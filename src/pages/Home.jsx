@@ -117,9 +117,9 @@ const Home = () => {
             </div>
 
             <div className="flex items-center space-x-4">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="xs">
                 <svg
-                  className="w-4 h-4 mr-2"
+                  className="w-3 h-3 mr-1"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -139,9 +139,9 @@ const Home = () => {
                 </svg>
                 Cài đặt
               </Button>
-              <Button variant="primary" size="sm">
+              <Button variant="primary" size="xs">
                 <svg
-                  className="w-4 h-4 mr-2"
+                  className="w-3 h-3 mr-1"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -169,10 +169,10 @@ const Home = () => {
                 Trận đấu hiện tại
               </h2>
               <div className="flex space-x-2">
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="xs">
                   Chỉnh sửa
                 </Button>
-                <Button variant="primary" size="sm">
+                <Button variant="primary" size="xs">
                   Bắt đầu Stream
                 </Button>
               </div>
@@ -232,7 +232,7 @@ const Home = () => {
                     <p className="text-gray-600 text-sm mb-4">
                       {feature.description}
                     </p>
-                    <Button variant="outline" size="sm" className="w-full">
+                    <Button variant="outline" size="xs">
                       Mở {feature.title}
                     </Button>
                   </div>
@@ -281,7 +281,7 @@ const Home = () => {
                   </div>
                 ))}
               </div>
-              <Button variant="outline" size="sm" className="w-full mt-4">
+              <Button variant="outline" size="xs" className="w-full mt-4">
                 Xem tất cả
               </Button>
             </div>
@@ -292,9 +292,9 @@ const Home = () => {
                 Thao tác nhanh
               </h3>
               <div className="space-y-3">
-                <Button variant="primary" className="w-full">
+                <Button variant="primary" size="xs" className="w-full">
                   <svg
-                    className="w-4 h-4 mr-2"
+                    className="w-3 h-3 mr-1"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -308,9 +308,9 @@ const Home = () => {
                   </svg>
                   Tạo trận đấu mới
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" size="xs" className="w-full">
                   <svg
-                    className="w-4 h-4 mr-2"
+                    className="w-3 h-3 mr-1"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -324,9 +324,9 @@ const Home = () => {
                   </svg>
                   Nhập dữ liệu
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" size="xs" className="w-full">
                   <svg
-                    className="w-4 h-4 mr-2"
+                    className="w-3 h-3 mr-1"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
