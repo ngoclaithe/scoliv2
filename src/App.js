@@ -97,7 +97,7 @@ function App() {
     { id: "scoreboard", name: "Bảng tỉ số", icon: "⚽" },
     { id: "match", name: "Quản lý trận đấu", icon: "📋" },
     { id: "lineup", name: "Đội hình", icon: "👥" },
-    { id: "poster", name: "Poster", icon: "🎨" },
+    { id: "poster", name: "Poster", icon: "��" },
     { id: "logo", name: "Logo", icon: "🏆" },
     { id: "audio", name: "Âm thanh", icon: "🎵" },
   ];
@@ -307,18 +307,20 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b">
+      <nav className="bg-white shadow-lg border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setCurrentPage("home")}
-                className="flex items-center space-x-2 text-primary-600 hover:text-primary-700"
+                className="flex items-center space-x-3 text-primary-600 hover:text-primary-700 transition-colors"
               >
-                <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">⚽</span>
+                <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-xl flex items-center justify-center shadow-md">
+                  <span className="text-white font-bold text-lg">⚽</span>
                 </div>
-                <h1 className="text-xl font-bold">Football Livestream Tool</h1>
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-primary-600 to-primary-700 bg-clip-text text-transparent">
+                  scoliv
+                </h1>
               </button>
             </div>
           </div>
@@ -326,20 +328,20 @@ function App() {
       </nav>
 
       {/* Page Navigation */}
-      <div className="bg-white border-b">
+      <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8 overflow-x-auto">
+          <div className="flex space-x-1 overflow-x-auto">
             {navigation.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setCurrentPage(item.id)}
-                className={`flex items-center space-x-2 py-4 px-2 border-b-2 text-sm font-medium transition-colors whitespace-nowrap ${
+                className={`flex items-center space-x-2 py-3 px-4 border-b-2 text-sm font-medium transition-all duration-200 whitespace-nowrap rounded-t-lg ${
                   currentPage === item.id
-                    ? "border-primary-500 text-primary-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
+                    ? "border-primary-500 text-primary-600 bg-primary-50"
+                    : "border-transparent text-gray-600 hover:text-gray-800 hover:border-gray-300 hover:bg-gray-50"
                 }`}
               >
-                <span>{item.icon}</span>
+                <span className="text-base">{item.icon}</span>
                 <span>{item.name}</span>
               </button>
             ))}
