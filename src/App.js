@@ -318,7 +318,7 @@ function App() {
                 <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-sm">⚽</span>
                 </div>
-                <h1 className="text-xl font-bold">Football Livestream Tool</h1>
+                <h1 className="text-xl font-bold">scoliv</h1>
               </button>
             </div>
           </div>
