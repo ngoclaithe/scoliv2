@@ -292,7 +292,7 @@ const Home = () => {
                 Thao tác nhanh
               </h3>
               <div className="space-y-3">
-                <Button variant="primary" className="w-full">
+                <Button variant="primary" size="sm" className="w-full">
                   <svg
                     className="w-4 h-4 mr-2"
                     fill="none"
@@ -308,7 +308,7 @@ const Home = () => {
                   </svg>
                   Tạo trận đấu mới
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" size="sm" className="w-full">
                   <svg
                     className="w-4 h-4 mr-2"
                     fill="none"
@@ -324,7 +324,7 @@ const Home = () => {
                   </svg>
                   Nhập dữ liệu
                 </Button>
-                <Button variant="outline" className="w-full">
+                <Button variant="outline" size="sm" className="w-full">
                   <svg
                     className="w-4 h-4 mr-2"
                     fill="none"
