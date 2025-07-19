@@ -398,27 +398,31 @@ const Home = () => {
         </div>
 
         {/* Tab Controls */}
-        <div className="grid grid-cols-2 gap-4">
-          <button
-            onClick={() => setSelectedOption("dieu-khien")}
-            className={`py-3 px-4 rounded-lg font-medium ${
-              selectedOption === "dieu-khien"
-                ? "bg-gray-500 text-white"
-                : "bg-gray-200 text-gray-700"
-            }`}
-          >
-            ĐIỀU KHIỂN
-          </button>
-          <button
-            onClick={() => setSelectedOption("chon-skin")}
-            className={`py-3 px-4 rounded-lg font-medium ${
-              selectedOption === "chon-skin"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-gray-700"
-            }`}
-          >
-            CHỌN SKIN
-          </button>
+        <div className="bg-white rounded-xl p-4 shadow-lg border border-gray-200">
+          <div className="grid grid-cols-2 gap-4">
+            <button
+              onClick={() => setSelectedOption("dieu-khien")}
+              className={`py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-md ${
+                selectedOption === "dieu-khien"
+                  ? "bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-xl"
+                  : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
+              }`}
+            >
+              <span className="mr-2">🎮</span>
+              ĐIỀU KHIỂN
+            </button>
+            <button
+              onClick={() => setSelectedOption("chon-skin")}
+              className={`py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-md ${
+                selectedOption === "chon-skin"
+                  ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
+                  : "bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 hover:from-blue-200 hover:to-blue-300"
+              }`}
+            >
+              <span className="mr-2">🎨</span>
+              CHỌN SKIN
+            </button>
+          </div>
         </div>
 
         {/* Options */}
