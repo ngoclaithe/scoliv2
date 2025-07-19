@@ -565,8 +565,12 @@ const Home = () => {
         </div>
 
         {/* Clock Settings */}
-        <div className="space-y-4">
-          <h3 className="font-bold text-center">CÀI ĐẶT CHỮ CHẠY:</h3>
+        <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-6 border border-orange-200">
+          <h3 className="font-bold text-center text-lg text-orange-800 mb-6 flex items-center justify-center">
+            <span className="mr-2">📰</span>
+            CÀI ĐẶT CHỮ CHẠY
+            <span className="ml-2">📰</span>
+          </h3>
 
           <div className="flex justify-center space-x-8">
             <div className="flex items-center space-x-2">
