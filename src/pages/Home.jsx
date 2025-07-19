@@ -20,7 +20,7 @@ const Home = () => {
   // State cho match data sau khi nhập code
   const [matchData, setMatchData] = useState({
     homeTeam: { name: "ĐỘI-A", score: 0, logo: null },
-    awayTeam: { name: "��ỘI-B", score: 0, logo: null },
+    awayTeam: { name: "ĐỘI-B", score: 0, logo: null },
     matchTime: "39:15",
     period: "Hiệp 1",
     status: "live",
@@ -91,101 +91,152 @@ const Home = () => {
   };
 
   const renderUploadLogoTab = () => (
-    <div className="p-6 space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="p-6 space-y-8">
+      <div className="text-center mb-8">
+        <h2 className="text-2xl font-bold text-gray-800 mb-2 flex items-center justify-center">
+          <span className="mr-3">🏆</span>
+          QUẢN LÝ LOGO ĐỘI BÓNG
+          <span className="ml-3">🏆</span>
+        </h2>
+        <p className="text-gray-600">
+          Tải lên và quản lý logo cho các đội bóng
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Đội nhà */}
-        <div className="space-y-4">
-          <Button
-            variant="primary"
-            size="lg"
-            className="w-full"
-            onClick={() => handleLogoUpload("home")}
-          >
-            CHỌN LOGO
-          </Button>
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-6 border-2 border-blue-200 shadow-lg">
+          <h3 className="text-center text-lg font-bold text-blue-700 mb-6 flex items-center justify-center">
+            <span className="mr-2">🏠</span>
+            ĐỘI NHÀ
+          </h3>
 
-          {homeTeamLogo && (
-            <div className="flex justify-center">
-              <img
-                src={homeTeamLogo}
-                alt="Home team logo"
-                className="w-20 h-20 object-contain"
-              />
-            </div>
-          )}
+          <div className="space-y-4">
+            <Button
+              variant="primary"
+              size="lg"
+              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg transform hover:scale-105 transition-all duration-200"
+              onClick={() => handleLogoUpload("home")}
+            >
+              <span className="mr-2">📁</span>
+              CHỌN LOGO
+            </Button>
 
-          <Input
-            placeholder="TÊN ĐỘI"
-            value={homeTeamName}
-            onChange={(e) => setHomeTeamName(e.target.value)}
-            className="text-center"
-          />
+            {homeTeamLogo ? (
+              <div className="flex justify-center">
+                <div className="bg-white p-4 rounded-lg shadow-md border-2 border-blue-300">
+                  <img
+                    src={homeTeamLogo}
+                    alt="Home team logo"
+                    className="w-20 h-20 object-contain"
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="flex justify-center">
+                <div className="w-28 h-28 bg-white border-2 border-dashed border-blue-300 rounded-lg flex items-center justify-center">
+                  <span className="text-blue-400 text-sm">Chưa có logo</span>
+                </div>
+              </div>
+            )}
 
-          <Button
-            variant="secondary"
-            size="lg"
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white"
-          >
-            TẢI LÊN
-          </Button>
+            <Input
+              placeholder="TÊN ĐỘI NHÀ"
+              value={homeTeamName}
+              onChange={(e) => setHomeTeamName(e.target.value)}
+              className="text-center font-semibold"
+            />
+
+            <Button
+              variant="secondary"
+              size="lg"
+              className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="mr-2">⬆️</span>
+              TẢI LÊN
+            </Button>
+          </div>
         </div>
 
-        {/* Đội khách */}
-        <div className="space-y-4">
-          <Button
-            variant="primary"
-            size="lg"
-            className="w-full"
-            onClick={() => handleLogoUpload("away")}
-          >
-            CHỌN LOGO
-          </Button>
+        {/* Đ��i khách */}
+        <div className="bg-gradient-to-br from-purple-50 to-pink-100 rounded-xl p-6 border-2 border-purple-200 shadow-lg">
+          <h3 className="text-center text-lg font-bold text-purple-700 mb-6 flex items-center justify-center">
+            <span className="mr-2">✈️</span>
+            ĐỘI KHÁCH
+          </h3>
 
-          {awayTeamLogo && (
-            <div className="flex justify-center">
-              <img
-                src={awayTeamLogo}
-                alt="Away team logo"
-                className="w-20 h-20 object-contain"
-              />
-            </div>
-          )}
+          <div className="space-y-4">
+            <Button
+              variant="primary"
+              size="lg"
+              className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 shadow-lg transform hover:scale-105 transition-all duration-200"
+              onClick={() => handleLogoUpload("away")}
+            >
+              <span className="mr-2">📁</span>
+              CHỌN LOGO
+            </Button>
 
-          <Input
-            placeholder="TÊN ĐỘI"
-            value={awayTeamName}
-            onChange={(e) => setAwayTeamName(e.target.value)}
-            className="text-center"
-          />
+            {awayTeamLogo ? (
+              <div className="flex justify-center">
+                <div className="bg-white p-4 rounded-lg shadow-md border-2 border-purple-300">
+                  <img
+                    src={awayTeamLogo}
+                    alt="Away team logo"
+                    className="w-20 h-20 object-contain"
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="flex justify-center">
+                <div className="w-28 h-28 bg-white border-2 border-dashed border-purple-300 rounded-lg flex items-center justify-center">
+                  <span className="text-purple-400 text-sm">Chưa có logo</span>
+                </div>
+              </div>
+            )}
 
-          <Button
-            variant="secondary"
-            size="lg"
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white"
-          >
-            TẢI LÊN
-          </Button>
+            <Input
+              placeholder="TÊN ĐỘI KHÁCH"
+              value={awayTeamName}
+              onChange={(e) => setAwayTeamName(e.target.value)}
+              className="text-center font-semibold"
+            />
+
+            <Button
+              variant="secondary"
+              size="lg"
+              className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="mr-2">⬆️</span>
+              TẢI LÊN
+            </Button>
+          </div>
         </div>
       </div>
 
       {/* Tìm kiếm logo */}
-      <div className="mt-8">
+      <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
+        <h3 className="text-center text-lg font-bold text-green-700 mb-4 flex items-center justify-center">
+          <span className="mr-2">🔍</span>
+          TÌM KIẾM LOGO
+        </h3>
         <Input
           placeholder="Tìm theo tên đội hoặc mã logo..."
           value={logoSearch}
           onChange={(e) => setLogoSearch(e.target.value)}
-          className="w-full"
+          className="w-full text-center"
         />
       </div>
 
       {/* Hướng dẫn */}
-      <div className="mt-8 text-center">
+      <div className="text-center">
         <Button
           variant="secondary"
           size="lg"
-          className="bg-red-500 hover:bg-red-600 text-white px-8"
+          className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-12 py-4 font-bold text-lg rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300"
         >
+          <span className="mr-3">📚</span>
           HƯỚNG DẪN - HỖ TRỢ
+          <span className="ml-3">💬</span>
         </Button>
       </div>
     </div>
