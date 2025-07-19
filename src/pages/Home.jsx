@@ -42,8 +42,20 @@ const Home = () => {
       // Simulate loading
       setTimeout(() => {
         setIsCodeEntered(true);
+        setCodeInfo({
+          code: matchCode.toUpperCase(),
+          generatedAt: "16:13:11 19/7/2025",
+          status: "active", // active, inactive, expired
+          accessCount: 0,
+          maxAccess: 100,
+          expiryDays: 15,
+          expiryDate: "16:13:11 3/8/2025",
+          lastUsed: null,
+        });
         setIsLoading(false);
       }, 1000);
+    } else {
+      alert("Code không đúng. Vui lòng thử lại!");
     }
   };
 
