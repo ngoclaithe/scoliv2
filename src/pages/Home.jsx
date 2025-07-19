@@ -158,7 +158,7 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Đ��i khách */}
+        {/* Đội khách */}
         <div className="bg-gradient-to-br from-purple-50 to-pink-100 rounded-xl p-6 border-2 border-purple-200 shadow-lg">
           <h3 className="text-center text-lg font-bold text-purple-700 mb-6 flex items-center justify-center">
             <span className="mr-2">✈️</span>
@@ -481,7 +481,7 @@ const Home = () => {
           <h3 className="text-center text-lg font-bold text-indigo-800 mb-6 flex items-center justify-center">
             <span className="mr-2">⚙️</span>
             TÙY CHỌN HIỂN THỊ
-            <span className="ml-2">⚙️</span>
+            <span className="ml-2">���️</span>
           </h3>
           <div className="grid grid-cols-3 gap-4 text-sm">
             <div className="space-y-2">
@@ -683,17 +683,22 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 shadow-xl border-b-4 border-yellow-400">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-18">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">⚽</span>
+              <div className="flex items-center space-x-3">
+                <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg transform hover:rotate-12 transition-transform duration-300">
+                  <span className="text-white font-bold text-xl">⚽</span>
                 </div>
-                <h1 className="text-xl font-bold text-gray-900">
-                  Football Livestream Tool
-                </h1>
+                <div>
+                  <h1 className="text-2xl font-bold text-white">
+                    Football Livestream Tool
+                  </h1>
+                  <p className="text-blue-200 text-sm">
+                    Công cụ quản lý trận đấu trực tiếp
+                  </p>
+                </div>
               </div>
             </div>
           </div>
