@@ -197,15 +197,6 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-4 gap-3 mb-6">
-            {[1, 2, 3, 4].map((i) => (
-              <div
-                key={i}
-                className="aspect-square border-2 border-gray-300 rounded"
-              ></div>
-            ))}
-          </div>
-
           <div className="space-y-4">
             <Input
               placeholder="Nhập code..."
