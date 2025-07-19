@@ -1,103 +1,507 @@
 import React, { useState } from "react";
 import Button from "../components/common/Button";
+import Input from "../components/common/Input";
 import ScoreDisplay from "../components/scoreboard/ScoreDisplay";
-import MatchPreview from "../components/match/MatchPreview";
-import LineupDisplay from "../components/lineup/LineupDisplay";
 
 const Home = () => {
-  const [currentMatch, setCurrentMatch] = useState({
-    homeTeam: { name: "Hà Nội FC", score: 1, logo: null },
-    awayTeam: { name: "TP.HCM", score: 2, logo: null },
-    matchTime: "67:23",
-    period: "Hiệp 2",
+  const [activeTab, setActiveTab] = useState("upload-logo");
+  const [matchCode, setMatchCode] = useState("");
+  const [isCodeEntered, setIsCodeEntered] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // State cho upload logo
+  const [homeTeamLogo, setHomeTeamLogo] = useState(null);
+  const [awayTeamLogo, setAwayTeamLogo] = useState(null);
+  const [homeTeamName, setHomeTeamName] = useState("");
+  const [awayTeamName, setAwayTeamName] = useState("");
+  const [logoSearch, setLogoSearch] = useState("");
+
+  // State cho match data sau khi nhập code
+  const [matchData, setMatchData] = useState({
+    homeTeam: { name: "ĐỘI-A", score: 0, logo: null },
+    awayTeam: { name: "ĐỘI-B", score: 0, logo: null },
+    matchTime: "39:15",
+    period: "Hiệp 1",
     status: "live",
-    league: "V-League 2024",
-    stadium: "Sân Hàng Đẫy",
-    date: "2024-01-15",
-    time: "19:00",
-    weather: "☀️ Nắng",
-    temperature: "28°C",
   });
 
-  const features = [
-    {
-      icon: "⚽",
-      title: "Quản lý trận đấu",
-      description:
-        "Tạo và quản lý thông tin trận đấu, cập nhật tỉ số trực tiếp",
-      link: "/match-management",
-      color: "bg-blue-500",
-    },
-    {
-      icon: "🏆",
-      title: "Quản lý logo",
-      description: "Tải lên và quản lý logo đội bóng, banner nhà tài trợ",
-      link: "/logo-management",
-      color: "bg-green-500",
-    },
-    {
-      icon: "👥",
-      title: "Đội hình cầu thủ",
-      description: "Thiết lập đội hình và quản lý thông tin cầu thủ",
-      link: "/lineup-management",
-      color: "bg-purple-500",
-    },
-    {
-      icon: "📺",
-      title: "Livestream",
-      description: "Stream trực tiếp với overlay thông tin trận đấu",
-      link: "/livestream",
-      color: "bg-red-500",
-    },
-    {
-      icon: "🎨",
-      title: "Templates",
-      description: "Mẫu thiết kế poster, intro, và overlay đa dạng",
-      link: "/templates",
-      color: "bg-orange-500",
-    },
-    {
-      icon: "🎵",
-      title: "Âm thanh",
-      description: "Quản lý nhạc nền và hiệu ứng âm thanh",
-      link: "/audio",
-      color: "bg-pink-500",
-    },
+  // State cho các tùy chọn điều khiển
+  const [selectedOption, setSelectedOption] = useState("gioi-thieu");
+  const [clockSetting, setClockSetting] = useState("khong");
+  const [clockText, setClockText] = useState("");
+
+  const tabs = [
+    { id: "upload-logo", name: "UP LOGO" },
+    { id: "quan-ly-tran", name: "QUẢN LÝ TRẬN" },
   ];
 
-  const quickStats = [
-    { label: "Trận đấu hôm nay", value: "12", icon: "⚽" },
-    { label: "Đội bóng", value: "24", icon: "🏃‍♂️" },
-    { label: "Viewers", value: "1.2K", icon: "👥" },
-    { label: "Thời gian stream", value: "2.5h", icon: "⏱️" },
-  ];
+  const handleCodeSubmit = async () => {
+    if (matchCode.toLowerCase() === "ffff") {
+      setIsLoading(true);
+      // Simulate loading
+      setTimeout(() => {
+        setIsCodeEntered(true);
+        setIsLoading(false);
+      }, 1000);
+    }
+  };
 
-  const recentMatches = [
-    {
-      id: 1,
-      home: "Hà Nội FC",
-      away: "HAGL",
-      score: "2-1",
-      status: "ended",
-      time: "15:00",
-    },
-    {
-      id: 2,
-      home: "TP.HCM",
-      away: "SLNA",
-      score: "1-0",
-      status: "live",
-      time: "17:00",
-    },
-    {
-      id: 3,
-      home: "Bình Dương",
-      away: "Thanh Hóa",
-      score: "0-0",
-      status: "pending",
-      time: "19:00",
-    },
-  ];
+  const handleLogoUpload = (teamType) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (teamType === "home") {
+            setHomeTeamLogo(e.target.result);
+          } else {
+            setAwayTeamLogo(e.target.result);
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  };
+
+  const handleScoreChange = (team, increment) => {
+    setMatchData((prev) => ({
+      ...prev,
+      [team]: {
+        ...prev[team],
+        score: Math.max(0, prev[team].score + increment),
+      },
+    }));
+  };
+
+  const renderUploadLogoTab = () => (
+    <div className="p-6 space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Đội nhà */}
+        <div className="space-y-4">
+          <Button
+            variant="primary"
+            size="lg"
+            className="w-full"
+            onClick={() => handleLogoUpload("home")}
+          >
+            CHỌN LOGO
+          </Button>
+
+          {homeTeamLogo && (
+            <div className="flex justify-center">
+              <img
+                src={homeTeamLogo}
+                alt="Home team logo"
+                className="w-20 h-20 object-contain"
+              />
+            </div>
+          )}
+
+          <Input
+            placeholder="TÊN ĐỘI"
+            value={homeTeamName}
+            onChange={(e) => setHomeTeamName(e.target.value)}
+            className="text-center"
+          />
+
+          <Button
+            variant="secondary"
+            size="lg"
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white"
+          >
+            TẢI LÊN
+          </Button>
+        </div>
+
+        {/* Đội khách */}
+        <div className="space-y-4">
+          <Button
+            variant="primary"
+            size="lg"
+            className="w-full"
+            onClick={() => handleLogoUpload("away")}
+          >
+            CHỌN LOGO
+          </Button>
+
+          {awayTeamLogo && (
+            <div className="flex justify-center">
+              <img
+                src={awayTeamLogo}
+                alt="Away team logo"
+                className="w-20 h-20 object-contain"
+              />
+            </div>
+          )}
+
+          <Input
+            placeholder="TÊN ĐỘI"
+            value={awayTeamName}
+            onChange={(e) => setAwayTeamName(e.target.value)}
+            className="text-center"
+          />
+
+          <Button
+            variant="secondary"
+            size="lg"
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white"
+          >
+            TẢI LÊN
+          </Button>
+        </div>
+      </div>
+
+      {/* Tìm kiếm logo */}
+      <div className="mt-8">
+        <Input
+          placeholder="Tìm theo tên đội hoặc mã logo..."
+          value={logoSearch}
+          onChange={(e) => setLogoSearch(e.target.value)}
+          className="w-full"
+        />
+      </div>
+
+      {/* Hướng dẫn */}
+      <div className="mt-8 text-center">
+        <Button
+          variant="secondary"
+          size="lg"
+          className="bg-red-500 hover:bg-red-600 text-white px-8"
+        >
+          HƯỚNG DẪN - HỖ TRỢ
+        </Button>
+      </div>
+    </div>
+  );
+
+  const renderQuanLyTranTab = () => {
+    if (!isCodeEntered) {
+      return (
+        <div className="p-6 max-w-md mx-auto">
+          <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-6 mb-6">
+            <p className="text-center text-sm mb-2">
+              <strong>Code được lấy lúc:</strong> 16:13:11 19/7/2025
+            </p>
+            <p className="text-center text-red-600 font-bold mb-2">
+              CODE CHƯA TRUY CẬP
+            </p>
+            <p className="text-center text-sm mb-2">
+              Code sẽ hết hạn nếu không sử dụng sau 15 ngày
+            </p>
+            <p className="text-center text-sm">
+              <strong>Có thể là lúc:</strong> 16:13:11 3/8/2025
+            </p>
+          </div>
+
+          <div className="grid grid-cols-4 gap-3 mb-6">
+            {[1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="aspect-square border-2 border-gray-300 rounded"
+              ></div>
+            ))}
+          </div>
+
+          <div className="space-y-4">
+            <Input
+              placeholder="Nhập code..."
+              value={matchCode}
+              onChange={(e) => setMatchCode(e.target.value)}
+              className="text-center text-lg"
+            />
+
+            <Button
+              variant="primary"
+              size="lg"
+              className="w-full"
+              onClick={handleCodeSubmit}
+              loading={isLoading}
+            >
+              {isLoading ? "Đang xử lý..." : "XÁC NHẬN"}
+            </Button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="p-6 space-y-6">
+        {/* Scoreboard */}
+        <div className="bg-gray-800 rounded-lg p-4">
+          <ScoreDisplay
+            homeTeam={matchData.homeTeam}
+            awayTeam={matchData.awayTeam}
+            matchTime={matchData.matchTime}
+            period={matchData.period}
+            status={matchData.status}
+            backgroundColor="bg-gray-800"
+            size="md"
+          />
+
+          <div className="text-center mt-4">
+            <h3 className="text-white text-lg font-bold">
+              MÀN HÌNH GIỚI THIỆU
+            </h3>
+          </div>
+        </div>
+
+        {/* Score Controls */}
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Button
+              variant="primary"
+              size="lg"
+              className="w-full"
+              onClick={() => handleScoreChange("homeTeam", 1)}
+            >
+              TĂNG
+            </Button>
+            <Button
+              variant="primary"
+              size="lg"
+              className="w-full"
+              onClick={() => handleScoreChange("homeTeam", -1)}
+            >
+              GIẢM
+            </Button>
+          </div>
+
+          <div className="space-y-2">
+            <Button
+              variant="primary"
+              size="lg"
+              className="w-full"
+              onClick={() => handleScoreChange("awayTeam", 1)}
+            >
+              TĂNG
+            </Button>
+            <Button
+              variant="primary"
+              size="lg"
+              className="w-full"
+              onClick={() => handleScoreChange("awayTeam", -1)}
+            >
+              GIẢM
+            </Button>
+          </div>
+        </div>
+
+        {/* Tab Controls */}
+        <div className="grid grid-cols-2 gap-4">
+          <button
+            onClick={() => setSelectedOption("dieu-khien")}
+            className={`py-3 px-4 rounded-lg font-medium ${
+              selectedOption === "dieu-khien"
+                ? "bg-gray-500 text-white"
+                : "bg-gray-200 text-gray-700"
+            }`}
+          >
+            ĐIỀU KHIỂN
+          </button>
+          <button
+            onClick={() => setSelectedOption("chon-skin")}
+            className={`py-3 px-4 rounded-lg font-medium ${
+              selectedOption === "chon-skin"
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700"
+            }`}
+          >
+            CHỌN SKIN
+          </button>
+        </div>
+
+        {/* Options */}
+        <div className="space-y-4">
+          <div className="grid grid-cols-3 gap-4 text-sm">
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="option"
+                  value="poster"
+                  checked={selectedOption === "poster"}
+                  onChange={(e) => setSelectedOption(e.target.value)}
+                />
+                <label>POSTER</label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="option"
+                  value="ti-so-duoi"
+                  checked={selectedOption === "ti-so-duoi"}
+                  onChange={(e) => setSelectedOption(e.target.value)}
+                />
+                <label>TỈ SỐ DƯỚI</label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="option"
+                  value="dem-20"
+                  checked={selectedOption === "dem-20"}
+                  onChange={(e) => setSelectedOption(e.target.value)}
+                />
+                <label>ĐẾM 20'</label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="option"
+                  value="dem-35"
+                  checked={selectedOption === "dem-35"}
+                  onChange={(e) => setSelectedOption(e.target.value)}
+                />
+                <label>ĐẾM 35'</label>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="option"
+                  value="gioi-thieu"
+                  checked={selectedOption === "gioi-thieu"}
+                  onChange={(e) => setSelectedOption(e.target.value)}
+                />
+                <label className="text-red-500">GIỚI THIỆU</label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="option"
+                  value="dem-0"
+                  checked={selectedOption === "dem-0"}
+                  onChange={(e) => setSelectedOption(e.target.value)}
+                />
+                <label>ĐẾM 0'</label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="option"
+                  value="dem-25"
+                  checked={selectedOption === "dem-25"}
+                  onChange={(e) => setSelectedOption(e.target.value)}
+                />
+                <label>ĐẾM 25'</label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="option"
+                  value="tat"
+                  checked={selectedOption === "tat"}
+                  onChange={(e) => setSelectedOption(e.target.value)}
+                />
+                <label>TẮT</label>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="option"
+                  value="danh-sach"
+                  checked={selectedOption === "danh-sach"}
+                  onChange={(e) => setSelectedOption(e.target.value)}
+                />
+                <label>DANH SÁCH</label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="option"
+                  value="nghi-hiep"
+                  checked={selectedOption === "nghi-hiep"}
+                  onChange={(e) => setSelectedOption(e.target.value)}
+                />
+                <label>NGHỈ HIỆP</label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="option"
+                  value="dem-30"
+                  checked={selectedOption === "dem-30"}
+                  onChange={(e) => setSelectedOption(e.target.value)}
+                />
+                <label>ĐẾM 30'</label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="option"
+                  value="penalty"
+                  checked={selectedOption === "penalty"}
+                  onChange={(e) => setSelectedOption(e.target.value)}
+                />
+                <label>PENALTY</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Clock Settings */}
+        <div className="space-y-4">
+          <h3 className="font-bold text-center">CÀI ĐẶT CHỮ CHẠY:</h3>
+
+          <div className="flex justify-center space-x-8">
+            <div className="flex items-center space-x-2">
+              <input
+                type="radio"
+                name="clock"
+                value="khong"
+                checked={clockSetting === "khong"}
+                onChange={(e) => setClockSetting(e.target.value)}
+              />
+              <label>KHÔNG</label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <input
+                type="radio"
+                name="clock"
+                value="lien-tuc"
+                checked={clockSetting === "lien-tuc"}
+                onChange={(e) => setClockSetting(e.target.value)}
+              />
+              <label>LIÊN TỤC</label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <input
+                type="radio"
+                name="clock"
+                value="moi-2"
+                checked={clockSetting === "moi-2"}
+                onChange={(e) => setClockSetting(e.target.value)}
+              />
+              <label>MỖI 2'</label>
+            </div>
+          </div>
+
+          <Input
+            placeholder="Nhập nội dung chữ chạy"
+            value={clockText}
+            onChange={(e) => setClockText(e.target.value)}
+            className="w-full"
+          />
+        </div>
+
+        {/* Apply Button */}
+        <div className="text-center">
+          <Button variant="primary" size="lg" className="px-16">
+            ÁP DỤNG
+          </Button>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -115,247 +519,34 @@ const Home = () => {
                 </h1>
               </div>
             </div>
-
-            <div className="flex items-center space-x-4">
-              <Button variant="outline" size="sm">
-                <svg
-                  className="w-4 h-4 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-                Cài đặt
-              </Button>
-              <Button variant="primary" size="sm">
-                <svg
-                  className="w-4 h-4 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  />
-                </svg>
-                Bắt đầu Stream
-              </Button>
-            </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Hero Section - Current Match */}
-        <div className="mb-8">
-          <div className="bg-white rounded-xl shadow-lg p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold text-gray-900">
-                Trận đấu hiện tại
-              </h2>
-              <div className="flex space-x-2">
-                <Button variant="outline" size="sm">
-                  Chỉnh sửa
-                </Button>
-                <Button variant="primary" size="sm">
-                  Bắt đầu Stream
-                </Button>
-              </div>
-            </div>
-
-            <ScoreDisplay
-              homeTeam={currentMatch.homeTeam}
-              awayTeam={currentMatch.awayTeam}
-              matchTime={currentMatch.matchTime}
-              period={currentMatch.period}
-              status={currentMatch.status}
-              size="lg"
-            />
-          </div>
-        </div>
-
-        {/* Quick Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {quickStats.map((stat, index) => (
-            <div key={index} className="bg-white rounded-lg shadow p-4">
-              <div className="flex items-center">
-                <span className="text-2xl mr-3">{stat.icon}</span>
-                <div>
-                  <div className="text-2xl font-bold text-gray-900">
-                    {stat.value}
-                  </div>
-                  <div className="text-sm text-gray-600">{stat.label}</div>
-                </div>
-              </div>
-            </div>
+      <main className="max-w-4xl mx-auto">
+        {/* Tabs */}
+        <div className="flex border-b border-gray-200 bg-white">
+          {tabs.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`flex-1 py-4 px-6 text-center font-medium border-b-2 transition-colors ${
+                activeTab === tab.id
+                  ? tab.id === "upload-logo"
+                    ? "border-blue-500 text-blue-600 bg-blue-50"
+                    : "border-blue-500 text-blue-600 bg-blue-50"
+                  : "border-transparent text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              {tab.name}
+            </button>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Features */}
-          <div className="lg:col-span-2">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">
-              Chức năng chính
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {features.map((feature, index) => (
-                <div
-                  key={index}
-                  className="bg-white rounded-lg shadow hover:shadow-md transition-shadow cursor-pointer group"
-                >
-                  <div className="p-6">
-                    <div className="flex items-center mb-4">
-                      <div
-                        className={`w-12 h-12 ${feature.color} rounded-lg flex items-center justify-center text-white text-xl mr-4 group-hover:scale-110 transition-transform`}
-                      >
-                        {feature.icon}
-                      </div>
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        {feature.title}
-                      </h3>
-                    </div>
-                    <p className="text-gray-600 text-sm mb-4">
-                      {feature.description}
-                    </p>
-                    <Button variant="outline" size="sm" className="w-full">
-                      Mở {feature.title}
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Recent Matches */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Trận đấu hôm nay
-              </h3>
-              <div className="space-y-3">
-                {recentMatches.map((match) => (
-                  <div
-                    key={match.id}
-                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                  >
-                    <div className="flex-1">
-                      <div className="text-sm font-medium text-gray-900">
-                        {match.home} vs {match.away}
-                      </div>
-                      <div className="text-xs text-gray-500">{match.time}</div>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <span className="text-sm font-mono">{match.score}</span>
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs ${
-                          match.status === "live"
-                            ? "bg-red-100 text-red-800"
-                            : match.status === "ended"
-                              ? "bg-gray-100 text-gray-800"
-                              : "bg-blue-100 text-blue-800"
-                        }`}
-                      >
-                        {match.status === "live"
-                          ? "LIVE"
-                          : match.status === "ended"
-                            ? "KT"
-                            : "Sắp tới"}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <Button variant="outline" size="sm" className="w-full mt-4">
-                Xem tất cả
-              </Button>
-            </div>
-
-            {/* Quick Actions */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Thao tác nhanh
-              </h3>
-              <div className="space-y-3">
-                <Button variant="primary" size="sm" className="w-full">
-                  <svg
-                    className="w-4 h-4 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M12 4v16m8-8H4"
-                    />
-                  </svg>
-                  Tạo trận đấu mới
-                </Button>
-                <Button variant="outline" size="sm" className="w-full">
-                  <svg
-                    className="w-4 h-4 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"
-                    />
-                  </svg>
-                  Nhập dữ liệu
-                </Button>
-                <Button variant="outline" size="sm" className="w-full">
-                  <svg
-                    className="w-4 h-4 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"
-                    />
-                  </svg>
-                  Chia sẻ
-                </Button>
-              </div>
-            </div>
-
-            {/* Tips */}
-            <div className="bg-blue-50 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-blue-900 mb-2">
-                💡 Mẹo sử dụng
-              </h3>
-              <ul className="text-sm text-blue-800 space-y-2">
-                <li>• Chuẩn bị logo và thông tin đội trước trận</li>
-                <li>• Kiểm tra kết nối internet trước khi stream</li>
-                <li>• Sử dụng template có sẵn để tiết kiệm thời gian</li>
-                <li>• Backup dữ liệu quan trọng thường xuyên</li>
-              </ul>
-            </div>
-          </div>
+        {/* Tab Content */}
+        <div className="bg-white min-h-screen">
+          {activeTab === "upload-logo" && renderUploadLogoTab()}
+          {activeTab === "quan-ly-tran" && renderQuanLyTranTab()}
         </div>
       </main>
     </div>
