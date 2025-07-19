@@ -426,7 +426,12 @@ const Home = () => {
         </div>
 
         {/* Options */}
-        <div className="space-y-4">
+        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 border border-indigo-200">
+          <h3 className="text-center text-lg font-bold text-indigo-800 mb-6 flex items-center justify-center">
+            <span className="mr-2">⚙️</span>
+            TÙY CHỌN HIỂN THỊ
+            <span className="ml-2">⚙️</span>
+          </h3>
           <div className="grid grid-cols-3 gap-4 text-sm">
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
