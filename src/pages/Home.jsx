@@ -481,7 +481,7 @@ const Home = () => {
           <h3 className="text-center text-lg font-bold text-indigo-800 mb-6 flex items-center justify-center">
             <span className="mr-2">⚙️</span>
             TÙY CHỌN HIỂN THỊ
-            <span className="ml-2">���️</span>
+            <span className="ml-2">⚙️</span>
           </h3>
           <div className="grid grid-cols-3 gap-4 text-sm">
             <div className="space-y-2">
@@ -707,20 +707,32 @@ const Home = () => {
 
       <main className="max-w-4xl mx-auto">
         {/* Tabs */}
-        <div className="flex border-b border-gray-200 bg-white">
+        <div className="flex bg-gradient-to-r from-gray-100 to-gray-200 border-b-4 border-gray-300 shadow-md">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 py-4 px-6 text-center font-medium border-b-2 transition-colors ${
+              className={`flex-1 py-5 px-8 text-center font-bold text-lg border-b-4 transition-all duration-300 transform hover:scale-105 ${
                 activeTab === tab.id
                   ? tab.id === "upload-logo"
-                    ? "border-blue-500 text-blue-600 bg-blue-50"
-                    : "border-blue-500 text-blue-600 bg-blue-50"
-                  : "border-transparent text-gray-500 hover:text-gray-700"
+                    ? "border-blue-500 text-blue-700 bg-gradient-to-t from-blue-100 to-blue-50 shadow-lg"
+                    : "border-purple-500 text-purple-700 bg-gradient-to-t from-purple-100 to-purple-50 shadow-lg"
+                  : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-50"
               }`}
             >
-              {tab.name}
+              <span className="flex items-center justify-center">
+                {tab.id === "upload-logo" ? (
+                  <>
+                    <span className="mr-2">🏆</span>
+                    {tab.name}
+                  </>
+                ) : (
+                  <>
+                    <span className="mr-2">⚽</span>
+                    {tab.name}
+                  </>
+                )}
+              </span>
             </button>
           ))}
         </div>
