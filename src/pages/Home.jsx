@@ -8,6 +8,7 @@ const Home = () => {
   const [matchCode, setMatchCode] = useState("");
   const [isCodeEntered, setIsCodeEntered] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [codeInfo, setCodeInfo] = useState(null);
 
   // State cho upload logo
   const [homeTeamLogo, setHomeTeamLogo] = useState(null);
