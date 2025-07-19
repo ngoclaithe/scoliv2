@@ -316,21 +316,23 @@ const Home = () => {
         )}
 
         {/* Scoreboard */}
-        <div className="bg-gray-800 rounded-lg p-4">
+        <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-xl p-6 border-4 border-yellow-400 shadow-2xl">
           <ScoreDisplay
             homeTeam={matchData.homeTeam}
             awayTeam={matchData.awayTeam}
             matchTime={matchData.matchTime}
             period={matchData.period}
             status={matchData.status}
-            backgroundColor="bg-gray-800"
+            backgroundColor="bg-transparent"
             size="md"
           />
 
-          <div className="text-center mt-4">
-            <h3 className="text-white text-lg font-bold">
+          <div className="text-center mt-6">
+            <div className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-6 py-3 rounded-full font-bold text-lg shadow-lg">
+              <span className="mr-2">📺</span>
               MÀN HÌNH GIỚI THIỆU
-            </h3>
+              <span className="ml-2">✨</span>
+            </div>
           </div>
         </div>
 
