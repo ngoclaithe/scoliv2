@@ -20,7 +20,7 @@ const Home = () => {
   // State cho match data sau khi nhập code
   const [matchData, setMatchData] = useState({
     homeTeam: { name: "ĐỘI-A", score: 0, logo: null },
-    awayTeam: { name: "ĐỘI-B", score: 0, logo: null },
+    awayTeam: { name: "��ỘI-B", score: 0, logo: null },
     matchTime: "39:15",
     period: "Hiệp 1",
     status: "live",
@@ -615,8 +615,14 @@ const Home = () => {
 
         {/* Apply Button */}
         <div className="text-center">
-          <Button variant="primary" size="lg" className="px-16">
+          <Button
+            variant="primary"
+            size="lg"
+            className="px-20 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xl rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300"
+          >
+            <span className="mr-3">🚀</span>
             ÁP DỤNG
+            <span className="ml-3">✨</span>
           </Button>
         </div>
       </div>
