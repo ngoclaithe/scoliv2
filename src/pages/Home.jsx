@@ -8,6 +8,7 @@ const Home = () => {
   const [matchCode, setMatchCode] = useState("");
   const [isCodeEntered, setIsCodeEntered] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [codeInfo, setCodeInfo] = useState(null);
 
   // State cho upload logo
   const [homeTeamLogo, setHomeTeamLogo] = useState(null);
@@ -41,8 +42,20 @@ const Home = () => {
       // Simulate loading
       setTimeout(() => {
         setIsCodeEntered(true);
+        setCodeInfo({
+          code: matchCode.toUpperCase(),
+          generatedAt: "16:13:11 19/7/2025",
+          status: "active", // active, inactive, expired
+          accessCount: 0,
+          maxAccess: 100,
+          expiryDays: 15,
+          expiryDate: "16:13:11 3/8/2025",
+          lastUsed: null,
+        });
         setIsLoading(false);
       }, 1000);
+    } else {
+      alert("Code không đúng. Vui lòng thử lại!");
     }
   };
 
@@ -182,19 +195,30 @@ const Home = () => {
     if (!isCodeEntered) {
       return (
         <div className="p-6 max-w-md mx-auto">
-          <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-6 mb-6">
-            <p className="text-center text-sm mb-2">
-              <strong>Code được lấy lúc:</strong> 16:13:11 19/7/2025
-            </p>
-            <p className="text-center text-red-600 font-bold mb-2">
-              CODE CHƯA TRUY CẬP
-            </p>
-            <p className="text-center text-sm mb-2">
-              Code sẽ hết hạn nếu không sử dụng sau 15 ngày
-            </p>
-            <p className="text-center text-sm">
-              <strong>Có thể là lúc:</strong> 16:13:11 3/8/2025
-            </p>
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <svg
+                  className="w-8 h-8 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 7a2 2 0 012 2m0 0a2 2 0 012 2m-2-2h-6m6 0v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2h6z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Nhập mã truy cập
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Vui lòng nhập mã code để truy cập và quản lý trận đấu
+              </p>
+            </div>
           </div>
 
           <div className="space-y-4">
@@ -202,7 +226,7 @@ const Home = () => {
               placeholder="Nhập code..."
               value={matchCode}
               onChange={(e) => setMatchCode(e.target.value)}
-              className="text-center text-lg"
+              className="text-center text-lg font-mono"
             />
 
             <Button
@@ -214,6 +238,10 @@ const Home = () => {
             >
               {isLoading ? "Đang xử lý..." : "XÁC NHẬN"}
             </Button>
+
+            <div className="text-center text-xs text-gray-500">
+              Nhập "ffff" để demo
+            </div>
           </div>
         </div>
       );
@@ -221,6 +249,72 @@ const Home = () => {
 
     return (
       <div className="p-6 space-y-6">
+        {/* Code Information */}
+        {codeInfo && (
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-6 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Thông tin mã truy cập
+              </h3>
+              <span
+                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  codeInfo.status === "active"
+                    ? "bg-green-100 text-green-800"
+                    : codeInfo.status === "inactive"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : "bg-red-100 text-red-800"
+                }`}
+              >
+                {codeInfo.status === "active"
+                  ? "🟢 Đã kích hoạt"
+                  : codeInfo.status === "inactive"
+                    ? "🟡 Chưa kích hoạt"
+                    : "🔴 Đã hết hạn"}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Mã code:</span>
+                  <span className="font-mono font-bold">{codeInfo.code}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Được tạo lúc:</span>
+                  <span className="font-medium">{codeInfo.generatedAt}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Số lần truy cập:</span>
+                  <span className="font-medium">
+                    {codeInfo.accessCount}/{codeInfo.maxAccess}
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Thời hạn sử dụng:</span>
+                  <span className="font-medium">
+                    {codeInfo.expiryDays} ngày
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Hết hạn vào:</span>
+                  <span className="font-medium text-orange-600">
+                    {codeInfo.expiryDate}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Lần cuối sử dụng:</span>
+                  <span className="font-medium">
+                    {codeInfo.lastUsed || "Chưa sử dụng"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Scoreboard */}
         <div className="bg-gray-800 rounded-lg p-4">
           <ScoreDisplay
