@@ -195,19 +195,30 @@ const Home = () => {
     if (!isCodeEntered) {
       return (
         <div className="p-6 max-w-md mx-auto">
-          <div className="bg-yellow-100 border border-yellow-300 rounded-lg p-6 mb-6">
-            <p className="text-center text-sm mb-2">
-              <strong>Code được lấy lúc:</strong> 16:13:11 19/7/2025
-            </p>
-            <p className="text-center text-red-600 font-bold mb-2">
-              CODE CHƯA TRUY CẬP
-            </p>
-            <p className="text-center text-sm mb-2">
-              Code sẽ hết hạn nếu không sử dụng sau 15 ngày
-            </p>
-            <p className="text-center text-sm">
-              <strong>Có thể là lúc:</strong> 16:13:11 3/8/2025
-            </p>
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <svg
+                  className="w-8 h-8 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 7a2 2 0 012 2m0 0a2 2 0 012 2m-2-2h-6m6 0v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2h6z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Nhập mã truy cập
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Vui lòng nhập mã code để truy cập và quản lý trận đấu
+              </p>
+            </div>
           </div>
 
           <div className="space-y-4">
@@ -215,7 +226,7 @@ const Home = () => {
               placeholder="Nhập code..."
               value={matchCode}
               onChange={(e) => setMatchCode(e.target.value)}
-              className="text-center text-lg"
+              className="text-center text-lg font-mono"
             />
 
             <Button
@@ -227,6 +238,10 @@ const Home = () => {
             >
               {isLoading ? "Đang xử lý..." : "XÁC NHẬN"}
             </Button>
+
+            <div className="text-center text-xs text-gray-500">
+              Nhập "ffff" để demo
+            </div>
           </div>
         </div>
       );
