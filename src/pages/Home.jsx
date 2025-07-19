@@ -249,6 +249,72 @@ const Home = () => {
 
     return (
       <div className="p-6 space-y-6">
+        {/* Code Information */}
+        {codeInfo && (
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-6 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Thông tin mã truy cập
+              </h3>
+              <span
+                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  codeInfo.status === "active"
+                    ? "bg-green-100 text-green-800"
+                    : codeInfo.status === "inactive"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : "bg-red-100 text-red-800"
+                }`}
+              >
+                {codeInfo.status === "active"
+                  ? "🟢 Đã kích hoạt"
+                  : codeInfo.status === "inactive"
+                    ? "🟡 Chưa kích hoạt"
+                    : "🔴 Đã hết hạn"}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Mã code:</span>
+                  <span className="font-mono font-bold">{codeInfo.code}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Được tạo lúc:</span>
+                  <span className="font-medium">{codeInfo.generatedAt}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Số lần truy cập:</span>
+                  <span className="font-medium">
+                    {codeInfo.accessCount}/{codeInfo.maxAccess}
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Thời hạn sử dụng:</span>
+                  <span className="font-medium">
+                    {codeInfo.expiryDays} ngày
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Hết hạn vào:</span>
+                  <span className="font-medium text-orange-600">
+                    {codeInfo.expiryDate}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Lần cuối sử dụng:</span>
+                  <span className="font-medium">
+                    {codeInfo.lastUsed || "Chưa sử dụng"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Scoreboard */}
         <div className="bg-gray-800 rounded-lg p-4">
           <ScoreDisplay
