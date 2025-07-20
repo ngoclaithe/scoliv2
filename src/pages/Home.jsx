@@ -5,6 +5,7 @@ import ScoreDisplay from "../components/scoreboard/ScoreDisplay";
 import PosterManager from "../components/poster/PosterManager";
 import TeamLineupModal from "../components/lineup/TeamLineupModal";
 import Modal from "../components/common/Modal";
+import PenaltyModal from "../components/common/PenaltyModal";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("upload-logo");
@@ -34,9 +35,10 @@ const Home = () => {
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
 
-    // State cho modal poster
+      // State cho modal poster
   const [showPosterModal, setShowPosterModal] = useState(false);
   const [showLineupModal, setShowLineupModal] = useState(false);
+  const [showPenaltyModal, setShowPenaltyModal] = useState(false);
 
   const tabs = [
     { id: "upload-logo", name: "UP LOGO" },
@@ -224,7 +226,7 @@ const Home = () => {
       <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
         <h3 className="text-center text-lg font-bold text-green-700 mb-4 flex items-center justify-center">
           <span className="mr-2">🔍</span>
-          TÌM KIẾM LOGO
+          TÌM KI��M LOGO
         </h3>
         <Input
           placeholder="Tìm theo tên đội hoặc mã logo..."
