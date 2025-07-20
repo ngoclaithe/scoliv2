@@ -91,8 +91,8 @@ const Modal = ({
             </div>
           )}
 
-                    {/* Content */}
-          <div className="px-4 sm:px-6 py-3 sm:py-4 overflow-y-auto flex-1">{children}</div>
+                                        {/* Content */}
+          <div className="px-4 sm:px-6 py-3 sm:py-4 overflow-y-auto flex-1 min-h-0">{children}</div>
 
                     {/* Footer */}
           {footer && (
