@@ -76,20 +76,22 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
     setShowCustomForm(false);
   };
 
-  return (
-    <div className="max-w-6xl mx-auto p-6 space-y-6">
+    return (
+    <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Quản Lý Poster</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Quản Lý Poster</h1>
+          <p className="text-gray-600 mt-1 text-sm sm:text-base">
             Chọn mẫu poster và cài đặt logo cho livestream
           </p>
         </div>
-        <div className="flex space-x-3">
+        <div className="flex space-x-2 sm:space-x-3">
           <Button
             variant="outline"
             onClick={() => setShowLogoSettings(true)}
+            size="sm"
+            className="flex-1 sm:flex-none"
             icon={
               <svg
                 className="w-4 h-4"
@@ -112,11 +114,14 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
               </svg>
             }
           >
-            Cài Đặt Logo
+            <span className="hidden sm:inline">Cài Đặt Logo</span>
+            <span className="sm:hidden">Logo</span>
           </Button>
           <Button
             variant="primary"
             onClick={() => setShowPosterSelector(true)}
+            size="sm"
+            className="flex-1 sm:flex-none"
             icon={
               <svg
                 className="w-4 h-4"
@@ -133,15 +138,16 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
               </svg>
             }
           >
-            Chọn Mẫu Poster
+            <span className="hidden sm:inline">Chọn Mẫu Poster</span>
+            <span className="sm:hidden">Poster</span>
           </Button>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Main Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Left Side - Current Poster */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 order-2 lg:order-1">
           {selectedPoster ? (
             <PosterPreview
               poster={selectedPoster}
@@ -191,8 +197,8 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
           )}
         </div>
 
-        {/* Right Side - Quick Info */}
-        <div className="space-y-4">
+                {/* Right Side - Quick Info */}
+        <div className="space-y-4 order-1 lg:order-2">
           {/* Poster Info Card */}
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
             <h3 className="font-semibold text-gray-900 mb-3">
@@ -245,7 +251,7 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
               <div className="flex justify-between">
                 <span className="text-gray-600">Đội khách:</span>
                 <span className="font-medium">
-                  {matchData?.awayTeam?.name || "Chưa đặt"}
+                  {matchData?.awayTeam?.name || "Chưa đ��t"}
                 </span>
               </div>
               <div className="flex justify-between">
