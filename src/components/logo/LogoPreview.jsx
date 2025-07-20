@@ -322,7 +322,7 @@ const LogoPreview = ({
             />
           </svg>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
-            B��n có chắc muốn xóa logo này?
+            Bạn có chắc muốn xóa logo này?
           </h3>
           <p className="text-gray-600">
             Logo của <strong>{logo.teamName}</strong> sẽ bị xóa vĩnh viễn. Hành

@@ -27,7 +27,7 @@ const PlayerInput = ({
     { value: "GK", label: "Thủ môn (GK)" },
     { value: "CB", label: "Trung vệ (CB)" },
     { value: "LB", label: "Hậu vệ trái (LB)" },
-    { value: "RB", label: "H��u vệ phải (RB)" },
+    { value: "RB", label: "Hậu vệ phải (RB)" },
     { value: "LWB", label: "Hậu vệ biên trái (LWB)" },
     { value: "RWB", label: "Hậu vệ biên phải (RWB)" },
     { value: "CDM", label: "Tiền vệ phòng ngự (CDM)" },

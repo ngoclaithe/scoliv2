@@ -169,7 +169,7 @@ const Home = () => {
         <div className="bg-gradient-to-br from-purple-50 to-pink-100 rounded-xl p-6 border-2 border-purple-200 shadow-lg">
           <h3 className="text-center text-lg font-bold text-purple-700 mb-6 flex items-center justify-center">
             <span className="mr-2">✈️</span>
-            Đ���I KHÁCH
+            ĐỘI KHÁCH
           </h3>
 
           <div className="space-y-4">
@@ -428,7 +428,7 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Đội kh��ch */}
+            {/* Đội khách */}
             <div className="bg-white rounded-lg p-4 shadow-md border-2 border-purple-200">
               <h4 className="text-center font-bold text-purple-700 mb-4">
                 {matchData.awayTeam.name}
@@ -483,7 +483,7 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Options - Thay đổi th��nh action buttons */}
+        {/* Options - Thay đổi action buttons */}
         <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-indigo-200">
           <h3 className="text-center text-lg font-bold text-indigo-800 mb-4 sm:mb-6 flex items-center justify-center">
             <span className="mr-2">⚙️</span>
@@ -508,7 +508,6 @@ const Home = () => {
             <button
               onClick={() => {
                 setSelectedOption("gioi-thieu");
-                // Có th�� mở modal giới thiệu ở đây
               }}
               className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "gioi-thieu"

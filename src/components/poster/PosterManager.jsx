@@ -251,7 +251,7 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
               <div className="flex justify-between">
                 <span className="text-gray-600">Đội khách:</span>
                 <span className="font-medium">
-                  {matchData?.awayTeam?.name || "Chưa đ��t"}
+                  {matchData?.awayTeam?.name || "Chưa đặt"}
                 </span>
               </div>
               <div className="flex justify-between">

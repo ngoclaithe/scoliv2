@@ -21,7 +21,7 @@ const LogoSearch = ({ onLogoSelect, onClose, className = "" }) => {
       name: "Hà Nội FC",
       category: "v-league",
       url: "/logos/hanoi.png",
-      description: "Câu lạc bộ bóng đ�� Hà Nội",
+      description: "Câu lạc bộ bóng đá Hà Nội",
     },
     {
       id: "vn_hagl",

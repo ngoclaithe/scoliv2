@@ -143,7 +143,7 @@ function App() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div>
-                <h2 className="text-xl font-semibold mb-4">Hiển th��� tỉ số</h2>
+                <h2 className="text-xl font-semibold mb-4">Hiển thị tỉ số</h2>
                 <ScoreDisplay
                   homeTeam={demoMatch.homeTeam}
                   awayTeam={demoMatch.awayTeam}

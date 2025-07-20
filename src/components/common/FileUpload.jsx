@@ -165,7 +165,7 @@ const FileUpload = ({
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
                   {accept ? `Chấp nhận: ${accept}` : "Tất cả định dạng"}
-                  {maxSize && ` �� Tối đa: ${formatFileSize(maxSize)}`}
+                  {maxSize && ` Tối đa: ${formatFileSize(maxSize)}`}
                 </p>
               </div>
             </>
