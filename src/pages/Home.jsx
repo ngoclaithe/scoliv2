@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Button from "../components/common/Button";
 import Input from "../components/common/Input";
 import ScoreDisplay from "../components/scoreboard/ScoreDisplay";
+import PosterManager from "../components/poster/PosterManager";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("upload-logo");
