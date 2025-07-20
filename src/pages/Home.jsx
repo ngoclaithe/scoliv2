@@ -374,7 +374,7 @@ const Home = () => {
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">H���t hạn vào:</span>
+                  <span className="text-gray-600">Hết hạn vào:</span>
                   <span className="font-medium text-orange-600">
                     {codeInfo.expiryDate}
                   </span>
