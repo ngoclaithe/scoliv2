@@ -35,10 +35,18 @@ const Home = () => {
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
 
-      // State cho modal poster
+        // State cho modal poster
   const [showPosterModal, setShowPosterModal] = useState(false);
   const [showLineupModal, setShowLineupModal] = useState(false);
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
+
+  // State cho penalty shootout
+  const [penaltyData, setPenaltyData] = useState({
+    penalties: [],
+    currentTurn: 'home',
+    homeGoals: 0,
+    awayGoals: 0
+  });
 
   const tabs = [
     { id: "upload-logo", name: "UP LOGO" },
