@@ -3,6 +3,7 @@ import Button from "../components/common/Button";
 import Input from "../components/common/Input";
 import ScoreDisplay from "../components/scoreboard/ScoreDisplay";
 import PosterManager from "../components/poster/PosterManager";
+import Modal from "../components/common/Modal";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("upload-logo");
@@ -231,7 +232,7 @@ const Home = () => {
         />
       </div>
 
-      {/* Hư��ng dẫn */}
+      {/* Hướng dẫn */}
       <div className="text-center">
         <Button
           variant="secondary"
