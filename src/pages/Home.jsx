@@ -921,15 +921,15 @@ const Home = () => {
         matchData={matchData}
       />
 
-            {/* Penalty Modal */}
+                  {/* Penalty Modal */}
       <PenaltyModal
         isOpen={showPenaltyModal}
         onClose={() => setShowPenaltyModal(false)}
         matchData={matchData}
-        onSelectOption={(penaltyData) => {
+        penaltyData={penaltyData}
+        onPenaltyChange={(newPenaltyData) => {
+          setPenaltyData(newPenaltyData);
           setSelectedOption("penalty");
-          console.log("Penalty data:", penaltyData);
-          // Có thể lưu penaltyData vào state để hiển thị
         }}
       />
     </div>
