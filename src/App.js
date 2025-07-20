@@ -10,7 +10,7 @@ import ScoreControls from "./components/scoreboard/ScoreControls";
 import Timer from "./components/scoreboard/Timer";
 import MatchManager from "./components/match/MatchManager";
 import LineupManager from "./components/lineup/LineupManager";
-import PosterPreview from "./components/poster/PosterPreview";
+import PosterManager from "./components/poster/PosterManager";
 import LogoPreview from "./components/logo/LogoPreview";
 import AudioPlayer from "./components/audio/AudioPlayer";
 
