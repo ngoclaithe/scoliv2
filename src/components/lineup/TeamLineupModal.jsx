@@ -158,7 +158,7 @@ const TeamLineupModal = ({
           </button>
           <button
             onClick={() => setActiveTeam("away")}
-            className={`flex-1 py-3 px-2 rounded-md text-sm font-medium transition-all min-h-[3rem] ${
+                        className={`flex-1 py-2 px-2 rounded-md text-sm font-medium transition-all min-h-[2.5rem] ${
               activeTeam === "away"
                 ? "bg-white text-red-600 shadow-sm"
                 : "text-gray-600 hover:bg-gray-200"
