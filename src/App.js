@@ -10,7 +10,7 @@ import ScoreControls from "./components/scoreboard/ScoreControls";
 import Timer from "./components/scoreboard/Timer";
 import MatchManager from "./components/match/MatchManager";
 import LineupManager from "./components/lineup/LineupManager";
-import PosterPreview from "./components/poster/PosterPreview";
+import PosterManager from "./components/poster/PosterManager";
 import LogoPreview from "./components/logo/LogoPreview";
 import AudioPlayer from "./components/audio/AudioPlayer";
 
@@ -232,18 +232,11 @@ function App() {
 
       case "poster":
         return (
-          <div className="max-w-6xl mx-auto p-6">
-            <h1 className="text-3xl font-bold text-gray-900 text-center mb-8">
-              Demo Poster
-            </h1>
-            <PosterPreview
-              poster={demoPoster}
-              matchData={demoMatch}
-              onEdit={() => console.log("Edit poster")}
-              onDownload={(format) => console.log("Download poster as", format)}
-              onShare={(platform) => console.log("Share to", platform)}
-            />
-          </div>
+          <PosterManager
+            matchData={demoMatch}
+            onPosterUpdate={(poster) => console.log("Updated poster:", poster)}
+            onLogoUpdate={(logoData) => console.log("Updated logo:", logoData)}
+          />
         );
 
       case "logo":

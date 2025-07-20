@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Button from "../components/common/Button";
 import Input from "../components/common/Input";
 import ScoreDisplay from "../components/scoreboard/ScoreDisplay";
+import PosterManager from "../components/poster/PosterManager";
+import Modal from "../components/common/Modal";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("upload-logo");
@@ -30,6 +32,9 @@ const Home = () => {
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
+
+  // State cho modal poster
+  const [showPosterModal, setShowPosterModal] = useState(false);
 
   const tabs = [
     { id: "upload-logo", name: "UP LOGO" },
@@ -162,7 +167,7 @@ const Home = () => {
         <div className="bg-gradient-to-br from-purple-50 to-pink-100 rounded-xl p-6 border-2 border-purple-200 shadow-lg">
           <h3 className="text-center text-lg font-bold text-purple-700 mb-6 flex items-center justify-center">
             <span className="mr-2">✈️</span>
-            ĐỘI KHÁCH
+            Đ���I KHÁCH
           </h3>
 
           <div className="space-y-4">
@@ -476,142 +481,202 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Options */}
-        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-6 border border-indigo-200">
-          <h3 className="text-center text-lg font-bold text-indigo-800 mb-6 flex items-center justify-center">
+        {/* Options - Thay đổi thành action buttons */}
+        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-indigo-200">
+          <h3 className="text-center text-lg font-bold text-indigo-800 mb-4 sm:mb-6 flex items-center justify-center">
             <span className="mr-2">⚙️</span>
             TÙY CHỌN HIỂN THỊ
             <span className="ml-2">⚙️</span>
           </h3>
-          <div className="grid grid-cols-3 gap-4 text-sm">
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="option"
-                  value="poster"
-                  checked={selectedOption === "poster"}
-                  onChange={(e) => setSelectedOption(e.target.value)}
-                />
-                <label>POSTER</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="option"
-                  value="ti-so-duoi"
-                  checked={selectedOption === "ti-so-duoi"}
-                  onChange={(e) => setSelectedOption(e.target.value)}
-                />
-                <label>TỈ SỐ DƯỚI</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="option"
-                  value="dem-20"
-                  checked={selectedOption === "dem-20"}
-                  onChange={(e) => setSelectedOption(e.target.value)}
-                />
-                <label>ĐẾM 20'</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="option"
-                  value="dem-35"
-                  checked={selectedOption === "dem-35"}
-                  onChange={(e) => setSelectedOption(e.target.value)}
-                />
-                <label>ĐẾM 35'</label>
-              </div>
-            </div>
 
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="option"
-                  value="gioi-thieu"
-                  checked={selectedOption === "gioi-thieu"}
-                  onChange={(e) => setSelectedOption(e.target.value)}
-                />
-                <label className="text-red-500">GIỚI THIỆU</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="option"
-                  value="dem-0"
-                  checked={selectedOption === "dem-0"}
-                  onChange={(e) => setSelectedOption(e.target.value)}
-                />
-                <label>ĐẾM 0'</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="option"
-                  value="dem-25"
-                  checked={selectedOption === "dem-25"}
-                  onChange={(e) => setSelectedOption(e.target.value)}
-                />
-                <label>ĐẾM 25'</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="option"
-                  value="tat"
-                  checked={selectedOption === "tat"}
-                  onChange={(e) => setSelectedOption(e.target.value)}
-                />
-                <label>TẮT</label>
-              </div>
-            </div>
+          {/* Grid responsive cho mobile */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
+            {/* Poster */}
+            <button
+              onClick={() => setShowPosterModal(true)}
+              className="flex flex-col items-center justify-center p-3 sm:p-4 bg-gradient-to-br from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-xl sm:text-2xl mb-1">🎨</span>
+              <span className="text-xs sm:text-sm font-bold text-center">
+                POSTER
+              </span>
+            </button>
 
-            <div className="space-y-2">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="option"
-                  value="danh-sach"
-                  checked={selectedOption === "danh-sach"}
-                  onChange={(e) => setSelectedOption(e.target.value)}
-                />
-                <label>DANH SÁCH</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="option"
-                  value="nghi-hiep"
-                  checked={selectedOption === "nghi-hiep"}
-                  onChange={(e) => setSelectedOption(e.target.value)}
-                />
-                <label>NGHỈ HIỆP</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="option"
-                  value="dem-30"
-                  checked={selectedOption === "dem-30"}
-                  onChange={(e) => setSelectedOption(e.target.value)}
-                />
-                <label>ĐẾM 30'</label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <input
-                  type="radio"
-                  name="option"
-                  value="penalty"
-                  checked={selectedOption === "penalty"}
-                  onChange={(e) => setSelectedOption(e.target.value)}
-                />
-                <label>PENALTY</label>
-              </div>
-            </div>
+            {/* Giới thiệu */}
+            <button
+              onClick={() => {
+                setSelectedOption("gioi-thieu");
+                // Có thể mở modal giới thiệu ở đây
+              }}
+              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+                selectedOption === "gioi-thieu"
+                  ? "bg-gradient-to-br from-red-500 to-orange-600 text-white"
+                  : "bg-gradient-to-br from-red-100 to-orange-200 text-red-700 hover:from-red-200 hover:to-orange-300"
+              }`}
+            >
+              <span className="text-xl sm:text-2xl mb-1">🎬</span>
+              <span className="text-xs sm:text-sm font-bold text-center">
+                GIỚI THIỆU
+              </span>
+            </button>
+
+            {/* Danh sách */}
+            <button
+              onClick={() => {
+                setSelectedOption("danh-sach");
+                // Có thể mở modal danh sách ở đây
+              }}
+              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+                selectedOption === "danh-sach"
+                  ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white"
+                  : "bg-gradient-to-br from-blue-100 to-indigo-200 text-blue-700 hover:from-blue-200 hover:to-indigo-300"
+              }`}
+            >
+              <span className="text-xl sm:text-2xl mb-1">📋</span>
+              <span className="text-xs sm:text-sm font-bold text-center">
+                DANH SÁCH
+              </span>
+            </button>
+
+            {/* Tỉ số dưới */}
+            <button
+              onClick={() => {
+                setSelectedOption("ti-so-duoi");
+                // Có thể mở modal tỉ số ở đây
+              }}
+              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+                selectedOption === "ti-so-duoi"
+                  ? "bg-gradient-to-br from-green-500 to-emerald-600 text-white"
+                  : "bg-gradient-to-br from-green-100 to-emerald-200 text-green-700 hover:from-green-200 hover:to-emerald-300"
+              }`}
+            >
+              <span className="text-xl sm:text-2xl mb-1">⚽</span>
+              <span className="text-xs sm:text-sm font-bold text-center">
+                TỈ SỐ DƯỚI
+              </span>
+            </button>
+
+            {/* Nghỉ hiệp */}
+            <button
+              onClick={() => {
+                setSelectedOption("nghi-hiep");
+                // Có thể mở modal nghỉ hiệp ở đây
+              }}
+              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+                selectedOption === "nghi-hiep"
+                  ? "bg-gradient-to-br from-yellow-500 to-orange-600 text-white"
+                  : "bg-gradient-to-br from-yellow-100 to-orange-200 text-yellow-700 hover:from-yellow-200 hover:to-orange-300"
+              }`}
+            >
+              <span className="text-xl sm:text-2xl mb-1">⏰</span>
+              <span className="text-xs sm:text-sm font-bold text-center">
+                NGHỈ HIỆP
+              </span>
+            </button>
+
+            {/* Penalty */}
+            <button
+              onClick={() => {
+                setSelectedOption("penalty");
+                // Có thể mở modal penalty ở đây
+              }}
+              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+                selectedOption === "penalty"
+                  ? "bg-gradient-to-br from-gray-600 to-gray-800 text-white"
+                  : "bg-gradient-to-br from-gray-100 to-gray-300 text-gray-700 hover:from-gray-200 hover:to-gray-400"
+              }`}
+            >
+              <span className="text-xl sm:text-2xl mb-1">🥅</span>
+              <span className="text-xs sm:text-sm font-bold text-center">
+                PENALTY
+              </span>
+            </button>
+
+            {/* Đếm giờ buttons */}
+            <button
+              onClick={() => setSelectedOption("dem-0")}
+              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+                selectedOption === "dem-0"
+                  ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
+                  : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
+              }`}
+            >
+              <span className="text-xl sm:text-2xl mb-1">🕐</span>
+              <span className="text-xs sm:text-sm font-bold text-center">
+                ĐẾM 0'
+              </span>
+            </button>
+
+            <button
+              onClick={() => setSelectedOption("dem-20")}
+              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+                selectedOption === "dem-20"
+                  ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
+                  : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
+              }`}
+            >
+              <span className="text-xl sm:text-2xl mb-1">🕐</span>
+              <span className="text-xs sm:text-sm font-bold text-center">
+                ĐẾM 20'
+              </span>
+            </button>
+
+            <button
+              onClick={() => setSelectedOption("dem-25")}
+              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+                selectedOption === "dem-25"
+                  ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
+                  : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
+              }`}
+            >
+              <span className="text-xl sm:text-2xl mb-1">🕐</span>
+              <span className="text-xs sm:text-sm font-bold text-center">
+                ĐẾM 25'
+              </span>
+            </button>
+
+            <button
+              onClick={() => setSelectedOption("dem-30")}
+              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+                selectedOption === "dem-30"
+                  ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
+                  : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
+              }`}
+            >
+              <span className="text-xl sm:text-2xl mb-1">🕐</span>
+              <span className="text-xs sm:text-sm font-bold text-center">
+                ĐẾM 30'
+              </span>
+            </button>
+
+            <button
+              onClick={() => setSelectedOption("dem-35")}
+              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+                selectedOption === "dem-35"
+                  ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
+                  : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
+              }`}
+            >
+              <span className="text-xl sm:text-2xl mb-1">🕐</span>
+              <span className="text-xs sm:text-sm font-bold text-center">
+                ĐẾM 35'
+              </span>
+            </button>
+
+            {/* Tắt */}
+            <button
+              onClick={() => setSelectedOption("tat")}
+              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+                selectedOption === "tat"
+                  ? "bg-gradient-to-br from-red-600 to-red-800 text-white"
+                  : "bg-gradient-to-br from-red-100 to-red-200 text-red-700 hover:from-red-200 hover:to-red-300"
+              }`}
+            >
+              <span className="text-xl sm:text-2xl mb-1">❌</span>
+              <span className="text-xs sm:text-sm font-bold text-center">
+                TẮT
+              </span>
+            </button>
           </div>
         </div>
 
@@ -743,6 +808,96 @@ const Home = () => {
           {activeTab === "quan-ly-tran" && renderQuanLyTranTab()}
         </div>
       </main>
+
+      {/* Poster Manager Modal - Responsive */}
+      <Modal
+        isOpen={showPosterModal}
+        onClose={() => setShowPosterModal(false)}
+        title="🎨 Quản Lý Poster & Logo"
+        size="full"
+        className="max-h-screen overflow-hidden"
+      >
+        <div className="h-full max-h-[85vh] overflow-y-auto">
+          <div className="p-2 sm:p-4 lg:p-6">
+            {/* Search Bar */}
+            <div className="mb-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border border-blue-200">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex-1">
+                  <Input
+                    placeholder="🔍 Tìm kiếm poster, logo, template..."
+                    className="w-full text-center sm:text-left"
+                    icon={
+                      <svg
+                        className="w-5 h-5 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
+                      </svg>
+                    }
+                  />
+                </div>
+                <Button
+                  variant="primary"
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold px-6 py-2 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                >
+                  <span className="mr-2">🔍</span>
+                  <span className="hidden sm:inline">Tìm Kiếm</span>
+                </Button>
+              </div>
+            </div>
+
+            {/* Poster Manager Component */}
+            <div className="bg-white rounded-lg">
+              <PosterManager
+                matchData={matchData}
+                onPosterUpdate={(poster) => {
+                  console.log("Updated poster:", poster);
+                  // Có thể thêm toast notification ở đây
+                }}
+                onLogoUpdate={(logoData) => {
+                  console.log("Updated logo:", logoData);
+                  // Có thể thêm toast notification ở đây
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile-friendly footer */}
+        <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4 flex flex-col sm:flex-row gap-3 justify-between items-center">
+          <div className="text-sm text-gray-600 text-center sm:text-left">
+            💡 <strong>Tip:</strong> Chọn poster trước, sau đó cài đặt logo và
+            chữ chạy
+          </div>
+          <div className="flex gap-3">
+            <Button
+              variant="outline"
+              onClick={() => setShowPosterModal(false)}
+              className="px-6 py-2"
+            >
+              Đóng
+            </Button>
+            <Button
+              variant="primary"
+              className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-2"
+              onClick={() => {
+                setShowPosterModal(false);
+                // Logic lưu cài đặt poster
+              }}
+            >
+              <span className="mr-2">💾</span>
+              Lưu & Áp Dụng
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
