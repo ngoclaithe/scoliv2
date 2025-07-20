@@ -928,15 +928,12 @@ const Home = () => {
       />
 
                   {/* Penalty Modal */}
-      <PenaltyModal
+            <PenaltyModal
         isOpen={showPenaltyModal}
         onClose={() => setShowPenaltyModal(false)}
         matchData={matchData}
         penaltyData={penaltyData}
-        onPenaltyChange={(newPenaltyData) => {
-          setPenaltyData(newPenaltyData);
-          setSelectedOption("penalty");
-        }}
+        onPenaltyChange={handlePenaltyChange}
       />
     </div>
   );
