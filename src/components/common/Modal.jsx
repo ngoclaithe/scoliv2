@@ -59,7 +59,7 @@ const Modal = ({
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
 
         <div
-          className={`relative transform overflow-hidden rounded-t-lg sm:rounded-lg bg-white text-left shadow-xl transition-all ${mobileBreakpoints[size]} ${className} max-h-[95vh] sm:max-h-[90vh]`}
+                    className={`relative transform overflow-hidden rounded-t-lg sm:rounded-lg bg-white text-left shadow-xl transition-all ${mobileBreakpoints[size]} ${className} max-h-[95vh] sm:max-h-[90vh] flex flex-col`}
         >
                     {/* Header */}
           {(title || showCloseButton) && (
@@ -91,8 +91,8 @@ const Modal = ({
             </div>
           )}
 
-                    {/* Content */}
-          <div className="px-4 sm:px-6 py-3 sm:py-4 overflow-y-auto flex-1">{children}</div>
+                                        {/* Content */}
+          <div className="px-4 sm:px-6 py-3 sm:py-4 overflow-y-auto flex-1 min-h-0">{children}</div>
 
                     {/* Footer */}
           {footer && (
