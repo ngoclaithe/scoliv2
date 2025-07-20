@@ -5,6 +5,7 @@ import ScoreDisplay from "../components/scoreboard/ScoreDisplay";
 import PosterManager from "../components/poster/PosterManager";
 import TeamLineupModal from "../components/lineup/TeamLineupModal";
 import Modal from "../components/common/Modal";
+import PenaltyModal from "../components/common/PenaltyModal";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("upload-logo");
@@ -34,9 +35,18 @@ const Home = () => {
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
 
-    // State cho modal poster
+        // State cho modal poster
   const [showPosterModal, setShowPosterModal] = useState(false);
   const [showLineupModal, setShowLineupModal] = useState(false);
+  const [showPenaltyModal, setShowPenaltyModal] = useState(false);
+
+  // State cho penalty shootout
+  const [penaltyData, setPenaltyData] = useState({
+    penalties: [],
+    currentTurn: 'home',
+    homeGoals: 0,
+    awayGoals: 0
+  });
 
   const tabs = [
     { id: "upload-logo", name: "UP LOGO" },
@@ -575,14 +585,13 @@ const Home = () => {
               </span>
             </button>
 
-            {/* Penalty */}
+                        {/* Penalty */}
             <button
               onClick={() => {
-                setSelectedOption("penalty");
-                // Có thể mở modal penalty ở đây
+                setShowPenaltyModal(true);
               }}
               className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
-                selectedOption === "penalty"
+                selectedOption?.startsWith("penalty")
                   ? "bg-gradient-to-br from-gray-600 to-gray-800 text-white"
                   : "bg-gradient-to-br from-gray-100 to-gray-300 text-gray-700 hover:from-gray-200 hover:to-gray-400"
               }`}
@@ -900,7 +909,7 @@ const Home = () => {
         </div>
       </Modal>
 
-      {/* Team Lineup Modal */}
+            {/* Team Lineup Modal */}
       <TeamLineupModal
         isOpen={showLineupModal}
         onClose={() => setShowLineupModal(false)}
@@ -910,6 +919,18 @@ const Home = () => {
           // Có thể thêm thông báo thành công ở đây
         }}
         matchData={matchData}
+      />
+
+                  {/* Penalty Modal */}
+      <PenaltyModal
+        isOpen={showPenaltyModal}
+        onClose={() => setShowPenaltyModal(false)}
+        matchData={matchData}
+        penaltyData={penaltyData}
+        onPenaltyChange={(newPenaltyData) => {
+          setPenaltyData(newPenaltyData);
+          setSelectedOption("penalty");
+        }}
       />
     </div>
   );
