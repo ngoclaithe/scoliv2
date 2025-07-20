@@ -184,7 +184,7 @@ const CustomPosterForm = ({
         <label className="block text-sm font-medium text-gray-700 mb-2">
           Mẫu poster
         </label>
-        <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {templates.map((template) => (
             <div
               key={template.id}
@@ -290,17 +290,17 @@ const CustomPosterForm = ({
         <h4 className="text-sm font-medium text-gray-900 mb-3">
           Thêm thành phần
         </h4>
-        <div className="grid grid-cols-1 gap-2">
+                <div className="grid grid-cols-1 gap-2">
           {elementTypes.map((elementType) => (
             <button
               key={elementType.id}
               onClick={() => addElement(elementType)}
-              className="flex items-center p-3 text-left border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+              className="flex items-center p-2 sm:p-3 text-left border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              <span className="text-lg mr-3">{elementType.icon}</span>
-              <div>
-                <p className="font-medium text-sm">{elementType.name}</p>
-                <p className="text-xs text-gray-500">
+              <span className="text-base sm:text-lg mr-2 sm:mr-3 flex-shrink-0">{elementType.icon}</span>
+              <div className="min-w-0 flex-1">
+                <p className="font-medium text-xs sm:text-sm truncate">{elementType.name}</p>
+                <p className="text-xs text-gray-500 hidden sm:block">
                   {elementType.description}
                 </p>
               </div>
@@ -392,27 +392,27 @@ const CustomPosterForm = ({
       onClose={onClose}
       title="Tạo poster tùy chỉnh"
       size="lg"
-      footer={
-        <div className="flex justify-end space-x-3">
-          <Button variant="outline" onClick={onClose}>
+            footer={
+        <div className="flex space-x-2 sm:space-x-3 w-full sm:w-auto sm:justify-end">
+          <Button variant="outline" onClick={onClose} className="flex-1 sm:flex-none">
             Hủy
           </Button>
-          <Button variant="primary" onClick={handleSave}>
+          <Button variant="primary" onClick={handleSave} className="flex-1 sm:flex-none">
             Tạo poster
           </Button>
         </div>
       }
     >
-      <div className="flex h-96">
+            <div className="flex flex-col sm:flex-row h-96 sm:h-96">
         {/* Tabs */}
-        <div className="w-1/4 border-r border-gray-200 pr-4">
-          <div className="space-y-1">
+        <div className="sm:w-1/4 border-b sm:border-b-0 sm:border-r border-gray-200 pb-2 sm:pb-0 sm:pr-4 mb-4 sm:mb-0">
+          <div className="flex overflow-x-auto sm:flex-col sm:space-y-1 space-x-2 sm:space-x-0">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  w-full flex items-center px-3 py-2 text-sm rounded-lg transition-colors
+                  flex items-center px-3 py-2 text-xs sm:text-sm rounded-lg transition-colors whitespace-nowrap
                   ${
                     activeTab === tab.id
                       ? "bg-primary-100 text-primary-700"
@@ -420,15 +420,15 @@ const CustomPosterForm = ({
                   }
                 `}
               >
-                <span className="mr-2">{tab.icon}</span>
-                {tab.name}
+                <span className="mr-1 sm:mr-2">{tab.icon}</span>
+                <span className="hidden sm:inline">{tab.name}</span>
               </button>
             ))}
           </div>
         </div>
 
         {/* Content */}
-        <div className="flex-1 pl-4">
+        <div className="flex-1 sm:pl-4">
           <div className="h-full overflow-y-auto">
             <TabContent />
           </div>
