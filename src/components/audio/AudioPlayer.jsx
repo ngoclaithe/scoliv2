@@ -20,8 +20,18 @@ const AudioPlayer = ({
   const [duration, setDuration] = useState(0);
   const [currentVolume, setCurrentVolume] = useState(volume);
   const [isMuted, setIsMuted] = useState(false);
-  const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const onPlayRef = useRef(onPlay);
+  const onPauseRef = useRef(onPause);
+  const onEndRef = useRef(onEnd);
+  const onTimeUpdateRef = useRef(onTimeUpdate);
+
+  onPlayRef.current = onPlay;
+  onPauseRef.current = onPause;
+  onEndRef.current = onEnd;
+  onTimeUpdateRef.current = onTimeUpdate;
 
   useEffect(() => {
     const audio = audioRef.current;
