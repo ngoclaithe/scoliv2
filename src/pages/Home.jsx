@@ -647,7 +647,7 @@ const Home = () => {
             >
               <span className="text-xl sm:text-2xl mb-1">🕐</span>
               <span className="text-xs sm:text-sm font-bold text-center">
-                Đ��M 30'
+                ĐẾM 30'
               </span>
             </button>
 
@@ -913,14 +913,15 @@ const Home = () => {
         matchData={matchData}
       />
 
-      {/* Penalty Modal */}
+            {/* Penalty Modal */}
       <PenaltyModal
         isOpen={showPenaltyModal}
         onClose={() => setShowPenaltyModal(false)}
-        selectedOption={selectedOption?.startsWith("penalty") ? selectedOption : null}
-        onSelectOption={(option) => {
-          setSelectedOption(option);
-          setShowPenaltyModal(false);
+        matchData={matchData}
+        onSelectOption={(penaltyData) => {
+          setSelectedOption("penalty");
+          console.log("Penalty data:", penaltyData);
+          // Có thể lưu penaltyData vào state để hiển thị
         }}
       />
     </div>
