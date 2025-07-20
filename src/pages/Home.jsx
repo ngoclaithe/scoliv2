@@ -669,40 +669,33 @@ const Home = () => {
           />
         </div>
 
-        {/* Apply Button */}
-        <div className="text-center">
+        {/* Action Buttons */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Apply Button */}
           <Button
             variant="primary"
             size="lg"
-            className="px-20 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xl rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300"
+            className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-lg rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300"
           >
             <span className="mr-3">🚀</span>
             ÁP DỤNG
             <span className="ml-3">✨</span>
           </Button>
-        </div>
 
-        {/* Poster Manager - Hiển thị khi chọn option POSTER */}
-        {selectedOption === "poster" && (
-          <div className="mt-6">
-            <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-200">
-              <h3 className="text-center text-lg font-bold text-purple-800 mb-6 flex items-center justify-center">
-                <span className="mr-2">🎨</span>
-                QUẢN LÝ POSTER
-                <span className="ml-2">🎨</span>
-              </h3>
-              <PosterManager
-                matchData={matchData}
-                onPosterUpdate={(poster) =>
-                  console.log("Updated poster:", poster)
-                }
-                onLogoUpdate={(logoData) =>
-                  console.log("Updated logo:", logoData)
-                }
-              />
-            </div>
-          </div>
-        )}
+          {/* Poster Manager Button - Hiển thị khi chọn option POSTER */}
+          {selectedOption === "poster" && (
+            <Button
+              variant="secondary"
+              size="lg"
+              onClick={() => setShowPosterModal(true)}
+              className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-bold text-lg rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300"
+            >
+              <span className="mr-3">🎨</span>
+              QUẢN LÝ POSTER
+              <span className="ml-3">🖼️</span>
+            </Button>
+          )}
+        </div>
       </div>
     );
   };
