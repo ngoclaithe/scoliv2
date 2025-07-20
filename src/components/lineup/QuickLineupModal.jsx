@@ -385,7 +385,7 @@ const QuickLineupModal = ({
               Danh sách {activeTeam === "home" ? "đội nhà" : "đội khách"}
             </h4>
           </div>
-          <div className="max-h-40 overflow-y-auto">
+                    <div className="max-h-48 sm:max-h-40 overflow-y-auto">
             {lineups[activeTeam].players.map((player, index) => (
               <button
                 key={index}
