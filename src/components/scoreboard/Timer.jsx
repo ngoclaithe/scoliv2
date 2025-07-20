@@ -13,8 +13,10 @@ const Timer = ({
 }) => {
   const [time, setTime] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(autoStart);
-  const [direction, setDirection] = useState("up"); // 'up' or 'down'
+    const [direction, setDirection] = useState("up"); // 'up' or 'down'
   const intervalRef = useRef(null);
+  const onTimeChangeRef = useRef(onTimeChange);
+  onTimeChangeRef.current = onTimeChange;
 
   useEffect(() => {
     if (isRunning) {
