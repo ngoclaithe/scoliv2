@@ -5,7 +5,7 @@ import ScoreDisplay from "../components/scoreboard/ScoreDisplay";
 import PosterManager from "../components/poster/PosterManager";
 import TeamLineupModal from "../components/lineup/TeamLineupModal";
 import Modal from "../components/common/Modal";
-import PenaltyModal from "../components/common/PenaltyModal";
+import SimplePenaltyModal from "../components/common/SimplePenaltyModal";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("upload-logo");
@@ -840,7 +840,7 @@ const Home = () => {
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="flex-1">
                   <Input
-                    placeholder="🔍 Tìm kiếm poster, logo, template..."
+                    placeholder="🔍 Tìm ki��m poster, logo, template..."
                     className="w-full text-center sm:text-left"
                     icon={
                       <svg
