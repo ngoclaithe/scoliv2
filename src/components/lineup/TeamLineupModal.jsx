@@ -174,42 +174,48 @@ const TeamLineupModal = ({
           </button>
         </div>
 
-        {/* Quick Actions */}
-        <div className="flex flex-col sm:flex-row gap-2">
-          <div className="flex gap-2 flex-1">
+                {/* Quick Actions */}
+        <div className="space-y-2">
+          {/* Top row - main actions */}
+          <div className="grid grid-cols-2 gap-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => handleQuickFill(activeTeam, "numbers")}
-              className="flex-1 sm:flex-none"
+              className="h-12 flex flex-col items-center justify-center"
             >
-              📝 Cầu thủ 1-11
+              <span className="text-lg">📝</span>
+              <span className="text-xs">Cầu thủ 1-11</span>
             </Button>
             <Button
               variant="outline"
               size="sm"
+              onClick={() => setBulkMode(!bulkMode)}
+              className="h-12 flex flex-col items-center justify-center"
+            >
+              <span className="text-lg">📋</span>
+              <span className="text-xs">Nhập hàng loạt</span>
+            </Button>
+          </div>
+          {/* Bottom row - secondary actions */}
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => handleQuickFill(activeTeam, "team")}
-              className="flex-1 sm:flex-none"
+              className="h-10 text-xs"
             >
               🏆 Theo tên đội
             </Button>
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setBulkMode(!bulkMode)}
-              className="flex-1 sm:flex-none"
+              onClick={() => clearTeam(activeTeam)}
+              className="text-red-600 border-red-300 hover:bg-red-50 h-10 text-xs"
             >
-              📝 Nhập hàng loạt
+              🗑️ Xóa hết
             </Button>
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => clearTeam(activeTeam)}
-            className="text-red-600 border-red-300 hover:bg-red-50 w-full sm:w-auto"
-          >
-            🗑️ Xóa hết
-          </Button>
         </div>
 
         {/* Bulk Input Mode */}
