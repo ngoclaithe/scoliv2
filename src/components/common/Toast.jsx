@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 const Toast = ({
   type = "info",
@@ -12,7 +12,7 @@ const Toast = ({
   const [isVisible, setIsVisible] = useState(true);
   const [isExiting, setIsExiting] = useState(false);
 
-  useEffect(() => {
+    useEffect(() => {
     if (duration > 0) {
       const timer = setTimeout(() => {
         handleClose();
@@ -20,15 +20,15 @@ const Toast = ({
 
       return () => clearTimeout(timer);
     }
-  }, [duration]);
+    }, [duration, handleClose]);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setIsExiting(true);
     setTimeout(() => {
       setIsVisible(false);
       onClose?.();
     }, 300);
-  };
+  }, [onClose]);
 
   const types = {
     success: {

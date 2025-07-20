@@ -13,8 +13,10 @@ const Timer = ({
 }) => {
   const [time, setTime] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(autoStart);
-  const [direction, setDirection] = useState("up"); // 'up' or 'down'
+    const [direction, setDirection] = useState("up"); // 'up' or 'down'
   const intervalRef = useRef(null);
+  const onTimeChangeRef = useRef(onTimeChange);
+  onTimeChangeRef.current = onTimeChange;
 
   useEffect(() => {
     if (isRunning) {
@@ -25,7 +27,7 @@ const Timer = ({
               ? Math.min(prevTime + 1, maxTime)
               : Math.max(prevTime - 1, 0);
 
-          onTimeChange?.(newTime);
+                    onTimeChangeRef.current?.(newTime);
 
           // Auto stop khi countdown về 0
           if (direction === "down" && newTime === 0) {
@@ -40,7 +42,7 @@ const Timer = ({
     }
 
     return () => clearInterval(intervalRef.current);
-  }, [isRunning, direction, maxTime, onTimeChange]);
+    }, [isRunning, direction, maxTime]);
 
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
@@ -60,13 +62,13 @@ const Timer = ({
 
   const handleReset = () => {
     setIsRunning(false);
-    setTime(initialTime);
-    onTimeChange?.(initialTime);
+        setTime(initialTime);
+    onTimeChangeRef.current?.(initialTime);
   };
 
-  const handleManualTimeChange = (newTime) => {
+    const handleManualTimeChange = (newTime) => {
     setTime(newTime);
-    onTimeChange?.(newTime);
+    onTimeChangeRef.current?.(newTime);
   };
 
   const adjustTime = (adjustment) => {

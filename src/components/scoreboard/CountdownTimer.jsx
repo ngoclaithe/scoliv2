@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Button from "../common/Button";
 
 const CountdownTimer = ({
@@ -10,13 +10,15 @@ const CountdownTimer = ({
   size = "lg",
   className = "",
 }) => {
-  const [timeLeft, setTimeLeft] = useState({
+    const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
   const [isCompleted, setIsCompleted] = useState(false);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
     const calculateTimeLeft = () => {
@@ -38,9 +40,9 @@ const CountdownTimer = ({
         setIsCompleted(false);
       } else {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        if (!isCompleted) {
+                if (!isCompleted) {
           setIsCompleted(true);
-          onComplete?.();
+          onCompleteRef.current?.();
         }
       }
     };
@@ -49,7 +51,7 @@ const CountdownTimer = ({
     const interval = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(interval);
-  }, [targetDate, isCompleted, onComplete]);
+    }, [targetDate, isCompleted]);
 
   const sizes = {
     sm: {

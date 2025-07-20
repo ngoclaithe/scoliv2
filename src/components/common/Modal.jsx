@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 const Modal = ({
   isOpen,
@@ -11,7 +11,10 @@ const Modal = ({
   closeOnOverlayClick = true,
   className = "",
 }) => {
-      const mobileBreakpoints = {
+        const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
+  const mobileBreakpoints = {
     sm: "w-full max-w-sm",
     md: "w-full max-w-md",
     lg: "w-full max-w-lg sm:max-w-2xl",
@@ -34,13 +37,13 @@ const Modal = ({
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === "Escape" && isOpen) {
-        onClose();
+        onCloseRef.current();
       }
     };
 
     document.addEventListener("keydown", handleEscape);
     return () => document.removeEventListener("keydown", handleEscape);
-  }, [isOpen, onClose]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
