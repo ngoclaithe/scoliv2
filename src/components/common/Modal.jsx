@@ -59,7 +59,7 @@ const Modal = ({
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
 
         <div
-          className={`relative transform overflow-hidden rounded-t-lg sm:rounded-lg bg-white text-left shadow-xl transition-all ${mobileBreakpoints[size]} ${className} max-h-[95vh] sm:max-h-[90vh]`}
+                    className={`relative transform overflow-hidden rounded-t-lg sm:rounded-lg bg-white text-left shadow-xl transition-all ${mobileBreakpoints[size]} ${className} max-h-[95vh] sm:max-h-[90vh] flex flex-col`}
         >
                     {/* Header */}
           {(title || showCloseButton) && (
