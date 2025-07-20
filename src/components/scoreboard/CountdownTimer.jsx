@@ -51,7 +51,7 @@ const CountdownTimer = ({
     const interval = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(interval);
-  }, [targetDate, isCompleted, onComplete]);
+    }, [targetDate, isCompleted]);
 
   const sizes = {
     sm: {
