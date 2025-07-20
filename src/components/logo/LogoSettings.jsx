@@ -230,12 +230,12 @@ const LogoSettings = ({ isOpen, onClose, onLogoUpdate, matchData }) => {
               }
             />
 
-            {/* Logo Type Filter */}
+                        {/* Logo Type Filter */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Lọc theo loại logo
               </label>
-              <div className="flex space-x-2">
+              <div className="flex flex-wrap gap-2">
                 <button
                   onClick={() => handleSettingChange("type", "all")}
                   className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
@@ -257,7 +257,8 @@ const LogoSettings = ({ isOpen, onClose, onLogoUpdate, matchData }) => {
                     }`}
                   >
                     <span className="mr-1">{type.icon}</span>
-                    {type.name}
+                    <span className="hidden sm:inline">{type.name}</span>
+                    <span className="sm:hidden">{type.icon}</span>
                   </button>
                 ))}
               </div>
@@ -267,7 +268,7 @@ const LogoSettings = ({ isOpen, onClose, onLogoUpdate, matchData }) => {
             {loading ? (
               <Loading size="lg" text="Đang tải logo..." />
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-h-80 overflow-y-auto">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-h-80 overflow-y-auto">
                 {filteredLogos.map((logo) => (
                   <LogoCard
                     key={logo.id}
@@ -515,42 +516,41 @@ const LogoSettings = ({ isOpen, onClose, onLogoUpdate, matchData }) => {
   };
 
   return (
-    <Modal
+        <Modal
       isOpen={isOpen}
       onClose={onClose}
       title="Cài Đặt Logo & Chữ Chạy"
       size="xl"
       footer={
-        <div className="flex justify-between">
-          <div className="flex space-x-2">
-            {selectedLogo && (
-              <div className="flex items-center text-sm text-gray-600">
-                <span className="mr-2">Đã chọn:</span>
-                <span className="font-medium">{selectedLogo.name}</span>
-              </div>
-            )}
-          </div>
-          <div className="flex space-x-3">
-            <Button variant="outline" onClick={onClose}>
+        <>
+          {selectedLogo && (
+            <div className="flex items-center text-xs sm:text-sm text-gray-600 mb-2 sm:mb-0 sm:flex-1">
+              <span className="mr-2">Đã chọn:</span>
+              <span className="font-medium truncate">{selectedLogo.name}</span>
+            </div>
+          )}
+          <div className="flex space-x-2 sm:space-x-3 w-full sm:w-auto">
+            <Button variant="outline" onClick={onClose} className="flex-1 sm:flex-none">
               Hủy
             </Button>
-            <Button variant="primary" onClick={handleSave}>
-              Áp Dụng Cài Đặt
+            <Button variant="primary" onClick={handleSave} className="flex-1 sm:flex-none">
+              <span className="hidden sm:inline">Áp Dụng Cài Đặt</span>
+              <span className="sm:hidden">Áp Dụng</span>
             </Button>
           </div>
-        </div>
+        </>
       }
     >
       <div className="space-y-6">
-        {/* Tab Navigation */}
-        <div className="border-b border-gray-200">
-          <nav className="flex space-x-8">
+                {/* Tab Navigation */}
+        <div className="border-b border-gray-200 overflow-x-auto">
+          <nav className="flex space-x-4 sm:space-x-8 min-w-max">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`
-                  py-2 px-1 border-b-2 font-medium text-sm transition-colors
+                  py-2 px-1 border-b-2 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap
                   ${
                     activeTab === tab.id
                       ? "border-primary-500 text-primary-600"
@@ -558,15 +558,15 @@ const LogoSettings = ({ isOpen, onClose, onLogoUpdate, matchData }) => {
                   }
                 `}
               >
-                <span className="mr-2">{tab.icon}</span>
-                {tab.name}
+                <span className="mr-1 sm:mr-2">{tab.icon}</span>
+                <span className="hidden sm:inline">{tab.name}</span>
               </button>
             ))}
           </nav>
         </div>
 
-        {/* Tab Content */}
-        <div className="min-h-96">{renderTabContent()}</div>
+                {/* Tab Content */}
+        <div className="min-h-64 sm:min-h-96">{renderTabContent()}</div>
       </div>
     </Modal>
   );
