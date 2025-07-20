@@ -12,12 +12,20 @@ const Modal = ({
   closeOnOverlayClick = true,
   className = "",
 }) => {
-  const sizes = {
+    const sizes = {
     sm: "max-w-md",
     md: "max-w-lg",
     lg: "max-w-2xl",
     xl: "max-w-4xl",
     full: "max-w-full mx-4",
+  };
+
+  const mobileBreakpoints = {
+    sm: "w-full max-w-sm",
+    md: "w-full max-w-md",
+    lg: "w-full max-w-lg sm:max-w-2xl",
+    xl: "w-full max-w-sm sm:max-w-md md:max-w-2xl lg:max-w-4xl",
+    full: "w-full max-w-full mx-2 sm:mx-4",
   };
 
   useEffect(() => {
@@ -52,30 +60,30 @@ const Modal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
+        <div className="fixed inset-0 z-50 overflow-y-auto">
       <div
-        className="flex min-h-full items-center justify-center p-4 text-center sm:p-0"
+        className="flex min-h-full items-end sm:items-center justify-center p-0 sm:p-4 text-center"
         onClick={handleOverlayClick}
       >
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
 
         <div
-          className={`relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all w-full ${sizes[size]} ${className}`}
+          className={`relative transform overflow-hidden rounded-t-lg sm:rounded-lg bg-white text-left shadow-xl transition-all ${mobileBreakpoints[size]} ${className} max-h-[95vh] sm:max-h-[90vh]`}
         >
-          {/* Header */}
+                    {/* Header */}
           {(title || showCloseButton) && (
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+            <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 bg-white sticky top-0 z-10">
               {title && (
-                <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate pr-2">{title}</h3>
               )}
               {showCloseButton && (
                 <button
                   onClick={onClose}
-                  className="rounded-md bg-white text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="flex-shrink-0 rounded-md bg-white text-gray-400 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 p-1"
                 >
                   <span className="sr-only">Đóng</span>
                   <svg
-                    className="h-6 w-6"
+                    className="h-5 w-5 sm:h-6 sm:w-6"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
@@ -92,12 +100,12 @@ const Modal = ({
             </div>
           )}
 
-          {/* Content */}
-          <div className="px-6 py-4">{children}</div>
+                    {/* Content */}
+          <div className="px-4 sm:px-6 py-3 sm:py-4 overflow-y-auto flex-1">{children}</div>
 
-          {/* Footer */}
+                    {/* Footer */}
           {footer && (
-            <div className="flex justify-end gap-3 px-6 py-4 border-t border-gray-200 bg-gray-50">
+            <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3 px-4 sm:px-6 py-3 sm:py-4 border-t border-gray-200 bg-gray-50 sticky bottom-0">
               {footer}
             </div>
           )}
