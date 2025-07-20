@@ -20,12 +20,22 @@ const PenaltyModal = ({ isOpen, onClose, onSelectOption, matchData }) => {
     setCurrentTurn(prev => prev === 'home' ? 'away' : 'home');
   };
 
-  const handleRemoveLastPenalty = () => {
+    const handleRemoveLastPenalty = () => {
     if (penalties.length > 0) {
       const lastPenalty = penalties[penalties.length - 1];
       setPenalties(prev => prev.slice(0, -1));
       setCurrentTurn(lastPenalty.team);
     }
+  };
+
+  const handleEditPenalty = (index) => {
+    setPenalties(prev =>
+      prev.map((penalty, i) =>
+        i === index
+          ? { ...penalty, result: penalty.result === 'goal' ? 'miss' : 'goal' }
+          : penalty
+      )
+    );
   };
 
   const handleConfirm = () => {
