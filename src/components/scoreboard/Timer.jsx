@@ -62,8 +62,8 @@ const Timer = ({
 
   const handleReset = () => {
     setIsRunning(false);
-    setTime(initialTime);
-    onTimeChange?.(initialTime);
+        setTime(initialTime);
+    onTimeChangeRef.current?.(initialTime);
   };
 
     const handleManualTimeChange = (newTime) => {
