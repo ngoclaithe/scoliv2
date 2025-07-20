@@ -105,8 +105,8 @@ const PosterSelector = ({
   return (
     <>
       <div className={`w-full ${className}`}>
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
             Chọn mẫu poster
           </h3>
           <div className="flex space-x-2">
@@ -114,6 +114,7 @@ const PosterSelector = ({
               variant="outline"
               size="sm"
               onClick={() => setShowModal(true)}
+              className="flex-1 sm:flex-none"
             >
               Xem tất cả
             </Button>
@@ -121,6 +122,7 @@ const PosterSelector = ({
               variant="primary"
               size="sm"
               onClick={onCustomPoster}
+              className="flex-1 sm:flex-none"
               icon={
                 <svg
                   className="w-4 h-4"
@@ -137,7 +139,8 @@ const PosterSelector = ({
                 </svg>
               }
             >
-              Tùy chỉnh
+              <span className="hidden sm:inline">Tùy chỉnh</span>
+              <span className="sm:hidden">Tạo mới</span>
             </Button>
           </div>
         </div>
@@ -152,8 +155,8 @@ const PosterSelector = ({
               </div>
             ))}
           </div>
-        ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
             {filteredPosters.slice(0, 8).map((poster) => (
               <PosterCard
                 key={poster.id}
@@ -201,14 +204,14 @@ const PosterSelector = ({
         size="xl"
       >
         <div className="space-y-6">
-          {/* Category Filter */}
+                    {/* Category Filter */}
           <div className="flex flex-wrap gap-2">
             {categories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
                 className={`
-                  px-3 py-2 rounded-lg text-sm font-medium transition-colors
+                  px-2 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors
                   ${
                     selectedCategory === category.id
                       ? "bg-primary-100 text-primary-800 border border-primary-300"
@@ -217,7 +220,7 @@ const PosterSelector = ({
                 `}
               >
                 <span className="mr-1">{category.icon}</span>
-                {category.name}
+                <span className="hidden sm:inline">{category.name}</span>
               </button>
             ))}
           </div>
@@ -226,7 +229,7 @@ const PosterSelector = ({
           {loading ? (
             <Loading size="lg" text="Đang tải poster..." />
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-96 overflow-y-auto">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 max-h-96 overflow-y-auto">
               {filteredPosters.map((poster) => (
                 <PosterCard
                   key={poster.id}

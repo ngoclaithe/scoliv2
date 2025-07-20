@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import Modal from "../common/Modal";
+import QuickLineupModal from "./QuickLineupModal";
 
 const LineupManager = ({
   lineup,
@@ -16,9 +17,10 @@ const LineupManager = ({
     ...lineup,
   });
 
-  const [showPlayerModal, setShowPlayerModal] = useState(false);
+    const [showPlayerModal, setShowPlayerModal] = useState(false);
   const [editingPlayer, setEditingPlayer] = useState(null);
   const [selectedPosition, setSelectedPosition] = useState(null);
+  const [showQuickModal, setShowQuickModal] = useState(false);
 
   const formations = [
     { id: "4-4-2", name: "4-4-2", positions: 11 },
@@ -171,6 +173,35 @@ const LineupManager = ({
     onLineupUpdate?.(updatedLineup);
   };
 
+    const handleQuickLineupSave = (lineupData) => {
+    // For now, we'll just update the current team's lineup
+    const teamData = lineupData[teamType];
+    if (!teamData) return;
+
+    // Convert the quick lineup format to our position format
+    const newFormation = teamData.formation;
+    const basePositions = getFormationPositions(newFormation);
+
+    const updatedPositions = basePositions.map((pos, index) => ({
+      ...pos,
+      player: teamData.players[index] ? {
+        name: teamData.players[index].name,
+        number: teamData.players[index].number,
+        position: teamData.players[index].position,
+      } : null,
+    }));
+
+    const updatedLineup = {
+      ...currentLineup,
+      formation: newFormation,
+      positions: updatedPositions,
+    };
+
+    setCurrentLineup(updatedLineup);
+    onLineupUpdate?.(updatedLineup);
+    setShowQuickModal(false);
+  };
+
   const getPlayerAtPosition = (positionId) => {
     return currentLineup.positions?.find((pos) => pos.id === positionId)
       ?.player;
@@ -190,7 +221,30 @@ const LineupManager = ({
                 Sắp xếp đội hình và cầu thủ cho trận đấu
               </p>
             </div>
-            <div className="flex space-x-2">
+                        <div className="flex flex-wrap gap-2">
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => setShowQuickModal(true)}
+                icon={
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4v16m8-8H4"
+                    />
+                  </svg>
+                }
+              >
+                <span className="hidden sm:inline">Nhập nhanh danh sách</span>
+                <span className="sm:hidden">Danh sách</span>
+              </Button>
               <Button
                 variant="outline"
                 size="sm"
@@ -211,7 +265,8 @@ const LineupManager = ({
                   </svg>
                 }
               >
-                Tự động
+                <span className="hidden sm:inline">Tự động</span>
+                <span className="sm:hidden">Auto</span>
               </Button>
               <Button
                 variant="outline"
@@ -233,7 +288,8 @@ const LineupManager = ({
                   </svg>
                 }
               >
-                Xóa hết
+                <span className="hidden sm:inline">Xóa hết</span>
+                <span className="sm:hidden">Xóa</span>
               </Button>
             </div>
           </div>
@@ -461,8 +517,19 @@ const LineupManager = ({
               placeholder="VD: Việt Nam"
             />
           </div>
-        )}
+                )}
       </Modal>
+
+      {/* Quick Lineup Modal */}
+      <QuickLineupModal
+        isOpen={showQuickModal}
+        onClose={() => setShowQuickModal(false)}
+        onSave={handleQuickLineupSave}
+        matchData={{
+          homeTeam: { name: teamType === "home" ? "Đội nhà" : "Đội A" },
+          awayTeam: { name: teamType === "away" ? "Đội khách" : "Đội B" },
+        }}
+      />
     </>
   );
 };

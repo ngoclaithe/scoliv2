@@ -3,6 +3,7 @@ import Button from "../components/common/Button";
 import Input from "../components/common/Input";
 import ScoreDisplay from "../components/scoreboard/ScoreDisplay";
 import PosterManager from "../components/poster/PosterManager";
+import TeamLineupModal from "../components/lineup/TeamLineupModal";
 import Modal from "../components/common/Modal";
 
 const Home = () => {
@@ -33,8 +34,9 @@ const Home = () => {
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
 
-  // State cho modal poster
+    // State cho modal poster
   const [showPosterModal, setShowPosterModal] = useState(false);
+  const [showLineupModal, setShowLineupModal] = useState(false);
 
   const tabs = [
     { id: "upload-logo", name: "UP LOGO" },
@@ -426,7 +428,7 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Đội khách */}
+            {/* Đội kh��ch */}
             <div className="bg-white rounded-lg p-4 shadow-md border-2 border-purple-200">
               <h4 className="text-center font-bold text-purple-700 mb-4">
                 {matchData.awayTeam.name}
@@ -481,7 +483,7 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Options - Thay đổi thành action buttons */}
+        {/* Options - Thay đổi th��nh action buttons */}
         <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-indigo-200">
           <h3 className="text-center text-lg font-bold text-indigo-800 mb-4 sm:mb-6 flex items-center justify-center">
             <span className="mr-2">⚙️</span>
@@ -506,7 +508,7 @@ const Home = () => {
             <button
               onClick={() => {
                 setSelectedOption("gioi-thieu");
-                // Có thể mở modal giới thiệu ở đây
+                // Có th�� mở modal giới thiệu ở đây
               }}
               className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "gioi-thieu"
@@ -520,11 +522,11 @@ const Home = () => {
               </span>
             </button>
 
-            {/* Danh sách */}
+                        {/* Danh sách */}
             <button
               onClick={() => {
                 setSelectedOption("danh-sach");
-                // Có thể mở modal danh sách ở đây
+                setShowLineupModal(true);
               }}
               className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "danh-sach"
@@ -895,9 +897,21 @@ const Home = () => {
               <span className="mr-2">💾</span>
               Lưu & Áp Dụng
             </Button>
-          </div>
+                    </div>
         </div>
       </Modal>
+
+      {/* Team Lineup Modal */}
+      <TeamLineupModal
+        isOpen={showLineupModal}
+        onClose={() => setShowLineupModal(false)}
+        onSave={(lineupData) => {
+          console.log("Saved lineup data:", lineupData);
+          setShowLineupModal(false);
+          // Có thể thêm thông báo thành công ở đây
+        }}
+        matchData={matchData}
+      />
     </div>
   );
 };

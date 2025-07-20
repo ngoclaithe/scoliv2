@@ -10,7 +10,9 @@ import ScoreControls from "./components/scoreboard/ScoreControls";
 import Timer from "./components/scoreboard/Timer";
 import MatchManager from "./components/match/MatchManager";
 import LineupManager from "./components/lineup/LineupManager";
+import TeamLineupModal from "./components/lineup/TeamLineupModal";
 import PosterManager from "./components/poster/PosterManager";
+import Button from "./components/common/Button";
 import LogoPreview from "./components/logo/LogoPreview";
 import AudioPlayer from "./components/audio/AudioPlayer";
 
@@ -30,7 +32,8 @@ function App() {
     temperature: "28°C",
   });
 
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
+    const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [showLineupModal, setShowLineupModal] = useState(false);
 
   const demoLineup = {
     formation: "4-4-2",
@@ -214,12 +217,37 @@ function App() {
           </div>
         );
 
-      case "lineup":
+            case "lineup":
         return (
-          <div className="max-w-6xl mx-auto p-6">
-            <h1 className="text-3xl font-bold text-gray-900 text-center mb-8">
-              Demo Quản Lý Đội Hình
-            </h1>
+          <div className="max-w-6xl mx-auto p-4 sm:p-6">
+            <div className="text-center mb-6 sm:mb-8">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+                Quản Lý Đội Hình
+              </h1>
+              <Button
+                variant="primary"
+                size="lg"
+                onClick={() => setShowLineupModal(true)}
+                icon={
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+                    />
+                  </svg>
+                }
+                className="mb-6"
+              >
+                📋 Nhập danh sách cầu thủ
+              </Button>
+            </div>
             <LineupManager
               lineup={demoLineup}
               onLineupUpdate={(lineup) =>
@@ -342,8 +370,19 @@ function App() {
         </div>
       </div>
 
-      {/* Page Content */}
+            {/* Page Content */}
       <main>{renderCurrentPage()}</main>
+
+      {/* Global Modals */}
+      <TeamLineupModal
+        isOpen={showLineupModal}
+        onClose={() => setShowLineupModal(false)}
+        onSave={(lineupData) => {
+          console.log("Saved lineup data:", lineupData);
+          setShowLineupModal(false);
+        }}
+        matchData={demoMatch}
+      />
     </div>
   );
 }
