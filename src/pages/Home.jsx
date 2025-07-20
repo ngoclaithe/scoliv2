@@ -38,7 +38,7 @@ const Home = () => {
 
   const tabs = [
     { id: "upload-logo", name: "UP LOGO" },
-    { id: "quan-ly-tran", name: "QUẢN LÝ TRẬN" },
+    { id: "quan-ly-tran", name: "QU��N LÝ TRẬN" },
   ];
 
   const handleCodeSubmit = async () => {
@@ -763,6 +763,96 @@ const Home = () => {
           {activeTab === "quan-ly-tran" && renderQuanLyTranTab()}
         </div>
       </main>
+
+      {/* Poster Manager Modal - Responsive */}
+      <Modal
+        isOpen={showPosterModal}
+        onClose={() => setShowPosterModal(false)}
+        title="🎨 Quản Lý Poster & Logo"
+        size="full"
+        className="max-h-screen overflow-hidden"
+      >
+        <div className="h-full max-h-[85vh] overflow-y-auto">
+          <div className="p-2 sm:p-4 lg:p-6">
+            {/* Search Bar */}
+            <div className="mb-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border border-blue-200">
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex-1">
+                  <Input
+                    placeholder="🔍 Tìm kiếm poster, logo, template..."
+                    className="w-full text-center sm:text-left"
+                    icon={
+                      <svg
+                        className="w-5 h-5 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                        />
+                      </svg>
+                    }
+                  />
+                </div>
+                <Button
+                  variant="primary"
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold px-6 py-2 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                >
+                  <span className="mr-2">🔍</span>
+                  <span className="hidden sm:inline">Tìm Kiếm</span>
+                </Button>
+              </div>
+            </div>
+
+            {/* Poster Manager Component */}
+            <div className="bg-white rounded-lg">
+              <PosterManager
+                matchData={matchData}
+                onPosterUpdate={(poster) => {
+                  console.log("Updated poster:", poster);
+                  // Có thể thêm toast notification ở đây
+                }}
+                onLogoUpdate={(logoData) => {
+                  console.log("Updated logo:", logoData);
+                  // Có thể thêm toast notification ở đây
+                }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile-friendly footer */}
+        <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4 flex flex-col sm:flex-row gap-3 justify-between items-center">
+          <div className="text-sm text-gray-600 text-center sm:text-left">
+            💡 <strong>Tip:</strong> Chọn poster trước, sau đó cài đặt logo và
+            chữ chạy
+          </div>
+          <div className="flex gap-3">
+            <Button
+              variant="outline"
+              onClick={() => setShowPosterModal(false)}
+              className="px-6 py-2"
+            >
+              Đóng
+            </Button>
+            <Button
+              variant="primary"
+              className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-2"
+              onClick={() => {
+                setShowPosterModal(false);
+                // Logic lưu cài đặt poster
+              }}
+            >
+              <span className="mr-2">💾</span>
+              Lưu & Áp Dụng
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
