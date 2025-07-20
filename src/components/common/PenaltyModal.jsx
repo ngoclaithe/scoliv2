@@ -1,22 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
 import Button from "./Button";
 
-const PenaltyModal = ({ isOpen, onClose, onSelectOption, matchData }) => {
+const PenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penaltyData }) => {
   const [penalties, setPenalties] = useState([]);
-  const [currentTurn, setCurrentTurn] = useState('home'); // 'home' hoặc 'away'
+  const [currentTurn, setCurrentTurn] = useState('home');
+
+  // Load trạng thái penalty từ props khi mở modal
+  useEffect(() => {
+    if (isOpen && penaltyData) {
+      setPenalties(penaltyData.penalties || []);
+      setCurrentTurn(penaltyData.currentTurn || 'home');
+    }
+  }, [isOpen, penaltyData]);
+
+  // Auto-save mỗi khi có thay đổi
+  useEffect(() => {
+    if (isOpen) {
+      const homeGoals = penalties.filter(p => p.team === 'home' && p.result === 'goal').length;
+      const awayGoals = penalties.filter(p => p.team === 'away' && p.result === 'goal').length;
+      
+      const newPenaltyData = {
+        penalties: penalties,
+        currentTurn: currentTurn,
+        homeGoals: homeGoals,
+        awayGoals: awayGoals
+      };
+      
+      if (onPenaltyChange) {
+        onPenaltyChange(newPenaltyData);
+      }
+    }
+  }, [penalties, currentTurn, isOpen, onPenaltyChange]);
 
   const handleAddPenalty = (result) => {
     const newPenalty = {
       turn: penalties.length + 1,
       team: currentTurn,
-      result: result, // 'goal' hoặc 'miss'
+      result: result,
       teamName: currentTurn === 'home' ? matchData?.homeTeam?.name : matchData?.awayTeam?.name
     };
 
     setPenalties(prev => [...prev, newPenalty]);
-    
-    // Chuyển lượt
     setCurrentTurn(prev => prev === 'home' ? 'away' : 'home');
   };
 
@@ -38,26 +63,9 @@ const PenaltyModal = ({ isOpen, onClose, onSelectOption, matchData }) => {
     );
   };
 
-  const handleConfirm = () => {
-    const homeGoals = penalties.filter(p => p.team === 'home' && p.result === 'goal').length;
-    const awayGoals = penalties.filter(p => p.team === 'away' && p.result === 'goal').length;
-    
-    if (onSelectOption) {
-      onSelectOption({
-        type: "penalty",
-        penalties: penalties,
-        homeGoals: homeGoals,
-        awayGoals: awayGoals,
-        currentTurn: currentTurn
-      });
-    }
-    onClose();
-  };
-
-  const handleCancel = () => {
+  const handleClearAll = () => {
     setPenalties([]);
     setCurrentTurn('home');
-    onClose();
   };
 
   const homeGoals = penalties.filter(p => p.team === 'home' && p.result === 'goal').length;
@@ -66,29 +74,35 @@ const PenaltyModal = ({ isOpen, onClose, onSelectOption, matchData }) => {
   return (
     <Modal
       isOpen={isOpen}
-      onClose={handleCancel}
-      title="🥅 Penalty Shootout - Theo dõi từng lượt"
+      onClose={onClose}
+      title="🥅 Penalty Shootout - Tương tác trực tiếp"
       size="lg"
       footer={
-        <div className="flex flex-col sm:flex-row gap-2 w-full">
+        <div className="flex justify-between w-full">
           <Button
             variant="secondary"
-            onClick={handleCancel}
-            className="w-full sm:w-auto"
+            onClick={handleClearAll}
+            className="text-red-600 hover:bg-red-50"
           >
-            Hủy
+            🗑️ Xóa tất cả
           </Button>
           <Button
             variant="primary"
-            onClick={handleConfirm}
-            className="w-full sm:w-auto"
+            onClick={onClose}
           >
-            Xác nhận
+            Đóng
           </Button>
         </div>
       }
     >
       <div className="space-y-6">
+        {/* Auto-save indicator */}
+        <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+          <span className="text-green-700 text-sm font-medium">
+            ✅ Tự động lưu - Mọi thay đổi được áp dụng ngay lập tức
+          </span>
+        </div>
+
         {/* Current Score */}
         <div className="bg-gradient-to-r from-blue-50 to-red-50 rounded-lg p-4 border">
           <div className="flex items-center justify-center space-x-6">
@@ -124,14 +138,14 @@ const PenaltyModal = ({ isOpen, onClose, onSelectOption, matchData }) => {
             <div className="flex justify-center space-x-4">
               <button
                 onClick={() => handleAddPenalty('goal')}
-                className="px-6 py-3 rounded-lg font-bold text-white bg-green-500 hover:bg-green-600 transition-all transform hover:scale-105"
+                className="px-6 py-3 rounded-lg font-bold text-white bg-green-500 hover:bg-green-600 transition-all transform hover:scale-105 shadow-lg"
               >
                 ✅ VÀO
               </button>
               
               <button
                 onClick={() => handleAddPenalty('miss')}
-                className="px-6 py-3 rounded-lg font-bold text-white bg-red-500 hover:bg-red-600 transition-all transform hover:scale-105"
+                className="px-6 py-3 rounded-lg font-bold text-white bg-red-500 hover:bg-red-600 transition-all transform hover:scale-105 shadow-lg"
               >
                 ❌ TRƯỢT
               </button>
@@ -143,12 +157,14 @@ const PenaltyModal = ({ isOpen, onClose, onSelectOption, matchData }) => {
         {penalties.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h4 className="font-semibold text-gray-800">Lịch sử các lượt sút:</h4>
+              <h4 className="font-semibold text-gray-800">
+                Lịch sử các lượt sút ({penalties.length} lượt):
+              </h4>
               <button
                 onClick={handleRemoveLastPenalty}
-                className="text-sm bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded text-gray-700"
+                className="text-sm bg-orange-200 hover:bg-orange-300 px-3 py-1 rounded text-orange-700 transition-colors"
               >
-                Xóa lượt cuối
+                ↶ Hoàn tác lượt cuối
               </button>
             </div>
             
@@ -157,7 +173,7 @@ const PenaltyModal = ({ isOpen, onClose, onSelectOption, matchData }) => {
                 {penalties.map((penalty, index) => (
                   <div
                     key={index}
-                    className={`flex items-center justify-between p-3 rounded-lg border-2 transition-all ${
+                    className={`flex items-center justify-between p-3 rounded-lg border-2 transition-all hover:shadow-md ${
                       penalty.team === 'home' 
                         ? 'bg-blue-50 border-blue-200 text-blue-800' 
                         : 'bg-red-50 border-red-200 text-red-800'
@@ -170,20 +186,20 @@ const PenaltyModal = ({ isOpen, onClose, onSelectOption, matchData }) => {
                     </div>
                     
                     <div className="flex items-center space-x-2">
-                      <span className={`font-bold px-2 py-1 rounded text-xs ${
+                      <span className={`font-bold px-3 py-1 rounded-full text-xs ${
                         penalty.result === 'goal' 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
+                          ? 'bg-green-100 text-green-800 border border-green-300' 
+                          : 'bg-red-100 text-red-800 border border-red-300'
                       }`}>
                         {penalty.result === 'goal' ? '✅ VÀO' : '❌ TRƯỢT'}
                       </span>
                       
                       <button
                         onClick={() => handleEditPenalty(index)}
-                        className="text-xs bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded text-gray-600 transition-colors"
-                        title="Click để thay đổi kết quả"
+                        className="text-xs bg-blue-200 hover:bg-blue-300 px-3 py-1 rounded-full text-blue-700 transition-all transform hover:scale-105"
+                        title={`Click để thay đổi: ${penalty.result === 'goal' ? 'VÀO → TRƯỢT' : 'TRƯỢT → VÀO'}`}
                       >
-                        Sửa
+                        🔄 Đổi
                       </button>
                     </div>
                   </div>
@@ -191,7 +207,7 @@ const PenaltyModal = ({ isOpen, onClose, onSelectOption, matchData }) => {
               </div>
               
               <div className="mt-3 text-xs text-gray-500 text-center">
-                💡 Click "Sửa" để thay đổi k���t quả VÀO ↔ TRƯỢT
+                💡 Click "🔄 Đổi" để thay đổi kết quả VÀO ↔ TRƯỢT
               </div>
             </div>
           </div>
@@ -199,7 +215,9 @@ const PenaltyModal = ({ isOpen, onClose, onSelectOption, matchData }) => {
 
         {/* Preview */}
         <div className="bg-gray-50 rounded-lg p-4 border">
-          <h4 className="font-semibold text-gray-800 mb-2 text-sm text-center">Xem trước hiển thị:</h4>
+          <h4 className="font-semibold text-gray-800 mb-2 text-sm text-center">
+            📺 Hiển thị trên livestream:
+          </h4>
           <div className="bg-white rounded border p-4">
             <div className="text-center mb-3">
               <div className="text-sm text-gray-600 mb-2">🥅 PENALTY SHOOTOUT</div>
@@ -232,6 +250,13 @@ const PenaltyModal = ({ isOpen, onClose, onSelectOption, matchData }) => {
                     </div>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {penalties.length === 0 && (
+              <div className="text-center text-gray-400 py-4">
+                <div className="text-sm">Chưa có lượt sút nào</div>
+                <div className="text-xs mt-1">Bắt đầu penalty shootout ↑</div>
               </div>
             )}
           </div>
