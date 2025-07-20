@@ -12,6 +12,7 @@ import MatchManager from "./components/match/MatchManager";
 import LineupManager from "./components/lineup/LineupManager";
 import TeamLineupModal from "./components/lineup/TeamLineupModal";
 import PosterManager from "./components/poster/PosterManager";
+import Button from "./components/common/Button";
 import LogoPreview from "./components/logo/LogoPreview";
 import AudioPlayer from "./components/audio/AudioPlayer";
 
@@ -369,8 +370,19 @@ function App() {
         </div>
       </div>
 
-      {/* Page Content */}
+            {/* Page Content */}
       <main>{renderCurrentPage()}</main>
+
+      {/* Global Modals */}
+      <TeamLineupModal
+        isOpen={showLineupModal}
+        onClose={() => setShowLineupModal(false)}
+        onSave={(lineupData) => {
+          console.log("Saved lineup data:", lineupData);
+          setShowLineupModal(false);
+        }}
+        matchData={demoMatch}
+      />
     </div>
   );
 }
