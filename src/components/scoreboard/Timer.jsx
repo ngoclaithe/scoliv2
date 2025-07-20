@@ -27,7 +27,7 @@ const Timer = ({
               ? Math.min(prevTime + 1, maxTime)
               : Math.max(prevTime - 1, 0);
 
-          onTimeChange?.(newTime);
+                    onTimeChangeRef.current?.(newTime);
 
           // Auto stop khi countdown về 0
           if (direction === "down" && newTime === 0) {
@@ -42,7 +42,7 @@ const Timer = ({
     }
 
     return () => clearInterval(intervalRef.current);
-  }, [isRunning, direction, maxTime, onTimeChange]);
+    }, [isRunning, direction, maxTime]);
 
   const formatTime = (seconds) => {
     const hours = Math.floor(seconds / 3600);
@@ -66,9 +66,9 @@ const Timer = ({
     onTimeChange?.(initialTime);
   };
 
-  const handleManualTimeChange = (newTime) => {
+    const handleManualTimeChange = (newTime) => {
     setTime(newTime);
-    onTimeChange?.(newTime);
+    onTimeChangeRef.current?.(newTime);
   };
 
   const adjustTime = (adjustment) => {
