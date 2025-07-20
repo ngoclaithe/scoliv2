@@ -138,27 +138,39 @@ const TeamLineupModal = ({
       }
     >
       <div className="space-y-4 sm:space-y-6">
-        {/* Team Selection */}
-        <div className="flex bg-gray-100 rounded-lg p-1">
+                {/* Team Selection */}
+        <div className="flex bg-gray-100 rounded-lg p-1 mb-2">
           <button
             onClick={() => setActiveTeam("home")}
-            className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
+            className={`flex-1 py-3 px-2 rounded-md text-sm font-medium transition-all min-h-[3rem] ${
               activeTeam === "home"
                 ? "bg-white text-blue-600 shadow-sm"
-                : "text-gray-600"
+                : "text-gray-600 hover:bg-gray-200"
             }`}
           >
-            🏠 {matchData.homeTeam?.name || "Đội nhà"} ({homeCount}/11)
+            <div className="flex flex-col items-center">
+              <span className="text-lg mb-1">🏠</span>
+              <span className="text-xs sm:text-sm font-medium">
+                {matchData.homeTeam?.name || "Đội nhà"}
+              </span>
+              <span className="text-xs text-gray-500">({homeCount}/11)</span>
+            </div>
           </button>
           <button
             onClick={() => setActiveTeam("away")}
-            className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
+            className={`flex-1 py-3 px-2 rounded-md text-sm font-medium transition-all min-h-[3rem] ${
               activeTeam === "away"
                 ? "bg-white text-red-600 shadow-sm"
-                : "text-gray-600"
+                : "text-gray-600 hover:bg-gray-200"
             }`}
           >
-            ✈️ {matchData.awayTeam?.name || "Đội khách"} ({awayCount}/11)
+            <div className="flex flex-col items-center">
+              <span className="text-lg mb-1">✈️</span>
+              <span className="text-xs sm:text-sm font-medium">
+                {matchData.awayTeam?.name || "Đội khách"}
+              </span>
+              <span className="text-xs text-gray-500">({awayCount}/11)</span>
+            </div>
           </button>
         </div>
 
