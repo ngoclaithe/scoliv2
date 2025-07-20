@@ -10,13 +10,15 @@ const CountdownTimer = ({
   size = "lg",
   className = "",
 }) => {
-  const [timeLeft, setTimeLeft] = useState({
+    const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
     seconds: 0,
   });
   const [isCompleted, setIsCompleted] = useState(false);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
     const calculateTimeLeft = () => {
@@ -124,7 +126,7 @@ const CountdownTimer = ({
             Trận đấu đã bắt đầu!
           </h3>
           <p className="text-white text-opacity-90">
-            Thời gian đếm ngược đã kết thúc
+            Thời gian đếm ngược đã k���t thúc
           </p>
         </div>
       </div>
