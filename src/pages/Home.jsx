@@ -40,12 +40,13 @@ const Home = () => {
   const [showLineupModal, setShowLineupModal] = useState(false);
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
 
-    // State cho penalty shootout
+      // State cho penalty shootout - đơn giản hóa cho backend
   const [penaltyData, setPenaltyData] = useState({
-    penalties: [],
-    currentTurn: 'home',
     homeGoals: 0,
-    awayGoals: 0
+    awayGoals: 0,
+    currentTurn: 'home',
+    status: 'ready', // ready, ongoing, completed
+    lastUpdated: null
   });
 
   // Memoized callback to prevent infinite loops
@@ -373,7 +374,7 @@ const Home = () => {
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Hết hạn vào:</span>
+                  <span className="text-gray-600">H���t hạn vào:</span>
                   <span className="font-medium text-orange-600">
                     {codeInfo.expiryDate}
                   </span>
