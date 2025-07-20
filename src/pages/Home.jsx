@@ -3,6 +3,7 @@ import Button from "../components/common/Button";
 import Input from "../components/common/Input";
 import ScoreDisplay from "../components/scoreboard/ScoreDisplay";
 import PosterManager from "../components/poster/PosterManager";
+import TeamLineupModal from "../components/lineup/TeamLineupModal";
 import Modal from "../components/common/Modal";
 
 const Home = () => {
@@ -33,8 +34,9 @@ const Home = () => {
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
 
-  // State cho modal poster
+    // State cho modal poster
   const [showPosterModal, setShowPosterModal] = useState(false);
+  const [showLineupModal, setShowLineupModal] = useState(false);
 
   const tabs = [
     { id: "upload-logo", name: "UP LOGO" },
@@ -520,11 +522,11 @@ const Home = () => {
               </span>
             </button>
 
-            {/* Danh sách */}
+                        {/* Danh sách */}
             <button
               onClick={() => {
                 setSelectedOption("danh-sach");
-                // Có thể mở modal danh sách ở đây
+                setShowLineupModal(true);
               }}
               className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "danh-sach"
