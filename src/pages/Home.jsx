@@ -226,7 +226,7 @@ const Home = () => {
       <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
         <h3 className="text-center text-lg font-bold text-green-700 mb-4 flex items-center justify-center">
           <span className="mr-2">🔍</span>
-          TÌM KI��M LOGO
+          TÌM KIẾM LOGO
         </h3>
         <Input
           placeholder="Tìm theo tên đội hoặc mã logo..."
@@ -577,14 +577,13 @@ const Home = () => {
               </span>
             </button>
 
-            {/* Penalty */}
+                        {/* Penalty */}
             <button
               onClick={() => {
-                setSelectedOption("penalty");
-                // Có thể mở modal penalty ở đây
+                setShowPenaltyModal(true);
               }}
               className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
-                selectedOption === "penalty"
+                selectedOption?.startsWith("penalty")
                   ? "bg-gradient-to-br from-gray-600 to-gray-800 text-white"
                   : "bg-gradient-to-br from-gray-100 to-gray-300 text-gray-700 hover:from-gray-200 hover:to-gray-400"
               }`}
