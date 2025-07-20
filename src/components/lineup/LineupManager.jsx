@@ -488,8 +488,19 @@ const LineupManager = ({
               placeholder="VD: Việt Nam"
             />
           </div>
-        )}
+                )}
       </Modal>
+
+      {/* Quick Lineup Modal */}
+      <QuickLineupModal
+        isOpen={showQuickModal}
+        onClose={() => setShowQuickModal(false)}
+        onSave={handleQuickLineupSave}
+        matchData={{
+          homeTeam: { name: teamType === "home" ? "Đội nhà" : "Đội A" },
+          awayTeam: { name: teamType === "away" ? "Đội khách" : "Đội B" },
+        }}
+      />
     </>
   );
 };
