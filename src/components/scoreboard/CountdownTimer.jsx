@@ -40,9 +40,9 @@ const CountdownTimer = ({
         setIsCompleted(false);
       } else {
         setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-        if (!isCompleted) {
+                if (!isCompleted) {
           setIsCompleted(true);
-          onComplete?.();
+          onCompleteRef.current?.();
         }
       }
     };
@@ -126,7 +126,7 @@ const CountdownTimer = ({
             Trận đấu đã bắt đầu!
           </h3>
           <p className="text-white text-opacity-90">
-            Thời gian đếm ngược đã k���t thúc
+            Thời gian đếm ngược đã kết thúc
           </p>
         </div>
       </div>
