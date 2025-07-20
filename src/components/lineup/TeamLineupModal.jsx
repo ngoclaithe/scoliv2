@@ -107,8 +107,9 @@ const TeamLineupModal = ({
       onClose={onClose}
       title="📋 Danh sách cầu thủ hai đội"
       size="xl"
-      footer={
-        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full sm:w-auto sm:justify-end">
+            footer={
+        <div className="flex flex-col gap-3 w-full">
+          {/* Mobile progress indicator */}
           <div className="flex gap-2 sm:hidden">
             <div className="flex-1 text-center p-2 bg-blue-50 rounded">
               <div className="font-semibold text-blue-600">{homeCount}/11</div>
@@ -119,12 +120,18 @@ const TeamLineupModal = ({
               <div className="text-xs text-red-500">Đội khách</div>
             </div>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={onClose} className="flex-1 sm:flex-none">
+          {/* Action buttons */}
+          <div className="flex gap-2 sm:justify-end">
+            <Button variant="outline" onClick={onClose} className="flex-1 sm:flex-none min-h-[2.75rem]">
               Hủy
             </Button>
-            <Button variant="primary" onClick={validateAndSave} className="flex-1 sm:flex-none">
-              Lưu danh sách
+            <Button
+              variant="primary"
+              onClick={validateAndSave}
+              className="flex-1 sm:flex-none min-h-[2.75rem]"
+              disabled={homeCount < 11 || awayCount < 11}
+            >
+              Lưu danh sách ({homeCount + awayCount}/22)
             </Button>
           </div>
         </div>
