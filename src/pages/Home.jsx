@@ -647,7 +647,7 @@ const Home = () => {
             >
               <span className="text-xl sm:text-2xl mb-1">🕐</span>
               <span className="text-xs sm:text-sm font-bold text-center">
-                ĐẾM 30'
+                Đ��M 30'
               </span>
             </button>
 
@@ -901,7 +901,7 @@ const Home = () => {
         </div>
       </Modal>
 
-      {/* Team Lineup Modal */}
+            {/* Team Lineup Modal */}
       <TeamLineupModal
         isOpen={showLineupModal}
         onClose={() => setShowLineupModal(false)}
@@ -911,6 +911,17 @@ const Home = () => {
           // Có thể thêm thông báo thành công ở đây
         }}
         matchData={matchData}
+      />
+
+      {/* Penalty Modal */}
+      <PenaltyModal
+        isOpen={showPenaltyModal}
+        onClose={() => setShowPenaltyModal(false)}
+        selectedOption={selectedOption?.startsWith("penalty") ? selectedOption : null}
+        onSelectOption={(option) => {
+          setSelectedOption(option);
+          setShowPenaltyModal(false);
+        }}
       />
     </div>
   );
