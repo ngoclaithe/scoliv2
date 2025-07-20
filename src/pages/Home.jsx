@@ -38,7 +38,7 @@ const Home = () => {
 
   const tabs = [
     { id: "upload-logo", name: "UP LOGO" },
-    { id: "quan-ly-tran", name: "QU��N LÝ TRẬN" },
+    { id: "quan-ly-tran", name: "QUẢN LÝ TRẬN" },
   ];
 
   const handleCodeSubmit = async () => {
@@ -395,7 +395,7 @@ const Home = () => {
         {/* Score Controls */}
         <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-200">
           <h3 className="text-center text-lg font-bold text-gray-800 mb-6 flex items-center justify-center">
-            <span className="mr-2">⚽</span>
+            <span className="mr-2">���</span>
             ĐIỀU KHIỂN TỈ SỐ
             <span className="ml-2">⚽</span>
           </h3>
@@ -669,32 +669,17 @@ const Home = () => {
           />
         </div>
 
-        {/* Action Buttons */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Apply Button */}
+        {/* Apply Button */}
+        <div className="text-center">
           <Button
             variant="primary"
             size="lg"
-            className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-lg rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300"
+            className="px-20 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xl rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300"
           >
             <span className="mr-3">🚀</span>
             ÁP DỤNG
             <span className="ml-3">✨</span>
           </Button>
-
-          {/* Poster Manager Button - Hiển thị khi chọn option POSTER */}
-          {selectedOption === "poster" && (
-            <Button
-              variant="secondary"
-              size="lg"
-              onClick={() => setShowPosterModal(true)}
-              className="px-8 py-4 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-bold text-lg rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300"
-            >
-              <span className="mr-3">🎨</span>
-              QUẢN LÝ POSTER
-              <span className="ml-3">🖼️</span>
-            </Button>
-          )}
         </div>
       </div>
     );
