@@ -40,13 +40,19 @@ const Home = () => {
   const [showLineupModal, setShowLineupModal] = useState(false);
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
 
-  // State cho penalty shootout
+    // State cho penalty shootout
   const [penaltyData, setPenaltyData] = useState({
     penalties: [],
     currentTurn: 'home',
     homeGoals: 0,
     awayGoals: 0
   });
+
+  // Memoized callback to prevent infinite loops
+  const handlePenaltyChange = useCallback((newPenaltyData) => {
+    setPenaltyData(newPenaltyData);
+    setSelectedOption("penalty");
+  }, []);
 
   const tabs = [
     { id: "upload-logo", name: "UP LOGO" },
