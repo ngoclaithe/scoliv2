@@ -142,7 +142,7 @@ const TeamLineupModal = ({
         <div className="flex bg-gray-100 rounded-lg p-1 mb-2">
           <button
             onClick={() => setActiveTeam("home")}
-            className={`flex-1 py-3 px-2 rounded-md text-sm font-medium transition-all min-h-[3rem] ${
+                        className={`flex-1 py-2 px-2 rounded-md text-sm font-medium transition-all min-h-[2.5rem] ${
               activeTeam === "home"
                 ? "bg-white text-blue-600 shadow-sm"
                 : "text-gray-600 hover:bg-gray-200"
@@ -151,7 +151,7 @@ const TeamLineupModal = ({
             <div className="flex flex-col items-center">
               <span className="text-lg mb-1">🏠</span>
               <span className="text-xs sm:text-sm font-medium">
-                {matchData.homeTeam?.name || "��ội nhà"}
+                {matchData.homeTeam?.name || "Đội nhà"}
               </span>
               <span className="text-xs text-gray-500">({homeCount}/11)</span>
             </div>
