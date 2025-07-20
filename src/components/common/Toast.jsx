@@ -20,15 +20,15 @@ const Toast = ({
 
       return () => clearTimeout(timer);
     }
-  }, [duration, handleClose]);
+    }, [duration, handleClose]);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setIsExiting(true);
     setTimeout(() => {
       setIsVisible(false);
       onClose?.();
     }, 300);
-  };
+  }, [onClose]);
 
   const types = {
     success: {
