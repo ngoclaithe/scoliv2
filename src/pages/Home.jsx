@@ -32,6 +32,9 @@ const Home = () => {
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
 
+  // State cho modal poster
+  const [showPosterModal, setShowPosterModal] = useState(false);
+
   const tabs = [
     { id: "upload-logo", name: "UP LOGO" },
     { id: "quan-ly-tran", name: "QUẢN LÝ TRẬN" },
@@ -228,7 +231,7 @@ const Home = () => {
         />
       </div>
 
-      {/* Hướng dẫn */}
+      {/* Hư��ng dẫn */}
       <div className="text-center">
         <Button
           variant="secondary"
