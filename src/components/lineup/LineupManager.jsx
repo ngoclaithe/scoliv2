@@ -173,6 +173,35 @@ const LineupManager = ({
     onLineupUpdate?.(updatedLineup);
   };
 
+    const handleQuickLineupSave = (lineupData) => {
+    // For now, we'll just update the current team's lineup
+    const teamData = lineupData[teamType];
+    if (!teamData) return;
+
+    // Convert the quick lineup format to our position format
+    const newFormation = teamData.formation;
+    const basePositions = getFormationPositions(newFormation);
+
+    const updatedPositions = basePositions.map((pos, index) => ({
+      ...pos,
+      player: teamData.players[index] ? {
+        name: teamData.players[index].name,
+        number: teamData.players[index].number,
+        position: teamData.players[index].position,
+      } : null,
+    }));
+
+    const updatedLineup = {
+      ...currentLineup,
+      formation: newFormation,
+      positions: updatedPositions,
+    };
+
+    setCurrentLineup(updatedLineup);
+    onLineupUpdate?.(updatedLineup);
+    setShowQuickModal(false);
+  };
+
   const getPlayerAtPosition = (positionId) => {
     return currentLineup.positions?.find((pos) => pos.id === positionId)
       ?.player;
