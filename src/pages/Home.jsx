@@ -840,7 +840,7 @@ const Home = () => {
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="flex-1">
                   <Input
-                    placeholder="🔍 Tìm ki��m poster, logo, template..."
+                    placeholder="🔍 Tìm kiếm poster, logo, template..."
                     className="w-full text-center sm:text-left"
                     icon={
                       <svg
@@ -928,7 +928,7 @@ const Home = () => {
       />
 
                   {/* Penalty Modal */}
-            <PenaltyModal
+                        <SimplePenaltyModal
         isOpen={showPenaltyModal}
         onClose={() => setShowPenaltyModal(false)}
         matchData={matchData}
