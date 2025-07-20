@@ -151,7 +151,7 @@ const TeamLineupModal = ({
             <div className="flex flex-col items-center">
               <span className="text-lg mb-1">🏠</span>
               <span className="text-xs sm:text-sm font-medium">
-                {matchData.homeTeam?.name || "Đội nhà"}
+                {matchData.homeTeam?.name || "��ội nhà"}
               </span>
               <span className="text-xs text-gray-500">({homeCount}/11)</span>
             </div>
@@ -271,7 +271,7 @@ const TeamLineupModal = ({
                                         <div className="p-3 sm:p-4 space-y-3 max-h-[40vh] sm:max-h-[50vh] lg:max-h-96 overflow-y-auto">
             {currentTeamData.map((player, index) => (
                                                         <div key={index} className="flex items-center gap-2 sm:gap-3 min-h-[2.5rem] py-1">
-                                <div className={`w-10 h-10 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0 ${
+                                                                <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0 ${
                   activeTeam === "home" ? "bg-blue-500" : "bg-red-500"
                 }`}>
                   {player.number}
