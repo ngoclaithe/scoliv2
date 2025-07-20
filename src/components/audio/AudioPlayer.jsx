@@ -44,20 +44,20 @@ const AudioPlayer = ({
     };
     const handleTimeUpdate = () => {
       setCurrentTime(audio.currentTime);
-      onTimeUpdate?.(audio.currentTime);
+            onTimeUpdateRef.current?.(audio.currentTime);
     };
     const handlePlay = () => {
       setIsPlaying(true);
-      onPlay?.(audio.currentTime);
+            onPlayRef.current?.(audio.currentTime);
     };
     const handlePause = () => {
       setIsPlaying(false);
-      onPause?.(audio.currentTime);
+            onPauseRef.current?.(audio.currentTime);
     };
     const handleEnded = () => {
       setIsPlaying(false);
       setCurrentTime(0);
-      onEnd?.();
+            onEndRef.current?.();
     };
     const handleError = () => {
       setLoading(false);
@@ -81,7 +81,7 @@ const AudioPlayer = ({
       audio.removeEventListener("ended", handleEnded);
       audio.removeEventListener("error", handleError);
     };
-  }, [onPlay, onPause, onEnd, onTimeUpdate]);
+    }, []);
 
   useEffect(() => {
     if (audioRef.current) {
