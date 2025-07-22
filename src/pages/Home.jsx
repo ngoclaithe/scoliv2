@@ -282,7 +282,7 @@ const Home = () => {
       {/* Search Section - No Code Required */}
       <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-3 border border-green-200">
         <div className="flex items-center justify-center mb-2">
-          <span className="text-sm">��</span>
+          <span className="text-sm">🔍</span>
           <h3 className="text-xs font-bold text-green-700 mx-2">TÌM KIẾM LOGO</h3>
         </div>
         <Input
@@ -625,8 +625,217 @@ const Home = () => {
           </div>
         )}
 
+        {/* Tab Thông số */}
+        {selectedOption === "thong-so" && (
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200">
+            <h3 className="text-center text-sm sm:text-lg font-bold text-green-800 mb-4 flex items-center justify-center">
+              <span className="mr-2 text-sm">📊</span>
+              THỐNG KÊ TRẬN ĐẤU
+              <span className="ml-2 text-sm">📊</span>
+            </h3>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {/* Tổng số cú sút */}
+              <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
+                <div className="text-center">
+                  <div className="text-lg sm:text-2xl font-bold text-blue-600 mb-1">
+                    {footballStats.totalShots}
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2">Tổng số cú sút</div>
+                  <div className="flex justify-center space-x-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, totalShots: Math.max(0, prev.totalShots - 1)}))}
+                      className="w-6 h-6 p-0 text-xs"
+                      disabled={footballStats.totalShots === 0}
+                    >
+                      -
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, totalShots: prev.totalShots + 1}))}
+                      className="w-6 h-6 p-0 text-xs"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sút trúng đích */}
+              <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
+                <div className="text-center">
+                  <div className="text-lg sm:text-2xl font-bold text-green-600 mb-1">
+                    {footballStats.shotsOnTarget}
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2">Sút trúng đích</div>
+                  <div className="flex justify-center space-x-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, shotsOnTarget: Math.max(0, prev.shotsOnTarget - 1)}))}
+                      className="w-6 h-6 p-0 text-xs"
+                      disabled={footballStats.shotsOnTarget === 0}
+                    >
+                      -
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, shotsOnTarget: prev.shotsOnTarget + 1}))}
+                      className="w-6 h-6 p-0 text-xs"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Phạt góc */}
+              <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
+                <div className="text-center">
+                  <div className="text-lg sm:text-2xl font-bold text-purple-600 mb-1">
+                    {footballStats.corners}
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2">Phạt góc</div>
+                  <div className="flex justify-center space-x-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, corners: Math.max(0, prev.corners - 1)}))}
+                      className="w-6 h-6 p-0 text-xs"
+                      disabled={footballStats.corners === 0}
+                    >
+                      -
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, corners: prev.corners + 1}))}
+                      className="w-6 h-6 p-0 text-xs"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Thẻ vàng */}
+              <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
+                <div className="text-center">
+                  <div className="text-lg sm:text-2xl font-bold text-yellow-600 mb-1">
+                    {footballStats.yellowCards}
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2">Thẻ vàng</div>
+                  <div className="flex justify-center space-x-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, yellowCards: Math.max(0, prev.yellowCards - 1)}))}
+                      className="w-6 h-6 p-0 text-xs"
+                      disabled={footballStats.yellowCards === 0}
+                    >
+                      -
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, yellowCards: prev.yellowCards + 1}))}
+                      className="w-6 h-6 p-0 text-xs"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Phạm lỗi */}
+              <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
+                <div className="text-center">
+                  <div className="text-lg sm:text-2xl font-bold text-red-600 mb-1">
+                    {footballStats.fouls}
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2">Phạm lỗi</div>
+                  <div className="flex justify-center space-x-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, fouls: Math.max(0, prev.fouls - 1)}))}
+                      className="w-6 h-6 p-0 text-xs"
+                      disabled={footballStats.fouls === 0}
+                    >
+                      -
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, fouls: prev.fouls + 1}))}
+                      className="w-6 h-6 p-0 text-xs"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Lỗi Futsal */}
+              <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
+                <div className="text-center">
+                  <div className="text-lg sm:text-2xl font-bold text-orange-600 mb-1">
+                    {futsalErrors}
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2">Lỗi(futsal)</div>
+                  <div className="flex justify-center space-x-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setFutsalErrors(prev => Math.max(0, prev - 1))}
+                      className="w-6 h-6 p-0 text-xs"
+                      disabled={futsalErrors === 0}
+                    >
+                      -
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setFutsalErrors(prev => prev + 1)}
+                      className="w-6 h-6 p-0 text-xs"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Reset Button */}
+            <div className="flex justify-center mt-4">
+              <Button
+                variant="warning"
+                size="sm"
+                onClick={() => {
+                  setFootballStats({
+                    totalShots: 0,
+                    shotsOnTarget: 0,
+                    corners: 0,
+                    yellowCards: 0,
+                    fouls: 0
+                  });
+                  setFutsalErrors(0);
+                }}
+                className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+              >
+                <span className="mr-1">🔄</span>
+                ĐẶT LẠI TẤT CẢ
+              </Button>
+            </div>
+          </div>
+        )}
+
         {/* Options - Thay đổi action buttons */}
-        {selectedOption !== "chon-skin" && (
+        {selectedOption !== "chon-skin" && selectedOption !== "thong-so" && (
           <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 sm:p-4 border border-indigo-200">
           {/* Grid responsive cho mobile */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
@@ -1276,7 +1485,7 @@ const Home = () => {
         onSave={(lineupData) => {
           console.log("Saved lineup data:", lineupData);
           setShowLineupModal(false);
-          // Có thể thêm thông báo thành công ở đây
+          // Có thể thêm thông báo thành công ��� đây
         }}
         matchData={matchData}
       />
