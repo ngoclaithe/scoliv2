@@ -770,35 +770,38 @@ const Home = () => {
           </h3>
 
           <div className="flex justify-center space-x-4 sm:space-x-8">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1 sm:space-x-2">
               <input
                 type="radio"
                 name="clock"
                 value="khong"
                 checked={clockSetting === "khong"}
                 onChange={(e) => setClockSetting(e.target.value)}
+                className="scale-75 sm:scale-100"
               />
-              <label>KHÔNG</label>
+              <label className="text-xs sm:text-sm">KHÔNG</label>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1 sm:space-x-2">
               <input
                 type="radio"
                 name="clock"
                 value="lien-tuc"
                 checked={clockSetting === "lien-tuc"}
                 onChange={(e) => setClockSetting(e.target.value)}
+                className="scale-75 sm:scale-100"
               />
-              <label>LIÊN TỤC</label>
+              <label className="text-xs sm:text-sm">LIÊN TỤC</label>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1 sm:space-x-2">
               <input
                 type="radio"
                 name="clock"
                 value="moi-2"
                 checked={clockSetting === "moi-2"}
                 onChange={(e) => setClockSetting(e.target.value)}
+                className="scale-75 sm:scale-100"
               />
-              <label>MỖI 2'</label>
+              <label className="text-xs sm:text-sm">MỖI 2'</label>
             </div>
           </div>
 
