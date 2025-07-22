@@ -230,39 +230,7 @@ const LogoSettings = ({ isOpen, onClose, onLogoUpdate, matchData }) => {
               }
             />
 
-                        {/* Logo Type Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Lọc theo loại logo
-              </label>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  onClick={() => handleSettingChange("type", "all")}
-                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                    logoSettings.type === "all"
-                      ? "bg-gray-800 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  Tất cả
-                </button>
-                {logoTypes.map((type) => (
-                  <button
-                    key={type.id}
-                    onClick={() => handleSettingChange("type", type.id)}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      logoSettings.type === type.id
-                        ? type.color.replace("100", "200")
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
-                  >
-                    <span className="mr-1">{type.icon}</span>
-                    <span className="hidden sm:inline">{type.name}</span>
-                    <span className="sm:hidden">{type.icon}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
+
 
             {/* Logo Grid */}
             {loading ? (
