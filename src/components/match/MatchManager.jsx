@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
-import Modal from "../common/Modal";
 
 const MatchManager = ({
   match,
@@ -39,8 +38,6 @@ const MatchManager = ({
     ...match,
   });
 
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [editingField, setEditingField] = useState(null);
   const [showDisplaySettings, setShowDisplaySettings] = useState(false);
   const [showTickerSettings, setShowTickerSettings] = useState(false);
 
@@ -61,25 +58,7 @@ const MatchManager = ({
     { id: "ended", name: "Kết thúc", color: "red", icon: "🏁" },
   ];
 
-  const leagues = [
-    "V-League 2024",
-    "Hạng Nhất 2024",
-    "Cúp Quốc gia 2024",
-    "AFC Champions League",
-    "AFF Cup",
-    "World Cup 2026",
-    "Giao hữu quốc tế",
-    "Giải tự tổ chức",
-  ];
 
-  const weatherOptions = [
-    "☀️ Nắng",
-    "⛅ Nhiều mây",
-    "🌧️ Mưa",
-    "⛈️ Dông",
-    "🌫️ Sương mù",
-    "❄️ Tuyết",
-  ];
 
   const handleChange = (field, value) => {
     const newData = { ...matchData, [field]: value };
@@ -196,27 +175,6 @@ const MatchManager = ({
               </p>
             </div>
             <div className="flex space-x-2">
-              <Button
-                variant="outline"
-                onClick={() => setShowEditModal(true)}
-                icon={
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                    />
-                  </svg>
-                }
-              >
-                Chỉnh sửa
-              </Button>
               <Button variant="primary" onClick={handleSave}>
                 Lưu thay đổi
               </Button>
