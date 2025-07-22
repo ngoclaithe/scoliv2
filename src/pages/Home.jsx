@@ -339,7 +339,7 @@ const Home = () => {
             </div>
 
             <div className="text-center text-xs text-gray-500">
-              Nhập "ffff" để demo
+              Nh���p "ffff" để demo
             </div>
           </div>
         </div>
@@ -436,51 +436,51 @@ const Home = () => {
 
           <div className="grid grid-cols-2 gap-3 sm:gap-6">
             {/* Đội nhà */}
-            <div className="bg-white rounded-lg p-4 shadow-md border-2 border-blue-200">
-              <h4 className="text-center font-bold text-blue-700 mb-4">
+            <div className="bg-white rounded-lg p-2 sm:p-4 shadow-md border border-blue-200">
+              <h4 className="text-center font-bold text-blue-700 mb-2 sm:mb-4 text-xs sm:text-sm">
                 {matchData.homeTeam.name}
               </h4>
-              <div className="flex space-x-2">
+              <div className="flex space-x-1 sm:space-x-2">
                 <Button
                   variant="primary"
-                  size="lg"
-                  className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200"
+                  size="sm"
+                  className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-8 sm:h-10"
                   onClick={() => handleScoreChange("homeTeam", 1)}
                 >
-                  <span className="text-xl">+</span>
+                  <span className="text-lg sm:text-xl">+</span>
                 </Button>
                 <Button
                   variant="primary"
-                  size="lg"
-                  className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200"
+                  size="sm"
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-8 sm:h-10"
                   onClick={() => handleScoreChange("homeTeam", -1)}
                 >
-                  <span className="text-xl">-</span>
+                  <span className="text-lg sm:text-xl">-</span>
                 </Button>
               </div>
             </div>
 
             {/* Đội khách */}
-            <div className="bg-white rounded-lg p-4 shadow-md border-2 border-purple-200">
-              <h4 className="text-center font-bold text-purple-700 mb-4">
+            <div className="bg-white rounded-lg p-2 sm:p-4 shadow-md border border-purple-200">
+              <h4 className="text-center font-bold text-purple-700 mb-2 sm:mb-4 text-xs sm:text-sm">
                 {matchData.awayTeam.name}
               </h4>
-              <div className="flex space-x-2">
+              <div className="flex space-x-1 sm:space-x-2">
                 <Button
                   variant="primary"
-                  size="lg"
-                  className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200"
+                  size="sm"
+                  className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-8 sm:h-10"
                   onClick={() => handleScoreChange("awayTeam", 1)}
                 >
-                  <span className="text-xl">+</span>
+                  <span className="text-lg sm:text-xl">+</span>
                 </Button>
                 <Button
                   variant="primary"
-                  size="lg"
-                  className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200"
+                  size="sm"
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-8 sm:h-10"
                   onClick={() => handleScoreChange("awayTeam", -1)}
                 >
-                  <span className="text-xl">-</span>
+                  <span className="text-lg sm:text-xl">-</span>
                 </Button>
               </div>
             </div>
