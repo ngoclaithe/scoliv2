@@ -158,7 +158,7 @@ const Home = () => {
   };
 
   const renderUploadLogoTab = () => (
-    <div className="p-4 space-y-4">
+    <div className="p-2 sm:p-4 space-y-3">
       {/* Upload Section - Require Code */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 border border-blue-200">
         <div className="flex items-center justify-center mb-3">
