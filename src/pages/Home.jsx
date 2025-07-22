@@ -502,6 +502,19 @@ const Home = () => {
               </div>
             </div>
           </div>
+
+          {/* Nút TẠM DỪNG - Thêm vào điều khiển tỉ số */}
+          <div className="flex justify-center mt-3">
+            <Button
+              variant="primary"
+              size="sm"
+              className="px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+              onClick={() => setSelectedOption("tam-dung")}
+            >
+              <span className="mr-1">⏸️</span>
+              TẠM DỪNG
+            </Button>
+          </div>
         </div>
 
         {/* Tab Controls */}
@@ -851,7 +864,7 @@ const Home = () => {
                 className="text-sm border-yellow-300 focus:ring-yellow-500 focus:border-yellow-500"
               />
               <div className="text-xs text-yellow-700 mt-1">
-                Thời gian đếm ngược sẽ bắt đầu từ {customTime || "?"} phút về 0
+                Th��i gian đếm ngược sẽ bắt đầu từ {customTime || "?"} phút về 0
               </div>
             </div>
           )}
