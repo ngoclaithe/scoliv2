@@ -155,13 +155,13 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
                   Chưa chọn poster
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  Chọn một mẫu poster từ thư viện hoặc tạo poster tùy chỉnh
+                  Chọn một poster từ thư viện có sẵn
                 </p>
                 <Button
                   variant="primary"
                   onClick={() => setShowPosterSelector(true)}
                 >
-                  Chọn Mẫu Poster
+                  Chọn Poster
                 </Button>
               </div>
             </div>
