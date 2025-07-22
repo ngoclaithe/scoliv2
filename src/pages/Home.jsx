@@ -908,7 +908,7 @@ const Home = () => {
             <button
               onClick={() => {
                 setSelectedOption("nghi-hiep");
-                // Có thể mở modal nghỉ hiệp ở đây
+                // Có thể mở modal nghỉ hi���p ở đây
               }}
               className={`flex flex-row items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "nghi-hiep"
@@ -1295,22 +1295,26 @@ const Home = () => {
                 <span className="sm:hidden">Login</span>
               </Button>
 
-              {/* Mã truy cập và Hotline - chỉ hiển thị khi đã nhập code */}
+              {/* Icon Key - chỉ hiển thị khi đã nhập code */}
               {isCodeEntered && codeInfo && (
-                <>
-                  <div className="flex items-center bg-white/10 rounded px-2 py-1">
-                    <span className="text-white text-xs mr-1">🔑</span>
-                    <span className="text-white text-xs font-mono">{codeInfo.code}</span>
-                  </div>
-                  <a
-                    href="tel:0923415678"
-                    className="flex items-center bg-white/10 rounded px-2 py-1 hover:bg-white/20 transition-colors"
-                  >
-                    <span className="text-white text-xs mr-1">📞</span>
-                    <span className="text-white text-xs">0923415678</span>
-                  </a>
-                </>
+                <button
+                  onClick={() => setShowCodeInfoModal(true)}
+                  className="flex items-center bg-white/10 rounded px-2 py-1 hover:bg-white/20 transition-colors"
+                  title="Xem thông tin mã truy cập"
+                >
+                  <span className="text-white text-xs">🔑</span>
+                </button>
               )}
+
+              {/* Icon điện thoại - luôn hiển thị */}
+              <a
+                href="tel:0923415678"
+                className="flex items-center bg-white/10 rounded px-2 py-1 hover:bg-white/20 transition-colors"
+                title="Gọi hotline hỗ trợ"
+              >
+                <span className="text-white text-xs mr-1">📞</span>
+                <span className="text-white text-xs">0923415678</span>
+              </a>
             </div>
 
             {/* Center Logo and Title */}
