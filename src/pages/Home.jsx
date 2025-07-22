@@ -312,7 +312,7 @@ const Home = () => {
                 Nhập mã truy cập
               </h3>
               <p className="text-gray-600 text-sm">
-                Vui lòng nh��p mã code để truy cập và quản lý trận đấu
+                Vui lòng nhập mã code để truy cập và quản lý trận đấu
               </p>
             </div>
           </div>
@@ -596,7 +596,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-red-100 to-orange-200 text-red-700 hover:from-red-200 hover:to-orange-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">🎬</span>
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🎬</span>
               <span className="text-xs sm:text-sm font-bold text-center">
                 GIỚI THIỆU
               </span>
@@ -614,7 +614,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-blue-100 to-indigo-200 text-blue-700 hover:from-blue-200 hover:to-indigo-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">📋</span>
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">📋</span>
               <span className="text-xs sm:text-sm font-bold text-center">
                 DANH SÁCH
               </span>
@@ -632,7 +632,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-green-100 to-emerald-200 text-green-700 hover:from-green-200 hover:to-emerald-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">⚽</span>
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">⚽</span>
               <span className="text-xs sm:text-sm font-bold text-center">
                 TỈ SỐ DƯỚI
               </span>
@@ -650,7 +650,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-yellow-100 to-orange-200 text-yellow-700 hover:from-yellow-200 hover:to-orange-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">⏰</span>
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">⏰</span>
               <span className="text-xs sm:text-sm font-bold text-center">
                 NGHỈ HIỆP
               </span>
@@ -667,7 +667,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-gray-100 to-gray-300 text-gray-700 hover:from-gray-200 hover:to-gray-400"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">🥅</span>
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🥅</span>
               <span className="text-xs sm:text-sm font-bold text-center">
                 PENALTY
               </span>
@@ -682,7 +682,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">🕐</span>
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
               <span className="text-xs sm:text-sm font-bold text-center">
                 ĐẾM 0'
               </span>
@@ -696,7 +696,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">🕐</span>
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
               <span className="text-xs sm:text-sm font-bold text-center">
                 ĐẾM 20'
               </span>
@@ -710,7 +710,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">🕐</span>
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
               <span className="text-xs sm:text-sm font-bold text-center">
                 ĐẾM 25'
               </span>
@@ -724,7 +724,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">🕐</span>
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
               <span className="text-xs sm:text-sm font-bold text-center">
                 ĐẾM 30'
               </span>
@@ -738,7 +738,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">🕐</span>
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
               <span className="text-xs sm:text-sm font-bold text-center">
                 ĐẾM 35'
               </span>
@@ -753,7 +753,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-red-100 to-red-200 text-red-700 hover:from-red-200 hover:to-red-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">❌</span>
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">❌</span>
               <span className="text-xs sm:text-sm font-bold text-center">
                 TẮT
               </span>
