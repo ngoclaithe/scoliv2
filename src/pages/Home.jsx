@@ -834,41 +834,40 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Text content - no label */}
-            <textarea
-              placeholder="Nhập nội dung chữ chạy..."
+            {/* Text content - compact for mobile */}
+            <Input
+              placeholder="Nội dung chữ chạy..."
               value={clockText}
               onChange={(e) => setClockText(e.target.value)}
-              rows={2}
-              maxLength={200}
-              className="w-full px-3 py-2 border border-orange-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm resize-none"
+              maxLength={100}
+              className="w-full text-xs"
             />
 
             {/* Color and Font Size - compact */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <div className="flex items-center space-x-2 mb-1">
+                <div className="flex items-center space-x-1 mb-1">
                   <input
                     type="color"
                     value={tickerColor}
                     onChange={(e) => setTickerColor(e.target.value)}
-                    className="w-6 h-6 border border-orange-300 rounded cursor-pointer"
+                    className="w-5 h-5 border border-orange-300 rounded cursor-pointer"
                   />
                   <Input
                     type="text"
                     value={tickerColor}
                     onChange={(e) => setTickerColor(e.target.value)}
-                    className="text-xs flex-1 uppercase"
+                    className="text-xs flex-1 uppercase h-5"
                     placeholder="#ffffff"
                   />
                 </div>
-                <div className="flex gap-1">
-                  {["#ffffff", "#000000", "#ff0000", "#ffff00"].map((color) => (
+                <div className="flex gap-0.5 flex-wrap">
+                  {["#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff6600", "#ff00ff"].map((color) => (
                     <button
                       key={color}
                       onClick={() => setTickerColor(color)}
-                      className={`w-4 h-4 rounded border ${
-                        tickerColor === color ? "border-orange-600" : "border-gray-300"
+                      className={`w-3 h-3 rounded border ${
+                        tickerColor === color ? "border-orange-600 border-2" : "border-gray-300"
                       }`}
                       style={{ backgroundColor: color }}
                     />
