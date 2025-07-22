@@ -14,7 +14,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [codeInfo, setCodeInfo] = useState(null);
 
-  // State cho upload logo - sử dụng chung với tab quản lý trận
+  // State cho upload logo - s�� dụng chung với tab quản lý trận
   const [logoData, setLogoData] = useState(null);
   const [bannerData, setBannerData] = useState(null);
   const [logoName, setLogoName] = useState("");
@@ -359,7 +359,9 @@ const Home = () => {
             >
               <div className="flex items-center space-x-2">
                 <span className="text-sm text-gray-600">Mã truy cập:</span>
-                <span className="font-mono font-bold text-sm">{codeInfo.code}</span>
+                <span className={`font-mono font-bold text-sm ${!isCodeInfoExpanded ? 'filter blur-sm select-none' : ''}`}>
+                  {isCodeInfoExpanded ? codeInfo.code : '••••'}
+                </span>
               </div>
               <div className="flex items-center space-x-2">
                 <span
@@ -900,53 +902,7 @@ const Home = () => {
 
     return (
       <div className="p-6 space-y-6">
-        {/* Code Information */}
-        {codeInfo && (
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-6 mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Thông tin mã truy cập
-              </h3>
-              <span
-                className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  codeInfo.status === "active"
-                    ? "bg-green-100 text-green-800"
-                    : codeInfo.status === "inactive"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : "bg-red-100 text-red-800"
-                }`}
-              >
-                {codeInfo.status === "active"
-                  ? "🟢 Đã kích hoạt"
-                  : codeInfo.status === "inactive"
-                    ? "🟡 Chưa kích hoạt"
-                    : "🔴 Đã hết hạn"}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Mã code:</span>
-                  <span className="font-mono font-bold">{codeInfo.code}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Được tạo lúc:</span>
-                  <span className="font-medium">{codeInfo.generatedAt}</span>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Hết hạn vào:</span>
-                  <span className="font-medium text-orange-600">
-                    {codeInfo.expiryDate}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Không hiển thị thông tin mã truy cập trong tab bình luận */}
 
         {/* Microphone Section */}
         <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-8 border border-red-200">
