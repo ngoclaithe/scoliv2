@@ -488,35 +488,82 @@ const Home = () => {
         </div>
 
         {/* Tab Controls */}
-        <div className="bg-white rounded-xl p-4 shadow-lg border border-gray-200">
-          <div className="grid grid-cols-2 gap-4">
+        <div className="bg-white rounded-xl p-3 sm:p-4 shadow-lg border border-gray-200">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <button
               onClick={() => setSelectedOption("dieu-khien")}
-              className={`py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-md ${
+              className={`py-2 sm:py-4 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-md ${
                 selectedOption === "dieu-khien"
                   ? "bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-xl"
                   : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
               }`}
             >
-              <span className="mr-2">🎮</span>
+              <span className="mr-1 sm:mr-2 text-sm">🎮</span>
               ĐIỀU KHIỂN
             </button>
             <button
               onClick={() => {
-                setSelectedOption("chon-skin");
-                setShowSkinModal(true);
+                setSelectedOption(selectedOption === "chon-skin" ? "dieu-khien" : "chon-skin");
               }}
-              className={`py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-md ${
+              className={`py-2 sm:py-4 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-md ${
                 selectedOption === "chon-skin"
                   ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
                   : "bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 hover:from-blue-200 hover:to-blue-300"
               }`}
             >
-              <span className="mr-2">🎨</span>
-              CHỌN SKIN
+              <span className="mr-1 sm:mr-2 text-sm">🎨</span>
+              TEMPLATE
             </button>
           </div>
         </div>
+
+        {/* Inline Template Selection */}
+        {selectedOption === "chon-skin" && (
+          <div className="bg-white rounded-xl p-3 sm:p-4 shadow-lg border border-gray-200 animate-slide-up">
+            <h3 className="text-center text-sm sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 flex items-center justify-center">
+              <span className="mr-1 sm:mr-2 text-sm">🎨</span>
+              CHỌN TEMPLATE
+              <span className="ml-1 sm:ml-2 text-sm">🎨</span>
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
+              {[1, 2, 3, 4, 5].map((skinNumber) => (
+                <div
+                  key={skinNumber}
+                  onClick={() => {
+                    setSelectedSkin(skinNumber);
+                    console.log('Template selected:', skinNumber);
+                  }}
+                  className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${
+                    selectedSkin === skinNumber
+                      ? "border-blue-500 ring-2 ring-blue-200"
+                      : "border-gray-200 hover:border-blue-300"
+                  }`}
+                >
+                  <img
+                    src={`/images/templates/skin${skinNumber}.png`}
+                    alt={`Template ${skinNumber}`}
+                    className="w-full h-20 sm:h-32 object-contain bg-gray-50"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div className="w-full h-20 sm:h-32 bg-gray-100 items-center justify-center hidden">
+                    <span className="text-gray-500 font-medium text-xs sm:text-sm">Template {skinNumber}</span>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white text-center py-1">
+                    <span className="text-xs font-medium">Template {skinNumber}</span>
+                  </div>
+                  {selectedSkin === skinNumber && (
+                    <div className="absolute top-1 right-1 bg-blue-500 text-white rounded-full w-4 h-4 sm:w-6 sm:h-6 flex items-center justify-center">
+                      <span className="text-xs">✓</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Options - Thay đổi action buttons */}
         <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-indigo-200">
