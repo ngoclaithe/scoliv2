@@ -34,7 +34,6 @@ const Home = () => {
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
-  const [showSkinModal, setShowSkinModal] = useState(false);
   const [selectedSkin, setSelectedSkin] = useState(1);
 
   // Skin data configuration
@@ -985,7 +984,7 @@ const Home = () => {
                 onClick={() => console.log('Login clicked')}
               >
                 <span className="text-xs mr-1">👤</span>
-                <span className="hidden sm:inline">Đăng nh���p</span>
+                <span className="hidden sm:inline">Đăng nhập</span>
                 <span className="sm:hidden">Login</span>
               </Button>
             </div>
