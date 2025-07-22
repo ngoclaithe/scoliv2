@@ -1364,7 +1364,7 @@ const Home = () => {
                 Nhập mã truy cập
               </h3>
               <p className="text-gray-600 text-sm">
-                Vui lòng nhập m�� code để truy cập chức năng bình luận
+                Vui lòng nhập một code để truy cập chức năng bình luận
               </p>
             </div>
           </div>
@@ -1601,7 +1601,7 @@ const Home = () => {
                 matchData={matchData}
                 onPosterUpdate={(poster) => {
                   console.log("Updated poster:", poster);
-                  // Có th��� thêm toast notification ở đây
+                  // Có thể thêm toast notification ở đây
                 }}
                 onLogoUpdate={(logoData) => {
                   console.log("Updated logo:", logoData);
@@ -1740,7 +1740,7 @@ const Home = () => {
                   <span className="text-3xl text-white">👤</span>
                 </div>
                 <h2 className="text-2xl font-bold text-gray-800 mb-2">Đăng Nhập</h2>
-                <p className="text-gray-600">Chào mừng bạn quay tr��� lại!</p>
+                <p className="text-gray-600">Chào mừng bạn quay trở lại!</p>
               </div>
 
               <form className="space-y-4" onSubmit={(e) => {
@@ -1828,7 +1828,7 @@ const Home = () => {
                     <div className="w-full border-t border-gray-300" />
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 text-gray-500">Hoặc đ��ng nhập với</span>
+                    <span className="px-2 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 text-gray-500">Hoặc đăng nhập với</span>
                   </div>
                 </div>
 
