@@ -69,6 +69,7 @@ const Home = () => {
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
   const [showTimerModal, setShowTimerModal] = useState(false);
   const [showCodeInfoModal, setShowCodeInfoModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
       // State cho penalty shootout - đơn giản hóa cho backend
   const [penaltyData, setPenaltyData] = useState({
@@ -1610,7 +1611,7 @@ const Home = () => {
                         ? "🟢 Đã kích hoạt"
                         : codeInfo.status === "inactive"
                           ? "🟡 Chưa kích hoạt"
-                          : "🔴 Đã hết hạn"}
+                          : "��� Đã hết hạn"}
                     </span>
                   </div>
                 </div>
