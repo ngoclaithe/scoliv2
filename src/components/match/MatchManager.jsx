@@ -152,6 +152,16 @@ const MatchManager = ({
       weather: "Nắng",
       temperature: "28°C",
       attendance: "",
+      displayOptions: {
+        countdownType: "normal",
+        customTime: "",
+      },
+      tickerSettings: {
+        text: "Chào mừng đến với trận đấu!",
+        color: "#ffffff",
+        fontSize: 16,
+        enabled: true,
+      },
     };
     setMatchData(resetData);
     onMatchReset?.(resetData);
@@ -432,7 +442,7 @@ const MatchManager = ({
           <div className="mt-6 pt-6 border-t border-gray-200">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
               <h4 className="text-lg font-medium text-gray-900 mb-2 sm:mb-0">
-                Tùy ch��n hiển thị
+                Tùy chọn hiển thị
               </h4>
               <Button
                 variant="outline"
