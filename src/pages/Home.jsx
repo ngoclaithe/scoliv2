@@ -522,7 +522,7 @@ const Home = () => {
             <h3 className="text-center text-sm sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 flex items-center justify-center">
               <span className="mr-1 sm:mr-2 text-sm">🎨</span>
               CHỌN TEMPLATE
-              <span className="ml-1 sm:ml-2 text-sm">🎨</span>
+              <span className="ml-1 sm:ml-2 text-sm">����</span>
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
               {[1, 2, 3, 4, 5].map((skinNumber) => (
@@ -565,15 +565,15 @@ const Home = () => {
         )}
 
         {/* Options - Thay đổi action buttons */}
-        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-indigo-200">
-          <h3 className="text-center text-lg font-bold text-indigo-800 mb-4 sm:mb-6 flex items-center justify-center">
-            <span className="mr-2">⚙️</span>
-            TÙY CHỌN HIỂN THỊ
-            <span className="ml-2">⚙️</span>
+        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 sm:p-4 border border-indigo-200">
+          <h3 className="text-center text-sm sm:text-lg font-bold text-indigo-800 mb-3 sm:mb-4 flex items-center justify-center">
+            <span className="mr-1 sm:mr-2 text-sm">⚙️</span>
+            <span className="text-xs sm:text-base">TÙY CHỌN HIỂN THỊ</span>
+            <span className="ml-1 sm:ml-2 text-sm">⚙️</span>
           </h3>
 
           {/* Grid responsive cho mobile */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
             {/* Poster */}
             <button
               onClick={() => setShowPosterModal(true)}
