@@ -262,6 +262,24 @@ const Home = () => {
                         />
                       </div>
                     </div>
+                    {/* Upload Button cho Logo */}
+                    {logoName.trim() && (
+                      <div className="flex justify-center mt-2">
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold text-xs py-2 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                          onClick={() => {
+                            // Logic upload sẽ được thêm sau khi ghép API
+                            console.log('Upload logo:', { name: logoName, file: logoData });
+                            alert(`Sẽ upload logo "${logoName}" lên server!`);
+                          }}
+                        >
+                          <span className="mr-1">☁️</span>
+                          UPLOAD LOGO
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 )}
                 {bannerData && (
@@ -282,6 +300,24 @@ const Home = () => {
                         />
                       </div>
                     </div>
+                    {/* Upload Button cho Banner */}
+                    {bannerName.trim() && (
+                      <div className="flex justify-center mt-2">
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-xs py-2 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                          onClick={() => {
+                            // Logic upload sẽ được thêm sau khi ghép API
+                            console.log('Upload banner:', { name: bannerName, file: bannerData });
+                            alert(`Sẽ upload banner "${bannerName}" lên server!`);
+                          }}
+                        >
+                          <span className="mr-1">☁️</span>
+                          UPLOAD BANNER
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -916,7 +952,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-sm mr-1">🕐</span>
+              <span className="text-sm mr-1">��</span>
               <span className="text-xs font-bold text-center">
                 ĐẾM 20'
               </span>
@@ -1061,7 +1097,7 @@ const Home = () => {
                   onChange={(e) => setClockSetting(e.target.value)}
                   className="scale-75"
                 />
-                <label className="text-xs">M��I 2'</label>
+                <label className="text-xs">MỖI 2'</label>
               </div>
             </div>
 
@@ -1154,10 +1190,10 @@ const Home = () => {
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Nhập mã truy cập
+                Nh��p mã truy cập
               </h3>
               <p className="text-gray-600 text-sm">
-                Vui lòng nhập mã code để truy cập chức năng b��nh luận
+                Vui lòng nhập mã code để truy cập chức năng bình luận
               </p>
             </div>
           </div>
