@@ -1283,38 +1283,35 @@ const Home = () => {
       <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 shadow-xl border-b-2 border-yellow-400">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
           <div className="flex justify-between items-center h-12 sm:h-14">
-            {/* Login/Register Button - Top Left */}
+            {/* Icons - Top Left */}
             <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="bg-white/10 border-white/20 text-white hover:bg-white/20 text-xs px-2 py-1 h-7"
-                onClick={() => console.log('Login clicked')}
+              {/* Login Icon */}
+              <button
+                onClick={() => setShowLoginModal(true)}
+                className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
+                title="Đăng nhập"
               >
-                <span className="text-xs mr-1">👤</span>
-                <span className="hidden sm:inline">Đăng nhập</span>
-                <span className="sm:hidden">Login</span>
-              </Button>
+                <span className="text-white text-sm">👤</span>
+              </button>
 
               {/* Icon Key - chỉ hiển thị khi đã nhập code */}
               {isCodeEntered && codeInfo && (
                 <button
                   onClick={() => setShowCodeInfoModal(true)}
-                  className="flex items-center bg-white/10 rounded px-2 py-1 hover:bg-white/20 transition-colors"
+                  className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
                   title="Xem thông tin mã truy cập"
                 >
-                  <span className="text-white text-xs">🔑</span>
+                  <span className="text-white text-sm">🔑</span>
                 </button>
               )}
 
               {/* Icon điện thoại - luôn hiển thị */}
               <a
                 href="tel:0923415678"
-                className="flex items-center bg-white/10 rounded px-2 py-1 hover:bg-white/20 transition-colors"
-                title="Gọi hotline hỗ trợ"
+                className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
+                title="Gọi hotline hỗ trợ: 0923415678"
               >
-                <span className="text-white text-xs mr-1">📞</span>
-                <span className="text-white text-xs">0923415678</span>
+                <span className="text-white text-sm">📞</span>
               </a>
             </div>
 
@@ -1611,7 +1608,7 @@ const Home = () => {
                         ? "🟢 Đã kích hoạt"
                         : codeInfo.status === "inactive"
                           ? "🟡 Chưa kích hoạt"
-                          : "��� Đã hết hạn"}
+                          : "🔴 Đã hết h��n"}
                     </span>
                   </div>
                 </div>
