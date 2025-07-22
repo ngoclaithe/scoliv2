@@ -972,11 +972,18 @@ const Home = () => {
                 size="sm"
                 onClick={() => {
                   setFootballStats({
-                    totalShots: 0,
-                    shotsOnTarget: 0,
-                    corners: 0,
-                    yellowCards: 0,
-                    fouls: 0
+                    homeShots: 0,
+                    awayShots: 0,
+                    homeShotsOnTarget: 0,
+                    awayShotsOnTarget: 0,
+                    homeCorners: 0,
+                    awayCorners: 0,
+                    homeYellowCards: 0,
+                    awayYellowCards: 0,
+                    homeFouls: 0,
+                    awayFouls: 0,
+                    homeFutsalErrors: 0,
+                    awayFutsalErrors: 0
                   });
                   setFutsalErrors(0);
                 }}
@@ -1752,7 +1759,7 @@ const Home = () => {
               }}>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email ho��c Tên đăng nhập
+                    Email hoặc Tên đăng nhập
                   </label>
                   <Input
                     type="email"
