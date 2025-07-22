@@ -261,10 +261,10 @@ const Home = () => {
       </div>
 
       {/* Search Section - No Code Required */}
-      <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
-        <div className="flex items-center justify-center mb-3">
-          <span className="text-lg">🔍</span>
-          <h3 className="text-sm font-bold text-green-700 mx-2">TÌM KIẾM LOGO</h3>
+      <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-3 border border-green-200">
+        <div className="flex items-center justify-center mb-2">
+          <span className="text-sm">🔍</span>
+          <h3 className="text-xs font-bold text-green-700 mx-2">TÌM KIẾM LOGO</h3>
         </div>
         <Input
           placeholder="Tìm theo tên đội..."
@@ -1116,7 +1116,7 @@ const Home = () => {
         onSave={(lineupData) => {
           console.log("Saved lineup data:", lineupData);
           setShowLineupModal(false);
-          // Có thể thêm thông báo thành công ở ��ây
+          // Có thể thêm thông báo thành công ở đây
         }}
         matchData={matchData}
       />
