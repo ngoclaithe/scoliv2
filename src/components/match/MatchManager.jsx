@@ -529,15 +529,37 @@ const MatchManager = ({
                 <div className="space-y-4">
                   <div className="space-y-2">
                     <label className="block text-sm font-medium text-gray-700">
-                      Nội dung chữ chạy
+                      📝 Nội dung chữ chạy
                     </label>
-                    <textarea
-                      value={matchData.tickerSettings.text}
-                      onChange={(e) => handleTickerSettingChange("text", e.target.value)}
-                      placeholder="Nhập nội dung chữ chạy..."
-                      rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm resize-none"
-                    />
+                    <div className="relative">
+                      <textarea
+                        value={matchData.tickerSettings.text}
+                        onChange={(e) => handleTickerSettingChange("text", e.target.value)}
+                        placeholder="Nhập nội dung chữ chạy (ví dụ: Chào mừng các bạn đến với trận đấu hôm nay!)"
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm resize-none"
+                        maxLength={200}
+                      />
+                      <div className="absolute bottom-2 right-2 text-xs text-gray-400">
+                        {matchData.tickerSettings.text.length}/200
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {[
+                        "Chào mừng đến với trận đấu!",
+                        "Hãy cổ vũ cho đội bóng yêu thích!",
+                        "Trận đấu hấp dẫn đang diễn ra!",
+                        "Cảm ơn quý khán giả đã theo dõi!"
+                      ].map((template, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleTickerSettingChange("text", template)}
+                          className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-gray-600 transition-colors"
+                        >
+                          {template}
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
