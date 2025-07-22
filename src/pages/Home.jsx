@@ -39,11 +39,11 @@ const Home = () => {
 
   // Skin data configuration
   const skinData = {
-    1: { time: "45:00", period: "Hiệp 1" },
-    2: { time: "90:00", period: "Hết giờ" },
-    3: { time: "15:30", period: "Hiệp 2" },
-    4: { time: "120:00", period: "Hiệp phụ" },
-    5: { time: "0:00", period: "Khởi động" }
+    1: { name: "Template 1", image: "/images/templates/skin1.png" },
+    2: { name: "Template 2", image: "/images/templates/skin2.png" },
+    3: { name: "Template 3", image: "/images/templates/skin3.png" },
+    4: { name: "Template 4", image: "/images/templates/skin4.png" },
+    5: { name: "Template 5", image: "/images/templates/skin5.png" }
   };
 
         // State cho modal poster
@@ -69,10 +69,11 @@ const Home = () => {
   const tabs = [
     { id: "upload-logo", name: "UP LOGO" },
     { id: "quan-ly-tran", name: "QUẢN LÝ TRẬN" },
+    { id: "binh-luan", name: "BÌNH LUẬN" },
   ];
 
   const handleCodeSubmit = async () => {
-    if (matchCode.toLowerCase() === "ffff" || matchCode.toLowerCase() === "logo") {
+    if (matchCode.toLowerCase() === "ffff") {
       setIsLoading(true);
       // Simulate loading
       setTimeout(() => {
@@ -91,7 +92,7 @@ const Home = () => {
   };
 
   const handleUploadCodeSubmit = () => {
-    if (matchCode.toLowerCase() === "logo" || matchCode.toLowerCase() === "ffff") {
+    if (matchCode.toLowerCase() === "ffff") {
       setIsCodeEntered(true);
       setCodeInfo({
         code: matchCode.toUpperCase(),
@@ -184,7 +185,7 @@ const Home = () => {
               </Button>
             </div>
             <div className="text-center text-xs text-gray-500">
-              Nhập "logo" hoặc "ffff" để demo
+              Nhập "ffff" để demo
             </div>
           </div>
         ) : (
@@ -338,7 +339,7 @@ const Home = () => {
             </div>
 
             <div className="text-center text-xs text-gray-500">
-              Nhập "ffff" hoặc "logo" để demo
+              Nhập "ffff" để demo
             </div>
           </div>
         </div>
@@ -396,24 +397,33 @@ const Home = () => {
         )}
 
         {/* Scoreboard */}
-        <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-xl p-6 border-4 border-yellow-400 shadow-2xl">
-          <ScoreDisplay
-            homeTeam={matchData.homeTeam}
-            awayTeam={matchData.awayTeam}
-            matchTime={skinData[selectedSkin]?.time || matchData.matchTime}
-            period={skinData[selectedSkin]?.period || matchData.period}
-            status={matchData.status}
-            backgroundColor="bg-transparent"
-            size="md"
-          />
-
-          <div className="text-center mt-6">
-            <div className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-6 py-3 rounded-full font-bold text-lg shadow-lg">
-              <span className="mr-2">📺</span>
-              MÀN HÌNH GIỚI THIỆU
-              <span className="ml-2">✨</span>
+        <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-xl p-4 border-4 border-yellow-400 shadow-2xl">
+          {selectedSkin && skinData[selectedSkin] ? (
+            <div className="w-full h-40 bg-gray-100 rounded-lg overflow-hidden">
+              <img
+                src={skinData[selectedSkin].image}
+                alt={skinData[selectedSkin].name}
+                className="w-full h-full object-contain"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                }}
+              />
+              <div className="w-full h-full bg-gray-200 items-center justify-center hidden">
+                <span className="text-gray-600 font-medium">{skinData[selectedSkin].name}</span>
+              </div>
             </div>
-          </div>
+          ) : (
+            <ScoreDisplay
+              homeTeam={matchData.homeTeam}
+              awayTeam={matchData.awayTeam}
+              matchTime={matchData.matchTime}
+              period={matchData.period}
+              status={matchData.status}
+              backgroundColor="bg-transparent"
+              size="md"
+            />
+          )}
         </div>
 
         {/* Score Controls */}
@@ -529,7 +539,7 @@ const Home = () => {
               </span>
             </button>
 
-            {/* Giới thiệu */}
+            {/* Gi��i thiệu */}
             <button
               onClick={() => {
                 setSelectedOption("gioi-thieu");
@@ -769,6 +779,150 @@ const Home = () => {
     );
   };
 
+  const renderBinhLuanTab = () => {
+    if (!isCodeEntered) {
+      return (
+        <div className="p-6 max-w-md mx-auto">
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <svg
+                  className="w-8 h-8 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Nhập mã truy cập
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Vui lòng nhập mã code để truy cập chức năng bình luận
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <Input
+              placeholder="Nhập code..."
+              value={matchCode}
+              onChange={(e) => setMatchCode(e.target.value)}
+              className="text-center text-lg font-mono"
+            />
+
+            <div className="flex justify-center">
+              <Button
+                variant="primary"
+                size="lg"
+                className="w-32"
+                onClick={handleCodeSubmit}
+                loading={isLoading}
+              >
+                {isLoading ? "Đang xử lý..." : "XÁC NHẬN"}
+              </Button>
+            </div>
+
+            <div className="text-center text-xs text-gray-500">
+              Nhập "ffff" để demo
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="p-6 space-y-6">
+        {/* Code Information */}
+        {codeInfo && (
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-6 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Thông tin mã truy cập
+              </h3>
+              <span
+                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  codeInfo.status === "active"
+                    ? "bg-green-100 text-green-800"
+                    : codeInfo.status === "inactive"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : "bg-red-100 text-red-800"
+                }`}
+              >
+                {codeInfo.status === "active"
+                  ? "🟢 Đã kích hoạt"
+                  : codeInfo.status === "inactive"
+                    ? "🟡 Chưa kích hoạt"
+                    : "🔴 Đã hết hạn"}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Mã code:</span>
+                  <span className="font-mono font-bold">{codeInfo.code}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Được tạo lúc:</span>
+                  <span className="font-medium">{codeInfo.generatedAt}</span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Hết hạn vào:</span>
+                  <span className="font-medium text-orange-600">
+                    {codeInfo.expiryDate}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Microphone Section */}
+        <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-8 border border-red-200">
+          <h3 className="text-center text-lg font-bold text-red-800 mb-8 flex items-center justify-center">
+            <span className="mr-2">🎙️</span>
+            THU ÂM BÌNH LUẬN
+            <span className="ml-2">🎙️</span>
+          </h3>
+
+          <div className="flex justify-center">
+            <button
+              onClick={() => {
+                // Logic thu âm sẽ được thêm sau
+                console.log("Microphone clicked - logic will be added later");
+              }}
+              className="w-32 h-32 bg-gradient-to-br from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white rounded-full flex items-center justify-center shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300"
+            >
+              <svg
+                className="w-16 h-16"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M12 2c1.1 0 2 .9 2 2v6c0 1.1-.9 2-2 2s-2-.9-2-2V4c0-1.1.9-2 2-2zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H6c0 3.53 2.61 6.43 6 6.92V21h2v-2.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+              </svg>
+            </button>
+          </div>
+
+          <div className="text-center mt-6">
+            <p className="text-sm text-gray-600">
+              Nhấn vào micro để bắt đầu thu âm bình luận
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -805,7 +959,9 @@ const Home = () => {
                 activeTab === tab.id
                   ? tab.id === "upload-logo"
                     ? "border-blue-500 text-blue-700 bg-gradient-to-t from-blue-100 to-blue-50 shadow-lg"
-                    : "border-purple-500 text-purple-700 bg-gradient-to-t from-purple-100 to-purple-50 shadow-lg"
+                    : tab.id === "quan-ly-tran"
+                    ? "border-purple-500 text-purple-700 bg-gradient-to-t from-purple-100 to-purple-50 shadow-lg"
+                    : "border-red-500 text-red-700 bg-gradient-to-t from-red-100 to-red-50 shadow-lg"
                   : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-50"
               }`}
             >
@@ -815,9 +971,14 @@ const Home = () => {
                     <span className="mr-2">🏆</span>
                     {tab.name}
                   </>
-                ) : (
+                ) : tab.id === "quan-ly-tran" ? (
                   <>
                     <span className="mr-2">⚽</span>
+                    {tab.name}
+                  </>
+                ) : (
+                  <>
+                    <span className="mr-2">🎙️</span>
                     {tab.name}
                   </>
                 )}
@@ -830,6 +991,7 @@ const Home = () => {
         <div className="bg-white min-h-screen">
           {activeTab === "upload-logo" && renderUploadLogoTab()}
           {activeTab === "quan-ly-tran" && renderQuanLyTranTab()}
+          {activeTab === "binh-luan" && renderBinhLuanTab()}
         </div>
       </main>
 
