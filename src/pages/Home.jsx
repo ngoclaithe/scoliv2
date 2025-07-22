@@ -1601,7 +1601,7 @@ const Home = () => {
                 matchData={matchData}
                 onPosterUpdate={(poster) => {
                   console.log("Updated poster:", poster);
-                  // Có thể thêm toast notification ở đây
+                  // Có th��� thêm toast notification ở đây
                 }}
                 onLogoUpdate={(logoData) => {
                   console.log("Updated logo:", logoData);
@@ -1613,11 +1613,7 @@ const Home = () => {
         </div>
 
         {/* Mobile-friendly footer */}
-        <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4 flex flex-col sm:flex-row gap-3 justify-between items-center">
-          <div className="text-sm text-gray-600 text-center sm:text-left">
-            💡 <strong>Tip:</strong> Chọn poster trước, sau đó cài đặt logo và
-            chữ chạy
-          </div>
+        <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4 flex justify-center sm:justify-end">
           <div className="flex gap-3">
             <Button
               variant="outline"
@@ -1744,7 +1740,7 @@ const Home = () => {
                   <span className="text-3xl text-white">👤</span>
                 </div>
                 <h2 className="text-2xl font-bold text-gray-800 mb-2">Đăng Nhập</h2>
-                <p className="text-gray-600">Chào mừng bạn quay trở lại!</p>
+                <p className="text-gray-600">Chào mừng bạn quay tr��� lại!</p>
               </div>
 
               <form className="space-y-4" onSubmit={(e) => {
