@@ -993,7 +993,7 @@ const Home = () => {
 
     return (
       <div className="p-6 space-y-6">
-        {/* Không hiển thị thông tin mã truy cập trong tab bình luận */}
+        {/* Không hiển thị thông tin mã truy c��p trong tab bình luận */}
 
         {/* Microphone Section */}
         <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-8 border border-red-200">
@@ -1038,7 +1038,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
           <div className="flex justify-between items-center h-12 sm:h-14">
             {/* Login/Register Button - Top Left */}
-            <div className="flex items-center">
+            <div className="flex items-center space-x-2">
               <Button
                 variant="outline"
                 size="sm"
@@ -1049,6 +1049,23 @@ const Home = () => {
                 <span className="hidden sm:inline">Đăng nhập</span>
                 <span className="sm:hidden">Login</span>
               </Button>
+
+              {/* Mã truy cập và Hotline - chỉ hiển thị khi đã nhập code */}
+              {isCodeEntered && codeInfo && (
+                <>
+                  <div className="flex items-center bg-white/10 rounded px-2 py-1">
+                    <span className="text-white text-xs mr-1">🔑</span>
+                    <span className="text-white text-xs font-mono">{codeInfo.code}</span>
+                  </div>
+                  <a
+                    href="tel:0923415678"
+                    className="flex items-center bg-white/10 rounded px-2 py-1 hover:bg-white/20 transition-colors"
+                  >
+                    <span className="text-white text-xs mr-1">📞</span>
+                    <span className="text-white text-xs">0923415678</span>
+                  </a>
+                </>
+              )}
             </div>
 
             {/* Center Logo and Title */}
