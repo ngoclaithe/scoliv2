@@ -908,7 +908,7 @@ const Home = () => {
             <button
               onClick={() => {
                 setSelectedOption("nghi-hiep");
-                // Có thể mở modal nghỉ hi���p ở đây
+                // Có thể mở modal nghỉ hiệp ở đây
               }}
               className={`flex flex-row items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "nghi-hiep"
@@ -1563,6 +1563,102 @@ const Home = () => {
             </Button>
           </div>
         </div>
+      </Modal>
+
+      {/* Code Info Modal */}
+      <Modal
+        isOpen={showCodeInfoModal}
+        onClose={() => setShowCodeInfoModal(false)}
+        title="🔑 Thông Tin Mã Truy Cập"
+        size="md"
+      >
+        {codeInfo && (
+          <div className="bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-lg p-4">
+            <div className="text-center mb-4">
+              <div className="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                <span className="text-2xl">🔑</span>
+              </div>
+              <h4 className="text-lg font-bold text-blue-800 mb-2">
+                MÃ TRUY CẬP TRẬN ĐẤU
+              </h4>
+            </div>
+
+            <div className="space-y-4">
+              <div className="bg-white rounded-lg p-4 border border-blue-200">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600 font-medium">Mã truy cập:</span>
+                  <span className="font-mono font-bold text-lg text-blue-600 bg-blue-50 px-3 py-1 rounded">
+                    {codeInfo.code}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3">
+                <div className="bg-white rounded-lg p-3 border border-gray-200">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Trạng thái:</span>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        codeInfo.status === "active"
+                          ? "bg-green-100 text-green-800"
+                          : codeInfo.status === "inactive"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {codeInfo.status === "active"
+                        ? "🟢 Đã kích hoạt"
+                        : codeInfo.status === "inactive"
+                          ? "🟡 Chưa kích hoạt"
+                          : "🔴 Đã hết hạn"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg p-3 border border-gray-200">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Được tạo lúc:</span>
+                    <span className="font-medium">{codeInfo.generatedAt}</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg p-3 border border-gray-200">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Hết hạn vào:</span>
+                    <span className="font-medium text-orange-600">
+                      {codeInfo.expiryDate}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                <div className="flex items-start">
+                  <span className="text-yellow-600 mr-2">⚠️</span>
+                  <div className="text-sm text-yellow-800">
+                    <strong>Lưu ý bảo mật:</strong>
+                    <ul className="mt-1 list-disc list-inside space-y-1">
+                      <li>Không chia sẻ mã này với người khác</li>
+                      <li>Mã sẽ hết hạn sau thời gian quy định</li>
+                      <li>Liên hệ hotline nếu gặp vấn đề</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-center mt-4">
+              <Button
+                variant="primary"
+                onClick={() => setShowCodeInfoModal(false)}
+                className="px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold rounded-lg"
+              >
+                <span className="mr-1">✅</span>
+                Đóng
+              </Button>
+            </div>
+          </div>
+        )}
       </Modal>
 
     </div>
