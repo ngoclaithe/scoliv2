@@ -818,19 +818,7 @@ const Home = () => {
               </span>
             </button>
 
-            <button
-              onClick={() => setSelectedOption("tam-dung")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
-                selectedOption === "tam-dung"
-                  ? "bg-gradient-to-br from-amber-500 to-yellow-600 text-white"
-                  : "bg-gradient-to-br from-amber-100 to-yellow-200 text-amber-700 hover:from-amber-200 hover:to-yellow-300"
-              }`}
-            >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">⏸️</span>
-              <span className="text-xs font-bold text-center">
-                TẠM DỪNG
-              </span>
-            </button>
+
 
             {/* Tắt */}
             <button
