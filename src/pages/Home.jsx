@@ -68,6 +68,7 @@ const Home = () => {
   const [showLineupModal, setShowLineupModal] = useState(false);
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
   const [showTimerModal, setShowTimerModal] = useState(false);
+  const [showCodeInfoModal, setShowCodeInfoModal] = useState(false);
 
       // State cho penalty shootout - đơn giản hóa cho backend
   const [penaltyData, setPenaltyData] = useState({
@@ -1485,7 +1486,7 @@ const Home = () => {
         onSave={(lineupData) => {
           console.log("Saved lineup data:", lineupData);
           setShowLineupModal(false);
-          // Có thể thêm thông báo thành công ��� đây
+          // Có thể thêm thông báo thành công ở đây
         }}
         matchData={matchData}
       />
