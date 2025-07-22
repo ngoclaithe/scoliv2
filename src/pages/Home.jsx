@@ -427,14 +427,14 @@ const Home = () => {
         </div>
 
         {/* Score Controls */}
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-200">
-          <h3 className="text-center text-lg font-bold text-gray-800 mb-6 flex items-center justify-center">
-            <span className="mr-2">⚽</span>
-            ĐIỀU KHIỂN TỈ SỐ
-            <span className="ml-2">⚽</span>
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-3 sm:p-6 border border-blue-200">
+          <h3 className="text-center text-sm sm:text-lg font-bold text-gray-800 mb-3 sm:mb-6 flex items-center justify-center">
+            <span className="mr-1 sm:mr-2 text-sm">⚽</span>
+            <span className="text-xs sm:text-base">ĐIỀU KHIỂN TỈ SỐ</span>
+            <span className="ml-1 sm:ml-2 text-sm">⚽</span>
           </h3>
 
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 gap-3 sm:gap-6">
             {/* Đội nhà */}
             <div className="bg-white rounded-lg p-4 shadow-md border-2 border-blue-200">
               <h4 className="text-center font-bold text-blue-700 mb-4">
