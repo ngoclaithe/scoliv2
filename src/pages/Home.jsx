@@ -35,7 +35,7 @@ const Home = () => {
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
   const [selectedSkin, setSelectedSkin] = useState(1);
-  const [isCodeInfoExpanded, setIsCodeInfoExpanded] = useState(false);
+
 
   // State cho custom time và cài đặt chữ chạy nâng cao
   const [customTime, setCustomTime] = useState("");
@@ -1364,7 +1364,7 @@ const Home = () => {
                 Nhập mã truy cập
               </h3>
               <p className="text-gray-600 text-sm">
-                Vui lòng nhập mã code để truy cập chức năng bình luận
+                Vui lòng nhập m�� code để truy cập chức năng bình luận
               </p>
             </div>
           </div>
@@ -1832,7 +1832,7 @@ const Home = () => {
                     <div className="w-full border-t border-gray-300" />
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 text-gray-500">Hoặc đăng nhập với</span>
+                    <span className="px-2 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 text-gray-500">Hoặc đ��ng nhập với</span>
                   </div>
                 </div>
 
