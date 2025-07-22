@@ -19,6 +19,8 @@ const Home = () => {
   const [isUploadCodeEntered, setIsUploadCodeEntered] = useState(false);
   const [logoData, setLogoData] = useState(null);
   const [bannerData, setBannerData] = useState(null);
+  const [logoName, setLogoName] = useState("");
+  const [bannerName, setBannerName] = useState("");
   const [logoSearch, setLogoSearch] = useState("");
 
   // State cho match data sau khi nhập code
@@ -173,59 +175,73 @@ const Home = () => {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-3 gap-3 h-20">
-            {/* Left - Preview */}
-            <div className="col-span-1">
-              {logoData || bannerData ? (
-                <div className="h-full bg-white rounded border-2 border-dashed border-gray-300 p-1">
-                  {logoData && (
-                    <div className="text-center">
-                      <img
-                        src={logoData.preview}
-                        alt="Logo"
-                        className="w-12 h-12 object-contain mx-auto"
-                      />
-                      <div className="text-xs text-green-600 mt-1">📁</div>
-                    </div>
-                  )}
-                  {bannerData && (
-                    <div className="text-center mt-2">
-                      <img
-                        src={bannerData.preview}
-                        alt="Banner"
-                        className="w-12 h-6 object-cover mx-auto rounded"
-                      />
-                      <div className="text-xs text-blue-600 mt-1">🖼️</div>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="h-full bg-white border-2 border-dashed border-gray-300 rounded flex items-center justify-center">
-                  <span className="text-gray-400 text-xs">Chưa có</span>
-                </div>
-              )}
-            </div>
-
-            {/* Right - Upload Buttons */}
-            <div className="col-span-2 flex space-x-2">
+          <div className="space-y-3">
+            {/* Upload Buttons Row */}
+            <div className="flex justify-center space-x-4">
               {/* Upload Logo */}
               <button
                 onClick={handleLogoUpload}
-                className="flex-1 bg-gradient-to-br from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg flex flex-col items-center justify-center h-full shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+                className="w-20 h-16 bg-gradient-to-br from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg flex flex-col items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
               >
-                <span className="text-2xl mb-1">+</span>
+                <span className="text-xl mb-1">+</span>
                 <span className="text-xs font-bold">LOGO</span>
               </button>
 
               {/* Upload Banner */}
               <button
                 onClick={handleBannerUpload}
-                className="flex-1 bg-gradient-to-br from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white rounded-lg flex flex-col items-center justify-center h-full shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+                className="w-20 h-16 bg-gradient-to-br from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white rounded-lg flex flex-col items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
               >
-                <span className="text-2xl mb-1">+</span>
+                <span className="text-xl mb-1">+</span>
                 <span className="text-xs font-bold">BANNER</span>
               </button>
             </div>
+
+            {/* Preview and Name Input */}
+            {(logoData || bannerData) && (
+              <div className="bg-white rounded border border-gray-200 p-3">
+                {logoData && (
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={logoData.preview}
+                        alt="Logo"
+                        className="w-12 h-12 object-contain border rounded"
+                      />
+                      <div className="flex-1">
+                        <div className="text-xs text-green-600 font-medium mb-1">📁 Logo</div>
+                        <Input
+                          placeholder="Nhập tên logo..."
+                          value={logoName}
+                          onChange={(e) => setLogoName(e.target.value)}
+                          className="text-xs h-8"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {bannerData && (
+                  <div className="space-y-2 mt-3">
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={bannerData.preview}
+                        alt="Banner"
+                        className="w-12 h-6 object-cover border rounded"
+                      />
+                      <div className="flex-1">
+                        <div className="text-xs text-blue-600 font-medium mb-1">🖼️ Banner</div>
+                        <Input
+                          placeholder="Nhập tên banner..."
+                          value={bannerName}
+                          onChange={(e) => setBannerName(e.target.value)}
+                          className="text-xs h-8"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
