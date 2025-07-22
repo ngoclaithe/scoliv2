@@ -522,7 +522,7 @@ const Home = () => {
         <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-indigo-200">
           <h3 className="text-center text-lg font-bold text-indigo-800 mb-4 sm:mb-6 flex items-center justify-center">
             <span className="mr-2">⚙️</span>
-            TÙY CHỌN HIỂN TH���
+            TÙY CHỌN HIỂN THỊ
             <span className="ml-2">⚙️</span>
           </h3>
 
@@ -984,6 +984,7 @@ const Home = () => {
         <div className="bg-white min-h-screen">
           {activeTab === "upload-logo" && renderUploadLogoTab()}
           {activeTab === "quan-ly-tran" && renderQuanLyTranTab()}
+          {activeTab === "binh-luan" && renderBinhLuanTab()}
         </div>
       </main>
 
