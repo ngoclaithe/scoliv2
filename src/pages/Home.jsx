@@ -313,7 +313,7 @@ const Home = () => {
                 Nhập mã truy cập
               </h3>
               <p className="text-gray-600 text-sm">
-                Vui lòng nhập mã code đ��� truy cập và quản lý trận đấu
+                Vui lòng nhập mã code để truy cập và quản lý trận đấu
               </p>
             </div>
           </div>
@@ -556,7 +556,7 @@ const Home = () => {
                       e.target.nextSibling.style.display = 'flex';
                     }}
                   />
-                  <div className="w-full h-20 sm:h-32 bg-gray-100 items-center justify-center hidden">
+                  <div className="w-full h-16 sm:h-24 bg-gray-100 items-center justify-center hidden">
                     <span className="text-gray-500 font-medium text-xs sm:text-sm">Template {skinNumber}</span>
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white text-center py-1">
