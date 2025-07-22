@@ -14,7 +14,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [codeInfo, setCodeInfo] = useState(null);
 
-  // State cho upload logo - sử d���ng chung với tab quản lý trận
+  // State cho upload logo - sử dụng chung với tab quản lý trận
   const [logoData, setLogoData] = useState(null);
   const [bannerData, setBannerData] = useState(null);
   const [logoName, setLogoName] = useState("");
@@ -312,7 +312,7 @@ const Home = () => {
                 Nhập mã truy cập
               </h3>
               <p className="text-gray-600 text-sm">
-                Vui lòng nhập mã code để truy cập và quản lý trận đấu
+                Vui lòng nhập mã code để truy cập và quản lý tr���n đấu
               </p>
             </div>
           </div>
@@ -397,20 +397,37 @@ const Home = () => {
 
         {/* Scoreboard */}
         <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-xl p-6 border-4 border-yellow-400 shadow-2xl">
-          <ScoreDisplay
-            homeTeam={matchData.homeTeam}
-            awayTeam={matchData.awayTeam}
-            matchTime={matchData.matchTime}
-            period={matchData.period}
-            status={matchData.status}
-            backgroundColor="bg-transparent"
-            size="md"
-          />
+          {selectedSkin && skinData[selectedSkin] ? (
+            <div className="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
+              <img
+                src={skinData[selectedSkin].image}
+                alt={skinData[selectedSkin].name}
+                className="w-full h-full object-contain"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex';
+                }}
+              />
+              <div className="w-full h-full bg-gray-200 items-center justify-center hidden">
+                <span className="text-gray-600 font-medium">{skinData[selectedSkin].name}</span>
+              </div>
+            </div>
+          ) : (
+            <ScoreDisplay
+              homeTeam={matchData.homeTeam}
+              awayTeam={matchData.awayTeam}
+              matchTime={matchData.matchTime}
+              period={matchData.period}
+              status={matchData.status}
+              backgroundColor="bg-transparent"
+              size="md"
+            />
+          )}
 
           <div className="text-center mt-6">
             <div className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-6 py-3 rounded-full font-bold text-lg shadow-lg">
               <span className="mr-2">📺</span>
-              MÀN HÌNH GIỚI THIỆU
+              {selectedSkin && skinData[selectedSkin] ? skinData[selectedSkin].name : "MÀN HÌNH GIỚI THIỆU"}
               <span className="ml-2">✨</span>
             </div>
           </div>
