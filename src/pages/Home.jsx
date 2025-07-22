@@ -35,6 +35,7 @@ const Home = () => {
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
   const [selectedSkin, setSelectedSkin] = useState(1);
+  const [isCodeInfoExpanded, setIsCodeInfoExpanded] = useState(false);
 
   // Skin data configuration
   const skinData = {
