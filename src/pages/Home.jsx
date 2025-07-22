@@ -72,7 +72,7 @@ const Home = () => {
   ];
 
   const handleCodeSubmit = async () => {
-    if (matchCode.toLowerCase() === "ffff" || matchCode.toLowerCase() === "logo") {
+    if (matchCode.toLowerCase() === "ffff") {
       setIsLoading(true);
       // Simulate loading
       setTimeout(() => {
@@ -91,7 +91,7 @@ const Home = () => {
   };
 
   const handleUploadCodeSubmit = () => {
-    if (matchCode.toLowerCase() === "logo" || matchCode.toLowerCase() === "ffff") {
+    if (matchCode.toLowerCase() === "ffff") {
       setIsCodeEntered(true);
       setCodeInfo({
         code: matchCode.toUpperCase(),
@@ -184,7 +184,7 @@ const Home = () => {
               </Button>
             </div>
             <div className="text-center text-xs text-gray-500">
-              Nhập "logo" hoặc "ffff" để demo
+              Nhập "ffff" để demo
             </div>
           </div>
         ) : (
@@ -338,7 +338,7 @@ const Home = () => {
             </div>
 
             <div className="text-center text-xs text-gray-500">
-              Nhập "ffff" hoặc "logo" để demo
+              Nhập "ffff" để demo
             </div>
           </div>
         </div>
@@ -400,8 +400,8 @@ const Home = () => {
           <ScoreDisplay
             homeTeam={matchData.homeTeam}
             awayTeam={matchData.awayTeam}
-            matchTime={skinData[selectedSkin]?.time || matchData.matchTime}
-            period={skinData[selectedSkin]?.period || matchData.period}
+            matchTime={matchData.matchTime}
+            period={matchData.period}
             status={matchData.status}
             backgroundColor="bg-transparent"
             size="md"
