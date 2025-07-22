@@ -522,7 +522,7 @@ const Home = () => {
             <h3 className="text-center text-sm sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 flex items-center justify-center">
               <span className="mr-1 sm:mr-2 text-sm">🎨</span>
               CHỌN TEMPLATE
-              <span className="ml-1 sm:ml-2 text-sm">����</span>
+              <span className="ml-1 sm:ml-2 text-sm">🎨</span>
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
               {[1, 2, 3, 4, 5].map((skinNumber) => (
@@ -577,10 +577,10 @@ const Home = () => {
             {/* Poster */}
             <button
               onClick={() => setShowPosterModal(true)}
-              className="flex flex-col items-center justify-center p-3 sm:p-4 bg-gradient-to-br from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+              className="flex flex-col items-center justify-center p-2 sm:p-3 bg-gradient-to-br from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-xl sm:text-2xl mb-1">🎨</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🎨</span>
+              <span className="text-xs font-bold text-center">
                 POSTER
               </span>
             </button>
