@@ -399,9 +399,12 @@ const MatchManager = ({
           {/* Display Options */}
           <div className="mt-6 pt-6 border-t border-gray-200">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-              <h4 className="text-lg font-medium text-gray-900 mb-2 sm:mb-0">
-                Tùy chọn hiển thị
-              </h4>
+              <div className="mb-2 sm:mb-0">
+                <h4 className="text-lg font-medium text-gray-900 flex items-center">
+                  📊 Tùy chọn hiển thị
+                </h4>
+                <p className="text-sm text-gray-600">Chọn cách hiển thị thời gian trận đấu</p>
+              </div>
               <Button
                 variant="outline"
                 size="sm"
@@ -419,49 +422,78 @@ const MatchManager = ({
 
             {showDisplaySettings && (
               <div className="space-y-4 mb-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="space-y-2">
+                <div className="space-y-4">
+                  <div className="space-y-3">
                     <label className="block text-sm font-medium text-gray-700">
-                      Loại đếm ngược
+                      Chọn loại đếm ngược
                     </label>
-                    <select
-                      value={matchData.displayOptions.countdownType}
-                      onChange={(e) => handleDisplayOptionChange("countdownType", e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
-                    >
-                      <option value="normal">Bình thường</option>
-                      <option value="count40">Đếm 40</option>
-                      <option value="count45">Đếm 45</option>
-                      <option value="countCustom">Đếm T</option>
-                    </select>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {[
+                        { value: "normal", label: "Bình thường", icon: "⏱️" },
+                        { value: "count40", label: "Đếm 40", icon: "4️⃣0️⃣" },
+                        { value: "count45", label: "Đếm 45", icon: "4️⃣5️⃣" },
+                        { value: "countCustom", label: "Đếm T", icon: "🕰️" },
+                      ].map((option) => (
+                        <button
+                          key={option.value}
+                          onClick={() => handleDisplayOptionChange("countdownType", option.value)}
+                          className={`
+                            p-3 rounded-lg border-2 text-center transition-all
+                            ${
+                              matchData.displayOptions.countdownType === option.value
+                                ? "border-primary-500 bg-primary-50 text-primary-700"
+                                : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                            }
+                          `}
+                        >
+                          <div className="text-lg mb-1">{option.icon}</div>
+                          <div className="text-xs font-medium">{option.label}</div>
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
                   {matchData.displayOptions.countdownType === "countCustom" && (
-                    <div className="space-y-2">
-                      <label className="block text-sm font-medium text-gray-700">
-                        Thời gian tùy chỉnh (phút)
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                      <label className="block text-sm font-medium text-yellow-800 mb-2">
+                        🕰️ Thời gian tùy chỉnh (phút)
                       </label>
                       <Input
                         type="number"
+                        min="1"
+                        max="120"
                         value={matchData.displayOptions.customTime}
                         onChange={(e) => handleDisplayOptionChange("customTime", e.target.value)}
-                        placeholder="Nhập thời gian"
-                        className="text-sm"
+                        placeholder="Nhập số phút (ví dụ: 30)"
+                        className="text-sm border-yellow-300 focus:ring-yellow-500 focus:border-yellow-500"
                       />
+                      <div className="text-xs text-yellow-700 mt-1">
+                        Thời gian đếm ngược sẽ bắt đầu từ {matchData.displayOptions.customTime || "?"} phút về 0
+                      </div>
                     </div>
                   )}
                 </div>
 
-                <div className="mt-3 p-3 bg-primary-50 rounded-lg border border-primary-200">
-                  <div className="text-sm">
-                    <span className="font-medium text-primary-800">Loại đếm hiện tại:</span>
-                    <span className="ml-2 text-primary-700">
-                      {matchData.displayOptions.countdownType === "normal" && "Bình thường"}
-                      {matchData.displayOptions.countdownType === "count40" && "Đếm 40 phút"}
-                      {matchData.displayOptions.countdownType === "count45" && "Đếm 45 phút"}
-                      {matchData.displayOptions.countdownType === "countCustom" &&
-                        `Đếm ${matchData.displayOptions.customTime || "?"} phút`}
+                <div className="mt-4 p-4 bg-gradient-to-r from-primary-50 to-blue-50 rounded-lg border border-primary-200">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div>
+                    <span className="text-sm font-medium text-primary-800">
+                      Chế độ hiện tại:
                     </span>
+                    <span className="text-sm font-bold text-primary-700">
+                      {matchData.displayOptions.countdownType === "normal" && "⏱️ Bình thường"}
+                      {matchData.displayOptions.countdownType === "count40" && "4️⃣0️⃣ Đếm 40 phút"}
+                      {matchData.displayOptions.countdownType === "count45" && "4️⃣5️⃣ Đếm 45 phút"}
+                      {matchData.displayOptions.countdownType === "countCustom" &&
+                        `🕰️ Đếm ${matchData.displayOptions.customTime || "?"} phút`}
+                    </span>
+                  </div>
+                  <div className="text-xs text-primary-600 mt-1">
+                    {matchData.displayOptions.countdownType === "normal" && "Thời gian trận đấu sẽ đếm tiến"}
+                    {matchData.displayOptions.countdownType === "count40" && "Thời gian sẽ đếm ngược từ 40:00 về 00:00"}
+                    {matchData.displayOptions.countdownType === "count45" && "Thời gian sẽ đếm ngược từ 45:00 về 00:00"}
+                    {matchData.displayOptions.countdownType === "countCustom" &&
+                      `Thời gian sẽ đếm ngược từ ${matchData.displayOptions.customTime || "?"}:00 về 00:00`}
                   </div>
                 </div>
               </div>
@@ -471,9 +503,12 @@ const MatchManager = ({
           {/* Ticker Settings */}
           <div className="mt-6 pt-6 border-t border-gray-200">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-              <h4 className="text-lg font-medium text-gray-900 mb-2 sm:mb-0">
-                Cài đặt chữ chạy
-              </h4>
+              <div className="mb-2 sm:mb-0">
+                <h4 className="text-lg font-medium text-gray-900 flex items-center">
+                  📺 Cài đặt chữ chạy
+                </h4>
+                <p className="text-sm text-gray-600">Tùy chỉnh văn bản chạy trên màn hình</p>
+              </div>
               <Button
                 variant="outline"
                 size="sm"
