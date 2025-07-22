@@ -282,7 +282,7 @@ const Home = () => {
       {/* Search Section - No Code Required */}
       <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-3 border border-green-200">
         <div className="flex items-center justify-center mb-2">
-          <span className="text-sm">🔍</span>
+          <span className="text-sm">��</span>
           <h3 className="text-xs font-bold text-green-700 mx-2">TÌM KIẾM LOGO</h3>
         </div>
         <Input
@@ -535,30 +535,44 @@ const Home = () => {
 
         {/* Tab Controls */}
         <div className="bg-white rounded-xl p-3 sm:p-4 shadow-lg border border-gray-200">
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
+            <button
+              onClick={() => setSelectedOption("thong-so")}
+              className={`py-2 sm:py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 shadow-md ${
+                selectedOption === "thong-so"
+                  ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-xl"
+                  : "bg-gradient-to-r from-green-100 to-green-200 text-green-700 hover:from-green-200 hover:to-green-300"
+              }`}
+            >
+              <span className="mr-1 text-sm">📊</span>
+              <span className="hidden sm:inline">THÔNG SỐ</span>
+              <span className="sm:hidden">STATS</span>
+            </button>
             <button
               onClick={() => setSelectedOption("dieu-khien")}
-              className={`py-2 sm:py-4 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-md ${
+              className={`py-2 sm:py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 shadow-md ${
                 selectedOption === "dieu-khien"
                   ? "bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-xl"
                   : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
               }`}
             >
-              <span className="mr-1 sm:mr-2 text-sm">🎮</span>
-              ĐIỀU KHIỂN
+              <span className="mr-1 text-sm">🎮</span>
+              <span className="hidden sm:inline">ĐIỀU KHIỂN</span>
+              <span className="sm:hidden">CTRL</span>
             </button>
             <button
               onClick={() => {
                 setSelectedOption(selectedOption === "chon-skin" ? "dieu-khien" : "chon-skin");
               }}
-              className={`py-2 sm:py-4 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-md ${
+              className={`py-2 sm:py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 shadow-md ${
                 selectedOption === "chon-skin"
                   ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
                   : "bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 hover:from-blue-200 hover:to-blue-300"
               }`}
             >
-              <span className="mr-1 sm:mr-2 text-sm">🎨</span>
-              TEMPLATE
+              <span className="mr-1 text-sm">🎨</span>
+              <span className="hidden sm:inline">TEMPLATE</span>
+              <span className="sm:hidden">TPL</span>
             </button>
           </div>
         </div>
@@ -1215,7 +1229,7 @@ const Home = () => {
                 matchData={matchData}
                 onPosterUpdate={(poster) => {
                   console.log("Updated poster:", poster);
-                  // Có thể thêm toast notification ��� đây
+                  // Có thể thêm toast notification ở đây
                 }}
                 onLogoUpdate={(logoData) => {
                   console.log("Updated logo:", logoData);
