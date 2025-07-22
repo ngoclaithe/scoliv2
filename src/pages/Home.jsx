@@ -14,7 +14,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [codeInfo, setCodeInfo] = useState(null);
 
-  // State cho upload logo - s�� dụng chung với tab quản lý trận
+  // State cho upload logo - sử dụng chung với tab quản lý trận
   const [logoData, setLogoData] = useState(null);
   const [bannerData, setBannerData] = useState(null);
   const [logoName, setLogoName] = useState("");
@@ -952,7 +952,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-sm mr-1">��</span>
+              <span className="text-sm mr-1">🕐</span>
               <span className="text-xs font-bold text-center">
                 ĐẾM 20'
               </span>
@@ -1190,7 +1190,7 @@ const Home = () => {
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Nh��p mã truy cập
+                Nhập mã truy cập
               </h3>
               <p className="text-gray-600 text-sm">
                 Vui lòng nhập mã code để truy cập chức năng bình luận
@@ -1258,7 +1258,7 @@ const Home = () => {
 
           <div className="text-center mt-6">
             <p className="text-sm text-gray-600">
-              Nhấn vào micro để bắt đ��u thu âm bình luận
+              Nhấn vào micro để bắt đầu thu âm bình luận
             </p>
           </div>
         </div>
