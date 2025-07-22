@@ -337,16 +337,7 @@ const TeamLineupModal = ({
           </div>
         </div>
 
-        {/* Tips */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
-          <h4 className="text-sm font-medium text-blue-800 mb-2">💡 Hướng dẫn:</h4>
-          <ul className="text-sm text-blue-700 space-y-1">
-            <li>• <strong>GK</strong>: Thủ môn (luôn ở đầu danh sách)</li>
-            <li>• <strong>Số áo</strong>: 2, 3, 4, 5, 6, 7, 8, 9, 10, 11...</li>
-            <li>• <strong>Nhập hàng loạt</strong>: Format "GK Tên" hoặc "Số Tên"</li>
-            <li>• Ví dụ: "GK Mai Đức Anh", "10 Messi", "7 Ronaldo"</li>
-          </ul>
-        </div>
+
       </div>
     </Modal>
   );
