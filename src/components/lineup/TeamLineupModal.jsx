@@ -44,34 +44,7 @@ const TeamLineupModal = ({
     }));
   };
 
-  const handleQuickFill = (team, type) => {
-    let names = [];
-    const teamName = team === "home" ? 
-      (matchData.homeTeam?.name || "Đội nhà") : 
-      (matchData.awayTeam?.name || "Đội khách");
 
-    switch (type) {
-      case "positions":
-        names = ["Thủ môn", "Hậu vệ phải", "Trung vệ", "Trung vệ", "Hậu vệ trái", 
-                "Tiền vệ phòng ngự", "Tiền vệ trung tâm", "Tiền vệ tấn công", "Cánh phải", "Tiền đạo", "Cánh trái"];
-        break;
-      case "team":
-        names = Array.from({ length: 11 }, (_, i) => 
-          i === 0 ? `${teamName} GK` : `${teamName} ${i + 1}`
-        );
-        break;
-      default:
-        return;
-    }
-
-    setLineups(prev => ({
-      ...prev,
-      [team]: prev[team].map((player, i) => ({
-        ...player,
-        name: names[i] || player.name,
-      })),
-    }));
-  };
 
   const handleBulkInput = () => {
     const lines = bulkText.trim().split('\n').filter(line => line.trim());
