@@ -11,9 +11,25 @@ const TeamLineupModal = ({
   className = "",
 }) => {
   const [activeTeam, setActiveTeam] = useState("home");
+  
+  // Khởi tạo với số áo thực tế, GK đầu tiên
+  const defaultPlayers = [
+    { number: "GK", name: "" }, // Thủ môn
+    { number: "2", name: "" },
+    { number: "3", name: "" },
+    { number: "4", name: "" },
+    { number: "5", name: "" },
+    { number: "6", name: "" },
+    { number: "7", name: "" },
+    { number: "8", name: "" },
+    { number: "9", name: "" },
+    { number: "10", name: "" },
+    { number: "11", name: "" },
+  ];
+
   const [lineups, setLineups] = useState({
-    home: Array.from({ length: 11 }, (_, i) => ({ number: i + 1, name: "" })),
-    away: Array.from({ length: 11 }, (_, i) => ({ number: i + 1, name: "" })),
+    home: [...defaultPlayers],
+    away: [...defaultPlayers],
   });
 
   const [bulkMode, setBulkMode] = useState(false);
@@ -28,46 +44,51 @@ const TeamLineupModal = ({
     }));
   };
 
-  const handleQuickFill = (team, type) => {
-    let names = [];
-    const teamName = team === "home" ? 
-      (matchData.homeTeam?.name || "Đội nhà") : 
-      (matchData.awayTeam?.name || "Đội khách");
 
-    switch (type) {
-      case "numbers":
-        names = Array.from({ length: 11 }, (_, i) => `Cầu thủ ${i + 1}`);
-        break;
-      case "team":
-        names = Array.from({ length: 11 }, (_, i) => `${teamName} ${i + 1}`);
-        break;
-      case "positions":
-        names = ["Thủ môn", "Hậu vệ trái", "Trung vệ", "Trung vệ", "Hậu vệ phải", 
-                "Tiền vệ trái", "Tiền vệ", "Tiền vệ", "Tiền vệ phải", "Tiền đạo", "Tiền đạo"];
-        break;
-      default:
-        return;
-    }
-
-    setLineups(prev => ({
-      ...prev,
-      [team]: prev[team].map((player, i) => ({
-        ...player,
-        name: names[i] || player.name,
-      })),
-    }));
-  };
 
   const handleBulkInput = () => {
     const lines = bulkText.trim().split('\n').filter(line => line.trim());
-    const names = lines.slice(0, 11); // Take first 11 lines
+    const players = [];
     
+    lines.forEach(line => {
+      const trimmedLine = line.trim();
+      if (trimmedLine.startsWith('GK ')) {
+        // Thủ môn
+        players.push({
+          number: "GK",
+          name: trimmedLine.substring(3).trim()
+        });
+      } else {
+        // Cầu thủ khác với số áo
+        const match = trimmedLine.match(/^(\d+)\s+(.+)$/);
+        if (match) {
+          players.push({
+            number: match[1],
+            name: match[2].trim()
+          });
+        }
+      }
+    });
+
+    // Sắp xếp: GK đầu tiên, rồi theo số áo
+    players.sort((a, b) => {
+      if (a.number === "GK") return -1;
+      if (b.number === "GK") return 1;
+      return parseInt(a.number) - parseInt(b.number);
+    });
+
+    // Cập nhật lineup
     setLineups(prev => ({
       ...prev,
-      [activeTeam]: prev[activeTeam].map((player, i) => ({
-        ...player,
-        name: names[i]?.trim() || player.name,
-      })),
+      [activeTeam]: prev[activeTeam].map((player, i) => {
+        if (players[i]) {
+          return {
+            number: players[i].number,
+            name: players[i].name
+          };
+        }
+        return player;
+      }),
     }));
     
     setBulkText("");
@@ -77,7 +98,7 @@ const TeamLineupModal = ({
   const clearTeam = (team) => {
     setLineups(prev => ({
       ...prev,
-      [team]: prev[team].map(player => ({ ...player, name: "" })),
+      [team]: [...defaultPlayers],
     }));
   };
 
@@ -107,7 +128,7 @@ const TeamLineupModal = ({
       onClose={onClose}
       title="📋 Danh sách cầu thủ hai đội"
       size="xl"
-            footer={
+      footer={
         <div className="flex flex-col gap-3 w-full">
           {/* Mobile progress indicator */}
           <div className="flex gap-2 sm:hidden">
@@ -138,11 +159,11 @@ const TeamLineupModal = ({
       }
     >
       <div className="space-y-4 sm:space-y-6">
-                {/* Team Selection */}
+        {/* Team Selection */}
         <div className="flex bg-gray-100 rounded-lg p-1 mb-2">
           <button
             onClick={() => setActiveTeam("home")}
-                        className={`flex-1 py-2 px-2 rounded-md text-sm font-medium transition-all min-h-[2.5rem] ${
+            className={`flex-1 py-2 px-2 rounded-md text-sm font-medium transition-all min-h-[2.5rem] ${
               activeTeam === "home"
                 ? "bg-white text-blue-600 shadow-sm"
                 : "text-gray-600 hover:bg-gray-200"
@@ -158,7 +179,7 @@ const TeamLineupModal = ({
           </button>
           <button
             onClick={() => setActiveTeam("away")}
-                        className={`flex-1 py-2 px-2 rounded-md text-sm font-medium transition-all min-h-[2.5rem] ${
+            className={`flex-1 py-2 px-2 rounded-md text-sm font-medium transition-all min-h-[2.5rem] ${
               activeTeam === "away"
                 ? "bg-white text-red-600 shadow-sm"
                 : "text-gray-600 hover:bg-gray-200"
@@ -174,48 +195,26 @@ const TeamLineupModal = ({
           </button>
         </div>
 
-                {/* Quick Actions */}
-        <div className="space-y-2">
-          {/* Top row - main actions */}
-          <div className="grid grid-cols-2 gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleQuickFill(activeTeam, "numbers")}
-              className="h-12 flex flex-col items-center justify-center"
-            >
-              <span className="text-lg">📝</span>
-              <span className="text-xs">Cầu thủ 1-11</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setBulkMode(!bulkMode)}
-              className="h-12 flex flex-col items-center justify-center"
-            >
-              <span className="text-lg">📋</span>
-              <span className="text-xs">Nhập hàng loạt</span>
-            </Button>
-          </div>
-          {/* Bottom row - secondary actions */}
-          <div className="grid grid-cols-2 gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleQuickFill(activeTeam, "team")}
-              className="h-10 text-xs"
-            >
-              🏆 Theo tên đội
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => clearTeam(activeTeam)}
-              className="text-red-600 border-red-300 hover:bg-red-50 h-10 text-xs"
-            >
-              🗑️ Xóa hết
-            </Button>
-          </div>
+        {/* Quick Actions */}
+        <div className="grid grid-cols-2 gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setBulkMode(!bulkMode)}
+            className="h-12 flex flex-col items-center justify-center"
+          >
+            <span className="text-lg">📋</span>
+            <span className="text-xs">Nhập hàng loạt</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => clearTeam(activeTeam)}
+            className="text-red-600 border-red-300 hover:bg-red-50 h-12 flex flex-col items-center justify-center text-xs"
+          >
+            <span className="text-lg">🗑️</span>
+            <span className="text-xs">Xóa hết</span>
+          </Button>
         </div>
 
         {/* Bulk Input Mode */}
@@ -227,13 +226,13 @@ const TeamLineupModal = ({
             <textarea
               value={bulkText}
               onChange={(e) => setBulkText(e.target.value)}
-              placeholder="Nhập tên cầu thủ, mỗi dòng một người&#10;Ví dụ:&#10;Nguyễn Văn A&#10;Trần Văn B&#10;Lê Văn C&#10;..."
-              className="w-full h-32 p-3 border border-yellow-300 rounded-lg resize-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent"
-              rows={6}
+              placeholder="Nhập theo format số áo + tên:&#10;GK Mai Đức Anh&#10;12 Hoàng Hải&#10;13 Đức Long&#10;10 Nam Hải&#10;7 Messi&#10;..."
+              className="w-full h-40 p-3 border border-yellow-300 rounded-lg resize-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-sm"
+              rows={8}
             />
             <div className="flex justify-between items-center mt-3">
               <p className="text-sm text-yellow-700">
-                💡 Mỗi dòng một tên cầu thủ, tối đa 11 người
+                💡 Format: "GK Tên thủ môn" hoặc "Số_áo Tên_cầu_thủ"
               </p>
               <div className="flex gap-2">
                 <Button 
@@ -268,19 +267,21 @@ const TeamLineupModal = ({
             </div>
           </div>
           
-                                        <div className="p-3 sm:p-4 space-y-3 max-h-[40vh] sm:max-h-[50vh] lg:max-h-96 overflow-y-auto">
+          <div className="p-3 sm:p-4 space-y-3 max-h-[40vh] sm:max-h-[50vh] lg:max-h-96 overflow-y-auto">
             {currentTeamData.map((player, index) => (
-                                                        <div key={index} className="flex items-center gap-2 sm:gap-3 min-h-[2.5rem] py-1">
-                                                                <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0 ${
-                  activeTeam === "home" ? "bg-blue-500" : "bg-red-500"
+              <div key={index} className="flex items-center gap-2 sm:gap-3 min-h-[2.5rem] py-1">
+                <div className={`w-10 h-8 sm:w-12 sm:h-10 rounded-lg flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0 ${
+                  player.number === "GK" 
+                    ? "bg-green-500" 
+                    : activeTeam === "home" ? "bg-blue-500" : "bg-red-500"
                 }`}>
                   {player.number}
                 </div>
-                                <div className="flex-1 min-w-0">
+                <div className="flex-1 min-w-0">
                   <Input
                     value={player.name}
                     onChange={(e) => handlePlayerChange(activeTeam, index, e.target.value)}
-                                        placeholder={`Tên cầu thủ số ${player.number}...`}
+                    placeholder={player.number === "GK" ? "Tên thủ môn..." : `Tên cầu thủ số ${player.number}...`}
                     className="text-sm sm:text-base w-full"
                   />
                 </div>
@@ -309,16 +310,7 @@ const TeamLineupModal = ({
           </div>
         </div>
 
-        {/* Tips */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 sm:p-4">
-          <h4 className="text-sm font-medium text-blue-800 mb-2">💡 Mẹo sử dụng:</h4>
-          <ul className="text-sm text-blue-700 space-y-1">
-            <li>• Chuyển đổi giữa hai đội bằng các tab ở trên</li>
-            <li>• Sử dụng "Nhập hàng loạt" để dán danh sách từ Excel/Word</li>
-            <li>• Điền nhanh bằng các nút "Cầu thủ 1-11" hoặc "Theo tên đội"</li>
-            <li>• Cần đủ 11 cầu thủ cho mỗi đội mới có thể lưu</li>
-          </ul>
-        </div>
+
       </div>
     </Modal>
   );

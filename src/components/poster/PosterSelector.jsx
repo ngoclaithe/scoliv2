@@ -12,22 +12,7 @@ const PosterSelector = ({
   className = "",
 }) => {
   const [showModal, setShowModal] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("all");
-
-  const categories = [
-    { id: "all", name: "Tất cả", icon: "🎯" },
-    { id: "match", name: "Trận đấu", icon: "⚽" },
-    { id: "lineup", name: "Đội hình", icon: "👥" },
-    { id: "intro", name: "Giới thiệu", icon: "🎬" },
-    { id: "halftime", name: "Giải lao", icon: "⏰" },
-    { id: "celebration", name: "Ăn mừng", icon: "🎉" },
-    { id: "custom", name: "Tùy chỉnh", icon: "🎨" },
-  ];
-
-  const filteredPosters = posters.filter(
-    (poster) =>
-      selectedCategory === "all" || poster.category === selectedCategory,
-  );
+  const filteredPosters = posters;
 
   const PosterCard = ({ poster, isSelected, onClick }) => (
     <div
@@ -70,14 +55,6 @@ const PosterSelector = ({
         <h4 className="font-semibold text-sm text-gray-900 truncate">
           {poster.name}
         </h4>
-        <p className="text-xs text-gray-500 mt-1">
-          {poster.category === "match" && "⚽ Trận đấu"}
-          {poster.category === "lineup" && "👥 Đội hình"}
-          {poster.category === "intro" && "🎬 Giới thiệu"}
-          {poster.category === "halftime" && "⏰ Giải lao"}
-          {poster.category === "celebration" && "🎉 Ăn mừng"}
-          {poster.category === "custom" && "🎨 Tùy chỉnh"}
-        </p>
       </div>
 
       {/* Selection Indicator */}
@@ -107,42 +84,8 @@ const PosterSelector = ({
       <div className={`w-full ${className}`}>
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
           <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-            Chọn mẫu poster
+            Chọn poster template
           </h3>
-          <div className="flex space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowModal(true)}
-              className="flex-1 sm:flex-none"
-            >
-              Xem tất cả
-            </Button>
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={onCustomPoster}
-              className="flex-1 sm:flex-none"
-              icon={
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-              }
-            >
-              <span className="hidden sm:inline">Tùy chỉnh</span>
-              <span className="sm:hidden">Tạo mới</span>
-            </Button>
-          </div>
         </div>
 
         {loading ? (
@@ -204,27 +147,6 @@ const PosterSelector = ({
         size="xl"
       >
         <div className="space-y-6">
-                    {/* Category Filter */}
-          <div className="flex flex-wrap gap-2">
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
-                className={`
-                  px-2 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors
-                  ${
-                    selectedCategory === category.id
-                      ? "bg-primary-100 text-primary-800 border border-primary-300"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }
-                `}
-              >
-                <span className="mr-1">{category.icon}</span>
-                <span className="hidden sm:inline">{category.name}</span>
-              </button>
-            ))}
-          </div>
-
           {/* Poster Grid */}
           {loading ? (
             <Loading size="lg" text="Đang tải poster..." />

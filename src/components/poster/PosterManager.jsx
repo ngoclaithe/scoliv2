@@ -11,44 +11,39 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
   const [showPosterSelector, setShowPosterSelector] = useState(false);
   const [showCustomForm, setShowCustomForm] = useState(false);
   const [showLogoSettings, setShowLogoSettings] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
-  // Dữ liệu mẫu poster
-  const samplePosters = [
+  // Posters từ thư mục public/images/posters
+  const availablePosters = [
     {
       id: "poster-1",
-      name: "Poster Trận Đấu Cơ Bản",
-      category: "match",
-      thumbnail: null,
-      isPremium: false,
+      name: "Poster Template 1",
+      thumbnail: "/images/posters/poster1.jpg",
     },
     {
       id: "poster-2",
-      name: "Poster Đội Hình",
-      category: "lineup",
-      thumbnail: null,
-      isPremium: false,
+      name: "Poster Template 2",
+      thumbnail: "/images/posters/poster2.jpg",
     },
     {
       id: "poster-3",
-      name: "Poster Giới Thiệu",
-      category: "intro",
-      thumbnail: null,
-      isPremium: true,
+      name: "Poster Template 3",
+      thumbnail: "/images/posters/poster3.jpg",
     },
     {
       id: "poster-4",
-      name: "Poster Ăn Mừng",
-      category: "celebration",
-      thumbnail: null,
-      isPremium: false,
+      name: "Poster Template 4",
+      thumbnail: "/images/posters/poster4.jpg",
     },
     {
       id: "poster-5",
-      name: "Poster Giải Lao",
-      category: "halftime",
-      thumbnail: null,
-      isPremium: false,
+      name: "Poster Template 5",
+      thumbnail: "/images/posters/poster5.jpg",
+    },
+    {
+      id: "poster-6",
+      name: "Poster Template 6",
+      thumbnail: "/images/posters/poster6.jpg",
     },
   ];
 
@@ -80,15 +75,34 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
     <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Quản Lý Poster</h1>
-          <p className="text-gray-600 mt-1 text-sm sm:text-base">
-            Chọn mẫu poster và cài đặt logo cho livestream
-          </p>
-        </div>
-        <div className="flex space-x-2 sm:space-x-3">
+        <div className="flex items-center justify-between space-x-3">
           <Button
             variant="outline"
+            onClick={() => setShowPosterSelector(true)}
+            size="sm"
+            className="flex-1 sm:flex-none"
+            icon={
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+            }
+          >
+            <span className="hidden sm:inline">{selectedPoster ? 'Đổi Poster' : 'Chọn Poster'}</span>
+            <span className="sm:hidden">{selectedPoster ? 'Đổi' : 'Chọn'}</span>
+          </Button>
+
+          <Button
+            variant="primary"
             onClick={() => setShowLogoSettings(true)}
             size="sm"
             className="flex-1 sm:flex-none"
@@ -117,50 +131,16 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
             <span className="hidden sm:inline">Cài Đặt Logo</span>
             <span className="sm:hidden">Logo</span>
           </Button>
-          <Button
-            variant="primary"
-            onClick={() => setShowPosterSelector(true)}
-            size="sm"
-            className="flex-1 sm:flex-none"
-            icon={
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-            }
-          >
-            <span className="hidden sm:inline">Chọn Mẫu Poster</span>
-            <span className="sm:hidden">Poster</span>
-          </Button>
         </div>
       </div>
 
             {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-        {/* Left Side - Current Poster */}
-        <div className="lg:col-span-2 order-2 lg:order-1">
+      <div className="w-full">
+        {/* Current Poster Display */}
+        <div className="w-full">
           {selectedPoster ? (
             <PosterPreview
               poster={selectedPoster}
-              matchData={matchData}
-              onEdit={() => {
-                if (selectedPoster.category === "custom") {
-                  setShowCustomForm(true);
-                } else {
-                  setShowPosterSelector(true);
-                }
-              }}
-              onDownload={(format) => console.log("Download poster as", format)}
-              onShare={(platform) => console.log("Share to", platform)}
             />
           ) : (
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
@@ -184,90 +164,17 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
                   Chưa chọn poster
                 </h3>
                 <p className="text-gray-600 mb-4">
-                  Chọn một mẫu poster từ thư viện hoặc tạo poster tùy chỉnh
+                  Chọn một poster từ thư viện có sẵn
                 </p>
                 <Button
                   variant="primary"
                   onClick={() => setShowPosterSelector(true)}
                 >
-                  Chọn Mẫu Poster
+                  Chọn Poster
                 </Button>
               </div>
             </div>
           )}
-        </div>
-
-                {/* Right Side - Quick Info */}
-        <div className="space-y-4 order-1 lg:order-2">
-          {/* Poster Info Card */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-            <h3 className="font-semibold text-gray-900 mb-3">
-              Thông Tin Poster
-            </h3>
-            {selectedPoster ? (
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Tên:</span>
-                  <span className="font-medium">{selectedPoster.name}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Loại:</span>
-                  <span className="font-medium">
-                    {selectedPoster.category === "match" && "⚽ Trận đấu"}
-                    {selectedPoster.category === "lineup" && "👥 Đội hình"}
-                    {selectedPoster.category === "intro" && "🎬 Giới thiệu"}
-                    {selectedPoster.category === "halftime" && "⏰ Giải lao"}
-                    {selectedPoster.category === "celebration" && "🎉 Ăn mừng"}
-                    {selectedPoster.category === "custom" && "🎨 Tùy chỉnh"}
-                  </span>
-                </div>
-                {selectedPoster.dimensions && (
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Kích thước:</span>
-                    <span className="font-medium">
-                      {selectedPoster.dimensions.width} x{" "}
-                      {selectedPoster.dimensions.height}
-                    </span>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <p className="text-gray-500 text-sm">Chưa chọn poster</p>
-            )}
-          </div>
-
-          {/* Match Info Card */}
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-            <h3 className="font-semibold text-gray-900 mb-3">
-              Thông Tin Trận Đấu
-            </h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Đội nhà:</span>
-                <span className="font-medium">
-                  {matchData?.homeTeam?.name || "Chưa đặt"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Đội khách:</span>
-                <span className="font-medium">
-                  {matchData?.awayTeam?.name || "Chưa đặt"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Giải đấu:</span>
-                <span className="font-medium">
-                  {matchData?.league || "Chưa đặt"}
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Ngày:</span>
-                <span className="font-medium">
-                  {matchData?.date || "Chưa đặt"}
-                </span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -279,7 +186,7 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
         size="xl"
       >
         <PosterSelector
-          posters={samplePosters}
+          posters={availablePosters}
           selectedPoster={selectedPoster}
           onPosterSelect={handlePosterSelect}
           onCustomPoster={handleCustomPoster}
