@@ -597,7 +597,7 @@ const Home = () => {
               }`}
             >
               <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🎬</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-xs font-bold text-center">
                 GIỚI THIỆU
               </span>
             </button>
@@ -615,7 +615,7 @@ const Home = () => {
               }`}
             >
               <span className="text-base sm:text-xl mb-0.5 sm:mb-1">📋</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-xs font-bold text-center">
                 DANH SÁCH
               </span>
             </button>
@@ -633,7 +633,7 @@ const Home = () => {
               }`}
             >
               <span className="text-base sm:text-xl mb-0.5 sm:mb-1">⚽</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-xs font-bold text-center">
                 TỈ SỐ DƯỚI
               </span>
             </button>
@@ -651,7 +651,7 @@ const Home = () => {
               }`}
             >
               <span className="text-base sm:text-xl mb-0.5 sm:mb-1">⏰</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-xs font-bold text-center">
                 NGHỈ HIỆP
               </span>
             </button>
@@ -668,7 +668,7 @@ const Home = () => {
               }`}
             >
               <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🥅</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-xs font-bold text-center">
                 PENALTY
               </span>
             </button>
@@ -683,7 +683,7 @@ const Home = () => {
               }`}
             >
               <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-xs font-bold text-center">
                 ĐẾM 0'
               </span>
             </button>
@@ -697,7 +697,7 @@ const Home = () => {
               }`}
             >
               <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-xs font-bold text-center">
                 ĐẾM 20'
               </span>
             </button>
@@ -711,7 +711,7 @@ const Home = () => {
               }`}
             >
               <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-xs font-bold text-center">
                 ĐẾM 25'
               </span>
             </button>
@@ -725,7 +725,7 @@ const Home = () => {
               }`}
             >
               <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-xs font-bold text-center">
                 ĐẾM 30'
               </span>
             </button>
@@ -739,7 +739,7 @@ const Home = () => {
               }`}
             >
               <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-xs font-bold text-center">
                 ĐẾM 35'
               </span>
             </button>
@@ -754,7 +754,7 @@ const Home = () => {
               }`}
             >
               <span className="text-base sm:text-xl mb-0.5 sm:mb-1">❌</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-xs font-bold text-center">
                 TẮT
               </span>
             </button>
