@@ -116,9 +116,9 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
       </div>
 
             {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-        {/* Left Side - Current Poster */}
-        <div className="lg:col-span-2 order-2 lg:order-1">
+      <div className="w-full">
+        {/* Current Poster Display */}
+        <div className="w-full">
           {selectedPoster ? (
             <PosterPreview
               poster={selectedPoster}
