@@ -654,21 +654,38 @@ const MatchManager = ({
                   </div>
                 </div>
 
-                {/* Preview */}
-                <div className="bg-gray-900 rounded-lg p-4 overflow-hidden relative">
-                  <div className="text-xs text-gray-400 mb-2">Xem trước chữ chạy:</div>
-                  <div className="h-8 flex items-center overflow-hidden">
+                {/* Enhanced Preview */}
+                <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg p-4 overflow-hidden relative border-2 border-gray-700">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="text-xs text-gray-400 flex items-center space-x-1">
+                      <span>👁️</span>
+                      <span>Xem trước chữ chạy:</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                      <span className="text-xs text-gray-400">LIVE</span>
+                    </div>
+                  </div>
+                  <div className="h-10 flex items-center overflow-hidden bg-black rounded border">
                     <div
-                      className="animate-pulse whitespace-nowrap"
+                      className={`whitespace-nowrap transition-all duration-300 ${
+                        matchData.tickerSettings.enabled ? "animate-bounce" : ""
+                      }`}
                       style={{
                         color: matchData.tickerSettings.color,
                         fontSize: `${matchData.tickerSettings.fontSize}px`,
                         opacity: matchData.tickerSettings.enabled ? 1 : 0.3,
+                        paddingLeft: "10px",
                       }}
                     >
                       {matchData.tickerSettings.text || "Chào mừng đến với trận đấu!"}
                     </div>
                   </div>
+                  {!matchData.tickerSettings.enabled && (
+                    <div className="absolute inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center rounded-lg">
+                      <span className="text-gray-400 text-sm font-medium">⏸️ Chữ chạy đã tắt</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Apply Button */}
