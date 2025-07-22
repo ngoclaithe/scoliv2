@@ -37,6 +37,11 @@ const Home = () => {
   const [selectedSkin, setSelectedSkin] = useState(1);
   const [isCodeInfoExpanded, setIsCodeInfoExpanded] = useState(false);
 
+  // State cho custom time và cài đặt chữ chạy nâng cao
+  const [customTime, setCustomTime] = useState("");
+  const [tickerColor, setTickerColor] = useState("#ffffff");
+  const [tickerFontSize, setTickerFontSize] = useState(16);
+
   // Skin data configuration
   const skinData = {
     1: { name: "Template 1", image: "/images/templates/skin1.png" },
