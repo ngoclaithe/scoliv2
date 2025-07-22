@@ -264,7 +264,7 @@ const Home = () => {
       {/* Search Section - No Code Required */}
       <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-3 border border-green-200">
         <div className="flex items-center justify-center mb-2">
-          <span className="text-sm">��</span>
+          <span className="text-sm">🔍</span>
           <h3 className="text-xs font-bold text-green-700 mx-2">TÌM KIẾM LOGO</h3>
         </div>
         <Input
@@ -281,6 +281,7 @@ const Home = () => {
           variant="secondary"
           size="sm"
           className="w-20 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-1 text-xs rounded-full shadow-lg transform hover:scale-105 transition-all duration-200"
+          style={{ fontSize: '10px' }}
         >
           <span className="mr-1 text-xs">📚</span>
           HỖ TRỢ
