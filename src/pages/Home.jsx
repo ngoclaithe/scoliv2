@@ -971,12 +971,12 @@ const Home = () => {
 
       <main className="max-w-4xl mx-auto">
         {/* Tabs */}
-        <div className="flex bg-gradient-to-r from-gray-100 to-gray-200 border-b-4 border-gray-300 shadow-md">
+        <div className="flex bg-gradient-to-r from-gray-100 to-gray-200 border-b-2 border-gray-300 shadow-md">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 py-5 px-8 text-center font-bold text-lg border-b-4 transition-all duration-300 transform hover:scale-105 ${
+              className={`flex-1 py-2 px-2 sm:py-3 sm:px-4 text-center font-bold text-xs sm:text-sm border-b-2 transition-all duration-300 ${
                 activeTab === tab.id
                   ? tab.id === "upload-logo"
                     ? "border-blue-500 text-blue-700 bg-gradient-to-t from-blue-100 to-blue-50 shadow-lg"
@@ -989,18 +989,21 @@ const Home = () => {
               <span className="flex items-center justify-center">
                 {tab.id === "upload-logo" ? (
                   <>
-                    <span className="mr-2">🏆</span>
-                    {tab.name}
+                    <span className="mr-1 text-sm">🏆</span>
+                    <span className="hidden sm:inline">{tab.name}</span>
+                    <span className="sm:hidden">LOGO</span>
                   </>
                 ) : tab.id === "quan-ly-tran" ? (
                   <>
-                    <span className="mr-2">⚽</span>
-                    {tab.name}
+                    <span className="mr-1 text-sm">⚽</span>
+                    <span className="hidden sm:inline">{tab.name}</span>
+                    <span className="sm:hidden">TRẬN</span>
                   </>
                 ) : (
                   <>
-                    <span className="mr-2">🎙️</span>
-                    {tab.name}
+                    <span className="mr-1 text-sm">🎙️</span>
+                    <span className="hidden sm:inline">{tab.name}</span>
+                    <span className="sm:hidden">AUDIO</span>
                   </>
                 )}
               </span>
