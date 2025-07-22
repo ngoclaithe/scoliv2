@@ -817,8 +817,8 @@ const Home = () => {
         <div className="flex justify-center">
           <Button
             variant="primary"
-            size="lg"
-            className="w-32 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xl rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300"
+            size="sm"
+            className="w-24 sm:w-32 py-2 sm:py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-sm sm:text-lg rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300"
           >
             <span className="mr-2">��</span>
             ÁP DỤNG
