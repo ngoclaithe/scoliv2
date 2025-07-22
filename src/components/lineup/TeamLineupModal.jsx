@@ -223,39 +223,25 @@ const TeamLineupModal = ({
         </div>
 
         {/* Quick Actions */}
-        <div className="space-y-2">
-          {/* Top row - main actions */}
-          <div className="grid grid-cols-2 gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleQuickFill(activeTeam, "positions")}
-              className="h-12 flex flex-col items-center justify-center"
-            >
-              <span className="text-lg">⚽</span>
-              <span className="text-xs">Theo vị trí</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setBulkMode(!bulkMode)}
-              className="h-12 flex flex-col items-center justify-center"
-            >
-              <span className="text-lg">📋</span>
-              <span className="text-xs">Nhập hàng loạt</span>
-            </Button>
-          </div>
-          {/* Bottom row - secondary actions */}
-          <div className="grid grid-cols-2 gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => clearTeam(activeTeam)}
-              className="text-red-600 border-red-300 hover:bg-red-50 h-10 text-xs"
-            >
-              🗑️ Xóa hết
-            </Button>
-          </div>
+        <div className="grid grid-cols-2 gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setBulkMode(!bulkMode)}
+            className="h-12 flex flex-col items-center justify-center"
+          >
+            <span className="text-lg">📋</span>
+            <span className="text-xs">Nhập hàng loạt</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => clearTeam(activeTeam)}
+            className="text-red-600 border-red-300 hover:bg-red-50 h-12 flex flex-col items-center justify-center text-xs"
+          >
+            <span className="text-lg">🗑️</span>
+            <span className="text-xs">Xóa hết</span>
+          </Button>
         </div>
 
         {/* Bulk Input Mode */}
