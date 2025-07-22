@@ -55,6 +55,7 @@ const Home = () => {
   const [showPosterModal, setShowPosterModal] = useState(false);
   const [showLineupModal, setShowLineupModal] = useState(false);
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
+  const [showTimerModal, setShowTimerModal] = useState(false);
 
       // State cho penalty shootout - đơn giản hóa cho backend
   const [penaltyData, setPenaltyData] = useState({
@@ -270,7 +271,7 @@ const Home = () => {
       <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-3 border border-green-200">
         <div className="flex items-center justify-center mb-2">
           <span className="text-sm">🔍</span>
-          <h3 className="text-xs font-bold text-green-700 mx-2">TÌM KI��M LOGO</h3>
+          <h3 className="text-xs font-bold text-green-700 mx-2">TÌM KIẾM LOGO</h3>
         </div>
         <Input
           placeholder="Tìm theo tên đội..."
@@ -714,7 +715,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🕐</span>
+              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">���</span>
               <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 0'
               </span>
@@ -841,7 +842,7 @@ const Home = () => {
             <div className="mt-4 bg-gradient-to-r from-yellow-100 to-orange-100 border-2 border-yellow-400 rounded-xl p-4 shadow-lg">
               <div className="text-center mb-3">
                 <h4 className="text-lg font-bold text-yellow-800 flex items-center justify-center">
-                  <span className="mr-2">🕰��</span>
+                  <span className="mr-2">🕰️</span>
                   THIẾT LẬP THỜI GIAN TÙY CHỈNH
                   <span className="ml-2">🕰️</span>
                 </h4>
@@ -892,7 +893,7 @@ const Home = () => {
           <h3 className="font-bold text-center text-sm text-orange-800 mb-3 flex items-center justify-center">
             <span className="mr-1 text-sm">📰</span>
             <span className="text-xs">CÀI ĐẶT CHỮ CHẠY</span>
-            <span className="ml-1 text-sm">📰</span>
+            <span className="ml-1 text-sm">��</span>
           </h3>
 
           <div className="space-y-3">
