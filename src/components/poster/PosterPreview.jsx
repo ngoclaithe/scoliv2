@@ -24,7 +24,7 @@ const PosterPreview = ({
 
 
         {/* Poster Display */}
-        <div className="p-3 sm:p-6">
+        <div className="p-3">
           <div className="relative bg-gray-50 rounded-lg overflow-hidden">
             {poster.thumbnail ? (
               <div className="w-full">
