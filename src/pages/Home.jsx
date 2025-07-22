@@ -706,7 +706,7 @@ const Home = () => {
               </span>
             </button>
 
-            {/* Đ���m giờ buttons - Đầy đủ tất cả options */}
+            {/* Đếm giờ buttons - Đầy đủ tất cả options */}
             <button
               onClick={() => setSelectedOption("dem-0")}
               className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
@@ -1085,7 +1085,7 @@ const Home = () => {
                   Football Livestream Tool
                 </h1>
                 <p className="text-blue-200 text-xs">
-                  Công cụ quản lý trận đấu tr��c tiếp
+                  Công cụ quản lý trận đấu trực tiếp
                 </p>
               </div>
               <div className="sm:hidden">
@@ -1262,6 +1262,66 @@ const Home = () => {
         onPenaltyChange={handlePenaltyChange}
       />
 
+      {/* Timer Modal */}
+      <Modal
+        isOpen={showTimerModal}
+        onClose={() => setShowTimerModal(false)}
+        title="🕰️ Thiết Lập Thời Gian Tùy Chỉnh"
+        size="md"
+      >
+        <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-4">
+          <div className="text-center mb-4">
+            <h4 className="text-lg font-bold text-yellow-800 flex items-center justify-center">
+              <span className="mr-2">🕰️</span>
+              THIẾT LẬP ĐẾM T
+              <span className="ml-2">🕰️</span>
+            </h4>
+            <p className="text-sm text-yellow-700 mt-1">
+              Trận đấu sẽ bắt đầu chạy từ thời điểm này
+            </p>
+          </div>
+
+          <div className="flex items-center space-x-2 mb-4">
+            <Input
+              type="number"
+              min="0"
+              max="120"
+              value={customTime}
+              onChange={(e) => setCustomTime(e.target.value)}
+              placeholder="Nhập phút (VD: 30)"
+              className="flex-1 text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
+            />
+            <span className="text-sm font-medium text-yellow-800">phút</span>
+          </div>
+
+          <div className="text-center text-sm text-yellow-700 mb-4">
+            ⏱️ Trận đấu sẽ bắt đầu từ: <strong>{customTime || "0"}:00</strong>
+          </div>
+
+          <div className="flex justify-center gap-3">
+            <Button
+              variant="outline"
+              onClick={() => setShowTimerModal(false)}
+              className="px-4 py-2"
+            >
+              Hủy
+            </Button>
+            <Button
+              variant="primary"
+              className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-sm rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+              onClick={() => {
+                // Gửi về backend
+                console.log('Áp dụng thời gian tùy chỉnh:', customTime);
+                alert(`Đã áp dụng: Trận đấu bắt đầu từ ${customTime || 0} phút`);
+                setShowTimerModal(false);
+              }}
+            >
+              <span className="mr-1">✅</span>
+              ÁP DỤNG
+            </Button>
+          </div>
+        </div>
+      </Modal>
 
     </div>
   );
