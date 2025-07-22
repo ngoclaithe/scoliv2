@@ -565,21 +565,37 @@ const MatchManager = ({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label className="block text-sm font-medium text-gray-700">
-                        Màu chữ
+                        🎨 Màu chữ
                       </label>
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="color"
-                          value={matchData.tickerSettings.color}
-                          onChange={(e) => handleTickerSettingChange("color", e.target.value)}
-                          className="w-8 h-8 border border-gray-300 rounded cursor-pointer"
-                        />
-                        <Input
-                          type="text"
-                          value={matchData.tickerSettings.color}
-                          onChange={(e) => handleTickerSettingChange("color", e.target.value)}
-                          className="text-sm flex-1"
-                        />
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="color"
+                            value={matchData.tickerSettings.color}
+                            onChange={(e) => handleTickerSettingChange("color", e.target.value)}
+                            className="w-10 h-10 border border-gray-300 rounded-lg cursor-pointer"
+                          />
+                          <Input
+                            type="text"
+                            value={matchData.tickerSettings.color}
+                            onChange={(e) => handleTickerSettingChange("color", e.target.value)}
+                            className="text-sm flex-1 uppercase"
+                            placeholder="#ffffff"
+                          />
+                        </div>
+                        <div className="flex gap-1">
+                          {["#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00"].map((color) => (
+                            <button
+                              key={color}
+                              onClick={() => handleTickerSettingChange("color", color)}
+                              className={`w-6 h-6 rounded border-2 ${
+                                matchData.tickerSettings.color === color ? "border-gray-800" : "border-gray-300"
+                              }`}
+                              style={{ backgroundColor: color }}
+                              title={color}
+                            />
+                          ))}
+                        </div>
                       </div>
                     </div>
 
