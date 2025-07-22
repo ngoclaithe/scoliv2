@@ -147,27 +147,6 @@ const PosterSelector = ({
         size="xl"
       >
         <div className="space-y-6">
-                    {/* Category Filter */}
-          <div className="flex flex-wrap gap-2">
-            {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.id)}
-                className={`
-                  px-2 sm:px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors
-                  ${
-                    selectedCategory === category.id
-                      ? "bg-primary-100 text-primary-800 border border-primary-300"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }
-                `}
-              >
-                <span className="mr-1">{category.icon}</span>
-                <span className="hidden sm:inline">{category.name}</span>
-              </button>
-            ))}
-          </div>
-
           {/* Poster Grid */}
           {loading ? (
             <Loading size="lg" text="Đang tải poster..." />
