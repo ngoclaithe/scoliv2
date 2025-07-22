@@ -114,10 +114,8 @@ const LogoSettings = ({ isOpen, onClose, onLogoUpdate, matchData }) => {
     { id: "marquee", name: "Chữ Chạy", icon: "📜" },
   ];
 
-  const filteredLogos = sampleLogos.filter(
-    (logo) =>
-      logo.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      logo.category === logoSettings.type,
+  const filteredLogos = sampleLogos.filter((logo) =>
+    logo.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handleLogoSelect = (logo) => {
