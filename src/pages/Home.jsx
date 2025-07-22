@@ -379,7 +379,7 @@ const Home = () => {
                   <span className="font-mono font-bold">{codeInfo.code}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">��ược tạo lúc:</span>
+                  <span className="text-gray-600">Được tạo lúc:</span>
                   <span className="font-medium">{codeInfo.generatedAt}</span>
                 </div>
               </div>
@@ -522,7 +522,7 @@ const Home = () => {
         <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-indigo-200">
           <h3 className="text-center text-lg font-bold text-indigo-800 mb-4 sm:mb-6 flex items-center justify-center">
             <span className="mr-2">⚙️</span>
-            TÙY CHỌN HIỂN THỊ
+            TÙY CHỌN HIỂN TH���
             <span className="ml-2">⚙️</span>
           </h3>
 
@@ -779,6 +779,150 @@ const Home = () => {
     );
   };
 
+  const renderBinhLuanTab = () => {
+    if (!isCodeEntered) {
+      return (
+        <div className="p-6 max-w-md mx-auto">
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <svg
+                  className="w-8 h-8 text-blue-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Nhập mã truy cập
+              </h3>
+              <p className="text-gray-600 text-sm">
+                Vui lòng nhập mã code để truy cập chức năng bình luận
+              </p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <Input
+              placeholder="Nhập code..."
+              value={matchCode}
+              onChange={(e) => setMatchCode(e.target.value)}
+              className="text-center text-lg font-mono"
+            />
+
+            <div className="flex justify-center">
+              <Button
+                variant="primary"
+                size="lg"
+                className="w-32"
+                onClick={handleCodeSubmit}
+                loading={isLoading}
+              >
+                {isLoading ? "Đang xử lý..." : "XÁC NHẬN"}
+              </Button>
+            </div>
+
+            <div className="text-center text-xs text-gray-500">
+              Nhập "ffff" để demo
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="p-6 space-y-6">
+        {/* Code Information */}
+        {codeInfo && (
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-6 mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">
+                Thông tin mã truy cập
+              </h3>
+              <span
+                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  codeInfo.status === "active"
+                    ? "bg-green-100 text-green-800"
+                    : codeInfo.status === "inactive"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : "bg-red-100 text-red-800"
+                }`}
+              >
+                {codeInfo.status === "active"
+                  ? "🟢 Đã kích hoạt"
+                  : codeInfo.status === "inactive"
+                    ? "🟡 Chưa kích hoạt"
+                    : "🔴 Đã hết hạn"}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Mã code:</span>
+                  <span className="font-mono font-bold">{codeInfo.code}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Được tạo lúc:</span>
+                  <span className="font-medium">{codeInfo.generatedAt}</span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Hết hạn vào:</span>
+                  <span className="font-medium text-orange-600">
+                    {codeInfo.expiryDate}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Microphone Section */}
+        <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-8 border border-red-200">
+          <h3 className="text-center text-lg font-bold text-red-800 mb-8 flex items-center justify-center">
+            <span className="mr-2">🎙️</span>
+            THU ÂM BÌNH LUẬN
+            <span className="ml-2">🎙️</span>
+          </h3>
+
+          <div className="flex justify-center">
+            <button
+              onClick={() => {
+                // Logic thu âm sẽ được thêm sau
+                console.log("Microphone clicked - logic will be added later");
+              }}
+              className="w-32 h-32 bg-gradient-to-br from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white rounded-full flex items-center justify-center shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300"
+            >
+              <svg
+                className="w-16 h-16"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M12 2c1.1 0 2 .9 2 2v6c0 1.1-.9 2-2 2s-2-.9-2-2V4c0-1.1.9-2 2-2zm6 6c0 2.76-2.24 5-5 5s-5-2.24-5-5H6c0 3.53 2.61 6.43 6 6.92V21h2v-2.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+              </svg>
+            </button>
+          </div>
+
+          <div className="text-center mt-6">
+            <p className="text-sm text-gray-600">
+              Nhấn vào micro để bắt đầu thu âm bình luận
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -940,7 +1084,7 @@ const Home = () => {
         onSave={(lineupData) => {
           console.log("Saved lineup data:", lineupData);
           setShowLineupModal(false);
-          // Có thể thêm thông báo thành c��ng ở đây
+          // Có thể thêm thông báo thành công ở đây
         }}
         matchData={matchData}
       />
