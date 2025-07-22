@@ -36,6 +36,8 @@ const Home = () => {
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
+  const [showSkinModal, setShowSkinModal] = useState(false);
+  const [selectedSkin, setSelectedSkin] = useState(null);
 
         // State cho modal poster
   const [showPosterModal, setShowPosterModal] = useState(false);
@@ -367,31 +369,13 @@ const Home = () => {
                   <span className="text-gray-600">Được tạo lúc:</span>
                   <span className="font-medium">{codeInfo.generatedAt}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Số lần truy cập:</span>
-                  <span className="font-medium">
-                    {codeInfo.accessCount}/{codeInfo.maxAccess}
-                  </span>
-                </div>
               </div>
 
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Thời hạn sử dụng:</span>
-                  <span className="font-medium">
-                    {codeInfo.expiryDays} ngày
-                  </span>
-                </div>
-                <div className="flex justify-between">
                   <span className="text-gray-600">Hết hạn vào:</span>
                   <span className="font-medium text-orange-600">
                     {codeInfo.expiryDate}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Lần cuối sử dụng:</span>
-                  <span className="font-medium">
-                    {codeInfo.lastUsed || "Chưa sử dụng"}
                   </span>
                 </div>
               </div>
@@ -496,7 +480,10 @@ const Home = () => {
               ĐIỀU KHIỂN
             </button>
             <button
-              onClick={() => setSelectedOption("chon-skin")}
+              onClick={() => {
+                setSelectedOption("chon-skin");
+                setShowSkinModal(true);
+              }}
               className={`py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-md ${
                 selectedOption === "chon-skin"
                   ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
@@ -945,6 +932,74 @@ const Home = () => {
         penaltyData={penaltyData}
         onPenaltyChange={handlePenaltyChange}
       />
+
+      {/* Skin Selection Modal */}
+      <Modal
+        isOpen={showSkinModal}
+        onClose={() => setShowSkinModal(false)}
+        title="🎨 Chọn Skin"
+        size="lg"
+      >
+        <div className="p-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {[1, 2, 3, 4, 5].map((skinNumber) => (
+              <div
+                key={skinNumber}
+                onClick={() => {
+                  setSelectedSkin(skinNumber);
+                  setShowSkinModal(false);
+                }}
+                className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${
+                  selectedSkin === skinNumber
+                    ? "border-blue-500 ring-2 ring-blue-200"
+                    : "border-gray-200 hover:border-blue-300"
+                }`}
+              >
+                <img
+                  src={`/images/templates/skin${skinNumber}.png`}
+                  alt={`Skin ${skinNumber}`}
+                  className="w-full h-32 object-cover"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+                <div className="w-full h-32 bg-gray-100 items-center justify-center hidden">
+                  <span className="text-gray-500 font-medium">Skin {skinNumber}</span>
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white text-center py-2">
+                  <span className="text-sm font-medium">Skin {skinNumber}</span>
+                </div>
+                {selectedSkin === skinNumber && (
+                  <div className="absolute top-2 right-2 bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                    <span className="text-xs">✓</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 flex justify-end space-x-3">
+            <Button
+              variant="outline"
+              onClick={() => setShowSkinModal(false)}
+            >
+              Hủy
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => {
+                setShowSkinModal(false);
+                // Apply skin logic here
+                console.log('Applied skin:', selectedSkin);
+              }}
+              disabled={!selectedSkin}
+            >
+              Áp dụng
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
