@@ -13,42 +13,37 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
   const [showLogoSettings, setShowLogoSettings] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Dữ liệu mẫu poster
-  const samplePosters = [
+  // Posters từ thư mục public/images/posters
+  const availablePosters = [
     {
       id: "poster-1",
-      name: "Poster Trận Đấu Cơ Bản",
-      category: "match",
-      thumbnail: null,
-      isPremium: false,
+      name: "Poster Template 1",
+      thumbnail: "/images/posters/poster1.jpg",
     },
     {
       id: "poster-2",
-      name: "Poster Đội Hình",
-      category: "lineup",
-      thumbnail: null,
-      isPremium: false,
+      name: "Poster Template 2",
+      thumbnail: "/images/posters/poster2.jpg",
     },
     {
       id: "poster-3",
-      name: "Poster Giới Thiệu",
-      category: "intro",
-      thumbnail: null,
-      isPremium: true,
+      name: "Poster Template 3",
+      thumbnail: "/images/posters/poster3.jpg",
     },
     {
       id: "poster-4",
-      name: "Poster Ăn Mừng",
-      category: "celebration",
-      thumbnail: null,
-      isPremium: false,
+      name: "Poster Template 4",
+      thumbnail: "/images/posters/poster4.jpg",
     },
     {
       id: "poster-5",
-      name: "Poster Giải Lao",
-      category: "halftime",
-      thumbnail: null,
-      isPremium: false,
+      name: "Poster Template 5",
+      thumbnail: "/images/posters/poster5.jpg",
+    },
+    {
+      id: "poster-6",
+      name: "Poster Template 6",
+      thumbnail: "/images/posters/poster6.jpg",
     },
   ];
 
@@ -116,30 +111,6 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
           >
             <span className="hidden sm:inline">Cài Đặt Logo</span>
             <span className="sm:hidden">Logo</span>
-          </Button>
-          <Button
-            variant="primary"
-            onClick={() => setShowPosterSelector(true)}
-            size="sm"
-            className="flex-1 sm:flex-none"
-            icon={
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-            }
-          >
-            <span className="hidden sm:inline">Chọn Mẫu Poster</span>
-            <span className="sm:hidden">Poster</span>
           </Button>
         </div>
       </div>
@@ -279,7 +250,7 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
         size="xl"
       >
         <PosterSelector
-          posters={samplePosters}
+          posters={availablePosters}
           selectedPoster={selectedPoster}
           onPosterSelect={handlePosterSelect}
           onCustomPoster={handleCustomPoster}
