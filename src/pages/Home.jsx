@@ -312,7 +312,7 @@ const Home = () => {
                 Nhập mã truy cập
               </h3>
               <p className="text-gray-600 text-sm">
-                Vui lòng nhập mã code để truy cập và quản lý tr���n đấu
+                Vui lòng nhập mã code để truy cập và quản lý trận đấu
               </p>
             </div>
           </div>
@@ -396,9 +396,9 @@ const Home = () => {
         )}
 
         {/* Scoreboard */}
-        <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-xl p-6 border-4 border-yellow-400 shadow-2xl">
+        <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-xl p-4 border-4 border-yellow-400 shadow-2xl">
           {selectedSkin && skinData[selectedSkin] ? (
-            <div className="w-full h-64 bg-gray-100 rounded-lg overflow-hidden">
+            <div className="w-full h-40 bg-gray-100 rounded-lg overflow-hidden">
               <img
                 src={skinData[selectedSkin].image}
                 alt={skinData[selectedSkin].name}
@@ -423,14 +423,6 @@ const Home = () => {
               size="md"
             />
           )}
-
-          <div className="text-center mt-6">
-            <div className="inline-flex items-center bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-6 py-3 rounded-full font-bold text-lg shadow-lg">
-              <span className="mr-2">📺</span>
-              {selectedSkin && skinData[selectedSkin] ? skinData[selectedSkin].name : "MÀN HÌNH GIỚI THIỆU"}
-              <span className="ml-2">✨</span>
-            </div>
-          </div>
         </div>
 
         {/* Score Controls */}
