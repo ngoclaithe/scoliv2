@@ -312,7 +312,7 @@ const Home = () => {
                 Nhập mã truy cập
               </h3>
               <p className="text-gray-600 text-sm">
-                Vui lòng nhập mã code để truy cập và quản lý trận đấu
+                Vui lòng nh��p mã code để truy cập và quản lý trận đấu
               </p>
             </div>
           </div>
@@ -590,7 +590,7 @@ const Home = () => {
               onClick={() => {
                 setSelectedOption("gioi-thieu");
               }}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "gioi-thieu"
                   ? "bg-gradient-to-br from-red-500 to-orange-600 text-white"
                   : "bg-gradient-to-br from-red-100 to-orange-200 text-red-700 hover:from-red-200 hover:to-orange-300"
@@ -608,7 +608,7 @@ const Home = () => {
                 setSelectedOption("danh-sach");
                 setShowLineupModal(true);
               }}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "danh-sach"
                   ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white"
                   : "bg-gradient-to-br from-blue-100 to-indigo-200 text-blue-700 hover:from-blue-200 hover:to-indigo-300"
@@ -626,7 +626,7 @@ const Home = () => {
                 setSelectedOption("ti-so-duoi");
                 // Có thể mở modal tỉ số ở đây
               }}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "ti-so-duoi"
                   ? "bg-gradient-to-br from-green-500 to-emerald-600 text-white"
                   : "bg-gradient-to-br from-green-100 to-emerald-200 text-green-700 hover:from-green-200 hover:to-emerald-300"
@@ -644,7 +644,7 @@ const Home = () => {
                 setSelectedOption("nghi-hiep");
                 // Có thể mở modal nghỉ hiệp ở đây
               }}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "nghi-hiep"
                   ? "bg-gradient-to-br from-yellow-500 to-orange-600 text-white"
                   : "bg-gradient-to-br from-yellow-100 to-orange-200 text-yellow-700 hover:from-yellow-200 hover:to-orange-300"
@@ -661,7 +661,7 @@ const Home = () => {
               onClick={() => {
                 setShowPenaltyModal(true);
               }}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption?.startsWith("penalty")
                   ? "bg-gradient-to-br from-gray-600 to-gray-800 text-white"
                   : "bg-gradient-to-br from-gray-100 to-gray-300 text-gray-700 hover:from-gray-200 hover:to-gray-400"
@@ -676,7 +676,7 @@ const Home = () => {
             {/* Đếm giờ buttons */}
             <button
               onClick={() => setSelectedOption("dem-0")}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-0"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
@@ -690,7 +690,7 @@ const Home = () => {
 
             <button
               onClick={() => setSelectedOption("dem-20")}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-20"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
@@ -704,7 +704,7 @@ const Home = () => {
 
             <button
               onClick={() => setSelectedOption("dem-25")}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-25"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
@@ -718,7 +718,7 @@ const Home = () => {
 
             <button
               onClick={() => setSelectedOption("dem-30")}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-30"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
@@ -732,7 +732,7 @@ const Home = () => {
 
             <button
               onClick={() => setSelectedOption("dem-35")}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-35"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
@@ -747,7 +747,7 @@ const Home = () => {
             {/* Tắt */}
             <button
               onClick={() => setSelectedOption("tat")}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "tat"
                   ? "bg-gradient-to-br from-red-600 to-red-800 text-white"
                   : "bg-gradient-to-br from-red-100 to-red-200 text-red-700 hover:from-red-200 hover:to-red-300"
