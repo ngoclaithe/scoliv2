@@ -341,7 +341,7 @@ const Home = () => {
             </div>
 
             <div className="text-center text-xs text-gray-500">
-              Nh���p "ffff" để demo
+              Nhập "ffff" để demo
             </div>
           </div>
         </div>
@@ -597,7 +597,7 @@ const Home = () => {
               </span>
             </button>
 
-            {/* Gi��i thiệu */}
+            {/* Giới thiệu */}
             <button
               onClick={() => {
                 setSelectedOption("gioi-thieu");
@@ -833,7 +833,6 @@ const Home = () => {
             size="sm"
             className="w-24 sm:w-32 py-2 sm:py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-sm sm:text-lg rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300"
           >
-            <span className="mr-2">��</span>
             ÁP DỤNG
           </Button>
         </div>
