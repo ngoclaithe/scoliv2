@@ -122,16 +122,6 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
           {selectedPoster ? (
             <PosterPreview
               poster={selectedPoster}
-              matchData={matchData}
-              onEdit={() => {
-                if (selectedPoster.category === "custom") {
-                  setShowCustomForm(true);
-                } else {
-                  setShowPosterSelector(true);
-                }
-              }}
-              onDownload={(format) => console.log("Download poster as", format)}
-              onShare={(platform) => console.log("Share to", platform)}
             />
           ) : (
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
