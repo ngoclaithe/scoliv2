@@ -55,14 +55,6 @@ const PosterSelector = ({
         <h4 className="font-semibold text-sm text-gray-900 truncate">
           {poster.name}
         </h4>
-        <p className="text-xs text-gray-500 mt-1">
-          {poster.category === "match" && "⚽ Trận đấu"}
-          {poster.category === "lineup" && "👥 Đội hình"}
-          {poster.category === "intro" && "🎬 Giới thiệu"}
-          {poster.category === "halftime" && "⏰ Giải lao"}
-          {poster.category === "celebration" && "🎉 Ăn mừng"}
-          {poster.category === "custom" && "🎨 Tùy chỉnh"}
-        </p>
       </div>
 
       {/* Selection Indicator */}
