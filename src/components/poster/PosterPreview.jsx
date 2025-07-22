@@ -130,7 +130,7 @@ const PosterPreview = ({
                     )}
                     <div>
                       <h2 className="text-xl font-bold">
-                        {matchData.homeTeam || "Đội nhà"}
+                        {matchData.homeTeam?.name || "Đội nhà"}
                       </h2>
                       <p className="text-sm opacity-90">Chủ nhà</p>
                     </div>
