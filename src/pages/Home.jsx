@@ -45,6 +45,15 @@ const Home = () => {
   // State cho số lỗi futsal
   const [futsalErrors, setFutsalErrors] = useState(0);
 
+  // State cho thống kê bóng đá
+  const [footballStats, setFootballStats] = useState({
+    totalShots: 0,
+    shotsOnTarget: 0,
+    corners: 0,
+    yellowCards: 0,
+    fouls: 0
+  });
+
   // Skin data configuration
   const skinData = {
     1: { name: "Template 1", image: "/images/templates/skin1.png" },
@@ -799,7 +808,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-sm mr-1">4���⃣5️⃣</span>
+              <span className="text-sm mr-1">4️⃣5️⃣</span>
               <span className="text-xs font-bold text-center">
                 ĐẾM 45
               </span>
@@ -1206,7 +1215,7 @@ const Home = () => {
                 matchData={matchData}
                 onPosterUpdate={(poster) => {
                   console.log("Updated poster:", poster);
-                  // Có thể thêm toast notification ở đây
+                  // Có thể thêm toast notification ��� đây
                 }}
                 onLogoUpdate={(logoData) => {
                   console.log("Updated logo:", logoData);
