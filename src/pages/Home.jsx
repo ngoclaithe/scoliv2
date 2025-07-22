@@ -14,9 +14,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [codeInfo, setCodeInfo] = useState(null);
 
-  // State cho upload logo
-  const [uploadCode, setUploadCode] = useState("");
-  const [isUploadCodeEntered, setIsUploadCodeEntered] = useState(false);
+  // State cho upload logo - sử dụng chung với tab quản lý trận
   const [logoData, setLogoData] = useState(null);
   const [bannerData, setBannerData] = useState(null);
   const [logoName, setLogoName] = useState("");
@@ -37,7 +35,16 @@ const Home = () => {
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
   const [showSkinModal, setShowSkinModal] = useState(false);
-  const [selectedSkin, setSelectedSkin] = useState(null);
+  const [selectedSkin, setSelectedSkin] = useState(1);
+
+  // Skin data configuration
+  const skinData = {
+    1: { time: "45:00", period: "Hiệp 1" },
+    2: { time: "90:00", period: "Hết giờ" },
+    3: { time: "15:30", period: "Hiệp 2" },
+    4: { time: "120:00", period: "Hiệp phụ" },
+    5: { time: "0:00", period: "Khởi động" }
+  };
 
         // State cho modal poster
   const [showPosterModal, setShowPosterModal] = useState(false);
@@ -65,7 +72,7 @@ const Home = () => {
   ];
 
   const handleCodeSubmit = async () => {
-    if (matchCode.toLowerCase() === "ffff") {
+    if (matchCode.toLowerCase() === "ffff" || matchCode.toLowerCase() === "logo") {
       setIsLoading(true);
       // Simulate loading
       setTimeout(() => {
@@ -73,12 +80,8 @@ const Home = () => {
         setCodeInfo({
           code: matchCode.toUpperCase(),
           generatedAt: "16:13:11 19/7/2025",
-          status: "active", // active, inactive, expired
-          accessCount: 0,
-          maxAccess: 100,
-          expiryDays: 15,
-          expiryDate: "16:13:11 3/8/2025",
-          lastUsed: null,
+          status: "active",
+          expiryDate: "16:13:11 3/8/2025"
         });
         setIsLoading(false);
       }, 1000);
@@ -88,8 +91,14 @@ const Home = () => {
   };
 
   const handleUploadCodeSubmit = () => {
-    if (uploadCode.toLowerCase() === "logo") {
-      setIsUploadCodeEntered(true);
+    if (matchCode.toLowerCase() === "logo" || matchCode.toLowerCase() === "ffff") {
+      setIsCodeEntered(true);
+      setCodeInfo({
+        code: matchCode.toUpperCase(),
+        generatedAt: "16:13:11 19/7/2025",
+        status: "active",
+        expiryDate: "16:13:11 3/8/2025"
+      });
     } else {
       alert("Code không đúng. Vui lòng thử lại!");
     }
@@ -156,12 +165,12 @@ const Home = () => {
           <h3 className="text-sm font-bold text-gray-800 mx-2">UPLOAD</h3>
         </div>
 
-        {!isUploadCodeEntered ? (
+        {!isCodeEntered ? (
           <div className="space-y-3">
             <Input
               placeholder="Nhập code..."
-              value={uploadCode}
-              onChange={(e) => setUploadCode(e.target.value)}
+              value={matchCode}
+              onChange={(e) => setMatchCode(e.target.value)}
               className="text-center text-sm"
             />
             <div className="flex justify-center">
@@ -175,7 +184,7 @@ const Home = () => {
               </Button>
             </div>
             <div className="text-center text-xs text-gray-500">
-              Nhập "logo" để demo
+              Nhập "logo" hoặc "ffff" để demo
             </div>
           </div>
         ) : (
@@ -329,7 +338,7 @@ const Home = () => {
             </div>
 
             <div className="text-center text-xs text-gray-500">
-              Nhập "ffff" để demo
+              Nhập "ffff" hoặc "logo" để demo
             </div>
           </div>
         </div>
@@ -391,8 +400,8 @@ const Home = () => {
           <ScoreDisplay
             homeTeam={matchData.homeTeam}
             awayTeam={matchData.awayTeam}
-            matchTime={matchData.matchTime}
-            period={matchData.period}
+            matchTime={skinData[selectedSkin]?.time || matchData.matchTime}
+            period={skinData[selectedSkin]?.period || matchData.period}
             status={matchData.status}
             backgroundColor="bg-transparent"
             size="md"
