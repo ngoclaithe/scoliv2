@@ -42,6 +42,18 @@ const Home = () => {
   const [tickerColor, setTickerColor] = useState("#ffffff");
   const [tickerFontSize, setTickerFontSize] = useState(16);
 
+  // State cho số lỗi futsal
+  const [futsalErrors, setFutsalErrors] = useState(0);
+
+  // State cho thống kê bóng đá
+  const [footballStats, setFootballStats] = useState({
+    totalShots: 0,
+    shotsOnTarget: 0,
+    corners: 0,
+    yellowCards: 0,
+    fouls: 0
+  });
+
   // Skin data configuration
   const skinData = {
     1: { name: "Template 1", image: "/images/templates/skin1.png" },
@@ -56,6 +68,17 @@ const Home = () => {
   const [showLineupModal, setShowLineupModal] = useState(false);
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
   const [showTimerModal, setShowTimerModal] = useState(false);
+  const [showCodeInfoModal, setShowCodeInfoModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+
+  // State cho form login
+  const [loginForm, setLoginForm] = useState({
+    email: '',
+    password: '',
+    rememberMe: false
+  });
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
 
       // State cho penalty shootout - đơn giản hóa cho backend
   const [penaltyData, setPenaltyData] = useState({
@@ -239,6 +262,24 @@ const Home = () => {
                         />
                       </div>
                     </div>
+                    {/* Upload Button cho Logo */}
+                    {logoName.trim() && (
+                      <div className="flex justify-center mt-2">
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold text-xs py-2 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                          onClick={() => {
+                            // Logic upload sẽ được thêm sau khi ghép API
+                            console.log('Upload logo:', { name: logoName, file: logoData });
+                            alert(`Sẽ upload logo "${logoName}" lên server!`);
+                          }}
+                        >
+                          <span className="mr-1">☁️</span>
+                          UPLOAD LOGO
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 )}
                 {bannerData && (
@@ -259,6 +300,24 @@ const Home = () => {
                         />
                       </div>
                     </div>
+                    {/* Upload Button cho Banner */}
+                    {bannerName.trim() && (
+                      <div className="flex justify-center mt-2">
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-xs py-2 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                          onClick={() => {
+                            // Logic upload sẽ được thêm sau khi ghép API
+                            console.log('Upload banner:', { name: bannerName, file: bannerData });
+                            alert(`Sẽ upload banner "${bannerName}" lên server!`);
+                          }}
+                        >
+                          <span className="mr-1">☁️</span>
+                          UPLOAD BANNER
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -356,63 +415,7 @@ const Home = () => {
 
     return (
       <div className="p-3 sm:p-6 space-y-4 sm:space-y-6">
-        {/* Code Information - Compact */}
-        {codeInfo && (
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-3 sm:p-4 mb-3 sm:mb-4">
-            <div
-              className="flex items-center justify-between cursor-pointer hover:bg-white/50 rounded-lg p-2 transition-colors"
-              onClick={() => setIsCodeInfoExpanded(!isCodeInfoExpanded)}
-            >
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-600">Mã truy cập:</span>
-                <span className={`font-mono font-bold text-sm ${!isCodeInfoExpanded ? 'filter blur-sm select-none' : ''}`}>
-                  {isCodeInfoExpanded ? codeInfo.code : '••••'}
-                </span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    codeInfo.status === "active"
-                      ? "bg-green-100 text-green-800"
-                      : codeInfo.status === "inactive"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-red-100 text-red-800"
-                  }`}
-                >
-                  {codeInfo.status === "active"
-                    ? "🟢 Đã kích hoạt"
-                    : codeInfo.status === "inactive"
-                      ? "🟡 Chưa kích hoạt"
-                      : "🔴 Đã hết hạn"}
-                </span>
-                <span className={`text-gray-400 transition-transform duration-200 ${isCodeInfoExpanded ? 'rotate-180' : ''}`}>
-                  ▼
-                </span>
-              </div>
-            </div>
 
-            {isCodeInfoExpanded && (
-              <div className="mt-3 pt-3 border-t border-gray-200 animate-slide-up">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Được tạo lúc:</span>
-                      <span className="font-medium">{codeInfo.generatedAt}</span>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Hết hạn vào:</span>
-                      <span className="font-medium text-orange-600">
-                        {codeInfo.expiryDate}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
 
         {/* Scoreboard */}
         <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-xl p-3 sm:p-4 border-2 sm:border-4 border-yellow-400 shadow-2xl">
@@ -449,9 +452,6 @@ const Home = () => {
           <div className="grid grid-cols-2 gap-3 sm:gap-6">
             {/* Đội nhà */}
             <div className="bg-white rounded-lg p-2 sm:p-4 shadow-md border border-blue-200">
-              <h4 className="text-center font-bold text-blue-700 mb-2 sm:mb-4 text-xs sm:text-sm">
-                {matchData.homeTeam.name}
-              </h4>
               <div className="flex space-x-1 sm:space-x-2">
                 <Button
                   variant="primary"
@@ -474,9 +474,6 @@ const Home = () => {
 
             {/* Đội khách */}
             <div className="bg-white rounded-lg p-2 sm:p-4 shadow-md border border-purple-200">
-              <h4 className="text-center font-bold text-purple-700 mb-2 sm:mb-4 text-xs sm:text-sm">
-                {matchData.awayTeam.name}
-              </h4>
               <div className="flex space-x-1 sm:space-x-2">
                 <Button
                   variant="primary"
@@ -498,8 +495,8 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Nút TẠM DỪNG - Thêm vào điều khiển tỉ số */}
-          <div className="flex justify-center mt-3">
+          {/* Nút TẠM DỪNG và LỖI(FUTSAL) */}
+          <div className="flex justify-center items-center mt-3 space-x-3">
             <Button
               variant="primary"
               size="sm"
@@ -509,35 +506,64 @@ const Home = () => {
               <span className="mr-1">⏸️</span>
               TẠM DỪNG
             </Button>
+
+            <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
+              <Button
+                variant="outline"
+                size="sm"
+                className="px-2 py-1 text-xs border-0 hover:bg-red-50"
+                onClick={() => setFutsalErrors(prev => prev + 1)}
+              >
+                <span className="mr-1">⚠️</span>
+                Lỗi(futsal)
+              </Button>
+              <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-6 text-center rounded-r">
+                {futsalErrors}
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Tab Controls */}
         <div className="bg-white rounded-xl p-3 sm:p-4 shadow-lg border border-gray-200">
-          <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
+            <button
+              onClick={() => setSelectedOption("thong-so")}
+              className={`py-2 sm:py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 shadow-md ${
+                selectedOption === "thong-so"
+                  ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-xl"
+                  : "bg-gradient-to-r from-green-100 to-green-200 text-green-700 hover:from-green-200 hover:to-green-300"
+              }`}
+            >
+              <span className="mr-1 text-sm">📊</span>
+              <span className="hidden sm:inline">THÔNG SỐ</span>
+              <span className="sm:hidden">STATS</span>
+            </button>
             <button
               onClick={() => setSelectedOption("dieu-khien")}
-              className={`py-2 sm:py-4 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-md ${
+              className={`py-2 sm:py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 shadow-md ${
                 selectedOption === "dieu-khien"
                   ? "bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-xl"
                   : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
               }`}
             >
-              <span className="mr-1 sm:mr-2 text-sm">🎮</span>
-              ĐIỀU KHIỂN
+              <span className="mr-1 text-sm">🎮</span>
+              <span className="hidden sm:inline">ĐIỀU KHIỂN</span>
+              <span className="sm:hidden">CTRL</span>
             </button>
             <button
               onClick={() => {
                 setSelectedOption(selectedOption === "chon-skin" ? "dieu-khien" : "chon-skin");
               }}
-              className={`py-2 sm:py-4 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-md ${
+              className={`py-2 sm:py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 shadow-md ${
                 selectedOption === "chon-skin"
                   ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
                   : "bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 hover:from-blue-200 hover:to-blue-300"
               }`}
             >
-              <span className="mr-1 sm:mr-2 text-sm">🎨</span>
-              TEMPLATE
+              <span className="mr-1 text-sm">🎨</span>
+              <span className="hidden sm:inline">TEMPLATE</span>
+              <span className="sm:hidden">TPL</span>
             </button>
           </div>
         </div>
@@ -590,8 +616,217 @@ const Home = () => {
           </div>
         )}
 
+        {/* Tab Thông số */}
+        {selectedOption === "thong-so" && (
+          <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200">
+            <h3 className="text-center text-sm sm:text-lg font-bold text-green-800 mb-4 flex items-center justify-center">
+              <span className="mr-2 text-sm">📊</span>
+              THỐNG KÊ TRẬN ĐẤU
+              <span className="ml-2 text-sm">📊</span>
+            </h3>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {/* Tổng số cú sút */}
+              <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
+                <div className="text-center">
+                  <div className="text-lg sm:text-2xl font-bold text-blue-600 mb-1">
+                    {footballStats.totalShots}
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2">Tổng số cú sút</div>
+                  <div className="flex justify-center space-x-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, totalShots: Math.max(0, prev.totalShots - 1)}))}
+                      className="w-6 h-6 p-0 text-xs"
+                      disabled={footballStats.totalShots === 0}
+                    >
+                      -
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, totalShots: prev.totalShots + 1}))}
+                      className="w-6 h-6 p-0 text-xs"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sút trúng đích */}
+              <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
+                <div className="text-center">
+                  <div className="text-lg sm:text-2xl font-bold text-green-600 mb-1">
+                    {footballStats.shotsOnTarget}
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2">Sút trúng đích</div>
+                  <div className="flex justify-center space-x-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, shotsOnTarget: Math.max(0, prev.shotsOnTarget - 1)}))}
+                      className="w-6 h-6 p-0 text-xs"
+                      disabled={footballStats.shotsOnTarget === 0}
+                    >
+                      -
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, shotsOnTarget: prev.shotsOnTarget + 1}))}
+                      className="w-6 h-6 p-0 text-xs"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Phạt góc */}
+              <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
+                <div className="text-center">
+                  <div className="text-lg sm:text-2xl font-bold text-purple-600 mb-1">
+                    {footballStats.corners}
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2">Phạt góc</div>
+                  <div className="flex justify-center space-x-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, corners: Math.max(0, prev.corners - 1)}))}
+                      className="w-6 h-6 p-0 text-xs"
+                      disabled={footballStats.corners === 0}
+                    >
+                      -
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, corners: prev.corners + 1}))}
+                      className="w-6 h-6 p-0 text-xs"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Thẻ vàng */}
+              <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
+                <div className="text-center">
+                  <div className="text-lg sm:text-2xl font-bold text-yellow-600 mb-1">
+                    {footballStats.yellowCards}
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2">Thẻ vàng</div>
+                  <div className="flex justify-center space-x-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, yellowCards: Math.max(0, prev.yellowCards - 1)}))}
+                      className="w-6 h-6 p-0 text-xs"
+                      disabled={footballStats.yellowCards === 0}
+                    >
+                      -
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, yellowCards: prev.yellowCards + 1}))}
+                      className="w-6 h-6 p-0 text-xs"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Phạm lỗi */}
+              <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
+                <div className="text-center">
+                  <div className="text-lg sm:text-2xl font-bold text-red-600 mb-1">
+                    {footballStats.fouls}
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2">Phạm lỗi</div>
+                  <div className="flex justify-center space-x-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, fouls: Math.max(0, prev.fouls - 1)}))}
+                      className="w-6 h-6 p-0 text-xs"
+                      disabled={footballStats.fouls === 0}
+                    >
+                      -
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setFootballStats(prev => ({...prev, fouls: prev.fouls + 1}))}
+                      className="w-6 h-6 p-0 text-xs"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Lỗi Futsal */}
+              <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
+                <div className="text-center">
+                  <div className="text-lg sm:text-2xl font-bold text-orange-600 mb-1">
+                    {futsalErrors}
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2">Lỗi(futsal)</div>
+                  <div className="flex justify-center space-x-1">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setFutsalErrors(prev => Math.max(0, prev - 1))}
+                      className="w-6 h-6 p-0 text-xs"
+                      disabled={futsalErrors === 0}
+                    >
+                      -
+                    </Button>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      onClick={() => setFutsalErrors(prev => prev + 1)}
+                      className="w-6 h-6 p-0 text-xs"
+                    >
+                      +
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Reset Button */}
+            <div className="flex justify-center mt-4">
+              <Button
+                variant="warning"
+                size="sm"
+                onClick={() => {
+                  setFootballStats({
+                    totalShots: 0,
+                    shotsOnTarget: 0,
+                    corners: 0,
+                    yellowCards: 0,
+                    fouls: 0
+                  });
+                  setFutsalErrors(0);
+                }}
+                className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+              >
+                <span className="mr-1">🔄</span>
+                ĐẶT LẠI TẤT CẢ
+              </Button>
+            </div>
+          </div>
+        )}
+
         {/* Options - Thay đổi action buttons */}
-        {selectedOption !== "chon-skin" && (
+        {selectedOption !== "chon-skin" && selectedOption !== "thong-so" && (
           <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 sm:p-4 border border-indigo-200">
           {/* Grid responsive cho mobile */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
@@ -717,7 +952,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-sm mr-1">🕐</span>
+              <span className="text-sm mr-1">��</span>
               <span className="text-xs font-bold text-center">
                 ĐẾM 20'
               </span>
@@ -955,7 +1190,7 @@ const Home = () => {
                 </svg>
               </div>
               <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Nhập mã truy cập
+                Nh��p mã truy cập
               </h3>
               <p className="text-gray-600 text-sm">
                 Vui lòng nhập mã code để truy cập chức năng bình luận
@@ -1037,18 +1272,36 @@ const Home = () => {
       <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 shadow-xl border-b-2 border-yellow-400">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
           <div className="flex justify-between items-center h-12 sm:h-14">
-            {/* Login/Register Button - Top Left */}
-            <div className="flex items-center">
-              <Button
-                variant="outline"
-                size="sm"
-                className="bg-white/10 border-white/20 text-white hover:bg-white/20 text-xs px-2 py-1 h-7"
-                onClick={() => console.log('Login clicked')}
+            {/* Icons - Top Left */}
+            <div className="flex items-center space-x-2">
+              {/* Login Icon */}
+              <button
+                onClick={() => setShowLoginModal(true)}
+                className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
+                title="Đăng nhập"
               >
-                <span className="text-xs mr-1">👤</span>
-                <span className="hidden sm:inline">Đăng nhập</span>
-                <span className="sm:hidden">Login</span>
-              </Button>
+                <span className="text-white text-sm">👤</span>
+              </button>
+
+              {/* Icon Key - chỉ hiển thị khi đã nhập code */}
+              {isCodeEntered && codeInfo && (
+                <button
+                  onClick={() => setShowCodeInfoModal(true)}
+                  className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
+                  title="Xem thông tin mã truy cập"
+                >
+                  <span className="text-white text-sm">🔑</span>
+                </button>
+              )}
+
+              {/* Icon điện thoại - luôn hiển thị */}
+              <a
+                href="tel:0923415678"
+                className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
+                title="Gọi hotline hỗ trợ: 0923415678"
+              >
+                <span className="text-white text-sm">📞</span>
+              </a>
             </div>
 
             {/* Center Logo and Title */}
@@ -1297,6 +1550,395 @@ const Home = () => {
             </Button>
           </div>
         </div>
+      </Modal>
+
+      {/* Login Modal */}
+      <Modal
+        isOpen={showLoginModal}
+        onClose={() => {
+          setShowLoginModal(false);
+          setShowRegister(false);
+          setLoginForm({ email: '', password: '', rememberMe: false });
+        }}
+        title=""
+        size="md"
+        className="overflow-hidden"
+      >
+        <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-lg">
+          {!showRegister ? (
+            // Login Form
+            <div className="p-6">
+              <div className="text-center mb-6">
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
+                  <span className="text-3xl text-white">👤</span>
+                </div>
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">Đăng Nhập</h2>
+                <p className="text-gray-600">Chào mừng bạn quay trở lại!</p>
+              </div>
+
+              <form className="space-y-4" onSubmit={(e) => {
+                e.preventDefault();
+                setLoginLoading(true);
+                // Simulate login
+                setTimeout(() => {
+                  setLoginLoading(false);
+                  setShowLoginModal(false);
+                  alert('Đăng nhập thành công!');
+                }, 1500);
+              }}>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Email hoặc Tên đăng nhập
+                  </label>
+                  <Input
+                    type="email"
+                    placeholder="user@example.com"
+                    value={loginForm.email}
+                    onChange={(e) => setLoginForm(prev => ({...prev, email: e.target.value}))}
+                    className="w-full"
+                    required
+                    icon={
+                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                      </svg>
+                    }
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Mật khẩu
+                  </label>
+                  <Input
+                    type="password"
+                    placeholder="••••••••"
+                    value={loginForm.password}
+                    onChange={(e) => setLoginForm(prev => ({...prev, password: e.target.value}))}
+                    className="w-full"
+                    required
+                    icon={
+                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                    }
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="remember"
+                      checked={loginForm.rememberMe}
+                      onChange={(e) => setLoginForm(prev => ({...prev, rememberMe: e.target.checked}))}
+                      className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    />
+                    <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
+                      Ghi nhớ đăng nhập
+                    </label>
+                  </div>
+                  <button
+                    type="button"
+                    className="text-sm text-blue-600 hover:text-blue-500 font-medium"
+                  >
+                    Quên mật khẩu?
+                  </button>
+                </div>
+
+                <Button
+                  type="submit"
+                  variant="primary"
+                  loading={loginLoading}
+                  className="w-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-3 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                >
+                  {loginLoading ? "Đang đăng nhập..." : "Đăng Nhập"}
+                </Button>
+              </form>
+
+              <div className="mt-6">
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-300" />
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 text-gray-500">Hoặc đăng nhập với</span>
+                  </div>
+                </div>
+
+                <div className="mt-4 grid grid-cols-2 gap-3">
+                  <button className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">
+                    <svg className="w-5 h-5" viewBox="0 0 24 24">
+                      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    <span className="ml-2">Google</span>
+                  </button>
+                  <button className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 transition-colors">
+                    <svg className="w-5 h-5" fill="#1877F2" viewBox="0 0 24 24">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    <span className="ml-2">Facebook</span>
+                  </button>
+                </div>
+              </div>
+
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-600">
+                  Chưa có tài khoản?{' '}
+                  <button
+                    onClick={() => setShowRegister(true)}
+                    className="font-medium text-blue-600 hover:text-blue-500"
+                  >
+                    Đăng ký ngay
+                  </button>
+                </p>
+              </div>
+            </div>
+          ) : (
+            // Register Form
+            <div className="p-6">
+              <div className="text-center mb-6">
+                <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
+                  <span className="text-3xl text-white">📝</span>
+                </div>
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">Đăng Ký</h2>
+                <p className="text-gray-600">Tạo tài khoản mới để sử dụng dịch vụ</p>
+              </div>
+
+              <form className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Họ
+                    </label>
+                    <Input
+                      type="text"
+                      placeholder="Nguyễn"
+                      className="w-full"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Tên
+                    </label>
+                    <Input
+                      type="text"
+                      placeholder="Văn A"
+                      className="w-full"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Email
+                  </label>
+                  <Input
+                    type="email"
+                    placeholder="user@example.com"
+                    className="w-full"
+                    required
+                    icon={
+                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                      </svg>
+                    }
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Số điện thoại
+                  </label>
+                  <Input
+                    type="tel"
+                    placeholder="0901234567"
+                    className="w-full"
+                    required
+                    icon={
+                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      </svg>
+                    }
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Mật khẩu
+                  </label>
+                  <Input
+                    type="password"
+                    placeholder="••••••••"
+                    className="w-full"
+                    required
+                    icon={
+                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                    }
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Xác nhận mật khẩu
+                  </label>
+                  <Input
+                    type="password"
+                    placeholder="••••••••"
+                    className="w-full"
+                    required
+                    icon={
+                      <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    }
+                  />
+                </div>
+
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="terms"
+                    className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    required
+                  />
+                  <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
+                    Tôi đồng ý với{' '}
+                    <a href="#" className="text-blue-600 hover:text-blue-500 font-medium">
+                      Điều khoản sử dụng
+                    </a>
+                    {' '}và{' '}
+                    <a href="#" className="text-blue-600 hover:text-blue-500 font-medium">
+                      Chính sách bảo mật
+                    </a>
+                  </label>
+                </div>
+
+                <Button
+                  type="submit"
+                  variant="primary"
+                  className="w-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700 text-white font-bold py-3 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                >
+                  Đăng Ký
+                </Button>
+              </form>
+
+              <div className="mt-6 text-center">
+                <p className="text-sm text-gray-600">
+                  Đã có tài khoản?{' '}
+                  <button
+                    onClick={() => setShowRegister(false)}
+                    className="font-medium text-blue-600 hover:text-blue-500"
+                  >
+                    Đăng nhập ngay
+                  </button>
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </Modal>
+
+      {/* Code Info Modal */}
+      <Modal
+        isOpen={showCodeInfoModal}
+        onClose={() => setShowCodeInfoModal(false)}
+        title="🔑 Thông Tin Mã Truy Cập"
+        size="md"
+      >
+        {codeInfo && (
+          <div className="bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-lg p-4">
+            <div className="text-center mb-4">
+              <div className="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-3 flex items-center justify-center">
+                <span className="text-2xl">🔑</span>
+              </div>
+              <h4 className="text-lg font-bold text-blue-800 mb-2">
+                MÃ TRUY CẬP TRẬN ĐẤU
+              </h4>
+            </div>
+
+            <div className="space-y-4">
+              <div className="bg-white rounded-lg p-4 border border-blue-200">
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600 font-medium">Mã truy cập:</span>
+                  <span className="font-mono font-bold text-lg text-blue-600 bg-blue-50 px-3 py-1 rounded">
+                    {codeInfo.code}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3">
+                <div className="bg-white rounded-lg p-3 border border-gray-200">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Trạng thái:</span>
+                    <span
+                      className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        codeInfo.status === "active"
+                          ? "bg-green-100 text-green-800"
+                          : codeInfo.status === "inactive"
+                            ? "bg-yellow-100 text-yellow-800"
+                            : "bg-red-100 text-red-800"
+                      }`}
+                    >
+                      {codeInfo.status === "active"
+                        ? "🟢 Đã kích hoạt"
+                        : codeInfo.status === "inactive"
+                          ? "🟡 Chưa kích hoạt"
+                          : "🔴 Đã hết hạn"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg p-3 border border-gray-200">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Được tạo lúc:</span>
+                    <span className="font-medium">{codeInfo.generatedAt}</span>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-lg p-3 border border-gray-200">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Hết hạn vào:</span>
+                    <span className="font-medium text-orange-600">
+                      {codeInfo.expiryDate}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                <div className="flex items-start">
+                  <span className="text-yellow-600 mr-2">⚠️</span>
+                  <div className="text-sm text-yellow-800">
+                    <strong>Lưu ý bảo mật:</strong>
+                    <ul className="mt-1 list-disc list-inside space-y-1">
+                      <li>Không chia sẻ mã này với người khác</li>
+                      <li>Mã sẽ hết hạn sau thời gian quy định</li>
+                      <li>Liên hệ hotline nếu gặp vấn đề</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-center mt-4">
+              <Button
+                variant="primary"
+                onClick={() => setShowCodeInfoModal(false)}
+                className="px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold rounded-lg"
+              >
+                <span className="mr-1">✅</span>
+                Đóng
+              </Button>
+            </div>
+          </div>
+        )}
       </Modal>
 
     </div>
