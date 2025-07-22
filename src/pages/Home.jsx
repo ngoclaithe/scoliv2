@@ -69,6 +69,7 @@ const Home = () => {
   const tabs = [
     { id: "upload-logo", name: "UP LOGO" },
     { id: "quan-ly-tran", name: "QUẢN LÝ TRẬN" },
+    { id: "binh-luan", name: "BÌNH LUẬN" },
   ];
 
   const handleCodeSubmit = async () => {
@@ -378,7 +379,7 @@ const Home = () => {
                   <span className="font-mono font-bold">{codeInfo.code}</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Được tạo lúc:</span>
+                  <span className="text-gray-600">��ược tạo lúc:</span>
                   <span className="font-medium">{codeInfo.generatedAt}</span>
                 </div>
               </div>
@@ -939,7 +940,7 @@ const Home = () => {
         onSave={(lineupData) => {
           console.log("Saved lineup data:", lineupData);
           setShowLineupModal(false);
-          // Có thể thêm thông báo thành công ở đây
+          // Có thể thêm thông báo thành c��ng ở đây
         }}
         matchData={matchData}
       />
