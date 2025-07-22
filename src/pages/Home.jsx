@@ -71,6 +71,15 @@ const Home = () => {
   const [showCodeInfoModal, setShowCodeInfoModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
+  // State cho form login
+  const [loginForm, setLoginForm] = useState({
+    email: '',
+    password: '',
+    rememberMe: false
+  });
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+
       // State cho penalty shootout - đơn giản hóa cho backend
   const [penaltyData, setPenaltyData] = useState({
     homeGoals: 0,
@@ -335,7 +344,7 @@ const Home = () => {
                 Nhập mã truy cập
               </h3>
               <p className="text-gray-600 text-sm">
-                Vui lòng nhập mã code để truy cập và quản lý trận đấu
+                Vui lòng nhập mã code để truy cập và quản l�� trận đấu
               </p>
             </div>
           </div>
@@ -1608,7 +1617,7 @@ const Home = () => {
                         ? "🟢 Đã kích hoạt"
                         : codeInfo.status === "inactive"
                           ? "🟡 Chưa kích hoạt"
-                          : "🔴 Đã hết h��n"}
+                          : "🔴 Đã hết hạn"}
                     </span>
                   </div>
                 </div>
