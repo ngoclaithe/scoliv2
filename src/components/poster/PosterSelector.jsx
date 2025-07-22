@@ -12,22 +12,7 @@ const PosterSelector = ({
   className = "",
 }) => {
   const [showModal, setShowModal] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("all");
-
-  const categories = [
-    { id: "all", name: "Tất cả", icon: "🎯" },
-    { id: "match", name: "Trận đấu", icon: "⚽" },
-    { id: "lineup", name: "Đội hình", icon: "👥" },
-    { id: "intro", name: "Giới thiệu", icon: "🎬" },
-    { id: "halftime", name: "Giải lao", icon: "⏰" },
-    { id: "celebration", name: "Ăn mừng", icon: "🎉" },
-    { id: "custom", name: "Tùy chỉnh", icon: "🎨" },
-  ];
-
-  const filteredPosters = posters.filter(
-    (poster) =>
-      selectedCategory === "all" || poster.category === selectedCategory,
-  );
+  const filteredPosters = posters;
 
   const PosterCard = ({ poster, isSelected, onClick }) => (
     <div
