@@ -959,7 +959,9 @@ const Home = () => {
                 activeTab === tab.id
                   ? tab.id === "upload-logo"
                     ? "border-blue-500 text-blue-700 bg-gradient-to-t from-blue-100 to-blue-50 shadow-lg"
-                    : "border-purple-500 text-purple-700 bg-gradient-to-t from-purple-100 to-purple-50 shadow-lg"
+                    : tab.id === "quan-ly-tran"
+                    ? "border-purple-500 text-purple-700 bg-gradient-to-t from-purple-100 to-purple-50 shadow-lg"
+                    : "border-red-500 text-red-700 bg-gradient-to-t from-red-100 to-red-50 shadow-lg"
                   : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-50"
               }`}
             >
