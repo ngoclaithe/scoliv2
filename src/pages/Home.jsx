@@ -178,7 +178,7 @@ const Home = () => {
         {!isCodeEntered ? (
           <div className="space-y-3">
             <Input
-              placeholder="Nh��p code..."
+              placeholder="Nhập code..."
               value={matchCode}
               onChange={(e) => setMatchCode(e.target.value)}
               className="text-center text-sm"
@@ -495,8 +495,8 @@ const Home = () => {
             </div>
           </div>
 
-          {/* Nút TẠM DỪNG - Thêm vào điều khiển tỉ số */}
-          <div className="flex justify-center mt-3">
+          {/* Nút TẠM DỪNG và LỖI(FUTSAL) */}
+          <div className="flex justify-center items-center mt-3 space-x-3">
             <Button
               variant="primary"
               size="sm"
@@ -506,6 +506,21 @@ const Home = () => {
               <span className="mr-1">⏸️</span>
               TẠM DỪNG
             </Button>
+
+            <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
+              <Button
+                variant="outline"
+                size="sm"
+                className="px-2 py-1 text-xs border-0 hover:bg-red-50"
+                onClick={() => setFutsalErrors(prev => prev + 1)}
+              >
+                <span className="mr-1">⚠️</span>
+                Lỗi(futsal)
+              </Button>
+              <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-6 text-center rounded-r">
+                {futsalErrors}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -784,7 +799,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-sm mr-1">4️⃣5️⃣</span>
+              <span className="text-sm mr-1">4���⃣5️⃣</span>
               <span className="text-xs font-bold text-center">
                 ĐẾM 45
               </span>
