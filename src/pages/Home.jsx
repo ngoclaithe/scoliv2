@@ -164,14 +164,16 @@ const Home = () => {
               onChange={(e) => setUploadCode(e.target.value)}
               className="text-center text-sm"
             />
-            <Button
-              variant="primary"
-              size="sm"
-              className="w-full h-8 text-xs"
-              onClick={handleUploadCodeSubmit}
-            >
-              XÁC NHẬN
-            </Button>
+            <div className="flex justify-center">
+              <Button
+                variant="primary"
+                size="sm"
+                className="w-24 h-8 text-xs"
+                onClick={handleUploadCodeSubmit}
+              >
+                XÁC NHẬN
+              </Button>
+            </div>
             <div className="text-center text-xs text-gray-500">
               Nhập "logo" để demo
             </div>
@@ -263,15 +265,14 @@ const Home = () => {
       </div>
 
       {/* Help Section */}
-      <div className="text-center">
+      <div className="flex justify-center">
         <Button
           variant="secondary"
           size="sm"
-          className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-2 text-sm rounded-full shadow-lg transform hover:scale-105 transition-all duration-200"
+          className="w-28 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-2 text-sm rounded-full shadow-lg transform hover:scale-105 transition-all duration-200"
         >
-          <span className="mr-2">📚</span>
+          <span className="mr-1">📚</span>
           HỖ TRỢ
-          <span className="ml-2">💬</span>
         </Button>
       </div>
     </div>
@@ -315,15 +316,17 @@ const Home = () => {
               className="text-center text-lg font-mono"
             />
 
-            <Button
-              variant="primary"
-              size="lg"
-              className="w-full"
-              onClick={handleCodeSubmit}
-              loading={isLoading}
-            >
-              {isLoading ? "Đang xử lý..." : "XÁC NHẬN"}
-            </Button>
+            <div className="flex justify-center">
+              <Button
+                variant="primary"
+                size="lg"
+                className="w-32"
+                onClick={handleCodeSubmit}
+                loading={isLoading}
+              >
+                {isLoading ? "Đang xử lý..." : "XÁC NHẬN"}
+              </Button>
+            </div>
 
             <div className="text-center text-xs text-gray-500">
               Nhập "ffff" để demo
@@ -743,15 +746,14 @@ const Home = () => {
         </div>
 
         {/* Apply Button */}
-        <div className="text-center">
+        <div className="flex justify-center">
           <Button
             variant="primary"
             size="lg"
-            className="px-20 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xl rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300"
+            className="w-32 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xl rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300"
           >
-            <span className="mr-3">🚀</span>
+            <span className="mr-2">🚀</span>
             ÁP DỤNG
-            <span className="ml-3">✨</span>
           </Button>
         </div>
       </div>
@@ -893,19 +895,19 @@ const Home = () => {
             <Button
               variant="outline"
               onClick={() => setShowPosterModal(false)}
-              className="px-6 py-2"
+              className="w-20 py-2"
             >
               Đóng
             </Button>
             <Button
               variant="primary"
-              className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-2"
+              className="w-32 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-2"
               onClick={() => {
                 setShowPosterModal(false);
                 // Logic lưu cài đặt poster
               }}
             >
-              <span className="mr-2">💾</span>
+              <span className="mr-1">💾</span>
               Lưu & Áp Dụng
             </Button>
                     </div>
@@ -941,13 +943,12 @@ const Home = () => {
         size="lg"
       >
         <div className="p-4">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5].map((skinNumber) => (
               <div
                 key={skinNumber}
                 onClick={() => {
                   setSelectedSkin(skinNumber);
-                  setShowSkinModal(false);
                 }}
                 className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${
                   selectedSkin === skinNumber
@@ -958,13 +959,13 @@ const Home = () => {
                 <img
                   src={`/images/templates/skin${skinNumber}.png`}
                   alt={`Skin ${skinNumber}`}
-                  className="w-full h-32 object-cover"
+                  className="w-full h-48 object-contain bg-gray-50"
                   onError={(e) => {
                     e.target.style.display = 'none';
                     e.target.nextSibling.style.display = 'flex';
                   }}
                 />
-                <div className="w-full h-32 bg-gray-100 items-center justify-center hidden">
+                <div className="w-full h-48 bg-gray-100 items-center justify-center hidden">
                   <span className="text-gray-500 font-medium">Skin {skinNumber}</span>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white text-center py-2">
@@ -979,10 +980,11 @@ const Home = () => {
             ))}
           </div>
 
-          <div className="mt-6 flex justify-end space-x-3">
+          <div className="mt-6 flex justify-center space-x-4">
             <Button
               variant="outline"
               onClick={() => setShowSkinModal(false)}
+              className="w-20"
             >
               Hủy
             </Button>
@@ -990,10 +992,10 @@ const Home = () => {
               variant="primary"
               onClick={() => {
                 setShowSkinModal(false);
-                // Apply skin logic here
                 console.log('Applied skin:', selectedSkin);
               }}
               disabled={!selectedSkin}
+              className="w-24"
             >
               Áp dụng
             </Button>
