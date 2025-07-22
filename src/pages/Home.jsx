@@ -347,16 +347,16 @@ const Home = () => {
     }
 
     return (
-      <div className="p-6 space-y-6">
+      <div className="p-3 sm:p-6 space-y-4 sm:space-y-6">
         {/* Code Information */}
         {codeInfo && (
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-6 mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6">
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900">
                 Thông tin mã truy cập
               </h3>
               <span
-                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                className={`px-2 py-1 rounded-full text-xs sm:text-sm font-medium ${
                   codeInfo.status === "active"
                     ? "bg-green-100 text-green-800"
                     : codeInfo.status === "inactive"
@@ -372,8 +372,8 @@ const Home = () => {
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div className="space-y-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
+              <div className="space-y-1 sm:space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Mã code:</span>
                   <span className="font-mono font-bold">{codeInfo.code}</span>
@@ -384,7 +384,7 @@ const Home = () => {
                 </div>
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1 sm:space-y-2">
                 <div className="flex justify-between">
                   <span className="text-gray-600">Hết hạn vào:</span>
                   <span className="font-medium text-orange-600">
@@ -771,7 +771,7 @@ const Home = () => {
             size="lg"
             className="w-32 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xl rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300"
           >
-            <span className="mr-2">🚀</span>
+            <span className="mr-2">��</span>
             ÁP DỤNG
           </Button>
         </div>
@@ -1134,7 +1134,7 @@ const Home = () => {
       <Modal
         isOpen={showSkinModal}
         onClose={() => setShowSkinModal(false)}
-        title="��� Chọn Skin"
+        title="🎨 Chọn Skin"
         size="lg"
       >
         <div className="p-4">
