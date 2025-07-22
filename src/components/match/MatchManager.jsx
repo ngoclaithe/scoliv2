@@ -11,7 +11,7 @@ const MatchManager = ({
 }) => {
   const [matchData, setMatchData] = useState({
     homeTeam: { name: "Đội nhà", score: 0, logo: null },
-    awayTeam: { name: "Đ���i khách", score: 0, logo: null },
+    awayTeam: { name: "Đội khách", score: 0, logo: null },
     matchTime: "00:00",
     period: "Hiệp 1",
     status: "pending", // pending, live, pause, ended
@@ -628,17 +628,29 @@ const MatchManager = ({
                     </div>
                   </div>
 
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      id="ticker-enabled"
-                      checked={matchData.tickerSettings.enabled}
-                      onChange={(e) => handleTickerSettingChange("enabled", e.target.checked)}
-                      className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                    />
-                    <label htmlFor="ticker-enabled" className="text-sm font-medium text-gray-700">
-                      Hiển thị chữ chạy
-                    </label>
+                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
+                    <div className="flex items-center space-x-3">
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="ticker-enabled"
+                          checked={matchData.tickerSettings.enabled}
+                          onChange={(e) => handleTickerSettingChange("enabled", e.target.checked)}
+                          className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 focus:ring-2"
+                        />
+                      </div>
+                      <label htmlFor="ticker-enabled" className="flex items-center space-x-2 text-sm font-medium text-gray-700 cursor-pointer">
+                        <span>🟢</span>
+                        <span>Hiển thị chữ chạy</span>
+                      </label>
+                    </div>
+                    <div className={`px-2 py-1 rounded text-xs font-medium ${
+                      matchData.tickerSettings.enabled
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-100 text-gray-600"
+                    }`}>
+                      {matchData.tickerSettings.enabled ? "Bật" : "Tắt"}
+                    </div>
                   </div>
                 </div>
 
