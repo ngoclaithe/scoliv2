@@ -42,6 +42,9 @@ const Home = () => {
   const [tickerColor, setTickerColor] = useState("#ffffff");
   const [tickerFontSize, setTickerFontSize] = useState(16);
 
+  // State cho số lỗi futsal
+  const [futsalErrors, setFutsalErrors] = useState(0);
+
   // Skin data configuration
   const skinData = {
     1: { name: "Template 1", image: "/images/templates/skin1.png" },
@@ -93,7 +96,7 @@ const Home = () => {
         setIsLoading(false);
       }, 1000);
     } else {
-      alert("Code không đúng. Vui lòng thử l���i!");
+      alert("Code không đúng. Vui lòng thử lại!");
     }
   };
 
@@ -175,7 +178,7 @@ const Home = () => {
         {!isCodeEntered ? (
           <div className="space-y-3">
             <Input
-              placeholder="Nhập code..."
+              placeholder="Nh��p code..."
               value={matchCode}
               onChange={(e) => setMatchCode(e.target.value)}
               className="text-center text-sm"
