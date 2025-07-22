@@ -715,7 +715,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">���</span>
+              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🕐</span>
               <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 0'
               </span>
@@ -806,12 +806,8 @@ const Home = () => {
             </button>
 
             <button
-              onClick={() => setSelectedOption("dem-t")}
-              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
-                selectedOption === "dem-t"
-                  ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
-                  : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
-              }`}
+              onClick={() => setShowTimerModal(true)}
+              className="flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
             >
               <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🕰️</span>
               <span className="text-[10px] sm:text-xs font-bold text-center">
@@ -893,7 +889,7 @@ const Home = () => {
           <h3 className="font-bold text-center text-sm text-orange-800 mb-3 flex items-center justify-center">
             <span className="mr-1 text-sm">📰</span>
             <span className="text-xs">CÀI ĐẶT CHỮ CHẠY</span>
-            <span className="ml-1 text-sm">��</span>
+            <span className="ml-1 text-sm">📰</span>
           </h3>
 
           <div className="space-y-3">
