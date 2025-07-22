@@ -178,7 +178,7 @@ const Home = () => {
               <Button
                 variant="primary"
                 size="sm"
-                className="w-24 h-8 text-xs"
+                className="w-20 h-7 text-xs"
                 onClick={handleUploadCodeSubmit}
               >
                 XÁC NHẬN
