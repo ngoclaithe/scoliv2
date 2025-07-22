@@ -313,7 +313,7 @@ const Home = () => {
                 Nhập mã truy cập
               </h3>
               <p className="text-gray-600 text-sm">
-                Vui lòng nhập mã code để truy cập và quản lý trận đấu
+                Vui lòng nhập mã code đ��� truy cập và quản lý trận đấu
               </p>
             </div>
           </div>
@@ -550,7 +550,7 @@ const Home = () => {
                   <img
                     src={`/images/templates/skin${skinNumber}.png`}
                     alt={`Template ${skinNumber}`}
-                    className="w-full h-20 sm:h-32 object-contain bg-gray-50"
+                    className="w-full h-16 sm:h-24 object-contain bg-gray-50"
                     onError={(e) => {
                       e.target.style.display = 'none';
                       e.target.nextSibling.style.display = 'flex';
