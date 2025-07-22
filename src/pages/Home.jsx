@@ -34,8 +34,8 @@ const Home = () => {
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
-  const [showSkinModal, setShowSkinModal] = useState(false);
   const [selectedSkin, setSelectedSkin] = useState(1);
+  const [isCodeInfoExpanded, setIsCodeInfoExpanded] = useState(false);
 
   // Skin data configuration
   const skinData = {
@@ -158,12 +158,12 @@ const Home = () => {
   };
 
   const renderUploadLogoTab = () => (
-    <div className="p-4 space-y-4">
+    <div className="p-2 sm:p-4 space-y-3">
       {/* Upload Section - Require Code */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 border border-blue-200">
-        <div className="flex items-center justify-center mb-3">
-          <span className="text-lg">📁</span>
-          <h3 className="text-sm font-bold text-gray-800 mx-2">UPLOAD</h3>
+      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 border border-blue-200">
+        <div className="flex items-center justify-center mb-2">
+          <span className="text-sm">📁</span>
+          <h3 className="text-xs font-bold text-gray-800 mx-2">UPLOAD</h3>
         </div>
 
         {!isCodeEntered ? (
@@ -178,8 +178,9 @@ const Home = () => {
               <Button
                 variant="primary"
                 size="sm"
-                className="w-24 h-8 text-xs"
+                className="w-20 h-7 text-xs"
                 onClick={handleUploadCodeSubmit}
+                style={{ fontSize: '10px' }}
               >
                 XÁC NHẬN
               </Button>
@@ -191,22 +192,22 @@ const Home = () => {
         ) : (
           <div className="space-y-3">
             {/* Upload Buttons Row */}
-            <div className="flex justify-center space-x-4">
+            <div className="flex justify-center space-x-3">
               {/* Upload Logo */}
               <button
                 onClick={handleLogoUpload}
-                className="w-20 h-16 bg-gradient-to-br from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg flex flex-col items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+                className="w-16 h-12 bg-gradient-to-br from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg flex flex-col items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
               >
-                <span className="text-xl mb-1">+</span>
+                <span className="text-lg mb-0.5">+</span>
                 <span className="text-xs font-bold">LOGO</span>
               </button>
 
               {/* Upload Banner */}
               <button
                 onClick={handleBannerUpload}
-                className="w-20 h-16 bg-gradient-to-br from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white rounded-lg flex flex-col items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+                className="w-16 h-12 bg-gradient-to-br from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white rounded-lg flex flex-col items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
               >
-                <span className="text-xl mb-1">+</span>
+                <span className="text-lg mb-0.5">+</span>
                 <span className="text-xs font-bold">BANNER</span>
               </button>
             </div>
@@ -261,10 +262,10 @@ const Home = () => {
       </div>
 
       {/* Search Section - No Code Required */}
-      <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
-        <div className="flex items-center justify-center mb-3">
-          <span className="text-lg">🔍</span>
-          <h3 className="text-sm font-bold text-green-700 mx-2">TÌM KIẾM LOGO</h3>
+      <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-3 border border-green-200">
+        <div className="flex items-center justify-center mb-2">
+          <span className="text-sm">🔍</span>
+          <h3 className="text-xs font-bold text-green-700 mx-2">TÌM KIẾM LOGO</h3>
         </div>
         <Input
           placeholder="Tìm theo tên đội..."
@@ -279,9 +280,10 @@ const Home = () => {
         <Button
           variant="secondary"
           size="sm"
-          className="w-28 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-2 text-sm rounded-full shadow-lg transform hover:scale-105 transition-all duration-200"
+          className="w-20 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-1 text-xs rounded-full shadow-lg transform hover:scale-105 transition-all duration-200"
+          style={{ fontSize: '10px' }}
         >
-          <span className="mr-1">📚</span>
+          <span className="mr-1 text-xs">📚</span>
           HỖ TRỢ
         </Button>
       </div>
@@ -291,7 +293,7 @@ const Home = () => {
   const renderQuanLyTranTab = () => {
     if (!isCodeEntered) {
       return (
-        <div className="p-6 max-w-md mx-auto">
+        <div className="p-3 sm:p-6 max-w-md mx-auto">
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6">
             <div className="text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
@@ -339,7 +341,7 @@ const Home = () => {
             </div>
 
             <div className="text-center text-xs text-gray-500">
-              Nhập "ffff" để demo
+              Nh���p "ffff" để demo
             </div>
           </div>
         </div>
@@ -347,57 +349,65 @@ const Home = () => {
     }
 
     return (
-      <div className="p-6 space-y-6">
-        {/* Code Information */}
+      <div className="p-3 sm:p-6 space-y-4 sm:space-y-6">
+        {/* Code Information - Compact */}
         {codeInfo && (
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-6 mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Thông tin mã truy cập
-              </h3>
-              <span
-                className={`px-3 py-1 rounded-full text-sm font-medium ${
-                  codeInfo.status === "active"
-                    ? "bg-green-100 text-green-800"
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-3 sm:p-4 mb-3 sm:mb-4">
+            <div
+              className="flex items-center justify-between cursor-pointer hover:bg-white/50 rounded-lg p-2 transition-colors"
+              onClick={() => setIsCodeInfoExpanded(!isCodeInfoExpanded)}
+            >
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-600">Mã truy cập:</span>
+                <span className="font-mono font-bold text-sm">{codeInfo.code}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span
+                  className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    codeInfo.status === "active"
+                      ? "bg-green-100 text-green-800"
+                      : codeInfo.status === "inactive"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : "bg-red-100 text-red-800"
+                  }`}
+                >
+                  {codeInfo.status === "active"
+                    ? "🟢 Đã kích hoạt"
                     : codeInfo.status === "inactive"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : "bg-red-100 text-red-800"
-                }`}
-              >
-                {codeInfo.status === "active"
-                  ? "🟢 Đã kích hoạt"
-                  : codeInfo.status === "inactive"
-                    ? "🟡 Chưa kích hoạt"
-                    : "🔴 Đã hết hạn"}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Mã code:</span>
-                  <span className="font-mono font-bold">{codeInfo.code}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Được tạo lúc:</span>
-                  <span className="font-medium">{codeInfo.generatedAt}</span>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Hết hạn vào:</span>
-                  <span className="font-medium text-orange-600">
-                    {codeInfo.expiryDate}
-                  </span>
-                </div>
+                      ? "🟡 Chưa kích hoạt"
+                      : "🔴 Đã hết hạn"}
+                </span>
+                <span className={`text-gray-400 transition-transform duration-200 ${isCodeInfoExpanded ? 'rotate-180' : ''}`}>
+                  ▼
+                </span>
               </div>
             </div>
+
+            {isCodeInfoExpanded && (
+              <div className="mt-3 pt-3 border-t border-gray-200 animate-slide-up">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Được tạo lúc:</span>
+                      <span className="font-medium">{codeInfo.generatedAt}</span>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Hết hạn vào:</span>
+                      <span className="font-medium text-orange-600">
+                        {codeInfo.expiryDate}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
         {/* Scoreboard */}
-        <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-xl p-4 border-4 border-yellow-400 shadow-2xl">
+        <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-xl p-3 sm:p-4 border-2 sm:border-4 border-yellow-400 shadow-2xl">
           {selectedSkin && skinData[selectedSkin] ? (
             <div className="w-full h-40 bg-gray-100 rounded-lg overflow-hidden">
               <img
@@ -427,60 +437,60 @@ const Home = () => {
         </div>
 
         {/* Score Controls */}
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-200">
-          <h3 className="text-center text-lg font-bold text-gray-800 mb-6 flex items-center justify-center">
-            <span className="mr-2">⚽</span>
-            ĐIỀU KHIỂN TỈ SỐ
-            <span className="ml-2">⚽</span>
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-3 sm:p-6 border border-blue-200">
+          <h3 className="text-center text-sm sm:text-lg font-bold text-gray-800 mb-3 sm:mb-6 flex items-center justify-center">
+            <span className="mr-1 sm:mr-2 text-sm">⚽</span>
+            <span className="text-xs sm:text-base">ĐIỀU KHIỂN TỈ SỐ</span>
+            <span className="ml-1 sm:ml-2 text-sm">⚽</span>
           </h3>
 
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 gap-3 sm:gap-6">
             {/* Đội nhà */}
-            <div className="bg-white rounded-lg p-4 shadow-md border-2 border-blue-200">
-              <h4 className="text-center font-bold text-blue-700 mb-4">
+            <div className="bg-white rounded-lg p-2 sm:p-4 shadow-md border border-blue-200">
+              <h4 className="text-center font-bold text-blue-700 mb-2 sm:mb-4 text-xs sm:text-sm">
                 {matchData.homeTeam.name}
               </h4>
-              <div className="flex space-x-2">
+              <div className="flex space-x-1 sm:space-x-2">
                 <Button
                   variant="primary"
-                  size="lg"
-                  className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200"
+                  size="sm"
+                  className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-8 sm:h-10"
                   onClick={() => handleScoreChange("homeTeam", 1)}
                 >
-                  <span className="text-xl">+</span>
+                  <span className="text-lg sm:text-xl">+</span>
                 </Button>
                 <Button
                   variant="primary"
-                  size="lg"
-                  className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200"
+                  size="sm"
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-8 sm:h-10"
                   onClick={() => handleScoreChange("homeTeam", -1)}
                 >
-                  <span className="text-xl">-</span>
+                  <span className="text-lg sm:text-xl">-</span>
                 </Button>
               </div>
             </div>
 
             {/* Đội khách */}
-            <div className="bg-white rounded-lg p-4 shadow-md border-2 border-purple-200">
-              <h4 className="text-center font-bold text-purple-700 mb-4">
+            <div className="bg-white rounded-lg p-2 sm:p-4 shadow-md border border-purple-200">
+              <h4 className="text-center font-bold text-purple-700 mb-2 sm:mb-4 text-xs sm:text-sm">
                 {matchData.awayTeam.name}
               </h4>
-              <div className="flex space-x-2">
+              <div className="flex space-x-1 sm:space-x-2">
                 <Button
                   variant="primary"
-                  size="lg"
-                  className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200"
+                  size="sm"
+                  className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-8 sm:h-10"
                   onClick={() => handleScoreChange("awayTeam", 1)}
                 >
-                  <span className="text-xl">+</span>
+                  <span className="text-lg sm:text-xl">+</span>
                 </Button>
                 <Button
                   variant="primary"
-                  size="lg"
-                  className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200"
+                  size="sm"
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-8 sm:h-10"
                   onClick={() => handleScoreChange("awayTeam", -1)}
                 >
-                  <span className="text-xl">-</span>
+                  <span className="text-lg sm:text-xl">-</span>
                 </Button>
               </div>
             </div>
@@ -488,53 +498,101 @@ const Home = () => {
         </div>
 
         {/* Tab Controls */}
-        <div className="bg-white rounded-xl p-4 shadow-lg border border-gray-200">
-          <div className="grid grid-cols-2 gap-4">
+        <div className="bg-white rounded-xl p-3 sm:p-4 shadow-lg border border-gray-200">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <button
               onClick={() => setSelectedOption("dieu-khien")}
-              className={`py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-md ${
+              className={`py-2 sm:py-4 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-md ${
                 selectedOption === "dieu-khien"
                   ? "bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-xl"
                   : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
               }`}
             >
-              <span className="mr-2">🎮</span>
+              <span className="mr-1 sm:mr-2 text-sm">🎮</span>
               ĐIỀU KHIỂN
             </button>
             <button
               onClick={() => {
-                setSelectedOption("chon-skin");
-                setShowSkinModal(true);
+                setSelectedOption(selectedOption === "chon-skin" ? "dieu-khien" : "chon-skin");
               }}
-              className={`py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-md ${
+              className={`py-2 sm:py-4 px-3 sm:px-6 rounded-xl font-bold text-xs sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-md ${
                 selectedOption === "chon-skin"
                   ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
                   : "bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 hover:from-blue-200 hover:to-blue-300"
               }`}
             >
-              <span className="mr-2">🎨</span>
-              CHỌN SKIN
+              <span className="mr-1 sm:mr-2 text-sm">🎨</span>
+              TEMPLATE
             </button>
           </div>
         </div>
 
+        {/* Inline Template Selection */}
+        {selectedOption === "chon-skin" && (
+          <div className="bg-white rounded-xl p-3 sm:p-4 shadow-lg border border-gray-200 animate-slide-up">
+            <h3 className="text-center text-sm sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 flex items-center justify-center">
+              <span className="mr-1 sm:mr-2 text-sm">🎨</span>
+              CHỌN TEMPLATE
+              <span className="ml-1 sm:ml-2 text-sm">🎨</span>
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
+              {[1, 2, 3, 4, 5].map((skinNumber) => (
+                <div
+                  key={skinNumber}
+                  onClick={() => {
+                    setSelectedSkin(skinNumber);
+                    console.log('Template selected:', skinNumber);
+                  }}
+                  className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${
+                    selectedSkin === skinNumber
+                      ? "border-blue-500 ring-2 ring-blue-200"
+                      : "border-gray-200 hover:border-blue-300"
+                  }`}
+                >
+                  <img
+                    src={`/images/templates/skin${skinNumber}.png`}
+                    alt={`Template ${skinNumber}`}
+                    className="w-full h-16 sm:h-24 object-contain bg-gray-50"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div className="w-full h-16 sm:h-24 bg-gray-100 items-center justify-center hidden">
+                    <span className="text-gray-500 font-medium text-xs sm:text-sm">Template {skinNumber}</span>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white text-center py-1">
+                    <span className="text-xs font-medium">Template {skinNumber}</span>
+                  </div>
+                  {selectedSkin === skinNumber && (
+                    <div className="absolute top-1 right-1 bg-blue-500 text-white rounded-full w-4 h-4 sm:w-6 sm:h-6 flex items-center justify-center">
+                      <span className="text-xs">✓</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Options - Thay đổi action buttons */}
-        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 sm:p-6 border border-indigo-200">
-          <h3 className="text-center text-lg font-bold text-indigo-800 mb-4 sm:mb-6 flex items-center justify-center">
-            <span className="mr-2">⚙️</span>
-            TÙY CHỌN HIỂN THỊ
-            <span className="ml-2">⚙️</span>
+        {selectedOption !== "chon-skin" && (
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 sm:p-4 border border-indigo-200">
+          <h3 className="text-center text-sm sm:text-lg font-bold text-indigo-800 mb-3 sm:mb-4 flex items-center justify-center">
+            <span className="mr-1 sm:mr-2 text-sm">⚙️</span>
+            <span className="text-xs sm:text-base">TÙY CHỌN HIỂN THỊ</span>
+            <span className="ml-1 sm:ml-2 text-sm">⚙️</span>
           </h3>
 
           {/* Grid responsive cho mobile */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
             {/* Poster */}
             <button
               onClick={() => setShowPosterModal(true)}
-              className="flex flex-col items-center justify-center p-3 sm:p-4 bg-gradient-to-br from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+              className="flex flex-col items-center justify-center p-2 sm:p-3 bg-gradient-to-br from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-xl sm:text-2xl mb-1">🎨</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🎨</span>
+              <span className="text-xs font-bold text-center">
                 POSTER
               </span>
             </button>
@@ -544,14 +602,14 @@ const Home = () => {
               onClick={() => {
                 setSelectedOption("gioi-thieu");
               }}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "gioi-thieu"
                   ? "bg-gradient-to-br from-red-500 to-orange-600 text-white"
                   : "bg-gradient-to-br from-red-100 to-orange-200 text-red-700 hover:from-red-200 hover:to-orange-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">🎬</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🎬</span>
+              <span className="text-xs font-bold text-center">
                 GIỚI THIỆU
               </span>
             </button>
@@ -562,14 +620,14 @@ const Home = () => {
                 setSelectedOption("danh-sach");
                 setShowLineupModal(true);
               }}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "danh-sach"
                   ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white"
                   : "bg-gradient-to-br from-blue-100 to-indigo-200 text-blue-700 hover:from-blue-200 hover:to-indigo-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">📋</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">📋</span>
+              <span className="text-xs font-bold text-center">
                 DANH SÁCH
               </span>
             </button>
@@ -580,14 +638,14 @@ const Home = () => {
                 setSelectedOption("ti-so-duoi");
                 // Có thể mở modal tỉ số ở đây
               }}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "ti-so-duoi"
                   ? "bg-gradient-to-br from-green-500 to-emerald-600 text-white"
                   : "bg-gradient-to-br from-green-100 to-emerald-200 text-green-700 hover:from-green-200 hover:to-emerald-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">⚽</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">⚽</span>
+              <span className="text-xs font-bold text-center">
                 TỈ SỐ DƯỚI
               </span>
             </button>
@@ -598,14 +656,14 @@ const Home = () => {
                 setSelectedOption("nghi-hiep");
                 // Có thể mở modal nghỉ hiệp ở đây
               }}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "nghi-hiep"
                   ? "bg-gradient-to-br from-yellow-500 to-orange-600 text-white"
                   : "bg-gradient-to-br from-yellow-100 to-orange-200 text-yellow-700 hover:from-yellow-200 hover:to-orange-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">⏰</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">⏰</span>
+              <span className="text-xs font-bold text-center">
                 NGHỈ HIỆP
               </span>
             </button>
@@ -615,14 +673,14 @@ const Home = () => {
               onClick={() => {
                 setShowPenaltyModal(true);
               }}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption?.startsWith("penalty")
                   ? "bg-gradient-to-br from-gray-600 to-gray-800 text-white"
                   : "bg-gradient-to-br from-gray-100 to-gray-300 text-gray-700 hover:from-gray-200 hover:to-gray-400"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">🥅</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🥅</span>
+              <span className="text-xs font-bold text-center">
                 PENALTY
               </span>
             </button>
@@ -630,70 +688,70 @@ const Home = () => {
             {/* Đếm giờ buttons */}
             <button
               onClick={() => setSelectedOption("dem-0")}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-0"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">🕐</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
+              <span className="text-xs font-bold text-center">
                 ĐẾM 0'
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-20")}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-20"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">🕐</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
+              <span className="text-xs font-bold text-center">
                 ĐẾM 20'
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-25")}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-25"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">🕐</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
+              <span className="text-xs font-bold text-center">
                 ĐẾM 25'
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-30")}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-30"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">🕐</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
+              <span className="text-xs font-bold text-center">
                 ĐẾM 30'
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-35")}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-35"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">🕐</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
+              <span className="text-xs font-bold text-center">
                 ĐẾM 35'
               </span>
             </button>
@@ -701,58 +759,62 @@ const Home = () => {
             {/* Tắt */}
             <button
               onClick={() => setSelectedOption("tat")}
-              className={`flex flex-col items-center justify-center p-3 sm:p-4 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "tat"
                   ? "bg-gradient-to-br from-red-600 to-red-800 text-white"
                   : "bg-gradient-to-br from-red-100 to-red-200 text-red-700 hover:from-red-200 hover:to-red-300"
               }`}
             >
-              <span className="text-xl sm:text-2xl mb-1">❌</span>
-              <span className="text-xs sm:text-sm font-bold text-center">
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">❌</span>
+              <span className="text-xs font-bold text-center">
                 TẮT
               </span>
             </button>
           </div>
         </div>
+        )}
 
         {/* Clock Settings */}
-        <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-6 border border-orange-200">
-          <h3 className="font-bold text-center text-lg text-orange-800 mb-6 flex items-center justify-center">
-            <span className="mr-2">📰</span>
-            CÀI ĐẶT CHỮ CHẠY
-            <span className="ml-2">📰</span>
+        <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-3 sm:p-6 border border-orange-200">
+          <h3 className="font-bold text-center text-sm sm:text-lg text-orange-800 mb-3 sm:mb-6 flex items-center justify-center">
+            <span className="mr-1 sm:mr-2 text-sm">📰</span>
+            <span className="text-xs sm:text-base">CÀI ĐẶT CHỮ CHẠY</span>
+            <span className="ml-1 sm:ml-2 text-sm">📰</span>
           </h3>
 
-          <div className="flex justify-center space-x-8">
-            <div className="flex items-center space-x-2">
+          <div className="flex justify-center space-x-4 sm:space-x-8">
+            <div className="flex items-center space-x-1 sm:space-x-2">
               <input
                 type="radio"
                 name="clock"
                 value="khong"
                 checked={clockSetting === "khong"}
                 onChange={(e) => setClockSetting(e.target.value)}
+                className="scale-75 sm:scale-100"
               />
-              <label>KHÔNG</label>
+              <label className="text-xs sm:text-sm">KHÔNG</label>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1 sm:space-x-2">
               <input
                 type="radio"
                 name="clock"
                 value="lien-tuc"
                 checked={clockSetting === "lien-tuc"}
                 onChange={(e) => setClockSetting(e.target.value)}
+                className="scale-75 sm:scale-100"
               />
-              <label>LIÊN TỤC</label>
+              <label className="text-xs sm:text-sm">LIÊN TỤC</label>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-1 sm:space-x-2">
               <input
                 type="radio"
                 name="clock"
                 value="moi-2"
                 checked={clockSetting === "moi-2"}
                 onChange={(e) => setClockSetting(e.target.value)}
+                className="scale-75 sm:scale-100"
               />
-              <label>MỖI 2'</label>
+              <label className="text-xs sm:text-sm">MỖI 2'</label>
             </div>
           </div>
 
@@ -768,10 +830,10 @@ const Home = () => {
         <div className="flex justify-center">
           <Button
             variant="primary"
-            size="lg"
-            className="w-32 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xl rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300"
+            size="sm"
+            className="w-24 sm:w-32 py-2 sm:py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-sm sm:text-lg rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300"
           >
-            <span className="mr-2">🚀</span>
+            <span className="mr-2">��</span>
             ÁP DỤNG
           </Button>
         </div>
@@ -926,36 +988,57 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 shadow-xl border-b-4 border-yellow-400">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-18">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg transform hover:rotate-12 transition-transform duration-300">
-                  <span className="text-white font-bold text-xl">⚽</span>
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-white">
-                    Football Livestream Tool
-                  </h1>
-                  <p className="text-blue-200 text-sm">
-                    Công cụ quản lý trận đấu trực tiếp
-                  </p>
-                </div>
+      <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 shadow-xl border-b-2 border-yellow-400">
+        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
+          <div className="flex justify-between items-center h-12 sm:h-14">
+            {/* Login/Register Button - Top Left */}
+            <div className="flex items-center">
+              <Button
+                variant="outline"
+                size="sm"
+                className="bg-white/10 border-white/20 text-white hover:bg-white/20 text-xs px-2 py-1 h-7"
+                onClick={() => console.log('Login clicked')}
+              >
+                <span className="text-xs mr-1">👤</span>
+                <span className="hidden sm:inline">Đăng nhập</span>
+                <span className="sm:hidden">Login</span>
+              </Button>
+            </div>
+
+            {/* Center Logo and Title */}
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg transform hover:rotate-12 transition-transform duration-300">
+                <span className="text-white font-bold text-sm sm:text-lg">⚽</span>
+              </div>
+              <div className="hidden sm:block">
+                <h1 className="text-lg sm:text-xl font-bold text-white">
+                  Football Livestream Tool
+                </h1>
+                <p className="text-blue-200 text-xs">
+                  Công cụ quản lý trận đấu trực tiếp
+                </p>
+              </div>
+              <div className="sm:hidden">
+                <h1 className="text-sm font-bold text-white">
+                  scoliv
+                </h1>
               </div>
             </div>
+
+            {/* Right spacer for balance */}
+            <div className="w-16 sm:w-20"></div>
           </div>
         </div>
       </header>
 
       <main className="max-w-4xl mx-auto">
         {/* Tabs */}
-        <div className="flex bg-gradient-to-r from-gray-100 to-gray-200 border-b-4 border-gray-300 shadow-md">
+        <div className="flex bg-gradient-to-r from-gray-100 to-gray-200 border-b-2 border-gray-300 shadow-md">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 py-5 px-8 text-center font-bold text-lg border-b-4 transition-all duration-300 transform hover:scale-105 ${
+              className={`flex-1 py-2 px-2 sm:py-3 sm:px-4 text-center font-bold text-xs sm:text-sm border-b-2 transition-all duration-300 ${
                 activeTab === tab.id
                   ? tab.id === "upload-logo"
                     ? "border-blue-500 text-blue-700 bg-gradient-to-t from-blue-100 to-blue-50 shadow-lg"
@@ -968,18 +1051,21 @@ const Home = () => {
               <span className="flex items-center justify-center">
                 {tab.id === "upload-logo" ? (
                   <>
-                    <span className="mr-2">🏆</span>
-                    {tab.name}
+                    <span className="mr-1 text-sm">🏆</span>
+                    <span className="hidden sm:inline">{tab.name}</span>
+                    <span className="sm:hidden">LOGO</span>
                   </>
                 ) : tab.id === "quan-ly-tran" ? (
                   <>
-                    <span className="mr-2">⚽</span>
-                    {tab.name}
+                    <span className="mr-1 text-sm">⚽</span>
+                    <span className="hidden sm:inline">{tab.name}</span>
+                    <span className="sm:hidden">TRẬN</span>
                   </>
                 ) : (
                   <>
-                    <span className="mr-2">🎙️</span>
-                    {tab.name}
+                    <span className="mr-1 text-sm">🎙️</span>
+                    <span className="hidden sm:inline">{tab.name}</span>
+                    <span className="sm:hidden">AUDIO</span>
                   </>
                 )}
               </span>
@@ -1106,73 +1192,7 @@ const Home = () => {
         onPenaltyChange={handlePenaltyChange}
       />
 
-      {/* Skin Selection Modal */}
-      <Modal
-        isOpen={showSkinModal}
-        onClose={() => setShowSkinModal(false)}
-        title="🎨 Chọn Skin"
-        size="lg"
-      >
-        <div className="p-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5].map((skinNumber) => (
-              <div
-                key={skinNumber}
-                onClick={() => {
-                  setSelectedSkin(skinNumber);
-                }}
-                className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${
-                  selectedSkin === skinNumber
-                    ? "border-blue-500 ring-2 ring-blue-200"
-                    : "border-gray-200 hover:border-blue-300"
-                }`}
-              >
-                <img
-                  src={`/images/templates/skin${skinNumber}.png`}
-                  alt={`Skin ${skinNumber}`}
-                  className="w-full h-48 object-contain bg-gray-50"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
-                />
-                <div className="w-full h-48 bg-gray-100 items-center justify-center hidden">
-                  <span className="text-gray-500 font-medium">Skin {skinNumber}</span>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white text-center py-2">
-                  <span className="text-sm font-medium">Skin {skinNumber}</span>
-                </div>
-                {selectedSkin === skinNumber && (
-                  <div className="absolute top-2 right-2 bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
-                    <span className="text-xs">✓</span>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
 
-          <div className="mt-6 flex justify-center space-x-4">
-            <Button
-              variant="outline"
-              onClick={() => setShowSkinModal(false)}
-              className="w-20"
-            >
-              Hủy
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => {
-                setShowSkinModal(false);
-                console.log('Applied skin:', selectedSkin);
-              }}
-              disabled={!selectedSkin}
-              className="w-24"
-            >
-              Áp dụng
-            </Button>
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 };
