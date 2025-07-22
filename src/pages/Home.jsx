@@ -539,7 +539,7 @@ const Home = () => {
               </span>
             </button>
 
-            {/* Giới thiệu */}
+            {/* Gi��i thiệu */}
             <button
               onClick={() => {
                 setSelectedOption("gioi-thieu");
@@ -971,9 +971,14 @@ const Home = () => {
                     <span className="mr-2">🏆</span>
                     {tab.name}
                   </>
-                ) : (
+                ) : tab.id === "quan-ly-tran" ? (
                   <>
                     <span className="mr-2">⚽</span>
+                    {tab.name}
+                  </>
+                ) : (
+                  <>
+                    <span className="mr-2">🎙️</span>
                     {tab.name}
                   </>
                 )}
