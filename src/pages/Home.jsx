@@ -764,6 +764,27 @@ const Home = () => {
               </span>
             </button>
           </div>
+
+          {/* Input field cho Đếm T */}
+          {selectedOption === "dem-t" && (
+            <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+              <label className="block text-sm font-medium text-yellow-800 mb-2">
+                🕰️ Nhập thời gian tùy chỉnh (phút)
+              </label>
+              <Input
+                type="number"
+                min="1"
+                max="120"
+                value={customTime}
+                onChange={(e) => setCustomTime(e.target.value)}
+                placeholder="Nhập số phút (ví dụ: 30)"
+                className="text-sm border-yellow-300 focus:ring-yellow-500 focus:border-yellow-500"
+              />
+              <div className="text-xs text-yellow-700 mt-1">
+                Thời gian đếm ngược sẽ bắt đầu từ {customTime || "?"} ph��t về 0
+              </div>
+            </div>
+          )}
         </div>
         )}
 
