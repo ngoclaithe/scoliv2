@@ -111,7 +111,6 @@ const LogoSettings = ({ isOpen, onClose, onLogoUpdate, matchData }) => {
   const tabs = [
     { id: "search", name: "Tìm Kiếm Logo", icon: "🔍" },
     { id: "position", name: "Vị Trí & Loại", icon: "📍" },
-    { id: "marquee", name: "Chữ Chạy", icon: "📜" },
   ];
 
   const filteredLogos = sampleLogos.filter((logo) =>
