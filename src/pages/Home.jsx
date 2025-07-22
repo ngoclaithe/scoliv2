@@ -14,7 +14,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [codeInfo, setCodeInfo] = useState(null);
 
-  // State cho upload logo - sử dụng chung với tab quản lý trận
+  // State cho upload logo - sử d���ng chung với tab quản lý trận
   const [logoData, setLogoData] = useState(null);
   const [bannerData, setBannerData] = useState(null);
   const [logoName, setLogoName] = useState("");
@@ -39,11 +39,11 @@ const Home = () => {
 
   // Skin data configuration
   const skinData = {
-    1: { time: "45:00", period: "Hiệp 1" },
-    2: { time: "90:00", period: "Hết giờ" },
-    3: { time: "15:30", period: "Hiệp 2" },
-    4: { time: "120:00", period: "Hiệp phụ" },
-    5: { time: "0:00", period: "Khởi động" }
+    1: { name: "Template 1", image: "/images/templates/skin1.png" },
+    2: { name: "Template 2", image: "/images/templates/skin2.png" },
+    3: { name: "Template 3", image: "/images/templates/skin3.png" },
+    4: { name: "Template 4", image: "/images/templates/skin4.png" },
+    5: { name: "Template 5", image: "/images/templates/skin5.png" }
   };
 
         // State cho modal poster
