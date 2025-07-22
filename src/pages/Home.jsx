@@ -687,74 +687,60 @@ const Home = () => {
               </span>
             </button>
 
-            {/* Đếm giờ buttons */}
+            {/* Đếm giờ buttons - Updated theo yêu cầu */}
             <button
-              onClick={() => setSelectedOption("dem-0")}
+              onClick={() => setSelectedOption("dem-40")}
               className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
-                selectedOption === "dem-0"
+                selectedOption === "dem-40"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">4️⃣0️⃣</span>
               <span className="text-xs font-bold text-center">
-                ĐẾM 0'
+                ĐẾM 40
               </span>
             </button>
 
             <button
-              onClick={() => setSelectedOption("dem-20")}
+              onClick={() => setSelectedOption("dem-45")}
               className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
-                selectedOption === "dem-20"
+                selectedOption === "dem-45"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">4️⃣5️⃣</span>
               <span className="text-xs font-bold text-center">
-                ĐẾM 20'
+                ĐẾM 45
               </span>
             </button>
 
             <button
-              onClick={() => setSelectedOption("dem-25")}
+              onClick={() => setSelectedOption("dem-t")}
               className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
-                selectedOption === "dem-25"
+                selectedOption === "dem-t"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕰️</span>
               <span className="text-xs font-bold text-center">
-                ĐẾM 25'
+                ĐẾM T
               </span>
             </button>
 
             <button
-              onClick={() => setSelectedOption("dem-30")}
+              onClick={() => setSelectedOption("tam-dung")}
               className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
-                selectedOption === "dem-30"
-                  ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
-                  : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
+                selectedOption === "tam-dung"
+                  ? "bg-gradient-to-br from-amber-500 to-yellow-600 text-white"
+                  : "bg-gradient-to-br from-amber-100 to-yellow-200 text-amber-700 hover:from-amber-200 hover:to-yellow-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">⏸️</span>
               <span className="text-xs font-bold text-center">
-                ĐẾM 30'
-              </span>
-            </button>
-
-            <button
-              onClick={() => setSelectedOption("dem-35")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
-                selectedOption === "dem-35"
-                  ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
-                  : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
-              }`}
-            >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
-              <span className="text-xs font-bold text-center">
-                ĐẾM 35'
+                TẠM DỪNG
               </span>
             </button>
 
