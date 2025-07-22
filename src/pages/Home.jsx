@@ -191,22 +191,22 @@ const Home = () => {
         ) : (
           <div className="space-y-3">
             {/* Upload Buttons Row */}
-            <div className="flex justify-center space-x-4">
+            <div className="flex justify-center space-x-3">
               {/* Upload Logo */}
               <button
                 onClick={handleLogoUpload}
-                className="w-20 h-16 bg-gradient-to-br from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg flex flex-col items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+                className="w-16 h-12 bg-gradient-to-br from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg flex flex-col items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
               >
-                <span className="text-xl mb-1">+</span>
+                <span className="text-lg mb-0.5">+</span>
                 <span className="text-xs font-bold">LOGO</span>
               </button>
 
               {/* Upload Banner */}
               <button
                 onClick={handleBannerUpload}
-                className="w-20 h-16 bg-gradient-to-br from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white rounded-lg flex flex-col items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+                className="w-16 h-12 bg-gradient-to-br from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white rounded-lg flex flex-col items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
               >
-                <span className="text-xl mb-1">+</span>
+                <span className="text-lg mb-0.5">+</span>
                 <span className="text-xs font-bold">BANNER</span>
               </button>
             </div>
@@ -1116,7 +1116,7 @@ const Home = () => {
         onSave={(lineupData) => {
           console.log("Saved lineup data:", lineupData);
           setShowLineupModal(false);
-          // Có thể thêm thông báo thành công ở đây
+          // Có thể thêm thông báo thành công ở ��ây
         }}
         matchData={matchData}
       />
