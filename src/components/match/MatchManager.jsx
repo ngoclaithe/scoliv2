@@ -625,8 +625,6 @@ const MatchManager = ({
           </div>
         </div>
       </div>
-
-      {/* Edit Modal sẽ được implement riêng */}
     </>
   );
 };
