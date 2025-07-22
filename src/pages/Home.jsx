@@ -348,51 +348,59 @@ const Home = () => {
 
     return (
       <div className="p-3 sm:p-6 space-y-4 sm:space-y-6">
-        {/* Code Information */}
+        {/* Code Information - Compact */}
         {codeInfo && (
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-4 sm:p-6 mb-4 sm:mb-6">
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-                Thông tin mã truy cập
-              </h3>
-              <span
-                className={`px-2 py-1 rounded-full text-xs sm:text-sm font-medium ${
-                  codeInfo.status === "active"
-                    ? "bg-green-100 text-green-800"
+          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-3 sm:p-4 mb-3 sm:mb-4">
+            <div
+              className="flex items-center justify-between cursor-pointer hover:bg-white/50 rounded-lg p-2 transition-colors"
+              onClick={() => setIsCodeInfoExpanded(!isCodeInfoExpanded)}
+            >
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-600">Mã truy cập:</span>
+                <span className="font-mono font-bold text-sm">{codeInfo.code}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span
+                  className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    codeInfo.status === "active"
+                      ? "bg-green-100 text-green-800"
+                      : codeInfo.status === "inactive"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : "bg-red-100 text-red-800"
+                  }`}
+                >
+                  {codeInfo.status === "active"
+                    ? "🟢 Đã kích hoạt"
                     : codeInfo.status === "inactive"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : "bg-red-100 text-red-800"
-                }`}
-              >
-                {codeInfo.status === "active"
-                  ? "🟢 Đã kích hoạt"
-                  : codeInfo.status === "inactive"
-                    ? "🟡 Chưa kích hoạt"
-                    : "🔴 Đã hết hạn"}
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
-              <div className="space-y-1 sm:space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Mã code:</span>
-                  <span className="font-mono font-bold">{codeInfo.code}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Được tạo lúc:</span>
-                  <span className="font-medium">{codeInfo.generatedAt}</span>
-                </div>
-              </div>
-
-              <div className="space-y-1 sm:space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Hết hạn vào:</span>
-                  <span className="font-medium text-orange-600">
-                    {codeInfo.expiryDate}
-                  </span>
-                </div>
+                      ? "🟡 Chưa kích hoạt"
+                      : "🔴 Đã hết hạn"}
+                </span>
+                <span className={`text-gray-400 transition-transform duration-200 ${isCodeInfoExpanded ? 'rotate-180' : ''}`}>
+                  ▼
+                </span>
               </div>
             </div>
+
+            {isCodeInfoExpanded && (
+              <div className="mt-3 pt-3 border-t border-gray-200 animate-slide-up">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Được tạo lúc:</span>
+                      <span className="font-medium">{codeInfo.generatedAt}</span>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Hết hạn vào:</span>
+                      <span className="font-medium text-orange-600">
+                        {codeInfo.expiryDate}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
