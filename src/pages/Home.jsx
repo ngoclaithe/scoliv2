@@ -985,7 +985,7 @@ const Home = () => {
                 onClick={() => console.log('Login clicked')}
               >
                 <span className="text-xs mr-1">👤</span>
-                <span className="hidden sm:inline">Đăng nhập</span>
+                <span className="hidden sm:inline">Đăng nh���p</span>
                 <span className="sm:hidden">Login</span>
               </Button>
             </div>
@@ -1177,73 +1177,7 @@ const Home = () => {
         onPenaltyChange={handlePenaltyChange}
       />
 
-      {/* Skin Selection Modal */}
-      <Modal
-        isOpen={showSkinModal}
-        onClose={() => setShowSkinModal(false)}
-        title="🎨 Chọn Skin"
-        size="lg"
-      >
-        <div className="p-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3, 4, 5].map((skinNumber) => (
-              <div
-                key={skinNumber}
-                onClick={() => {
-                  setSelectedSkin(skinNumber);
-                }}
-                className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${
-                  selectedSkin === skinNumber
-                    ? "border-blue-500 ring-2 ring-blue-200"
-                    : "border-gray-200 hover:border-blue-300"
-                }`}
-              >
-                <img
-                  src={`/images/templates/skin${skinNumber}.png`}
-                  alt={`Skin ${skinNumber}`}
-                  className="w-full h-48 object-contain bg-gray-50"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextSibling.style.display = 'flex';
-                  }}
-                />
-                <div className="w-full h-48 bg-gray-100 items-center justify-center hidden">
-                  <span className="text-gray-500 font-medium">Skin {skinNumber}</span>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white text-center py-2">
-                  <span className="text-sm font-medium">Skin {skinNumber}</span>
-                </div>
-                {selectedSkin === skinNumber && (
-                  <div className="absolute top-2 right-2 bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
-                    <span className="text-xs">✓</span>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
 
-          <div className="mt-6 flex justify-center space-x-4">
-            <Button
-              variant="outline"
-              onClick={() => setShowSkinModal(false)}
-              className="w-20"
-            >
-              Hủy
-            </Button>
-            <Button
-              variant="primary"
-              onClick={() => {
-                setShowSkinModal(false);
-                console.log('Applied skin:', selectedSkin);
-              }}
-              disabled={!selectedSkin}
-              className="w-24"
-            >
-              Áp dụng
-            </Button>
-          </div>
-        </div>
-      </Modal>
     </div>
   );
 };
