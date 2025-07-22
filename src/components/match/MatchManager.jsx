@@ -162,8 +162,8 @@ const MatchManager = ({
 
   return (
     <>
-      <div className={`w-full max-w-4xl mx-auto ${className}`}>
-        <div className="bg-white rounded-xl shadow-lg p-6">
+      <div className={`w-full max-w-4xl mx-auto px-2 sm:px-0 ${className}`}>
+        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <div>
@@ -205,11 +205,11 @@ const MatchManager = ({
           </div>
 
           {/* Main Match Info */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-6">
             {/* Home Team */}
             <div className="bg-gray-50 rounded-lg p-4">
               <h4 className="font-medium text-gray-900 mb-3 text-center">
-                Đội nhà
+                Đội nh��
               </h4>
               <div className="text-center space-y-3">
                 <div className="w-16 h-16 bg-white rounded-full mx-auto flex items-center justify-center border">
@@ -360,7 +360,7 @@ const MatchManager = ({
           </div>
 
           {/* Quick Actions */}
-          <div className="flex flex-wrap gap-3 justify-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-wrap gap-2 lg:gap-3 lg:justify-center">
             <Button
               variant="success"
               size="sm"
@@ -399,9 +399,12 @@ const MatchManager = ({
           {/* Display Options */}
           <div className="mt-6 pt-6 border-t border-gray-200">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-              <h4 className="text-lg font-medium text-gray-900 mb-2 sm:mb-0">
-                Tùy chọn hiển thị
-              </h4>
+              <div className="mb-2 sm:mb-0">
+                <h4 className="text-lg font-medium text-gray-900 flex items-center">
+                  📊 Tùy chọn hiển thị
+                </h4>
+                <p className="text-sm text-gray-600">Chọn cách hiển thị thời gian trận đấu</p>
+              </div>
               <Button
                 variant="outline"
                 size="sm"
@@ -418,48 +421,79 @@ const MatchManager = ({
             </div>
 
             {showDisplaySettings && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Loại đếm ngược
-                  </label>
-                  <select
-                    value={matchData.displayOptions.countdownType}
-                    onChange={(e) => handleDisplayOptionChange("countdownType", e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
-                  >
-                    <option value="normal">Bình thường</option>
-                    <option value="count40">Đếm 40</option>
-                    <option value="count45">Đếm 45</option>
-                    <option value="countCustom">Đếm T</option>
-                  </select>
+              <div className="space-y-4 mb-4">
+                <div className="space-y-4">
+                  <div className="space-y-3">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Chọn loại đếm ngược
+                    </label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {[
+                        { value: "normal", label: "Bình thường", icon: "⏱️" },
+                        { value: "count40", label: "Đếm 40", icon: "4️⃣0️⃣" },
+                        { value: "count45", label: "Đếm 45", icon: "4️⃣5️⃣" },
+                        { value: "countCustom", label: "Đếm T", icon: "🕰️" },
+                      ].map((option) => (
+                        <button
+                          key={option.value}
+                          onClick={() => handleDisplayOptionChange("countdownType", option.value)}
+                          className={`
+                            p-3 rounded-lg border-2 text-center transition-all
+                            ${
+                              matchData.displayOptions.countdownType === option.value
+                                ? "border-primary-500 bg-primary-50 text-primary-700"
+                                : "border-gray-200 bg-white text-gray-600 hover:border-gray-300 hover:bg-gray-50"
+                            }
+                          `}
+                        >
+                          <div className="text-lg mb-1">{option.icon}</div>
+                          <div className="text-xs font-medium">{option.label}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {matchData.displayOptions.countdownType === "countCustom" && (
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                      <label className="block text-sm font-medium text-yellow-800 mb-2">
+                        🕰️ Thời gian tùy chỉnh (phút)
+                      </label>
+                      <Input
+                        type="number"
+                        min="1"
+                        max="120"
+                        value={matchData.displayOptions.customTime}
+                        onChange={(e) => handleDisplayOptionChange("customTime", e.target.value)}
+                        placeholder="Nhập số phút (ví dụ: 30)"
+                        className="text-sm border-yellow-300 focus:ring-yellow-500 focus:border-yellow-500"
+                      />
+                      <div className="text-xs text-yellow-700 mt-1">
+                        Thời gian đếm ngược sẽ bắt đầu từ {matchData.displayOptions.customTime || "?"} phút về 0
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {matchData.displayOptions.countdownType === "countCustom" && (
-                  <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">
-                      Thời gian tùy chỉnh (phút)
-                    </label>
-                    <Input
-                      type="number"
-                      value={matchData.displayOptions.customTime}
-                      onChange={(e) => handleDisplayOptionChange("customTime", e.target.value)}
-                      placeholder="Nhập thời gian"
-                      className="text-sm"
-                    />
-                  </div>
-                )}
-
-                <div className="sm:col-span-2 lg:col-span-2 flex items-end">
-                  <div className="text-sm text-gray-600 bg-gray-50 rounded-lg p-3 w-full">
-                    <strong>Loại đếm hiện tại:</strong>
-                    <span className="ml-2">
-                      {matchData.displayOptions.countdownType === "normal" && "Bình thường"}
-                      {matchData.displayOptions.countdownType === "count40" && "Đếm 40 phút"}
-                      {matchData.displayOptions.countdownType === "count45" && "Đếm 45 phút"}
-                      {matchData.displayOptions.countdownType === "countCustom" &&
-                        `Đếm ${matchData.displayOptions.customTime || "?"} phút`}
+                <div className="mt-4 p-4 bg-gradient-to-r from-primary-50 to-blue-50 rounded-lg border border-primary-200">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div>
+                    <span className="text-sm font-medium text-primary-800">
+                      Chế độ hiện tại:
                     </span>
+                    <span className="text-sm font-bold text-primary-700">
+                      {matchData.displayOptions.countdownType === "normal" && "⏱️ Bình thường"}
+                      {matchData.displayOptions.countdownType === "count40" && "4️⃣0️⃣ Đếm 40 phút"}
+                      {matchData.displayOptions.countdownType === "count45" && "4️⃣5️⃣ Đếm 45 phút"}
+                      {matchData.displayOptions.countdownType === "countCustom" &&
+                        `🕰️ Đếm ${matchData.displayOptions.customTime || "?"} phút`}
+                    </span>
+                  </div>
+                  <div className="text-xs text-primary-600 mt-1">
+                    {matchData.displayOptions.countdownType === "normal" && "Thời gian trận đấu sẽ đếm tiến"}
+                    {matchData.displayOptions.countdownType === "count40" && "Thời gian sẽ đếm ngược từ 40:00 về 00:00"}
+                    {matchData.displayOptions.countdownType === "count45" && "Thời gian sẽ đếm ngược từ 45:00 về 00:00"}
+                    {matchData.displayOptions.countdownType === "countCustom" &&
+                      `Thời gian sẽ đếm ngược từ ${matchData.displayOptions.customTime || "?"}:00 về 00:00`}
                   </div>
                 </div>
               </div>
@@ -469,9 +503,12 @@ const MatchManager = ({
           {/* Ticker Settings */}
           <div className="mt-6 pt-6 border-t border-gray-200">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-              <h4 className="text-lg font-medium text-gray-900 mb-2 sm:mb-0">
-                Cài đặt chữ chạy
-              </h4>
+              <div className="mb-2 sm:mb-0">
+                <h4 className="text-lg font-medium text-gray-900 flex items-center">
+                  📺 Cài đặt chữ chạy
+                </h4>
+                <p className="text-sm text-gray-600">Tùy chỉnh văn bản chạy trên màn hình</p>
+              </div>
               <Button
                 variant="outline"
                 size="sm"
@@ -489,99 +526,178 @@ const MatchManager = ({
 
             {showTickerSettings && (
               <div className="space-y-4">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className="space-y-4">
                   <div className="space-y-2">
                     <label className="block text-sm font-medium text-gray-700">
-                      Nội dung chữ chạy
+                      📝 Nội dung chữ chạy
                     </label>
-                    <textarea
-                      value={matchData.tickerSettings.text}
-                      onChange={(e) => handleTickerSettingChange("text", e.target.value)}
-                      placeholder="Nhập nội dung chữ chạy..."
-                      rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm resize-none"
-                    />
+                    <div className="relative">
+                      <textarea
+                        value={matchData.tickerSettings.text}
+                        onChange={(e) => handleTickerSettingChange("text", e.target.value)}
+                        placeholder="Nhập nội dung chữ chạy (ví dụ: Chào mừng các bạn đến với trận đấu hôm nay!)"
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm resize-none"
+                        maxLength={200}
+                      />
+                      <div className="absolute bottom-2 right-2 text-xs text-gray-400">
+                        {matchData.tickerSettings.text.length}/200
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-1 mt-2">
+                      {[
+                        "Chào mừng đến với trận đấu!",
+                        "Hãy cổ vũ cho đội bóng yêu thích!",
+                        "Trận đấu hấp dẫn đang diễn ra!",
+                        "Cảm ơn quý khán giả đã theo dõi!"
+                      ].map((template, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleTickerSettingChange("text", template)}
+                          className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 rounded text-gray-600 transition-colors"
+                        >
+                          {template}
+                        </button>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        🎨 Màu chữ
+                      </label>
                       <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Màu chữ
-                        </label>
                         <div className="flex items-center space-x-2">
                           <input
                             type="color"
                             value={matchData.tickerSettings.color}
                             onChange={(e) => handleTickerSettingChange("color", e.target.value)}
-                            className="w-8 h-8 border border-gray-300 rounded cursor-pointer"
+                            className="w-10 h-10 border border-gray-300 rounded-lg cursor-pointer"
                           />
                           <Input
                             type="text"
                             value={matchData.tickerSettings.color}
                             onChange={(e) => handleTickerSettingChange("color", e.target.value)}
-                            className="text-sm flex-1"
+                            className="text-sm flex-1 uppercase"
+                            placeholder="#ffffff"
                           />
                         </div>
+                        <div className="flex gap-1">
+                          {["#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00"].map((color) => (
+                            <button
+                              key={color}
+                              onClick={() => handleTickerSettingChange("color", color)}
+                              className={`w-6 h-6 rounded border-2 ${
+                                matchData.tickerSettings.color === color ? "border-gray-800" : "border-gray-300"
+                              }`}
+                              style={{ backgroundColor: color }}
+                              title={color}
+                            />
+                          ))}
+                        </div>
                       </div>
+                    </div>
 
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        🔤 Kích thước chữ
+                      </label>
                       <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Kích thước chữ (px)
-                        </label>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-3">
+                          <span className="text-xs text-gray-500">12px</span>
                           <input
                             type="range"
                             min="12"
-                            max="32"
+                            max="40"
                             value={matchData.tickerSettings.fontSize}
                             onChange={(e) => handleTickerSettingChange("fontSize", parseInt(e.target.value))}
-                            className="flex-1"
+                            className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                            style={{
+                              background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((matchData.tickerSettings.fontSize - 12) / 28) * 100}%, #e5e7eb ${((matchData.tickerSettings.fontSize - 12) / 28) * 100}%, #e5e7eb 100%)`
+                            }}
                           />
-                          <span className="text-sm font-medium min-w-8 text-center">
+                          <span className="text-xs text-gray-500">40px</span>
+                        </div>
+                        <div className="text-center">
+                          <span className="inline-block px-3 py-1 bg-primary-100 text-primary-800 rounded-full text-sm font-medium">
                             {matchData.tickerSettings.fontSize}px
                           </span>
                         </div>
                       </div>
                     </div>
+                  </div>
 
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id="ticker-enabled"
-                        checked={matchData.tickerSettings.enabled}
-                        onChange={(e) => handleTickerSettingChange("enabled", e.target.checked)}
-                        className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                      />
-                      <label htmlFor="ticker-enabled" className="text-sm font-medium text-gray-700">
-                        Hiển thị chữ chạy
+                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
+                    <div className="flex items-center space-x-3">
+                      <div className="flex items-center">
+                        <input
+                          type="checkbox"
+                          id="ticker-enabled"
+                          checked={matchData.tickerSettings.enabled}
+                          onChange={(e) => handleTickerSettingChange("enabled", e.target.checked)}
+                          className="w-4 h-4 text-primary-600 bg-gray-100 border-gray-300 rounded focus:ring-primary-500 focus:ring-2"
+                        />
+                      </div>
+                      <label htmlFor="ticker-enabled" className="flex items-center space-x-2 text-sm font-medium text-gray-700 cursor-pointer">
+                        <span>🟢</span>
+                        <span>Hiển thị chữ chạy</span>
                       </label>
+                    </div>
+                    <div className={`px-2 py-1 rounded text-xs font-medium ${
+                      matchData.tickerSettings.enabled
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-100 text-gray-600"
+                    }`}>
+                      {matchData.tickerSettings.enabled ? "Bật" : "Tắt"}
                     </div>
                   </div>
                 </div>
 
-                {/* Preview */}
-                <div className="bg-gray-900 rounded-lg p-4 overflow-hidden relative">
-                  <div className="text-xs text-gray-400 mb-2">Xem trước chữ chạy:</div>
-                  <div className="h-8 flex items-center overflow-hidden">
+                {/* Enhanced Preview */}
+                <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-lg p-4 overflow-hidden relative border-2 border-gray-700">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="text-xs text-gray-400 flex items-center space-x-1">
+                      <span>👁️</span>
+                      <span>Xem trước chữ chạy:</span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                      <span className="text-xs text-gray-400">LIVE</span>
+                    </div>
+                  </div>
+                  <div className="h-10 flex items-center overflow-hidden bg-black rounded border">
                     <div
-                      className="animate-pulse whitespace-nowrap"
+                      className={`whitespace-nowrap transition-all duration-300 ${
+                        matchData.tickerSettings.enabled ? "animate-bounce" : ""
+                      }`}
                       style={{
                         color: matchData.tickerSettings.color,
                         fontSize: `${matchData.tickerSettings.fontSize}px`,
                         opacity: matchData.tickerSettings.enabled ? 1 : 0.3,
+                        paddingLeft: "10px",
                       }}
                     >
                       {matchData.tickerSettings.text || "Chào mừng đến với trận đấu!"}
                     </div>
                   </div>
+                  {!matchData.tickerSettings.enabled && (
+                    <div className="absolute inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center rounded-lg">
+                      <span className="text-gray-400 text-sm font-medium">⏸️ Chữ chạy đã tắt</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Apply Button */}
-                <div className="flex justify-end pt-4 border-t border-gray-200">
+                <div className="flex flex-col sm:flex-row gap-2 sm:justify-between pt-4 border-t border-gray-200">
+                  <div className="text-xs text-gray-500 flex items-center space-x-1">
+                    <span>ℹ️</span>
+                    <span>Thay đổi sẽ được áp dụng ngay lập tức</span>
+                  </div>
                   <Button
                     variant="primary"
                     onClick={handleSave}
+                    className="w-full sm:w-auto"
                     icon={
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -589,7 +705,7 @@ const MatchManager = ({
                       </svg>
                     }
                   >
-                    Áp dụng cài đặt
+                    💾 Áp dụng cài đặt
                   </Button>
                 </div>
               </div>
@@ -598,7 +714,7 @@ const MatchManager = ({
 
           {/* Match Summary */}
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 text-sm">
               <div className="text-center">
                 <div className="text-gray-500">Sân vận động</div>
                 <div className="font-medium">{matchData.stadium}</div>

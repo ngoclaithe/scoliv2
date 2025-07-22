@@ -37,6 +37,11 @@ const Home = () => {
   const [selectedSkin, setSelectedSkin] = useState(1);
   const [isCodeInfoExpanded, setIsCodeInfoExpanded] = useState(false);
 
+  // State cho custom time và cài đặt chữ chạy nâng cao
+  const [customTime, setCustomTime] = useState("");
+  const [tickerColor, setTickerColor] = useState("#ffffff");
+  const [tickerFontSize, setTickerFontSize] = useState(16);
+
   // Skin data configuration
   const skinData = {
     1: { name: "Template 1", image: "/images/templates/skin1.png" },
@@ -497,6 +502,19 @@ const Home = () => {
               </div>
             </div>
           </div>
+
+          {/* Nút TẠM DỪNG - Thêm vào điều khiển tỉ số */}
+          <div className="flex justify-center mt-3">
+            <Button
+              variant="primary"
+              size="sm"
+              className="px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+              onClick={() => setSelectedOption("tam-dung")}
+            >
+              <span className="mr-1">⏸️</span>
+              TẠM DỪNG
+            </Button>
+          </div>
         </div>
 
         {/* Tab Controls */}
@@ -687,7 +705,7 @@ const Home = () => {
               </span>
             </button>
 
-            {/* Đếm giờ buttons */}
+            {/* Đếm giờ buttons - Đầy đủ tất cả options */}
             <button
               onClick={() => setSelectedOption("dem-0")}
               className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
@@ -758,6 +776,50 @@ const Home = () => {
               </span>
             </button>
 
+            <button
+              onClick={() => setSelectedOption("dem-40")}
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+                selectedOption === "dem-40"
+                  ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
+                  : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
+              }`}
+            >
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">4️⃣0️⃣</span>
+              <span className="text-xs font-bold text-center">
+                ĐẾM 40
+              </span>
+            </button>
+
+            <button
+              onClick={() => setSelectedOption("dem-45")}
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+                selectedOption === "dem-45"
+                  ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
+                  : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
+              }`}
+            >
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">4️⃣5️⃣</span>
+              <span className="text-xs font-bold text-center">
+                ĐẾM 45
+              </span>
+            </button>
+
+            <button
+              onClick={() => setSelectedOption("dem-t")}
+              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+                selectedOption === "dem-t"
+                  ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
+                  : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
+              }`}
+            >
+              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕰️</span>
+              <span className="text-xs font-bold text-center">
+                ĐẾM T
+              </span>
+            </button>
+
+
+
             {/* Tắt */}
             <button
               onClick={() => setSelectedOption("tat")}
@@ -773,70 +835,173 @@ const Home = () => {
               </span>
             </button>
           </div>
+
+          {/* Input field cho Đếm T - Nổi bật với nút Áp dụng */}
+          {selectedOption === "dem-t" && (
+            <div className="mt-4 bg-gradient-to-r from-yellow-100 to-orange-100 border-2 border-yellow-400 rounded-xl p-4 shadow-lg">
+              <div className="text-center mb-3">
+                <h4 className="text-lg font-bold text-yellow-800 flex items-center justify-center">
+                  <span className="mr-2">🕰️</span>
+                  THIẾT LẬP THỜI GIAN TÙY CHỈNH
+                  <span className="ml-2">🕰️</span>
+                </h4>
+                <p className="text-sm text-yellow-700 mt-1">
+                  Trận đấu sẽ bắt đầu chạy từ thời điểm này
+                </p>
+              </div>
+
+              <div className="flex items-center space-x-2 mb-3">
+                <Input
+                  type="number"
+                  min="0"
+                  max="120"
+                  value={customTime}
+                  onChange={(e) => setCustomTime(e.target.value)}
+                  placeholder="Nhập phút (VD: 30)"
+                  className="flex-1 text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
+                />
+                <span className="text-sm font-medium text-yellow-800">phút</span>
+              </div>
+
+              <div className="text-center text-sm text-yellow-700 mb-3">
+                ⏱️ Trận đấu sẽ bắt đầu từ: <strong>{customTime || "0"}:00</strong>
+              </div>
+
+              <div className="flex justify-center">
+                <Button
+                  variant="primary"
+                  size="sm"
+                  className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-sm rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                  onClick={() => {
+                    // Gửi về backend
+                    console.log('Áp dụng thời gian tùy chỉnh:', customTime);
+                    alert(`Đã áp dụng: Trận đấu bắt đầu từ ${customTime || 0} phút`);
+                  }}
+                >
+                  <span className="mr-1">✅</span>
+                  ÁP DỤNG
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
         )}
 
-        {/* Clock Settings */}
-        <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-3 sm:p-6 border border-orange-200">
-          <h3 className="font-bold text-center text-sm sm:text-lg text-orange-800 mb-3 sm:mb-6 flex items-center justify-center">
-            <span className="mr-1 sm:mr-2 text-sm">📰</span>
-            <span className="text-xs sm:text-base">CÀI ĐẶT CHỮ CHẠY</span>
-            <span className="ml-1 sm:ml-2 text-sm">📰</span>
+        {/* Clock Settings - Compact */}
+        <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-3 border border-orange-200">
+          <h3 className="font-bold text-center text-sm text-orange-800 mb-3 flex items-center justify-center">
+            <span className="mr-1 text-sm">📰</span>
+            <span className="text-xs">CÀI ĐẶT CHỮ CHẠY</span>
+            <span className="ml-1 text-sm">📰</span>
           </h3>
 
-          <div className="flex justify-center space-x-4 sm:space-x-8">
-            <div className="flex items-center space-x-1 sm:space-x-2">
-              <input
-                type="radio"
-                name="clock"
-                value="khong"
-                checked={clockSetting === "khong"}
-                onChange={(e) => setClockSetting(e.target.value)}
-                className="scale-75 sm:scale-100"
-              />
-              <label className="text-xs sm:text-sm">KHÔNG</label>
+          <div className="space-y-3">
+            {/* Radio buttons */}
+            <div className="flex justify-center space-x-4">
+              <div className="flex items-center space-x-1">
+                <input
+                  type="radio"
+                  name="clock"
+                  value="khong"
+                  checked={clockSetting === "khong"}
+                  onChange={(e) => setClockSetting(e.target.value)}
+                  className="scale-75"
+                />
+                <label className="text-xs">KHÔNG</label>
+              </div>
+              <div className="flex items-center space-x-1">
+                <input
+                  type="radio"
+                  name="clock"
+                  value="lien-tuc"
+                  checked={clockSetting === "lien-tuc"}
+                  onChange={(e) => setClockSetting(e.target.value)}
+                  className="scale-75"
+                />
+                <label className="text-xs">LIÊN TỤC</label>
+              </div>
+              <div className="flex items-center space-x-1">
+                <input
+                  type="radio"
+                  name="clock"
+                  value="moi-2"
+                  checked={clockSetting === "moi-2"}
+                  onChange={(e) => setClockSetting(e.target.value)}
+                  className="scale-75"
+                />
+                <label className="text-xs">MỖI 2'</label>
+              </div>
             </div>
-            <div className="flex items-center space-x-1 sm:space-x-2">
-              <input
-                type="radio"
-                name="clock"
-                value="lien-tuc"
-                checked={clockSetting === "lien-tuc"}
-                onChange={(e) => setClockSetting(e.target.value)}
-                className="scale-75 sm:scale-100"
-              />
-              <label className="text-xs sm:text-sm">LIÊN TỤC</label>
+
+            {/* Text content - compact for mobile */}
+            <Input
+              placeholder="Nội dung chữ chạy..."
+              value={clockText}
+              onChange={(e) => setClockText(e.target.value)}
+              maxLength={100}
+              className="w-full text-xs"
+            />
+
+            {/* Color and Font Size - compact */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <div className="flex items-center space-x-1 mb-1">
+                  <input
+                    type="color"
+                    value={tickerColor}
+                    onChange={(e) => setTickerColor(e.target.value)}
+                    className="w-5 h-5 border border-orange-300 rounded cursor-pointer"
+                  />
+                  <Input
+                    type="text"
+                    value={tickerColor}
+                    onChange={(e) => setTickerColor(e.target.value)}
+                    className="text-xs flex-1 uppercase h-5"
+                    placeholder="#ffffff"
+                  />
+                </div>
+                <div className="flex gap-0.5 flex-wrap">
+                  {["#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff6600", "#ff00ff"].map((color) => (
+                    <button
+                      key={color}
+                      onClick={() => setTickerColor(color)}
+                      className={`w-3 h-3 rounded border ${
+                        tickerColor === color ? "border-orange-600 border-2" : "border-gray-300"
+                      }`}
+                      style={{ backgroundColor: color }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center space-x-2 mb-1">
+                  <input
+                    type="range"
+                    min="12"
+                    max="32"
+                    value={tickerFontSize}
+                    onChange={(e) => setTickerFontSize(parseInt(e.target.value))}
+                    className="flex-1 h-1 bg-orange-200 rounded appearance-none cursor-pointer"
+                  />
+                  <span className="text-xs font-medium min-w-8">
+                    {tickerFontSize}px
+                  </span>
+                </div>
+              </div>
             </div>
-            <div className="flex items-center space-x-1 sm:space-x-2">
-              <input
-                type="radio"
-                name="clock"
-                value="moi-2"
-                checked={clockSetting === "moi-2"}
-                onChange={(e) => setClockSetting(e.target.value)}
-                className="scale-75 sm:scale-100"
-              />
-              <label className="text-xs sm:text-sm">MỖI 2'</label>
+
+            {/* Apply Button - compact */}
+            <div className="flex justify-center pt-2 border-t border-orange-200">
+              <Button
+                variant="primary"
+                size="sm"
+                className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+              >
+                ÁP DỤNG
+              </Button>
             </div>
           </div>
-
-          <Input
-            placeholder="Nhập nội dung chữ chạy"
-            value={clockText}
-            onChange={(e) => setClockText(e.target.value)}
-            className="w-full"
-          />
-        </div>
-
-        {/* Apply Button */}
-        <div className="flex justify-center">
-          <Button
-            variant="primary"
-            size="sm"
-            className="w-24 sm:w-32 py-2 sm:py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-sm sm:text-lg rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300"
-          >
-            ÁP DỤNG
-          </Button>
         </div>
       </div>
     );
