@@ -313,7 +313,7 @@ const Home = () => {
                 Nhập mã truy cập
               </h3>
               <p className="text-gray-600 text-sm">
-                Vui lòng nh��p mã code để truy cập và quản lý trận đấu
+                Vui lòng nhập mã code để truy cập và quản lý trận đấu
               </p>
             </div>
           </div>
