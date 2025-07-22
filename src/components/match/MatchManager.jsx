@@ -11,7 +11,7 @@ const MatchManager = ({
 }) => {
   const [matchData, setMatchData] = useState({
     homeTeam: { name: "Đội nhà", score: 0, logo: null },
-    awayTeam: { name: "Đội khách", score: 0, logo: null },
+    awayTeam: { name: "Đ���i khách", score: 0, logo: null },
     matchTime: "00:00",
     period: "Hiệp 1",
     status: "pending", // pending, live, pause, ended
@@ -601,20 +601,29 @@ const MatchManager = ({
 
                     <div className="space-y-2">
                       <label className="block text-sm font-medium text-gray-700">
-                        Kích thước chữ (px)
+                        🔤 Kích thước chữ
                       </label>
-                      <div className="flex items-center space-x-2">
-                        <input
-                          type="range"
-                          min="12"
-                          max="32"
-                          value={matchData.tickerSettings.fontSize}
-                          onChange={(e) => handleTickerSettingChange("fontSize", parseInt(e.target.value))}
-                          className="flex-1"
-                        />
-                        <span className="text-sm font-medium min-w-8 text-center">
-                          {matchData.tickerSettings.fontSize}px
-                        </span>
+                      <div className="space-y-2">
+                        <div className="flex items-center space-x-3">
+                          <span className="text-xs text-gray-500">12px</span>
+                          <input
+                            type="range"
+                            min="12"
+                            max="40"
+                            value={matchData.tickerSettings.fontSize}
+                            onChange={(e) => handleTickerSettingChange("fontSize", parseInt(e.target.value))}
+                            className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
+                            style={{
+                              background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${((matchData.tickerSettings.fontSize - 12) / 28) * 100}%, #e5e7eb ${((matchData.tickerSettings.fontSize - 12) / 28) * 100}%, #e5e7eb 100%)`
+                            }}
+                          />
+                          <span className="text-xs text-gray-500">40px</span>
+                        </div>
+                        <div className="text-center">
+                          <span className="inline-block px-3 py-1 bg-primary-100 text-primary-800 rounded-full text-sm font-medium">
+                            {matchData.tickerSettings.fontSize}px
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
