@@ -8,7 +8,7 @@ const LogoSettings = ({ isOpen, onClose, onLogoUpdate, matchData }) => {
   const [activeTab, setActiveTab] = useState("search");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLogo, setSelectedLogo] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
 
   // State cho multi-logo system
   const [logoPositions, setLogoPositions] = useState({
