@@ -848,23 +848,51 @@ const Home = () => {
             </button>
           </div>
 
-          {/* Input field cho Đếm T */}
+          {/* Input field cho Đếm T - Nổi bật với nút Áp dụng */}
           {selectedOption === "dem-t" && (
-            <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-              <label className="block text-sm font-medium text-yellow-800 mb-2">
-                🕰️ Nhập thời gian tùy chỉnh (phút)
-              </label>
-              <Input
-                type="number"
-                min="1"
-                max="120"
-                value={customTime}
-                onChange={(e) => setCustomTime(e.target.value)}
-                placeholder="Nhập số phút (ví dụ: 30)"
-                className="text-sm border-yellow-300 focus:ring-yellow-500 focus:border-yellow-500"
-              />
-              <div className="text-xs text-yellow-700 mt-1">
-                Th��i gian đếm ngược sẽ bắt đầu từ {customTime || "?"} phút về 0
+            <div className="mt-4 bg-gradient-to-r from-yellow-100 to-orange-100 border-2 border-yellow-400 rounded-xl p-4 shadow-lg">
+              <div className="text-center mb-3">
+                <h4 className="text-lg font-bold text-yellow-800 flex items-center justify-center">
+                  <span className="mr-2">🕰️</span>
+                  THIẾT LẬP THỜI GIAN TÙY CHỈNH
+                  <span className="ml-2">🕰️</span>
+                </h4>
+                <p className="text-sm text-yellow-700 mt-1">
+                  Trận đấu sẽ bắt đầu chạy từ thời điểm này
+                </p>
+              </div>
+
+              <div className="flex items-center space-x-2 mb-3">
+                <Input
+                  type="number"
+                  min="0"
+                  max="120"
+                  value={customTime}
+                  onChange={(e) => setCustomTime(e.target.value)}
+                  placeholder="Nhập phút (VD: 30)"
+                  className="flex-1 text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
+                />
+                <span className="text-sm font-medium text-yellow-800">phút</span>
+              </div>
+
+              <div className="text-center text-sm text-yellow-700 mb-3">
+                ⏱️ Trận đấu sẽ bắt đầu từ: <strong>{customTime || "0"}:00</strong>
+              </div>
+
+              <div className="flex justify-center">
+                <Button
+                  variant="primary"
+                  size="sm"
+                  className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-sm rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                  onClick={() => {
+                    // Gửi về backend
+                    console.log('Áp dụng thời gian tùy chỉnh:', customTime);
+                    alert(`Đã áp dụng: Trận đấu bắt đầu từ ${customTime || 0} phút`);
+                  }}
+                >
+                  <span className="mr-1">✅</span>
+                  ÁP DỤNG
+                </Button>
               </div>
             </div>
           )}
