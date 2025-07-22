@@ -524,7 +524,7 @@ const Home = () => {
               }`}
             >
               <span className="mr-1 sm:mr-2 text-sm">🎮</span>
-              ĐIỀU KHIỂN
+              ĐI��U KHIỂN
             </button>
             <button
               onClick={() => {
@@ -593,12 +593,6 @@ const Home = () => {
         {/* Options - Thay đổi action buttons */}
         {selectedOption !== "chon-skin" && (
           <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 sm:p-4 border border-indigo-200">
-          <h3 className="text-center text-sm sm:text-lg font-bold text-indigo-800 mb-3 sm:mb-4 flex items-center justify-center">
-            <span className="mr-1 sm:mr-2 text-sm">⚙️</span>
-            <span className="text-xs sm:text-base">TÙY CHỌN HIỂN THỊ</span>
-            <span className="ml-1 sm:ml-2 text-sm">⚙️</span>
-          </h3>
-
           {/* Grid responsive cho mobile */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
             {/* Poster */}
@@ -1293,7 +1287,7 @@ const Home = () => {
               className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-sm rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
               onClick={() => {
                 // Gửi về backend
-                console.log('Áp dụng thời gian tùy ch��nh:', customTime);
+                console.log('Áp dụng thời gian tùy chỉnh:', customTime);
                 alert(`Đã áp dụng: Trận đấu bắt đầu từ ${customTime || 0} phút`);
                 setShowTimerModal(false);
               }}
