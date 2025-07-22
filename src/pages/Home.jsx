@@ -93,7 +93,7 @@ const Home = () => {
         setIsLoading(false);
       }, 1000);
     } else {
-      alert("Code không đúng. Vui lòng thử lại!");
+      alert("Code không đúng. Vui lòng thử l���i!");
     }
   };
 
@@ -471,9 +471,6 @@ const Home = () => {
 
             {/* Đội khách */}
             <div className="bg-white rounded-lg p-2 sm:p-4 shadow-md border border-purple-200">
-              <h4 className="text-center font-bold text-purple-700 mb-2 sm:mb-4 text-xs sm:text-sm">
-                {matchData.awayTeam.name}
-              </h4>
               <div className="flex space-x-1 sm:space-x-2">
                 <Button
                   variant="primary"
