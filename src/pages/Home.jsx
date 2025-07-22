@@ -571,11 +571,7 @@ const Home = () => {
         {/* Inline Template Selection */}
         {selectedOption === "chon-skin" && (
           <div className="bg-white rounded-xl p-3 sm:p-4 shadow-lg border border-gray-200 animate-slide-up">
-            <h3 className="text-center text-sm sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 flex items-center justify-center">
-              <span className="mr-1 sm:mr-2 text-sm">🎨</span>
-              CHỌN TEMPLATE
-              <span className="ml-1 sm:ml-2 text-sm">🎨</span>
-            </h3>
+
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
               {[1, 2, 3, 4, 5].map((skinNumber) => (
                 <div
@@ -602,9 +598,7 @@ const Home = () => {
                   <div className="w-full h-16 sm:h-24 bg-gray-100 items-center justify-center hidden">
                     <span className="text-gray-500 font-medium text-xs sm:text-sm">Template {skinNumber}</span>
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white text-center py-1">
-                    <span className="text-xs font-medium">Template {skinNumber}</span>
-                  </div>
+
                   {selectedSkin === skinNumber && (
                     <div className="absolute top-1 right-1 bg-blue-500 text-white rounded-full w-4 h-4 sm:w-6 sm:h-6 flex items-center justify-center">
                       <span className="text-xs">✓</span>
@@ -619,11 +613,7 @@ const Home = () => {
         {/* Tab Thông số */}
         {selectedOption === "thong-so" && (
           <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200">
-            <h3 className="text-center text-sm sm:text-lg font-bold text-green-800 mb-4 flex items-center justify-center">
-              <span className="mr-2 text-sm">📊</span>
-              THỐNG KÊ TRẬN ĐẤU
-              <span className="ml-2 text-sm">📊</span>
-            </h3>
+
 
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {/* Tổng số cú sút */}
