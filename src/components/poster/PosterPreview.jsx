@@ -148,7 +148,7 @@ const PosterPreview = ({
                   <div className="flex items-center space-x-4 text-right">
                     <div>
                       <h2 className="text-xl font-bold">
-                        {matchData.awayTeam || "Đội khách"}
+                        {matchData.awayTeam?.name || "Đội khách"}
                       </h2>
                       <p className="text-sm opacity-90">Khách</p>
                     </div>
