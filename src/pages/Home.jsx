@@ -574,7 +574,8 @@ const Home = () => {
         )}
 
         {/* Options - Thay đổi action buttons */}
-        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 sm:p-4 border border-indigo-200">
+        {selectedOption !== "chon-skin" && (
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 sm:p-4 border border-indigo-200">
           <h3 className="text-center text-sm sm:text-lg font-bold text-indigo-800 mb-3 sm:mb-4 flex items-center justify-center">
             <span className="mr-1 sm:mr-2 text-sm">⚙️</span>
             <span className="text-xs sm:text-base">TÙY CHỌN HIỂN THỊ</span>
@@ -769,6 +770,7 @@ const Home = () => {
             </button>
           </div>
         </div>
+        )}
 
         {/* Clock Settings */}
         <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-3 sm:p-6 border border-orange-200">
