@@ -14,11 +14,11 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [codeInfo, setCodeInfo] = useState(null);
 
-  // State cho upload logo
-  const [homeTeamLogo, setHomeTeamLogo] = useState(null);
-  const [awayTeamLogo, setAwayTeamLogo] = useState(null);
-  const [homeTeamName, setHomeTeamName] = useState("");
-  const [awayTeamName, setAwayTeamName] = useState("");
+  // State cho upload logo - sử dụng chung với tab quản lý trận
+  const [logoData, setLogoData] = useState(null);
+  const [bannerData, setBannerData] = useState(null);
+  const [logoName, setLogoName] = useState("");
+  const [bannerName, setBannerName] = useState("");
   const [logoSearch, setLogoSearch] = useState("");
 
   // State cho match data sau khi nhập code
@@ -34,6 +34,17 @@ const Home = () => {
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
+  const [showSkinModal, setShowSkinModal] = useState(false);
+  const [selectedSkin, setSelectedSkin] = useState(1);
+
+  // Skin data configuration
+  const skinData = {
+    1: { time: "45:00", period: "Hiệp 1" },
+    2: { time: "90:00", period: "Hết giờ" },
+    3: { time: "15:30", period: "Hiệp 2" },
+    4: { time: "120:00", period: "Hiệp phụ" },
+    5: { time: "0:00", period: "Khởi động" }
+  };
 
         // State cho modal poster
   const [showPosterModal, setShowPosterModal] = useState(false);
@@ -61,7 +72,7 @@ const Home = () => {
   ];
 
   const handleCodeSubmit = async () => {
-    if (matchCode.toLowerCase() === "ffff") {
+    if (matchCode.toLowerCase() === "ffff" || matchCode.toLowerCase() === "logo") {
       setIsLoading(true);
       // Simulate loading
       setTimeout(() => {
@@ -69,12 +80,8 @@ const Home = () => {
         setCodeInfo({
           code: matchCode.toUpperCase(),
           generatedAt: "16:13:11 19/7/2025",
-          status: "active", // active, inactive, expired
-          accessCount: 0,
-          maxAccess: 100,
-          expiryDays: 15,
-          expiryDate: "16:13:11 3/8/2025",
-          lastUsed: null,
+          status: "active",
+          expiryDate: "16:13:11 3/8/2025"
         });
         setIsLoading(false);
       }, 1000);
@@ -83,7 +90,21 @@ const Home = () => {
     }
   };
 
-  const handleLogoUpload = (teamType) => {
+  const handleUploadCodeSubmit = () => {
+    if (matchCode.toLowerCase() === "logo" || matchCode.toLowerCase() === "ffff") {
+      setIsCodeEntered(true);
+      setCodeInfo({
+        code: matchCode.toUpperCase(),
+        generatedAt: "16:13:11 19/7/2025",
+        status: "active",
+        expiryDate: "16:13:11 3/8/2025"
+      });
+    } else {
+      alert("Code không đúng. Vui lòng thử lại!");
+    }
+  };
+
+  const handleLogoUpload = () => {
     const input = document.createElement("input");
     input.type = "file";
     input.accept = "image/*";
@@ -92,11 +113,32 @@ const Home = () => {
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          if (teamType === "home") {
-            setHomeTeamLogo(e.target.result);
-          } else {
-            setAwayTeamLogo(e.target.result);
-          }
+          setLogoData({
+            file: file,
+            preview: e.target.result,
+            name: file.name
+          });
+        };
+        reader.readAsDataURL(file);
+      }
+    };
+    input.click();
+  };
+
+  const handleBannerUpload = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setBannerData({
+            file: file,
+            preview: e.target.result,
+            name: file.name
+          });
         };
         reader.readAsDataURL(file);
       }
@@ -115,152 +157,131 @@ const Home = () => {
   };
 
   const renderUploadLogoTab = () => (
-    <div className="p-6 space-y-8">
-      <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-gray-800 mb-2 flex items-center justify-center">
-          <span className="mr-3">🏆</span>
-          QUẢN LÝ LOGO ĐỘI BÓNG
-          <span className="ml-3">🏆</span>
-        </h2>
-        <p className="text-gray-600">
-          Tải lên và quản lý logo cho các đội bóng
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Đội nhà */}
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl p-6 border-2 border-blue-200 shadow-lg">
-          <h3 className="text-center text-lg font-bold text-blue-700 mb-6 flex items-center justify-center">
-            <span className="mr-2">🏠</span>
-            ĐỘI NHÀ
-          </h3>
-
-          <div className="space-y-4">
-            <Button
-              variant="primary"
-              size="lg"
-              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg transform hover:scale-105 transition-all duration-200"
-              onClick={() => handleLogoUpload("home")}
-            >
-              <span className="mr-2">📁</span>
-              CHỌN LOGO
-            </Button>
-
-            {homeTeamLogo ? (
-              <div className="flex justify-center">
-                <div className="bg-white p-4 rounded-lg shadow-md border-2 border-blue-300">
-                  <img
-                    src={homeTeamLogo}
-                    alt="Home team logo"
-                    className="w-20 h-20 object-contain"
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className="flex justify-center">
-                <div className="w-28 h-28 bg-white border-2 border-dashed border-blue-300 rounded-lg flex items-center justify-center">
-                  <span className="text-blue-400 text-sm">Chưa có logo</span>
-                </div>
-              </div>
-            )}
-
-            <Input
-              placeholder="TÊN ĐỘI NHÀ"
-              value={homeTeamName}
-              onChange={(e) => setHomeTeamName(e.target.value)}
-              className="text-center font-semibold"
-            />
-
-            <Button
-              variant="secondary"
-              size="lg"
-              className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200"
-            >
-              <span className="mr-2">⬆️</span>
-              TẢI LÊN
-            </Button>
-          </div>
+    <div className="p-4 space-y-4">
+      {/* Upload Section - Require Code */}
+      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 border border-blue-200">
+        <div className="flex items-center justify-center mb-3">
+          <span className="text-lg">📁</span>
+          <h3 className="text-sm font-bold text-gray-800 mx-2">UPLOAD</h3>
         </div>
 
-        {/* Đội khách */}
-        <div className="bg-gradient-to-br from-purple-50 to-pink-100 rounded-xl p-6 border-2 border-purple-200 shadow-lg">
-          <h3 className="text-center text-lg font-bold text-purple-700 mb-6 flex items-center justify-center">
-            <span className="mr-2">✈️</span>
-            ĐỘI KHÁCH
-          </h3>
+        {!isCodeEntered ? (
+          <div className="space-y-3">
+            <Input
+              placeholder="Nhập code..."
+              value={matchCode}
+              onChange={(e) => setMatchCode(e.target.value)}
+              className="text-center text-sm"
+            />
+            <div className="flex justify-center">
+              <Button
+                variant="primary"
+                size="sm"
+                className="w-24 h-8 text-xs"
+                onClick={handleUploadCodeSubmit}
+              >
+                XÁC NHẬN
+              </Button>
+            </div>
+            <div className="text-center text-xs text-gray-500">
+              Nhập "logo" hoặc "ffff" để demo
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {/* Upload Buttons Row */}
+            <div className="flex justify-center space-x-4">
+              {/* Upload Logo */}
+              <button
+                onClick={handleLogoUpload}
+                className="w-20 h-16 bg-gradient-to-br from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg flex flex-col items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+              >
+                <span className="text-xl mb-1">+</span>
+                <span className="text-xs font-bold">LOGO</span>
+              </button>
 
-          <div className="space-y-4">
-            <Button
-              variant="primary"
-              size="lg"
-              className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 shadow-lg transform hover:scale-105 transition-all duration-200"
-              onClick={() => handleLogoUpload("away")}
-            >
-              <span className="mr-2">📁</span>
-              CHỌN LOGO
-            </Button>
+              {/* Upload Banner */}
+              <button
+                onClick={handleBannerUpload}
+                className="w-20 h-16 bg-gradient-to-br from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white rounded-lg flex flex-col items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+              >
+                <span className="text-xl mb-1">+</span>
+                <span className="text-xs font-bold">BANNER</span>
+              </button>
+            </div>
 
-            {awayTeamLogo ? (
-              <div className="flex justify-center">
-                <div className="bg-white p-4 rounded-lg shadow-md border-2 border-purple-300">
-                  <img
-                    src={awayTeamLogo}
-                    alt="Away team logo"
-                    className="w-20 h-20 object-contain"
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className="flex justify-center">
-                <div className="w-28 h-28 bg-white border-2 border-dashed border-purple-300 rounded-lg flex items-center justify-center">
-                  <span className="text-purple-400 text-sm">Chưa có logo</span>
-                </div>
+            {/* Preview and Name Input */}
+            {(logoData || bannerData) && (
+              <div className="bg-white rounded border border-gray-200 p-3">
+                {logoData && (
+                  <div className="space-y-2">
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={logoData.preview}
+                        alt="Logo"
+                        className="w-12 h-12 object-contain border rounded"
+                      />
+                      <div className="flex-1">
+                        <div className="text-xs text-green-600 font-medium mb-1">📁 Logo</div>
+                        <Input
+                          placeholder="Nhập tên logo..."
+                          value={logoName}
+                          onChange={(e) => setLogoName(e.target.value)}
+                          className="text-xs h-8"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+                {bannerData && (
+                  <div className="space-y-2 mt-3">
+                    <div className="flex items-center space-x-3">
+                      <img
+                        src={bannerData.preview}
+                        alt="Banner"
+                        className="w-12 h-6 object-cover border rounded"
+                      />
+                      <div className="flex-1">
+                        <div className="text-xs text-blue-600 font-medium mb-1">🖼️ Banner</div>
+                        <Input
+                          placeholder="Nhập tên banner..."
+                          value={bannerName}
+                          onChange={(e) => setBannerName(e.target.value)}
+                          className="text-xs h-8"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
-
-            <Input
-              placeholder="TÊN ĐỘI KHÁCH"
-              value={awayTeamName}
-              onChange={(e) => setAwayTeamName(e.target.value)}
-              className="text-center font-semibold"
-            />
-
-            <Button
-              variant="secondary"
-              size="lg"
-              className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200"
-            >
-              <span className="mr-2">⬆️</span>
-              TẢI LÊN
-            </Button>
           </div>
-        </div>
+        )}
       </div>
 
-      {/* Tìm kiếm logo */}
-      <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
-        <h3 className="text-center text-lg font-bold text-green-700 mb-4 flex items-center justify-center">
-          <span className="mr-2">🔍</span>
-          TÌM KIẾM LOGO
-        </h3>
+      {/* Search Section - No Code Required */}
+      <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
+        <div className="flex items-center justify-center mb-3">
+          <span className="text-lg">🔍</span>
+          <h3 className="text-sm font-bold text-green-700 mx-2">TÌM KIẾM LOGO</h3>
+        </div>
         <Input
-          placeholder="Tìm theo tên đội hoặc mã logo..."
+          placeholder="Tìm theo tên đội..."
           value={logoSearch}
           onChange={(e) => setLogoSearch(e.target.value)}
-          className="w-full text-center"
+          className="text-center text-sm h-8"
         />
       </div>
 
-      {/* Hướng dẫn */}
-      <div className="text-center">
+      {/* Help Section */}
+      <div className="flex justify-center">
         <Button
           variant="secondary"
-          size="lg"
-          className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-12 py-4 font-bold text-lg rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300"
+          size="sm"
+          className="w-28 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-2 text-sm rounded-full shadow-lg transform hover:scale-105 transition-all duration-200"
         >
-          <span className="mr-3">📚</span>
-          HƯỚNG DẪN - HỖ TRỢ
-          <span className="ml-3">💬</span>
+          <span className="mr-1">📚</span>
+          HỖ TRỢ
         </Button>
       </div>
     </div>
@@ -304,18 +325,20 @@ const Home = () => {
               className="text-center text-lg font-mono"
             />
 
-            <Button
-              variant="primary"
-              size="lg"
-              className="w-full"
-              onClick={handleCodeSubmit}
-              loading={isLoading}
-            >
-              {isLoading ? "Đang xử lý..." : "XÁC NHẬN"}
-            </Button>
+            <div className="flex justify-center">
+              <Button
+                variant="primary"
+                size="lg"
+                className="w-32"
+                onClick={handleCodeSubmit}
+                loading={isLoading}
+              >
+                {isLoading ? "Đang xử lý..." : "XÁC NHẬN"}
+              </Button>
+            </div>
 
             <div className="text-center text-xs text-gray-500">
-              Nhập "ffff" để demo
+              Nhập "ffff" hoặc "logo" để demo
             </div>
           </div>
         </div>
@@ -358,31 +381,13 @@ const Home = () => {
                   <span className="text-gray-600">Được tạo lúc:</span>
                   <span className="font-medium">{codeInfo.generatedAt}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Số lần truy cập:</span>
-                  <span className="font-medium">
-                    {codeInfo.accessCount}/{codeInfo.maxAccess}
-                  </span>
-                </div>
               </div>
 
               <div className="space-y-2">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Thời hạn sử dụng:</span>
-                  <span className="font-medium">
-                    {codeInfo.expiryDays} ngày
-                  </span>
-                </div>
-                <div className="flex justify-between">
                   <span className="text-gray-600">Hết hạn vào:</span>
                   <span className="font-medium text-orange-600">
                     {codeInfo.expiryDate}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Lần cuối sử dụng:</span>
-                  <span className="font-medium">
-                    {codeInfo.lastUsed || "Chưa sử dụng"}
                   </span>
                 </div>
               </div>
@@ -395,8 +400,8 @@ const Home = () => {
           <ScoreDisplay
             homeTeam={matchData.homeTeam}
             awayTeam={matchData.awayTeam}
-            matchTime={matchData.matchTime}
-            period={matchData.period}
+            matchTime={skinData[selectedSkin]?.time || matchData.matchTime}
+            period={skinData[selectedSkin]?.period || matchData.period}
             status={matchData.status}
             backgroundColor="bg-transparent"
             size="md"
@@ -487,7 +492,10 @@ const Home = () => {
               ĐIỀU KHIỂN
             </button>
             <button
-              onClick={() => setSelectedOption("chon-skin")}
+              onClick={() => {
+                setSelectedOption("chon-skin");
+                setShowSkinModal(true);
+              }}
               className={`py-4 px-6 rounded-xl font-bold text-lg transition-all duration-300 transform hover:scale-105 shadow-md ${
                 selectedOption === "chon-skin"
                   ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
@@ -747,15 +755,14 @@ const Home = () => {
         </div>
 
         {/* Apply Button */}
-        <div className="text-center">
+        <div className="flex justify-center">
           <Button
             variant="primary"
             size="lg"
-            className="px-20 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xl rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300"
+            className="w-32 py-4 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xl rounded-full shadow-2xl transform hover:scale-110 transition-all duration-300"
           >
-            <span className="mr-3">🚀</span>
+            <span className="mr-2">🚀</span>
             ÁP DỤNG
-            <span className="ml-3">✨</span>
           </Button>
         </div>
       </div>
@@ -897,19 +904,19 @@ const Home = () => {
             <Button
               variant="outline"
               onClick={() => setShowPosterModal(false)}
-              className="px-6 py-2"
+              className="w-20 py-2"
             >
               Đóng
             </Button>
             <Button
               variant="primary"
-              className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-6 py-2"
+              className="w-32 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white py-2"
               onClick={() => {
                 setShowPosterModal(false);
                 // Logic lưu cài đặt poster
               }}
             >
-              <span className="mr-2">💾</span>
+              <span className="mr-1">💾</span>
               Lưu & Áp Dụng
             </Button>
                     </div>
@@ -936,6 +943,74 @@ const Home = () => {
         penaltyData={penaltyData}
         onPenaltyChange={handlePenaltyChange}
       />
+
+      {/* Skin Selection Modal */}
+      <Modal
+        isOpen={showSkinModal}
+        onClose={() => setShowSkinModal(false)}
+        title="🎨 Chọn Skin"
+        size="lg"
+      >
+        <div className="p-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3, 4, 5].map((skinNumber) => (
+              <div
+                key={skinNumber}
+                onClick={() => {
+                  setSelectedSkin(skinNumber);
+                }}
+                className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${
+                  selectedSkin === skinNumber
+                    ? "border-blue-500 ring-2 ring-blue-200"
+                    : "border-gray-200 hover:border-blue-300"
+                }`}
+              >
+                <img
+                  src={`/images/templates/skin${skinNumber}.png`}
+                  alt={`Skin ${skinNumber}`}
+                  className="w-full h-48 object-contain bg-gray-50"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+                <div className="w-full h-48 bg-gray-100 items-center justify-center hidden">
+                  <span className="text-gray-500 font-medium">Skin {skinNumber}</span>
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-75 text-white text-center py-2">
+                  <span className="text-sm font-medium">Skin {skinNumber}</span>
+                </div>
+                {selectedSkin === skinNumber && (
+                  <div className="absolute top-2 right-2 bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                    <span className="text-xs">✓</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 flex justify-center space-x-4">
+            <Button
+              variant="outline"
+              onClick={() => setShowSkinModal(false)}
+              className="w-20"
+            >
+              Hủy
+            </Button>
+            <Button
+              variant="primary"
+              onClick={() => {
+                setShowSkinModal(false);
+                console.log('Applied skin:', selectedSkin);
+              }}
+              disabled={!selectedSkin}
+              className="w-24"
+            >
+              Áp dụng
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
