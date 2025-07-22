@@ -160,10 +160,10 @@ const Home = () => {
   const renderUploadLogoTab = () => (
     <div className="p-2 sm:p-4 space-y-3">
       {/* Upload Section - Require Code */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4 border border-blue-200">
-        <div className="flex items-center justify-center mb-3">
-          <span className="text-lg">📁</span>
-          <h3 className="text-sm font-bold text-gray-800 mx-2">UPLOAD</h3>
+      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 border border-blue-200">
+        <div className="flex items-center justify-center mb-2">
+          <span className="text-sm">📁</span>
+          <h3 className="text-xs font-bold text-gray-800 mx-2">UPLOAD</h3>
         </div>
 
         {!isCodeEntered ? (
