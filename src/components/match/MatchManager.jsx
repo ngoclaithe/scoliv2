@@ -162,8 +162,8 @@ const MatchManager = ({
 
   return (
     <>
-      <div className={`w-full max-w-4xl mx-auto ${className}`}>
-        <div className="bg-white rounded-xl shadow-lg p-6">
+      <div className={`w-full max-w-4xl mx-auto px-2 sm:px-0 ${className}`}>
+        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6">
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <div>
@@ -205,7 +205,7 @@ const MatchManager = ({
           </div>
 
           {/* Main Match Info */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6 mb-6">
             {/* Home Team */}
             <div className="bg-gray-50 rounded-lg p-4">
               <h4 className="font-medium text-gray-900 mb-3 text-center">
@@ -360,7 +360,7 @@ const MatchManager = ({
           </div>
 
           {/* Quick Actions */}
-          <div className="flex flex-wrap gap-3 justify-center">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:flex lg:flex-wrap gap-2 lg:gap-3 lg:justify-center">
             <Button
               variant="success"
               size="sm"
@@ -418,42 +418,44 @@ const MatchManager = ({
             </div>
 
             {showDisplaySettings && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
-                <div className="space-y-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Loại đếm ngược
-                  </label>
-                  <select
-                    value={matchData.displayOptions.countdownType}
-                    onChange={(e) => handleDisplayOptionChange("countdownType", e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
-                  >
-                    <option value="normal">Bình thường</option>
-                    <option value="count40">Đếm 40</option>
-                    <option value="count45">Đếm 45</option>
-                    <option value="countCustom">Đếm T</option>
-                  </select>
-                </div>
-
-                {matchData.displayOptions.countdownType === "countCustom" && (
+              <div className="space-y-4 mb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="block text-sm font-medium text-gray-700">
-                      Thời gian tùy chỉnh (phút)
+                      Loại đếm ngược
                     </label>
-                    <Input
-                      type="number"
-                      value={matchData.displayOptions.customTime}
-                      onChange={(e) => handleDisplayOptionChange("customTime", e.target.value)}
-                      placeholder="Nhập thời gian"
-                      className="text-sm"
-                    />
+                    <select
+                      value={matchData.displayOptions.countdownType}
+                      onChange={(e) => handleDisplayOptionChange("countdownType", e.target.value)}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                    >
+                      <option value="normal">Bình thường</option>
+                      <option value="count40">Đếm 40</option>
+                      <option value="count45">Đếm 45</option>
+                      <option value="countCustom">Đếm T</option>
+                    </select>
                   </div>
-                )}
 
-                <div className="sm:col-span-2 lg:col-span-2 flex items-end">
-                  <div className="text-sm text-gray-600 bg-gray-50 rounded-lg p-3 w-full">
-                    <strong>Loại đếm hiện tại:</strong>
-                    <span className="ml-2">
+                  {matchData.displayOptions.countdownType === "countCustom" && (
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Thời gian tùy chỉnh (phút)
+                      </label>
+                      <Input
+                        type="number"
+                        value={matchData.displayOptions.customTime}
+                        onChange={(e) => handleDisplayOptionChange("customTime", e.target.value)}
+                        placeholder="Nhập thời gian"
+                        className="text-sm"
+                      />
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-3 p-3 bg-primary-50 rounded-lg border border-primary-200">
+                  <div className="text-sm">
+                    <span className="font-medium text-primary-800">Loại đếm hiện tại:</span>
+                    <span className="ml-2 text-primary-700">
                       {matchData.displayOptions.countdownType === "normal" && "Bình thường"}
                       {matchData.displayOptions.countdownType === "count40" && "Đếm 40 phút"}
                       {matchData.displayOptions.countdownType === "count45" && "Đếm 45 phút"}
@@ -489,7 +491,7 @@ const MatchManager = ({
 
             {showTickerSettings && (
               <div className="space-y-4">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                <div className="space-y-4">
                   <div className="space-y-2">
                     <label className="block text-sm font-medium text-gray-700">
                       Nội dung chữ chạy
@@ -503,60 +505,58 @@ const MatchManager = ({
                     />
                   </div>
 
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Màu chữ
-                        </label>
-                        <div className="flex items-center space-x-2">
-                          <input
-                            type="color"
-                            value={matchData.tickerSettings.color}
-                            onChange={(e) => handleTickerSettingChange("color", e.target.value)}
-                            className="w-8 h-8 border border-gray-300 rounded cursor-pointer"
-                          />
-                          <Input
-                            type="text"
-                            value={matchData.tickerSettings.color}
-                            onChange={(e) => handleTickerSettingChange("color", e.target.value)}
-                            className="text-sm flex-1"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <label className="block text-sm font-medium text-gray-700">
-                          Kích thước chữ (px)
-                        </label>
-                        <div className="flex items-center space-x-2">
-                          <input
-                            type="range"
-                            min="12"
-                            max="32"
-                            value={matchData.tickerSettings.fontSize}
-                            onChange={(e) => handleTickerSettingChange("fontSize", parseInt(e.target.value))}
-                            className="flex-1"
-                          />
-                          <span className="text-sm font-medium min-w-8 text-center">
-                            {matchData.tickerSettings.fontSize}px
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id="ticker-enabled"
-                        checked={matchData.tickerSettings.enabled}
-                        onChange={(e) => handleTickerSettingChange("enabled", e.target.checked)}
-                        className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
-                      />
-                      <label htmlFor="ticker-enabled" className="text-sm font-medium text-gray-700">
-                        Hiển thị chữ chạy
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Màu chữ
                       </label>
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="color"
+                          value={matchData.tickerSettings.color}
+                          onChange={(e) => handleTickerSettingChange("color", e.target.value)}
+                          className="w-8 h-8 border border-gray-300 rounded cursor-pointer"
+                        />
+                        <Input
+                          type="text"
+                          value={matchData.tickerSettings.color}
+                          onChange={(e) => handleTickerSettingChange("color", e.target.value)}
+                          className="text-sm flex-1"
+                        />
+                      </div>
                     </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Kích thước chữ (px)
+                      </label>
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="range"
+                          min="12"
+                          max="32"
+                          value={matchData.tickerSettings.fontSize}
+                          onChange={(e) => handleTickerSettingChange("fontSize", parseInt(e.target.value))}
+                          className="flex-1"
+                        />
+                        <span className="text-sm font-medium min-w-8 text-center">
+                          {matchData.tickerSettings.fontSize}px
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="ticker-enabled"
+                      checked={matchData.tickerSettings.enabled}
+                      onChange={(e) => handleTickerSettingChange("enabled", e.target.checked)}
+                      className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                    />
+                    <label htmlFor="ticker-enabled" className="text-sm font-medium text-gray-700">
+                      Hiển thị chữ chạy
+                    </label>
                   </div>
                 </div>
 
@@ -598,7 +598,7 @@ const MatchManager = ({
 
           {/* Match Summary */}
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 text-sm">
               <div className="text-center">
                 <div className="text-gray-500">Sân vận động</div>
                 <div className="font-medium">{matchData.stadium}</div>
