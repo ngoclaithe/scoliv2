@@ -88,15 +88,7 @@ const PosterPreview = ({
               </div>
             )}
 
-            {/* Overlay thông tin poster */}
-            <div className="absolute bottom-2 left-2 right-2 sm:bottom-4 sm:left-4 sm:right-4">
-              <div className="bg-black bg-opacity-60 backdrop-blur rounded-lg p-2 sm:p-3">
-                <div className="flex justify-between items-center text-white text-xs sm:text-sm">
-                  <span className="font-medium">✨ {poster.name}</span>
-                  <span className="opacity-90">Template poster</span>
-                </div>
-              </div>
-            </div>
+
           </div>
         </div>
 
