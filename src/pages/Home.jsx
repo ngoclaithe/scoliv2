@@ -615,177 +615,351 @@ const Home = () => {
           <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200">
 
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="space-y-3">
               {/* Tổng số cú sút */}
               <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
-                <div className="text-center">
-                  <div className="text-lg sm:text-2xl font-bold text-blue-600 mb-1">
-                    {footballStats.totalShots}
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-gray-700">Tổng số cú sút</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs text-blue-600 font-medium">{matchData.homeTeam.name}</span>
+                    <div className="flex space-x-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, homeShots: Math.max(0, (prev.homeShots || 0) - 1)}))}
+                        className="w-6 h-6 p-0 text-xs"
+                        disabled={(footballStats.homeShots || 0) === 0}
+                      >
+                        -
+                      </Button>
+                      <span className="w-8 text-center text-sm font-bold text-blue-600">{footballStats.homeShots || 0}</span>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, homeShots: (prev.homeShots || 0) + 1}))}
+                        className="w-6 h-6 p-0 text-xs"
+                      >
+                        +
+                      </Button>
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-600 mb-2">Tổng số cú sút</div>
-                  <div className="flex justify-center space-x-1">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setFootballStats(prev => ({...prev, totalShots: Math.max(0, prev.totalShots - 1)}))}
-                      className="w-6 h-6 p-0 text-xs"
-                      disabled={footballStats.totalShots === 0}
-                    >
-                      -
-                    </Button>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => setFootballStats(prev => ({...prev, totalShots: prev.totalShots + 1}))}
-                      className="w-6 h-6 p-0 text-xs"
-                    >
-                      +
-                    </Button>
+                  <div className="text-center">
+                    <span className="text-lg font-bold text-gray-500">VS</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="flex space-x-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, awayShots: Math.max(0, (prev.awayShots || 0) - 1)}))}
+                        className="w-6 h-6 p-0 text-xs"
+                        disabled={(footballStats.awayShots || 0) === 0}
+                      >
+                        -
+                      </Button>
+                      <span className="w-8 text-center text-sm font-bold text-red-600">{footballStats.awayShots || 0}</span>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, awayShots: (prev.awayShots || 0) + 1}))}
+                        className="w-6 h-6 p-0 text-xs"
+                      >
+                        +
+                      </Button>
+                    </div>
+                    <span className="text-xs text-red-600 font-medium">{matchData.awayTeam.name}</span>
                   </div>
                 </div>
               </div>
 
               {/* Sút trúng đích */}
               <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
-                <div className="text-center">
-                  <div className="text-lg sm:text-2xl font-bold text-green-600 mb-1">
-                    {footballStats.shotsOnTarget}
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-gray-700">Sút trúng đích</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs text-blue-600 font-medium">{matchData.homeTeam.name}</span>
+                    <div className="flex space-x-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, homeShotsOnTarget: Math.max(0, (prev.homeShotsOnTarget || 0) - 1)}))}
+                        className="w-6 h-6 p-0 text-xs"
+                        disabled={(footballStats.homeShotsOnTarget || 0) === 0}
+                      >
+                        -
+                      </Button>
+                      <span className="w-8 text-center text-sm font-bold text-blue-600">{footballStats.homeShotsOnTarget || 0}</span>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, homeShotsOnTarget: (prev.homeShotsOnTarget || 0) + 1}))}
+                        className="w-6 h-6 p-0 text-xs"
+                      >
+                        +
+                      </Button>
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-600 mb-2">Sút trúng đích</div>
-                  <div className="flex justify-center space-x-1">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setFootballStats(prev => ({...prev, shotsOnTarget: Math.max(0, prev.shotsOnTarget - 1)}))}
-                      className="w-6 h-6 p-0 text-xs"
-                      disabled={footballStats.shotsOnTarget === 0}
-                    >
-                      -
-                    </Button>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => setFootballStats(prev => ({...prev, shotsOnTarget: prev.shotsOnTarget + 1}))}
-                      className="w-6 h-6 p-0 text-xs"
-                    >
-                      +
-                    </Button>
+                  <div className="text-center">
+                    <span className="text-lg font-bold text-gray-500">VS</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="flex space-x-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, awayShotsOnTarget: Math.max(0, (prev.awayShotsOnTarget || 0) - 1)}))}
+                        className="w-6 h-6 p-0 text-xs"
+                        disabled={(footballStats.awayShotsOnTarget || 0) === 0}
+                      >
+                        -
+                      </Button>
+                      <span className="w-8 text-center text-sm font-bold text-red-600">{footballStats.awayShotsOnTarget || 0}</span>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, awayShotsOnTarget: (prev.awayShotsOnTarget || 0) + 1}))}
+                        className="w-6 h-6 p-0 text-xs"
+                      >
+                        +
+                      </Button>
+                    </div>
+                    <span className="text-xs text-red-600 font-medium">{matchData.awayTeam.name}</span>
                   </div>
                 </div>
               </div>
 
               {/* Phạt góc */}
               <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
-                <div className="text-center">
-                  <div className="text-lg sm:text-2xl font-bold text-purple-600 mb-1">
-                    {footballStats.corners}
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-gray-700">Phạt góc</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs text-blue-600 font-medium">{matchData.homeTeam.name}</span>
+                    <div className="flex space-x-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, homeCorners: Math.max(0, (prev.homeCorners || 0) - 1)}))}
+                        className="w-6 h-6 p-0 text-xs"
+                        disabled={(footballStats.homeCorners || 0) === 0}
+                      >
+                        -
+                      </Button>
+                      <span className="w-8 text-center text-sm font-bold text-blue-600">{footballStats.homeCorners || 0}</span>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, homeCorners: (prev.homeCorners || 0) + 1}))}
+                        className="w-6 h-6 p-0 text-xs"
+                      >
+                        +
+                      </Button>
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-600 mb-2">Phạt góc</div>
-                  <div className="flex justify-center space-x-1">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setFootballStats(prev => ({...prev, corners: Math.max(0, prev.corners - 1)}))}
-                      className="w-6 h-6 p-0 text-xs"
-                      disabled={footballStats.corners === 0}
-                    >
-                      -
-                    </Button>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => setFootballStats(prev => ({...prev, corners: prev.corners + 1}))}
-                      className="w-6 h-6 p-0 text-xs"
-                    >
-                      +
-                    </Button>
+                  <div className="text-center">
+                    <span className="text-lg font-bold text-gray-500">VS</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="flex space-x-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, awayCorners: Math.max(0, (prev.awayCorners || 0) - 1)}))}
+                        className="w-6 h-6 p-0 text-xs"
+                        disabled={(footballStats.awayCorners || 0) === 0}
+                      >
+                        -
+                      </Button>
+                      <span className="w-8 text-center text-sm font-bold text-red-600">{footballStats.awayCorners || 0}</span>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, awayCorners: (prev.awayCorners || 0) + 1}))}
+                        className="w-6 h-6 p-0 text-xs"
+                      >
+                        +
+                      </Button>
+                    </div>
+                    <span className="text-xs text-red-600 font-medium">{matchData.awayTeam.name}</span>
                   </div>
                 </div>
               </div>
 
               {/* Thẻ vàng */}
               <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
-                <div className="text-center">
-                  <div className="text-lg sm:text-2xl font-bold text-yellow-600 mb-1">
-                    {footballStats.yellowCards}
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-gray-700">Thẻ vàng</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs text-blue-600 font-medium">{matchData.homeTeam.name}</span>
+                    <div className="flex space-x-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, homeYellowCards: Math.max(0, (prev.homeYellowCards || 0) - 1)}))}
+                        className="w-6 h-6 p-0 text-xs"
+                        disabled={(footballStats.homeYellowCards || 0) === 0}
+                      >
+                        -
+                      </Button>
+                      <span className="w-8 text-center text-sm font-bold text-blue-600">{footballStats.homeYellowCards || 0}</span>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, homeYellowCards: (prev.homeYellowCards || 0) + 1}))}
+                        className="w-6 h-6 p-0 text-xs"
+                      >
+                        +
+                      </Button>
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-600 mb-2">Thẻ vàng</div>
-                  <div className="flex justify-center space-x-1">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setFootballStats(prev => ({...prev, yellowCards: Math.max(0, prev.yellowCards - 1)}))}
-                      className="w-6 h-6 p-0 text-xs"
-                      disabled={footballStats.yellowCards === 0}
-                    >
-                      -
-                    </Button>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => setFootballStats(prev => ({...prev, yellowCards: prev.yellowCards + 1}))}
-                      className="w-6 h-6 p-0 text-xs"
-                    >
-                      +
-                    </Button>
+                  <div className="text-center">
+                    <span className="text-lg font-bold text-gray-500">VS</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="flex space-x-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, awayYellowCards: Math.max(0, (prev.awayYellowCards || 0) - 1)}))}
+                        className="w-6 h-6 p-0 text-xs"
+                        disabled={(footballStats.awayYellowCards || 0) === 0}
+                      >
+                        -
+                      </Button>
+                      <span className="w-8 text-center text-sm font-bold text-red-600">{footballStats.awayYellowCards || 0}</span>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, awayYellowCards: (prev.awayYellowCards || 0) + 1}))}
+                        className="w-6 h-6 p-0 text-xs"
+                      >
+                        +
+                      </Button>
+                    </div>
+                    <span className="text-xs text-red-600 font-medium">{matchData.awayTeam.name}</span>
                   </div>
                 </div>
               </div>
 
               {/* Phạm lỗi */}
               <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
-                <div className="text-center">
-                  <div className="text-lg sm:text-2xl font-bold text-red-600 mb-1">
-                    {footballStats.fouls}
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-gray-700">Phạm lỗi</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs text-blue-600 font-medium">{matchData.homeTeam.name}</span>
+                    <div className="flex space-x-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, homeFouls: Math.max(0, (prev.homeFouls || 0) - 1)}))}
+                        className="w-6 h-6 p-0 text-xs"
+                        disabled={(footballStats.homeFouls || 0) === 0}
+                      >
+                        -
+                      </Button>
+                      <span className="w-8 text-center text-sm font-bold text-blue-600">{footballStats.homeFouls || 0}</span>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, homeFouls: (prev.homeFouls || 0) + 1}))}
+                        className="w-6 h-6 p-0 text-xs"
+                      >
+                        +
+                      </Button>
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-600 mb-2">Phạm lỗi</div>
-                  <div className="flex justify-center space-x-1">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setFootballStats(prev => ({...prev, fouls: Math.max(0, prev.fouls - 1)}))}
-                      className="w-6 h-6 p-0 text-xs"
-                      disabled={footballStats.fouls === 0}
-                    >
-                      -
-                    </Button>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => setFootballStats(prev => ({...prev, fouls: prev.fouls + 1}))}
-                      className="w-6 h-6 p-0 text-xs"
-                    >
-                      +
-                    </Button>
+                  <div className="text-center">
+                    <span className="text-lg font-bold text-gray-500">VS</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="flex space-x-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, awayFouls: Math.max(0, (prev.awayFouls || 0) - 1)}))}
+                        className="w-6 h-6 p-0 text-xs"
+                        disabled={(footballStats.awayFouls || 0) === 0}
+                      >
+                        -
+                      </Button>
+                      <span className="w-8 text-center text-sm font-bold text-red-600">{footballStats.awayFouls || 0}</span>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, awayFouls: (prev.awayFouls || 0) + 1}))}
+                        className="w-6 h-6 p-0 text-xs"
+                      >
+                        +
+                      </Button>
+                    </div>
+                    <span className="text-xs text-red-600 font-medium">{matchData.awayTeam.name}</span>
                   </div>
                 </div>
               </div>
 
               {/* Lỗi Futsal */}
               <div className="bg-white rounded-lg p-3 shadow-sm border border-green-200">
-                <div className="text-center">
-                  <div className="text-lg sm:text-2xl font-bold text-orange-600 mb-1">
-                    {futsalErrors}
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-gray-700">Lỗi(futsal)</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <span className="text-xs text-blue-600 font-medium">{matchData.homeTeam.name}</span>
+                    <div className="flex space-x-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, homeFutsalErrors: Math.max(0, (prev.homeFutsalErrors || 0) - 1)}))}
+                        className="w-6 h-6 p-0 text-xs"
+                        disabled={(footballStats.homeFutsalErrors || 0) === 0}
+                      >
+                        -
+                      </Button>
+                      <span className="w-8 text-center text-sm font-bold text-blue-600">{footballStats.homeFutsalErrors || 0}</span>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, homeFutsalErrors: (prev.homeFutsalErrors || 0) + 1}))}
+                        className="w-6 h-6 p-0 text-xs"
+                      >
+                        +
+                      </Button>
+                    </div>
                   </div>
-                  <div className="text-xs text-gray-600 mb-2">Lỗi(futsal)</div>
-                  <div className="flex justify-center space-x-1">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setFutsalErrors(prev => Math.max(0, prev - 1))}
-                      className="w-6 h-6 p-0 text-xs"
-                      disabled={futsalErrors === 0}
-                    >
-                      -
-                    </Button>
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => setFutsalErrors(prev => prev + 1)}
-                      className="w-6 h-6 p-0 text-xs"
-                    >
-                      +
-                    </Button>
+                  <div className="text-center">
+                    <span className="text-lg font-bold text-gray-500">VS</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <div className="flex space-x-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, awayFutsalErrors: Math.max(0, (prev.awayFutsalErrors || 0) - 1)}))}
+                        className="w-6 h-6 p-0 text-xs"
+                        disabled={(footballStats.awayFutsalErrors || 0) === 0}
+                      >
+                        -
+                      </Button>
+                      <span className="w-8 text-center text-sm font-bold text-red-600">{footballStats.awayFutsalErrors || 0}</span>
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        onClick={() => setFootballStats(prev => ({...prev, awayFutsalErrors: (prev.awayFutsalErrors || 0) + 1}))}
+                        className="w-6 h-6 p-0 text-xs"
+                      >
+                        +
+                      </Button>
+                    </div>
+                    <span className="text-xs text-red-600 font-medium">{matchData.awayTeam.name}</span>
                   </div>
                 </div>
               </div>
@@ -1578,7 +1752,7 @@ const Home = () => {
               }}>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email hoặc Tên đăng nhập
+                    Email ho��c Tên đăng nhập
                   </label>
                   <Input
                     type="email"
