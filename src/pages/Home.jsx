@@ -623,7 +623,7 @@ const Home = () => {
               onClick={() => {
                 setSelectedOption("gioi-thieu");
               }}
-              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "gioi-thieu"
                   ? "bg-gradient-to-br from-red-500 to-orange-600 text-white"
                   : "bg-gradient-to-br from-red-100 to-orange-200 text-red-700 hover:from-red-200 hover:to-orange-300"
@@ -641,7 +641,7 @@ const Home = () => {
                 setSelectedOption("danh-sach");
                 setShowLineupModal(true);
               }}
-              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "danh-sach"
                   ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white"
                   : "bg-gradient-to-br from-blue-100 to-indigo-200 text-blue-700 hover:from-blue-200 hover:to-indigo-300"
@@ -659,7 +659,7 @@ const Home = () => {
                 setSelectedOption("ti-so-duoi");
                 // Có thể mở modal tỉ số ở đây
               }}
-              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "ti-so-duoi"
                   ? "bg-gradient-to-br from-green-500 to-emerald-600 text-white"
                   : "bg-gradient-to-br from-green-100 to-emerald-200 text-green-700 hover:from-green-200 hover:to-emerald-300"
@@ -677,7 +677,7 @@ const Home = () => {
                 setSelectedOption("nghi-hiep");
                 // Có thể mở modal nghỉ hiệp ở đây
               }}
-              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "nghi-hiep"
                   ? "bg-gradient-to-br from-yellow-500 to-orange-600 text-white"
                   : "bg-gradient-to-br from-yellow-100 to-orange-200 text-yellow-700 hover:from-yellow-200 hover:to-orange-300"
@@ -694,13 +694,13 @@ const Home = () => {
               onClick={() => {
                 setShowPenaltyModal(true);
               }}
-              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption?.startsWith("penalty")
                   ? "bg-gradient-to-br from-gray-600 to-gray-800 text-white"
                   : "bg-gradient-to-br from-gray-100 to-gray-300 text-gray-700 hover:from-gray-200 hover:to-gray-400"
               }`}
             >
-              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🥅</span>
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">🥅</span>
               <span className="text-[10px] sm:text-xs font-bold text-center">
                 PENALTY
               </span>
@@ -709,13 +709,13 @@ const Home = () => {
             {/* Đếm giờ buttons - Đầy đủ tất cả options */}
             <button
               onClick={() => setSelectedOption("dem-0")}
-              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-0"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🕐</span>
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">🕐</span>
               <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 0'
               </span>
@@ -723,13 +723,13 @@ const Home = () => {
 
             <button
               onClick={() => setSelectedOption("dem-20")}
-              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-20"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🕐</span>
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">🕐</span>
               <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 20'
               </span>
@@ -737,13 +737,13 @@ const Home = () => {
 
             <button
               onClick={() => setSelectedOption("dem-25")}
-              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-25"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🕐</span>
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">🕐</span>
               <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 25'
               </span>
@@ -751,13 +751,13 @@ const Home = () => {
 
             <button
               onClick={() => setSelectedOption("dem-30")}
-              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-30"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🕐</span>
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">🕐</span>
               <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 30'
               </span>
@@ -765,13 +765,13 @@ const Home = () => {
 
             <button
               onClick={() => setSelectedOption("dem-35")}
-              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-35"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🕐</span>
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">🕐</span>
               <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 35'
               </span>
@@ -779,13 +779,13 @@ const Home = () => {
 
             <button
               onClick={() => setSelectedOption("dem-40")}
-              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-40"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">4️⃣0️⃣</span>
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">4️⃣0️⃣</span>
               <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 40
               </span>
@@ -793,13 +793,13 @@ const Home = () => {
 
             <button
               onClick={() => setSelectedOption("dem-45")}
-              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-45"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">4️⃣5️⃣</span>
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">4️⃣5️⃣</span>
               <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 45
               </span>
@@ -809,7 +809,7 @@ const Home = () => {
               onClick={() => setShowTimerModal(true)}
               className="flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
             >
-              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🕰️</span>
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">🕰️</span>
               <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM T
               </span>
@@ -820,13 +820,13 @@ const Home = () => {
             {/* Tắt */}
             <button
               onClick={() => setSelectedOption("tat")}
-              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "tat"
                   ? "bg-gradient-to-br from-red-600 to-red-800 text-white"
                   : "bg-gradient-to-br from-red-100 to-red-200 text-red-700 hover:from-red-200 hover:to-red-300"
               }`}
             >
-              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">❌</span>
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">❌</span>
               <span className="text-[10px] sm:text-xs font-bold text-center">
                 TẮT
               </span>
@@ -1254,7 +1254,7 @@ const Home = () => {
       <Modal
         isOpen={showTimerModal}
         onClose={() => setShowTimerModal(false)}
-        title="🕰️ Thiết Lập Th���i Gian Tùy Chỉnh"
+        title="🕰️ Thiết Lập Thời Gian Tùy Chỉnh"
         size="md"
       >
         <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-4">
