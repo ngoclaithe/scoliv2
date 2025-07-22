@@ -270,7 +270,7 @@ const Home = () => {
       <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-3 border border-green-200">
         <div className="flex items-center justify-center mb-2">
           <span className="text-sm">🔍</span>
-          <h3 className="text-xs font-bold text-green-700 mx-2">TÌM KIẾM LOGO</h3>
+          <h3 className="text-xs font-bold text-green-700 mx-2">TÌM KI��M LOGO</h3>
         </div>
         <Input
           placeholder="Tìm theo tên đội..."
@@ -622,7 +622,7 @@ const Home = () => {
               onClick={() => {
                 setSelectedOption("gioi-thieu");
               }}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "gioi-thieu"
                   ? "bg-gradient-to-br from-red-500 to-orange-600 text-white"
                   : "bg-gradient-to-br from-red-100 to-orange-200 text-red-700 hover:from-red-200 hover:to-orange-300"
@@ -640,7 +640,7 @@ const Home = () => {
                 setSelectedOption("danh-sach");
                 setShowLineupModal(true);
               }}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "danh-sach"
                   ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white"
                   : "bg-gradient-to-br from-blue-100 to-indigo-200 text-blue-700 hover:from-blue-200 hover:to-indigo-300"
@@ -658,7 +658,7 @@ const Home = () => {
                 setSelectedOption("ti-so-duoi");
                 // Có thể mở modal tỉ số ở đây
               }}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "ti-so-duoi"
                   ? "bg-gradient-to-br from-green-500 to-emerald-600 text-white"
                   : "bg-gradient-to-br from-green-100 to-emerald-200 text-green-700 hover:from-green-200 hover:to-emerald-300"
@@ -676,7 +676,7 @@ const Home = () => {
                 setSelectedOption("nghi-hiep");
                 // Có thể mở modal nghỉ hiệp ở đây
               }}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "nghi-hiep"
                   ? "bg-gradient-to-br from-yellow-500 to-orange-600 text-white"
                   : "bg-gradient-to-br from-yellow-100 to-orange-200 text-yellow-700 hover:from-yellow-200 hover:to-orange-300"
@@ -693,14 +693,14 @@ const Home = () => {
               onClick={() => {
                 setShowPenaltyModal(true);
               }}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption?.startsWith("penalty")
                   ? "bg-gradient-to-br from-gray-600 to-gray-800 text-white"
                   : "bg-gradient-to-br from-gray-100 to-gray-300 text-gray-700 hover:from-gray-200 hover:to-gray-400"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🥅</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🥅</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 PENALTY
               </span>
             </button>
@@ -708,112 +708,112 @@ const Home = () => {
             {/* Đếm giờ buttons - Đầy đủ tất cả options */}
             <button
               onClick={() => setSelectedOption("dem-0")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-0"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🕐</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 0'
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-20")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-20"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🕐</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 20'
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-25")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-25"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🕐</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 25'
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-30")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-30"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🕐</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 30'
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-35")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-35"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🕐</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 35'
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-40")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-40"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">4️⃣0️⃣</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">4️⃣0️⃣</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 40
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-45")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-45"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">4️⃣5️⃣</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">4️⃣5️⃣</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 45
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-t")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-t"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕰️</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">🕰️</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM T
               </span>
             </button>
@@ -823,14 +823,14 @@ const Home = () => {
             {/* Tắt */}
             <button
               onClick={() => setSelectedOption("tat")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "tat"
                   ? "bg-gradient-to-br from-red-600 to-red-800 text-white"
                   : "bg-gradient-to-br from-red-100 to-red-200 text-red-700 hover:from-red-200 hover:to-red-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">❌</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mb-0 sm:mb-0.5">❌</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 TẮT
               </span>
             </button>
@@ -841,7 +841,7 @@ const Home = () => {
             <div className="mt-4 bg-gradient-to-r from-yellow-100 to-orange-100 border-2 border-yellow-400 rounded-xl p-4 shadow-lg">
               <div className="text-center mb-3">
                 <h4 className="text-lg font-bold text-yellow-800 flex items-center justify-center">
-                  <span className="mr-2">🕰️</span>
+                  <span className="mr-2">🕰��</span>
                   THIẾT LẬP THỜI GIAN TÙY CHỈNH
                   <span className="ml-2">🕰️</span>
                 </h4>
