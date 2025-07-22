@@ -55,6 +55,7 @@ const Home = () => {
   const [showPosterModal, setShowPosterModal] = useState(false);
   const [showLineupModal, setShowLineupModal] = useState(false);
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
+  const [showTimerModal, setShowTimerModal] = useState(false);
 
       // State cho penalty shootout - đơn giản hóa cho backend
   const [penaltyData, setPenaltyData] = useState({
@@ -622,7 +623,7 @@ const Home = () => {
               onClick={() => {
                 setSelectedOption("gioi-thieu");
               }}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "gioi-thieu"
                   ? "bg-gradient-to-br from-red-500 to-orange-600 text-white"
                   : "bg-gradient-to-br from-red-100 to-orange-200 text-red-700 hover:from-red-200 hover:to-orange-300"
@@ -640,7 +641,7 @@ const Home = () => {
                 setSelectedOption("danh-sach");
                 setShowLineupModal(true);
               }}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "danh-sach"
                   ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white"
                   : "bg-gradient-to-br from-blue-100 to-indigo-200 text-blue-700 hover:from-blue-200 hover:to-indigo-300"
@@ -658,7 +659,7 @@ const Home = () => {
                 setSelectedOption("ti-so-duoi");
                 // Có thể mở modal tỉ số ở đây
               }}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "ti-so-duoi"
                   ? "bg-gradient-to-br from-green-500 to-emerald-600 text-white"
                   : "bg-gradient-to-br from-green-100 to-emerald-200 text-green-700 hover:from-green-200 hover:to-emerald-300"
@@ -676,7 +677,7 @@ const Home = () => {
                 setSelectedOption("nghi-hiep");
                 // Có thể mở modal nghỉ hiệp ở đây
               }}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "nghi-hiep"
                   ? "bg-gradient-to-br from-yellow-500 to-orange-600 text-white"
                   : "bg-gradient-to-br from-yellow-100 to-orange-200 text-yellow-700 hover:from-yellow-200 hover:to-orange-300"
@@ -693,14 +694,14 @@ const Home = () => {
               onClick={() => {
                 setShowPenaltyModal(true);
               }}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption?.startsWith("penalty")
                   ? "bg-gradient-to-br from-gray-600 to-gray-800 text-white"
                   : "bg-gradient-to-br from-gray-100 to-gray-300 text-gray-700 hover:from-gray-200 hover:to-gray-400"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🥅</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">🥅</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 PENALTY
               </span>
             </button>
@@ -708,112 +709,108 @@ const Home = () => {
             {/* Đếm giờ buttons - Đầy đủ tất cả options */}
             <button
               onClick={() => setSelectedOption("dem-0")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-0"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">🕐</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 0'
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-20")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-20"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">🕐</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 20'
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-25")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-25"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">🕐</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 25'
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-30")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-30"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">🕐</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 30'
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-35")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-35"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕐</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">🕐</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 35'
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-40")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-40"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">4️⃣0️⃣</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">4️⃣0️⃣</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 40
               </span>
             </button>
 
             <button
               onClick={() => setSelectedOption("dem-45")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "dem-45"
                   ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
                   : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">4️⃣5️⃣</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">4️⃣5️⃣</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM 45
               </span>
             </button>
 
             <button
-              onClick={() => setSelectedOption("dem-t")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
-                selectedOption === "dem-t"
-                  ? "bg-gradient-to-br from-teal-500 to-cyan-600 text-white"
-                  : "bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
-              }`}
+              onClick={() => setShowTimerModal(true)}
+              className="flex flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🕰️</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">🕰️</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 ĐẾM T
               </span>
             </button>
@@ -823,77 +820,25 @@ const Home = () => {
             {/* Tắt */}
             <button
               onClick={() => setSelectedOption("tat")}
-              className={`flex flex-col items-center justify-center p-2 sm:p-3 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "tat"
                   ? "bg-gradient-to-br from-red-600 to-red-800 text-white"
                   : "bg-gradient-to-br from-red-100 to-red-200 text-red-700 hover:from-red-200 hover:to-red-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">❌</span>
-              <span className="text-xs font-bold text-center">
+              <span className="text-sm sm:text-base mr-1 sm:mr-0 mb-0 sm:mb-0.5">❌</span>
+              <span className="text-[10px] sm:text-xs font-bold text-center">
                 TẮT
               </span>
             </button>
           </div>
 
-          {/* Input field cho Đếm T - Nổi bật với nút Áp dụng */}
-          {selectedOption === "dem-t" && (
-            <div className="mt-4 bg-gradient-to-r from-yellow-100 to-orange-100 border-2 border-yellow-400 rounded-xl p-4 shadow-lg">
-              <div className="text-center mb-3">
-                <h4 className="text-lg font-bold text-yellow-800 flex items-center justify-center">
-                  <span className="mr-2">🕰️</span>
-                  THIẾT LẬP THỜI GIAN TÙY CHỈNH
-                  <span className="ml-2">🕰️</span>
-                </h4>
-                <p className="text-sm text-yellow-700 mt-1">
-                  Trận đấu sẽ bắt đầu chạy từ thời điểm này
-                </p>
-              </div>
 
-              <div className="flex items-center space-x-2 mb-3">
-                <Input
-                  type="number"
-                  min="0"
-                  max="120"
-                  value={customTime}
-                  onChange={(e) => setCustomTime(e.target.value)}
-                  placeholder="Nhập phút (VD: 30)"
-                  className="flex-1 text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
-                />
-                <span className="text-sm font-medium text-yellow-800">phút</span>
-              </div>
-
-              <div className="text-center text-sm text-yellow-700 mb-3">
-                ⏱️ Trận đấu sẽ bắt đầu từ: <strong>{customTime || "0"}:00</strong>
-              </div>
-
-              <div className="flex justify-center">
-                <Button
-                  variant="primary"
-                  size="sm"
-                  className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-sm rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
-                  onClick={() => {
-                    // Gửi về backend
-                    console.log('Áp dụng thời gian tùy chỉnh:', customTime);
-                    alert(`Đã áp dụng: Trận đấu bắt đầu từ ${customTime || 0} phút`);
-                  }}
-                >
-                  <span className="mr-1">✅</span>
-                  ÁP DỤNG
-                </Button>
-              </div>
-            </div>
-          )}
         </div>
         )}
 
         {/* Clock Settings - Compact */}
         <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-3 border border-orange-200">
-          <h3 className="font-bold text-center text-sm text-orange-800 mb-3 flex items-center justify-center">
-            <span className="mr-1 text-sm">📰</span>
-            <span className="text-xs">CÀI ĐẶT CHỮ CHẠY</span>
-            <span className="ml-1 text-sm">📰</span>
-          </h3>
 
           <div className="space-y-3">
             {/* Radio buttons */}
@@ -951,13 +896,6 @@ const Home = () => {
                     value={tickerColor}
                     onChange={(e) => setTickerColor(e.target.value)}
                     className="w-5 h-5 border border-orange-300 rounded cursor-pointer"
-                  />
-                  <Input
-                    type="text"
-                    value={tickerColor}
-                    onChange={(e) => setTickerColor(e.target.value)}
-                    className="text-xs flex-1 uppercase h-5"
-                    placeholder="#ffffff"
                   />
                 </div>
                 <div className="flex gap-0.5 flex-wrap">
@@ -1097,7 +1035,7 @@ const Home = () => {
 
           <div className="text-center mt-6">
             <p className="text-sm text-gray-600">
-              Nhấn vào micro để bắt đầu thu âm bình luận
+              Nhấn vào micro để bắt đ��u thu âm bình luận
             </p>
           </div>
         </div>
@@ -1312,6 +1250,66 @@ const Home = () => {
         onPenaltyChange={handlePenaltyChange}
       />
 
+      {/* Timer Modal */}
+      <Modal
+        isOpen={showTimerModal}
+        onClose={() => setShowTimerModal(false)}
+        title="🕰️ Thiết Lập Thời Gian Tùy Chỉnh"
+        size="md"
+      >
+        <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-4">
+          <div className="text-center mb-4">
+            <h4 className="text-lg font-bold text-yellow-800 flex items-center justify-center">
+              <span className="mr-2">🕰️</span>
+              THIẾT LẬP ĐẾM T
+              <span className="ml-2">🕰️</span>
+            </h4>
+            <p className="text-sm text-yellow-700 mt-1">
+              Trận đấu sẽ bắt đầu chạy từ thời điểm này
+            </p>
+          </div>
+
+          <div className="flex items-center space-x-2 mb-4">
+            <Input
+              type="number"
+              min="0"
+              max="120"
+              value={customTime}
+              onChange={(e) => setCustomTime(e.target.value)}
+              placeholder="Nhập phút (VD: 30)"
+              className="flex-1 text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
+            />
+            <span className="text-sm font-medium text-yellow-800">phút</span>
+          </div>
+
+          <div className="text-center text-sm text-yellow-700 mb-4">
+            ⏱️ Trận đấu sẽ bắt đầu từ: <strong>{customTime || "0"}:00</strong>
+          </div>
+
+          <div className="flex justify-center gap-3">
+            <Button
+              variant="outline"
+              onClick={() => setShowTimerModal(false)}
+              className="px-4 py-2"
+            >
+              Hủy
+            </Button>
+            <Button
+              variant="primary"
+              className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-sm rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+              onClick={() => {
+                // Gửi về backend
+                console.log('Áp dụng thời gian tùy chỉnh:', customTime);
+                alert(`Đã áp dụng: Trận đấu bắt đầu từ ${customTime || 0} phút`);
+                setShowTimerModal(false);
+              }}
+            >
+              <span className="mr-1">✅</span>
+              ÁP DỤNG
+            </Button>
+          </div>
+        </div>
+      </Modal>
 
     </div>
   );
