@@ -14,7 +14,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [codeInfo, setCodeInfo] = useState(null);
 
-  // State cho upload logo - sử dụng chung với tab quản lý trận
+  // State cho upload logo - s�� dụng chung với tab quản lý trận
   const [logoData, setLogoData] = useState(null);
   const [bannerData, setBannerData] = useState(null);
   const [logoName, setLogoName] = useState("");
@@ -359,7 +359,7 @@ const Home = () => {
             >
               <div className="flex items-center space-x-2">
                 <span className="text-sm text-gray-600">Mã truy cập:</span>
-                <span className="font-mono font-bold text-sm filter blur-sm select-none">
+                <span className={`font-mono font-bold text-sm ${!isCodeInfoExpanded ? 'filter blur-sm select-none' : ''}`}>
                   {isCodeInfoExpanded ? codeInfo.code : '••••'}
                 </span>
               </div>
