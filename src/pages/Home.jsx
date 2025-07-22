@@ -839,11 +839,6 @@ const Home = () => {
 
         {/* Clock Settings - Compact */}
         <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-3 border border-orange-200">
-          <h3 className="font-bold text-center text-sm text-orange-800 mb-3 flex items-center justify-center">
-            <span className="mr-1 text-sm">📰</span>
-            <span className="text-xs">CÀI ĐẶT CHỮ CHẠY</span>
-            <span className="ml-1 text-sm">📰</span>
-          </h3>
 
           <div className="space-y-3">
             {/* Radio buttons */}
@@ -1047,7 +1042,7 @@ const Home = () => {
 
           <div className="text-center mt-6">
             <p className="text-sm text-gray-600">
-              Nhấn vào micro để bắt đầu thu âm bình luận
+              Nhấn vào micro để bắt đ��u thu âm bình luận
             </p>
           </div>
         </div>
