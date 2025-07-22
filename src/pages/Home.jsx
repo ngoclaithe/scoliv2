@@ -897,13 +897,6 @@ const Home = () => {
                     onChange={(e) => setTickerColor(e.target.value)}
                     className="w-5 h-5 border border-orange-300 rounded cursor-pointer"
                   />
-                  <Input
-                    type="text"
-                    value={tickerColor}
-                    onChange={(e) => setTickerColor(e.target.value)}
-                    className="text-xs flex-1 uppercase h-5"
-                    placeholder="#ffffff"
-                  />
                 </div>
                 <div className="flex gap-0.5 flex-wrap">
                   {["#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff6600", "#ff00ff"].map((color) => (
@@ -1261,7 +1254,7 @@ const Home = () => {
       <Modal
         isOpen={showTimerModal}
         onClose={() => setShowTimerModal(false)}
-        title="🕰️ Thiết Lập Thời Gian Tùy Chỉnh"
+        title="🕰️ Thiết Lập Th���i Gian Tùy Chỉnh"
         size="md"
       >
         <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-4">
