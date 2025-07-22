@@ -291,7 +291,7 @@ const Home = () => {
   const renderQuanLyTranTab = () => {
     if (!isCodeEntered) {
       return (
-        <div className="p-6 max-w-md mx-auto">
+        <div className="p-3 sm:p-6 max-w-md mx-auto">
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6">
             <div className="text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
@@ -313,7 +313,7 @@ const Home = () => {
                 Nhập mã truy cập
               </h3>
               <p className="text-gray-600 text-sm">
-                Vui lòng nhập mã code để truy cập và quản lý trận đấu
+                Vui lòng nh��p mã code để truy cập và quản lý trận đấu
               </p>
             </div>
           </div>
