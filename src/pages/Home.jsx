@@ -524,7 +524,7 @@ const Home = () => {
               }`}
             >
               <span className="mr-1 sm:mr-2 text-sm">🎮</span>
-              ĐI��U KHIỂN
+              ĐIỀU KHIỂN
             </button>
             <button
               onClick={() => {
@@ -598,9 +598,9 @@ const Home = () => {
             {/* Poster */}
             <button
               onClick={() => setShowPosterModal(true)}
-              className="flex flex-col items-center justify-center p-2 sm:p-3 bg-gradient-to-br from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🎨</span>
+              <span className="text-sm mr-1">🎨</span>
               <span className="text-xs font-bold text-center">
                 POSTER
               </span>
@@ -611,13 +611,13 @@ const Home = () => {
               onClick={() => {
                 setSelectedOption("gioi-thieu");
               }}
-              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "gioi-thieu"
                   ? "bg-gradient-to-br from-red-500 to-orange-600 text-white"
                   : "bg-gradient-to-br from-red-100 to-orange-200 text-red-700 hover:from-red-200 hover:to-orange-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">🎬</span>
+              <span className="text-sm mr-1">🎬</span>
               <span className="text-xs font-bold text-center">
                 GIỚI THIỆU
               </span>
@@ -629,13 +629,13 @@ const Home = () => {
                 setSelectedOption("danh-sach");
                 setShowLineupModal(true);
               }}
-              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "danh-sach"
                   ? "bg-gradient-to-br from-blue-500 to-indigo-600 text-white"
                   : "bg-gradient-to-br from-blue-100 to-indigo-200 text-blue-700 hover:from-blue-200 hover:to-indigo-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">📋</span>
+              <span className="text-sm mr-1">📋</span>
               <span className="text-xs font-bold text-center">
                 DANH SÁCH
               </span>
@@ -647,13 +647,13 @@ const Home = () => {
                 setSelectedOption("ti-so-duoi");
                 // Có thể mở modal tỉ số ở đây
               }}
-              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "ti-so-duoi"
                   ? "bg-gradient-to-br from-green-500 to-emerald-600 text-white"
                   : "bg-gradient-to-br from-green-100 to-emerald-200 text-green-700 hover:from-green-200 hover:to-emerald-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">⚽</span>
+              <span className="text-sm mr-1">⚽</span>
               <span className="text-xs font-bold text-center">
                 TỈ SỐ DƯỚI
               </span>
@@ -665,13 +665,13 @@ const Home = () => {
                 setSelectedOption("nghi-hiep");
                 // Có thể mở modal nghỉ hiệp ở đây
               }}
-              className={`flex flex-row sm:flex-col items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
+              className={`flex flex-row items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 ${
                 selectedOption === "nghi-hiep"
                   ? "bg-gradient-to-br from-yellow-500 to-orange-600 text-white"
                   : "bg-gradient-to-br from-yellow-100 to-orange-200 text-yellow-700 hover:from-yellow-200 hover:to-orange-300"
               }`}
             >
-              <span className="text-base sm:text-xl mb-0.5 sm:mb-1">⏰</span>
+              <span className="text-sm mr-1">⏰</span>
               <span className="text-xs font-bold text-center">
                 NGHỈ HIỆP
               </span>
