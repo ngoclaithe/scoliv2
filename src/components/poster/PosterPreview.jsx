@@ -21,19 +21,7 @@ const PosterPreview = ({
   return (
     <div className={`w-full ${className}`}>
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-        {/* Header */}
-        <div className="p-3 sm:p-4 border-b border-gray-200">
-          <div className="flex justify-between items-center">
-            <div>
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-                {poster.name}
-              </h3>
-              <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                Poster template đã chọn
-              </p>
-            </div>
-          </div>
-        </div>
+
 
         {/* Poster Display */}
         <div className="p-3 sm:p-6">
