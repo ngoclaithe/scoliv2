@@ -279,9 +279,9 @@ const Home = () => {
         <Button
           variant="secondary"
           size="sm"
-          className="w-28 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-2 text-sm rounded-full shadow-lg transform hover:scale-105 transition-all duration-200"
+          className="w-20 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white py-1 text-xs rounded-full shadow-lg transform hover:scale-105 transition-all duration-200"
         >
-          <span className="mr-1">📚</span>
+          <span className="mr-1 text-xs">📚</span>
           HỖ TRỢ
         </Button>
       </div>
