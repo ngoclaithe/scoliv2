@@ -92,22 +92,7 @@ const PosterPreview = ({
           </div>
         </div>
 
-        {/* Footer với thông tin đơn giản */}
-        <div className="px-3 pb-3 sm:px-6 sm:pb-6">
-          <div className="bg-blue-50 rounded-lg p-3 sm:p-4">
-            <div className="flex items-start space-x-3">
-              <div className="text-blue-600 text-lg sm:text-xl">💡</div>
-              <div>
-                <h4 className="font-medium text-blue-900 text-sm sm:text-base mb-1">
-                  Poster đã sẵn sàng
-                </h4>
-                <p className="text-blue-700 text-xs sm:text-sm">
-                  Bạn có thể tiếp tục cài đặt logo tại các vị trí khác nhau trên poster này.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
   );
