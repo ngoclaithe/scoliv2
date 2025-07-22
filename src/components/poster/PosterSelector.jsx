@@ -107,42 +107,8 @@ const PosterSelector = ({
       <div className={`w-full ${className}`}>
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
           <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-            Chọn mẫu poster
+            Chọn poster template
           </h3>
-          <div className="flex space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowModal(true)}
-              className="flex-1 sm:flex-none"
-            >
-              Xem tất cả
-            </Button>
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={onCustomPoster}
-              className="flex-1 sm:flex-none"
-              icon={
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 4v16m8-8H4"
-                  />
-                </svg>
-              }
-            >
-              <span className="hidden sm:inline">Tùy chỉnh</span>
-              <span className="sm:hidden">Tạo mới</span>
-            </Button>
-          </div>
         </div>
 
         {loading ? (
