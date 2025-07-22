@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
-import Modal from "../common/Modal";
 
 const MatchManager = ({
   match,
@@ -24,11 +23,23 @@ const MatchManager = ({
     weather: "Nắng",
     temperature: "28°C",
     attendance: "",
+    // Thêm cài đặt hiển thị
+    displayOptions: {
+      countdownType: "normal", // normal, count40, count45, countCustom
+      customTime: "", // cho đếm t
+    },
+    // Thêm cài đặt chữ chạy
+    tickerSettings: {
+      text: "Chào mừng đến với trận đấu!",
+      color: "#ffffff",
+      fontSize: 16,
+      enabled: true,
+    },
     ...match,
   });
 
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [editingField, setEditingField] = useState(null);
+  const [showDisplaySettings, setShowDisplaySettings] = useState(false);
+  const [showTickerSettings, setShowTickerSettings] = useState(false);
 
   const periods = [
     "Hiệp 1",
@@ -47,28 +58,34 @@ const MatchManager = ({
     { id: "ended", name: "Kết thúc", color: "red", icon: "🏁" },
   ];
 
-  const leagues = [
-    "V-League 2024",
-    "Hạng Nhất 2024",
-    "Cúp Quốc gia 2024",
-    "AFC Champions League",
-    "AFF Cup",
-    "World Cup 2026",
-    "Giao hữu quốc tế",
-    "Giải tự tổ chức",
-  ];
 
-  const weatherOptions = [
-    "☀️ Nắng",
-    "⛅ Nhiều mây",
-    "🌧️ Mưa",
-    "⛈️ Dông",
-    "🌫️ Sương mù",
-    "❄️ Tuyết",
-  ];
 
   const handleChange = (field, value) => {
     const newData = { ...matchData, [field]: value };
+    setMatchData(newData);
+    onMatchUpdate?.(newData);
+  };
+
+  const handleDisplayOptionChange = (field, value) => {
+    const newData = {
+      ...matchData,
+      displayOptions: {
+        ...matchData.displayOptions,
+        [field]: value,
+      },
+    };
+    setMatchData(newData);
+    onMatchUpdate?.(newData);
+  };
+
+  const handleTickerSettingChange = (field, value) => {
+    const newData = {
+      ...matchData,
+      tickerSettings: {
+        ...matchData.tickerSettings,
+        [field]: value,
+      },
+    };
     setMatchData(newData);
     onMatchUpdate?.(newData);
   };
@@ -114,6 +131,16 @@ const MatchManager = ({
       weather: "Nắng",
       temperature: "28°C",
       attendance: "",
+      displayOptions: {
+        countdownType: "normal",
+        customTime: "",
+      },
+      tickerSettings: {
+        text: "Chào mừng đến với trận đấu!",
+        color: "#ffffff",
+        fontSize: 16,
+        enabled: true,
+      },
     };
     setMatchData(resetData);
     onMatchReset?.(resetData);
@@ -148,27 +175,6 @@ const MatchManager = ({
               </p>
             </div>
             <div className="flex space-x-2">
-              <Button
-                variant="outline"
-                onClick={() => setShowEditModal(true)}
-                icon={
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                    />
-                  </svg>
-                }
-              >
-                Chỉnh sửa
-              </Button>
               <Button variant="primary" onClick={handleSave}>
                 Lưu thay đổi
               </Button>
@@ -390,6 +396,206 @@ const MatchManager = ({
             </Button>
           </div>
 
+          {/* Display Options */}
+          <div className="mt-6 pt-6 border-t border-gray-200">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+              <h4 className="text-lg font-medium text-gray-900 mb-2 sm:mb-0">
+                Tùy chọn hiển thị
+              </h4>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowDisplaySettings(!showDisplaySettings)}
+                icon={
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d={showDisplaySettings ? "M19 9l-7 7-7-7" : "M9 5l7 7-7 7"} />
+                  </svg>
+                }
+              >
+                {showDisplaySettings ? "Thu gọn" : "Mở rộng"}
+              </Button>
+            </div>
+
+            {showDisplaySettings && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Loại đếm ngược
+                  </label>
+                  <select
+                    value={matchData.displayOptions.countdownType}
+                    onChange={(e) => handleDisplayOptionChange("countdownType", e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                  >
+                    <option value="normal">Bình thường</option>
+                    <option value="count40">Đếm 40</option>
+                    <option value="count45">Đếm 45</option>
+                    <option value="countCustom">Đếm T</option>
+                  </select>
+                </div>
+
+                {matchData.displayOptions.countdownType === "countCustom" && (
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Thời gian tùy chỉnh (phút)
+                    </label>
+                    <Input
+                      type="number"
+                      value={matchData.displayOptions.customTime}
+                      onChange={(e) => handleDisplayOptionChange("customTime", e.target.value)}
+                      placeholder="Nhập thời gian"
+                      className="text-sm"
+                    />
+                  </div>
+                )}
+
+                <div className="sm:col-span-2 lg:col-span-2 flex items-end">
+                  <div className="text-sm text-gray-600 bg-gray-50 rounded-lg p-3 w-full">
+                    <strong>Loại đếm hiện tại:</strong>
+                    <span className="ml-2">
+                      {matchData.displayOptions.countdownType === "normal" && "Bình thường"}
+                      {matchData.displayOptions.countdownType === "count40" && "Đếm 40 phút"}
+                      {matchData.displayOptions.countdownType === "count45" && "Đếm 45 phút"}
+                      {matchData.displayOptions.countdownType === "countCustom" &&
+                        `Đếm ${matchData.displayOptions.customTime || "?"} phút`}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Ticker Settings */}
+          <div className="mt-6 pt-6 border-t border-gray-200">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+              <h4 className="text-lg font-medium text-gray-900 mb-2 sm:mb-0">
+                Cài đặt chữ chạy
+              </h4>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowTickerSettings(!showTickerSettings)}
+                icon={
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                      d={showTickerSettings ? "M19 9l-7 7-7-7" : "M9 5l7 7-7 7"} />
+                  </svg>
+                }
+              >
+                {showTickerSettings ? "Thu gọn" : "Mở rộng"}
+              </Button>
+            </div>
+
+            {showTickerSettings && (
+              <div className="space-y-4">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">
+                      Nội dung chữ chạy
+                    </label>
+                    <textarea
+                      value={matchData.tickerSettings.text}
+                      onChange={(e) => handleTickerSettingChange("text", e.target.value)}
+                      placeholder="Nhập nội dung chữ chạy..."
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm resize-none"
+                    />
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Màu chữ
+                        </label>
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="color"
+                            value={matchData.tickerSettings.color}
+                            onChange={(e) => handleTickerSettingChange("color", e.target.value)}
+                            className="w-8 h-8 border border-gray-300 rounded cursor-pointer"
+                          />
+                          <Input
+                            type="text"
+                            value={matchData.tickerSettings.color}
+                            onChange={(e) => handleTickerSettingChange("color", e.target.value)}
+                            className="text-sm flex-1"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Kích thước chữ (px)
+                        </label>
+                        <div className="flex items-center space-x-2">
+                          <input
+                            type="range"
+                            min="12"
+                            max="32"
+                            value={matchData.tickerSettings.fontSize}
+                            onChange={(e) => handleTickerSettingChange("fontSize", parseInt(e.target.value))}
+                            className="flex-1"
+                          />
+                          <span className="text-sm font-medium min-w-8 text-center">
+                            {matchData.tickerSettings.fontSize}px
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="ticker-enabled"
+                        checked={matchData.tickerSettings.enabled}
+                        onChange={(e) => handleTickerSettingChange("enabled", e.target.checked)}
+                        className="rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+                      />
+                      <label htmlFor="ticker-enabled" className="text-sm font-medium text-gray-700">
+                        Hiển thị chữ chạy
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Preview */}
+                <div className="bg-gray-900 rounded-lg p-4 overflow-hidden relative">
+                  <div className="text-xs text-gray-400 mb-2">Xem trước chữ chạy:</div>
+                  <div className="h-8 flex items-center overflow-hidden">
+                    <div
+                      className="animate-pulse whitespace-nowrap"
+                      style={{
+                        color: matchData.tickerSettings.color,
+                        fontSize: `${matchData.tickerSettings.fontSize}px`,
+                        opacity: matchData.tickerSettings.enabled ? 1 : 0.3,
+                      }}
+                    >
+                      {matchData.tickerSettings.text || "Chào mừng đến với trận đấu!"}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Apply Button */}
+                <div className="flex justify-end pt-4 border-t border-gray-200">
+                  <Button
+                    variant="primary"
+                    onClick={handleSave}
+                    icon={
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                          d="M5 13l4 4L19 7" />
+                      </svg>
+                    }
+                  >
+                    Áp dụng cài đặt
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* Match Summary */}
           <div className="mt-6 pt-6 border-t border-gray-200">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
@@ -419,8 +625,6 @@ const MatchManager = ({
           </div>
         </div>
       </div>
-
-      {/* Edit Modal sẽ được implement riêng */}
     </>
   );
 };
