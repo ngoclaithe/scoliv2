@@ -449,9 +449,6 @@ const Home = () => {
           <div className="grid grid-cols-2 gap-3 sm:gap-6">
             {/* Đội nhà */}
             <div className="bg-white rounded-lg p-2 sm:p-4 shadow-md border border-blue-200">
-              <h4 className="text-center font-bold text-blue-700 mb-2 sm:mb-4 text-xs sm:text-sm">
-                {matchData.homeTeam.name}
-              </h4>
               <div className="flex space-x-1 sm:space-x-2">
                 <Button
                   variant="primary"
@@ -993,7 +990,7 @@ const Home = () => {
 
     return (
       <div className="p-6 space-y-6">
-        {/* Không hiển thị thông tin mã truy c��p trong tab bình luận */}
+        {/* Không hiển thị thông tin mã truy cập trong tab bình luận */}
 
         {/* Microphone Section */}
         <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-8 border border-red-200">
