@@ -379,63 +379,7 @@ const Home = () => {
 
     return (
       <div className="p-3 sm:p-6 space-y-4 sm:space-y-6">
-        {/* Code Information - Compact */}
-        {codeInfo && (
-          <div className="bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-xl p-3 sm:p-4 mb-3 sm:mb-4">
-            <div
-              className="flex items-center justify-between cursor-pointer hover:bg-white/50 rounded-lg p-2 transition-colors"
-              onClick={() => setIsCodeInfoExpanded(!isCodeInfoExpanded)}
-            >
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-600">Mã truy cập:</span>
-                <span className={`font-mono font-bold text-sm ${!isCodeInfoExpanded ? 'filter blur-sm select-none' : ''}`}>
-                  {isCodeInfoExpanded ? codeInfo.code : '••••'}
-                </span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    codeInfo.status === "active"
-                      ? "bg-green-100 text-green-800"
-                      : codeInfo.status === "inactive"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-red-100 text-red-800"
-                  }`}
-                >
-                  {codeInfo.status === "active"
-                    ? "🟢 Đã kích hoạt"
-                    : codeInfo.status === "inactive"
-                      ? "🟡 Chưa kích hoạt"
-                      : "🔴 Đã hết hạn"}
-                </span>
-                <span className={`text-gray-400 transition-transform duration-200 ${isCodeInfoExpanded ? 'rotate-180' : ''}`}>
-                  ▼
-                </span>
-              </div>
-            </div>
 
-            {isCodeInfoExpanded && (
-              <div className="mt-3 pt-3 border-t border-gray-200 animate-slide-up">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs sm:text-sm">
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Được tạo lúc:</span>
-                      <span className="font-medium">{codeInfo.generatedAt}</span>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Hết hạn vào:</span>
-                      <span className="font-medium text-orange-600">
-                        {codeInfo.expiryDate}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
 
         {/* Scoreboard */}
         <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-xl p-3 sm:p-4 border-2 sm:border-4 border-yellow-400 shadow-2xl">
@@ -1117,7 +1061,7 @@ const Home = () => {
                   onChange={(e) => setClockSetting(e.target.value)}
                   className="scale-75"
                 />
-                <label className="text-xs">MỖI 2'</label>
+                <label className="text-xs">M��I 2'</label>
               </div>
             </div>
 
@@ -1213,7 +1157,7 @@ const Home = () => {
                 Nhập mã truy cập
               </h3>
               <p className="text-gray-600 text-sm">
-                Vui lòng nhập mã code để truy cập chức năng bình luận
+                Vui lòng nhập mã code để truy cập chức năng b��nh luận
               </p>
             </div>
           </div>
@@ -1540,7 +1484,7 @@ const Home = () => {
               placeholder="Nhập phút (VD: 30)"
               className="flex-1 text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
             />
-            <span className="text-sm font-medium text-yellow-800">ph��t</span>
+            <span className="text-sm font-medium text-yellow-800">phút</span>
           </div>
 
           <div className="text-center text-sm text-yellow-700 mb-4">
