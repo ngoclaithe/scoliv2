@@ -397,7 +397,7 @@ const Home = () => {
         )}
 
         {/* Scoreboard */}
-        <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-xl p-4 border-4 border-yellow-400 shadow-2xl">
+        <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-xl p-3 sm:p-4 border-2 sm:border-4 border-yellow-400 shadow-2xl">
           {selectedSkin && skinData[selectedSkin] ? (
             <div className="w-full h-40 bg-gray-100 rounded-lg overflow-hidden">
               <img
@@ -1134,7 +1134,7 @@ const Home = () => {
       <Modal
         isOpen={showSkinModal}
         onClose={() => setShowSkinModal(false)}
-        title="🎨 Chọn Skin"
+        title="��� Chọn Skin"
         size="lg"
       >
         <div className="p-4">
