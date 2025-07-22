@@ -180,6 +180,7 @@ const Home = () => {
                 size="sm"
                 className="w-20 h-7 text-xs"
                 onClick={handleUploadCodeSubmit}
+                style={{ fontSize: '10px' }}
               >
                 XÁC NHẬN
               </Button>
@@ -263,7 +264,7 @@ const Home = () => {
       {/* Search Section - No Code Required */}
       <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-3 border border-green-200">
         <div className="flex items-center justify-center mb-2">
-          <span className="text-sm">🔍</span>
+          <span className="text-sm">��</span>
           <h3 className="text-xs font-bold text-green-700 mx-2">TÌM KIẾM LOGO</h3>
         </div>
         <Input
