@@ -209,7 +209,7 @@ const MatchManager = ({
             {/* Home Team */}
             <div className="bg-gray-50 rounded-lg p-4">
               <h4 className="font-medium text-gray-900 mb-3 text-center">
-                Đội nhà
+                Đội nh��
               </h4>
               <div className="text-center space-y-3">
                 <div className="w-16 h-16 bg-white rounded-full mx-auto flex items-center justify-center border">
@@ -689,10 +689,15 @@ const MatchManager = ({
                 </div>
 
                 {/* Apply Button */}
-                <div className="flex justify-end pt-4 border-t border-gray-200">
+                <div className="flex flex-col sm:flex-row gap-2 sm:justify-between pt-4 border-t border-gray-200">
+                  <div className="text-xs text-gray-500 flex items-center space-x-1">
+                    <span>ℹ️</span>
+                    <span>Thay đổi sẽ được áp dụng ngay lập tức</span>
+                  </div>
                   <Button
                     variant="primary"
                     onClick={handleSave}
+                    className="w-full sm:w-auto"
                     icon={
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -700,7 +705,7 @@ const MatchManager = ({
                       </svg>
                     }
                   >
-                    Áp dụng cài đặt
+                    💾 Áp dụng cài đặt
                   </Button>
                 </div>
               </div>
