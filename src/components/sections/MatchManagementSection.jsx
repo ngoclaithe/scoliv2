@@ -84,6 +84,32 @@ const MatchManagementSection = () => {
     }));
   };
 
+  // Hàm cập nhật thống kê
+  const updateStat = (statKey, team, value) => {
+    setMatchStats(prev => ({
+      ...prev,
+      [statKey]: {
+        ...prev[statKey],
+        [team]: Math.max(0, parseInt(value) || 0)
+      }
+    }));
+  };
+
+  // Hàm cập nhật kiểm soát bóng (đảm bảo tổng = 100%)
+  const updatePossession = (team, value) => {
+    const newValue = Math.max(0, Math.min(100, parseInt(value) || 0));
+    const otherTeam = team === 'team1' ? 'team2' : 'team1';
+    const otherValue = 100 - newValue;
+
+    setMatchStats(prev => ({
+      ...prev,
+      possession: {
+        [team]: newValue,
+        [otherTeam]: otherValue
+      }
+    }));
+  };
+
   return (
     <div className="p-3 sm:p-6 space-y-4 sm:space-y-6">
       {/* Scoreboard */}
