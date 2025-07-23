@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import "./App.css";
 
 // Import auth context
-import { AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 // Import pages
 import Home from "./pages/Home";
+import LoginPage from "./components/auth/LoginPage";
+import Loading from "./components/common/Loading";
 
 // Import components for demo
 import ScoreDisplay from "./components/scoreboard/ScoreDisplay";
