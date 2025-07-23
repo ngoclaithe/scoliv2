@@ -139,7 +139,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
   const sections = [
     { id: "posters", name: "Chọn Poster", icon: "🎨" },
-    { id: "logos", name: "Chọn Logo", icon: "��" },
+    { id: "logos", name: "Chọn Logo", icon: "🏆" },
   ];
 
   const filteredLogos = sampleLogos.filter((logo) =>
@@ -150,9 +150,9 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     <div
       onClick={onClick}
       className={`
-        relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg 
-        transition-all duration-200 cursor-pointer group
-        ${isSelected ? "ring-2 ring-blue-500 ring-offset-2" : "hover:scale-105"}
+        relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg
+        transition-shadow duration-200 cursor-pointer group
+        ${isSelected ? "ring-2 ring-blue-500 ring-offset-2" : ""}
       `}
     >
       <div className="aspect-video bg-gray-100 overflow-hidden">
@@ -160,7 +160,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
           <img
             src={poster.thumbnail}
             alt={poster.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            className="w-full h-full object-cover transition-opacity duration-200 group-hover:opacity-90"
             onError={(e) => {
               e.target.style.display = 'none';
               e.target.nextSibling.style.display = 'flex';
