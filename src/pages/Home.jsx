@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Modal from "../components/common/Modal";
 import { useAuth } from "../contexts/AuthContext";
-import LoginModal from "../components/auth/LoginModal";
 import UploadLogoSection from "../components/sections/UploadLogoSection";
 import MatchManagementSection from "../components/sections/MatchManagementSection";
 import CommentarySection from "../components/sections/CommentarySection";
