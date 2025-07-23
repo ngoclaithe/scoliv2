@@ -74,15 +74,6 @@ const Home = () => {
   const [showCodeInfoModal, setShowCodeInfoModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
 
-  // State cho form login
-  const [loginForm, setLoginForm] = useState({
-    email: '',
-    password: '',
-    rememberMe: false
-  });
-  const [loginLoading, setLoginLoading] = useState(false);
-  const [showRegister, setShowRegister] = useState(false);
-
       // State cho penalty shootout - đơn giản hóa cho backend
   const [penaltyData, setPenaltyData] = useState({
     homeGoals: 0,
@@ -1777,7 +1768,7 @@ const Home = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Mật khẩu
+                    Mật kh��u
                   </label>
                   <Input
                     type="password"
@@ -1981,7 +1972,7 @@ const Home = () => {
                   <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
                     Tôi đồng ý với{' '}
                     <a href="#" className="text-blue-600 hover:text-blue-500 font-medium">
-                      Đi���u khoản sử dụng
+                      Điều khoản sử dụng
                     </a>
                     {' '}và{' '}
                     <a href="#" className="text-blue-600 hover:text-blue-500 font-medium">
