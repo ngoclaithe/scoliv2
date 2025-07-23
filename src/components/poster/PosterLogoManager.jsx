@@ -15,32 +15,32 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   const availablePosters = [
     {
       id: "poster-1",
-      name: "Poster Template 1",
+      name: "Trẻ trung",
       thumbnail: "/images/posters/poster1.jpg",
     },
     {
       id: "poster-2",
-      name: "Poster Template 2",
+      name: "Hào Quang",
       thumbnail: "/images/posters/poster2.jpg",
     },
     {
       id: "poster-3",
-      name: "Poster Template 3",
+      name: "Cầu trường",
       thumbnail: "/images/posters/poster3.jpg",
     },
     {
       id: "poster-4",
-      name: "Poster Template 4",
+      name: "Nền vàng",
       thumbnail: "/images/posters/poster4.jpg",
     },
     {
       id: "poster-5",
-      name: "Poster Template 5",
+      name: "Vàng xanh",
       thumbnail: "/images/posters/poster5.jpg",
     },
     {
       id: "poster-6",
-      name: "Poster Template 6",
+      name: "Tranh tài",
       thumbnail: "/images/posters/poster6.jpg",
     },
   ];
@@ -171,8 +171,8 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         </div>
       </div>
 
-      <div className="p-3">
-        <h4 className="font-semibold text-sm text-gray-900 truncate">
+      <div className="p-2">
+        <h4 className="font-medium text-xs text-gray-900 truncate">
           {poster.name}
         </h4>
       </div>
@@ -419,7 +419,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
               )}
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-h-96 overflow-y-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 max-h-96 overflow-y-auto">
               {availablePosters.map((poster) => (
                 <PosterCard
                   key={poster.id}
