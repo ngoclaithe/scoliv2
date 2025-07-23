@@ -37,9 +37,22 @@ function AppContent() {
     weather: "☀️ Nắng",
     temperature: "28°C",
   });
-
-    const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [showLineupModal, setShowLineupModal] = useState(false);
+
+  // Hiển thị loading khi đang kiểm tra authentication
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-600 to-blue-800">
+        <Loading size="lg" color="white" />
+      </div>
+    );
+  }
+
+  // Hiển thị trang đăng nhập nếu chưa authenticate
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
 
   const demoLineup = {
     formation: "4-4-2",
