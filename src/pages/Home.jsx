@@ -12,7 +12,12 @@ import LoginModal from "../components/auth/LoginModal";
 const Home = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState("upload-logo");
-  const [codeInfo, setCodeInfo] = useState(null);
+  const [codeInfo, setCodeInfo] = useState({
+    code: "DEMO",
+    generatedAt: "16:13:11 19/7/2025",
+    status: "active",
+    expiryDate: "16:13:11 3/8/2025"
+  });
 
   // State cho upload logo - sử dụng chung với tab quản lý trận
   const [logoData, setLogoData] = useState(null);
@@ -1302,7 +1307,7 @@ const Home = () => {
               )}
 
               {/* Icon Key - chỉ hiển thị khi đã đăng nhập */}
-              {isAuthenticated && codeInfo && (
+              {isAuthenticated && (
                 <button
                   onClick={() => setShowCodeInfoModal(true)}
                   className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
