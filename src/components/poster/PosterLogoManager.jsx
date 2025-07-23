@@ -360,8 +360,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
   const handlePosterSelect = (poster) => {
     setSelectedPoster(poster);
-    // Tự động chuyển sang tab preview khi chọn poster
-    setActiveSection("preview");
+    // Không tự động chuyển tab nữa vì đã bỏ preview
   };
 
   const handleLogoSelect = (logo) => {
