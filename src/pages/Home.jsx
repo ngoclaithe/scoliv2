@@ -90,10 +90,20 @@ const Home = () => {
   }, []);
 
   const tabs = [
-    { id: "upload-logo", name: "UP LOGO" },
-    { id: "quan-ly-tran", name: "QUẢN LÝ TRẬN" },
-    { id: "binh-luan", name: "BÌNH LUẬN" },
+    { id: "upload-logo", name: "UP LOGO", requireAuth: true },
+    { id: "quan-ly-tran", name: "QUẢN LÝ TRẬN", requireAuth: true },
+    { id: "binh-luan", name: "BÌNH LUẬN", requireAuth: true },
   ];
+
+  // Hàm kiểm tra và chuyển tab
+  const handleTabChange = (tabId) => {
+    const tab = tabs.find(t => t.id === tabId);
+    if (tab && tab.requireAuth && !isAuthenticated) {
+      setShowLoginModal(true);
+      return;
+    }
+    setActiveTab(tabId);
+  };
 
   const handleCodeSubmit = async () => {
     if (matchCode.toLowerCase() === "ffff") {
@@ -1768,7 +1778,7 @@ const Home = () => {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Mật kh��u
+                    Mật khẩu
                   </label>
                   <Input
                     type="password"
