@@ -22,7 +22,22 @@ import LogoPreview from "./components/logo/LogoPreview";
 import AudioPlayer from "./components/audio/AudioPlayer";
 
 function AppContent() {
+  const { isAuthenticated, loading } = useAuth();
   const [currentPage, setCurrentPage] = useState("home");
+
+  // Hiển th��� loading khi đang kiểm tra authentication
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-600 to-blue-800">
+        <Loading size="lg" color="white" />
+      </div>
+    );
+  }
+
+  // Hiển thị trang đăng nhập nếu chưa authenticate
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
   const [demoMatch, setDemoMatch] = useState({
     homeTeam: { name: "Hà Nội FC", score: 1, logo: null },
     awayTeam: { name: "TP.HCM", score: 2, logo: null },
