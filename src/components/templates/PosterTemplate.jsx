@@ -16,12 +16,22 @@ const PosterTemplate = ({
     titleText: "",
     titleColor: "#ffffff",
     titleSize: 48,
+    titleFont: "Inter",
     showLogos: true,
     logoSize: 80,
+    logoPosition: "center",
     showScore: true,
     scoreSize: 64,
     scoreColor: "#ffffff",
+    scorePosition: "center",
     layout: "horizontal",
+    padding: 40,
+    spacing: 20,
+    backgroundOpacity: 100,
+    backgroundBlur: 0,
+    enableAnimations: true,
+    animationType: "fade",
+    animationDuration: 500,
     ...settings,
   };
 
@@ -116,7 +126,7 @@ const PosterTemplate = ({
   };
 
   const drawTeamSection = async (ctx, width, height) => {
-    const logoSize = defaultSettings.logoSize;
+    const logoSize = Math.max(40, Math.min(200, defaultSettings.logoSize));
     const centerY = height * 0.4;
 
     // Home team
@@ -147,7 +157,7 @@ const PosterTemplate = ({
 
     // Team names
     ctx.fillStyle = defaultSettings.titleColor;
-    ctx.font = "bold 32px Inter, sans-serif";
+    ctx.font = `bold ${Math.max(24, defaultSettings.titleSize * 0.67)}px ${defaultSettings.titleFont || 'Inter'}, sans-serif`;
     ctx.textAlign = "center";
 
     ctx.fillText(
@@ -196,7 +206,7 @@ const PosterTemplate = ({
   const drawScore = (ctx, width, height) => {
     const centerX = width / 2;
     const centerY = height * 0.4;
-    const scoreSize = defaultSettings.scoreSize;
+    const scoreSize = Math.max(24, Math.min(128, defaultSettings.scoreSize));
 
     ctx.fillStyle = defaultSettings.scoreColor;
     ctx.font = `bold ${scoreSize}px Inter, sans-serif`;
@@ -223,11 +233,11 @@ const PosterTemplate = ({
     if (!defaultSettings.titleText) return;
 
     ctx.fillStyle = defaultSettings.titleColor;
-    ctx.font = `bold ${defaultSettings.titleSize}px Inter, sans-serif`;
+    ctx.font = `bold ${Math.max(16, Math.min(128, defaultSettings.titleSize))}px ${defaultSettings.titleFont || 'Inter'}, sans-serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
 
-    ctx.fillText(defaultSettings.titleText, width / 2, 80);
+    ctx.fillText(defaultSettings.titleText, width / 2, Math.max(40, defaultSettings.padding * 2));
   };
 
   const drawMatchInfo = (ctx, width, height) => {
@@ -238,12 +248,12 @@ const PosterTemplate = ({
     ];
 
     ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-    ctx.font = "normal 24px Inter, sans-serif";
+    ctx.font = `normal ${Math.max(16, defaultSettings.titleSize * 0.5)}px ${defaultSettings.titleFont || 'Inter'}, sans-serif`;
     ctx.textAlign = "center";
 
-    const startY = height - 120;
+    const startY = height - Math.max(80, defaultSettings.padding * 3);
     info.forEach((text, index) => {
-      ctx.fillText(text, width / 2, startY + index * 30);
+      ctx.fillText(text, width / 2, startY + index * Math.max(20, defaultSettings.spacing * 1.5));
     });
   };
 
