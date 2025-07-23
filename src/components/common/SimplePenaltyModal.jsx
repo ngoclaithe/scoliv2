@@ -195,53 +195,53 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
         </div>
 
         {/* Tỉ số hiện tại */}
-        <div className="bg-gradient-to-r from-blue-50 to-red-50 rounded-lg p-6 border">
-          <div className="flex items-center justify-center space-x-8">
+        <div className="bg-gradient-to-r from-blue-50 to-red-50 rounded p-2 border">
+          <div className="flex items-center justify-center space-x-4">
             <div className="text-center">
-              <div className="text-sm font-semibold text-blue-700 mb-2">
+              <div className="text-xs font-semibold text-blue-700 mb-1">
                 {matchData?.homeTeam?.name || "ĐỘI NHÀ"}
               </div>
-              <div className="text-4xl font-bold text-blue-800 mb-2">{homeScore}</div>
-              
+              <div className="text-2xl font-bold text-blue-800 mb-1">{homeScore}</div>
+
               {/* Điều chỉnh tỉ số */}
               <div className="flex items-center justify-center space-x-1">
                 <button
                   onClick={() => adjustScore('home', -1)}
-                  className="w-6 h-6 rounded-full bg-blue-200 text-blue-700 text-xs hover:bg-blue-300 disabled:opacity-50"
+                  className="w-4 h-4 rounded-full bg-blue-200 text-blue-700 text-xs hover:bg-blue-300 disabled:opacity-50"
                   disabled={isLoading || homeScore === 0}
                 >
                   -
                 </button>
                 <button
                   onClick={() => adjustScore('home', 1)}
-                  className="w-6 h-6 rounded-full bg-blue-200 text-blue-700 text-xs hover:bg-blue-300 disabled:opacity-50"
+                  className="w-4 h-4 rounded-full bg-blue-200 text-blue-700 text-xs hover:bg-blue-300 disabled:opacity-50"
                   disabled={isLoading}
                 >
                   +
                 </button>
               </div>
             </div>
-            
-            <div className="text-3xl font-bold text-gray-400">-</div>
-            
+
+            <div className="text-xl font-bold text-gray-400">-</div>
+
             <div className="text-center">
-              <div className="text-sm font-semibold text-red-700 mb-2">
+              <div className="text-xs font-semibold text-red-700 mb-1">
                 {matchData?.awayTeam?.name || "ĐỘI KHÁCH"}
               </div>
-              <div className="text-4xl font-bold text-red-800 mb-2">{awayScore}</div>
-              
+              <div className="text-2xl font-bold text-red-800 mb-1">{awayScore}</div>
+
               {/* Điều chỉnh tỉ số */}
               <div className="flex items-center justify-center space-x-1">
                 <button
                   onClick={() => adjustScore('away', -1)}
-                  className="w-6 h-6 rounded-full bg-red-200 text-red-700 text-xs hover:bg-red-300 disabled:opacity-50"
+                  className="w-4 h-4 rounded-full bg-red-200 text-red-700 text-xs hover:bg-red-300 disabled:opacity-50"
                   disabled={isLoading || awayScore === 0}
                 >
                   -
                 </button>
                 <button
                   onClick={() => adjustScore('away', 1)}
-                  className="w-6 h-6 rounded-full bg-red-200 text-red-700 text-xs hover:bg-red-300 disabled:opacity-50"
+                  className="w-4 h-4 rounded-full bg-red-200 text-red-700 text-xs hover:bg-red-300 disabled:opacity-50"
                   disabled={isLoading}
                 >
                   +
