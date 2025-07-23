@@ -41,6 +41,9 @@ const MatchManagementSection = () => {
     fouls: { team1: 7, team2: 9 }, // Phạm lỗi
   });
 
+  // State cho chế độ chỉnh sửa thống kê
+  const [isEditingStats, setIsEditingStats] = useState(false);
+
   // Skin data configuration
   const skinData = {
     1: { name: "Template 1", image: "/images/templates/skin1.png" },
