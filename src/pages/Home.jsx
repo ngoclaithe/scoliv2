@@ -133,94 +133,71 @@ const Home = () => {
         </div>
       </main>
 
-      {/* Code Info Modal */}
+      {/* Code Info Modal - tối ưu mobile */}
       <Modal
         isOpen={showCodeInfoModal}
         onClose={() => setShowCodeInfoModal(false)}
-        title="🔑 Thông Tin Mã Truy Cập"
-        size="md"
+        title=""
+        size="sm"
       >
         {codeInfo && (
-          <div className="bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-lg p-4">
-            <div className="text-center mb-4">
-              <div className="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-3 flex items-center justify-center">
-                <span className="text-2xl">🔑</span>
+          <div className="p-3">
+            <div className="text-center mb-3">
+              <div className="w-12 h-12 bg-blue-100 rounded-full mx-auto mb-2 flex items-center justify-center">
+                <span className="text-lg">🔑</span>
               </div>
-              <h4 className="text-lg font-bold text-blue-800 mb-2">
-                MÃ TRUY CẬP TRẬN ĐẤU
-              </h4>
+              <h4 className="text-sm font-bold text-blue-800">MÃ TRUY CẬP</h4>
             </div>
 
-            <div className="space-y-4">
-              <div className="bg-white rounded-lg p-4 border border-blue-200">
+            <div className="space-y-2">
+              <div className="bg-white rounded p-2 border">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600 font-medium">Mã truy cập:</span>
-                  <span className="font-mono font-bold text-lg text-blue-600 bg-blue-50 px-3 py-1 rounded">
+                  <span className="text-gray-600 text-xs">Mã:</span>
+                  <span className="font-mono font-bold text-sm text-blue-600 bg-blue-50 px-2 py-1 rounded">
                     {codeInfo.code}
                   </span>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-3">
-                <div className="bg-white rounded-lg p-3 border border-gray-200">
+              <div className="grid grid-cols-1 gap-2">
+                <div className="bg-white rounded p-2 border">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Trạng thái:</span>
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        codeInfo.status === "active"
-                          ? "bg-green-100 text-green-800"
-                          : codeInfo.status === "inactive"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {codeInfo.status === "active"
-                        ? "🟢 Đã kích hoạt"
-                        : codeInfo.status === "inactive"
-                          ? "🟡 Chưa kích hoạt"
-                          : "🔴 Đã hết hạn"}
+                    <span className="text-gray-600 text-xs">Trạng thái:</span>
+                    <span className="px-1 py-1 rounded text-xs font-medium bg-green-100 text-green-800">
+                      🟢 Hoạt động
                     </span>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg p-3 border border-gray-200">
+                <div className="bg-white rounded p-2 border">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Được tạo lúc:</span>
-                    <span className="font-medium">{codeInfo.generatedAt}</span>
+                    <span className="text-gray-600 text-xs">Tạo lúc:</span>
+                    <span className="font-medium text-xs">{codeInfo.generatedAt}</span>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg p-3 border border-gray-200">
+                <div className="bg-white rounded p-2 border">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Hết hạn vào:</span>
-                    <span className="font-medium text-orange-600">
+                    <span className="text-gray-600 text-xs">Hết hạn:</span>
+                    <span className="font-medium text-xs text-orange-600">
                       {codeInfo.expiryDate}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                <div className="flex items-start">
-                  <span className="text-yellow-600 mr-2">⚠️</span>
-                  <div className="text-sm text-yellow-800">
-                    <strong>Lưu ý bảo mật:</strong>
-                    <ul className="mt-1 list-disc list-inside space-y-1">
-                      <li>Không chia sẻ mã này với người khác</li>
-                      <li>Mã sẽ hết hạn sau thời gian quy định</li>
-                      <li>Liên hệ hotline nếu gặp vấn đề</li>
-                    </ul>
-                  </div>
+              <div className="bg-yellow-50 border border-yellow-200 rounded p-2">
+                <div className="text-xs text-yellow-800">
+                  <strong>⚠️ Lưu ý:</strong> Không chia sẻ mã này
                 </div>
               </div>
             </div>
 
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-center mt-3">
               <button
                 onClick={() => setShowCodeInfoModal(false)}
-                className="px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold rounded-lg"
+                className="px-4 py-1 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded text-xs"
               >
-                <span className="mr-1">✅</span>
                 Đóng
               </button>
             </div>
