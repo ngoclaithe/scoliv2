@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import "./App.css";
 
+// Import auth context
+import { AuthProvider } from "./contexts/AuthContext";
+
 // Import pages
 import Home from "./pages/Home";
 
@@ -16,7 +19,7 @@ import Button from "./components/common/Button";
 import LogoPreview from "./components/logo/LogoPreview";
 import AudioPlayer from "./components/audio/AudioPlayer";
 
-function App() {
+function AppContent() {
   const [currentPage, setCurrentPage] = useState("home");
   const [demoMatch, setDemoMatch] = useState({
     homeTeam: { name: "Hà Nội FC", score: 1, logo: null },
@@ -384,6 +387,14 @@ function App() {
         matchData={demoMatch}
       />
     </div>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
   );
 }
 
