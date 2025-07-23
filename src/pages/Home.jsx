@@ -6,6 +6,8 @@ import PosterManager from "../components/poster/PosterManager";
 import TeamLineupModal from "../components/lineup/TeamLineupModal";
 import Modal from "../components/common/Modal";
 import SimplePenaltyModal from "../components/common/SimplePenaltyModal";
+import { useAuth } from "../contexts/AuthContext";
+import LoginModal from "../components/auth/LoginModal";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("upload-logo");
@@ -1399,7 +1401,7 @@ const Home = () => {
 
     return (
       <div className="p-6 space-y-6">
-        {/* Không hiển thị thông tin mã truy cập trong tab bình luận */}
+        {/* Không hiển thị thông tin mã truy c���p trong tab bình luận */}
 
         {/* Microphone Section */}
         <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-8 border border-red-200">
