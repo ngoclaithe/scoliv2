@@ -112,25 +112,25 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   const logoTypes = [
     {
       id: "sponsor",
-      name: "Nhà Tài Trợ",
+      name: "TÀI TRỢ",
       icon: "💰",
       color: "bg-green-100 text-green-800",
     },
     {
-      id: "media",
-      name: "Truyền Thông",
-      icon: "📺",
-      color: "bg-purple-100 text-purple-800",
-    },
-    {
       id: "organizer",
-      name: "Ban Tổ Chức",
+      name: "TỔ CHỨC",
       icon: "🏛️",
       color: "bg-blue-100 text-blue-800",
     },
     {
+      id: "media",
+      name: "TRUYỀN THÔNG",
+      icon: "📺",
+      color: "bg-purple-100 text-purple-800",
+    },
+    {
       id: "tournament",
-      name: "Giải Đấu",
+      name: "GIẢI ĐẤU",
       icon: "🏆",
       color: "bg-yellow-100 text-yellow-800",
     },
