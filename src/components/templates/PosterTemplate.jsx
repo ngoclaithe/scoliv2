@@ -335,7 +335,8 @@ const PosterTemplate = ({
                 className="font-bold mb-2"
                 style={{
                   color: defaultSettings.scoreColor,
-                  fontSize: `${defaultSettings.scoreSize * 0.03}rem`,
+                  fontSize: `${Math.max(1.2, defaultSettings.scoreSize * 0.03)}rem`,
+                  fontFamily: defaultSettings.titleFont || 'Inter',
                 }}
               >
                 {matchData.homeTeam?.score || 0} -{" "}
