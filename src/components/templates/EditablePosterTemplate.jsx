@@ -87,9 +87,9 @@ const EditablePosterTemplate = ({
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
           {/* Poster Preview */}
-          <div className="lg:col-span-2">
+          <div className="flex-1 lg:flex-[2]">
             <PosterTemplate
               matchData={matchData}
               teamLogos={teamLogos}
@@ -100,7 +100,7 @@ const EditablePosterTemplate = ({
 
           {/* Settings Panel */}
           {showSettings && (
-            <div className="lg:col-span-1">
+            <div className="w-full lg:w-80 flex-shrink-0">
               <PosterSettings
                 settings={posterSettings}
                 onSettingsChange={handleSettingsChange}
