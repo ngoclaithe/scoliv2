@@ -62,19 +62,42 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
     const newHomeScore = currentTurn === 'home' ? homeScore + 1 : homeScore;
     const newAwayScore = currentTurn === 'away' ? awayScore + 1 : awayScore;
     const newTurn = currentTurn === 'home' ? 'away' : 'home';
-    
+
+    // Thêm vào lịch sử sút
+    const newShoot = {
+      id: Date.now(),
+      team: currentTurn,
+      result: 'goal',
+      timestamp: new Date().toISOString(),
+      round: Math.ceil((shootHistory.length + 1) / 2)
+    };
+    const newShootHistory = [...shootHistory, newShoot];
+
     setHomeScore(newHomeScore);
     setAwayScore(newAwayScore);
     setCurrentTurn(newTurn);
-    
-    updatePenaltyScore(newHomeScore, newAwayScore, newTurn);
+    setShootHistory(newShootHistory);
+
+    updatePenaltyScore(newHomeScore, newAwayScore, newTurn, newShootHistory);
   };
 
   // Xử lý khi miss
   const handleMiss = () => {
     const newTurn = currentTurn === 'home' ? 'away' : 'home';
+
+    // Thêm vào lịch sử sút
+    const newShoot = {
+      id: Date.now(),
+      team: currentTurn,
+      result: 'miss',
+      timestamp: new Date().toISOString(),
+      round: Math.ceil((shootHistory.length + 1) / 2)
+    };
+    const newShootHistory = [...shootHistory, newShoot];
+
     setCurrentTurn(newTurn);
-    updatePenaltyScore(homeScore, awayScore, newTurn);
+    setShootHistory(newShootHistory);
+    updatePenaltyScore(homeScore, awayScore, newTurn, newShootHistory);
   };
 
   // Reset penalty shootout
