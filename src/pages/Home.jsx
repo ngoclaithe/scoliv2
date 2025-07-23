@@ -55,7 +55,27 @@ const Home = () => {
       <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 shadow-xl border-b-2 border-yellow-400">
         <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
           <div className="flex justify-between items-center h-12 sm:h-14">
-            {/* Icons - Top Left */}
+            {/* Left - Logo and Title */}
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg transform hover:rotate-12 transition-transform duration-300">
+                <span className="text-white font-bold text-sm sm:text-lg">⚽</span>
+              </div>
+              <div className="hidden sm:block">
+                <h1 className="text-lg sm:text-xl font-bold text-white">
+                  Football Livestream Tool
+                </h1>
+                <p className="text-blue-200 text-xs">
+                  Công cụ quản lý trận đấu trực tiếp
+                </p>
+              </div>
+              <div className="sm:hidden">
+                <h1 className="text-sm font-bold text-white">
+                  scoliv
+                </h1>
+              </div>
+            </div>
+
+            {/* Right - Icons and User Actions */}
             <div className="flex items-center space-x-2">
               {/* Login/User Icon */}
               {isAuthenticated ? (
@@ -102,29 +122,6 @@ const Home = () => {
                 <span className="text-white text-sm">📞</span>
               </a>
             </div>
-
-            {/* Center Logo and Title */}
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg transform hover:rotate-12 transition-transform duration-300">
-                <span className="text-white font-bold text-sm sm:text-lg">⚽</span>
-              </div>
-              <div className="hidden sm:block">
-                <h1 className="text-lg sm:text-xl font-bold text-white">
-                  Football Livestream Tool
-                </h1>
-                <p className="text-blue-200 text-xs">
-                  Công cụ quản lý trận đấu trực tiếp
-                </p>
-              </div>
-              <div className="sm:hidden">
-                <h1 className="text-sm font-bold text-white">
-                  scoliv
-                </h1>
-              </div>
-            </div>
-
-            {/* Right spacer for balance */}
-            <div className="w-16 sm:w-20"></div>
           </div>
         </div>
       </header>
