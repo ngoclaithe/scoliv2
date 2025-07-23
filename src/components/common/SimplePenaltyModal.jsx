@@ -9,7 +9,7 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
   const [currentTurn, setCurrentTurn] = useState('home');
   const [isLoading, setIsLoading] = useState(false);
 
-  // State theo dõi từng lượt sút (có thể chỉnh sửa)
+  // State theo dõi từng lượt sút (có thể ch��nh sửa)
   const [shootHistory, setShootHistory] = useState([]);
 
   // Load tỉ số penalty từ props
@@ -375,6 +375,7 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
   homeGoals: homeScore,
   awayGoals: awayScore,
   currentTurn: currentTurn,
+  shootHistory: shootHistory,
   status: 'ongoing',
   lastUpdated: new Date().toISOString()
 }, null, 2)}
