@@ -377,7 +377,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
       case "logos":
         const currentCategoryLogos = selectedLogos.filter(logo => logo.category === activeLogoCategory);
-        const availableCategoryLogos = sampleLogos.filter(logo => logo.category === activeLogoCategory);
 
         return (
           <div className="space-y-4">
