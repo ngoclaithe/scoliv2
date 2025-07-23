@@ -357,8 +357,8 @@ const PosterTemplate = ({
               <div
                 className="mx-auto mb-4 bg-white bg-opacity-20 rounded-full flex items-center justify-center"
                 style={{
-                  width: `${defaultSettings.logoSize * 0.8}px`,
-                  height: `${defaultSettings.logoSize * 0.8}px`,
+                  width: `${Math.max(32, defaultSettings.logoSize * 0.8)}px`,
+                  height: `${Math.max(32, defaultSettings.logoSize * 0.8)}px`,
                 }}
               >
                 {teamLogos.away ? (
