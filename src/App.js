@@ -19,7 +19,7 @@ import Button from "./components/common/Button";
 import LogoPreview from "./components/logo/LogoPreview";
 import AudioPlayer from "./components/audio/AudioPlayer";
 
-function App() {
+function AppContent() {
   const [currentPage, setCurrentPage] = useState("home");
   const [demoMatch, setDemoMatch] = useState({
     homeTeam: { name: "Hà Nội FC", score: 1, logo: null },
