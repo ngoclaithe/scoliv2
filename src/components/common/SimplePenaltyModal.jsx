@@ -29,13 +29,14 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
   }, [isOpen, penaltyData]);
 
   // Hàm gửi cập nhật lên parent/backend
-  const updatePenaltyScore = useCallback(async (newHomeScore, newAwayScore, newTurn) => {
+  const updatePenaltyScore = useCallback(async (newHomeScore, newAwayScore, newTurn, newShootHistory = null) => {
     setIsLoading(true);
-    
+
     const penaltyUpdate = {
       homeGoals: newHomeScore,
       awayGoals: newAwayScore,
       currentTurn: newTurn,
+      shootHistory: newShootHistory || shootHistory,
       // Đơn giản hóa - chỉ gửi data cần thiết cho backend
       status: 'ongoing',
       lastUpdated: new Date().toISOString()
@@ -44,7 +45,7 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
     try {
       // TODO: Khi có backend, thay thế onPenaltyChange bằng API call
       // await api.updatePenaltyScore(matchId, penaltyUpdate);
-      
+
       if (onPenaltyChange) {
         onPenaltyChange(penaltyUpdate);
       }
@@ -54,7 +55,7 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
     } finally {
       setIsLoading(false);
     }
-  }, [onPenaltyChange]);
+  }, [onPenaltyChange, shootHistory]);
 
   // Xử lý khi ghi bàn
   const handleGoal = () => {
