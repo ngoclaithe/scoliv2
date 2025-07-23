@@ -51,8 +51,8 @@ const PosterSelector = ({
       </div>
 
       {/* Poster Info */}
-      <div className="p-3">
-        <h4 className="font-semibold text-sm text-gray-900 truncate">
+      <div className="p-2">
+        <h4 className="font-medium text-xs text-gray-900 truncate">
           {poster.name}
         </h4>
       </div>
@@ -99,7 +99,7 @@ const PosterSelector = ({
             ))}
           </div>
                 ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3">
             {filteredPosters.slice(0, 8).map((poster) => (
               <PosterCard
                 key={poster.id}
@@ -151,7 +151,7 @@ const PosterSelector = ({
           {loading ? (
             <Loading size="lg" text="Đang tải poster..." />
           ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 max-h-96 overflow-y-auto">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 max-h-96 overflow-y-auto">
               {filteredPosters.map((poster) => (
                 <PosterCard
                   key={poster.id}

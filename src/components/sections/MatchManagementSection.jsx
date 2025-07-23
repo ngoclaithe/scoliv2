@@ -41,6 +41,9 @@ const MatchManagementSection = () => {
     fouls: { team1: 7, team2: 9 }, // Phạm lỗi
   });
 
+  // State cho chế độ chỉnh sửa thống kê
+  const [isEditingStats, setIsEditingStats] = useState(false);
+
   // Skin data configuration
   const skinData = {
     1: { name: "Template 1", image: "/images/templates/skin1.png" },
@@ -79,6 +82,102 @@ const MatchManagementSection = () => {
         score: Math.max(0, prev[team].score + increment),
       },
     }));
+  };
+
+  // Hàm cập nhật thống kê
+  const updateStat = (statKey, team, value) => {
+    setMatchStats(prev => ({
+      ...prev,
+      [statKey]: {
+        ...prev[statKey],
+        [team]: Math.max(0, parseInt(value) || 0)
+      }
+    }));
+  };
+
+  // Hàm cập nhật kiểm soát bóng (đảm bảo tổng = 100%)
+  const updatePossession = (team, value) => {
+    const newValue = Math.max(0, Math.min(100, parseInt(value) || 0));
+    const otherTeam = team === 'team1' ? 'team2' : 'team1';
+    const otherValue = 100 - newValue;
+
+    setMatchStats(prev => ({
+      ...prev,
+      possession: {
+        [team]: newValue,
+        [otherTeam]: otherValue
+      }
+    }));
+  };
+
+  // Component để hiển thị/chỉnh sửa thống kê
+  const EditableStatBar = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => {
+    if (!isEditingStats) {
+      // Chế độ hiển thị
+      return (
+        <div className="space-y-1">
+          <div className="flex justify-between items-center text-sm">
+            <span className="font-semibold">{team1Value}{isPercentage ? '%' : ''}</span>
+            <span className="font-medium text-gray-700">{label}</span>
+            <span className="font-semibold">{team2Value}{isPercentage ? '%' : ''}</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+            <div className="h-full flex">
+              <div
+                className="bg-red-500"
+                style={{
+                  width: isPercentage
+                    ? `${team1Value}%`
+                    : `${team1Value === 0 && team2Value === 0 ? 50 : (team1Value / (team1Value + team2Value)) * 100}%`
+                }}
+              ></div>
+              <div
+                className="bg-gray-800"
+                style={{
+                  width: isPercentage
+                    ? `${team2Value}%`
+                    : `${team1Value === 0 && team2Value === 0 ? 50 : (team2Value / (team1Value + team2Value)) * 100}%`
+                }}
+              ></div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Chế độ chỉnh sửa
+    return (
+      <div className="space-y-2 p-3 bg-gray-50 rounded-lg border">
+        <div className="text-center">
+          <span className="font-medium text-gray-700 text-sm">{label}</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex-1">
+            <label className="block text-xs text-red-600 font-medium mb-1">Đội nhà</label>
+            <input
+              type="number"
+              min="0"
+              max={isPercentage ? "100" : "99"}
+              value={team1Value}
+              onChange={(e) => onUpdate('team1', e.target.value)}
+              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:border-red-500 focus:outline-none text-center"
+            />
+          </div>
+          <div className="text-gray-400 text-sm">vs</div>
+          <div className="flex-1">
+            <label className="block text-xs text-gray-800 font-medium mb-1">Đội khách</label>
+            <input
+              type="number"
+              min="0"
+              max={isPercentage ? "100" : "99"}
+              value={team2Value}
+              onChange={(e) => onUpdate('team2', e.target.value)}
+              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:border-gray-700 focus:outline-none text-center"
+            />
+          </div>
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -279,133 +378,78 @@ const MatchManagementSection = () => {
       {selectedOption === "thong-so" && (
         <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
           <div className="space-y-4">
+            {/* Header với nút chỉnh sửa */}
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-gray-900">📊 Thông số trận đấu</h3>
+              <Button
+                variant={isEditingStats ? "primary" : "outline"}
+                size="sm"
+                onClick={() => setIsEditingStats(!isEditingStats)}
+                className="flex items-center space-x-1"
+              >
+                <span>{isEditingStats ? "💾" : "✏️"}</span>
+                <span className="text-xs">{isEditingStats ? "Lưu" : "Sửa"}</span>
+              </Button>
+            </div>
+
             {/* Stats Display */}
             <div className="space-y-3">
               {/* Kiểm soát bóng */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="font-semibold">{matchStats.possession.team1}%</span>
-                  <span className="font-medium text-gray-700">Kiểm soát bóng</span>
-                  <span className="font-semibold">{matchStats.possession.team2}%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                  <div className="h-full flex">
-                    <div
-                      className="bg-red-500"
-                      style={{ width: `${matchStats.possession.team1}%` }}
-                    ></div>
-                    <div
-                      className="bg-gray-800"
-                      style={{ width: `${matchStats.possession.team2}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
+              <EditableStatBar
+                label="Kiểm soát bóng"
+                statKey="possession"
+                team1Value={matchStats.possession.team1}
+                team2Value={matchStats.possession.team2}
+                isPercentage={true}
+                onUpdate={(team, value) => updatePossession(team, value)}
+              />
 
               {/* Tổng số cú sút */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="font-semibold">{matchStats.totalShots.team1}</span>
-                  <span className="font-medium text-gray-700">Tổng số cú sút</span>
-                  <span className="font-semibold">{matchStats.totalShots.team2}</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                  <div className="h-full flex">
-                    <div
-                      className="bg-red-500"
-                      style={{ width: `${(matchStats.totalShots.team1 / (matchStats.totalShots.team1 + matchStats.totalShots.team2)) * 100}%` }}
-                    ></div>
-                    <div
-                      className="bg-gray-800"
-                      style={{ width: `${(matchStats.totalShots.team2 / (matchStats.totalShots.team1 + matchStats.totalShots.team2)) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
+              <EditableStatBar
+                label="Tổng số cú sút"
+                statKey="totalShots"
+                team1Value={matchStats.totalShots.team1}
+                team2Value={matchStats.totalShots.team2}
+                onUpdate={(team, value) => updateStat('totalShots', team, value)}
+              />
 
               {/* Sút trúng đích */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="font-semibold">{matchStats.shotsOnTarget.team1}</span>
-                  <span className="font-medium text-gray-700">Sút trúng đích</span>
-                  <span className="font-semibold">{matchStats.shotsOnTarget.team2}</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                  <div className="h-full flex">
-                    <div
-                      className="bg-red-500"
-                      style={{ width: `${(matchStats.shotsOnTarget.team1 / (matchStats.shotsOnTarget.team1 + matchStats.shotsOnTarget.team2)) * 100}%` }}
-                    ></div>
-                    <div
-                      className="bg-gray-800"
-                      style={{ width: `${(matchStats.shotsOnTarget.team2 / (matchStats.shotsOnTarget.team1 + matchStats.shotsOnTarget.team2)) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
+              <EditableStatBar
+                label="Sút trúng đích"
+                statKey="shotsOnTarget"
+                team1Value={matchStats.shotsOnTarget.team1}
+                team2Value={matchStats.shotsOnTarget.team2}
+                onUpdate={(team, value) => updateStat('shotsOnTarget', team, value)}
+              />
 
               {/* Phạt góc */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="font-semibold">{matchStats.corners.team1}</span>
-                  <span className="font-medium text-gray-700">Phạt góc</span>
-                  <span className="font-semibold">{matchStats.corners.team2}</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                  <div className="h-full flex">
-                    <div
-                      className="bg-red-500"
-                      style={{ width: `${(matchStats.corners.team1 / (matchStats.corners.team1 + matchStats.corners.team2)) * 100}%` }}
-                    ></div>
-                    <div
-                      className="bg-gray-800"
-                      style={{ width: `${(matchStats.corners.team2 / (matchStats.corners.team1 + matchStats.corners.team2)) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
+              <EditableStatBar
+                label="Phạt góc"
+                statKey="corners"
+                team1Value={matchStats.corners.team1}
+                team2Value={matchStats.corners.team2}
+                onUpdate={(team, value) => updateStat('corners', team, value)}
+              />
 
               {/* Thẻ vàng */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="font-semibold">{matchStats.yellowCards.team1}</span>
-                  <span className="font-medium text-gray-700">Thẻ vàng</span>
-                  <span className="font-semibold">{matchStats.yellowCards.team2}</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                  <div className="h-full flex">
-                    <div
-                      className="bg-red-500"
-                      style={{ width: `${matchStats.yellowCards.team1 === 0 && matchStats.yellowCards.team2 === 0 ? 50 : (matchStats.yellowCards.team1 / (matchStats.yellowCards.team1 + matchStats.yellowCards.team2)) * 100}%` }}
-                    ></div>
-                    <div
-                      className="bg-gray-800"
-                      style={{ width: `${matchStats.yellowCards.team1 === 0 && matchStats.yellowCards.team2 === 0 ? 50 : (matchStats.yellowCards.team2 / (matchStats.yellowCards.team1 + matchStats.yellowCards.team2)) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
+              <EditableStatBar
+                label="Thẻ vàng"
+                statKey="yellowCards"
+                team1Value={matchStats.yellowCards.team1}
+                team2Value={matchStats.yellowCards.team2}
+                onUpdate={(team, value) => updateStat('yellowCards', team, value)}
+              />
 
               {/* Phạm lỗi */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="font-semibold">{matchStats.fouls.team1}</span>
-                  <span className="font-medium text-gray-700">Phạm lỗi</span>
-                  <span className="font-semibold">{matchStats.fouls.team2}</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                  <div className="h-full flex">
-                    <div
-                      className="bg-red-500"
-                      style={{ width: `${(matchStats.fouls.team1 / (matchStats.fouls.team1 + matchStats.fouls.team2)) * 100}%` }}
-                    ></div>
-                    <div
-                      className="bg-gray-800"
-                      style={{ width: `${(matchStats.fouls.team2 / (matchStats.fouls.team1 + matchStats.fouls.team2)) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
+              <EditableStatBar
+                label="Phạm lỗi"
+                statKey="fouls"
+                team1Value={matchStats.fouls.team1}
+                team2Value={matchStats.fouls.team2}
+                onUpdate={(team, value) => updateStat('fouls', team, value)}
+              />
+
+
             </div>
 
             {/* Control buttons */}
@@ -538,7 +582,7 @@ const MatchManagementSection = () => {
                   onChange={(e) => setTickerColor(e.target.value)}
                   className="w-5 h-5 border border-orange-300 rounded cursor-pointer"
                 />
-              </div>
+            </div>
               <div className="flex gap-0.5 flex-wrap">
                 {["#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff6600", "#ff00ff"].map((color) => (
                   <button

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import Loading from "../common/Loading";
+import EditablePosterTemplate from "../templates/EditablePosterTemplate";
 
 const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose }) => {
   const [activeSection, setActiveSection] = useState("posters");
@@ -15,32 +16,32 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   const availablePosters = [
     {
       id: "poster-1",
-      name: "Poster Template 1",
+      name: "Trẻ trung",
       thumbnail: "/images/posters/poster1.jpg",
     },
     {
       id: "poster-2",
-      name: "Poster Template 2",
+      name: "Hào Quang",
       thumbnail: "/images/posters/poster2.jpg",
     },
     {
       id: "poster-3",
-      name: "Poster Template 3",
+      name: "Cầu trường",
       thumbnail: "/images/posters/poster3.jpg",
     },
     {
       id: "poster-4",
-      name: "Poster Template 4",
+      name: "Nền vàng",
       thumbnail: "/images/posters/poster4.jpg",
     },
     {
       id: "poster-5",
-      name: "Poster Template 5",
+      name: "Vàng xanh",
       thumbnail: "/images/posters/poster5.jpg",
     },
     {
       id: "poster-6",
-      name: "Poster Template 6",
+      name: "Tranh tài",
       thumbnail: "/images/posters/poster6.jpg",
     },
   ];
@@ -139,6 +140,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   const sections = [
     { id: "posters", name: "Chọn Poster", icon: "🎨" },
     { id: "logos", name: "Chọn Logo", icon: "🏆" },
+    { id: "preview", name: "Xem & Cài đặt", icon: "⚙️" },
   ];
 
   const filteredLogos = sampleLogos.filter((logo) =>
@@ -171,8 +173,8 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         </div>
       </div>
 
-      <div className="p-3">
-        <h4 className="font-semibold text-sm text-gray-900 truncate">
+      <div className="p-2">
+        <h4 className="font-medium text-xs text-gray-900 truncate">
           {poster.name}
         </h4>
       </div>
@@ -359,6 +361,8 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
   const handlePosterSelect = (poster) => {
     setSelectedPoster(poster);
+    // Tự động chuyển sang tab preview khi chọn poster
+    setActiveSection("preview");
   };
 
   const handleLogoSelect = (logo) => {
@@ -419,7 +423,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
               )}
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-h-96 overflow-y-auto">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 max-h-96 overflow-y-auto">
               {availablePosters.map((poster) => (
                 <PosterCard
                   key={poster.id}
@@ -557,6 +561,51 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
           </div>
         );
 
+      case "preview":
+        return (
+          <div className="space-y-4">
+            <div className="text-center">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">XEM TRƯỚC & CÀI ĐẶT</h3>
+              <p className="text-sm text-gray-600 mb-6">
+                Xem trước poster và điều chỉnh các thông số
+              </p>
+            </div>
+
+            <EditablePosterTemplate
+              matchData={{
+                homeTeam: { name: "Đội nhà", score: 2 },
+                awayTeam: { name: "Đội khách", score: 1 },
+                league: "V-League 2024",
+                stadium: "Sân vận động Mỹ Đình",
+                date: new Date().toLocaleDateString("vi-VN"),
+                time: "19:00",
+                matchTime: "45:00",
+                period: "Hiệp 1"
+              }}
+              teamLogos={{
+                home: null,
+                away: null
+              }}
+              initialSettings={{
+                titleText: selectedPoster ? selectedPoster.name : "Demo Poster",
+                backgroundColor: selectedPoster?.id === "poster-1" ? "#10b981" :
+                                selectedPoster?.id === "poster-2" ? "#f59e0b" :
+                                selectedPoster?.id === "poster-3" ? "#8b5cf6" :
+                                selectedPoster?.id === "poster-4" ? "#fbbf24" :
+                                selectedPoster?.id === "poster-5" ? "#06b6d4" :
+                                selectedPoster?.id === "poster-6" ? "#ef4444" : "#1e40af",
+                titleSize: 48,
+                logoSize: 80,
+                showLogos: true,
+                showScore: true
+              }}
+              onExport={(format, dataURL) => {
+                console.log('Exported poster:', format, dataURL);
+              }}
+            />
+          </div>
+        );
+
       default:
         return null;
     }
@@ -595,11 +644,26 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       {/* Footer Actions */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-4 border-t border-gray-200">
         <div className="text-sm text-gray-600">
-          <p>
-            {selectedPoster ? `Poster: ${selectedPoster.name}` : "Chưa chọn poster"}
-            {selectedPoster && selectedLogos.length > 0 && " • "}
-            {selectedLogos.length > 0 ? `Logo: ${selectedLogos.length} đã chọn` : selectedPoster ? "" : "Chưa chọn logo"}
-          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            {selectedPoster ? (
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                ✅ Poster: {selectedPoster.name}
+              </span>
+            ) : (
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                ❌ Chưa chọn poster
+              </span>
+            )}
+            {selectedLogos.length > 0 ? (
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                ✅ Logo: {selectedLogos.length} đã chọn
+              </span>
+            ) : (
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                ❌ Chưa chọn logo
+              </span>
+            )}
+          </div>
         </div>
         
         <div className="flex gap-3 w-full sm:w-auto">
