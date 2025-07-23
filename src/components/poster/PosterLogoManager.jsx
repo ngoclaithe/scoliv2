@@ -643,7 +643,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             variant="primary" 
             onClick={handleSave}
             className="flex-1 sm:flex-none"
-            disabled={!selectedPoster && !selectedLogo}
+            disabled={!selectedPoster && selectedLogos.length === 0}
           >
             <span className="mr-1">💾</span>
             Lưu & Áp Dụng
