@@ -105,7 +105,8 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
     setHomeScore(0);
     setAwayScore(0);
     setCurrentTurn('home');
-    updatePenaltyScore(0, 0, 'home');
+    setShootHistory([]);
+    updatePenaltyScore(0, 0, 'home', []);
   };
 
   // Điều chỉnh tỉ số thủ công (cho admin)
