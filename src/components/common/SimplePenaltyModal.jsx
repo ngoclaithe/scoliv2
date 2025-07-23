@@ -199,7 +199,7 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
           <div className="flex items-center justify-center space-x-4">
             <div className="text-center">
               <div className="text-xs font-semibold text-blue-700 mb-1">
-                {matchData?.homeTeam?.name || "ĐỘI NHÀ"}
+                ĐỘI A
               </div>
               <div className="text-2xl font-bold text-blue-800 mb-1">{homeScore}</div>
 
