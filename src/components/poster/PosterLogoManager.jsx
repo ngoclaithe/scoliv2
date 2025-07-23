@@ -89,7 +89,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     },
     {
       id: "logo-8",
-      name: "FPT - Tập đoàn c��ng nghệ",
+      name: "FPT - Tập đoàn công nghệ",
       url: null,
       category: "sponsor",
     },
@@ -187,61 +187,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     </div>
   );
 
-  const LogoCard = ({ logo, isSelected, onClick }) => (
-    <div
-      onClick={onClick}
-      className={`
-        relative bg-white rounded-lg border-2 p-4 cursor-pointer transition-all duration-200
-        ${
-          isSelected
-            ? "border-blue-500 bg-blue-50 shadow-md"
-            : "border-gray-200 hover:border-gray-300 hover:shadow-sm"
-        }
-      `}
-    >
-      <div className="aspect-square bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
-        {logo.url ? (
-          <img
-            src={logo.url}
-            alt={logo.name}
-            className="w-full h-full object-contain p-2"
-          />
-        ) : (
-          <div className="text-gray-400 text-2xl font-bold">
-            {logo.name.charAt(0)}
-          </div>
-        )}
-      </div>
 
-      <div>
-        <h4 className="font-medium text-sm text-gray-900 mb-1 line-clamp-2">
-          {logo.name}
-        </h4>
-        <span
-          className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-            logoTypes.find((type) => type.id === logo.category)?.color
-          }`}
-        >
-          {logoTypes.find((type) => type.id === logo.category)?.icon}
-          <span className="ml-1">
-            {logoTypes.find((type) => type.id === logo.category)?.name}
-          </span>
-        </span>
-      </div>
-
-      {isSelected && (
-        <div className="absolute top-2 right-2 bg-blue-500 text-white rounded-full p-1">
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fillRule="evenodd"
-              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </div>
-      )}
-    </div>
-  );
 
   const AddLogoForm = () => {
     const [logoData, setLogoData] = useState({
