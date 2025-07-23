@@ -188,13 +188,13 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
     >
       <div className="space-y-2">
         {/* Thông báo backend ready */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
-          <span className="text-blue-700 text-sm font-medium">
-            ⚡ Sẵn sàng đồng bộ với backend - Dữ liệu đơn giản & hiệu quả
+        <div className="bg-blue-50 border border-blue-200 rounded p-1 text-center">
+          <span className="text-blue-700 text-xs">
+            ⚡ Sẵn sàng đồng bộ backend
           </span>
         </div>
 
-        {/* Tỉ số hi���n tại */}
+        {/* Tỉ số hiện tại */}
         <div className="bg-gradient-to-r from-blue-50 to-red-50 rounded-lg p-6 border">
           <div className="flex items-center justify-center space-x-8">
             <div className="text-center">
