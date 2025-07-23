@@ -626,8 +626,8 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         <div className="text-sm text-gray-600">
           <p>
             {selectedPoster ? `Poster: ${selectedPoster.name}` : "Chưa chọn poster"}
-            {selectedPoster && selectedLogo && " • "}
-            {selectedLogo ? `Logo: ${selectedLogo.name}` : selectedPoster ? "" : "Chưa chọn logo"}
+            {selectedPoster && selectedLogos.length > 0 && " • "}
+            {selectedLogos.length > 0 ? `Logo: ${selectedLogos.length} đã chọn` : selectedPoster ? "" : "Chưa chọn logo"}
           </p>
         </div>
         
