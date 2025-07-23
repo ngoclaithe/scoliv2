@@ -110,6 +110,76 @@ const MatchManagementSection = () => {
     }));
   };
 
+  // Component để hiển thị/chỉnh sửa thống kê
+  const EditableStatBar = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => {
+    if (!isEditingStats) {
+      // Chế độ hiển thị
+      return (
+        <div className="space-y-1">
+          <div className="flex justify-between items-center text-sm">
+            <span className="font-semibold">{team1Value}{isPercentage ? '%' : ''}</span>
+            <span className="font-medium text-gray-700">{label}</span>
+            <span className="font-semibold">{team2Value}{isPercentage ? '%' : ''}</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+            <div className="h-full flex">
+              <div
+                className="bg-red-500"
+                style={{
+                  width: isPercentage
+                    ? `${team1Value}%`
+                    : `${team1Value === 0 && team2Value === 0 ? 50 : (team1Value / (team1Value + team2Value)) * 100}%`
+                }}
+              ></div>
+              <div
+                className="bg-gray-800"
+                style={{
+                  width: isPercentage
+                    ? `${team2Value}%`
+                    : `${team1Value === 0 && team2Value === 0 ? 50 : (team2Value / (team1Value + team2Value)) * 100}%`
+                }}
+              ></div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Chế độ chỉnh sửa
+    return (
+      <div className="space-y-2 p-3 bg-gray-50 rounded-lg border">
+        <div className="text-center">
+          <span className="font-medium text-gray-700 text-sm">{label}</span>
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="flex-1">
+            <label className="block text-xs text-red-600 font-medium mb-1">Đội nhà</label>
+            <input
+              type="number"
+              min="0"
+              max={isPercentage ? "100" : "99"}
+              value={team1Value}
+              onChange={(e) => onUpdate('team1', e.target.value)}
+              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:border-red-500 focus:outline-none text-center"
+            />
+          </div>
+          <div className="text-gray-400 text-sm">vs</div>
+          <div className="flex-1">
+            <label className="block text-xs text-gray-800 font-medium mb-1">Đội khách</label>
+            <input
+              type="number"
+              min="0"
+              max={isPercentage ? "100" : "99"}
+              value={team2Value}
+              onChange={(e) => onUpdate('team2', e.target.value)}
+              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:border-gray-700 focus:outline-none text-center"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="p-3 sm:p-6 space-y-4 sm:space-y-6">
       {/* Scoreboard */}
@@ -373,7 +443,7 @@ const MatchManagementSection = () => {
                 </div>
               </div>
 
-              {/* Phạt góc */}
+              {/* Ph���t góc */}
               <div className="space-y-1">
                 <div className="flex justify-between items-center text-sm">
                   <span className="font-semibold">{matchStats.corners.team1}</span>
