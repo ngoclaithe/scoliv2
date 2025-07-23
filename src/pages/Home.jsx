@@ -120,7 +120,7 @@ const Home = () => {
         setIsLoading(false);
       }, 1000);
     } else {
-      alert("Code không đúng. Vui lòng thử lại!");
+      alert("Code không đúng. Vui lòng thử l��i!");
     }
   };
 
@@ -200,110 +200,109 @@ const Home = () => {
         </div>
 
         <div className="space-y-3">
-            {/* Upload Buttons Row */}
-            <div className="flex justify-center space-x-3">
-              {/* Upload Logo */}
-              <button
-                onClick={handleLogoUpload}
-                className="w-16 h-12 bg-gradient-to-br from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg flex flex-col items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
-              >
-                <span className="text-lg mb-0.5">+</span>
-                <span className="text-xs font-bold">LOGO</span>
-              </button>
+          {/* Upload Buttons Row */}
+          <div className="flex justify-center space-x-3">
+            {/* Upload Logo */}
+            <button
+              onClick={handleLogoUpload}
+              className="w-16 h-12 bg-gradient-to-br from-green-400 to-green-600 hover:from-green-500 hover:to-green-700 text-white rounded-lg flex flex-col items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-lg mb-0.5">+</span>
+              <span className="text-xs font-bold">LOGO</span>
+            </button>
 
-              {/* Upload Banner */}
-              <button
-                onClick={handleBannerUpload}
-                className="w-16 h-12 bg-gradient-to-br from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white rounded-lg flex flex-col items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
-              >
-                <span className="text-lg mb-0.5">+</span>
-                <span className="text-xs font-bold">BANNER</span>
-              </button>
-            </div>
-
-            {/* Preview and Name Input */}
-            {(logoData || bannerData) && (
-              <div className="bg-white rounded border border-gray-200 p-3">
-                {logoData && (
-                  <div className="space-y-2">
-                    <div className="flex items-center space-x-3">
-                      <img
-                        src={logoData.preview}
-                        alt="Logo"
-                        className="w-12 h-12 object-contain border rounded"
-                      />
-                      <div className="flex-1">
-                        <div className="text-xs text-green-600 font-medium mb-1">📁 Logo</div>
-                        <Input
-                          placeholder="Nhập tên logo..."
-                          value={logoName}
-                          onChange={(e) => setLogoName(e.target.value)}
-                          className="text-xs h-8"
-                        />
-                      </div>
-                    </div>
-                    {/* Upload Button cho Logo */}
-                    {logoName.trim() && (
-                      <div className="flex justify-center mt-2">
-                        <Button
-                          variant="primary"
-                          size="sm"
-                          className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold text-xs py-2 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
-                          onClick={() => {
-                            // Logic upload sẽ được thêm sau khi ghép API
-                            console.log('Upload logo:', { name: logoName, file: logoData });
-                            alert(`Sẽ upload logo "${logoName}" lên server!`);
-                          }}
-                        >
-                          <span className="mr-1">☁️</span>
-                          UPLOAD LOGO
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                )}
-                {bannerData && (
-                  <div className="space-y-2 mt-3">
-                    <div className="flex items-center space-x-3">
-                      <img
-                        src={bannerData.preview}
-                        alt="Banner"
-                        className="w-12 h-6 object-cover border rounded"
-                      />
-                      <div className="flex-1">
-                        <div className="text-xs text-blue-600 font-medium mb-1">🖼️ Banner</div>
-                        <Input
-                          placeholder="Nhập tên banner..."
-                          value={bannerName}
-                          onChange={(e) => setBannerName(e.target.value)}
-                          className="text-xs h-8"
-                        />
-                      </div>
-                    </div>
-                    {/* Upload Button cho Banner */}
-                    {bannerName.trim() && (
-                      <div className="flex justify-center mt-2">
-                        <Button
-                          variant="primary"
-                          size="sm"
-                          className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-xs py-2 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
-                          onClick={() => {
-                            // Logic upload sẽ được thêm sau khi ghép API
-                            console.log('Upload banner:', { name: bannerName, file: bannerData });
-                            alert(`Sẽ upload banner "${bannerName}" lên server!`);
-                          }}
-                        >
-                          <span className="mr-1">☁️</span>
-                          UPLOAD BANNER
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
+            {/* Upload Banner */}
+            <button
+              onClick={handleBannerUpload}
+              className="w-16 h-12 bg-gradient-to-br from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 text-white rounded-lg flex flex-col items-center justify-center shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-lg mb-0.5">+</span>
+              <span className="text-xs font-bold">BANNER</span>
+            </button>
           </div>
-        )}
+
+          {/* Preview and Name Input */}
+          {(logoData || bannerData) && (
+            <div className="bg-white rounded border border-gray-200 p-3">
+              {logoData && (
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-3">
+                    <img
+                      src={logoData.preview}
+                      alt="Logo"
+                      className="w-12 h-12 object-contain border rounded"
+                    />
+                    <div className="flex-1">
+                      <div className="text-xs text-green-600 font-medium mb-1">📁 Logo</div>
+                      <Input
+                        placeholder="Nhập tên logo..."
+                        value={logoName}
+                        onChange={(e) => setLogoName(e.target.value)}
+                        className="text-xs h-8"
+                      />
+                    </div>
+                  </div>
+                  {/* Upload Button cho Logo */}
+                  {logoName.trim() && (
+                    <div className="flex justify-center mt-2">
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold text-xs py-2 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                        onClick={() => {
+                          // Logic upload sẽ được thêm sau khi ghép API
+                          console.log('Upload logo:', { name: logoName, file: logoData });
+                          alert(`Sẽ upload logo "${logoName}" lên server!`);
+                        }}
+                      >
+                        <span className="mr-1">☁️</span>
+                        UPLOAD LOGO
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
+              {bannerData && (
+                <div className="space-y-2 mt-3">
+                  <div className="flex items-center space-x-3">
+                    <img
+                      src={bannerData.preview}
+                      alt="Banner"
+                      className="w-12 h-6 object-cover border rounded"
+                    />
+                    <div className="flex-1">
+                      <div className="text-xs text-blue-600 font-medium mb-1">🖼️ Banner</div>
+                      <Input
+                        placeholder="Nhập tên banner..."
+                        value={bannerName}
+                        onChange={(e) => setBannerName(e.target.value)}
+                        className="text-xs h-8"
+                      />
+                    </div>
+                  </div>
+                  {/* Upload Button cho Banner */}
+                  {bannerName.trim() && (
+                    <div className="flex justify-center mt-2">
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-xs py-2 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                        onClick={() => {
+                          // Logic upload sẽ được thêm sau khi ghép API
+                          console.log('Upload banner:', { name: bannerName, file: bannerData });
+                          alert(`Sẽ upload banner "${bannerName}" lên server!`);
+                        }}
+                      >
+                        <span className="mr-1">☁️</span>
+                        UPLOAD BANNER
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Search Section - No Code Required */}
