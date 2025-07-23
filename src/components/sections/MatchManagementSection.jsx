@@ -617,33 +617,6 @@ const MatchManagementSection = () => {
                   onChange={(e) => setTickerColor(e.target.value)}
                   className="w-5 h-5 border border-orange-300 rounded cursor-pointer"
                 />
-
-              {/* Phạt góc - EditableStatBar */}
-              <EditableStatBar
-                label="Phạt góc"
-                statKey="corners"
-                team1Value={matchStats.corners.team1}
-                team2Value={matchStats.corners.team2}
-                onUpdate={(team, value) => updateStat('corners', team, value)}
-              />
-
-              {/* Thẻ vàng - EditableStatBar */}
-              <EditableStatBar
-                label="Thẻ vàng"
-                statKey="yellowCards"
-                team1Value={matchStats.yellowCards.team1}
-                team2Value={matchStats.yellowCards.team2}
-                onUpdate={(team, value) => updateStat('yellowCards', team, value)}
-              />
-
-              {/* Phạm lỗi - EditableStatBar */}
-              <EditableStatBar
-                label="Phạm lỗi"
-                statKey="fouls"
-                team1Value={matchStats.fouls.team1}
-                team2Value={matchStats.fouls.team2}
-                onUpdate={(team, value) => updateStat('fouls', team, value)}
-              />
             </div>
               <div className="flex gap-0.5 flex-wrap">
                 {["#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff6600", "#ff00ff"].map((color) => (
