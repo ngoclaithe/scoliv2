@@ -12,7 +12,7 @@ import LoginModal from "../components/auth/LoginModal";
 const Home = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState("upload-logo");
-  const [codeInfo, setCodeInfo] = useState({
+  const [codeInfo] = useState({
     code: "DEMO",
     generatedAt: "16:13:11 19/7/2025",
     status: "active",
