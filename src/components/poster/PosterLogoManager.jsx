@@ -89,7 +89,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     },
     {
       id: "logo-8",
-      name: "FPT - Tập đoàn công nghệ",
+      name: "FPT - Tập đoàn c��ng nghệ",
       url: null,
       category: "sponsor",
     },
@@ -139,9 +139,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     { id: "logos", name: "Chọn Logo", icon: "🏆" },
   ];
 
-  const filteredLogos = sampleLogos.filter((logo) =>
-    logo.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+
 
   const PosterCard = ({ poster, isSelected, onClick }) => (
     <div
