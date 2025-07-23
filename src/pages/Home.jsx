@@ -120,7 +120,7 @@ const Home = () => {
         setIsLoading(false);
       }, 1000);
     } else {
-      alert("Code không đúng. Vui lòng thử l��i!");
+      alert("Code không đúng. Vui lòng thử lại!");
     }
   };
 
@@ -335,63 +335,6 @@ const Home = () => {
   );
 
   const renderQuanLyTranTab = () => {
-    if (!isCodeEntered) {
-      return (
-        <div className="p-3 sm:p-6 max-w-md mx-auto">
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <svg
-                  className="w-8 h-8 text-blue-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 7a2 2 0 012 2m0 0a2 2 0 012 2m-2-2h-6m6 0v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9a2 2 0 012-2h6z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Nhập mã truy cập
-              </h3>
-              <p className="text-gray-600 text-sm">
-                Vui lòng nhập mã code để truy cập và quản lý trận đấu
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <Input
-              placeholder="Nhập code..."
-              value={matchCode}
-              onChange={(e) => setMatchCode(e.target.value)}
-              className="text-center text-lg font-mono"
-            />
-
-            <div className="flex justify-center">
-              <Button
-                variant="primary"
-                size="lg"
-                className="w-32"
-                onClick={handleCodeSubmit}
-                loading={isLoading}
-              >
-                {isLoading ? "Đang xử lý..." : "XÁC NHẬN"}
-              </Button>
-            </div>
-
-            <div className="text-center text-xs text-gray-500">
-              Nhập "ffff" để demo
-            </div>
-          </div>
-        </div>
-      );
-    }
-
     return (
       <div className="p-3 sm:p-6 space-y-4 sm:space-y-6">
 
