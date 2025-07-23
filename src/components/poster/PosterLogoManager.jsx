@@ -361,6 +361,8 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
   const handlePosterSelect = (poster) => {
     setSelectedPoster(poster);
+    // Tự động chuyển sang tab preview khi chọn poster
+    setActiveSection("preview");
   };
 
   const handleLogoSelect = (logo) => {
@@ -370,7 +372,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         // Bỏ chọn logo
         return prev.filter(l => l.id !== logo.id);
       } else {
-        // Thêm logo vào danh sách ��ã chọn
+        // Thêm logo vào danh sách đã chọn
         return [...prev, logo];
       }
     });
