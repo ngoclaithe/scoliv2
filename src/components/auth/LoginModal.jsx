@@ -112,8 +112,6 @@ const LoginModal = ({ isOpen, onClose }) => {
               <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
                 <span className="text-3xl text-white">👤</span>
               </div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Đăng Nhập</h2>
-              <p className="text-gray-600">Chào mừng bạn quay trở lại!</p>
             </div>
 
             {error && (
@@ -125,7 +123,7 @@ const LoginModal = ({ isOpen, onClose }) => {
             <form className="space-y-4" onSubmit={handleLoginSubmit}>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Email hoặc Tên đăng nhập
+                  Email
                 </label>
                 <Input
                   type="email"
@@ -286,8 +284,6 @@ const LoginModal = ({ isOpen, onClose }) => {
               <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
                 <span className="text-3xl text-white">📝</span>
               </div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Đăng Ký</h2>
-              <p className="text-gray-600">Tạo tài khoản mới để sử dụng dịch vụ</p>
             </div>
 
             {error && (
