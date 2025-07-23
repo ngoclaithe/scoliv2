@@ -163,8 +163,9 @@ const Home = () => {
 
   const renderUploadLogoTab = () => (
     <div className="p-2 sm:p-4 space-y-3">
-      {/* Upload Section */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 border border-blue-200">
+      {/* Upload Section - Chỉ hiển thị khi đã đăng nhập */}
+      {isAuthenticated && (
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 border border-blue-200">
         <div className="flex items-center justify-center mb-2">
           <span className="text-sm">📁</span>
           <h3 className="text-xs font-bold text-gray-800 mx-2">UPLOAD</h3>
@@ -274,7 +275,8 @@ const Home = () => {
             </div>
           )}
         </div>
-      </div>
+        </div>
+      )}
 
       {/* Search Section - No Code Required */}
       <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-3 border border-green-200">
@@ -1517,7 +1519,7 @@ const Home = () => {
       <Modal
         isOpen={showTimerModal}
         onClose={() => setShowTimerModal(false)}
-        title="🕰️ Thiết Lập Thời Gian Tùy Chỉnh"
+        title="🕰️ Thi��t Lập Thời Gian Tùy Chỉnh"
         size="md"
       >
         <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-4">
