@@ -1558,6 +1558,9 @@ const Home = () => {
                     <span className="sm:hidden">AUDIO</span>
                   </>
                 )}
+                {tab.requireAuth && !isAuthenticated && (
+                  <span className="ml-1 text-xs">🔒</span>
+                )}
               </span>
             </button>
           ))}
