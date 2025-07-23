@@ -18,7 +18,6 @@ const Home = () => {
 
   // State cho modals
   const [showCodeInfoModal, setShowCodeInfoModal] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const tabs = [
     { id: "upload-logo", name: "UP LOGO", requireAuth: true },
@@ -26,13 +25,8 @@ const Home = () => {
     { id: "binh-luan", name: "BÌNH LUẬN", requireAuth: true },
   ];
 
-  // Hàm kiểm tra và chuyển tab
+  // Hàm chuyển tab - đã đăng nhập rồi nên không cần check
   const handleTabChange = (tabId) => {
-    const tab = tabs.find(t => t.id === tabId);
-    if (tab && tab.requireAuth && !isAuthenticated) {
-      setShowLoginModal(true);
-      return;
-    }
     setActiveTab(tabId);
   };
 
