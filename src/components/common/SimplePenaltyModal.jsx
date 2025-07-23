@@ -282,7 +282,7 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
                         ? 'bg-green-100 text-green-700'
                         : 'bg-red-100 text-red-700'
                     }`}>
-                      {shoot.result === 'goal' ? '✅' : '❌'}
+                      {shoot.result === 'goal' ? '��' : '❌'}
                     </span>
                   </div>
 
@@ -344,17 +344,17 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
               <div className="text-xs text-gray-600 mb-1">🥅 PENALTY</div>
               <div className="flex items-center justify-center space-x-2">
                 <div className="text-center">
-                  <div className="text-blue-600 font-bold text-xs">{matchData?.homeTeam?.name || "ĐỘI-A"}</div>
+                  <div className="text-blue-600 font-bold text-xs">ĐỘI A</div>
                   <div className="text-lg font-bold text-blue-800">{homeScore}</div>
                 </div>
                 <div className="text-gray-400 text-sm">-</div>
                 <div className="text-center">
-                  <div className="text-red-600 font-bold text-xs">{matchData?.awayTeam?.name || "ĐỘI-B"}</div>
+                  <div className="text-red-600 font-bold text-xs">ĐỘI B</div>
                   <div className="text-lg font-bold text-red-800">{awayScore}</div>
                 </div>
               </div>
               <div className="text-xs text-gray-500 mt-1">
-                Lượt: {currentTurn === 'home' ? 'NH' : 'K'}
+                Lượt: {currentTurn === 'home' ? 'A' : 'B'}
               </div>
             </div>
           </div>
