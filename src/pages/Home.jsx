@@ -51,75 +51,44 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 shadow-xl border-b-2 border-yellow-400">
-        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
-          <div className="flex justify-between items-center h-12 sm:h-14">
-            {/* Left - Logo and Title */}
+      {/* Header - tối ưu mobile */}
+      <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 shadow-lg">
+        <div className="mx-auto px-3">
+          <div className="flex justify-between items-center h-10">
+            {/* Left - Logo */}
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg transform hover:rotate-12 transition-transform duration-300">
-                <span className="text-white font-bold text-sm sm:text-lg">⚽</span>
+              <div className="w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-xs">⚽</span>
               </div>
-              <div className="hidden sm:block">
-                <h1 className="text-lg sm:text-xl font-bold text-white">
-                  Football Livestream Tool
-                </h1>
-                <p className="text-blue-200 text-xs">
-                  Công cụ quản lý trận đấu trực tiếp
-                </p>
-              </div>
-              <div className="sm:hidden">
-                <h1 className="text-sm font-bold text-white">
-                  scoliv
-                </h1>
-              </div>
+              <h1 className="text-xs font-bold text-white">scoliv</h1>
             </div>
 
-            {/* Right - Icons and User Actions */}
-            <div className="flex items-center space-x-2">
-              {/* Login/User Icon */}
-              {isAuthenticated ? (
-                <div className="flex items-center space-x-2">
-                  <div className="flex items-center bg-white/10 rounded-full px-2 py-1 hover:bg-white/20 transition-colors">
-                    <span className="text-white text-sm mr-1">👤</span>
-                    <span className="text-white text-xs font-medium hidden sm:inline">{user?.name}</span>
-                  </div>
-                  <button
-                    onClick={logout}
-                    className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
-                    title="Đăng xuất"
-                  >
-                    <span className="text-white text-sm">🚪</span>
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => setShowLoginModal(true)}
-                  className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
-                  title="Đăng nhập"
-                >
-                  <span className="text-white text-sm">👤</span>
-                </button>
-              )}
-
-              {/* Icon Key - chỉ hiển thị khi đã đăng nhập */}
-              {isAuthenticated && (
-                <button
-                  onClick={() => setShowCodeInfoModal(true)}
-                  className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
-                  title="Xem thông tin mã truy cập"
-                >
-                  <span className="text-white text-sm">🔑</span>
-                </button>
-              )}
-
-              {/* Icon điện thoại - luôn hiển thị */}
+            {/* Right - User Actions */}
+            <div className="flex items-center space-x-1">
+              <div className="flex items-center bg-white/10 rounded-full px-2 py-1">
+                <span className="text-white text-xs mr-1">👤</span>
+                <span className="text-white text-xs font-medium">{user?.name || 'User'}</span>
+              </div>
+              <button
+                onClick={logout}
+                className="flex items-center justify-center bg-white/10 rounded-full w-6 h-6 hover:bg-white/20"
+                title="Đăng xuất"
+              >
+                <span className="text-white text-xs">🚪</span>
+              </button>
+              <button
+                onClick={() => setShowCodeInfoModal(true)}
+                className="flex items-center justify-center bg-white/10 rounded-full w-6 h-6 hover:bg-white/20"
+                title="Xem mã truy cập"
+              >
+                <span className="text-white text-xs">🔑</span>
+              </button>
               <a
                 href="tel:0923415678"
-                className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
-                title="Gọi hotline hỗ trợ: 0923415678"
+                className="flex items-center justify-center bg-white/10 rounded-full w-6 h-6 hover:bg-white/20"
+                title="Hotline: 0923415678"
               >
-                <span className="text-white text-sm">📞</span>
+                <span className="text-white text-xs">📞</span>
               </a>
             </div>
           </div>
