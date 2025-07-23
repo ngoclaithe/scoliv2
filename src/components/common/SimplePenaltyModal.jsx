@@ -300,26 +300,26 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
         )}
 
         {/* Lượt hiện tại */}
-        <div className={`p-4 rounded-lg border-2 ${
+        <div className={`p-2 rounded border-2 ${
           currentTurn === 'home'
             ? 'bg-blue-50 border-blue-300'
             : 'bg-red-50 border-red-300'
         }`}>
           <div className="text-center">
-            <h3 className={`text-lg font-bold mb-4 ${
+            <h3 className={`text-sm font-bold mb-2 ${
               currentTurn === 'home' ? 'text-blue-800' : 'text-red-800'
             }`}>
-              Lượt #{shootHistory.length + 1}: {
+              #{shootHistory.length + 1}: {
                 currentTurn === 'home'
                   ? matchData?.homeTeam?.name || "ĐỘI NHÀ"
                   : matchData?.awayTeam?.name || "ĐỘI KHÁCH"
               }
             </h3>
 
-            <div className="flex justify-center space-x-4">
+            <div className="flex justify-center space-x-2">
               <button
                 onClick={handleGoal}
-                className="px-6 py-3 rounded-lg font-bold text-white bg-green-500 hover:bg-green-600 transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:transform-none"
+                className="px-3 py-2 rounded text-xs font-bold text-white bg-green-500 hover:bg-green-600 disabled:opacity-50"
                 disabled={isLoading}
               >
                 {isLoading ? "..." : "✅ GHI BÀN"}
@@ -327,7 +327,7 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
 
               <button
                 onClick={handleMiss}
-                className="px-6 py-3 rounded-lg font-bold text-white bg-red-500 hover:bg-red-600 transition-all transform hover:scale-105 shadow-lg disabled:opacity-50 disabled:transform-none"
+                className="px-3 py-2 rounded text-xs font-bold text-white bg-red-500 hover:bg-red-600 disabled:opacity-50"
                 disabled={isLoading}
               >
                 {isLoading ? "..." : "❌ MISS"}
