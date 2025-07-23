@@ -644,11 +644,26 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       {/* Footer Actions */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-4 border-t border-gray-200">
         <div className="text-sm text-gray-600">
-          <p>
-            {selectedPoster ? `Poster: ${selectedPoster.name}` : "Chưa chọn poster"}
-            {selectedPoster && selectedLogos.length > 0 && " • "}
-            {selectedLogos.length > 0 ? `Logo: ${selectedLogos.length} đã chọn` : selectedPoster ? "" : "Chưa chọn logo"}
-          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            {selectedPoster ? (
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                ✅ Poster: {selectedPoster.name}
+              </span>
+            ) : (
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                ❌ Chưa chọn poster
+              </span>
+            )}
+            {selectedLogos.length > 0 ? (
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                ✅ Logo: {selectedLogos.length} đã chọn
+              </span>
+            ) : (
+              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+                ❌ Chưa chọn logo
+              </span>
+            )}
+          </div>
         </div>
         
         <div className="flex gap-3 w-full sm:w-auto">
