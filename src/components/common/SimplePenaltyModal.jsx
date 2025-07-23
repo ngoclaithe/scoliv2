@@ -337,26 +337,26 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
         </div>
 
         {/* Preview cho livestream */}
-        <div className="bg-gray-50 rounded-lg p-4 border">
-          <h4 className="font-semibold text-gray-800 mb-2 text-sm text-center">
-            📺 Preview livestream:
+        <div className="bg-gray-50 rounded p-2 border">
+          <h4 className="font-medium text-gray-800 mb-1 text-xs text-center">
+            📺 Preview:
           </h4>
-          <div className="bg-white rounded border p-4">
+          <div className="bg-white rounded border p-2">
             <div className="text-center">
-              <div className="text-sm text-gray-600 mb-2">🥅 PENALTY SHOOTOUT</div>
-              <div className="flex items-center justify-center space-x-4">
+              <div className="text-xs text-gray-600 mb-1">🥅 PENALTY</div>
+              <div className="flex items-center justify-center space-x-2">
                 <div className="text-center">
-                  <div className="text-blue-600 font-bold text-sm">{matchData?.homeTeam?.name || "ĐỘI-A"}</div>
-                  <div className="text-2xl font-bold text-blue-800">{homeScore}</div>
+                  <div className="text-blue-600 font-bold text-xs">{matchData?.homeTeam?.name || "ĐỘI-A"}</div>
+                  <div className="text-lg font-bold text-blue-800">{homeScore}</div>
                 </div>
-                <div className="text-gray-400">-</div>
+                <div className="text-gray-400 text-sm">-</div>
                 <div className="text-center">
-                  <div className="text-red-600 font-bold text-sm">{matchData?.awayTeam?.name || "ĐỘI-B"}</div>
-                  <div className="text-2xl font-bold text-red-800">{awayScore}</div>
+                  <div className="text-red-600 font-bold text-xs">{matchData?.awayTeam?.name || "ĐỘI-B"}</div>
+                  <div className="text-lg font-bold text-red-800">{awayScore}</div>
                 </div>
               </div>
-              <div className="text-xs text-gray-500 mt-2">
-                Lượt: {currentTurn === 'home' ? matchData?.homeTeam?.name || "Đội nhà" : matchData?.awayTeam?.name || "Đội khách"}
+              <div className="text-xs text-gray-500 mt-1">
+                Lượt: {currentTurn === 'home' ? 'NH' : 'K'}
               </div>
             </div>
           </div>
