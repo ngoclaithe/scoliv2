@@ -288,7 +288,8 @@ const PosterTemplate = ({
               className="font-bold"
               style={{
                 color: defaultSettings.titleColor,
-                fontSize: `${defaultSettings.titleSize * 0.02}rem`,
+                fontSize: `${Math.max(1, defaultSettings.titleSize * 0.02)}rem`,
+                fontFamily: defaultSettings.titleFont || 'Inter',
               }}
             >
               {defaultSettings.titleText}
