@@ -449,67 +449,7 @@ const MatchManagementSection = () => {
                 onUpdate={(team, value) => updateStat('fouls', team, value)}
               />
 
-              {/* OLD CODE TO DELETE - <div className="space-y-1">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="font-semibold">{matchStats.corners.team1}</span>
-                  <span className="font-medium text-gray-700">Phạt góc</span>
-                  <span className="font-semibold">{matchStats.corners.team2}</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                  <div className="h-full flex">
-                    <div
-                      className="bg-red-500"
-                      style={{ width: `${(matchStats.corners.team1 / (matchStats.corners.team1 + matchStats.corners.team2)) * 100}%` }}
-                    ></div>
-                    <div
-                      className="bg-gray-800"
-                      style={{ width: `${(matchStats.corners.team2 / (matchStats.corners.team1 + matchStats.corners.team2)) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
 
-              {/* Thẻ vàng */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="font-semibold">{matchStats.yellowCards.team1}</span>
-                  <span className="font-medium text-gray-700">Thẻ vàng</span>
-                  <span className="font-semibold">{matchStats.yellowCards.team2}</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                  <div className="h-full flex">
-                    <div
-                      className="bg-red-500"
-                      style={{ width: `${matchStats.yellowCards.team1 === 0 && matchStats.yellowCards.team2 === 0 ? 50 : (matchStats.yellowCards.team1 / (matchStats.yellowCards.team1 + matchStats.yellowCards.team2)) * 100}%` }}
-                    ></div>
-                    <div
-                      className="bg-gray-800"
-                      style={{ width: `${matchStats.yellowCards.team1 === 0 && matchStats.yellowCards.team2 === 0 ? 50 : (matchStats.yellowCards.team2 / (matchStats.yellowCards.team1 + matchStats.yellowCards.team2)) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Phạm lỗi */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="font-semibold">{matchStats.fouls.team1}</span>
-                  <span className="font-medium text-gray-700">Phạm lỗi</span>
-                  <span className="font-semibold">{matchStats.fouls.team2}</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                  <div className="h-full flex">
-                    <div
-                      className="bg-red-500"
-                      style={{ width: `${(matchStats.fouls.team1 / (matchStats.fouls.team1 + matchStats.fouls.team2)) * 100}%` }}
-                    ></div>
-                    <div
-                      className="bg-gray-800"
-                      style={{ width: `${(matchStats.fouls.team2 / (matchStats.fouls.team1 + matchStats.fouls.team2)) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Control buttons */}
