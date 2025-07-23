@@ -253,51 +253,46 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
 
         {/* Lịch sử các lượt sút */}
         {shootHistory.length > 0 && (
-          <div className="bg-gray-50 rounded-lg p-4 border">
-            <div className="flex justify-between items-center mb-3">
-              <h4 className="font-semibold text-gray-800 text-sm">📝 Lịch sử các lượt sút:</h4>
+          <div className="bg-gray-50 rounded p-2 border">
+            <div className="flex justify-between items-center mb-1">
+              <h4 className="font-medium text-gray-800 text-xs">📝 Lịch sử:</h4>
               <button
                 onClick={removeLastShoot}
-                className="px-2 py-1 text-xs bg-red-100 text-red-600 rounded hover:bg-red-200 disabled:opacity-50"
+                className="px-1 py-1 text-xs bg-red-100 text-red-600 rounded hover:bg-red-200 disabled:opacity-50"
                 disabled={isLoading || shootHistory.length === 0}
               >
-                🗑️ Xóa cuối
+                🗑️
               </button>
             </div>
 
-            <div className="grid grid-cols-1 gap-2 max-h-32 overflow-y-auto">
+            <div className="grid grid-cols-1 gap-1 max-h-16 overflow-y-auto">
               {shootHistory.map((shoot, index) => (
-                <div key={shoot.id} className="flex items-center justify-between bg-white rounded p-2 border">
-                  <div className="flex items-center space-x-2">
+                <div key={shoot.id} className="flex items-center justify-between bg-white rounded p-1 border">
+                  <div className="flex items-center space-x-1">
                     <span className="text-xs font-mono bg-gray-100 px-1 rounded">
                       #{index + 1}
                     </span>
-                    <span className={`text-xs font-medium ${
+                    <span className={`text-xs ${
                       shoot.team === 'home' ? 'text-blue-600' : 'text-red-600'
                     }`}>
-                      {shoot.team === 'home'
-                        ? matchData?.homeTeam?.name || "Đội nhà"
-                        : matchData?.awayTeam?.name || "Đội khách"
-                      }
+                      {shoot.team === 'home' ? 'NH' : 'K'}
                     </span>
                     <span className={`text-xs px-1 rounded ${
                       shoot.result === 'goal'
                         ? 'bg-green-100 text-green-700'
                         : 'bg-red-100 text-red-700'
                     }`}>
-                      {shoot.result === 'goal' ? '✅ Ghi bàn' : '❌ Miss'}
+                      {shoot.result === 'goal' ? '✅' : '❌'}
                     </span>
                   </div>
 
-                  <div className="flex space-x-1">
-                    <button
-                      onClick={() => editShootResult(shoot.id, shoot.result === 'goal' ? 'miss' : 'goal')}
-                      className="px-2 py-1 text-xs bg-blue-100 text-blue-600 rounded hover:bg-blue-200 disabled:opacity-50"
-                      disabled={isLoading}
-                    >
-                      🔄 {shoot.result === 'goal' ? 'Đổi Miss' : 'Đổi Ghi bàn'}
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => editShootResult(shoot.id, shoot.result === 'goal' ? 'miss' : 'goal')}
+                    className="px-1 py-1 text-xs bg-blue-100 text-blue-600 rounded hover:bg-blue-200 disabled:opacity-50"
+                    disabled={isLoading}
+                  >
+                    🔄
+                  </button>
                 </div>
               ))}
             </div>
