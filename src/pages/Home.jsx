@@ -10,6 +10,7 @@ import { useAuth } from "../contexts/AuthContext";
 import LoginModal from "../components/auth/LoginModal";
 
 const Home = () => {
+  const { isAuthenticated, user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState("upload-logo");
   const [matchCode, setMatchCode] = useState("");
   const [isCodeEntered, setIsCodeEntered] = useState(false);
@@ -1401,7 +1402,7 @@ const Home = () => {
 
     return (
       <div className="p-6 space-y-6">
-        {/* Không hiển thị thông tin mã truy c���p trong tab bình luận */}
+        {/* Không hiển thị thông tin mã truy cập trong tab bình luận */}
 
         {/* Microphone Section */}
         <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-8 border border-red-200">
@@ -1980,7 +1981,7 @@ const Home = () => {
                   <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
                     Tôi đồng ý với{' '}
                     <a href="#" className="text-blue-600 hover:text-blue-500 font-medium">
-                      Điều khoản sử dụng
+                      Đi���u khoản sử dụng
                     </a>
                     {' '}và{' '}
                     <a href="#" className="text-blue-600 hover:text-blue-500 font-medium">
