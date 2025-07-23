@@ -12,9 +12,6 @@ import LoginModal from "../components/auth/LoginModal";
 const Home = () => {
   const { isAuthenticated, user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState("upload-logo");
-  const [matchCode, setMatchCode] = useState("");
-  const [isCodeEntered, setIsCodeEntered] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [codeInfo, setCodeInfo] = useState(null);
 
   // State cho upload logo - sử dụng chung với tab quản lý trận
@@ -105,38 +102,7 @@ const Home = () => {
     setActiveTab(tabId);
   };
 
-  const handleCodeSubmit = async () => {
-    if (matchCode.toLowerCase() === "ffff") {
-      setIsLoading(true);
-      // Simulate loading
-      setTimeout(() => {
-        setIsCodeEntered(true);
-        setCodeInfo({
-          code: matchCode.toUpperCase(),
-          generatedAt: "16:13:11 19/7/2025",
-          status: "active",
-          expiryDate: "16:13:11 3/8/2025"
-        });
-        setIsLoading(false);
-      }, 1000);
-    } else {
-      alert("Code không đúng. Vui lòng thử lại!");
-    }
-  };
 
-  const handleUploadCodeSubmit = () => {
-    if (matchCode.toLowerCase() === "ffff") {
-      setIsCodeEntered(true);
-      setCodeInfo({
-        code: matchCode.toUpperCase(),
-        generatedAt: "16:13:11 19/7/2025",
-        status: "active",
-        expiryDate: "16:13:11 3/8/2025"
-      });
-    } else {
-      alert("Code không đúng. Vui lòng thử lại!");
-    }
-  };
 
   const handleLogoUpload = () => {
     const input = document.createElement("input");
@@ -1335,8 +1301,8 @@ const Home = () => {
                 </button>
               )}
 
-              {/* Icon Key - chỉ hiển thị khi đã nhập code */}
-              {isCodeEntered && codeInfo && (
+              {/* Icon Key - chỉ hiển thị khi đã đăng nhập */}
+              {isAuthenticated && codeInfo && (
                 <button
                   onClick={() => setShowCodeInfoModal(true)}
                   className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
