@@ -310,9 +310,7 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
               currentTurn === 'home' ? 'text-blue-800' : 'text-red-800'
             }`}>
               #{shootHistory.length + 1}: {
-                currentTurn === 'home'
-                  ? matchData?.homeTeam?.name || "ĐỘI NHÀ"
-                  : matchData?.awayTeam?.name || "ĐỘI KHÁCH"
+                currentTurn === 'home' ? "ĐỘI A" : "ĐỘI B"
               }
             </h3>
 
