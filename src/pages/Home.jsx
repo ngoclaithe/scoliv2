@@ -95,45 +95,39 @@ const Home = () => {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto">
-        {/* Tabs */}
-        <div className="flex bg-gradient-to-r from-gray-100 to-gray-200 border-b-2 border-gray-300 shadow-md">
+      <main className="mx-auto">
+        {/* Tabs - tối ưu mobile */}
+        <div className="flex bg-gray-100 border-b border-gray-300">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className={`flex-1 py-2 px-2 sm:py-3 sm:px-4 text-center font-bold text-xs sm:text-sm border-b-2 transition-all duration-300 relative ${
+              className={`flex-1 py-2 px-1 text-center font-bold text-xs border-b-2 transition-all ${
                 activeTab === tab.id
                   ? tab.id === "upload-logo"
-                    ? "border-blue-500 text-blue-700 bg-gradient-to-t from-blue-100 to-blue-50 shadow-lg"
+                    ? "border-blue-500 text-blue-700 bg-blue-50"
                     : tab.id === "quan-ly-tran"
-                    ? "border-purple-500 text-purple-700 bg-gradient-to-t from-purple-100 to-purple-50 shadow-lg"
-                    : "border-red-500 text-red-700 bg-gradient-to-t from-red-100 to-red-50 shadow-lg"
-                  : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                    ? "border-purple-500 text-purple-700 bg-purple-50"
+                    : "border-red-500 text-red-700 bg-red-50"
+                  : "border-transparent text-gray-600 hover:bg-gray-50"
               }`}
             >
               <span className="flex items-center justify-center">
                 {tab.id === "upload-logo" ? (
                   <>
-                    <span className="mr-1 text-sm">🏆</span>
-                    <span className="hidden sm:inline">{tab.name}</span>
-                    <span className="sm:hidden">LOGO</span>
+                    <span className="mr-1">🏆</span>
+                    <span>LOGO</span>
                   </>
                 ) : tab.id === "quan-ly-tran" ? (
                   <>
-                    <span className="mr-1 text-sm">⚽</span>
-                    <span className="hidden sm:inline">{tab.name}</span>
-                    <span className="sm:hidden">TRẬN</span>
+                    <span className="mr-1">⚽</span>
+                    <span>TRẬN</span>
                   </>
                 ) : (
                   <>
-                    <span className="mr-1 text-sm">🎙️</span>
-                    <span className="hidden sm:inline">{tab.name}</span>
-                    <span className="sm:hidden">AUDIO</span>
+                    <span className="mr-1">🎙️</span>
+                    <span>AUDIO</span>
                   </>
-                )}
-                {tab.requireAuth && !isAuthenticated && (
-                  <span className="ml-1 text-xs">🔒</span>
                 )}
               </span>
             </button>
