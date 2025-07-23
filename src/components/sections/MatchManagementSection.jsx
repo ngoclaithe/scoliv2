@@ -405,25 +405,13 @@ const MatchManagementSection = () => {
               />
 
               {/* Tổng số cú sút */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="font-semibold">{matchStats.totalShots.team1}</span>
-                  <span className="font-medium text-gray-700">Tổng số cú sút</span>
-                  <span className="font-semibold">{matchStats.totalShots.team2}</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                  <div className="h-full flex">
-                    <div
-                      className="bg-red-500"
-                      style={{ width: `${(matchStats.totalShots.team1 / (matchStats.totalShots.team1 + matchStats.totalShots.team2)) * 100}%` }}
-                    ></div>
-                    <div
-                      className="bg-gray-800"
-                      style={{ width: `${(matchStats.totalShots.team2 / (matchStats.totalShots.team1 + matchStats.totalShots.team2)) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
+              <EditableStatBar
+                label="Tổng số cú sút"
+                statKey="totalShots"
+                team1Value={matchStats.totalShots.team1}
+                team2Value={matchStats.totalShots.team2}
+                onUpdate={(team, value) => updateStat('totalShots', team, value)}
+              />
 
               {/* Sút trúng đích */}
               <div className="space-y-1">
