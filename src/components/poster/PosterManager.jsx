@@ -181,7 +181,25 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
       </div>
       </div>
 
-      {/* Poster Selection Modal */}
+      {/* Combined Poster & Logo Selection Modal */}
+      <Modal
+        isOpen={showPosterLogoManager}
+        onClose={() => setShowPosterLogoManager(false)}
+        title="🎨 Quản Lý Poster & Logo"
+        size="xl"
+        className="max-h-screen overflow-hidden"
+      >
+        <div className="h-full max-h-[85vh] overflow-y-auto">
+          <PosterLogoManager
+            matchData={matchData}
+            onPosterUpdate={handlePosterLogoUpdate}
+            onLogoUpdate={handleLogoUpdateFromManager}
+            onClose={() => setShowPosterLogoManager(false)}
+          />
+        </div>
+      </Modal>
+
+      {/* Legacy Poster Selection Modal - kept for compatibility */}
       <Modal
         isOpen={showPosterSelector}
         onClose={() => setShowPosterSelector(false)}
@@ -202,14 +220,6 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
         isOpen={showCustomForm}
         onClose={() => setShowCustomForm(false)}
         onSave={handleCustomPosterSave}
-        matchData={matchData}
-      />
-
-      {/* Logo Settings Modal */}
-      <LogoSettings
-        isOpen={showLogoSettings}
-        onClose={() => setShowLogoSettings(false)}
-        onLogoUpdate={onLogoUpdate}
         matchData={matchData}
       />
     </div>
