@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import Modal from "../components/common/Modal";
 import { useAuth } from "../contexts/AuthContext";
-import LoginModal from "../components/auth/LoginModal";
 import UploadLogoSection from "../components/sections/UploadLogoSection";
 import MatchManagementSection from "../components/sections/MatchManagementSection";
 import CommentarySection from "../components/sections/CommentarySection";
 
 const Home = () => {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState("upload-logo");
   const [codeInfo] = useState({
     code: "DEMO",
@@ -18,7 +17,6 @@ const Home = () => {
 
   // State cho modals
   const [showCodeInfoModal, setShowCodeInfoModal] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const tabs = [
     { id: "upload-logo", name: "UP LOGO", requireAuth: true },
@@ -26,13 +24,8 @@ const Home = () => {
     { id: "binh-luan", name: "BÌNH LUẬN", requireAuth: true },
   ];
 
-  // Hàm kiểm tra và chuyển tab
+  // Hàm chuyển tab - đã đăng nhập rồi nên không cần check
   const handleTabChange = (tabId) => {
-    const tab = tabs.find(t => t.id === tabId);
-    if (tab && tab.requireAuth && !isAuthenticated) {
-      setShowLoginModal(true);
-      return;
-    }
     setActiveTab(tabId);
   };
 
@@ -51,120 +44,83 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 shadow-xl border-b-2 border-yellow-400">
-        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
-          <div className="flex justify-between items-center h-12 sm:h-14">
-            {/* Left - Logo and Title */}
+      {/* Header - tối ưu mobile */}
+      <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 shadow-lg">
+        <div className="mx-auto px-3">
+          <div className="flex justify-between items-center h-10">
+            {/* Left - Logo */}
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-xl flex items-center justify-center shadow-lg transform hover:rotate-12 transition-transform duration-300">
-                <span className="text-white font-bold text-sm sm:text-lg">⚽</span>
+              <div className="w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-xs">⚽</span>
               </div>
-              <div className="hidden sm:block">
-                <h1 className="text-lg sm:text-xl font-bold text-white">
-                  Football Livestream Tool
-                </h1>
-                <p className="text-blue-200 text-xs">
-                  Công cụ quản lý trận đấu trực tiếp
-                </p>
-              </div>
-              <div className="sm:hidden">
-                <h1 className="text-sm font-bold text-white">
-                  scoliv
-                </h1>
-              </div>
+              <h1 className="text-xs font-bold text-white">scoliv</h1>
             </div>
 
-            {/* Right - Icons and User Actions */}
-            <div className="flex items-center space-x-2">
-              {/* Login/User Icon */}
-              {isAuthenticated ? (
-                <div className="flex items-center space-x-2">
-                  <div className="flex items-center bg-white/10 rounded-full px-2 py-1 hover:bg-white/20 transition-colors">
-                    <span className="text-white text-sm mr-1">👤</span>
-                    <span className="text-white text-xs font-medium hidden sm:inline">{user?.name}</span>
-                  </div>
-                  <button
-                    onClick={logout}
-                    className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
-                    title="Đăng xuất"
-                  >
-                    <span className="text-white text-sm">🚪</span>
-                  </button>
-                </div>
-              ) : (
-                <button
-                  onClick={() => setShowLoginModal(true)}
-                  className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
-                  title="Đăng nhập"
-                >
-                  <span className="text-white text-sm">👤</span>
-                </button>
-              )}
-
-              {/* Icon Key - chỉ hiển thị khi đã đăng nhập */}
-              {isAuthenticated && (
-                <button
-                  onClick={() => setShowCodeInfoModal(true)}
-                  className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
-                  title="Xem thông tin mã truy cập"
-                >
-                  <span className="text-white text-sm">🔑</span>
-                </button>
-              )}
-
-              {/* Icon điện thoại - luôn hiển thị */}
+            {/* Right - User Actions */}
+            <div className="flex items-center space-x-1">
+              <div className="flex items-center bg-white/10 rounded-full px-2 py-1">
+                <span className="text-white text-xs mr-1">👤</span>
+                <span className="text-white text-xs font-medium">{user?.name || 'User'}</span>
+              </div>
+              <button
+                onClick={logout}
+                className="flex items-center justify-center bg-white/10 rounded-full w-6 h-6 hover:bg-white/20"
+                title="Đăng xuất"
+              >
+                <span className="text-white text-xs">🚪</span>
+              </button>
+              <button
+                onClick={() => setShowCodeInfoModal(true)}
+                className="flex items-center justify-center bg-white/10 rounded-full w-6 h-6 hover:bg-white/20"
+                title="Xem mã truy cập"
+              >
+                <span className="text-white text-xs">🔑</span>
+              </button>
               <a
                 href="tel:0923415678"
-                className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
-                title="Gọi hotline hỗ trợ: 0923415678"
+                className="flex items-center justify-center bg-white/10 rounded-full w-6 h-6 hover:bg-white/20"
+                title="Hotline: 0923415678"
               >
-                <span className="text-white text-sm">📞</span>
+                <span className="text-white text-xs">📞</span>
               </a>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto">
-        {/* Tabs */}
-        <div className="flex bg-gradient-to-r from-gray-100 to-gray-200 border-b-2 border-gray-300 shadow-md">
+      <main className="mx-auto">
+        {/* Tabs - tối ưu mobile */}
+        <div className="flex bg-gray-100 border-b border-gray-300">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className={`flex-1 py-2 px-2 sm:py-3 sm:px-4 text-center font-bold text-xs sm:text-sm border-b-2 transition-all duration-300 relative ${
+              className={`flex-1 py-2 px-1 text-center font-bold text-xs border-b-2 transition-all ${
                 activeTab === tab.id
                   ? tab.id === "upload-logo"
-                    ? "border-blue-500 text-blue-700 bg-gradient-to-t from-blue-100 to-blue-50 shadow-lg"
+                    ? "border-blue-500 text-blue-700 bg-blue-50"
                     : tab.id === "quan-ly-tran"
-                    ? "border-purple-500 text-purple-700 bg-gradient-to-t from-purple-100 to-purple-50 shadow-lg"
-                    : "border-red-500 text-red-700 bg-gradient-to-t from-red-100 to-red-50 shadow-lg"
-                  : "border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-50"
+                    ? "border-purple-500 text-purple-700 bg-purple-50"
+                    : "border-red-500 text-red-700 bg-red-50"
+                  : "border-transparent text-gray-600 hover:bg-gray-50"
               }`}
             >
               <span className="flex items-center justify-center">
                 {tab.id === "upload-logo" ? (
                   <>
-                    <span className="mr-1 text-sm">🏆</span>
-                    <span className="hidden sm:inline">{tab.name}</span>
-                    <span className="sm:hidden">LOGO</span>
+                    <span className="mr-1">🏆</span>
+                    <span>LOGO</span>
                   </>
                 ) : tab.id === "quan-ly-tran" ? (
                   <>
-                    <span className="mr-1 text-sm">⚽</span>
-                    <span className="hidden sm:inline">{tab.name}</span>
-                    <span className="sm:hidden">TRẬN</span>
+                    <span className="mr-1">⚽</span>
+                    <span>TRẬN</span>
                   </>
                 ) : (
                   <>
-                    <span className="mr-1 text-sm">🎙️</span>
-                    <span className="hidden sm:inline">{tab.name}</span>
-                    <span className="sm:hidden">AUDIO</span>
+                    <span className="mr-1">🎙️</span>
+                    <span>AUDIO</span>
                   </>
-                )}
-                {tab.requireAuth && !isAuthenticated && (
-                  <span className="ml-1 text-xs">🔒</span>
                 )}
               </span>
             </button>
@@ -177,100 +133,71 @@ const Home = () => {
         </div>
       </main>
 
-      {/* Login Modal */}
-      <LoginModal
-        isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-      />
-
-      {/* Code Info Modal */}
+      {/* Code Info Modal - tối ưu mobile */}
       <Modal
         isOpen={showCodeInfoModal}
         onClose={() => setShowCodeInfoModal(false)}
-        title="🔑 Thông Tin Mã Truy Cập"
-        size="md"
+        title=""
+        size="sm"
       >
         {codeInfo && (
-          <div className="bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-lg p-4">
-            <div className="text-center mb-4">
-              <div className="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-3 flex items-center justify-center">
-                <span className="text-2xl">🔑</span>
+          <div className="p-3">
+            <div className="text-center mb-3">
+              <div className="w-12 h-12 bg-blue-100 rounded-full mx-auto mb-2 flex items-center justify-center">
+                <span className="text-lg">🔑</span>
               </div>
-              <h4 className="text-lg font-bold text-blue-800 mb-2">
-                MÃ TRUY CẬP TRẬN ĐẤU
-              </h4>
+              <h4 className="text-sm font-bold text-blue-800">MÃ TRUY CẬP</h4>
             </div>
 
-            <div className="space-y-4">
-              <div className="bg-white rounded-lg p-4 border border-blue-200">
+            <div className="space-y-2">
+              <div className="bg-white rounded p-2 border">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-600 font-medium">Mã truy cập:</span>
-                  <span className="font-mono font-bold text-lg text-blue-600 bg-blue-50 px-3 py-1 rounded">
+                  <span className="text-gray-600 text-xs">Mã:</span>
+                  <span className="font-mono font-bold text-sm text-blue-600 bg-blue-50 px-2 py-1 rounded">
                     {codeInfo.code}
                   </span>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-3">
-                <div className="bg-white rounded-lg p-3 border border-gray-200">
+              <div className="grid grid-cols-1 gap-2">
+                <div className="bg-white rounded p-2 border">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Trạng thái:</span>
-                    <span
-                      className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        codeInfo.status === "active"
-                          ? "bg-green-100 text-green-800"
-                          : codeInfo.status === "inactive"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-red-100 text-red-800"
-                      }`}
-                    >
-                      {codeInfo.status === "active"
-                        ? "🟢 Đã kích hoạt"
-                        : codeInfo.status === "inactive"
-                          ? "🟡 Chưa kích hoạt"
-                          : "🔴 Đã hết hạn"}
+                    <span className="text-gray-600 text-xs">Trạng thái:</span>
+                    <span className="px-1 py-1 rounded text-xs font-medium bg-green-100 text-green-800">
+                      🟢 Hoạt động
                     </span>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg p-3 border border-gray-200">
+                <div className="bg-white rounded p-2 border">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Được tạo lúc:</span>
-                    <span className="font-medium">{codeInfo.generatedAt}</span>
+                    <span className="text-gray-600 text-xs">Tạo lúc:</span>
+                    <span className="font-medium text-xs">{codeInfo.generatedAt}</span>
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg p-3 border border-gray-200">
+                <div className="bg-white rounded p-2 border">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Hết hạn vào:</span>
-                    <span className="font-medium text-orange-600">
+                    <span className="text-gray-600 text-xs">Hết hạn:</span>
+                    <span className="font-medium text-xs text-orange-600">
                       {codeInfo.expiryDate}
                     </span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                <div className="flex items-start">
-                  <span className="text-yellow-600 mr-2">⚠️</span>
-                  <div className="text-sm text-yellow-800">
-                    <strong>Lưu ý bảo mật:</strong>
-                    <ul className="mt-1 list-disc list-inside space-y-1">
-                      <li>Không chia sẻ mã này với người khác</li>
-                      <li>Mã sẽ hết hạn sau thời gian quy định</li>
-                      <li>Liên hệ hotline nếu gặp vấn đề</li>
-                    </ul>
-                  </div>
+              <div className="bg-yellow-50 border border-yellow-200 rounded p-2">
+                <div className="text-xs text-yellow-800">
+                  <strong>⚠️ Lưu ý:</strong> Không chia sẻ mã này
                 </div>
               </div>
             </div>
 
-            <div className="flex justify-center mt-4">
+            <div className="flex justify-center mt-3">
               <button
                 onClick={() => setShowCodeInfoModal(false)}
-                className="px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold rounded-lg"
+                className="px-4 py-1 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded text-xs"
               >
-                <span className="mr-1">✅</span>
                 Đóng
               </button>
             </div>

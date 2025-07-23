@@ -64,6 +64,7 @@ const MatchManagementSection = () => {
     homeGoals: 0,
     awayGoals: 0,
     currentTurn: 'home',
+    shootHistory: [],
     status: 'ready',
     lastUpdated: null
   });

@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import "./App.css";
 
 // Import auth context
-import { AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
 // Import pages
 import Home from "./pages/Home";
+import LoginPage from "./components/auth/LoginPage";
+import Loading from "./components/common/Loading";
 
 // Import components for demo
 import ScoreDisplay from "./components/scoreboard/ScoreDisplay";
@@ -20,6 +22,7 @@ import LogoPreview from "./components/logo/LogoPreview";
 import AudioPlayer from "./components/audio/AudioPlayer";
 
 function AppContent() {
+  const { isAuthenticated, loading } = useAuth();
   const [currentPage, setCurrentPage] = useState("home");
   const [demoMatch, setDemoMatch] = useState({
     homeTeam: { name: "Hà Nội FC", score: 1, logo: null },
@@ -34,9 +37,22 @@ function AppContent() {
     weather: "☀️ Nắng",
     temperature: "28°C",
   });
-
-    const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [showLineupModal, setShowLineupModal] = useState(false);
+
+  // Hiển thị loading khi đang kiểm tra authentication
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-600 to-blue-800">
+        <Loading size="lg" color="white" />
+      </div>
+    );
+  }
+
+  // Hiển thị trang đăng nhập nếu chưa authenticate
+  if (!isAuthenticated) {
+    return <LoginPage />;
+  }
 
   const demoLineup = {
     formation: "4-4-2",
@@ -85,11 +101,7 @@ function AppContent() {
     ],
   };
 
-  const demoPoster = {
-    id: "demo-poster",
-    name: "Match Poster",
-    dimensions: { width: 1920, height: 1080 },
-  };
+
 
   const demoLogo = {
     id: "demo-logo",

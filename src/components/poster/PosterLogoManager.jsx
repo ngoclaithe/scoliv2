@@ -1,14 +1,11 @@
 import React, { useState } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
-import Loading from "../common/Loading";
-import EditablePosterTemplate from "../templates/EditablePosterTemplate";
 
 const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose }) => {
   const [activeSection, setActiveSection] = useState("posters");
   const [selectedPoster, setSelectedPoster] = useState(null);
   const [selectedLogos, setSelectedLogos] = useState([]); // Thay đổi thành array để chọn nhiều logo
-  const [searchQuery, setSearchQuery] = useState("");
   const [activeLogoCategory, setActiveLogoCategory] = useState("sponsor"); // Tab hiện tại cho logo
   const [showAddLogoForm, setShowAddLogoForm] = useState(false); // Hiển thị form thêm logo
 
@@ -140,20 +137,17 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   const sections = [
     { id: "posters", name: "Chọn Poster", icon: "🎨" },
     { id: "logos", name: "Chọn Logo", icon: "🏆" },
-    { id: "preview", name: "Xem & Cài đặt", icon: "⚙️" },
   ];
 
-  const filteredLogos = sampleLogos.filter((logo) =>
-    logo.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+
 
   const PosterCard = ({ poster, isSelected, onClick }) => (
     <div
       onClick={onClick}
       className={`
-        relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg 
-        transition-all duration-200 cursor-pointer group
-        ${isSelected ? "ring-2 ring-blue-500 ring-offset-2" : "hover:scale-105"}
+        relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg
+        transition-shadow duration-200 cursor-pointer group
+        ${isSelected ? "ring-2 ring-blue-500 ring-offset-2" : ""}
       `}
     >
       <div className="aspect-video bg-gray-100 overflow-hidden">
@@ -161,7 +155,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
           <img
             src={poster.thumbnail}
             alt={poster.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            className="w-full h-full object-cover transition-opacity duration-200 group-hover:opacity-90"
             onError={(e) => {
               e.target.style.display = 'none';
               e.target.nextSibling.style.display = 'flex';
@@ -193,61 +187,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     </div>
   );
 
-  const LogoCard = ({ logo, isSelected, onClick }) => (
-    <div
-      onClick={onClick}
-      className={`
-        relative bg-white rounded-lg border-2 p-4 cursor-pointer transition-all duration-200
-        ${
-          isSelected
-            ? "border-blue-500 bg-blue-50 shadow-md"
-            : "border-gray-200 hover:border-gray-300 hover:shadow-sm"
-        }
-      `}
-    >
-      <div className="aspect-square bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
-        {logo.url ? (
-          <img
-            src={logo.url}
-            alt={logo.name}
-            className="w-full h-full object-contain p-2"
-          />
-        ) : (
-          <div className="text-gray-400 text-2xl font-bold">
-            {logo.name.charAt(0)}
-          </div>
-        )}
-      </div>
 
-      <div>
-        <h4 className="font-medium text-sm text-gray-900 mb-1 line-clamp-2">
-          {logo.name}
-        </h4>
-        <span
-          className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-            logoTypes.find((type) => type.id === logo.category)?.color
-          }`}
-        >
-          {logoTypes.find((type) => type.id === logo.category)?.icon}
-          <span className="ml-1">
-            {logoTypes.find((type) => type.id === logo.category)?.name}
-          </span>
-        </span>
-      </div>
-
-      {isSelected && (
-        <div className="absolute top-2 right-2 bg-blue-500 text-white rounded-full p-1">
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fillRule="evenodd"
-              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-              clipRule="evenodd"
-            />
-          </svg>
-        </div>
-      )}
-    </div>
-  );
 
   const AddLogoForm = () => {
     const [logoData, setLogoData] = useState({
@@ -361,8 +301,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
   const handlePosterSelect = (poster) => {
     setSelectedPoster(poster);
-    // Tự động chuyển sang tab preview khi chọn poster
-    setActiveSection("preview");
+    // Không tự động chuyển tab nữa vì đã bỏ preview
   };
 
   const handleLogoSelect = (logo) => {
@@ -438,7 +377,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
       case "logos":
         const currentCategoryLogos = selectedLogos.filter(logo => logo.category === activeLogoCategory);
-        const availableCategoryLogos = sampleLogos.filter(logo => logo.category === activeLogoCategory);
 
         return (
           <div className="space-y-4">
@@ -558,51 +496,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             </div>
 
             
-          </div>
-        );
-
-      case "preview":
-        return (
-          <div className="space-y-4">
-            <div className="text-center">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">XEM TRƯỚC & CÀI ĐẶT</h3>
-              <p className="text-sm text-gray-600 mb-6">
-                Xem trước poster và điều chỉnh các thông số
-              </p>
-            </div>
-
-            <EditablePosterTemplate
-              matchData={{
-                homeTeam: { name: "Đội nhà", score: 2 },
-                awayTeam: { name: "Đội khách", score: 1 },
-                league: "V-League 2024",
-                stadium: "Sân vận động Mỹ Đình",
-                date: new Date().toLocaleDateString("vi-VN"),
-                time: "19:00",
-                matchTime: "45:00",
-                period: "Hiệp 1"
-              }}
-              teamLogos={{
-                home: null,
-                away: null
-              }}
-              initialSettings={{
-                titleText: selectedPoster ? selectedPoster.name : "Demo Poster",
-                backgroundColor: selectedPoster?.id === "poster-1" ? "#10b981" :
-                                selectedPoster?.id === "poster-2" ? "#f59e0b" :
-                                selectedPoster?.id === "poster-3" ? "#8b5cf6" :
-                                selectedPoster?.id === "poster-4" ? "#fbbf24" :
-                                selectedPoster?.id === "poster-5" ? "#06b6d4" :
-                                selectedPoster?.id === "poster-6" ? "#ef4444" : "#1e40af",
-                titleSize: 48,
-                logoSize: 80,
-                showLogos: true,
-                showScore: true
-              }}
-              onExport={(format, dataURL) => {
-                console.log('Exported poster:', format, dataURL);
-              }}
-            />
           </div>
         );
 
