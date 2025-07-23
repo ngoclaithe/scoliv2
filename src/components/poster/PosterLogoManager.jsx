@@ -6,8 +6,10 @@ import Loading from "../common/Loading";
 const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose }) => {
   const [activeSection, setActiveSection] = useState("posters");
   const [selectedPoster, setSelectedPoster] = useState(null);
-  const [selectedLogo, setSelectedLogo] = useState(null);
+  const [selectedLogos, setSelectedLogos] = useState([]); // Thay đổi thành array để chọn nhiều logo
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeLogoCategory, setActiveLogoCategory] = useState("sponsor"); // Tab hiện tại cho logo
+  const [showAddLogoForm, setShowAddLogoForm] = useState(false); // Hiển thị form thêm logo
 
   // Posters từ thư mục public/images/posters
   const availablePosters = [
