@@ -1063,7 +1063,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-green-100 to-emerald-200 text-green-700 hover:from-green-200 hover:to-emerald-300"
               }`}
             >
-              <span className="text-sm mr-1">⚽</span>
+              <span className="text-sm mr-1">���</span>
               <span className="text-xs font-bold text-center">
                 TỈ SỐ DƯỚI
               </span>
@@ -1449,14 +1449,30 @@ const Home = () => {
           <div className="flex justify-between items-center h-12 sm:h-14">
             {/* Icons - Top Left */}
             <div className="flex items-center space-x-2">
-              {/* Login Icon */}
-              <button
-                onClick={() => setShowLoginModal(true)}
-                className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
-                title="Đăng nhập"
-              >
-                <span className="text-white text-sm">👤</span>
-              </button>
+              {/* Login/User Icon */}
+              {isAuthenticated ? (
+                <div className="flex items-center space-x-2">
+                  <div className="flex items-center bg-white/10 rounded-full px-2 py-1 hover:bg-white/20 transition-colors">
+                    <span className="text-white text-sm mr-1">👤</span>
+                    <span className="text-white text-xs font-medium hidden sm:inline">{user?.name}</span>
+                  </div>
+                  <button
+                    onClick={logout}
+                    className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
+                    title="Đăng xuất"
+                  >
+                    <span className="text-white text-sm">🚪</span>
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setShowLoginModal(true)}
+                  className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
+                  title="Đăng nhập"
+                >
+                  <span className="text-white text-sm">👤</span>
+                </button>
+              )}
 
               {/* Icon Key - chỉ hiển thị khi đã nhập code */}
               {isCodeEntered && codeInfo && (
@@ -1982,7 +1998,7 @@ const Home = () => {
                   <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
                     Tôi đồng ý với{' '}
                     <a href="#" className="text-blue-600 hover:text-blue-500 font-medium">
-                      Điều khoản sử dụng
+                      Điều khoản s��� dụng
                     </a>
                     {' '}và{' '}
                     <a href="#" className="text-blue-600 hover:text-blue-500 font-medium">
