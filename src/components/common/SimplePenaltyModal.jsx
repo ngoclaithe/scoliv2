@@ -122,6 +122,43 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
     }
   };
 
+  // Chỉnh sửa kết quả từng lượt sút
+  const editShootResult = (shootId, newResult) => {
+    const newShootHistory = shootHistory.map(shoot =>
+      shoot.id === shootId ? { ...shoot, result: newResult } : shoot
+    );
+
+    // Tính lại tỉ số từ lịch sử
+    const newHomeScore = newShootHistory.filter(s => s.team === 'home' && s.result === 'goal').length;
+    const newAwayScore = newShootHistory.filter(s => s.team === 'away' && s.result === 'goal').length;
+
+    setShootHistory(newShootHistory);
+    setHomeScore(newHomeScore);
+    setAwayScore(newAwayScore);
+    updatePenaltyScore(newHomeScore, newAwayScore, currentTurn, newShootHistory);
+  };
+
+  // Xóa lượt sút cuối
+  const removeLastShoot = () => {
+    if (shootHistory.length === 0) return;
+
+    const newShootHistory = shootHistory.slice(0, -1);
+    const lastShoot = shootHistory[shootHistory.length - 1];
+
+    // Tính lại tỉ số
+    const newHomeScore = newShootHistory.filter(s => s.team === 'home' && s.result === 'goal').length;
+    const newAwayScore = newShootHistory.filter(s => s.team === 'away' && s.result === 'goal').length;
+
+    // Đặt lại lượt về team của shoot vừa xóa
+    const newTurn = lastShoot.team;
+
+    setShootHistory(newShootHistory);
+    setHomeScore(newHomeScore);
+    setAwayScore(newAwayScore);
+    setCurrentTurn(newTurn);
+    updatePenaltyScore(newHomeScore, newAwayScore, newTurn, newShootHistory);
+  };
+
   return (
     <Modal
       isOpen={isOpen}
