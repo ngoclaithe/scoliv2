@@ -9,6 +9,9 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
   const [currentTurn, setCurrentTurn] = useState('home');
   const [isLoading, setIsLoading] = useState(false);
 
+  // State theo dõi từng lượt sút (có thể chỉnh sửa)
+  const [shootHistory, setShootHistory] = useState([]);
+
   // Load tỉ số penalty từ props
   useEffect(() => {
     if (isOpen && penaltyData) {
