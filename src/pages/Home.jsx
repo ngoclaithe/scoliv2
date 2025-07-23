@@ -133,12 +133,6 @@ const Home = () => {
         </div>
       </main>
 
-      {/* Login Modal */}
-      <LoginModal
-        isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-      />
-
       {/* Code Info Modal */}
       <Modal
         isOpen={showCodeInfoModal}
