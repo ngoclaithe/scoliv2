@@ -378,6 +378,20 @@ const MatchManagementSection = () => {
       {selectedOption === "thong-so" && (
         <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
           <div className="space-y-4">
+            {/* Header với nút chỉnh sửa */}
+            <div className="flex justify-between items-center">
+              <h3 className="text-lg font-semibold text-gray-900">📊 Thông số trận đấu</h3>
+              <Button
+                variant={isEditingStats ? "primary" : "outline"}
+                size="sm"
+                onClick={() => setIsEditingStats(!isEditingStats)}
+                className="flex items-center space-x-1"
+              >
+                <span>{isEditingStats ? "💾" : "✏️"}</span>
+                <span className="text-xs">{isEditingStats ? "Lưu" : "Sửa"}</span>
+              </Button>
+            </div>
+
             {/* Stats Display */}
             <div className="space-y-3">
               {/* Kiểm soát bóng */}
