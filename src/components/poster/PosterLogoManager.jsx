@@ -370,7 +370,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         // Bỏ chọn logo
         return prev.filter(l => l.id !== logo.id);
       } else {
-        // Thêm logo vào danh sách đã chọn
+        // Thêm logo vào danh sách ��ã chọn
         return [...prev, logo];
       }
     });
@@ -585,8 +585,13 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
                 away: null
               }}
               initialSettings={{
-                titleText: selectedPoster ? `Poster ${selectedPoster.name}` : "Demo Poster",
-                backgroundColor: "#1e40af",
+                titleText: selectedPoster ? selectedPoster.name : "Demo Poster",
+                backgroundColor: selectedPoster?.id === "poster-1" ? "#10b981" :
+                                selectedPoster?.id === "poster-2" ? "#f59e0b" :
+                                selectedPoster?.id === "poster-3" ? "#8b5cf6" :
+                                selectedPoster?.id === "poster-4" ? "#fbbf24" :
+                                selectedPoster?.id === "poster-5" ? "#06b6d4" :
+                                selectedPoster?.id === "poster-6" ? "#ef4444" : "#1e40af",
                 titleSize: 48,
                 logoSize: 80,
                 showLogos: true,
