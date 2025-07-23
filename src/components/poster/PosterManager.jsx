@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PosterSelector from "./PosterSelector";
 import PosterPreview from "./PosterPreview";
 import CustomPosterForm from "./CustomPosterForm";
-import LogoSettings from "../logo/LogoSettings";
+import PosterLogoManager from "./PosterLogoManager";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
 
