@@ -9,7 +9,7 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
   const [currentTurn, setCurrentTurn] = useState('home');
   const [isLoading, setIsLoading] = useState(false);
 
-  // State theo dõi từng lượt sút (có thể ch��nh sửa)
+  // State theo dõi từng lượt sút (có thể chỉnh sửa)
   const [shootHistory, setShootHistory] = useState([]);
 
   // Load tỉ số penalty từ props
@@ -163,14 +163,14 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="🥅 Penalty Shootout - Quản lý đơn giản"
-      size="md"
+      title="🥅 Penalty"
+      size="sm"
       footer={
         <div className="flex justify-between w-full">
           <Button
             variant="secondary"
             onClick={handleReset}
-            className="text-red-600 hover:bg-red-50"
+            className="text-red-600 hover:bg-red-50 text-xs py-1 px-2"
             disabled={isLoading}
           >
             🔄 Reset
@@ -179,13 +179,14 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
             variant="primary"
             onClick={onClose}
             disabled={isLoading}
+            className="text-xs py-1 px-3"
           >
             Đóng
           </Button>
         </div>
       }
     >
-      <div className="space-y-6">
+      <div className="space-y-2">
         {/* Thông báo backend ready */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-center">
           <span className="text-blue-700 text-sm font-medium">
@@ -193,7 +194,7 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
           </span>
         </div>
 
-        {/* Tỉ số hiện tại */}
+        {/* Tỉ số hi���n tại */}
         <div className="bg-gradient-to-r from-blue-50 to-red-50 rounded-lg p-6 border">
           <div className="flex items-center justify-center space-x-8">
             <div className="text-center">
