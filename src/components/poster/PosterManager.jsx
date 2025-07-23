@@ -72,6 +72,20 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
     setShowCustomForm(false);
   };
 
+  const handlePosterLogoUpdate = (poster) => {
+    if (poster) {
+      setSelectedPoster(poster);
+      onPosterUpdate?.(poster);
+    }
+  };
+
+  const handleLogoUpdateFromManager = (logoData) => {
+    if (logoData && logoData.selectedLogo) {
+      setSelectedLogo(logoData.selectedLogo);
+      onLogoUpdate?.(logoData);
+    }
+  };
+
     return (
     <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
       {/* Header */}
