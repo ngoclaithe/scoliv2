@@ -18,11 +18,13 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
       setHomeScore(penaltyData.homeGoals || 0);
       setAwayScore(penaltyData.awayGoals || 0);
       setCurrentTurn(penaltyData.currentTurn || 'home');
+      setShootHistory(penaltyData.shootHistory || []);
     } else if (isOpen) {
       // Reset khi mở modal mới
       setHomeScore(0);
       setAwayScore(0);
       setCurrentTurn('home');
+      setShootHistory([]);
     }
   }, [isOpen, penaltyData]);
 
