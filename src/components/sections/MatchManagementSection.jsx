@@ -422,9 +422,34 @@ const MatchManagementSection = () => {
                 onUpdate={(team, value) => updateStat('shotsOnTarget', team, value)}
               />
 
-              {/* OLD STATS - HIDDEN
-              {/* Ph���t góc */}
-              {/* <div className="space-y-1">
+              {/* Phạt góc */}
+              <EditableStatBar
+                label="Phạt góc"
+                statKey="corners"
+                team1Value={matchStats.corners.team1}
+                team2Value={matchStats.corners.team2}
+                onUpdate={(team, value) => updateStat('corners', team, value)}
+              />
+
+              {/* Thẻ vàng */}
+              <EditableStatBar
+                label="Thẻ vàng"
+                statKey="yellowCards"
+                team1Value={matchStats.yellowCards.team1}
+                team2Value={matchStats.yellowCards.team2}
+                onUpdate={(team, value) => updateStat('yellowCards', team, value)}
+              />
+
+              {/* Phạm lỗi */}
+              <EditableStatBar
+                label="Phạm lỗi"
+                statKey="fouls"
+                team1Value={matchStats.fouls.team1}
+                team2Value={matchStats.fouls.team2}
+                onUpdate={(team, value) => updateStat('fouls', team, value)}
+              />
+
+              {/* OLD CODE TO DELETE - <div className="space-y-1">
                 <div className="flex justify-between items-center text-sm">
                   <span className="font-semibold">{matchStats.corners.team1}</span>
                   <span className="font-medium text-gray-700">Phạt góc</span>
