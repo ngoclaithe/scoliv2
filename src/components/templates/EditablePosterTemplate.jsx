@@ -115,7 +115,7 @@ const EditablePosterTemplate = ({
         {!showSettings && (
           <div className="bg-gray-50 rounded-lg p-4">
             <h4 className="font-medium text-gray-900 mb-3">Cài đặt nhanh</h4>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {/* Title Text */}
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">
