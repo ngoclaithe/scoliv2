@@ -395,25 +395,14 @@ const MatchManagementSection = () => {
             {/* Stats Display */}
             <div className="space-y-3">
               {/* Kiểm soát bóng */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="font-semibold">{matchStats.possession.team1}%</span>
-                  <span className="font-medium text-gray-700">Kiểm soát bóng</span>
-                  <span className="font-semibold">{matchStats.possession.team2}%</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                  <div className="h-full flex">
-                    <div
-                      className="bg-red-500"
-                      style={{ width: `${matchStats.possession.team1}%` }}
-                    ></div>
-                    <div
-                      className="bg-gray-800"
-                      style={{ width: `${matchStats.possession.team2}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
+              <EditableStatBar
+                label="Kiểm soát bóng"
+                statKey="possession"
+                team1Value={matchStats.possession.team1}
+                team2Value={matchStats.possession.team2}
+                isPercentage={true}
+                onUpdate={(team, value) => updatePossession(team, value)}
+              />
 
               {/* Tổng số cú sút */}
               <div className="space-y-1">
