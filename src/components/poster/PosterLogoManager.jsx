@@ -553,36 +553,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
               )}
             </div>
 
-            {/* Available Logos for Quick Add */}
-            {availableCategoryLogos.length > 0 && (
-              <div>
-                <h4 className="text-sm font-medium text-gray-700 mb-3">Logo có sẵn:</h4>
-                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2">
-                  {availableCategoryLogos.map((logo) => (
-                    <button
-                      key={logo.id}
-                      onClick={() => handleLogoSelect(logo)}
-                      className="bg-white border border-gray-200 rounded-lg p-2 hover:border-blue-400 hover:shadow-sm transition-all duration-200"
-                    >
-                      <div className="aspect-square bg-gray-100 rounded mb-1 flex items-center justify-center">
-                        {logo.url ? (
-                          <img
-                            src={logo.url}
-                            alt={logo.name}
-                            className="w-full h-full object-contain p-1"
-                          />
-                        ) : (
-                          <span className="text-gray-400 text-xs font-bold">
-                            {logo.name.charAt(0)}
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-xs text-gray-600 truncate">{logo.name}</p>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
+            
           </div>
         );
 
