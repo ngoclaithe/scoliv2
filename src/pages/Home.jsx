@@ -192,38 +192,14 @@ const Home = () => {
 
   const renderUploadLogoTab = () => (
     <div className="p-2 sm:p-4 space-y-3">
-      {/* Upload Section - Require Code */}
+      {/* Upload Section */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 border border-blue-200">
         <div className="flex items-center justify-center mb-2">
           <span className="text-sm">📁</span>
           <h3 className="text-xs font-bold text-gray-800 mx-2">UPLOAD</h3>
         </div>
 
-        {!isCodeEntered ? (
-          <div className="space-y-3">
-            <Input
-              placeholder="Nhập code..."
-              value={matchCode}
-              onChange={(e) => setMatchCode(e.target.value)}
-              className="text-center text-sm"
-            />
-            <div className="flex justify-center">
-              <Button
-                variant="primary"
-                size="sm"
-                className="w-20 h-7 text-xs"
-                onClick={handleUploadCodeSubmit}
-                style={{ fontSize: '10px' }}
-              >
-                XÁC NHẬN
-              </Button>
-            </div>
-            <div className="text-center text-xs text-gray-500">
-              Nhập "ffff" để demo
-            </div>
-          </div>
-        ) : (
-          <div className="space-y-3">
+        <div className="space-y-3">
             {/* Upload Buttons Row */}
             <div className="flex justify-center space-x-3">
               {/* Upload Logo */}
