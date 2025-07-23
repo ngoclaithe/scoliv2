@@ -422,8 +422,9 @@ const MatchManagementSection = () => {
                 onUpdate={(team, value) => updateStat('shotsOnTarget', team, value)}
               />
 
+              {/* OLD STATS - HIDDEN
               {/* Ph���t góc */}
-              <div className="space-y-1">
+              {/* <div className="space-y-1">
                 <div className="flex justify-between items-center text-sm">
                   <span className="font-semibold">{matchStats.corners.team1}</span>
                   <span className="font-medium text-gray-700">Phạt góc</span>
