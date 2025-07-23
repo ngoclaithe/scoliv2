@@ -559,51 +559,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
           </div>
         );
 
-      case "preview":
-        return (
-          <div className="space-y-4">
-            <div className="text-center">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">XEM TRƯỚC & CÀI ĐẶT</h3>
-              <p className="text-sm text-gray-600 mb-6">
-                Xem trước poster và điều chỉnh các thông số
-              </p>
-            </div>
-
-            <EditablePosterTemplate
-              matchData={{
-                homeTeam: { name: "Đội nhà", score: 2 },
-                awayTeam: { name: "Đội khách", score: 1 },
-                league: "V-League 2024",
-                stadium: "Sân vận động Mỹ Đình",
-                date: new Date().toLocaleDateString("vi-VN"),
-                time: "19:00",
-                matchTime: "45:00",
-                period: "Hiệp 1"
-              }}
-              teamLogos={{
-                home: null,
-                away: null
-              }}
-              initialSettings={{
-                titleText: selectedPoster ? selectedPoster.name : "Demo Poster",
-                backgroundColor: selectedPoster?.id === "poster-1" ? "#10b981" :
-                                selectedPoster?.id === "poster-2" ? "#f59e0b" :
-                                selectedPoster?.id === "poster-3" ? "#8b5cf6" :
-                                selectedPoster?.id === "poster-4" ? "#fbbf24" :
-                                selectedPoster?.id === "poster-5" ? "#06b6d4" :
-                                selectedPoster?.id === "poster-6" ? "#ef4444" : "#1e40af",
-                titleSize: 48,
-                logoSize: 80,
-                showLogos: true,
-                showScore: true
-              }}
-              onExport={(format, dataURL) => {
-                console.log('Exported poster:', format, dataURL);
-              }}
-            />
-          </div>
-        );
-
       default:
         return null;
     }
