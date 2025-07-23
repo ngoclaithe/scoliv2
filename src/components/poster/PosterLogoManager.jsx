@@ -392,10 +392,10 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     if (selectedPoster) {
       onPosterUpdate?.(selectedPoster);
     }
-    if (selectedLogo) {
+    if (selectedLogos.length > 0) {
       onLogoUpdate?.({
-        selectedLogo: selectedLogo,
-        logoData: { logo: selectedLogo, position: "default" }
+        selectedLogos: selectedLogos,
+        logoData: selectedLogos.map(logo => ({ logo, position: logo.position || "default" }))
       });
     }
     onClose();
