@@ -363,18 +363,17 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
         </div>
 
         {/* Data structure info for backend */}
-        <div className="bg-gray-100 rounded-lg p-3 text-xs text-gray-600">
+        <div className="bg-gray-100 rounded p-2 text-xs text-gray-600">
           <details>
-            <summary className="cursor-pointer font-medium">📋 Data structure cho backend</summary>
-            <pre className="mt-2 text-xs">
+            <summary className="cursor-pointer font-medium text-xs">📋 Backend data</summary>
+            <pre className="mt-1 text-xs max-h-16 overflow-y-auto">
 {JSON.stringify({
   homeGoals: homeScore,
   awayGoals: awayScore,
   currentTurn: currentTurn,
   shootHistory: shootHistory,
-  status: 'ongoing',
-  lastUpdated: new Date().toISOString()
-}, null, 2)}
+  status: 'ongoing'
+}, null, 1)}
             </pre>
           </details>
         </div>
