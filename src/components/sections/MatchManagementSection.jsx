@@ -414,25 +414,13 @@ const MatchManagementSection = () => {
               />
 
               {/* Sút trúng đích */}
-              <div className="space-y-1">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="font-semibold">{matchStats.shotsOnTarget.team1}</span>
-                  <span className="font-medium text-gray-700">Sút trúng đích</span>
-                  <span className="font-semibold">{matchStats.shotsOnTarget.team2}</span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                  <div className="h-full flex">
-                    <div
-                      className="bg-red-500"
-                      style={{ width: `${(matchStats.shotsOnTarget.team1 / (matchStats.shotsOnTarget.team1 + matchStats.shotsOnTarget.team2)) * 100}%` }}
-                    ></div>
-                    <div
-                      className="bg-gray-800"
-                      style={{ width: `${(matchStats.shotsOnTarget.team2 / (matchStats.shotsOnTarget.team1 + matchStats.shotsOnTarget.team2)) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </div>
+              <EditableStatBar
+                label="Sút trúng đích"
+                statKey="shotsOnTarget"
+                team1Value={matchStats.shotsOnTarget.team1}
+                team2Value={matchStats.shotsOnTarget.team2}
+                onUpdate={(team, value) => updateStat('shotsOnTarget', team, value)}
+              />
 
               {/* Ph���t góc */}
               <div className="space-y-1">
