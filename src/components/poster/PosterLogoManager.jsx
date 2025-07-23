@@ -85,7 +85,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     },
     {
       id: "logo-7",
-      name: "VietinBank - Ngân hàng thư��ng mại",
+      name: "VietinBank - Ngân hàng thương mại",
       url: null,
       category: "sponsor",
     },
@@ -433,72 +433,154 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         );
 
       case "logos":
+        const currentCategoryLogos = selectedLogos.filter(logo => logo.category === activeLogoCategory);
+        const availableCategoryLogos = sampleLogos.filter(logo => logo.category === activeLogoCategory);
+
         return (
           <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Chọn Logo
-              </h3>
-              {selectedLogo && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
-                  <p className="text-sm font-medium text-blue-800">
-                    ✅ Đã chọn: {selectedLogo.name}
+            <div className="text-center">
+              <h3 className="text-xl font-bold text-gray-900 mb-4">CÀI ĐẶT LOGO</h3>
+
+              {/* Logo Category Tabs */}
+              <div className="flex justify-center mb-6">
+                <div className="inline-flex bg-gray-100 rounded-lg p-1">
+                  {logoTypes.map((type) => (
+                    <button
+                      key={type.id}
+                      onClick={() => setActiveLogoCategory(type.id)}
+                      className={`
+                        px-4 py-2 text-sm font-medium rounded-md transition-all duration-200
+                        ${activeLogoCategory === type.id
+                          ? 'bg-white text-blue-600 shadow-sm'
+                          : 'text-gray-600 hover:text-gray-900'
+                        }
+                      `}
+                    >
+                      {type.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Selected Logos Display */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+              {currentCategoryLogos.map((logo) => (
+                <div key={logo.id} className="bg-white border-2 border-gray-200 rounded-lg p-4 relative">
+                  <button
+                    onClick={() => handleLogoSelect(logo)}
+                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+
+                  <div className="aspect-square bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
+                    {logo.url ? (
+                      <img
+                        src={logo.url}
+                        alt={logo.name}
+                        className="w-full h-full object-contain p-2"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 bg-gray-400 rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-xl">
+                          {logo.name.charAt(0)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="text-center">
+                    <h4 className="font-medium text-sm text-gray-900 mb-1">TÊN ĐƠN VỊ</h4>
+                    <p className="text-xs text-gray-600 mb-2">{logo.name}</p>
+
+                    {logo.logoCode && (
+                      <div className="mb-2">
+                        <span className="text-xs font-medium text-gray-700">MÃ LOGO: </span>
+                        <span className="text-xs text-gray-600">{logo.logoCode}</span>
+                      </div>
+                    )}
+
+                    <div className="text-xs text-gray-600">
+                      <span className="font-medium">HIỂN THỊ TRONG TRẬN:</span>
+                      <div className="mt-1 space-y-1">
+                        <div>☑ GÓC TRÁI TRÊN</div>
+                        <div>☑ GÓC TRÁI DƯỚI</div>
+                        <div>☑ GÓC PHẢI DƯỚI</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 flex gap-2">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold text-xs"
+                    >
+                      THÊM
+                    </Button>
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onClick={() => handleLogoSelect(logo)}
+                      className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold text-xs"
+                    >
+                      XÓA
+                    </Button>
+                  </div>
+                </div>
+              ))}
+
+              {/* Add New Logo Card */}
+              {showAddLogoForm ? (
+                <AddLogoForm />
+              ) : (
+                <div
+                  onClick={() => setShowAddLogoForm(true)}
+                  className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 flex flex-col items-center justify-center min-h-[300px]"
+                >
+                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-3">
+                    <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                  </div>
+                  <p className="text-gray-600 font-medium text-center">
+                    Thêm {logoTypes.find(t => t.id === activeLogoCategory)?.name}
                   </p>
                 </div>
               )}
             </div>
 
-            <Input
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Tìm kiếm logo..."
-              icon={
-                <svg
-                  className="w-5 h-5 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-              }
-            />
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 max-h-80 overflow-y-auto">
-              {filteredLogos.map((logo) => (
-                <LogoCard
-                  key={logo.id}
-                  logo={logo}
-                  isSelected={selectedLogo?.id === logo.id}
-                  onClick={() => handleLogoSelect(logo)}
-                />
-              ))}
-            </div>
-
-            {filteredLogos.length === 0 && (
-              <div className="text-center py-8">
-                <svg
-                  className="w-16 h-16 text-gray-400 mx-auto mb-4"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  Không tìm thấy logo
-                </h3>
-                <p className="text-gray-600">Thử tìm kiếm với từ khóa khác</p>
+            {/* Available Logos for Quick Add */}
+            {availableCategoryLogos.length > 0 && (
+              <div>
+                <h4 className="text-sm font-medium text-gray-700 mb-3">Logo có sẵn:</h4>
+                <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2">
+                  {availableCategoryLogos.map((logo) => (
+                    <button
+                      key={logo.id}
+                      onClick={() => handleLogoSelect(logo)}
+                      className="bg-white border border-gray-200 rounded-lg p-2 hover:border-blue-400 hover:shadow-sm transition-all duration-200"
+                    >
+                      <div className="aspect-square bg-gray-100 rounded mb-1 flex items-center justify-center">
+                        {logo.url ? (
+                          <img
+                            src={logo.url}
+                            alt={logo.name}
+                            className="w-full h-full object-contain p-1"
+                          />
+                        ) : (
+                          <span className="text-gray-400 text-xs font-bold">
+                            {logo.name.charAt(0)}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-600 truncate">{logo.name}</p>
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
           </div>
