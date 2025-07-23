@@ -6,7 +6,7 @@ import MatchManagementSection from "../components/sections/MatchManagementSectio
 import CommentarySection from "../components/sections/CommentarySection";
 
 const Home = () => {
-  const { isAuthenticated, user, logout } = useAuth();
+  const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState("upload-logo");
   const [codeInfo] = useState({
     code: "DEMO",
