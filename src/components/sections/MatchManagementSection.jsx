@@ -31,14 +31,14 @@ const MatchManagementSection = () => {
   // State cho số lỗi futsal
   const [futsalErrors, setFutsalErrors] = useState(0);
 
-  // State cho thống kê bóng đá
-  // eslint-disable-next-line no-unused-vars
-  const [footballStats, setFootballStats] = useState({
-    totalShots: 0,
-    shotsOnTarget: 0,
-    corners: 0,
-    yellowCards: 0,
-    fouls: 0
+  // State cho thống kê bóng đá cho cả 2 đội
+  const [matchStats, setMatchStats] = useState({
+    possession: { team1: 45, team2: 55 }, // Kiểm soát bóng (%)
+    totalShots: { team1: 8, team2: 12 }, // Tổng số cú sút
+    shotsOnTarget: { team1: 3, team2: 5 }, // Sút trúng đích
+    corners: { team1: 2, team2: 6 }, // Phạt góc
+    yellowCards: { team1: 1, team2: 3 }, // Thẻ vàng
+    fouls: { team1: 7, team2: 9 }, // Phạm lỗi
   });
 
   // Skin data configuration
@@ -500,7 +500,7 @@ const MatchManagementSection = () => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ bắt đầu chạy từ thời điểm này
+              Trận ��ấu sẽ bắt đầu chạy từ thời điểm này
             </p>
           </div>
 
