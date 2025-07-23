@@ -252,7 +252,30 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   };
 
   const handleLogoSelect = (logo) => {
-    setSelectedLogo(logo);
+    setSelectedLogos(prev => {
+      const isSelected = prev.find(l => l.id === logo.id);
+      if (isSelected) {
+        // Bỏ chọn logo
+        return prev.filter(l => l.id !== logo.id);
+      } else {
+        // Thêm logo vào danh sách đã chọn
+        return [...prev, logo];
+      }
+    });
+  };
+
+  const handleAddNewLogo = (newLogoData) => {
+    // Logic thêm logo mới
+    const newLogo = {
+      id: `custom-${Date.now()}`,
+      name: newLogoData.name,
+      url: newLogoData.url,
+      category: activeLogoCategory,
+      position: newLogoData.position || "default"
+    };
+
+    setSelectedLogos(prev => [...prev, newLogo]);
+    setShowAddLogoForm(false);
   };
 
   const handleSave = () => {
