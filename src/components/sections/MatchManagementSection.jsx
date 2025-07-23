@@ -32,6 +32,7 @@ const MatchManagementSection = () => {
   const [futsalErrors, setFutsalErrors] = useState(0);
 
   // State cho thống kê bóng đá
+  // eslint-disable-next-line no-unused-vars
   const [footballStats, setFootballStats] = useState({
     totalShots: 0,
     shotsOnTarget: 0,
