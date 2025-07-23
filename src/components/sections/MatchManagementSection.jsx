@@ -31,14 +31,14 @@ const MatchManagementSection = () => {
   // State cho số lỗi futsal
   const [futsalErrors, setFutsalErrors] = useState(0);
 
-  // State cho thống kê bóng đá
-  // eslint-disable-next-line no-unused-vars
-  const [footballStats, setFootballStats] = useState({
-    totalShots: 0,
-    shotsOnTarget: 0,
-    corners: 0,
-    yellowCards: 0,
-    fouls: 0
+  // State cho thống kê bóng đá cho cả 2 đội
+  const [matchStats, setMatchStats] = useState({
+    possession: { team1: 45, team2: 55 }, // Kiểm soát bóng (%)
+    totalShots: { team1: 8, team2: 12 }, // Tổng số cú sút
+    shotsOnTarget: { team1: 3, team2: 5 }, // Sút trúng đích
+    corners: { team1: 2, team2: 6 }, // Phạt góc
+    yellowCards: { team1: 1, team2: 3 }, // Thẻ vàng
+    fouls: { team1: 7, team2: 9 }, // Phạm lỗi
   });
 
   // Skin data configuration
@@ -277,22 +277,151 @@ const MatchManagementSection = () => {
 
       {/* Tab Thông số */}
       {selectedOption === "thong-so" && (
-        <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200">
-          <div className="space-y-3">
-            {/* Reset Button */}
-            <div className="flex justify-center mt-4">
+        <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+          <div className="space-y-4">
+            {/* Stats Display */}
+            <div className="space-y-3">
+              {/* Kiểm soát bóng */}
+              <div className="space-y-1">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="font-semibold">{matchStats.possession.team1}%</span>
+                  <span className="font-medium text-gray-700">Kiểm soát bóng</span>
+                  <span className="font-semibold">{matchStats.possession.team2}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                  <div className="h-full flex">
+                    <div
+                      className="bg-red-500"
+                      style={{ width: `${matchStats.possession.team1}%` }}
+                    ></div>
+                    <div
+                      className="bg-gray-800"
+                      style={{ width: `${matchStats.possession.team2}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Tổng số cú sút */}
+              <div className="space-y-1">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="font-semibold">{matchStats.totalShots.team1}</span>
+                  <span className="font-medium text-gray-700">Tổng số cú sút</span>
+                  <span className="font-semibold">{matchStats.totalShots.team2}</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                  <div className="h-full flex">
+                    <div
+                      className="bg-red-500"
+                      style={{ width: `${(matchStats.totalShots.team1 / (matchStats.totalShots.team1 + matchStats.totalShots.team2)) * 100}%` }}
+                    ></div>
+                    <div
+                      className="bg-gray-800"
+                      style={{ width: `${(matchStats.totalShots.team2 / (matchStats.totalShots.team1 + matchStats.totalShots.team2)) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Sút trúng đích */}
+              <div className="space-y-1">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="font-semibold">{matchStats.shotsOnTarget.team1}</span>
+                  <span className="font-medium text-gray-700">Sút trúng đích</span>
+                  <span className="font-semibold">{matchStats.shotsOnTarget.team2}</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                  <div className="h-full flex">
+                    <div
+                      className="bg-red-500"
+                      style={{ width: `${(matchStats.shotsOnTarget.team1 / (matchStats.shotsOnTarget.team1 + matchStats.shotsOnTarget.team2)) * 100}%` }}
+                    ></div>
+                    <div
+                      className="bg-gray-800"
+                      style={{ width: `${(matchStats.shotsOnTarget.team2 / (matchStats.shotsOnTarget.team1 + matchStats.shotsOnTarget.team2)) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Phạt góc */}
+              <div className="space-y-1">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="font-semibold">{matchStats.corners.team1}</span>
+                  <span className="font-medium text-gray-700">Phạt góc</span>
+                  <span className="font-semibold">{matchStats.corners.team2}</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                  <div className="h-full flex">
+                    <div
+                      className="bg-red-500"
+                      style={{ width: `${(matchStats.corners.team1 / (matchStats.corners.team1 + matchStats.corners.team2)) * 100}%` }}
+                    ></div>
+                    <div
+                      className="bg-gray-800"
+                      style={{ width: `${(matchStats.corners.team2 / (matchStats.corners.team1 + matchStats.corners.team2)) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Thẻ vàng */}
+              <div className="space-y-1">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="font-semibold">{matchStats.yellowCards.team1}</span>
+                  <span className="font-medium text-gray-700">Thẻ vàng</span>
+                  <span className="font-semibold">{matchStats.yellowCards.team2}</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                  <div className="h-full flex">
+                    <div
+                      className="bg-red-500"
+                      style={{ width: `${matchStats.yellowCards.team1 === 0 && matchStats.yellowCards.team2 === 0 ? 50 : (matchStats.yellowCards.team1 / (matchStats.yellowCards.team1 + matchStats.yellowCards.team2)) * 100}%` }}
+                    ></div>
+                    <div
+                      className="bg-gray-800"
+                      style={{ width: `${matchStats.yellowCards.team1 === 0 && matchStats.yellowCards.team2 === 0 ? 50 : (matchStats.yellowCards.team2 / (matchStats.yellowCards.team1 + matchStats.yellowCards.team2)) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Phạm lỗi */}
+              <div className="space-y-1">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="font-semibold">{matchStats.fouls.team1}</span>
+                  <span className="font-medium text-gray-700">Phạm lỗi</span>
+                  <span className="font-semibold">{matchStats.fouls.team2}</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                  <div className="h-full flex">
+                    <div
+                      className="bg-red-500"
+                      style={{ width: `${(matchStats.fouls.team1 / (matchStats.fouls.team1 + matchStats.fouls.team2)) * 100}%` }}
+                    ></div>
+                    <div
+                      className="bg-gray-800"
+                      style={{ width: `${(matchStats.fouls.team2 / (matchStats.fouls.team1 + matchStats.fouls.team2)) * 100}%` }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Control buttons */}
+            <div className="flex justify-center pt-4 border-t border-gray-200">
               <Button
                 variant="warning"
                 size="sm"
                 onClick={() => {
-                  setFootballStats({
-                    totalShots: 0,
-                    shotsOnTarget: 0,
-                    corners: 0,
-                    yellowCards: 0,
-                    fouls: 0
+                  setMatchStats({
+                    possession: { team1: 50, team2: 50 },
+                    totalShots: { team1: 0, team2: 0 },
+                    shotsOnTarget: { team1: 0, team2: 0 },
+                    corners: { team1: 0, team2: 0 },
+                    yellowCards: { team1: 0, team2: 0 },
+                    fouls: { team1: 0, team2: 0 },
                   });
-                  setFutsalErrors(0);
                 }}
                 className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
               >
