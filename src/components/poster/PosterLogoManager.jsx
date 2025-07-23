@@ -139,8 +139,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
   const sections = [
     { id: "posters", name: "Chọn Poster", icon: "🎨" },
-    { id: "logos", name: "Chọn Logo", icon: "🏆" },
-    { id: "preview", name: "Xem & Cài đặt", icon: "⚙️" },
+    { id: "logos", name: "Chọn Logo", icon: "��" },
   ];
 
   const filteredLogos = sampleLogos.filter((logo) =>
