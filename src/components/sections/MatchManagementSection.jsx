@@ -285,18 +285,11 @@ const MatchManagementSection = () => {
                 size="sm"
                 onClick={() => {
                   setFootballStats({
-                    homeShots: 0,
-                    awayShots: 0,
-                    homeShotsOnTarget: 0,
-                    awayShotsOnTarget: 0,
-                    homeCorners: 0,
-                    awayCorners: 0,
-                    homeYellowCards: 0,
-                    awayYellowCards: 0,
-                    homeFouls: 0,
-                    awayFouls: 0,
-                    homeFutsalErrors: 0,
-                    awayFutsalErrors: 0
+                    totalShots: 0,
+                    shotsOnTarget: 0,
+                    corners: 0,
+                    yellowCards: 0,
+                    fouls: 0
                   });
                   setFutsalErrors(0);
                 }}
