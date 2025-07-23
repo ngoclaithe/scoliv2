@@ -101,11 +101,7 @@ function AppContent() {
     ],
   };
 
-  const demoPoster = {
-    id: "demo-poster",
-    name: "Match Poster",
-    dimensions: { width: 1920, height: 1080 },
-  };
+
 
   const demoLogo = {
     id: "demo-logo",
