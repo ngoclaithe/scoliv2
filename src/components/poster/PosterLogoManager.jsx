@@ -85,7 +85,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     },
     {
       id: "logo-7",
-      name: "VietinBank - Ngân hàng thương mại",
+      name: "VietinBank - Ngân hàng thư��ng mại",
       url: null,
       category: "sponsor",
     },
@@ -246,6 +246,116 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       )}
     </div>
   );
+
+  const AddLogoForm = () => {
+    const [logoData, setLogoData] = useState({
+      name: "",
+      logoCode: "",
+      position: "corner-left"
+    });
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      if (logoData.name.trim()) {
+        handleAddNewLogo(logoData);
+        setLogoData({ name: "", logoCode: "", position: "corner-left" });
+      }
+    };
+
+    return (
+      <div className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-6">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="flex items-center justify-center w-24 h-24 mx-auto bg-gray-100 rounded-full mb-4">
+            <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">TÊN ĐƠN VỊ</label>
+            <Input
+              value={logoData.name}
+              onChange={(e) => setLogoData(prev => ({ ...prev, name: e.target.value }))}
+              placeholder="Nhập tên đơn vị"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">MÃ LOGO:</label>
+            <Input
+              value={logoData.logoCode}
+              onChange={(e) => setLogoData(prev => ({ ...prev, logoCode: e.target.value }))}
+              placeholder="Nhập mã logo"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">HIỂN THỊ TRONG TRẬN:</label>
+            <div className="space-y-2">
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={logoData.position.includes("corner-left")}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setLogoData(prev => ({ ...prev, position: "corner-left" }));
+                    }
+                  }}
+                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span className="ml-2 text-sm text-gray-700">GÓC TRÁI TRÊN</span>
+              </label>
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={logoData.position.includes("corner-right")}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setLogoData(prev => ({ ...prev, position: "corner-right" }));
+                    }
+                  }}
+                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span className="ml-2 text-sm text-gray-700">GÓC TRÁI DƯỚI</span>
+              </label>
+              <label className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={logoData.position.includes("bottom")}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setLogoData(prev => ({ ...prev, position: "bottom" }));
+                    }
+                  }}
+                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span className="ml-2 text-sm text-gray-700">GÓC PHẢI DƯỚI</span>
+              </label>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            <Button
+              type="submit"
+              variant="primary"
+              className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold"
+            >
+              THÊM
+            </Button>
+            <Button
+              type="button"
+              variant="danger"
+              onClick={() => setShowAddLogoForm(false)}
+              className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold"
+            >
+              XÓA
+            </Button>
+          </div>
+        </form>
+      </div>
+    );
+  };
 
   const handlePosterSelect = (poster) => {
     setSelectedPoster(poster);
