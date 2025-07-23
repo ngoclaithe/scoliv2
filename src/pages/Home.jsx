@@ -1262,63 +1262,6 @@ const Home = () => {
   };
 
   const renderBinhLuanTab = () => {
-    if (!isCodeEntered) {
-      return (
-        <div className="p-6 max-w-md mx-auto">
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-6">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <svg
-                  className="w-8 h-8 text-blue-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Nhập mã truy cập
-              </h3>
-              <p className="text-gray-600 text-sm">
-                Vui lòng nhập một code để truy cập chức năng bình luận
-              </p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            <Input
-              placeholder="Nhập code..."
-              value={matchCode}
-              onChange={(e) => setMatchCode(e.target.value)}
-              className="text-center text-lg font-mono"
-            />
-
-            <div className="flex justify-center">
-              <Button
-                variant="primary"
-                size="lg"
-                className="w-32"
-                onClick={handleCodeSubmit}
-                loading={isLoading}
-              >
-                {isLoading ? "Đang xử lý..." : "XÁC NHẬN"}
-              </Button>
-            </div>
-
-            <div className="text-center text-xs text-gray-500">
-              Nhập "ffff" để demo
-            </div>
-          </div>
-        </div>
-      );
-    }
-
     return (
       <div className="p-6 space-y-6">
         {/* Không hiển thị thông tin mã truy cập trong tab bình luận */}
