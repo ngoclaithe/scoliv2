@@ -275,7 +275,7 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
                     <span className={`text-xs ${
                       shoot.team === 'home' ? 'text-blue-600' : 'text-red-600'
                     }`}>
-                      {shoot.team === 'home' ? 'NH' : 'K'}
+                      {shoot.team === 'home' ? 'A' : 'B'}
                     </span>
                     <span className={`text-xs px-1 rounded ${
                       shoot.result === 'goal'
