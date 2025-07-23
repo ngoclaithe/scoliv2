@@ -88,116 +88,32 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
 
     return (
     <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-        <div className="flex items-center justify-center space-x-3">
-          <Button
-            variant="primary"
-            onClick={() => setShowPosterLogoManager(true)}
-            size="lg"
-            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold px-6 py-3 rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
-            icon={
-              <svg
-                className="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-            }
-          >
-            <span className="hidden sm:inline">🎨 Chọn Poster & Logo</span>
-            <span className="sm:hidden">🎨 Chọn</span>
-          </Button>
-        </div>
-
-        {/* Status display */}
-        {(selectedPoster || selectedLogo) && (
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-            <div className="text-sm">
-              {selectedPoster && (
-                <p className="text-blue-800 font-medium">
-                  ✅ Poster: {selectedPoster.name}
-                </p>
-              )}
-              {selectedLogo && (
-                <p className="text-blue-800 font-medium">
-                  ✅ Logo: {selectedLogo.name}
-                </p>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-
-            {/* Main Content */}
-      <div className="w-full">
-        {/* Current Poster Display */}
-        <div className="w-full">
-        {selectedPoster ? (
-          <PosterPreview
-            poster={selectedPoster}
-          />
-        ) : (
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-            <div className="text-center">
-              <div className="w-24 h-24 mx-auto bg-gray-100 rounded-lg flex items-center justify-center mb-4">
-                <svg
-                  className="w-12 h-12 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Chưa chọn poster & logo
-              </h3>
-              <p className="text-gray-600 mb-4">
-                Chọn poster và logo từ thư viện có sẵn
+      {/* Header với status display */}
+      {(selectedPoster || selectedLogo) && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+          <div className="text-sm">
+            {selectedPoster && (
+              <p className="text-blue-800 font-medium">
+                ✅ Poster: {selectedPoster.name}
               </p>
-              <Button
-                variant="primary"
-                onClick={() => setShowPosterLogoManager(true)}
-                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold"
-              >
-                🎨 Chọn Poster & Logo
-              </Button>
-            </div>
+            )}
+            {selectedLogo && (
+              <p className="text-blue-800 font-medium">
+                ✅ Logo: {selectedLogo.name}
+              </p>
+            )}
           </div>
-        )}
-      </div>
-      </div>
-
-      {/* Combined Poster & Logo Selection Modal */}
-      <Modal
-        isOpen={showPosterLogoManager}
-        onClose={() => setShowPosterLogoManager(false)}
-        title="🎨 Quản Lý Poster & Logo"
-        size="xl"
-        className="max-h-screen overflow-hidden"
-      >
-        <div className="h-full max-h-[85vh] overflow-y-auto">
-          <PosterLogoManager
-            matchData={matchData}
-            onPosterUpdate={handlePosterLogoUpdate}
-            onLogoUpdate={handleLogoUpdateFromManager}
-            onClose={() => setShowPosterLogoManager(false)}
-          />
         </div>
-      </Modal>
+      )}
+
+      {/* Main Content - Hiển thị trực tiếp PosterLogoManager */}
+      <div className="w-full">
+        <PosterLogoManager
+          matchData={matchData}
+          onPosterUpdate={handlePosterLogoUpdate}
+          onLogoUpdate={handleLogoUpdateFromManager}
+        />
+      </div>
 
       {/* Legacy Poster Selection Modal - kept for compatibility */}
       <Modal
