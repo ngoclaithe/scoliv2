@@ -1063,7 +1063,7 @@ const Home = () => {
                   : "bg-gradient-to-br from-green-100 to-emerald-200 text-green-700 hover:from-green-200 hover:to-emerald-300"
               }`}
             >
-              <span className="text-sm mr-1">���</span>
+              <span className="text-sm mr-1">⚽</span>
               <span className="text-xs font-bold text-center">
                 TỈ SỐ DƯỚI
               </span>
@@ -1527,8 +1527,8 @@ const Home = () => {
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex-1 py-2 px-2 sm:py-3 sm:px-4 text-center font-bold text-xs sm:text-sm border-b-2 transition-all duration-300 ${
+              onClick={() => handleTabChange(tab.id)}
+              className={`flex-1 py-2 px-2 sm:py-3 sm:px-4 text-center font-bold text-xs sm:text-sm border-b-2 transition-all duration-300 relative ${
                 activeTab === tab.id
                   ? tab.id === "upload-logo"
                     ? "border-blue-500 text-blue-700 bg-gradient-to-t from-blue-100 to-blue-50 shadow-lg"
@@ -1998,7 +1998,7 @@ const Home = () => {
                   <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
                     Tôi đồng ý với{' '}
                     <a href="#" className="text-blue-600 hover:text-blue-500 font-medium">
-                      Điều khoản s��� dụng
+                      Điều khoản sử dụng
                     </a>
                     {' '}và{' '}
                     <a href="#" className="text-blue-600 hover:text-blue-500 font-medium">
