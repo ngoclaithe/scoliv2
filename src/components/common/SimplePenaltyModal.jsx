@@ -226,7 +226,7 @@ const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penal
 
             <div className="text-center">
               <div className="text-xs font-semibold text-red-700 mb-1">
-                {matchData?.awayTeam?.name || "ĐỘI KHÁCH"}
+                ĐỘI B
               </div>
               <div className="text-2xl font-bold text-red-800 mb-1">{awayScore}</div>
 
