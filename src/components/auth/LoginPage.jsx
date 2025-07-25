@@ -173,6 +173,10 @@ const LoginPage = () => {
                   <div className="text-blue-800 font-medium">💡 Đăng nhập tài khoản:</div>
                   <div className="text-blue-700">Để mua code + quản lý trận (cần nhập code sau)</div>
                 </div>
+                <div className="bg-purple-50 rounded p-2">
+                  <div className="text-purple-800 font-medium">👑 Demo Admin:</div>
+                  <div className="text-purple-700">Email: admin@demo.com | Pass: admin123</div>
+                </div>
                 <div>
                   Chưa có tài khoản?{' '}
                   <button
