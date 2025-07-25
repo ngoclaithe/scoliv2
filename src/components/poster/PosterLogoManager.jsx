@@ -214,16 +214,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">TÊN ĐƠN VỊ</label>
-            <Input
-              value={logoData.name}
-              onChange={(e) => setLogoData(prev => ({ ...prev, name: e.target.value }))}
-              placeholder="Nhập tên đơn vị"
-              required
-            />
-          </div>
-
-          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">MÃ LOGO:</label>
             <Input
               value={logoData.logoCode}
