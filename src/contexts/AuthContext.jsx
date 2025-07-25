@@ -52,6 +52,29 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       setLoading(true);
+
+      // Demo: Kiểm tra admin login
+      if (credentials.email === 'admin@demo.com' && credentials.password === 'admin123') {
+        const userData = {
+          id: 'admin-demo',
+          email: 'admin@demo.com',
+          name: 'Admin Demo',
+          role: 'admin',
+          avatar: null
+        };
+
+        setUser(userData);
+        setCodeOnly(false);
+        setAuthType('account'); // Admin đăng nhập thành công
+        setIsAuthenticated(true);
+
+        // Fake token for demo
+        localStorage.setItem('token', 'fake-admin-token');
+
+        return { success: true, user: userData };
+      }
+
+      // Đăng nhập thực tế thông qua API
       const { user: userData, token } = await AuthAPI.login(credentials);
 
       setUser({
