@@ -53,7 +53,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     },
     {
       id: "logo-2",
-      name: "VPF - Công ty CP bóng đá chuyên nghiệp Việt Nam",
+      name: "VPF - Công ty CP bóng đá chuyên nghi���p Việt Nam",
       url: null,
       category: "organizer",
     },
@@ -380,34 +380,30 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         const currentCategoryLogos = selectedLogos.filter(logo => logo.category === activeLogoCategory);
 
         return (
-          <div className="space-y-4">
-            <div className="text-center">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">CÀI ĐẶT LOGO</h3>
-
-              {/* Logo Category Tabs */}
-              <div className="flex justify-center mb-6">
-                <div className="inline-flex bg-gray-100 rounded-lg p-1">
-                  {logoTypes.map((type) => (
-                    <button
-                      key={type.id}
-                      onClick={() => setActiveLogoCategory(type.id)}
-                      className={`
-                        px-4 py-2 text-sm font-medium rounded-md transition-all duration-200
-                        ${activeLogoCategory === type.id
-                          ? 'bg-white text-blue-600 shadow-sm'
-                          : 'text-gray-600 hover:text-gray-900'
-                        }
-                      `}
-                    >
-                      {type.name}
-                    </button>
-                  ))}
-                </div>
+          <div className="space-y-2">
+            {/* Logo Category Tabs */}
+            <div className="flex justify-center mb-3">
+              <div className="inline-flex bg-gray-100 rounded p-1">
+                {logoTypes.map((type) => (
+                  <button
+                    key={type.id}
+                    onClick={() => setActiveLogoCategory(type.id)}
+                    className={`
+                      px-2 py-1 text-xs font-medium rounded transition-all duration-200
+                      ${activeLogoCategory === type.id
+                        ? 'bg-white text-blue-600 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                      }
+                    `}
+                  >
+                    {type.name}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Selected Logos Display */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            {/* Selected Logos Display - Horizontal Scroll */}
+            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide mb-3">
               {currentCategoryLogos.map((logo) => (
                 <div key={logo.id} className="bg-white border-2 border-gray-200 rounded-lg p-4 relative">
                   <button
