@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import AuthAPI from '../API/apiAuth';
 
 const AuthContext = createContext();
 
@@ -10,120 +11,146 @@ export const useAuth = () => {
   return context;
 };
 
-// Mock API functions
-const mockAPI = {
-  login: async (credentials) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        // Demo: chấp nhận bất kỳ email/password nào hoặc code "ffff"
-        if (credentials.code === 'ffff' || (credentials.email && credentials.password)) {
-          resolve({
-            user: {
-              id: 1,
-              email: credentials.email || 'demo@example.com',
-              name: 'Người dùng Demo',
-              avatar: null
-            },
-            token: 'demo-jwt-token-' + Date.now()
-          });
-        } else {
-          reject(new Error('Thông tin đăng nhập không đúng'));
-        }
-      }, 1000);
-    });
-  },
-
-  register: async (userData) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          user: {
-            id: Date.now(),
-            email: userData.email,
-            name: `${userData.firstName} ${userData.lastName}`,
-            avatar: null
-          },
-          token: 'demo-jwt-token-' + Date.now()
-        });
-      }, 1500);
-    });
-  },
-
-  me: async (token) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (token && token.startsWith('demo-jwt-token')) {
-          resolve({
-            id: 1,
-            email: 'demo@example.com',
-            name: 'Người dùng Demo',
-            avatar: null
-          });
-        } else {
-          reject(new Error('Token không hợp lệ'));
-        }
-      }, 500);
-    });
-  }
-};
-
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Hàm load thông tin người dùng từ token
+  const loadUser = useCallback(async () => {
+    try {
+      setLoading(true);
+      if (AuthAPI.isAuthenticated()) {
+        const userData = await AuthAPI.getMe();
+        setUser({
+          id: userData.id,
+          email: userData.email,
+          name: userData.name,
+          role: userData.role,
+          avatar: userData.avatar
+        });
+        setIsAuthenticated(true);
+      }
+    } catch (error) {
+      console.error('Lỗi tải thông tin người dùng:', error);
+      AuthAPI.logout();
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   // Kiểm tra token từ localStorage khi khởi tạo
   useEffect(() => {
-    const initAuth = async () => {
-      try {
-        const token = localStorage.getItem('auth_token');
-        if (token) {
-          const userData = await mockAPI.me(token);
-          setUser(userData);
-          setIsAuthenticated(true);
-        }
-      } catch (error) {
-        localStorage.removeItem('auth_token');
-        console.error('Lỗi xác thực:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    initAuth();
-  }, []);
+    loadUser();
+  }, [loadUser]);
 
   const login = async (credentials) => {
     try {
       setLoading(true);
-      const response = await mockAPI.login(credentials);
+      const { user: userData, token } = await AuthAPI.login(credentials);
       
-      setUser(response.user);
+      setUser({
+        id: userData.id,
+        email: userData.email,
+        name: userData.name,
+        role: userData.role,
+        avatar: userData.avatar
+      });
+      
       setIsAuthenticated(true);
-      localStorage.setItem('auth_token', response.token);
-      
-      return { success: true, user: response.user };
+      return { success: true, user: userData };
     } catch (error) {
-      return { success: false, error: error.message };
+      return { 
+        success: false, 
+        error: error.message || 'Đăng nhập thất bại. Vui lòng thử lại.' 
+      };
     } finally {
       setLoading(false);
     }
   };
 
   const loginWithCode = async (code) => {
-    return login({ code });
+    try {
+      setLoading(true);
+      // Giả sử API hỗ trợ đăng nhập bằng code
+      // Nếu không, có thể sử dụng login thông thường với email/password
+      const response = await AuthAPI.login({ code });
+      
+      setUser({
+        id: response.user.id,
+        email: response.user.email,
+        name: response.user.name,
+        role: response.user.role,
+        avatar: response.user.avatar
+      });
+      
+      setIsAuthenticated(true);
+      return { success: true, user: response.user };
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error.message || 'Đăng nhập thất bại. Vui lòng thử lại.' 
+      };
+    } finally {
+      setLoading(false);
+    }
   };
 
   const register = async (userData) => {
     try {
       setLoading(true);
-      const response = await mockAPI.register(userData);
+      const response = await AuthAPI.register({
+        name: userData.name,
+        email: userData.email,
+        password: userData.password,
+        role: 'user' // Mặc định là user
+      });
       
-      setUser(response.user);
+      setUser({
+        id: response.user.id,
+        email: response.user.email,
+        name: response.user.name,
+        role: response.user.role,
+        avatar: response.user.avatar
+      });
+      
       setIsAuthenticated(true);
-      localStorage.setItem('auth_token', response.token);
+      return { success: true, user: userData };
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error.message || 'Đăng ký thất bại. Vui lòng thử lại.' 
+      };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await AuthAPI.logout();
+    } catch (error) {
+      console.error('Lỗi khi đăng xuất:', error);
+    } finally {
+      setUser(null);
+      setIsAuthenticated(false);
+    }
+  };
+
+  // Thêm các hàm mới cho cập nhật thông tin và mật khẩu
+  const updateProfile = async (userData) => {
+    try {
+      setLoading(true);
+      const updatedUser = await AuthAPI.updateDetails(userData);
       
-      return { success: true, user: response.user };
+      setUser(prev => ({
+        ...prev,
+        ...updatedUser,
+        name: updatedUser.name || prev.name,
+        email: updatedUser.email || prev.email
+      }));
+      
+      return { success: true, user: updatedUser };
     } catch (error) {
       return { success: false, error: error.message };
     } finally {
@@ -131,20 +158,54 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    setUser(null);
-    setIsAuthenticated(false);
-    localStorage.removeItem('auth_token');
+  const changePassword = async (currentPassword, newPassword) => {
+    try {
+      setLoading(true);
+      await AuthAPI.updatePassword({ currentPassword, newPassword });
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const requestPasswordReset = async (email) => {
+    try {
+      setLoading(true);
+      await AuthAPI.forgotPassword(email);
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.message };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const resetPassword = async (token, newPassword) => {
+    try {
+      setLoading(true);
+      await AuthAPI.resetPassword(token, newPassword);
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.message };
+    } finally {
+      setLoading(false);
+    }
   };
 
   const value = {
     user,
-    isAuthenticated,
+    isAuthenticated: AuthAPI.isAuthenticated(),
     loading,
     login,
     loginWithCode,
     register,
-    logout
+    logout,
+    updateProfile,
+    changePassword,
+    requestPasswordReset,
+    resetPassword
   };
 
   return (

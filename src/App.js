@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 // Import pages
 import Home from "./pages/Home";
 import LoginPage from "./components/auth/LoginPage";
+import ProfilePage from "./routes/ProfilePage";
 import Loading from "./components/common/Loading";
 
 // Import components for demo
@@ -22,7 +23,7 @@ import LogoPreview from "./components/logo/LogoPreview";
 import AudioPlayer from "./components/audio/AudioPlayer";
 
 function AppContent() {
-  const { isAuthenticated, loading } = useAuth();
+  const { isAuthenticated, loading, user, logout } = useAuth();
   const [currentPage, setCurrentPage] = useState("home");
   const [demoMatch, setDemoMatch] = useState({
     homeTeam: { name: "Hà Nội FC", score: 1, logo: null },
@@ -102,7 +103,6 @@ function AppContent() {
   };
 
 
-
   const demoLogo = {
     id: "demo-logo",
     teamName: "Hà Nội FC",
@@ -118,6 +118,7 @@ function AppContent() {
     { id: "poster", name: "Poster", icon: "��" },
     { id: "logo", name: "Logo", icon: "🏆" },
     { id: "audio", name: "Âm thanh", icon: "🎵" },
+    { id: "profile", name: "Tài khoản", icon: "👤" },
   ];
 
   const handleMatchUpdate = (updatedMatch) => {
@@ -232,7 +233,7 @@ function AppContent() {
           </div>
         );
 
-            case "lineup":
+      case "lineup":
         return (
           <div className="max-w-6xl mx-auto p-4 sm:p-6">
             <div className="text-center mb-6 sm:mb-8">

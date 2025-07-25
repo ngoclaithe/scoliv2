@@ -13,10 +13,8 @@ const LoginModal = ({ isOpen, onClose }) => {
     rememberMe: false
   });
   const [registerForm, setRegisterForm] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
     email: '',
-    phone: '',
     password: '',
     confirmPassword: '',
     terms: false
@@ -42,22 +40,36 @@ const LoginModal = ({ isOpen, onClose }) => {
     e.preventDefault();
     setError('');
 
+    // Kiểm tra mật khẩu xác nhận
     if (registerForm.password !== registerForm.confirmPassword) {
       setError('Mật khẩu xác nhận không khớp');
       return;
     }
 
+    // Kiểm tra điều khoản sử dụng
     if (!registerForm.terms) {
       setError('Vui lòng đồng ý với điều khoản sử dụng');
       return;
     }
 
-    const result = await register(registerForm);
-    if (result.success) {
-      onClose();
-      resetForms();
-    } else {
-      setError(result.error);
+    try {
+      // Chỉ gửi các trường cần thiết lên backend
+      const userData = {
+        name: registerForm.name,
+        email: registerForm.email,
+        password: registerForm.password,
+        role: 'user' // Mặc định là user
+      };
+
+      const result = await register(userData);
+      if (result.success) {
+        onClose();
+        resetForms();
+      } else {
+        setError(result.message || 'Đăng ký thất bại');
+      }
+    } catch (error) {
+      setError(error.message || 'Có lỗi xảy ra khi đăng ký');
     }
   };
 
@@ -77,10 +89,8 @@ const LoginModal = ({ isOpen, onClose }) => {
   const resetForms = () => {
     setLoginForm({ email: '', password: '', rememberMe: false });
     setRegisterForm({
-      firstName: '',
-      lastName: '',
+      name: '',
       email: '',
-      phone: '',
       password: '',
       confirmPassword: '',
       terms: false
@@ -293,33 +303,23 @@ const LoginModal = ({ isOpen, onClose }) => {
             )}
 
             <form className="space-y-4" onSubmit={handleRegisterSubmit}>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Họ
-                  </label>
-                  <Input
-                    type="text"
-                    placeholder="Nguyễn"
-                    value={registerForm.firstName}
-                    onChange={(e) => setRegisterForm(prev => ({...prev, firstName: e.target.value}))}
-                    className="w-full"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Tên
-                  </label>
-                  <Input
-                    type="text"
-                    placeholder="Văn A"
-                    value={registerForm.lastName}
-                    onChange={(e) => setRegisterForm(prev => ({...prev, lastName: e.target.value}))}
-                    className="w-full"
-                    required
-                  />
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Họ và tên
+                </label>
+                <Input
+                  type="text"
+                  placeholder="Nguyễn Văn A"
+                  value={registerForm.name}
+                  onChange={(e) => setRegisterForm(prev => ({...prev, name: e.target.value}))}
+                  className="w-full"
+                  required
+                  icon={
+                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  }
+                />
               </div>
 
               <div>
@@ -335,26 +335,7 @@ const LoginModal = ({ isOpen, onClose }) => {
                   required
                   icon={
                     <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                    </svg>
-                  }
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Số điện thoại
-                </label>
-                <Input
-                  type="tel"
-                  placeholder="0901234567"
-                  value={registerForm.phone}
-                  onChange={(e) => setRegisterForm(prev => ({...prev, phone: e.target.value}))}
-                  className="w-full"
-                  required
-                  icon={
-                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                   }
                 />

@@ -12,10 +12,8 @@ const LoginPage = () => {
     rememberMe: false
   });
   const [registerForm, setRegisterForm] = useState({
-    firstName: '',
-    lastName: '',
+    name: '',
     email: '',
-    phone: '',
     password: '',
     confirmPassword: '',
     terms: false
@@ -50,7 +48,15 @@ const LoginPage = () => {
       return;
     }
 
-    const result = await register(registerForm);
+    // Chỉ gửi các trường cần thiết lên backend
+    const userData = {
+      name: registerForm.name,
+      email: registerForm.email,
+      password: registerForm.password,
+      role: 'user' // Mặc định là user
+    };
+
+    const result = await register(userData);
     if (result.success) {
       resetForms();
     } else {
@@ -73,10 +79,8 @@ const LoginPage = () => {
   const resetForms = () => {
     setLoginForm({ email: '', password: '', rememberMe: false });
     setRegisterForm({
-      firstName: '',
-      lastName: '',
+      name: '',
       email: '',
-      phone: '',
       password: '',
       confirmPassword: '',
       terms: false
@@ -238,39 +242,20 @@ const LoginPage = () => {
               )}
 
               <form className="space-y-3" onSubmit={handleRegisterSubmit}>
-                <div className="grid grid-cols-2 gap-2">
-                  <Input
-                    type="text"
-                    placeholder="Họ"
-                    value={registerForm.firstName}
-                    onChange={(e) => setRegisterForm(prev => ({...prev, firstName: e.target.value}))}
-                    className="text-sm"
-                    required
-                  />
-                  <Input
-                    type="text"
-                    placeholder="Tên"
-                    value={registerForm.lastName}
-                    onChange={(e) => setRegisterForm(prev => ({...prev, lastName: e.target.value}))}
-                    className="text-sm"
-                    required
-                  />
-                </div>
+                <Input
+                  type="text"
+                  placeholder="Họ và tên"
+                  value={registerForm.name}
+                  onChange={(e) => setRegisterForm(prev => ({...prev, name: e.target.value}))}
+                  className="w-full text-sm"
+                  required
+                />
 
                 <Input
                   type="email"
                   placeholder="Email"
                   value={registerForm.email}
                   onChange={(e) => setRegisterForm(prev => ({...prev, email: e.target.value}))}
-                  className="w-full text-sm"
-                  required
-                />
-
-                <Input
-                  type="tel"
-                  placeholder="Số điện thoại"
-                  value={registerForm.phone}
-                  onChange={(e) => setRegisterForm(prev => ({...prev, phone: e.target.value}))}
                   className="w-full text-sm"
                   required
                 />
