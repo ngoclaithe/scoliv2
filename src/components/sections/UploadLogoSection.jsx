@@ -323,10 +323,10 @@ const UploadLogoSection = () => {
           {/* Preview image với hiệu ứng 3D xoay 360 độ */}
           <div className="flex justify-center mb-2">
             <div className="relative w-12 h-12" style={{ perspective: '100px' }}>
-              <div 
-                className="w-full h-full rounded-full border-2 border-green-400 overflow-hidden shadow-lg relative"
+              <div
+                className="w-full h-full rounded-full border-2 border-green-400 overflow-hidden shadow-lg relative animate-spin"
                 style={{
-                  animation: 'rotate3D 3s linear infinite',
+                  animationDuration: '3s',
                   transformStyle: 'preserve-3d'
                 }}
               >
