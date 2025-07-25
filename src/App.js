@@ -125,16 +125,21 @@ function AppContent() {
     category: "club",
   };
 
+  // Navigation items dựa trên quyền truy cập
   const navigation = [
-    { id: "home", name: "Trang chủ", icon: "🏠" },
-    { id: "scoreboard", name: "Bảng tỉ số", icon: "⚽" },
-    { id: "match", name: "Quản lý trận đấu", icon: "📋" },
-    { id: "lineup", name: "Đội hình", icon: "👥" },
-    { id: "poster", name: "Poster", icon: "��" },
-    { id: "logo", name: "Logo", icon: "🏆" },
-    { id: "audio", name: "Âm thanh", icon: "🎵" },
-    { id: "profile", name: "Tài khoản", icon: "👤" },
-  ];
+    { id: "home", name: "Trang chủ", icon: "🏠", requireMatch: true },
+    { id: "scoreboard", name: "Bảng tỉ số", icon: "⚽", requireMatch: true },
+    { id: "match", name: "Quản lý trận đấu", icon: "📋", requireMatch: true },
+    { id: "lineup", name: "Đội hình", icon: "👥", requireMatch: true },
+    { id: "poster", name: "Poster", icon: "📸", requireMatch: true },
+    { id: "logo", name: "Logo", icon: "🏆", requireMatch: true },
+    { id: "audio", name: "Âm thanh", icon: "🎵", requireMatch: true },
+    ...(canAccessProfile ? [{ id: "profile", name: "Tài khoản", icon: "👤", requireAccount: true }] : []),
+  ].filter(item => {
+    if (item.requireMatch && !hasMatchAccess) return false;
+    if (item.requireAccount && !hasAccountAccess) return false;
+    return true;
+  });
 
   const handleMatchUpdate = (updatedMatch) => {
     setDemoMatch(updatedMatch);
