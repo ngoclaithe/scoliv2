@@ -171,11 +171,11 @@ const LoginPage = () => {
               <div className="mt-3 space-y-2 text-center text-xs text-gray-600">
                 <div className="bg-blue-50 rounded p-2">
                   <div className="text-blue-800 font-medium">💡 Đăng nhập tài khoản:</div>
-                  <div className="text-blue-700">Để mua code + quản lý trận (cần nhập code sau)</div>
+                  <div className="text-blue-700">Để tạo code + quản lý code đã tạo</div>
                 </div>
-                <div className="bg-purple-50 rounded p-2">
-                  <div className="text-purple-800 font-medium">👑 Demo Admin:</div>
-                  <div className="text-purple-700">Email: admin@demo.com | Pass: admin123</div>
+                <div className="bg-green-50 rounded p-2">
+                  <div className="text-green-800 font-medium">🎯 Demo User:</div>
+                  <div className="text-green-700">Email: demo@user.com | Pass: demo123</div>
                 </div>
                 <div>
                   Chưa có tài khoản?{' '}
