@@ -353,23 +353,18 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     switch (activeSection) {
       case "posters":
         return (
-          <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Chọn Poster Template
-              </h3>
-              {selectedPoster && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
-                  <p className="text-sm font-medium text-blue-800">
-                    ✅ Đã chọn: {selectedPoster.name}
-                  </p>
-                </div>
-              )}
-            </div>
+          <div className="space-y-2">
+            {selectedPoster && (
+              <div className="bg-blue-50 border border-blue-200 rounded px-2 py-1">
+                <p className="text-xs font-medium text-blue-800">
+                  ✅ Đã chọn: {selectedPoster.name}
+                </p>
+              </div>
+            )}
 
-            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
               {availablePosters.map((poster) => (
-                <div key={poster.id} className="flex-none w-48">
+                <div key={poster.id} className="flex-none w-40">
                   <PosterCard
                     poster={poster}
                     isSelected={selectedPoster?.id === poster.id}
