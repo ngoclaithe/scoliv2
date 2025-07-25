@@ -44,6 +44,16 @@ function AppContent() {
   };
 
   const [currentPage, setCurrentPage] = useState(getInitialPage());
+
+  // Cập nhật currentPage khi user thay đổi
+  React.useEffect(() => {
+    if (user?.role === 'admin') {
+      setCurrentPage("manage-access-code");
+    } else if (authType === 'code' || authType === 'full') {
+      setCurrentPage("home");
+    }
+  }, [user, authType]);
+
   const [demoMatch, setDemoMatch] = useState({
     homeTeam: { name: "Hà Nội FC", score: 1, logo: null },
     awayTeam: { name: "TP.HCM", score: 2, logo: null },
