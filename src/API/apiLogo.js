@@ -45,7 +45,7 @@ const LogoAPI = {
       });
       return response.data;
     } catch (error) {
-      throw this.handleError(error);
+      throw LogoAPI.handleError(error);
     }
   },
 
@@ -60,7 +60,7 @@ const LogoAPI = {
       const response = await api.get('/logos', { params });
       return response.data;
     } catch (error) {
-      throw this.handleError(error);
+      throw LogoAPI.handleError(error);
     }
   },
 
@@ -74,7 +74,7 @@ const LogoAPI = {
       const response = await api.get(`/logos/${id}`);
       return response.data;
     } catch (error) {
-      throw this.handleError(error);
+      throw LogoAPI.handleError(error);
     }
   },
 
@@ -91,7 +91,7 @@ const LogoAPI = {
       });
       return response.data;
     } catch (error) {
-      throw this.handleError(error);
+      throw LogoAPI.handleError(error);
     }
   },
 
@@ -116,7 +116,7 @@ const LogoAPI = {
       });
       return response.data;
     } catch (error) {
-      throw this.handleError(error);
+      throw LogoAPI.handleError(error);
     }
   },
 
@@ -130,7 +130,7 @@ const LogoAPI = {
       const response = await api.delete(`/logos/${id}`);
       return response.data;
     } catch (error) {
-      throw this.handleError(error);
+      throw LogoAPI.handleError(error);
     }
   },
 
