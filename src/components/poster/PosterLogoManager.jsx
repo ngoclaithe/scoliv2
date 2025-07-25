@@ -260,7 +260,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
                 `}
                 title="Góc trái dưới"
               >
-                🎯
+                ���
               </button>
               <button
                 type="button"
@@ -453,10 +453,16 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
                     <div className="text-xs text-gray-600">
                       <span className="font-medium">HIỂN THỊ TRONG TRẬN:</span>
-                      <div className="mt-1 space-y-1">
-                        <div>☑ GÓC TRÁI TRÊN</div>
-                        <div>☑ GÓC TRÁI DƯỚI</div>
-                        <div>☑ GÓC PHẢI DƯỚI</div>
+                      <div className="mt-2 flex justify-center gap-2">
+                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center" title="Góc trái trên">
+                          📍
+                        </div>
+                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center" title="Góc trái dưới">
+                          🎯
+                        </div>
+                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center" title="Góc phải dưới">
+                          🏷️
+                        </div>
                       </div>
                     </div>
                   </div>
