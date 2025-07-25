@@ -552,7 +552,7 @@ const ManageAccessCode = ({ onNavigate }) => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
               <div className="bg-white p-6 rounded-lg shadow">
                 <div className="text-2xl font-bold text-purple-600">15</div>
-                <div className="text-sm text-gray-600">T���ng số mã</div>
+                <div className="text-sm text-gray-600">Tổng số mã</div>
               </div>
               <div className="bg-white p-6 rounded-lg shadow">
                 <div className="text-2xl font-bold text-green-600">12</div>
@@ -732,6 +732,68 @@ const ManageAccessCode = ({ onNavigate }) => {
           </div>
         </Modal>
       )}
+
+      {/* Code Entry Modal để vào Home */}
+      <Modal
+        isOpen={showCodeEntry}
+        onClose={() => {
+          setShowCodeEntry(false);
+          setMatchCode('');
+          setError('');
+        }}
+        title="Nhập mã để vào trang chủ"
+        size="sm"
+      >
+        <form onSubmit={handleEnterCode} className="space-y-4">
+          <div className="text-center mb-4">
+            <div className="w-12 h-12 bg-blue-100 rounded-full mx-auto mb-2 flex items-center justify-center">
+              <span className="text-lg">🔑</span>
+            </div>
+            <p className="text-sm text-gray-600">
+              Để truy cập trang chủ quản lý trận đấu, vui lòng nhập mã:
+            </p>
+          </div>
+
+          {error && (
+            <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded text-sm">
+              {error}
+            </div>
+          )}
+
+          <div>
+            <Input
+              type="text"
+              placeholder="Nhập mã trận đấu (demo: ffff)"
+              value={matchCode}
+              onChange={(e) => setMatchCode(e.target.value)}
+              className="w-full text-center font-mono"
+              required
+            />
+          </div>
+
+          <div className="flex justify-end space-x-3">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                setShowCodeEntry(false);
+                setMatchCode('');
+                setError('');
+              }}
+            >
+              Hủy
+            </Button>
+            <Button
+              type="submit"
+              variant="primary"
+              loading={authLoading}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
+              Xác nhận
+            </Button>
+          </div>
+        </form>
+      </Modal>
     </div>
   );
 };
