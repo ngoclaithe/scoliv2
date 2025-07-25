@@ -352,6 +352,15 @@ function AppContent() {
           </div>
         );
 
+      case "profile":
+        // Chỉ cho phép truy cập profile nếu có quyền
+        if (canAccessProfile) {
+          return <ProfilePage />;
+        } else {
+          setCurrentPage("home");
+          return <Home />;
+        }
+
       default:
         return <Home />;
     }
