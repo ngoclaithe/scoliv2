@@ -16,6 +16,11 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Trạng thái mới cho việc phân biệt loại đăng nhập
+  const [authType, setAuthType] = useState(null); // 'account', 'code', 'full'
+  const [matchCode, setMatchCode] = useState(null); // Code trận đấu hiện tại
+  const [codeOnly, setCodeOnly] = useState(false); // Đăng nhập chỉ bằng code
+
   // Hàm load thông tin người dùng từ token
   const loadUser = useCallback(async () => {
     try {
@@ -48,7 +53,7 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       const { user: userData, token } = await AuthAPI.login(credentials);
-      
+
       setUser({
         id: userData.id,
         email: userData.email,
@@ -56,13 +61,15 @@ export const AuthProvider = ({ children }) => {
         role: userData.role,
         avatar: userData.avatar
       });
-      
+
+      setCodeOnly(false);
+      setAuthType('account'); // Chỉ đăng nhập tài khoản
       setIsAuthenticated(true);
       return { success: true, user: userData };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.message || 'Đăng nhập thất bại. Vui lòng thử lại.' 
+      return {
+        success: false,
+        error: error.message || 'Đăng nhập thất bại. Vui lòng thử lại.'
       };
     } finally {
       setLoading(false);
@@ -72,24 +79,32 @@ export const AuthProvider = ({ children }) => {
   const loginWithCode = async (code) => {
     try {
       setLoading(true);
-      // Giả sử API hỗ trợ đăng nhập bằng code
-      // Nếu không, có thể sử dụng login thông thường với email/password
-      const response = await AuthAPI.login({ code });
-      
-      setUser({
-        id: response.user.id,
-        email: response.user.email,
-        name: response.user.name,
-        role: response.user.role,
-        avatar: response.user.avatar
-      });
-      
-      setIsAuthenticated(true);
-      return { success: true, user: response.user };
+      // Giả lập đăng nhập chỉ bằng code (không có tài khoản)
+      // Trong thực tế, API sẽ xác thực code và trả về thông tin trận đấu
+
+      // Fake validation
+      if (code.toLowerCase() === 'ffff' || code.toLowerCase() === 'demo') {
+        setUser({
+          id: 'code-user',
+          email: null,
+          name: `Code User - ${code}`,
+          role: 'code-only',
+          avatar: null
+        });
+
+        setMatchCode(code);
+        setCodeOnly(true);
+        setAuthType('code');
+        setIsAuthenticated(true);
+
+        return { success: true, user: { name: `Code User - ${code}`, role: 'code-only' } };
+      } else {
+        throw new Error('Mã không hợp lệ');
+      }
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.message || 'Đăng nhập thất bại. Vui lòng thử lại.' 
+      return {
+        success: false,
+        error: error.message || 'Mã không hợp lệ. Vui lòng thử lại.'
       };
     } finally {
       setLoading(false);
@@ -134,6 +149,9 @@ export const AuthProvider = ({ children }) => {
     } finally {
       setUser(null);
       setIsAuthenticated(false);
+      setAuthType(null);
+      setMatchCode(null);
+      setCodeOnly(false);
     }
   };
 
@@ -194,6 +212,41 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Hàm mới để nhập code trận đấu sau khi đã đăng nhập tài khoản
+  const enterMatchCode = async (code) => {
+    try {
+      setLoading(true);
+      // Xác thực code trận đấu
+      if (code.toLowerCase() === 'ffff' || code.toLowerCase() === 'demo') {
+        setMatchCode(code);
+        setAuthType('full'); // Có cả tài khoản và code
+        return { success: true };
+      } else {
+        throw new Error('Mã trận đấu không hợp lệ');
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message || 'Mã trận đấu không hợp lệ.'
+      };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Hàm để clear code trận đấu
+  const clearMatchCode = () => {
+    setMatchCode(null);
+    if (authType === 'full') {
+      setAuthType('account');
+    }
+  };
+
+  // Computed values
+  const hasAccountAccess = authType === 'account' || authType === 'full';
+  const hasMatchAccess = authType === 'code' || authType === 'full';
+  const canAccessProfile = hasAccountAccess && !codeOnly;
+
   const value = {
     user,
     isAuthenticated: AuthAPI.isAuthenticated(),
@@ -205,7 +258,16 @@ export const AuthProvider = ({ children }) => {
     updateProfile,
     changePassword,
     requestPasswordReset,
-    resetPassword
+    resetPassword,
+    // Thêm các giá trị mới
+    authType,
+    matchCode,
+    codeOnly,
+    hasAccountAccess,
+    hasMatchAccess,
+    canAccessProfile,
+    enterMatchCode,
+    clearMatchCode
   };
 
   return (
