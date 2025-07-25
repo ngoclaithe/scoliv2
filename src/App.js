@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 // Import pages
 import Home from "./pages/Home";
 import LoginPage from "./components/auth/LoginPage";
+import MatchCodeEntry from "./components/auth/MatchCodeEntry";
 import ProfilePage from "./routes/ProfilePage";
 import Loading from "./components/common/Loading";
 
