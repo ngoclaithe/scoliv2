@@ -206,6 +206,26 @@ const ManageAccessCode = ({ onNavigate }) => {
     }
   };
 
+  // Xử lý nhập code để vào Home
+  const handleEnterCode = async (e) => {
+    e.preventDefault();
+    if (!matchCode.trim()) {
+      setError('Vui lòng nhập mã trận đấu');
+      return;
+    }
+
+    const result = await enterMatchCode(matchCode);
+    if (result.success) {
+      setShowCodeEntry(false);
+      setMatchCode('');
+      if (onNavigate) {
+        onNavigate('home');
+      }
+    } else {
+      setError(result.error);
+    }
+  };
+
   if (loading && codes.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -459,7 +479,7 @@ const ManageAccessCode = ({ onNavigate }) => {
               <form onSubmit={handleCreateCode} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Tên mã truy c���p *
+                    Tên mã truy cập *
                   </label>
                   <Input
                     type="text"
@@ -551,7 +571,7 @@ const ManageAccessCode = ({ onNavigate }) => {
             <div className="bg-white p-6 rounded-lg shadow">
               <h3 className="text-lg font-medium text-gray-900 mb-4">Sử dụng theo thời gian</h3>
               <div className="h-64 flex items-center justify-center bg-gray-50 rounded">
-                <p className="text-gray-500">Biểu đồ thống kê sẽ được hiển thị ở đây</p>
+                <p className="text-gray-500">Biểu đồ thống kê sẽ được hiển thị ở đ��y</p>
               </div>
             </div>
           </div>
