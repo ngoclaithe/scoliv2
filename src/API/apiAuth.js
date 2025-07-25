@@ -158,7 +158,7 @@ const AuthAPI = {
     } catch (error) {
       // Vẫn xóa token ngay cả khi có lỗi
       localStorage.removeItem('token');
-      throw this.handleError(error);
+      throw AuthAPI.handleError(error);
     }
   },
 
