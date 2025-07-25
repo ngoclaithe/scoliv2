@@ -198,9 +198,12 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
     const handleSubmit = (e) => {
       e.preventDefault();
-      if (logoData.name.trim()) {
-        handleAddNewLogo(logoData);
-        setLogoData({ name: "", logoCode: "", position: "corner-left" });
+      if (logoData.logoCode.trim()) {
+        handleAddNewLogo({
+          ...logoData,
+          name: logoData.logoCode // Dùng logoCode làm name
+        });
+        setLogoData({ name: "", logoCode: "", position: "" });
       }
     };
 
