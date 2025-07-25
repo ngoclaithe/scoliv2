@@ -26,15 +26,40 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       if (AuthAPI.isAuthenticated()) {
-        const userData = await AuthAPI.getMe();
-        setUser({
-          id: userData.id,
-          email: userData.email,
-          name: userData.name,
-          role: userData.role,
-          avatar: userData.avatar
-        });
-        setIsAuthenticated(true);
+        // Kiểm tra xem có phải là demo user account không
+        const token = AuthAPI.getToken();
+        if (token && (token.includes('user-token') || token.includes('admin-token'))) {
+          // Demo user account - set authType là 'account'
+          const userData = {
+            id: 'user-demo',
+            email: 'demo@user.com',
+            name: 'User Demo',
+            role: 'user',
+            avatar: null
+          };
+          setUser(userData);
+          setIsAuthenticated(true);
+          setAuthType('account');
+          setCodeOnly(false);
+        } else {
+          // Thực tế call API
+          try {
+            const userData = await AuthAPI.getMe();
+            setUser({
+              id: userData.id,
+              email: userData.email,
+              name: userData.name,
+              role: userData.role,
+              avatar: userData.avatar
+            });
+            setIsAuthenticated(true);
+            setAuthType('account'); // User account từ API
+            setCodeOnly(false);
+          } catch (apiError) {
+            // Nếu API fail, clear token
+            AuthAPI.logout();
+          }
+        }
       }
     } catch (error) {
       console.error('Lỗi tải thông tin người dùng:', error);
