@@ -224,46 +224,58 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">HIỂN THỊ TRONG TRẬN:</label>
-            <div className="space-y-2">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={logoData.position.includes("corner-left")}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setLogoData(prev => ({ ...prev, position: "corner-left" }));
-                    }
-                  }}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="ml-2 text-sm text-gray-700">GÓC TRÁI TRÊN</span>
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={logoData.position.includes("corner-right")}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setLogoData(prev => ({ ...prev, position: "corner-right" }));
-                    }
-                  }}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="ml-2 text-sm text-gray-700">GÓC TRÁI DƯỚI</span>
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={logoData.position.includes("bottom")}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setLogoData(prev => ({ ...prev, position: "bottom" }));
-                    }
-                  }}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="ml-2 text-sm text-gray-700">GÓC PHẢI DƯỚI</span>
-              </label>
+            <div className="flex justify-center gap-4">
+              <button
+                type="button"
+                onClick={() => setLogoData(prev => ({
+                  ...prev,
+                  position: prev.position === "corner-left" ? "" : "corner-left"
+                }))}
+                className={`
+                  w-12 h-12 rounded-lg border-2 flex items-center justify-center transition-all
+                  ${logoData.position === "corner-left"
+                    ? 'border-blue-500 bg-blue-100 text-blue-600'
+                    : 'border-gray-300 hover:border-gray-400 text-gray-600'
+                  }
+                `}
+                title="Góc trái trên"
+              >
+                📍
+              </button>
+              <button
+                type="button"
+                onClick={() => setLogoData(prev => ({
+                  ...prev,
+                  position: prev.position === "corner-right" ? "" : "corner-right"
+                }))}
+                className={`
+                  w-12 h-12 rounded-lg border-2 flex items-center justify-center transition-all
+                  ${logoData.position === "corner-right"
+                    ? 'border-blue-500 bg-blue-100 text-blue-600'
+                    : 'border-gray-300 hover:border-gray-400 text-gray-600'
+                  }
+                `}
+                title="Góc trái dưới"
+              >
+                🎯
+              </button>
+              <button
+                type="button"
+                onClick={() => setLogoData(prev => ({
+                  ...prev,
+                  position: prev.position === "bottom" ? "" : "bottom"
+                }))}
+                className={`
+                  w-12 h-12 rounded-lg border-2 flex items-center justify-center transition-all
+                  ${logoData.position === "bottom"
+                    ? 'border-blue-500 bg-blue-100 text-blue-600'
+                    : 'border-gray-300 hover:border-gray-400 text-gray-600'
+                  }
+                `}
+                title="Góc phải dưới"
+              >
+                🏷️
+              </button>
             </div>
           </div>
 
