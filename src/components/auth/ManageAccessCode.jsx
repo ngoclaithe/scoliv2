@@ -6,7 +6,7 @@ import Loading from '../common/Loading';
 import { useAuth } from '../../contexts/AuthContext';
 import AccessCodeAPI from '../../API/apiAccessCode';
 
-const ManageAccessCode = () => {
+const ManageAccessCode = ({ onNavigate }) => {
   const { user, logout } = useAuth();
   const [activeTab, setActiveTab] = useState('list');
   const [loading, setLoading] = useState(false);
