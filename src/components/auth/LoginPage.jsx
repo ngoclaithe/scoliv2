@@ -164,7 +164,7 @@ const LoginPage = () => {
                   onClick={() => setShowCodeLogin(true)}
                   className="w-full py-2 border border-gray-300 rounded text-sm text-gray-600 hover:bg-gray-50"
                 >
-                  🔑 Đăng nhập bằng mã
+                  🔑 Chỉ quản lý trận (code only)
                 </button>
               </div>
 
