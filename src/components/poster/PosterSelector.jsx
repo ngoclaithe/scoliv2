@@ -81,6 +81,17 @@ const PosterSelector = ({
 
   return (
     <>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+        `
+      }} />
       <div className={`w-full ${className}`}>
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
           <h3 className="text-base sm:text-lg font-semibold text-gray-900">
@@ -99,14 +110,15 @@ const PosterSelector = ({
             ))}
           </div>
                 ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3">
+          <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
             {filteredPosters.slice(0, 8).map((poster) => (
-              <PosterCard
-                key={poster.id}
-                poster={poster}
-                isSelected={selectedPoster?.id === poster.id}
-                onClick={() => onPosterSelect(poster)}
-              />
+              <div key={poster.id} className="flex-none w-48">
+                <PosterCard
+                  poster={poster}
+                  isSelected={selectedPoster?.id === poster.id}
+                  onClick={() => onPosterSelect(poster)}
+                />
+              </div>
             ))}
           </div>
         )}

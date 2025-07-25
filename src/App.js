@@ -8,6 +8,7 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import Home from "./pages/Home";
 import LoginPage from "./components/auth/LoginPage";
 import MatchCodeEntry from "./components/auth/MatchCodeEntry";
+import ManageAccessCode from "./components/auth/ManageAccessCode";
 import ProfilePage from "./routes/ProfilePage";
 import Loading from "./components/common/Loading";
 
@@ -34,7 +35,17 @@ function AppContent() {
     hasMatchAccess,
     canAccessProfile
   } = useAuth();
-  const [currentPage, setCurrentPage] = useState("home");
+  const [currentPage, setCurrentPage] = useState("manage-access-code");
+
+  // Cập nhật currentPage khi authType thay đổi
+  React.useEffect(() => {
+    if (authType === 'account') {
+      setCurrentPage("manage-access-code"); // User account bắt đầu từ quản lý mã
+    } else if (authType === 'full') {
+      setCurrentPage("home"); // Khi đã nhập code thì chuyển sang home
+    }
+  }, [authType]);
+
   const [demoMatch, setDemoMatch] = useState({
     homeTeam: { name: "Hà Nội FC", score: 1, logo: null },
     awayTeam: { name: "TP.HCM", score: 2, logo: null },
@@ -65,9 +76,9 @@ function AppContent() {
     return <LoginPage />;
   }
 
-  // Nếu đăng nhập bằng tài khoản nhưng chưa nhập code trận đấu
-  if (authType === 'account') {
-    return <MatchCodeEntry />;
+  // Đăng nhập chỉ bằng code -> vào thẳng Home
+  if (authType === 'code') {
+    return <Home />;
   }
 
   const demoLineup = {
@@ -128,13 +139,14 @@ function AppContent() {
   // Navigation items dựa trên quyền truy cập
   const navigation = [
     { id: "home", name: "Trang chủ", icon: "🏠", requireMatch: true },
+    ...(hasAccountAccess ? [{ id: "manage-access-code", name: "Quản lý mã", icon: "🔑", requireAccount: true }] : []),
     { id: "scoreboard", name: "Bảng tỉ số", icon: "⚽", requireMatch: true },
     { id: "match", name: "Quản lý trận đấu", icon: "📋", requireMatch: true },
     { id: "lineup", name: "Đội hình", icon: "👥", requireMatch: true },
     { id: "poster", name: "Poster", icon: "📸", requireMatch: true },
     { id: "logo", name: "Logo", icon: "🏆", requireMatch: true },
     { id: "audio", name: "Âm thanh", icon: "🎵", requireMatch: true },
-    ...(canAccessProfile ? [{ id: "profile", name: "Tài khoản", icon: "👤", requireAccount: true }] : []),
+    ...(canAccessProfile ? [{ id: "profile", name: "Tài khoản", icon: "���", requireAccount: true }] : []),
   ].filter(item => {
     if (item.requireMatch && !hasMatchAccess) return false;
     if (item.requireAccount && !hasAccountAccess) return false;
@@ -169,6 +181,9 @@ function AppContent() {
     switch (currentPage) {
       case "home":
         return <Home />;
+
+      case "manage-access-code":
+        return <ManageAccessCode onNavigate={setCurrentPage} />;
 
       case "scoreboard":
         return (

@@ -43,7 +43,7 @@ const AuthAPI = {
       }
       return response.data;
     } catch (error) {
-      throw this.handleError(error);
+      throw AuthAPI.handleError(error);
     }
   },
 
@@ -63,7 +63,7 @@ const AuthAPI = {
       }
       return response.data;
     } catch (error) {
-      throw this.handleError(error);
+      throw AuthAPI.handleError(error);
     }
   },
 
@@ -80,7 +80,7 @@ const AuthAPI = {
       if (error.response && error.response.status === 401) {
         localStorage.removeItem('token');
       }
-      throw this.handleError(error);
+      throw AuthAPI.handleError(error);
     }
   },
 
@@ -96,7 +96,7 @@ const AuthAPI = {
       const response = await api.put('/auth/updatedetails', userData);
       return response.data;
     } catch (error) {
-      throw this.handleError(error);
+      throw AuthAPI.handleError(error);
     }
   },
 
@@ -112,7 +112,7 @@ const AuthAPI = {
       const response = await api.put('/auth/updatepassword', passwords);
       return response.data;
     } catch (error) {
-      throw this.handleError(error);
+      throw AuthAPI.handleError(error);
     }
   },
 
@@ -126,7 +126,7 @@ const AuthAPI = {
       const response = await api.post('/auth/forgotpassword', { email });
       return response.data;
     } catch (error) {
-      throw this.handleError(error);
+      throw AuthAPI.handleError(error);
     }
   },
 
@@ -141,7 +141,7 @@ const AuthAPI = {
       const response = await api.put(`/auth/resetpassword/${resetToken}`, { password });
       return response.data;
     } catch (error) {
-      throw this.handleError(error);
+      throw AuthAPI.handleError(error);
     }
   },
 
@@ -158,7 +158,7 @@ const AuthAPI = {
     } catch (error) {
       // Vẫn xóa token ngay cả khi có lỗi
       localStorage.removeItem('token');
-      throw this.handleError(error);
+      throw AuthAPI.handleError(error);
     }
   },
 

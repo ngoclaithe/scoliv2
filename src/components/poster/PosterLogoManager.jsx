@@ -65,7 +65,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     },
     {
       id: "logo-4",
-      name: "FPT Play - Nền tảng giải trí số",
+      name: "FPT Play - N��n tảng giải trí số",
       url: null,
       category: "media",
     },
@@ -198,9 +198,12 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
     const handleSubmit = (e) => {
       e.preventDefault();
-      if (logoData.name.trim()) {
-        handleAddNewLogo(logoData);
-        setLogoData({ name: "", logoCode: "", position: "corner-left" });
+      if (logoData.logoCode.trim()) {
+        handleAddNewLogo({
+          ...logoData,
+          name: logoData.logoCode // Dùng logoCode làm name
+        });
+        setLogoData({ name: "", logoCode: "", position: "" });
       }
     };
 
@@ -214,16 +217,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">TÊN ĐƠN VỊ</label>
-            <Input
-              value={logoData.name}
-              onChange={(e) => setLogoData(prev => ({ ...prev, name: e.target.value }))}
-              placeholder="Nhập tên đơn vị"
-              required
-            />
-          </div>
-
-          <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">MÃ LOGO:</label>
             <Input
               value={logoData.logoCode}
@@ -234,46 +227,58 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">HIỂN THỊ TRONG TRẬN:</label>
-            <div className="space-y-2">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={logoData.position.includes("corner-left")}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setLogoData(prev => ({ ...prev, position: "corner-left" }));
-                    }
-                  }}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="ml-2 text-sm text-gray-700">GÓC TRÁI TRÊN</span>
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={logoData.position.includes("corner-right")}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setLogoData(prev => ({ ...prev, position: "corner-right" }));
-                    }
-                  }}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="ml-2 text-sm text-gray-700">GÓC TRÁI DƯỚI</span>
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={logoData.position.includes("bottom")}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setLogoData(prev => ({ ...prev, position: "bottom" }));
-                    }
-                  }}
-                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="ml-2 text-sm text-gray-700">GÓC PHẢI DƯỚI</span>
-              </label>
+            <div className="flex justify-center gap-4">
+              <button
+                type="button"
+                onClick={() => setLogoData(prev => ({
+                  ...prev,
+                  position: prev.position === "corner-left" ? "" : "corner-left"
+                }))}
+                className={`
+                  w-12 h-12 rounded-lg border-2 flex items-center justify-center transition-all
+                  ${logoData.position === "corner-left"
+                    ? 'border-blue-500 bg-blue-100 text-blue-600'
+                    : 'border-gray-300 hover:border-gray-400 text-gray-600'
+                  }
+                `}
+                title="Góc trái trên"
+              >
+                📍
+              </button>
+              <button
+                type="button"
+                onClick={() => setLogoData(prev => ({
+                  ...prev,
+                  position: prev.position === "corner-right" ? "" : "corner-right"
+                }))}
+                className={`
+                  w-12 h-12 rounded-lg border-2 flex items-center justify-center transition-all
+                  ${logoData.position === "corner-right"
+                    ? 'border-blue-500 bg-blue-100 text-blue-600'
+                    : 'border-gray-300 hover:border-gray-400 text-gray-600'
+                  }
+                `}
+                title="Góc trái dưới"
+              >
+                🎯
+              </button>
+              <button
+                type="button"
+                onClick={() => setLogoData(prev => ({
+                  ...prev,
+                  position: prev.position === "bottom" ? "" : "bottom"
+                }))}
+                className={`
+                  w-12 h-12 rounded-lg border-2 flex items-center justify-center transition-all
+                  ${logoData.position === "bottom"
+                    ? 'border-blue-500 bg-blue-100 text-blue-600'
+                    : 'border-gray-300 hover:border-gray-400 text-gray-600'
+                  }
+                `}
+                title="Góc phải dưới"
+              >
+                🏷️
+              </button>
             </div>
           </div>
 
@@ -348,28 +353,24 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     switch (activeSection) {
       case "posters":
         return (
-          <div className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Chọn Poster Template
-              </h3>
-              {selectedPoster && (
-                <div className="bg-blue-50 border border-blue-200 rounded-lg px-3 py-2">
-                  <p className="text-sm font-medium text-blue-800">
-                    ✅ Đã chọn: {selectedPoster.name}
-                  </p>
-                </div>
-              )}
-            </div>
+          <div className="space-y-2">
+            {selectedPoster && (
+              <div className="bg-blue-50 border border-blue-200 rounded px-2 py-1">
+                <p className="text-xs font-medium text-blue-800">
+                  ✅ Đ�� chọn: {selectedPoster.name}
+                </p>
+              </div>
+            )}
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 max-h-96 overflow-y-auto">
+            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
               {availablePosters.map((poster) => (
-                <PosterCard
-                  key={poster.id}
-                  poster={poster}
-                  isSelected={selectedPoster?.id === poster.id}
-                  onClick={() => handlePosterSelect(poster)}
-                />
+                <div key={poster.id} className="flex-none w-40">
+                  <PosterCard
+                    poster={poster}
+                    isSelected={selectedPoster?.id === poster.id}
+                    onClick={() => handlePosterSelect(poster)}
+                  />
+                </div>
               ))}
             </div>
           </div>
@@ -379,55 +380,51 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         const currentCategoryLogos = selectedLogos.filter(logo => logo.category === activeLogoCategory);
 
         return (
-          <div className="space-y-4">
-            <div className="text-center">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">CÀI ĐẶT LOGO</h3>
-
-              {/* Logo Category Tabs */}
-              <div className="flex justify-center mb-6">
-                <div className="inline-flex bg-gray-100 rounded-lg p-1">
-                  {logoTypes.map((type) => (
-                    <button
-                      key={type.id}
-                      onClick={() => setActiveLogoCategory(type.id)}
-                      className={`
-                        px-4 py-2 text-sm font-medium rounded-md transition-all duration-200
-                        ${activeLogoCategory === type.id
-                          ? 'bg-white text-blue-600 shadow-sm'
-                          : 'text-gray-600 hover:text-gray-900'
-                        }
-                      `}
-                    >
-                      {type.name}
-                    </button>
-                  ))}
-                </div>
+          <div className="space-y-2">
+            {/* Logo Category Tabs */}
+            <div className="flex justify-center mb-3">
+              <div className="inline-flex bg-gray-100 rounded p-1">
+                {logoTypes.map((type) => (
+                  <button
+                    key={type.id}
+                    onClick={() => setActiveLogoCategory(type.id)}
+                    className={`
+                      px-2 py-1 text-xs font-medium rounded transition-all duration-200
+                      ${activeLogoCategory === type.id
+                        ? 'bg-white text-blue-600 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                      }
+                    `}
+                  >
+                    {type.name}
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Selected Logos Display */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+            {/* Selected Logos Display - Horizontal Scroll */}
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide mb-2">
               {currentCategoryLogos.map((logo) => (
-                <div key={logo.id} className="bg-white border-2 border-gray-200 rounded-lg p-4 relative">
+                <div key={logo.id} className="flex-none w-32 bg-white border border-gray-200 rounded p-2 relative">
                   <button
                     onClick={() => handleLogoSelect(logo)}
-                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
 
-                  <div className="aspect-square bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
+                  <div className="aspect-square bg-gray-100 rounded mb-1 flex items-center justify-center">
                     {logo.url ? (
                       <img
                         src={logo.url}
                         alt={logo.name}
-                        className="w-full h-full object-contain p-2"
+                        className="w-full h-full object-contain p-1"
                       />
                     ) : (
-                      <div className="w-16 h-16 bg-gray-400 rounded-full flex items-center justify-center">
-                        <span className="text-white font-bold text-xl">
+                      <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-xs">
                           {logo.name.charAt(0)}
                         </span>
                       </div>
@@ -435,65 +432,38 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
                   </div>
 
                   <div className="text-center">
-                    <h4 className="font-medium text-sm text-gray-900 mb-1">TÊN ĐƠN VỊ</h4>
-                    <p className="text-xs text-gray-600 mb-2">{logo.name}</p>
-
-                    {logo.logoCode && (
-                      <div className="mb-2">
-                        <span className="text-xs font-medium text-gray-700">MÃ LOGO: </span>
-                        <span className="text-xs text-gray-600">{logo.logoCode}</span>
-                      </div>
-                    )}
-
-                    <div className="text-xs text-gray-600">
-                      <span className="font-medium">HIỂN THỊ TRONG TRẬN:</span>
-                      <div className="mt-1 space-y-1">
-                        <div>☑ GÓC TRÁI TRÊN</div>
-                        <div>☑ GÓC TRÁI DƯỚI</div>
-                        <div>☑ GÓC PHẢI DƯỚI</div>
-                      </div>
+                    <p className="text-xs text-gray-600 mb-1 font-mono truncate">{logo.logoCode || logo.name}</p>
+                    <div className="flex justify-center gap-1 mb-1">
+                      <div className="w-4 h-4 bg-blue-100 rounded flex items-center justify-center text-xs" title="Góc trái trên">📍</div>
+                      <div className="w-4 h-4 bg-blue-100 rounded flex items-center justify-center text-xs" title="Góc trái dưới">🎯</div>
+                      <div className="w-4 h-4 bg-blue-100 rounded flex items-center justify-center text-xs" title="Góc phải dưới">🏷️</div>
                     </div>
-                  </div>
-
-                  <div className="mt-3 flex gap-2">
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold text-xs"
-                    >
-                      THÊM
-                    </Button>
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      onClick={() => handleLogoSelect(logo)}
-                      className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold text-xs"
-                    >
-                      XÓA
-                    </Button>
                   </div>
                 </div>
               ))}
 
-              {/* Add New Logo Card */}
-              {showAddLogoForm ? (
-                <AddLogoForm />
-              ) : (
-                <div
-                  onClick={() => setShowAddLogoForm(true)}
-                  className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 flex flex-col items-center justify-center min-h-[300px]"
-                >
-                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-3">
-                    <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
-                  </div>
-                  <p className="text-gray-600 font-medium text-center">
-                    Thêm {logoTypes.find(t => t.id === activeLogoCategory)?.name}
-                  </p>
+              {/* Add New Logo Button */}
+              <div
+                onClick={() => setShowAddLogoForm(true)}
+                className="flex-none w-32 bg-white border-2 border-dashed border-gray-300 rounded p-2 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 flex flex-col items-center justify-center h-24"
+              >
+                <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mb-1">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
                 </div>
-              )}
+                <p className="text-xs text-gray-600 font-medium text-center">
+                  Thêm
+                </p>
+              </div>
             </div>
+
+            {/* Add Logo Form - Show below when active */}
+            {showAddLogoForm && (
+              <div className="bg-gray-50 border border-gray-200 rounded p-3 mb-2">
+                <AddLogoForm />
+              </div>
+            )}
 
             
           </div>
@@ -505,7 +475,18 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
+      {/* Copy Poster Section */}
+      <div className="flex items-center justify-between gap-2 mb-2">
+        <span className="text-xs font-medium text-gray-700">Copy poster trận trước:</span>
+        <select className="text-xs border border-gray-300 rounded px-2 py-1 bg-white">
+          <option value="">Chọn trận</option>
+          <option value="match1">Hà Nội vs TPHCM (15/01)</option>
+          <option value="match2">Viettel vs HAGL (12/01)</option>
+          <option value="match3">SHB vs Thanh Hóa (10/01)</option>
+        </select>
+      </div>
+
       {/* Section Navigation */}
       <div className="border-b border-gray-200">
         <nav className="flex space-x-1">
@@ -514,7 +495,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
               key={section.id}
               onClick={() => setActiveSection(section.id)}
               className={`
-                flex-1 py-3 px-4 text-center font-medium text-sm border-b-2 transition-all duration-200
+                flex-1 py-2 px-2 text-center font-medium text-xs border-b-2 transition-all duration-200
                 ${
                   activeSection === section.id
                     ? "border-blue-500 text-blue-600 bg-blue-50"
@@ -522,7 +503,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
                 }
               `}
             >
-              <span className="mr-2">{section.icon}</span>
+              <span className="mr-1">{section.icon}</span>
               <span>{section.name}</span>
             </button>
           ))}
