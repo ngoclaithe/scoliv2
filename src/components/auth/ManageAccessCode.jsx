@@ -75,7 +75,7 @@ const ManageAccessCode = ({ onNavigate }) => {
           {
             id: '3',
             code: 'EXPIRE001',
-            name: 'Code đã hết hạn',
+            name: 'Code đã h���t hạn',
             description: 'Mã test đã hết hạn sử dụng',
             status: 'expired',
             duration: 12,
@@ -225,7 +225,7 @@ const ManageAccessCode = ({ onNavigate }) => {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-white">Quản lý mã truy cập</h1>
-                <p className="text-purple-100 text-sm">Tạo và quản lý mã code cho trận đấu</p>
+                <p className="text-purple-100 text-sm">Tạo mã để chia sẻ và quản lý trận đấu</p>
               </div>
             </div>
 
