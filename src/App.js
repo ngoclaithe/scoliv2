@@ -197,7 +197,7 @@ function AppContent() {
         return <Home />;
 
       case "manage-access-code":
-        return <ManageAccessCode />;
+        return <ManageAccessCode onNavigate={setCurrentPage} />;
 
       case "scoreboard":
         return (
