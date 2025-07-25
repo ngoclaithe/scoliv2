@@ -53,7 +53,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     },
     {
       id: "logo-2",
-      name: "VPF - Công ty CP bóng đá chuyên nghi���p Việt Nam",
+      name: "VPF - Công ty CP bóng đá chuyên nghiệp Việt Nam",
       url: null,
       category: "organizer",
     },
@@ -403,28 +403,28 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             </div>
 
             {/* Selected Logos Display - Horizontal Scroll */}
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide mb-3">
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide mb-2">
               {currentCategoryLogos.map((logo) => (
-                <div key={logo.id} className="bg-white border-2 border-gray-200 rounded-lg p-4 relative">
+                <div key={logo.id} className="flex-none w-32 bg-white border border-gray-200 rounded p-2 relative">
                   <button
                     onClick={() => handleLogoSelect(logo)}
-                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
 
-                  <div className="aspect-square bg-gray-100 rounded-lg mb-3 flex items-center justify-center">
+                  <div className="aspect-square bg-gray-100 rounded mb-1 flex items-center justify-center">
                     {logo.url ? (
                       <img
                         src={logo.url}
                         alt={logo.name}
-                        className="w-full h-full object-contain p-2"
+                        className="w-full h-full object-contain p-1"
                       />
                     ) : (
-                      <div className="w-16 h-16 bg-gray-400 rounded-full flex items-center justify-center">
-                        <span className="text-white font-bold text-xl">
+                      <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center">
+                        <span className="text-white font-bold text-xs">
                           {logo.name.charAt(0)}
                         </span>
                       </div>
@@ -432,41 +432,12 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
                   </div>
 
                   <div className="text-center">
-                    <h4 className="font-medium text-sm text-gray-900 mb-1">MÃ LOGO</h4>
-                    <p className="text-xs text-gray-600 mb-2 font-mono">{logo.logoCode || logo.name}</p>
-
-                    <div className="text-xs text-gray-600">
-                      <span className="font-medium">HIỂN THỊ TRONG TRẬN:</span>
-                      <div className="mt-2 flex justify-center gap-2">
-                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center" title="Góc trái trên">
-                          📍
-                        </div>
-                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center" title="Góc trái dưới">
-                          🎯
-                        </div>
-                        <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center" title="Góc phải dưới">
-                          🏷️
-                        </div>
-                      </div>
+                    <p className="text-xs text-gray-600 mb-1 font-mono truncate">{logo.logoCode || logo.name}</p>
+                    <div className="flex justify-center gap-1 mb-1">
+                      <div className="w-4 h-4 bg-blue-100 rounded flex items-center justify-center text-xs" title="Góc trái trên">📍</div>
+                      <div className="w-4 h-4 bg-blue-100 rounded flex items-center justify-center text-xs" title="Góc trái dưới">🎯</div>
+                      <div className="w-4 h-4 bg-blue-100 rounded flex items-center justify-center text-xs" title="Góc phải dưới">🏷️</div>
                     </div>
-                  </div>
-
-                  <div className="mt-3 flex gap-2">
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold text-xs"
-                    >
-                      THÊM
-                    </Button>
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      onClick={() => handleLogoSelect(logo)}
-                      className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold text-xs"
-                    >
-                      XÓA
-                    </Button>
                   </div>
                 </div>
               ))}
