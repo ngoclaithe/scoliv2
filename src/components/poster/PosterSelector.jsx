@@ -81,6 +81,17 @@ const PosterSelector = ({
 
   return (
     <>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+        `
+      }} />
       <div className={`w-full ${className}`}>
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4 gap-3">
           <h3 className="text-base sm:text-lg font-semibold text-gray-900">
