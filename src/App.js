@@ -137,6 +137,7 @@ function AppContent() {
   // Navigation items dựa trên quyền truy cập
   const navigation = [
     { id: "home", name: "Trang chủ", icon: "🏠", requireMatch: true },
+    ...(hasAccountAccess ? [{ id: "manage-access-code", name: "Quản lý mã", icon: "🔑", requireAccount: true }] : []),
     { id: "scoreboard", name: "Bảng tỉ số", icon: "⚽", requireMatch: true },
     { id: "match", name: "Quản lý trận đấu", icon: "📋", requireMatch: true },
     { id: "lineup", name: "Đội hình", icon: "👥", requireMatch: true },
