@@ -53,23 +53,23 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
 
-      // Demo: Kiểm tra admin login
-      if (credentials.email === 'admin@demo.com' && credentials.password === 'admin123') {
+      // Demo: Đăng nhập user demo
+      if (credentials.email === 'demo@user.com' && credentials.password === 'demo123') {
         const userData = {
-          id: 'admin-demo',
-          email: 'admin@demo.com',
-          name: 'Admin Demo',
-          role: 'admin',
+          id: 'user-demo',
+          email: 'demo@user.com',
+          name: 'User Demo',
+          role: 'user',
           avatar: null
         };
 
         setUser(userData);
         setCodeOnly(false);
-        setAuthType('account'); // Admin đăng nhập thành công
+        setAuthType('account'); // User đăng nhập thành công
         setIsAuthenticated(true);
 
         // Fake token for demo
-        localStorage.setItem('token', 'fake-admin-token');
+        localStorage.setItem('token', 'fake-user-token');
 
         return { success: true, user: userData };
       }
@@ -182,7 +182,7 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       return {
         success: false,
-        error: error.message || 'Đăng ký thất bại. Vui lòng thử lại.'
+        error: error.message || 'Đăng ký thất bại. Vui lòng th�� lại.'
       };
     } finally {
       setLoading(false);
