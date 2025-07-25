@@ -316,7 +316,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         // Bỏ chọn logo
         return prev.filter(l => l.id !== logo.id);
       } else {
-        // Thêm logo vào danh sách ��ã chọn
+        // Thêm logo vào danh sách đã chọn
         return [...prev, logo];
       }
     });
@@ -510,7 +510,18 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
+      {/* Copy Poster Section */}
+      <div className="flex items-center justify-between gap-2 mb-2">
+        <span className="text-xs font-medium text-gray-700">Copy poster trận trước:</span>
+        <select className="text-xs border border-gray-300 rounded px-2 py-1 bg-white">
+          <option value="">Chọn trận</option>
+          <option value="match1">Hà Nội vs TPHCM (15/01)</option>
+          <option value="match2">Viettel vs HAGL (12/01)</option>
+          <option value="match3">SHB vs Thanh Hóa (10/01)</option>
+        </select>
+      </div>
+
       {/* Section Navigation */}
       <div className="border-b border-gray-200">
         <nav className="flex space-x-1">
@@ -519,7 +530,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
               key={section.id}
               onClick={() => setActiveSection(section.id)}
               className={`
-                flex-1 py-3 px-4 text-center font-medium text-sm border-b-2 transition-all duration-200
+                flex-1 py-2 px-2 text-center font-medium text-xs border-b-2 transition-all duration-200
                 ${
                   activeSection === section.id
                     ? "border-blue-500 text-blue-600 bg-blue-50"
@@ -527,7 +538,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
                 }
               `}
             >
-              <span className="mr-2">{section.icon}</span>
+              <span className="mr-1">{section.icon}</span>
               <span>{section.name}</span>
             </button>
           ))}
