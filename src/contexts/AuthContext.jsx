@@ -301,7 +301,7 @@ export const AuthProvider = ({ children }) => {
 
   const value = {
     user,
-    isAuthenticated: AuthAPI.isAuthenticated(),
+    isAuthenticated,
     loading,
     login,
     loginWithCode,
