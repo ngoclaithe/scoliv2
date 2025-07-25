@@ -60,9 +60,14 @@ function AppContent() {
     );
   }
 
-  // Hiển thị trang đăng nhập nếu chưa authenticate
+  // Logic điều hướng dựa trên trạng thái đăng nhập
   if (!isAuthenticated) {
     return <LoginPage />;
+  }
+
+  // Nếu đăng nhập bằng tài khoản nhưng chưa nhập code trận đấu
+  if (authType === 'account') {
+    return <MatchCodeEntry />;
   }
 
   const demoLineup = {
