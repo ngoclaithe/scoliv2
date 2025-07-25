@@ -185,7 +185,10 @@ const LoginPage = () => {
                 <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-full mx-auto mb-2 flex items-center justify-center">
                   <span className="text-white text-lg">🔑</span>
                 </div>
-                <h2 className="text-sm font-bold text-gray-800">Đăng nhập bằng mã</h2>
+                <h2 className="text-sm font-bold text-gray-800">Quản lý trận (chỉ code)</h2>
+                <p className="text-xs text-gray-600 mt-1">
+                  Chỉ để quản lý trận đấu, không thể mua code
+                </p>
               </div>
 
               {error && (
