@@ -259,9 +259,9 @@ const ManageAccessCode = ({ onNavigate }) => {
               </div>
               {onNavigate && (
                 <button
-                  onClick={() => onNavigate('home')}
+                  onClick={() => setShowCodeEntry(true)}
                   className="flex items-center bg-white/10 hover:bg-white/20 rounded-full px-3 py-2 transition-colors"
-                  title="Về trang chủ"
+                  title="Về trang chủ (cần nhập code)"
                 >
                   <span className="text-white text-sm">🏠 Trang chủ</span>
                 </button>
@@ -552,7 +552,7 @@ const ManageAccessCode = ({ onNavigate }) => {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
               <div className="bg-white p-6 rounded-lg shadow">
                 <div className="text-2xl font-bold text-purple-600">15</div>
-                <div className="text-sm text-gray-600">Tổng số mã</div>
+                <div className="text-sm text-gray-600">T���ng số mã</div>
               </div>
               <div className="bg-white p-6 rounded-lg shadow">
                 <div className="text-2xl font-bold text-green-600">12</div>
@@ -571,7 +571,7 @@ const ManageAccessCode = ({ onNavigate }) => {
             <div className="bg-white p-6 rounded-lg shadow">
               <h3 className="text-lg font-medium text-gray-900 mb-4">Sử dụng theo thời gian</h3>
               <div className="h-64 flex items-center justify-center bg-gray-50 rounded">
-                <p className="text-gray-500">Biểu đồ thống kê sẽ được hiển thị ở đ��y</p>
+                <p className="text-gray-500">Biểu đồ thống kê sẽ được hiển thị ở đây</p>
               </div>
             </div>
           </div>
