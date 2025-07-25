@@ -374,12 +374,7 @@ const UploadLogoSection = () => {
           </button>
         </div>
         
-        <style jsx>{`
-          @keyframes rotate3D {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
-          }
-        `}</style>
+
       </div>
     );
   };
@@ -670,7 +665,7 @@ const UploadLogoSection = () => {
           style={{ fontSize: '10px' }}
         >
           <span className="mr-1 text-xs">📚</span>
-          HỖ TRỢ
+          H��� TRỢ
         </Button>
       </div>
     </div>
