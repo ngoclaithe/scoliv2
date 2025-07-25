@@ -235,6 +235,15 @@ const ManageAccessCode = ({ onNavigate }) => {
                 <span className="text-white text-sm mr-2">👤</span>
                 <span className="text-white text-sm font-medium">{user?.name}</span>
               </div>
+              {onNavigate && (
+                <button
+                  onClick={() => onNavigate('home')}
+                  className="flex items-center bg-white/10 hover:bg-white/20 rounded-full px-3 py-2 transition-colors"
+                  title="Về trang chủ"
+                >
+                  <span className="text-white text-sm">🏠 Trang chủ</span>
+                </button>
+              )}
               <button
                 onClick={logout}
                 className="flex items-center bg-white/10 hover:bg-white/20 rounded-full px-3 py-2 transition-colors"
