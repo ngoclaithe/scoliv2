@@ -168,14 +168,20 @@ const LoginPage = () => {
                 </button>
               </div>
 
-              <div className="mt-3 text-center text-xs text-gray-600">
-                Chưa có tài khoản?{' '}
-                <button
-                  onClick={() => setShowRegister(true)}
-                  className="text-blue-600 font-medium"
-                >
-                  Đăng ký
-                </button>
+              <div className="mt-3 space-y-2 text-center text-xs text-gray-600">
+                <div className="bg-blue-50 rounded p-2">
+                  <div className="text-blue-800 font-medium">💡 Đăng nhập tài khoản:</div>
+                  <div className="text-blue-700">Để mua code + quản lý trận (cần nhập code sau)</div>
+                </div>
+                <div>
+                  Chưa có tài khoản?{' '}
+                  <button
+                    onClick={() => setShowRegister(true)}
+                    className="text-blue-600 font-medium"
+                  >
+                    Đăng ký
+                  </button>
+                </div>
               </div>
             </div>
           ) : showCodeLogin ? (
