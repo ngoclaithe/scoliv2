@@ -35,7 +35,15 @@ function AppContent() {
     hasMatchAccess,
     canAccessProfile
   } = useAuth();
-  const [currentPage, setCurrentPage] = useState("home");
+  // Khởi tạo trang mặc định dựa trên role
+  const getInitialPage = () => {
+    if (user?.role === 'admin') {
+      return "manage-access-code";
+    }
+    return "home";
+  };
+
+  const [currentPage, setCurrentPage] = useState(getInitialPage());
   const [demoMatch, setDemoMatch] = useState({
     homeTeam: { name: "Hà Nội FC", score: 1, logo: null },
     awayTeam: { name: "TP.HCM", score: 2, logo: null },
@@ -43,7 +51,7 @@ function AppContent() {
     period: "Hiệp 2",
     status: "live",
     league: "V-League 2024",
-    stadium: "Sân Hàng Đ��y",
+    stadium: "Sân Hàng Đẫy",
     date: "2024-01-15",
     time: "19:00",
     weather: "☀️ Nắng",
