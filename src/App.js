@@ -76,9 +76,9 @@ function AppContent() {
     return <LoginPage />;
   }
 
-  // Nếu đăng nhập bằng tài khoản thường nhưng chưa nhập code trận đấu
-  if (authType === 'account') {
-    return <MatchCodeEntry />;
+  // Đăng nhập chỉ bằng code -> vào thẳng Home
+  if (authType === 'code') {
+    return <Home />;
   }
 
   const demoLineup = {
@@ -145,7 +145,7 @@ function AppContent() {
     { id: "lineup", name: "Đội hình", icon: "👥", requireMatch: true },
     { id: "poster", name: "Poster", icon: "📸", requireMatch: true },
     { id: "logo", name: "Logo", icon: "🏆", requireMatch: true },
-    { id: "audio", name: "Âm thanh", icon: "🎵", requireMatch: true },
+    { id: "audio", name: "��m thanh", icon: "🎵", requireMatch: true },
     ...(canAccessProfile ? [{ id: "profile", name: "Tài khoản", icon: "👤", requireAccount: true }] : []),
   ].filter(item => {
     if (item.requireMatch && !hasMatchAccess) return false;
