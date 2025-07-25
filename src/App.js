@@ -35,24 +35,14 @@ function AppContent() {
     hasMatchAccess,
     canAccessProfile
   } = useAuth();
-  // Khởi tạo trang mặc định dựa trên role
-  const getInitialPage = () => {
-    if (user?.role === 'admin') {
-      return "manage-access-code";
-    }
-    return "home";
-  };
+  const [currentPage, setCurrentPage] = useState("home");
 
-  const [currentPage, setCurrentPage] = useState(getInitialPage());
-
-  // Cập nhật currentPage khi user thay đổi
+  // Cập nhật currentPage khi authType thay đổi
   React.useEffect(() => {
-    if (user?.role === 'admin') {
-      setCurrentPage("manage-access-code");
-    } else if (authType === 'code' || authType === 'full') {
+    if (authType === 'code' || authType === 'full') {
       setCurrentPage("home");
     }
-  }, [user, authType]);
+  }, [authType]);
 
   const [demoMatch, setDemoMatch] = useState({
     homeTeam: { name: "Hà Nội FC", score: 1, logo: null },
@@ -147,7 +137,7 @@ function AppContent() {
   // Navigation items dựa trên quyền truy cập
   const navigation = [
     { id: "home", name: "Trang chủ", icon: "🏠", requireMatch: true },
-    { id: "manage-access-code", name: "Quản lý m��", icon: "🔑", requireAdmin: true },
+    { id: "manage-access-code", name: "Quản lý mã", icon: "🔑", requireAdmin: true },
     { id: "scoreboard", name: "Bảng tỉ số", icon: "⚽", requireMatch: true },
     { id: "match", name: "Quản lý trận đấu", icon: "📋", requireMatch: true },
     { id: "lineup", name: "Đội hình", icon: "👥", requireMatch: true },
@@ -305,7 +295,7 @@ function AppContent() {
                 }
                 className="mb-6"
               >
-                📋 Nhập danh sách cầu thủ
+                📋 Nhập danh sách c���u thủ
               </Button>
             </div>
             <LineupManager
