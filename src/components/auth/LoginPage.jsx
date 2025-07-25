@@ -164,18 +164,24 @@ const LoginPage = () => {
                   onClick={() => setShowCodeLogin(true)}
                   className="w-full py-2 border border-gray-300 rounded text-sm text-gray-600 hover:bg-gray-50"
                 >
-                  🔑 Đăng nhập bằng mã
+                  🔑 Chỉ quản lý trận (code only)
                 </button>
               </div>
 
-              <div className="mt-3 text-center text-xs text-gray-600">
-                Chưa có tài khoản?{' '}
-                <button
-                  onClick={() => setShowRegister(true)}
-                  className="text-blue-600 font-medium"
-                >
-                  Đăng ký
-                </button>
+              <div className="mt-3 space-y-2 text-center text-xs text-gray-600">
+                <div className="bg-blue-50 rounded p-2">
+                  <div className="text-blue-800 font-medium">💡 Đăng nhập tài khoản:</div>
+                  <div className="text-blue-700">Để mua code + quản lý trận (cần nhập code sau)</div>
+                </div>
+                <div>
+                  Chưa có tài khoản?{' '}
+                  <button
+                    onClick={() => setShowRegister(true)}
+                    className="text-blue-600 font-medium"
+                  >
+                    Đăng ký
+                  </button>
+                </div>
               </div>
             </div>
           ) : showCodeLogin ? (
@@ -185,7 +191,10 @@ const LoginPage = () => {
                 <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-blue-600 rounded-full mx-auto mb-2 flex items-center justify-center">
                   <span className="text-white text-lg">🔑</span>
                 </div>
-                <h2 className="text-sm font-bold text-gray-800">Đăng nhập bằng mã</h2>
+                <h2 className="text-sm font-bold text-gray-800">Quản lý trận (chỉ code)</h2>
+                <p className="text-xs text-gray-600 mt-1">
+                  Chỉ để quản lý trận đấu, không thể mua code
+                </p>
               </div>
 
               {error && (

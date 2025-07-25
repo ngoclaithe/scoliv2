@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 // Import pages
 import Home from "./pages/Home";
 import LoginPage from "./components/auth/LoginPage";
+import MatchCodeEntry from "./components/auth/MatchCodeEntry";
 import ProfilePage from "./routes/ProfilePage";
 import Loading from "./components/common/Loading";
 
@@ -23,7 +24,16 @@ import LogoPreview from "./components/logo/LogoPreview";
 import AudioPlayer from "./components/audio/AudioPlayer";
 
 function AppContent() {
-  const { isAuthenticated, loading, user, logout } = useAuth();
+  const {
+    isAuthenticated,
+    loading,
+    user,
+    logout,
+    authType,
+    hasAccountAccess,
+    hasMatchAccess,
+    canAccessProfile
+  } = useAuth();
   const [currentPage, setCurrentPage] = useState("home");
   const [demoMatch, setDemoMatch] = useState({
     homeTeam: { name: "Hà Nội FC", score: 1, logo: null },
@@ -50,9 +60,14 @@ function AppContent() {
     );
   }
 
-  // Hiển thị trang đăng nhập nếu chưa authenticate
+  // Logic điều hướng dựa trên trạng thái đăng nhập
   if (!isAuthenticated) {
     return <LoginPage />;
+  }
+
+  // Nếu đăng nhập bằng tài khoản nhưng chưa nhập code trận đấu
+  if (authType === 'account') {
+    return <MatchCodeEntry />;
   }
 
   const demoLineup = {
@@ -110,16 +125,21 @@ function AppContent() {
     category: "club",
   };
 
+  // Navigation items dựa trên quyền truy cập
   const navigation = [
-    { id: "home", name: "Trang chủ", icon: "🏠" },
-    { id: "scoreboard", name: "Bảng tỉ số", icon: "⚽" },
-    { id: "match", name: "Quản lý trận đấu", icon: "📋" },
-    { id: "lineup", name: "Đội hình", icon: "👥" },
-    { id: "poster", name: "Poster", icon: "��" },
-    { id: "logo", name: "Logo", icon: "🏆" },
-    { id: "audio", name: "Âm thanh", icon: "🎵" },
-    { id: "profile", name: "Tài khoản", icon: "👤" },
-  ];
+    { id: "home", name: "Trang chủ", icon: "🏠", requireMatch: true },
+    { id: "scoreboard", name: "Bảng tỉ số", icon: "⚽", requireMatch: true },
+    { id: "match", name: "Quản lý trận đấu", icon: "📋", requireMatch: true },
+    { id: "lineup", name: "Đội hình", icon: "👥", requireMatch: true },
+    { id: "poster", name: "Poster", icon: "📸", requireMatch: true },
+    { id: "logo", name: "Logo", icon: "🏆", requireMatch: true },
+    { id: "audio", name: "Âm thanh", icon: "🎵", requireMatch: true },
+    ...(canAccessProfile ? [{ id: "profile", name: "Tài khoản", icon: "👤", requireAccount: true }] : []),
+  ].filter(item => {
+    if (item.requireMatch && !hasMatchAccess) return false;
+    if (item.requireAccount && !hasAccountAccess) return false;
+    return true;
+  });
 
   const handleMatchUpdate = (updatedMatch) => {
     setDemoMatch(updatedMatch);
@@ -331,6 +351,15 @@ function AppContent() {
             </div>
           </div>
         );
+
+      case "profile":
+        // Chỉ cho phép truy cập profile nếu có quyền
+        if (canAccessProfile) {
+          return <ProfilePage />;
+        } else {
+          setCurrentPage("home");
+          return <Home />;
+        }
 
       default:
         return <Home />;

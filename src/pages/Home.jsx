@@ -6,7 +6,7 @@ import MatchManagementSection from "../components/sections/MatchManagementSectio
 import CommentarySection from "../components/sections/CommentarySection";
 
 const Home = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, authType, hasAccountAccess, codeOnly, matchCode, clearMatchCode } = useAuth();
   const [activeTab, setActiveTab] = useState("upload-logo");
   const [codeInfo] = useState({
     code: "DEMO",
@@ -59,9 +59,13 @@ const Home = () => {
             {/* Right - User Actions */}
             <div className="flex items-center space-x-1">
               <div className="flex items-center bg-white/10 rounded-full px-2 py-1">
-                <span className="text-white text-xs mr-1">👤</span>
-                <span className="text-white text-xs font-medium">{user?.name || 'User'}</span>
+                <span className="text-white text-xs mr-1">{codeOnly ? '🔑' : '👤'}</span>
+                <span className="text-white text-xs font-medium">
+                  {codeOnly ? `Code: ${matchCode}` : (user?.name || 'User')}
+                </span>
               </div>
+
+              {/* Nút đăng xuất */}
               <button
                 onClick={logout}
                 className="flex items-center justify-center bg-white/10 rounded-full w-6 h-6 hover:bg-white/20"
@@ -69,13 +73,29 @@ const Home = () => {
               >
                 <span className="text-white text-xs">🚪</span>
               </button>
-              <button
-                onClick={() => setShowCodeInfoModal(true)}
-                className="flex items-center justify-center bg-white/10 rounded-full w-6 h-6 hover:bg-white/20"
-                title="Xem mã truy cập"
-              >
-                <span className="text-white text-xs">🔑</span>
-              </button>
+
+              {/* Chỉ hiển thị nút xem code nếu có quyền truy cập tài khoản */}
+              {hasAccountAccess && (
+                <button
+                  onClick={() => setShowCodeInfoModal(true)}
+                  className="flex items-center justify-center bg-white/10 rounded-full w-6 h-6 hover:bg-white/20"
+                  title="Xem mã truy cập"
+                >
+                  <span className="text-white text-xs">🔑</span>
+                </button>
+              )}
+
+              {/* Nếu có matchCode và không phải code-only, cho phép clear code để về tài khoản */}
+              {matchCode && !codeOnly && (
+                <button
+                  onClick={clearMatchCode}
+                  className="flex items-center justify-center bg-white/10 rounded-full w-6 h-6 hover:bg-white/20"
+                  title="Thoát khỏi trận đấu"
+                >
+                  <span className="text-white text-xs">↩️</span>
+                </button>
+              )}
+
               <a
                 href="tel:0923415678"
                 className="flex items-center justify-center bg-white/10 rounded-full w-6 h-6 hover:bg-white/20"
@@ -146,7 +166,9 @@ const Home = () => {
               <div className="w-12 h-12 bg-blue-100 rounded-full mx-auto mb-2 flex items-center justify-center">
                 <span className="text-lg">🔑</span>
               </div>
-              <h4 className="text-sm font-bold text-blue-800">MÃ TRUY CẬP</h4>
+              <h4 className="text-sm font-bold text-blue-800">
+                {codeOnly ? 'CODE TRẬN ĐẤU' : 'MÃ TRUY CẬP'}
+              </h4>
             </div>
 
             <div className="space-y-2">
@@ -154,42 +176,59 @@ const Home = () => {
                 <div className="flex justify-between items-center">
                   <span className="text-gray-600 text-xs">Mã:</span>
                   <span className="font-mono font-bold text-sm text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                    {codeInfo.code}
+                    {matchCode || codeInfo.code}
                   </span>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 gap-2">
-                <div className="bg-white rounded p-2 border">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 text-xs">Trạng thái:</span>
-                    <span className="px-1 py-1 rounded text-xs font-medium bg-green-100 text-green-800">
-                      🟢 Hoạt động
-                    </span>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded p-2 border">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 text-xs">Tạo lúc:</span>
-                    <span className="font-medium text-xs">{codeInfo.generatedAt}</span>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded p-2 border">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600 text-xs">Hết hạn:</span>
-                    <span className="font-medium text-xs text-orange-600">
-                      {codeInfo.expiryDate}
-                    </span>
-                  </div>
+              <div className="bg-white rounded p-2 border">
+                <div className="flex justify-between">
+                  <span className="text-gray-600 text-xs">Loại truy cập:</span>
+                  <span className={`px-1 py-1 rounded text-xs font-medium ${
+                    authType === 'code' ? 'bg-orange-100 text-orange-800' :
+                    authType === 'full' ? 'bg-green-100 text-green-800' :
+                    'bg-blue-100 text-blue-800'
+                  }`}>
+                    {authType === 'code' ? '🔑 Chỉ quản lý trận' :
+                     authType === 'full' ? '👑 Toàn quyền' :
+                     '👤 Tài khoản'}
+                  </span>
                 </div>
               </div>
 
-              <div className="bg-yellow-50 border border-yellow-200 rounded p-2">
-                <div className="text-xs text-yellow-800">
-                  <strong>⚠️ Lưu ý:</strong> Không chia sẻ mã này
-                </div>
+              {!codeOnly && (
+                <>
+                  <div className="bg-white rounded p-2 border">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600 text-xs">Trạng thái:</span>
+                      <span className="px-1 py-1 rounded text-xs font-medium bg-green-100 text-green-800">
+                        🟢 Hoạt động
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded p-2 border">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600 text-xs">Tạo lúc:</span>
+                      <span className="font-medium text-xs">{codeInfo.generatedAt}</span>
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded p-2 border">
+                    <div className="flex justify-between">
+                      <span className="text-gray-600 text-xs">Hết hạn:</span>
+                      <span className="font-medium text-xs text-orange-600">
+                        {codeInfo.expiryDate}
+                      </span>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <div className="bg-yellow-50 border border-yellow-200 rounded p-2 mt-3">
+              <div className="text-xs text-yellow-800">
+                <strong>⚠️ Lưu ý:</strong> {codeOnly ? 'Chỉ có quyền quản lý trận đấu' : 'Không chia sẻ mã này'}
               </div>
             </div>
 
