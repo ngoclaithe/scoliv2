@@ -362,14 +362,15 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
               )}
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 max-h-96 overflow-y-auto">
+            <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
               {availablePosters.map((poster) => (
-                <PosterCard
-                  key={poster.id}
-                  poster={poster}
-                  isSelected={selectedPoster?.id === poster.id}
-                  onClick={() => handlePosterSelect(poster)}
-                />
+                <div key={poster.id} className="flex-none w-48">
+                  <PosterCard
+                    poster={poster}
+                    isSelected={selectedPoster?.id === poster.id}
+                    onClick={() => handlePosterSelect(poster)}
+                  />
+                </div>
               ))}
             </div>
           </div>
