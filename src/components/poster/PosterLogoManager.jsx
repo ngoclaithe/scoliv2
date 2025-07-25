@@ -260,7 +260,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
                 `}
                 title="Góc trái dưới"
               >
-                ���
+                🎯
               </button>
               <button
                 type="button"
@@ -316,7 +316,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         // Bỏ chọn logo
         return prev.filter(l => l.id !== logo.id);
       } else {
-        // Thêm logo vào danh sách đã chọn
+        // Thêm logo vào danh sách ��ã chọn
         return [...prev, logo];
       }
     });
@@ -441,15 +441,8 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
                   </div>
 
                   <div className="text-center">
-                    <h4 className="font-medium text-sm text-gray-900 mb-1">TÊN ĐƠN VỊ</h4>
-                    <p className="text-xs text-gray-600 mb-2">{logo.name}</p>
-
-                    {logo.logoCode && (
-                      <div className="mb-2">
-                        <span className="text-xs font-medium text-gray-700">MÃ LOGO: </span>
-                        <span className="text-xs text-gray-600">{logo.logoCode}</span>
-                      </div>
-                    )}
+                    <h4 className="font-medium text-sm text-gray-900 mb-1">MÃ LOGO</h4>
+                    <p className="text-xs text-gray-600 mb-2 font-mono">{logo.logoCode || logo.name}</p>
 
                     <div className="text-xs text-gray-600">
                       <span className="font-medium">HIỂN THỊ TRONG TRẬN:</span>
