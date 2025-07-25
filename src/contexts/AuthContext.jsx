@@ -137,13 +137,36 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       setLoading(true);
+
+      // Demo: Tạo tài khoản admin nếu email là admin
+      if (userData.email.includes('admin')) {
+        const newUser = {
+          id: 'demo-admin-' + Date.now(),
+          email: userData.email,
+          name: userData.name,
+          role: 'admin',
+          avatar: null
+        };
+
+        setUser(newUser);
+        setCodeOnly(false);
+        setAuthType('account');
+        setIsAuthenticated(true);
+
+        // Fake token for demo
+        localStorage.setItem('token', 'fake-admin-token-' + Date.now());
+
+        return { success: true, user: newUser };
+      }
+
+      // Đăng ký thực tế thông qua API
       const response = await AuthAPI.register({
         name: userData.name,
         email: userData.email,
         password: userData.password,
         role: 'user' // Mặc định là user
       });
-      
+
       setUser({
         id: response.user.id,
         email: response.user.email,
@@ -151,13 +174,15 @@ export const AuthProvider = ({ children }) => {
         role: response.user.role,
         avatar: response.user.avatar
       });
-      
+
+      setCodeOnly(false);
+      setAuthType('account');
       setIsAuthenticated(true);
       return { success: true, user: userData };
     } catch (error) {
-      return { 
-        success: false, 
-        error: error.message || 'Đăng ký thất bại. Vui lòng thử lại.' 
+      return {
+        success: false,
+        error: error.message || 'Đăng ký thất bại. Vui lòng thử lại.'
       };
     } finally {
       setLoading(false);
