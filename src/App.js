@@ -39,8 +39,10 @@ function AppContent() {
 
   // Cập nhật currentPage khi authType thay đổi
   React.useEffect(() => {
-    if (authType === 'code' || authType === 'full') {
+    if (authType === 'code') {
       setCurrentPage("home");
+    } else if (authType === 'full') {
+      setCurrentPage("manage-access-code"); // User có tài khoản + code bắt đầu từ quản lý mã
     }
   }, [authType]);
 
