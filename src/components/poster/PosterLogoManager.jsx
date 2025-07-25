@@ -65,7 +65,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     },
     {
       id: "logo-4",
-      name: "FPT Play - Nền tảng giải trí số",
+      name: "FPT Play - N��n tảng giải trí số",
       url: null,
       category: "media",
     },
@@ -357,7 +357,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             {selectedPoster && (
               <div className="bg-blue-50 border border-blue-200 rounded px-2 py-1">
                 <p className="text-xs font-medium text-blue-800">
-                  ✅ Đã chọn: {selectedPoster.name}
+                  ✅ Đ�� chọn: {selectedPoster.name}
                 </p>
               </div>
             )}
@@ -442,25 +442,28 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
                 </div>
               ))}
 
-              {/* Add New Logo Card */}
-              {showAddLogoForm ? (
-                <AddLogoForm />
-              ) : (
-                <div
-                  onClick={() => setShowAddLogoForm(true)}
-                  className="bg-white border-2 border-dashed border-gray-300 rounded-lg p-4 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 flex flex-col items-center justify-center min-h-[300px]"
-                >
-                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-3">
-                    <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
-                  </div>
-                  <p className="text-gray-600 font-medium text-center">
-                    Thêm {logoTypes.find(t => t.id === activeLogoCategory)?.name}
-                  </p>
+              {/* Add New Logo Button */}
+              <div
+                onClick={() => setShowAddLogoForm(true)}
+                className="flex-none w-32 bg-white border-2 border-dashed border-gray-300 rounded p-2 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 flex flex-col items-center justify-center h-24"
+              >
+                <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mb-1">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
                 </div>
-              )}
+                <p className="text-xs text-gray-600 font-medium text-center">
+                  Thêm
+                </p>
+              </div>
             </div>
+
+            {/* Add Logo Form - Show below when active */}
+            {showAddLogoForm && (
+              <div className="bg-gray-50 border border-gray-200 rounded p-3 mb-2">
+                <AddLogoForm />
+              </div>
+            )}
 
             
           </div>
