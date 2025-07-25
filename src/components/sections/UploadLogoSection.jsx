@@ -396,15 +396,17 @@ const UploadLogoSection = () => {
 
   return (
     <div className="p-2 sm:p-4 space-y-2">
-      <style jsx global>{`
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+        `
+      }} />
 
       {/* Hiển thị logo đã chọn từ search */}
       {selectedLogo && (
@@ -665,7 +667,7 @@ const UploadLogoSection = () => {
           style={{ fontSize: '10px' }}
         >
           <span className="mr-1 text-xs">📚</span>
-          H��� TRỢ
+          HỖ TRỢ
         </Button>
       </div>
     </div>
