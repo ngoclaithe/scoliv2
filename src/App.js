@@ -178,6 +178,9 @@ function AppContent() {
       case "home":
         return <Home />;
 
+      case "manage-access-code":
+        return <ManageAccessCode />;
+
       case "scoreboard":
         return (
           <div className="max-w-6xl mx-auto p-6 space-y-8">
