@@ -43,7 +43,7 @@ function AppContent() {
     period: "Hiệp 2",
     status: "live",
     league: "V-League 2024",
-    stadium: "Sân Hàng Đẫy",
+    stadium: "Sân Hàng Đ��y",
     date: "2024-01-15",
     time: "19:00",
     weather: "☀️ Nắng",
@@ -66,13 +66,13 @@ function AppContent() {
     return <LoginPage />;
   }
 
-  // Nếu đăng nhập bằng tài khoản admin thành công -> vào ManageAccessCode
-  if (authType === 'account' && user?.role === 'admin') {
+  // Nếu đăng nhập bằng tài khoản admin thành công -> cho phép chuyển đổi trang
+  if (authType === 'account' && user?.role === 'admin' && currentPage === 'manage-access-code') {
     return <ManageAccessCode />;
   }
 
   // Nếu đăng nhập bằng tài khoản thường nhưng chưa nhập code trận đấu
-  if (authType === 'account') {
+  if (authType === 'account' && user?.role !== 'admin') {
     return <MatchCodeEntry />;
   }
 
