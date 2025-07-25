@@ -74,9 +74,9 @@ function AppContent() {
     return <LoginPage />;
   }
 
-  // Nếu đăng nhập bằng tài khoản (user bình thường) -> vào ManageAccessCode
+  // Nếu đăng nhập bằng tài khoản thường nhưng chưa nhập code trận đấu
   if (authType === 'account') {
-    return <ManageAccessCode onNavigate={setCurrentPage} />;
+    return <MatchCodeEntry />;
   }
 
   const demoLineup = {
