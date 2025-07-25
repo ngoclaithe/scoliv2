@@ -35,14 +35,14 @@ function AppContent() {
     hasMatchAccess,
     canAccessProfile
   } = useAuth();
-  const [currentPage, setCurrentPage] = useState("home");
+  const [currentPage, setCurrentPage] = useState("manage-access-code");
 
   // Cập nhật currentPage khi authType thay đổi
   React.useEffect(() => {
-    if (authType === 'code') {
-      setCurrentPage("home");
+    if (authType === 'account') {
+      setCurrentPage("manage-access-code"); // User account bắt đầu từ quản lý mã
     } else if (authType === 'full') {
-      setCurrentPage("manage-access-code"); // User có tài khoản + code bắt đầu từ quản lý mã
+      setCurrentPage("home"); // Khi đã nhập code thì chuyển sang home
     }
   }, [authType]);
 
@@ -145,8 +145,8 @@ function AppContent() {
     { id: "lineup", name: "Đội hình", icon: "👥", requireMatch: true },
     { id: "poster", name: "Poster", icon: "📸", requireMatch: true },
     { id: "logo", name: "Logo", icon: "🏆", requireMatch: true },
-    { id: "audio", name: "��m thanh", icon: "🎵", requireMatch: true },
-    ...(canAccessProfile ? [{ id: "profile", name: "Tài khoản", icon: "👤", requireAccount: true }] : []),
+    { id: "audio", name: "Âm thanh", icon: "🎵", requireMatch: true },
+    ...(canAccessProfile ? [{ id: "profile", name: "Tài khoản", icon: "���", requireAccount: true }] : []),
   ].filter(item => {
     if (item.requireMatch && !hasMatchAccess) return false;
     if (item.requireAccount && !hasAccountAccess) return false;
