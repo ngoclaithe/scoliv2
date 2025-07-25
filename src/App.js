@@ -66,7 +66,12 @@ function AppContent() {
     return <LoginPage />;
   }
 
-  // Nếu đăng nhập bằng tài khoản nhưng chưa nhập code trận đấu
+  // Nếu đăng nhập bằng tài khoản admin thành công -> vào ManageAccessCode
+  if (authType === 'account' && user?.role === 'admin') {
+    return <ManageAccessCode />;
+  }
+
+  // Nếu đăng nhập bằng tài khoản thường nhưng chưa nhập code trận đấu
   if (authType === 'account') {
     return <MatchCodeEntry />;
   }
