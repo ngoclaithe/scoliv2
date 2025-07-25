@@ -84,14 +84,9 @@ function AppContent() {
     return <LoginPage />;
   }
 
-  // Nếu đăng nhập bằng tài khoản admin thành công -> cho phép chuyển đổi trang
-  if (authType === 'account' && user?.role === 'admin' && currentPage === 'manage-access-code') {
-    return <ManageAccessCode />;
-  }
-
-  // Nếu đăng nhập bằng tài khoản thường nhưng chưa nhập code trận đấu
-  if (authType === 'account' && user?.role !== 'admin') {
-    return <MatchCodeEntry />;
+  // Nếu đăng nhập bằng tài khoản (user bình thường) -> vào ManageAccessCode
+  if (authType === 'account') {
+    return <ManageAccessCode onNavigate={setCurrentPage} />;
   }
 
   const demoLineup = {
@@ -152,7 +147,7 @@ function AppContent() {
   // Navigation items dựa trên quyền truy cập
   const navigation = [
     { id: "home", name: "Trang chủ", icon: "🏠", requireMatch: true },
-    { id: "manage-access-code", name: "Quản lý mã", icon: "🔑", requireAdmin: true },
+    { id: "manage-access-code", name: "Quản lý m��", icon: "🔑", requireAdmin: true },
     { id: "scoreboard", name: "Bảng tỉ số", icon: "⚽", requireMatch: true },
     { id: "match", name: "Quản lý trận đấu", icon: "📋", requireMatch: true },
     { id: "lineup", name: "Đội hình", icon: "👥", requireMatch: true },
