@@ -7,8 +7,10 @@ import { useAuth } from '../../contexts/AuthContext';
 import AccessCodeAPI from '../../API/apiAccessCode';
 
 const ManageAccessCode = ({ onNavigate }) => {
-  const { user, logout } = useAuth();
+  const { user, logout, enterMatchCode, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState('list');
+  const [showCodeEntry, setShowCodeEntry] = useState(false);
+  const [matchCode, setMatchCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [codes, setCodes] = useState([]);
   const [pagination, setPagination] = useState({
@@ -75,7 +77,7 @@ const ManageAccessCode = ({ onNavigate }) => {
           {
             id: '3',
             code: 'EXPIRE001',
-            name: 'Code đã h���t hạn',
+            name: 'Code đã hết hạn',
             description: 'Mã test đã hết hạn sử dụng',
             status: 'expired',
             duration: 12,
@@ -457,7 +459,7 @@ const ManageAccessCode = ({ onNavigate }) => {
               <form onSubmit={handleCreateCode} className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Tên mã truy cập *
+                    Tên mã truy c���p *
                   </label>
                   <Input
                     type="text"
