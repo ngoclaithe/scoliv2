@@ -170,7 +170,7 @@ const MatchManagementSection = () => {
     <div className="p-2 sm:p-4 space-y-3 sm:space-y-4">
       {/* Scoreboard */}
       <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-lg p-2 sm:p-3 border-2 border-yellow-400 shadow-xl">
-  {selectedSkin && skinData[selectedSkin] ? (
+  {displaySettings.selectedSkin && skinData[displaySettings.selectedSkin] ? (
     <div className="w-full h-16 sm:h-20 bg-gray-100 rounded-lg overflow-hidden">
       <img
         src={skinData[selectedSkin].image}
@@ -554,7 +554,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">ĐẾM 25'</span>
             </button>
 
-            {/* Đ��m 30' */}
+            {/* Đếm 30' */}
             <button
               onClick={() => setSelectedOption("dem-30")}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -622,7 +622,7 @@ const MatchManagementSection = () => {
                 disabled={!quickCustomTime}
               >
                 <span className="mr-1">✅</span>
-                ÁP D���NG
+                ÁP DỤNG
               </Button>
             </div>
           </div>
