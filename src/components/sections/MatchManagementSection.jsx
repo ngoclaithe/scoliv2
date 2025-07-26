@@ -114,7 +114,7 @@ const MatchManagementSection = () => {
     }));
   };
 
-  // Component để hiển thị/chỉnh sửa thống kê
+  // Component để hiển thị/ch��nh sửa thống kê
   const EditableStatBar = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => {
     if (!isEditingStats) {
       // Chế độ hiển thị
@@ -220,7 +220,7 @@ const MatchManagementSection = () => {
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
         <div className="grid grid-cols-2 gap-2 sm:gap-4">
           {/* Đội nhà */}
-          <div className="bg-white rounded-lg p-2 sm:p-4 shadow-md border border-blue-200">
+          <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-blue-200">
             <div className="flex space-x-1 sm:space-x-2">
               <Button
                 variant="primary"
