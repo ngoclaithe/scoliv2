@@ -348,7 +348,7 @@ const MatchManagementSection = () => {
               }`}
           >
             <span className="mr-0.5 text-xs">📊</span>
-            <span className="hidden sm:inline">TH��NG SỐ</span>
+            <span className="hidden sm:inline">THÔNG SỐ</span>
             <span className="sm:hidden">TK</span>
           </button>
           <button
@@ -424,7 +424,7 @@ const MatchManagementSection = () => {
           <div className="space-y-4">
             {/* Header với nút chỉnh sửa */}
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-gray-900">���� Thông số trận đấu</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Thông số trận đấu</h3>
               <Button
                 variant={isEditingStats ? "primary" : "outline"}
                 size="sm"

@@ -147,7 +147,7 @@ function AppContent() {
     { id: "poster", name: "Poster", icon: "📸", requireMatch: true },
     { id: "logo", name: "Logo", icon: "🏆", requireMatch: true },
     { id: "audio", name: "Âm thanh", icon: "🎵", requireMatch: true },
-    ...(canAccessProfile ? [{ id: "profile", name: "Tài khoản", icon: "���", requireAccount: true }] : []),
+    ...(canAccessProfile ? [{ id: "profile", name: "Tài khoản", icon: "👤", requireAccount: true }] : []),
   ].filter(item => {
     if (item.requireMatch && !hasMatchAccess) return false;
     if (item.requireAccount && !hasAccountAccess) return false;
