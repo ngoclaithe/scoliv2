@@ -243,22 +243,22 @@ const MatchManagementSection = () => {
 
           {/* Đội khách */}
           <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-purple-200">
-            <div className="flex space-x-1 sm:space-x-2">
+            <div className="flex space-x-1">
               <Button
                 variant="primary"
                 size="sm"
-                className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-8 sm:h-10"
+                className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
                 onClick={() => handleScoreChange("awayTeam", 1)}
               >
-                <span className="text-lg sm:text-xl">+</span>
+                <span className="text-sm sm:text-lg">+</span>
               </Button>
               <Button
                 variant="primary"
                 size="sm"
-                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-8 sm:h-10"
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
                 onClick={() => handleScoreChange("awayTeam", -1)}
               >
-                <span className="text-lg sm:text-xl">-</span>
+                <span className="text-sm sm:text-lg">-</span>
               </Button>
             </div>
           </div>
