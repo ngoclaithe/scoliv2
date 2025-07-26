@@ -25,6 +25,7 @@ const MatchManagementSection = () => {
 
   // State cho custom time và cài đặt chữ chạy nâng cao
   const [customTime, setCustomTime] = useState("");
+  const [quickCustomTime, setQuickCustomTime] = useState(""); // Cho input trực tiếp
   const [tickerColor, setTickerColor] = useState("#ffffff");
   const [tickerFontSize, setTickerFontSize] = useState(16);
 
@@ -736,7 +737,7 @@ const MatchManagementSection = () => {
           </div>
 
           <div className="text-center text-sm text-yellow-700 mb-4">
-            ⏱️ Trận đấu sẽ bắt đầu từ: <strong>{customTime || "0"}:00</strong>
+            ⏱️ Trận đấu s��� bắt đầu từ: <strong>{customTime || "0"}:00</strong>
           </div>
 
           <div className="flex justify-center gap-3">
