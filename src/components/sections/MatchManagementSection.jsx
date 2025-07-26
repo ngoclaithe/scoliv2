@@ -60,9 +60,9 @@ const MatchManagementSection = () => {
 
   // Memoized callback to prevent infinite loops
   const handlePenaltyChange = useCallback((newPenaltyData) => {
-    setPenaltyData(newPenaltyData);
+    updatePenalty(newPenaltyData);
     setSelectedOption("penalty");
-  }, []);
+  }, [updatePenalty]);
 
   const handleScoreChange = (team, increment) => {
     setMatchData((prev) => ({
@@ -261,7 +261,7 @@ const MatchManagementSection = () => {
             onClick={() => setSelectedOption("tam-dung")}
           >
             <span className="mr-1">⏸️</span>
-            <span className="hidden sm:inline">TẠM DỪNG</span>
+            <span className="hidden sm:inline">TẠM D���NG</span>
             <span className="sm:hidden">DỪNG</span>
           </Button>
 
