@@ -127,61 +127,112 @@ const LoginPage = () => {
                 </div>
               )}
 
-              <form className="space-y-3" onSubmit={handleAccessCodeSubmit}>
-                <div>
-                  <Input
-                    type="email"
-                    placeholder="Email"
-                    value={loginForm.email}
-                    onChange={(e) => setLoginForm(prev => ({...prev, email: e.target.value}))}
-                    className="w-full text-sm"
-                    required={!accessCode.trim()}
-                  />
+              {/* Section 1: Đăng nhập bằng tài khoản */}
+              <div className="space-y-3">
+                <div className="text-center">
+                  <h3 className="text-sm font-semibold text-gray-700 mb-3">Đăng nhập bằng tài khoản</h3>
                 </div>
 
-                <div>
-                  <Input
-                    type="password"
-                    placeholder="Mật khẩu"
-                    value={loginForm.password}
-                    onChange={(e) => setLoginForm(prev => ({...prev, password: e.target.value}))}
-                    className="w-full text-sm"
-                    required={!accessCode.trim()}
-                  />
+                <form className="space-y-3" onSubmit={(e) => {
+                  e.preventDefault();
+                  setError('');
+                  handleAccessCodeSubmit(e);
+                }}>
+                  <div>
+                    <Input
+                      type="email"
+                      placeholder="Email"
+                      value={loginForm.email}
+                      onChange={(e) => setLoginForm(prev => ({...prev, email: e.target.value}))}
+                      className="w-full text-sm"
+                      required={!accessCode.trim()}
+                    />
+                  </div>
+
+                  <div>
+                    <Input
+                      type="password"
+                      placeholder="Mật khẩu"
+                      value={loginForm.password}
+                      onChange={(e) => setLoginForm(prev => ({...prev, password: e.target.value}))}
+                      className="w-full text-sm"
+                      required={!accessCode.trim()}
+                    />
+                  </div>
+
+                  <div className="flex items-center text-xs">
+                    <input
+                      type="checkbox"
+                      id="remember"
+                      checked={loginForm.rememberMe}
+                      onChange={(e) => setLoginForm(prev => ({...prev, rememberMe: e.target.checked}))}
+                      className="h-3 w-3 text-blue-600"
+                    />
+                    <label htmlFor="remember" className="ml-1 text-gray-600">
+                      Ghi nhớ
+                    </label>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    loading={loading}
+                    className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-2 rounded text-sm"
+                    disabled={accessCode.trim() !== ''}
+                  >
+                    {loading ? "Đang xử lý..." : "Đăng nhập"}
+                  </Button>
+                </form>
+              </div>
+
+              {/* Divider */}
+              <div className="my-4 flex items-center">
+                <div className="flex-1 border-t border-gray-300"></div>
+                <div className="mx-3 text-xs text-gray-500 font-medium">HOẶC</div>
+                <div className="flex-1 border-t border-gray-300"></div>
+              </div>
+
+              {/* Section 2: Đăng nhập bằng mã trận đấu */}
+              <div className="space-y-3">
+                <div className="text-center">
+                  <h3 className="text-sm font-semibold text-gray-700 mb-3">
+                    <span className="mr-1">🔑</span>
+                    Đăng nhập bằng mã trận đấu
+                  </h3>
+                  <p className="text-xs text-gray-500">Dành cho quản lý trận đấu</p>
                 </div>
 
-                <div>
-                  <Input
-                    type="text"
-                    placeholder="Mã trận đấu (tùy chọn - nếu có thì không cần email/mật khẩu)"
-                    value={accessCode}
-                    onChange={(e) => setAccessCode(e.target.value)}
-                    className="w-full text-center font-mono text-sm"
-                  />
-                </div>
+                <form className="space-y-3" onSubmit={(e) => {
+                  e.preventDefault();
+                  setError('');
+                  if (accessCode.trim()) {
+                    handleAccessCodeSubmit(e);
+                  } else {
+                    setError('Vui lòng nhập mã trận đấu');
+                  }
+                }}>
+                  <div>
+                    <Input
+                      type="text"
+                      placeholder="Nhập mã trận đấu"
+                      value={accessCode}
+                      onChange={(e) => setAccessCode(e.target.value)}
+                      className="w-full text-center font-mono text-sm"
+                      required={loginForm.email.trim() === '' && loginForm.password.trim() === ''}
+                    />
+                  </div>
 
-                <div className="flex items-center text-xs">
-                  <input
-                    type="checkbox"
-                    id="remember"
-                    checked={loginForm.rememberMe}
-                    onChange={(e) => setLoginForm(prev => ({...prev, rememberMe: e.target.checked}))}
-                    className="h-3 w-3 text-blue-600"
-                  />
-                  <label htmlFor="remember" className="ml-1 text-gray-600">
-                    Ghi nhớ
-                  </label>
-                </div>
-
-                <Button
-                  type="submit"
-                  variant="primary"
-                  loading={loading}
-                  className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-bold py-2 rounded text-sm"
-                >
-                  {loading ? "Đang xử lý..." : "Gửi"}
-                </Button>
-              </form>
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    loading={loading}
+                    className="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white font-bold py-2 rounded text-sm"
+                    disabled={loginForm.email.trim() !== '' || loginForm.password.trim() !== ''}
+                  >
+                    {loading ? "Đang xử lý..." : "Vào trận"}
+                  </Button>
+                </form>
+              </div>
 
 
 
