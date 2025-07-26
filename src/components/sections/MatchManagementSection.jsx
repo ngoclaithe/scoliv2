@@ -189,33 +189,35 @@ const MatchManagementSection = () => {
     <div className="p-2 sm:p-4 space-y-3 sm:space-y-4">
       {/* Scoreboard */}
       <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-lg p-2 sm:p-3 border-2 border-yellow-400 shadow-xl">
-        {selectedSkin && skinData[selectedSkin] ? (
-          <div className="w-full h-32 sm:h-40 bg-gray-100 rounded-lg overflow-hidden">
-            <img
-              src={skinData[selectedSkin].image}
-              alt={skinData[selectedSkin].name}
-              className="w-full h-full object-contain"
-              onError={(e) => {
-                e.target.style.display = 'none';
-                e.target.nextSibling.style.display = 'flex';
-              }}
-            />
-            <div className="w-full h-full bg-gray-200 items-center justify-center hidden">
-              <span className="text-gray-600 font-medium">{skinData[selectedSkin].name}</span>
-            </div>
-          </div>
-        ) : (
-          <ScoreDisplay
-            homeTeam={matchData.homeTeam}
-            awayTeam={matchData.awayTeam}
-            matchTime={matchData.matchTime}
-            period={matchData.period}
-            status={matchData.status}
-            backgroundColor="bg-transparent"
-            size="md"
-          />
-        )}
+  {selectedSkin && skinData[selectedSkin] ? (
+    <div className="w-full h-16 sm:h-20 bg-gray-100 rounded-lg overflow-hidden">
+      <img
+        src={skinData[selectedSkin].image}
+        alt={skinData[selectedSkin].name}
+        className="w-full h-full object-contain"
+        onError={(e) => {
+          e.target.style.display = 'none';
+          e.target.nextSibling.style.display = 'flex';
+        }}
+      />
+      <div className="w-full h-full bg-gray-200 items-center justify-center hidden">
+        <span className="text-gray-600 font-medium">
+          {skinData[selectedSkin].name}
+        </span>
       </div>
+    </div>
+  ) : (
+    <ScoreDisplay
+      homeTeam={matchData.homeTeam}
+      awayTeam={matchData.awayTeam}
+      matchTime={matchData.matchTime}
+      period={matchData.period}
+      status={matchData.status}
+      backgroundColor="bg-transparent"
+      size="md"
+    />
+  )}
+</div>
 
       {/* Score Controls */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
@@ -340,11 +342,10 @@ const MatchManagementSection = () => {
         <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
           <button
             onClick={() => setSelectedOption("thong-so")}
-            className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${
-              selectedOption === "thong-so"
+            className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "thong-so"
                 ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-xl"
                 : "bg-gradient-to-r from-green-100 to-green-200 text-green-700 hover:from-green-200 hover:to-green-300"
-            }`}
+              }`}
           >
             <span className="mr-0.5 text-xs">📊</span>
             <span className="hidden sm:inline">TH��NG SỐ</span>
@@ -352,11 +353,10 @@ const MatchManagementSection = () => {
           </button>
           <button
             onClick={() => setSelectedOption("dieu-khien")}
-            className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${
-              selectedOption === "dieu-khien"
+            className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "dieu-khien"
                 ? "bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-xl"
                 : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
-            }`}
+              }`}
           >
             <span className="mr-0.5 text-xs">🎮</span>
             <span className="hidden sm:inline">ĐIỀU KHIỂN</span>
@@ -366,11 +366,10 @@ const MatchManagementSection = () => {
             onClick={() => {
               setSelectedOption(selectedOption === "chon-skin" ? "dieu-khien" : "chon-skin");
             }}
-            className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${
-              selectedOption === "chon-skin"
+            className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "chon-skin"
                 ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
                 : "bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 hover:from-blue-200 hover:to-blue-300"
-            }`}
+              }`}
           >
             <span className="mr-0.5 text-xs">🎨</span>
             <span className="hidden sm:inline">TEMPLATE</span>
@@ -390,11 +389,10 @@ const MatchManagementSection = () => {
                   setSelectedSkin(skinNumber);
                   console.log('Template selected:', skinNumber);
                 }}
-                className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${
-                  selectedSkin === skinNumber
+                className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${selectedSkin === skinNumber
                     ? "border-blue-500 ring-2 ring-blue-200"
                     : "border-gray-200 hover:border-blue-300"
-                }`}
+                  }`}
               >
                 <img
                   src={`/images/templates/skin${skinNumber}.png`}
@@ -709,15 +707,14 @@ const MatchManagementSection = () => {
                   onChange={(e) => setTickerColor(e.target.value)}
                   className="w-5 h-5 border border-orange-300 rounded cursor-pointer"
                 />
-            </div>
+              </div>
               <div className="flex gap-0.5 flex-wrap">
                 {["#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff6600", "#ff00ff"].map((color) => (
                   <button
                     key={color}
                     onClick={() => setTickerColor(color)}
-                    className={`w-3 h-3 rounded border ${
-                      tickerColor === color ? "border-orange-600 border-2" : "border-gray-300"
-                    }`}
+                    className={`w-3 h-3 rounded border ${tickerColor === color ? "border-orange-600 border-2" : "border-gray-300"
+                      }`}
                     style={{ backgroundColor: color }}
                   />
                 ))}
