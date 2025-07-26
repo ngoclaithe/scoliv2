@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '../contexts/AuthContext';
 import { MatchProvider } from '../contexts/MatchContext';
+import { PublicMatchProvider } from '../contexts/PublicMatchContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import App from '../App';
@@ -9,32 +10,41 @@ import PosterDisplay from '../components/display/PosterDisplay';
 
 const AppRoutes = () => {
   return (
-    <AuthProvider>
-      <MatchProvider>
-        <Routes>
-          <Route path="/" element={<App />} />
+    <>
+      <Routes>
+        {/* Authenticated routes */}
+        <Route path="/" element={
+          <AuthProvider>
+            <MatchProvider>
+              <App />
+            </MatchProvider>
+          </AuthProvider>
+        } />
 
-          {/* Dynamic route for access codes */}
-          <Route path="/:accessCode" element={<PosterDisplay />} />
-        </Routes>
+        {/* Public dynamic routes for access codes - không cần authentication */}
+        <Route path="/:accessCode" element={
+          <PublicMatchProvider>
+            <PosterDisplay />
+          </PublicMatchProvider>
+        } />
+      </Routes>
 
-        {/* Toast Container - để ở đây để có thể dùng cho tất cả routes */}
-        <ToastContainer
-          position="top-left"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-          toastClassName="custom-toast"
-          bodyClassName="custom-toast-body"
-        />
-      </MatchProvider>
-    </AuthProvider>
+      {/* Toast Container - để ở đây để có thể dùng cho tất cả routes */}
+      <ToastContainer
+        position="top-left"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        toastClassName="custom-toast"
+        bodyClassName="custom-toast-body"
+      />
+    </>
   );
 };
 
