@@ -193,15 +193,7 @@ const LoginPage = () => {
                 </Button>
               </form>
 
-              <div className="mt-3 space-y-2">
-                <button
-                  type="button"
-                  onClick={() => setShowCodeLogin(true)}
-                  className="w-full py-2 border border-gray-300 rounded text-sm text-gray-600 hover:bg-gray-50"
-                >
-                  🔑 Chỉ quản lý trận (code only)
-                </button>
-              </div>
+
 
               <div className="mt-3 space-y-2 text-center text-xs text-gray-600">
   
