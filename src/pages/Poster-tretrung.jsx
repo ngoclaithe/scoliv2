@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
+import { useMatch } from '../contexts/MatchContext';
 
 const FootballMatchIntro = () => {
   // Khai báo các biến state lên đầu
