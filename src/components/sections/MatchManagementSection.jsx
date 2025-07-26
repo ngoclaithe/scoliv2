@@ -398,7 +398,7 @@ const MatchManagementSection = () => {
                 <img
                   src={`/images/templates/skin${skinNumber}.png`}
                   alt={`Template ${skinNumber}`}
-                  className="w-full h-16 sm:h-24 object-contain bg-gray-50"
+                  className="w-full h-12 sm:h-20 object-contain bg-gray-50"
                   onError={(e) => {
                     e.target.style.display = 'none';
                     e.target.nextSibling.style.display = 'flex';
