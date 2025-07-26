@@ -72,21 +72,23 @@ const LoginPage = () => {
     setError('');
 
     if (accessCode.trim()) {
-      // Nếu có access code, đăng nhập bằng code
+      // Đăng nhập bằng code
       const result = await loginWithCode(accessCode.trim());
       if (result.success) {
         resetForms();
       } else {
         setError(result.error);
       }
-    } else {
-      // Nếu không có access code, đăng nhập bình thường
+    } else if (loginForm.email.trim() && loginForm.password.trim()) {
+      // Đăng nhập bằng tài khoản
       const result = await login(loginForm);
       if (result.success) {
         resetForms();
       } else {
         setError(result.error);
       }
+    } else {
+      setError('Vui lòng chọn một cách đăng nhập');
     }
   };
 
