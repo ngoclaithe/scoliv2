@@ -320,7 +320,7 @@ const MatchManagementSection = () => {
 
       {/* Tab Controls */}
       <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200">
-        <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+        <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
           <button
             onClick={() => setSelectedOption("thong-so")}
             className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "thong-so"
@@ -355,6 +355,19 @@ const MatchManagementSection = () => {
             <span className="mr-0.5 text-xs">🎨</span>
             <span className="hidden sm:inline">TEMPLATE</span>
             <span className="sm:hidden">TL</span>
+          </button>
+          <button
+            onClick={() => {
+              setSelectedOption(selectedOption === "chon-poster" ? "dieu-khien" : "chon-poster");
+            }}
+            className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "chon-poster"
+                ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-xl"
+                : "bg-gradient-to-r from-purple-100 to-purple-200 text-purple-700 hover:from-purple-200 hover:to-purple-300"
+              }`}
+          >
+            <span className="mr-0.5 text-xs">🖼️</span>
+            <span className="hidden sm:inline">POSTER</span>
+            <span className="sm:hidden">PT</span>
           </button>
         </div>
       </div>
