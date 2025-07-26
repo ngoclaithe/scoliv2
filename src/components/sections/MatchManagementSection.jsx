@@ -525,7 +525,7 @@ const MatchManagementSection = () => {
 
       {/* Options - Các action buttons điều khiển */}
       {selectedOption !== "chon-skin" && selectedOption !== "thong-so" && (
-        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 sm:p-4 border border-indigo-200">
+        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-2 sm:p-3 border border-indigo-200">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
             {/* Poster */}
             <button
@@ -557,14 +557,95 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">PENALTY</span>
             </button>
 
-            {/* Timer Modal */}
+            {/* Đếm 0 */}
             <button
-              onClick={() => setShowTimerModal(true)}
-              className="flex flex-row items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
+              onClick={() => setSelectedOption("dem-0")}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">🕰️</span>
-              <span className="text-xs font-bold text-center">ĐẾM T</span>
+              <span className="text-sm mr-1">🕐</span>
+              <span className="text-xs font-bold text-center">ĐẾM 0</span>
             </button>
+
+            {/* Đếm 25' */}
+            <button
+              onClick={() => setSelectedOption("dem-25")}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">🕐</span>
+              <span className="text-xs font-bold text-center">ĐẾM 25'</span>
+            </button>
+
+            {/* Đếm 30' */}
+            <button
+              onClick={() => setSelectedOption("dem-30")}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">🕑</span>
+              <span className="text-xs font-bold text-center">ĐẾM 30'</span>
+            </button>
+
+            {/* Đếm 35' */}
+            <button
+              onClick={() => setSelectedOption("dem-35")}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">🕒</span>
+              <span className="text-xs font-bold text-center">ĐẾM 35'</span>
+            </button>
+
+            {/* Giới thiệu */}
+            <button
+              onClick={() => setSelectedOption("gioi-thieu")}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">📢</span>
+              <span className="text-xs font-bold text-center">GIỚI THIỆU</span>
+            </button>
+
+            {/* Tỉ số dưới */}
+            <button
+              onClick={() => setSelectedOption("ti-so-duoi")}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">📊</span>
+              <span className="text-xs font-bold text-center">TỈ SỐ DƯỚI</span>
+            </button>
+          </div>
+
+          {/* Đếm T - Input trực tiếp */}
+          <div className="mt-3 bg-white rounded-lg p-2 border border-teal-200">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                <span className="text-sm">🕰️</span>
+                <span className="text-xs font-medium text-gray-700">Đếm T:</span>
+              </div>
+              <input
+                type="number"
+                min="0"
+                max="120"
+                value={quickCustomTime}
+                onChange={(e) => setQuickCustomTime(e.target.value)}
+                placeholder="Phút"
+                className="flex-1 text-xs border border-gray-300 rounded px-2 py-1 focus:border-teal-500 focus:outline-none text-center font-bold"
+              />
+              <span className="text-xs text-gray-600">phút</span>
+              <Button
+                variant="primary"
+                size="sm"
+                className="px-2 py-1 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                onClick={() => {
+                  if (quickCustomTime) {
+                    setSelectedOption("dem-tuy-chinh");
+                    console.log('Áp dụng thời gian tùy chỉnh:', quickCustomTime);
+                    alert(`Đã áp dụng: Trận đấu bắt đầu từ ${quickCustomTime} phút`);
+                  }
+                }}
+                disabled={!quickCustomTime}
+              >
+                <span className="mr-1">✅</span>
+                ÁP DỤNG
+              </Button>
+            </div>
           </div>
         </div>
       )}
@@ -737,7 +818,7 @@ const MatchManagementSection = () => {
           </div>
 
           <div className="text-center text-sm text-yellow-700 mb-4">
-            ⏱️ Trận đấu s��� bắt đầu từ: <strong>{customTime || "0"}:00</strong>
+            ⏱️ Trận đấu sẽ bắt đầu từ: <strong>{customTime || "0"}:00</strong>
           </div>
 
           <div className="flex justify-center gap-3">
