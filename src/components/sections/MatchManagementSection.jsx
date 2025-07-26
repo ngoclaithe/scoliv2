@@ -318,7 +318,7 @@ const MatchManagementSection = () => {
               >
                 -
               </Button>
-              <div className="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold min-w-6 text-center">
+              <div className="px-1.5 py-1 bg-gray-100 text-gray-800 text-xs font-bold min-w-5 text-center">
                 {futsalErrors.awayTeam}
               </div>
               <Button
@@ -718,7 +718,7 @@ const MatchManagementSection = () => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ bắt đầu chạy từ thời điểm này
+              Trận đấu sẽ b���t đầu chạy từ thời điểm này
             </p>
           </div>
 
