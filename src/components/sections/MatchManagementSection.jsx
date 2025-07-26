@@ -405,7 +405,7 @@ const MatchManagementSection = () => {
           <div className="space-y-4">
             {/* Header với nút chỉnh sửa */}
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-gray-900">Thông số trận ��ấu</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Thông số trận đấu</h3>
               <Button
                 variant={isEditingStats ? "primary" : "outline"}
                 size="sm"
@@ -483,7 +483,7 @@ const MatchManagementSection = () => {
                 variant="warning"
                 size="sm"
                 onClick={() => {
-                  setMatchStats({
+                  updateStats({
                     possession: { team1: 50, team2: 50 },
                     totalShots: { team1: 0, team2: 0 },
                     shotsOnTarget: { team1: 0, team2: 0 },
