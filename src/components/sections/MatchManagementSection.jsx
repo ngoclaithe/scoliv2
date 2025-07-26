@@ -335,8 +335,8 @@ const MatchManagementSection = () => {
       </div>
 
       {/* Tab Controls */}
-      <div className="bg-white rounded-xl p-3 sm:p-4 shadow-lg border border-gray-200">
-        <div className="grid grid-cols-3 gap-2 sm:gap-3">
+      <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200">
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
           <button
             onClick={() => setSelectedOption("thong-so")}
             className={`py-2 sm:py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 shadow-md ${
@@ -718,7 +718,7 @@ const MatchManagementSection = () => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ b���t đầu chạy từ thời điểm này
+              Trận đấu sẽ bắt đầu chạy từ thời điểm này
             </p>
           </div>
 
