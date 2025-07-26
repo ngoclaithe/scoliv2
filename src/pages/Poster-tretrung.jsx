@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { io } from 'socket.io-client';
 
 const FootballMatchIntro = () => {
   // Khai báo các biến state lên đầu
@@ -46,59 +47,67 @@ const FootballMatchIntro = () => {
   const teamTextRef1 = useRef(null);
   const teamTextRef2 = useRef(null);
 
-  // WebSocket connection với kiểm tra trạng thái
+  // Kết nối WebSocket sử dụng socket.io với cơ chế fallback
   useEffect(() => {
     const connectWebSocket = () => {
       try {
-        // Thay thế với URL WebSocket thực tế
-        socketRef.current = new WebSocket('ws://103.216.112.171:5000');
+        // Khởi tạo socket.io với cấu hình phù hợp
+        const socket = io('http://103.216.112.171:5000', {
+          transports: ['websocket', 'polling'], // Ưu tiên WebSocket, fallback về polling nếu cần
+          upgrade: true,
+          forceNew: true,
+          reconnection: true,
+          reconnectionAttempts: 5,
+          reconnectionDelay: 1000,
+          timeout: 20000
+        });
         
-        socketRef.current.onopen = () => {
+        socket.on('connect', () => {
           console.log("Socket đã kết nối thành công");
           setSocketConnected(true);
           setLastUpdateTime(Date.now());
-        };
-
-        socketRef.current.onclose = () => {
+        });
+        
+        socket.on('disconnect', () => {
           console.log("Socket đã ngắt kết nối");
           setSocketConnected(false);
-        };
+        });
 
-        socketRef.current.onerror = (error) => {
-          console.error("Lỗi socket:", error);
+        socket.on('connect_error', (error) => {
+          console.error("Lỗi kết nối socket:", error);
           setSocketConnected(false);
-        };
+        });
 
-        socketRef.current.onmessage = (event) => {
-          try {
-            const data = JSON.parse(event.data);
-            setLastUpdateTime(Date.now());
-            
-            // Xử lý các loại message từ socket
-            switch(data.type) {
-              case 'updateConfig':
-                setMatchData(prev => ({ ...prev, ...data.config }));
-                break;
-              case 'updatePartners':
-                setPartners(data.partners);
-                break;
-              case 'updateMarquee':
-                setMarqueeData(data.marquee);
-                break;
-              case 'updateTeams':
-                setMatchData(prev => ({
-                  ...prev,
-                  team1: data.team1 || prev.team1,
-                  team2: data.team2 || prev.team2
-                }));
-                break;
-              default:
-                console.log("Nhận dữ liệu từ socket:", data);
-            }
-          } catch (error) {
-            console.error("Lỗi parse dữ liệu socket:", error);
-          }
-        };
+        // Xử lý các sự kiện từ server
+        socket.on('updateConfig', (config) => {
+          setMatchData(prev => ({ ...prev, ...config }));
+          setLastUpdateTime(Date.now());
+        });
+
+        socket.on('updatePartners', (partnersData) => {
+          setPartners(partnersData);
+          setLastUpdateTime(Date.now());
+        });
+
+        socket.on('updateMarquee', (marquee) => {
+          setMarqueeData(marquee);
+          setLastUpdateTime(Date.now());
+        });
+
+        socket.on('updateTeams', (teams) => {
+          setMatchData(prev => ({
+            ...prev,
+            team1: teams.team1 || prev.team1,
+            team2: teams.team2 || prev.team2
+          }));
+          setLastUpdateTime(Date.now());
+        });
+
+        // Xử lý sự kiện tùy chỉnh khác
+        socket.onAny((eventName, ...args) => {
+          console.log("Nhận sự kiện:", eventName, args);
+          setLastUpdateTime(Date.now());
+        });
 
       } catch (error) {
         console.error("Lỗi kết nối socket:", error);
