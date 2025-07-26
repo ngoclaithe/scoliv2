@@ -8,7 +8,6 @@ import PosterHaoQuang from '../../pages/Poster-haoquang';
 const PosterDisplay = () => {
   const { accessCode } = useParams();
   const { initializeSocket, displaySettings, socketConnected, lastUpdateTime } = useMatch();
-  const { loginWithCode } = useAuth();
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
 
@@ -16,18 +15,20 @@ const PosterDisplay = () => {
   useEffect(() => {
     const initializeDisplay = async () => {
       try {
-        // Đăng nhập với access code
-        const loginResult = await loginWithCode(accessCode);
-        
-        if (!loginResult.success) {
+        // Xác thực access code mà không cần đăng nhập
+        const verifyResult = await PublicAPI.verifyAccessCode(accessCode);
+
+        if (!verifyResult.success || !verifyResult.isValid) {
           setError(`Mã truy cập không hợp lệ: ${accessCode}`);
           return;
         }
 
-        // Khởi tạo socket connection
+        console.log('Access code verified for display:', accessCode);
+
+        // Khởi tạo socket connection trực tiếp
         await initializeSocket(accessCode);
         setIsInitialized(true);
-        
+
       } catch (err) {
         console.error('Failed to initialize display:', err);
         setError('Không thể kết nối đến hệ thống');
@@ -37,7 +38,7 @@ const PosterDisplay = () => {
     if (accessCode) {
       initializeDisplay();
     }
-  }, [accessCode, loginWithCode, initializeSocket]);
+  }, [accessCode, initializeSocket]);
 
   // Render error state
   if (error) {
