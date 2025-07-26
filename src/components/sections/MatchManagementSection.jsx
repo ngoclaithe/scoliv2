@@ -189,7 +189,7 @@ const MatchManagementSection = () => {
       {/* Scoreboard */}
       <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-lg p-2 sm:p-3 border-2 border-yellow-400 shadow-xl">
         {selectedSkin && skinData[selectedSkin] ? (
-          <div className="w-full h-40 bg-gray-100 rounded-lg overflow-hidden">
+          <div className="w-full h-32 sm:h-40 bg-gray-100 rounded-lg overflow-hidden">
             <img
               src={skinData[selectedSkin].image}
               alt={skinData[selectedSkin].name}
@@ -725,7 +725,7 @@ const MatchManagementSection = () => {
               max="120"
               value={customTime}
               onChange={(e) => setCustomTime(e.target.value)}
-              placeholder="Nhập phút (VD: 30)"
+              placeholder="Nh��p phút (VD: 30)"
               className="flex-1 text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
             />
             <span className="text-sm font-medium text-yellow-800">phút</span>
