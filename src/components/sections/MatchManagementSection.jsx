@@ -6,6 +6,7 @@ import PosterManager from "../poster/PosterManager";
 import TeamLineupModal from "../lineup/TeamLineupModal";
 import Modal from "../common/Modal";
 import SimplePenaltyModal from "../common/SimplePenaltyModal";
+import { useMatch } from "../../contexts/MatchContext";
 
 const MatchManagementSection = () => {
   // State cho match data
@@ -600,7 +601,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">GIỚI THIỆU</span>
             </button>
 
-            {/* Tỉ số dưới */}
+            {/* T��� số dưới */}
             <button
               onClick={() => setSelectedOption("ti-so-duoi")}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -797,7 +798,7 @@ const MatchManagementSection = () => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ bắt đầu chạy từ thời điểm này
+              Trận đấu sẽ bắt đầu chạy từ th��i điểm này
             </p>
           </div>
 
