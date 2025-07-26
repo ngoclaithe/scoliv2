@@ -3,7 +3,6 @@ import Button from "../common/Button";
 import Input from "../common/Input";
 
 const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose }) => {
-  const [activeSection, setActiveSection] = useState("posters");
   const [selectedPoster, setSelectedPoster] = useState(null);
   const [selectedLogos, setSelectedLogos] = useState([]); // Thay đổi thành array để chọn nhiều logo
   const [activeLogoCategory, setActiveLogoCategory] = useState("sponsor"); // Tab hiện tại cho logo
