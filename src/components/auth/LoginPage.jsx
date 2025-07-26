@@ -110,6 +110,7 @@ const LoginPage = () => {
       terms: false
     });
     setCodeForm('');
+    setAccessCode('');
     setShowRegister(false);
     setShowCodeLogin(false);
     setError('');
@@ -251,7 +252,7 @@ const LoginPage = () => {
                   onClick={() => setShowCodeLogin(false)}
                   className="text-blue-600"
                 >
-                  �� Quay lại đăng nhập
+                  ← Quay lại đăng nhập
                 </button>
               </div>
             </div>
