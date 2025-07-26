@@ -302,7 +302,10 @@ const MatchManagementSection = () => {
             </div>
 
             <div className="flex flex-col items-center justify-center">
-              <span className="text-xs font-medium text-gray-600">LỖI FUTSAL</span>
+              <span className="text-xs font-medium text-gray-600">
+                <span className="hidden sm:inline">LỖI FUTSAL</span>
+                <span className="sm:hidden">LỖI</span>
+              </span>
             </div>
 
             {/* Lỗi đội khách */}
