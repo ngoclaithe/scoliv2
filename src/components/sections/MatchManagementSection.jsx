@@ -265,15 +265,16 @@ const MatchManagementSection = () => {
         </div>
 
         {/* Nút TẠM DỪNG và LỖI(FUTSAL) */}
-        <div className="flex justify-center items-center mt-3 space-x-3">
+        <div className="flex justify-center items-center mt-2 space-x-2">
           <Button
             variant="primary"
             size="sm"
-            className="px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+            className="px-2 py-1 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
             onClick={() => setSelectedOption("tam-dung")}
           >
             <span className="mr-1">⏸️</span>
-            TẠM DỪNG
+            <span className="hidden sm:inline">TẠM DỪNG</span>
+            <span className="sm:hidden">DỪNG</span>
           </Button>
 
           <div className="flex space-x-2">
