@@ -238,13 +238,22 @@ export const MatchProvider = ({ children }) => {
 
   // === ACTION FUNCTIONS ===
 
-  // Cập nhật tỉ số
-  const updateScore = useCallback((team, increment) => {
+  // Cập nhật tỉ số và thông tin đội
+  const updateScore = useCallback((team, increment, additionalData = {}) => {
     const newMatchData = { ...matchData };
-    newMatchData[team].score = Math.max(0, newMatchData[team].score + increment);
-    
+
+    // Cập nhật tỉ số nếu có increment
+    if (increment !== 0) {
+      newMatchData[team].score = Math.max(0, newMatchData[team].score + increment);
+    }
+
+    // Cập nhật thông tin bổ sung (tên đội, logo, etc.)
+    if (additionalData && Object.keys(additionalData).length > 0) {
+      newMatchData[team] = { ...newMatchData[team], ...additionalData };
+    }
+
     setMatchData(newMatchData);
-    
+
     // Emit to socket
     if (socketConnected) {
       socketService.updateScore(newMatchData.homeTeam.score, newMatchData.awayTeam.score);
