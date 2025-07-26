@@ -365,15 +365,15 @@ const MatchManagementSection = () => {
             onClick={() => {
               setSelectedOption(selectedOption === "chon-skin" ? "dieu-khien" : "chon-skin");
             }}
-            className={`py-2 sm:py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 shadow-md ${
+            className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${
               selectedOption === "chon-skin"
                 ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
                 : "bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 hover:from-blue-200 hover:to-blue-300"
             }`}
           >
-            <span className="mr-1 text-sm">🎨</span>
+            <span className="mr-0.5 text-xs">🎨</span>
             <span className="hidden sm:inline">TEMPLATE</span>
-            <span className="sm:hidden">TPL</span>
+            <span className="sm:hidden">TL</span>
           </button>
         </div>
       </div>
@@ -729,7 +729,7 @@ const MatchManagementSection = () => {
               max="120"
               value={customTime}
               onChange={(e) => setCustomTime(e.target.value)}
-              placeholder="Nhập phút (VD: 30)"
+              placeholder="Nh���p phút (VD: 30)"
               className="flex-1 text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
             />
             <span className="text-sm font-medium text-yellow-800">phút</span>
