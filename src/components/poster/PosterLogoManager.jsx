@@ -611,7 +611,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         displayOptions: logoDisplayOptions
       });
     }
-    onClose();
+    onClose?.();
   };
 
   const renderPosterSection = () => {
