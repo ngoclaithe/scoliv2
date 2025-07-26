@@ -205,7 +205,7 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe c��p nhật danh sách
+    // Lắng nghe cập nhật danh sách
     socketService.on('lineup_updated', (data) => {
       setLineupData({
         homeTeam: data.lineup.home,
@@ -260,7 +260,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [matchData, socketConnected]);
 
-  // Cập nhật thông tin tr��n đấu
+  // Cập nhật thông tin trận đấu
   const updateMatchInfo = useCallback((newMatchInfo) => {
     setMatchData(prev => ({ ...prev, ...newMatchInfo }));
     

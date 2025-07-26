@@ -277,7 +277,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Hàm mới để nhập code trận đấu sau khi đã đăng nh��p tài khoản
+  // Hàm mới để nhập code trận đấu sau khi đã đăng nhập tài khoản
   const enterMatchCode = async (code) => {
     try {
       setLoading(true);
