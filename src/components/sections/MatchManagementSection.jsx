@@ -86,13 +86,14 @@ const MatchManagementSection = () => {
     const otherTeam = team === 'team1' ? 'team2' : 'team1';
     const otherValue = 100 - newValue;
 
-    setMatchStats(prev => ({
-      ...prev,
+    const newStats = {
+      ...matchStats,
       possession: {
         [team]: newValue,
         [otherTeam]: otherValue
       }
-    }));
+    };
+    updateStats(newStats);
   };
 
   // Component để hiển thị/chỉnh sửa thống kê
@@ -553,7 +554,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">ĐẾM 25'</span>
             </button>
 
-            {/* Đếm 30' */}
+            {/* Đ��m 30' */}
             <button
               onClick={() => setSelectedOption("dem-30")}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -621,7 +622,7 @@ const MatchManagementSection = () => {
                 disabled={!quickCustomTime}
               >
                 <span className="mr-1">✅</span>
-                ÁP DỤNG
+                ÁP D���NG
               </Button>
             </div>
           </div>
