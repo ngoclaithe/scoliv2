@@ -101,7 +101,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       // Đăng nhập thực tế thông qua API
-      const { user: userData, token } = await AuthAPI.login(credentials);
+      const { user: userData } = await AuthAPI.login(credentials);
 
       setUser({
         id: userData.id,
@@ -273,7 +273,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Hàm mới để nhập code trận đấu sau khi đã đăng nhập tài khoản
+  // Hàm mới để nhập code trận đấu sau khi đã đăng nh��p tài khoản
   const enterMatchCode = async (code) => {
     try {
       setLoading(true);
