@@ -70,13 +70,14 @@ const MatchManagementSection = () => {
 
   // Hàm cập nhật thống kê
   const updateStat = (statKey, team, value) => {
-    setMatchStats(prev => ({
-      ...prev,
+    const newStats = {
+      ...matchStats,
       [statKey]: {
-        ...prev[statKey],
+        ...matchStats[statKey],
         [team]: Math.max(0, parseInt(value) || 0)
       }
-    }));
+    };
+    updateStats(newStats);
   };
 
   // Hàm cập nhật kiểm soát bóng (đảm bảo tổng = 100%)
