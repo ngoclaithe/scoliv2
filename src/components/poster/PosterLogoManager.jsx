@@ -1,19 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
+import LogoAPI from "../../API/apiLogo";
+
+const useDebounce = (value, delay) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
 
 const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose }) => {
   const [selectedPoster, setSelectedPoster] = useState(null);
-  const [logoItems, setLogoItems] = useState([]); // Gộp chung logo và banner
+  const [logoItems, setLogoItems] = useState([]);
+  const [apiLogos, setApiLogos] = useState([]);
   const [activeLogoCategory, setActiveLogoCategory] = useState("sponsor");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   
-  // State cho các tùy chọn hiển thị logo
   const [logoDisplayOptions, setLogoDisplayOptions] = useState({
-    shape: "round", // round, square, hexagon
+    shape: "round",
     rotateDisplay: false
   });
 
-  // Posters từ thư mục public/images/posters
   const availablePosters = [
     {
       id: "poster-1",
@@ -47,100 +65,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     },
   ];
 
-  // Logo data với tên đơn vị
-  const sampleLogos = [
-    {
-      id: "logo-1",
-      unitName: "Liên đoàn bóng đá VN",
-      code: "VFF",
-      type: "logo",
-      url: null,
-      category: "organizer",
-      displayPositions: [] // ["top-left", "top-right", "bottom"]
-    },
-    {
-      id: "logo-2",
-      unitName: "VPF Vietnam",
-      code: "VPF",
-      type: "logo",
-      url: null,
-      category: "organizer",
-      displayPositions: []
-    },
-    {
-      id: "logo-3",
-      unitName: "Đài Truyền hình VN",
-      code: "VTV",
-      type: "logo",
-      url: null,
-      category: "media",
-      displayPositions: []
-    },
-    {
-      id: "logo-4",
-      unitName: "FPT Play",
-      code: "FPTPLAY",
-      type: "logo",
-      url: null,
-      category: "media",
-      displayPositions: []
-    },
-    {
-      id: "logo-5",
-      unitName: "Bia Saigon",
-      code: "SAIGON",
-      type: "logo",
-      url: null,
-      category: "sponsor",
-      displayPositions: []
-    },
-    {
-      id: "logo-6",
-      unitName: "Vingroup",
-      code: "VIN",
-      type: "logo",
-      url: null,
-      category: "sponsor",
-      displayPositions: []
-    },
-    {
-      id: "logo-7",
-      unitName: "VietinBank",
-      code: "VTB",
-      type: "logo",
-      url: null,
-      category: "sponsor",
-      displayPositions: []
-    },
-    {
-      id: "logo-8",
-      unitName: "FPT Corporation",
-      code: "FPT",
-      type: "logo",
-      url: null,
-      category: "sponsor",
-      displayPositions: []
-    },
-    {
-      id: "logo-9",
-      unitName: "V-League 2024",
-      code: "VL2024",
-      type: "logo",
-      url: null,
-      category: "tournament",
-      displayPositions: []
-    },
-    {
-      id: "logo-10",
-      unitName: "AFF Cup",
-      code: "AFF",
-      type: "logo",
-      url: null,
-      category: "tournament",
-      displayPositions: []
-    },
-  ];
-
   const logoTypes = [
     {
       id: "sponsor",
@@ -164,8 +88,127 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     },
   ];
 
-  // Kết hợp sample logos với custom items
-  const allLogoItems = [...sampleLogos, ...logoItems];
+  useEffect(() => {
+    const loadLogos = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        setApiLogos([]);
+        
+      } catch (err) {
+        console.error("Error loading logos:", err);
+        setError("Không thể tải danh sách logo. Vui lòng thử lại.");
+        setApiLogos([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadLogos();
+  }, []);
+
+  const getCategoryFromType = (type) => {
+    const typeMapping = {
+      'banner': 'sponsor',
+      'logo': 'sponsor',
+      'organizer': 'organizer',
+      'media': 'media',
+      'tournament': 'tournament',
+      'other': 'sponsor'
+    };
+    return typeMapping[type] || 'sponsor';
+  };
+
+  const handleFileUpload = async (event, item) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Kiểm tra kích thước file (tối đa 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Kích thước file tối đa là 5MB");
+      return;
+    }
+
+    // Kiểm tra định dạng file
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      alert("Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WebP)");
+      return;
+    }
+
+    // Tạo preview ảnh
+    const reader = new FileReader();
+    
+    reader.onload = async (e) => {
+      const previewUrl = e.target.result;
+      
+      // Cập nhật UI với preview ảnh
+      setLogoItems(prev => prev.map(logo => 
+        logo.id === item.id 
+          ? { ...logo, 
+              url: previewUrl, 
+              file, 
+              uploadStatus: 'uploading',
+              uploadProgress: 0 
+            } 
+          : logo
+      ));
+
+      try {
+        // Upload ảnh lên server
+        const response = await LogoAPI.uploadLogo(file, item.type, item.unitName, 
+          (progressEvent) => {
+            const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setLogoItems(prev => prev.map(logo => 
+              logo.id === item.id 
+                ? { ...logo, uploadProgress: progress }
+                : logo
+            ));
+          }
+        );
+        
+        if (response && response.data) {
+          const apiLogo = {
+            id: response.data.id,
+            unitName: response.data.name || item.unitName,
+            code: item.code,
+            type: response.data.type || item.type,
+            url: response.data.url || response.data.url_logo,
+            category: item.category,
+            displayPositions: item.displayPositions,
+            uploadStatus: 'completed',
+            uploadProgress: 100
+          };
+          
+          // Xóa preview URL và cập nhật danh sách logo
+          URL.revokeObjectURL(previewUrl);
+          setLogoItems(prev => prev.filter(logo => logo.id !== item.id));
+          setApiLogos(prev => [apiLogo, ...prev]);
+          
+          // Thông báo thành công
+          alert(`Tải lên ${item.type} thành công!`);
+        }
+      } catch (error) {
+        console.error("Lỗi khi tải lên:", error);
+        
+        // Cập nhật trạng thái lỗi
+        setLogoItems(prev => prev.map(logo => 
+          logo.id === item.id 
+            ? { ...logo, uploadStatus: 'error' }
+            : logo
+        ));
+        
+        // Thông báo lỗi
+        alert(`Lỗi khi tải lên: ${error.message || 'Đã xảy ra lỗi'}`);
+      }
+    };
+    
+    // Bắt đầu đọc file
+    reader.readAsDataURL(file);
+  };
+
+  const allLogoItems = [...apiLogos, ...logoItems];
 
   const PosterCard = ({ poster, isSelected, onClick }) => (
     <div
@@ -213,10 +256,119 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     </div>
   );
 
-  const LogoItem = ({ item, onUpdate, onRemove }) => {
+  const LogoItem = React.memo(function LogoItem({ item, onUpdate, onRemove }) {
+    const [localCode, setLocalCode] = useState(item.code);
+    const [isSearching, setIsSearching] = useState(false);
+    
+    const debouncedCode = useDebounce(localCode, 1500);
+
+    useEffect(() => {
+      let isMounted = true;
+      
+      const searchByCode = async () => {
+        if (debouncedCode && debouncedCode.length >= 3 && debouncedCode !== item.code) {
+          try {
+            setIsSearching(true);
+            const response = await LogoAPI.searchLogosByCode(debouncedCode, true);
+            
+            if (!isMounted) return;
+            
+            if (response?.data?.length > 0) {
+              const foundLogo = response.data[0];
+              // Kiểm tra xem URL có hợp lệ không trước khi cập nhật
+              if (foundLogo.url_logo || foundLogo.file_path) {
+                onUpdate(item.id, {
+                  ...item,
+                  code: debouncedCode, // Cập nhật mã code mới
+                  url: foundLogo.url_logo || foundLogo.file_path,
+                  unitName: foundLogo.name || item.unitName,
+                  displayPositions: [...item.displayPositions] // Tạo mảng mới để trigger re-render
+                });
+              } else {
+                console.warn("Logo tìm thấy nhưng không có URL hợp lệ");
+              }
+            } else {
+              // Nếu không tìm thấy, chỉ cập nhật code mà không thay đổi URL
+              onUpdate(item.id, {
+                ...item,
+                code: debouncedCode
+              });
+            }
+          } catch (error) {
+            console.error("Lỗi khi tìm kiếm logo:", error);
+          } finally {
+            if (isMounted) {
+              setIsSearching(false);
+            }
+          }
+        }
+      };
+
+      searchByCode();
+      
+      return () => {
+        isMounted = false;
+      };
+    }, [debouncedCode, item.id, item, onUpdate]);
+
+    const handleCodeChange = (e) => {
+      const newCode = e.target.value.toUpperCase();
+      setLocalCode(newCode);
+    };
+
+    const handleCodeKeyPress = (e) => {
+      if (e.key === 'Enter' && localCode.length >= 3) {
+        const searchByCode = async () => {
+          try {
+            setIsSearching(true);
+            const response = await LogoAPI.searchLogosByCode(localCode, true);
+            
+            if (response?.data?.length > 0) {
+              const foundLogo = response.data[0];
+              if (foundLogo.url_logo || foundLogo.file_path) {
+                onUpdate(item.id, {
+                  ...item,
+                  code: localCode,
+                  url: foundLogo.url_logo || foundLogo.file_path,
+                  unitName: foundLogo.name || item.unitName,
+                  displayPositions: [...item.displayPositions] // Tạo mảng mới
+                });
+              } else {
+                console.warn("Logo tìm thấy nhưng không có URL hợp lệ");
+                // Vẫn cập nhật code nếu muốn
+                onUpdate(item.id, {
+                  ...item,
+                  code: localCode
+                });
+              }
+            } else {
+              // Nếu không tìm thấy, vẫn cập nhật code
+              onUpdate(item.id, {
+                ...item,
+                code: localCode
+              });
+            }
+          } catch (error) {
+            console.error("Lỗi khi tìm kiếm logo:", error);
+          } finally {
+            setIsSearching(false);
+          }
+        };
+        searchByCode();
+      }
+    };
+
+    const handleCodeBlur = () => {
+      onUpdate(item.id, { 
+        ...item, 
+        code: localCode 
+      });
+    };
+
     const getShapeClass = () => {
       switch (logoDisplayOptions.shape) {
-        case 'square': return 'rounded';
+        case 'round': return 'rounded-full';
+        case 'square': return 'rounded-sm';
         case 'hexagon': return 'rounded-lg';
         default: return 'rounded-full';
       }
@@ -230,110 +382,190 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       onUpdate(item.id, { ...item, displayPositions: newPositions });
     };
 
-    const handleCodeChange = (newCode) => {
-      onUpdate(item.id, { ...item, code: newCode });
-    };
-
     return (
-      <div className="flex-none w-24 bg-white border border-gray-200 rounded p-2 relative">
-        {/* Remove button */}
+      <div className="bg-white rounded-lg border-2 border-green-400 p-3 shadow-lg relative w-24 flex-shrink-0">
+        {/* X button */}
         <button
           onClick={() => onRemove(item.id)}
-          className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white flex items-center justify-center text-xs hover:bg-red-600"
+          className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 transition-colors flex items-center justify-center"
+          title="Xóa"
         >
           ×
         </button>
+        
+        <div className="text-center">
+          <div className="text-xs font-bold text-green-600 mb-1">
+            {item.type === 'banner' ? '🖼️' : '📁'}
+          </div>
+          
+          {/* Logo preview with 3D rotation effect */}
+          <div className="flex justify-center mb-2">
+            <div className="relative w-12 h-12" style={{ perspective: '100px' }}>
+              <div
+                className={`w-full h-full ${getShapeClass()} border-2 border-green-400 overflow-hidden shadow-lg relative animate-spin`}
+                style={{
+                  animationDuration: '3s',
+                  transformStyle: 'preserve-3d'
+                }}
+              >
+                {item.url ? (
+                  <img
+                    src={item.url}
+                    alt={item.code}
+                    className="w-full h-full object-contain bg-white"
+                    style={{
+                      backfaceVisibility: 'hidden'
+                    }}
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                    <span className="text-gray-400 text-xs">No image</span>
+                  </div>
+                )}
+                {/* Back side of the image */}
+                <div 
+                  className="absolute inset-0 bg-gradient-to-br from-green-400 to-blue-400 rounded-full flex items-center justify-center"
+                  style={{
+                    transform: 'rotateY(180deg)',
+                    backfaceVisibility: 'hidden'
+                  }}
+                >
+                  <span className="text-white text-xs font-bold">
+                    {item.type === 'banner' ? '🖼️' : '📁'}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          {/* Logo code */}
+          <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded p-1 mb-1">
+            <div className="text-xs text-green-700 bg-white rounded px-1 py-0.5 font-bold truncate">
+              {item.code}
+            </div>
+          </div>
+          
+          
+        </div>
 
-        {/* Logo preview */}
-        <div className={`aspect-square bg-gray-100 ${getShapeClass()} mb-1 flex items-center justify-center text-xs font-bold`}>
-          {item.url ? (
-            <img
-              src={item.url}
-              alt={item.unitName}
-              className="w-full h-full object-contain p-0.5"
-            />
-          ) : (
-            <span className="text-gray-600">{item.code}</span>
+        <div className="mt-2">
+          <input
+            type="text"
+            value={localCode}
+            onChange={handleCodeChange}
+            onKeyPress={handleCodeKeyPress}
+            onBlur={handleCodeBlur}
+            className={`w-full text-xs text-center border rounded px-1 py-1 font-mono transition-colors focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none ${
+              isSearching ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
+            }`}
+            placeholder="Mã (Enter để tìm)"
+          />
+
+          {isSearching && (
+            <div className="text-xs text-blue-600 text-center mt-1 animate-pulse">
+              🔍 Đang tìm kiếm...
+            </div>
           )}
+
+          <div className="mt-2">
+            <div className="grid grid-cols-3 gap-1">
+              {[
+                { key: 'top-left', icon: '↖️', title: 'Trên trái' },
+                { key: 'top', icon: '⬆️', title: 'Trên giữa' },
+                { key: 'top-right', icon: '↗️', title: 'Trên phải' }
+              ].map((pos) => (
+                <button
+                  key={pos.key}
+                  onClick={() => handlePositionToggle(pos.key)}
+                  className={`flex flex-col items-center p-1 border rounded text-xs ${item.displayPositions.includes(pos.key)
+                    ? 'border-blue-500 bg-blue-100 text-blue-600'
+                    : 'border-gray-300 hover:border-gray-400 text-gray-600'}`}
+                  title={pos.title}
+                >
+                  <span className="text-base">{pos.icon}</span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* Unit name */}
-        <div className="text-xs font-medium text-gray-900 truncate mb-1" title={item.unitName}>
-          {item.unitName}
-        </div>
-
-        {/* Code input */}
-        <input
-          type="text"
-          value={item.code}
-          onChange={(e) => handleCodeChange(e.target.value)}
-          className="w-full text-xs text-center border border-gray-200 rounded px-1 py-0.5 font-mono mb-2"
-          placeholder="Mã"
-        />
-
-        {/* Position toggles */}
-        <div className="text-xs text-gray-600 mb-1">Hiển thị:</div>
-        <div className="flex justify-center gap-1">
-          {[
-            { key: 'top-left', icon: '📍', title: 'Góc trái trên' },
-            { key: 'top-right', icon: '🎯', title: 'Góc phải trên' },
-            { key: 'bottom', icon: '🏷️', title: 'Góc dưới' }
-          ].map((pos) => (
-            <button
-              key={pos.key}
-              onClick={() => handlePositionToggle(pos.key)}
-              className={`w-5 h-5 rounded border flex items-center justify-center text-xs transition-all ${
-                item.displayPositions.includes(pos.key)
-                  ? 'border-blue-500 bg-blue-100 text-blue-600'
-                  : 'border-gray-300 hover:border-gray-400 text-gray-600'
+        {item.isCustom && (
+          <div className="mt-2">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleFileUpload(e, item)}
+              className="hidden"
+              id={`file-${item.id}`}
+            />
+            <label
+              htmlFor={`file-${item.id}`}
+              className={`block w-full text-xs text-center border rounded px-1 py-1 cursor-pointer transition-colors ${
+                item.uploadStatus === 'preview' ? 'bg-yellow-50 border-yellow-300 text-yellow-700' :
+                item.uploadStatus === 'error' ? 'bg-red-50 border-red-300 text-red-700' :
+                'bg-blue-50 border-blue-300 hover:bg-blue-100'
               }`}
-              title={pos.title}
             >
-              {pos.icon}
-            </button>
-          ))}
-        </div>
+              {item.uploadStatus === 'preview' ? '⏳ Đang tải...' :
+               item.uploadStatus === 'error' ? '❌ Thử lại' :
+               '📁 Chọn file'}
+            </label>
+          </div>
+        )}
       </div>
     );
-  };
+  });
 
   const handlePosterSelect = (poster) => {
     setSelectedPoster(poster);
   };
 
-  const handleItemUpdate = (itemId, updatedItem) => {
-    const isFromSample = sampleLogos.find(logo => logo.id === itemId);
+  const handleItemUpdate = async (itemId, updatedItem) => {
+    const isFromAPI = apiLogos.find(logo => logo.id === itemId);
     
-    if (isFromSample) {
-      // Update sample logos in-place (for this session)
-      const sampleIndex = sampleLogos.findIndex(logo => logo.id === itemId);
-      if (sampleIndex !== -1) {
-        sampleLogos[sampleIndex] = updatedItem;
+    if (isFromAPI) {
+      try {
+        setApiLogos(prev => prev.map(item => 
+          item.id === itemId ? updatedItem : item
+        ));
+      } catch (error) {
+        console.error("Error updating API logo:", error);
+        setApiLogos(prev => prev.map(item => 
+          item.id === itemId ? updatedItem : item
+        ));
       }
     } else {
-      // Update custom items
       setLogoItems(prev => prev.map(item => 
         item.id === itemId ? updatedItem : item
       ));
     }
   };
 
-  const handleItemRemove = (itemId) => {
-    const isFromSample = sampleLogos.find(logo => logo.id === itemId);
+  const handleItemRemove = async (itemId) => {
+    const isFromAPI = apiLogos.find(logo => logo.id === itemId);
+    const item = logoItems.find(logo => logo.id === itemId);
     
-    if (isFromSample) {
-      // Reset sample logo to default state
-      const sampleIndex = sampleLogos.findIndex(logo => logo.id === itemId);
-      if (sampleIndex !== -1) {
-        sampleLogos[sampleIndex].displayPositions = [];
+    if (item && item.url && item.url.startsWith('blob:')) {
+      URL.revokeObjectURL(item.url);
+    }
+    
+    if (isFromAPI) {
+      try {
+        setApiLogos(prev => prev.map(item => 
+          item.id === itemId ? { ...item, displayPositions: [] } : item
+        ));
+      } catch (error) {
+        console.error("Error resetting API logo:", error);
+        setApiLogos(prev => prev.map(item => 
+          item.id === itemId ? { ...item, displayPositions: [] } : item
+        ));
       }
     } else {
-      // Remove custom item
       setLogoItems(prev => prev.filter(item => item.id !== itemId));
     }
   };
 
-  const handleAddNewLogo = () => {
+  const handleAddNewLogo = async () => {
     const newLogo = {
       id: `custom-logo-${Date.now()}`,
       unitName: `Logo ${logoItems.filter(item => item.type === 'logo').length + 1}`,
@@ -341,12 +573,14 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       type: "logo",
       category: activeLogoCategory,
       url: null,
-      displayPositions: []
+      displayPositions: [],
+      isCustom: true
     };
+    
     setLogoItems(prev => [...prev, newLogo]);
   };
 
-  const handleAddNewBanner = () => {
+  const handleAddNewBanner = async () => {
     const newBanner = {
       id: `custom-banner-${Date.now()}`,
       unitName: `Banner ${logoItems.filter(item => item.type === 'banner').length + 1}`,
@@ -354,8 +588,10 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       type: "banner",
       category: activeLogoCategory,
       url: null,
-      displayPositions: []
+      displayPositions: [],
+      isCustom: true
     };
+    
     setLogoItems(prev => [...prev, newBanner]);
   };
 
@@ -414,35 +650,30 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
     return (
       <div className="space-y-2">
-        <div className="flex items-center gap-1">
-          <span className="text-sm">🏆</span>
-          <h3 className="text-sm font-semibold text-gray-900">Logo & Banner</h3>
-        </div>
-        
-        {/* Logo Category Tabs */}
-        <div className="flex justify-center">
-          <div className="inline-flex bg-gray-100 rounded p-0.5">
-            {logoTypes.map((type) => (
-              <button
-                key={type.id}
-                onClick={() => setActiveLogoCategory(type.id)}
-                className={`
-                  px-2 py-1 text-xs font-medium rounded transition-all duration-200
-                  ${activeLogoCategory === type.id
-                    ? 'bg-white text-blue-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                  }
-                `}
-              >
-                {type.name}
-              </button>
-            ))}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1">
+            <span className="text-sm">🏷️</span>
+            <h3 className="text-sm font-semibold text-gray-900">Logo & Banner</h3>
           </div>
         </div>
 
-        {/* Items scroll list */}
+        <div className="flex flex-wrap gap-1">
+          {logoTypes.map((type) => (
+            <button
+              key={type.id}
+              onClick={() => setActiveLogoCategory(type.id)}
+              className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                activeLogoCategory === type.id
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              }`}
+            >
+              {type.name}
+            </button>
+          ))}
+        </div>
+
         <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-          {/* Existing items */}
           {currentItems.map((item) => (
             <LogoItem
               key={item.id}
@@ -452,7 +683,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             />
           ))}
 
-          {/* Add Logo Button */}
           <div
             onClick={handleAddNewLogo}
             className="flex-none w-24 bg-white border-2 border-dashed border-gray-300 rounded p-2 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 flex flex-col items-center justify-center h-28"
@@ -465,7 +695,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             </p>
           </div>
 
-          {/* Add Banner Button */}
           <div
             onClick={handleAddNewBanner}
             className="flex-none w-24 bg-white border-2 border-dashed border-orange-300 rounded p-2 cursor-pointer hover:border-orange-400 hover:bg-orange-50 transition-all duration-200 flex flex-col items-center justify-center h-28"
@@ -479,11 +708,9 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
           </div>
         </div>
 
-        {/* Display Options */}
         <div className="border-t border-gray-200 pt-2 space-y-2">
           <div className="text-xs font-medium text-gray-700">Tùy chọn hiển thị:</div>
           
-          {/* Shape Options */}
           <div className="flex gap-2">
             {[
               { value: 'round', label: 'Tròn', icon: '⭕' },
@@ -505,7 +732,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             ))}
           </div>
 
-          {/* Rotate Display Option */}
           <label className="flex items-center gap-1 cursor-pointer">
             <input
               type="checkbox"
@@ -522,7 +748,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
   return (
     <div className="space-y-4">
-      {/* Copy Poster Section */}
       <div className="flex items-center justify-between gap-2">
         <span className="text-xs font-medium text-gray-700">Copy poster trận trước:</span>
         <select className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white">
@@ -533,42 +758,15 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         </select>
       </div>
 
-      {/* Poster Section */}
       <div className="bg-white border border-gray-200 rounded-lg p-3">
         {renderPosterSection()}
       </div>
 
-      {/* Logo Section */}
       <div className="bg-white border border-gray-200 rounded-lg p-3">
         {renderLogoSection()}
       </div>
 
-      {/* Footer Actions */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pt-3 border-t border-gray-200">
-        <div className="text-sm text-gray-600">
-          <div className="flex flex-wrap items-center gap-1">
-            {selectedPoster ? (
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                ✅ Poster: {selectedPoster.name}
-              </span>
-            ) : (
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                ❌ Chưa chọn poster
-              </span>
-            )}
-            
-            {allLogoItems.filter(item => item.displayPositions.length > 0).length > 0 ? (
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                ✅ Logo/Banner: {allLogoItems.filter(item => item.displayPositions.length > 0).length} đã chọn
-              </span>
-            ) : (
-              <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
-                ❌ Chưa chọn logo/banner
-              </span>
-            )}
-          </div>
-        </div>
-        
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pt-3 border-t border-gray-200">     
         <div className="flex gap-2 w-full sm:w-auto">
           <Button 
             variant="outline" 
