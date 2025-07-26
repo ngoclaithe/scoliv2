@@ -176,13 +176,13 @@ const AccessCodeAPI = {
   },
 
   /**
-   * Xác thực mã truy cập cho đăng nhập
+   * Xác thực mã truy cập cho đăng nhập (GET method)
    * @param {string} code - Mã truy cập cần xác thực
    * @returns {Promise<Object>} Thông tin xác thực và dữ liệu trận đấu
    */
   verifyCodeForLogin: async (code) => {
     try {
-      const response = await api.post(`/access-codes/${code}/verify-login`);
+      const response = await api.get(`/access-codes/${code}/verify-login`);
       return response.data;
     } catch (error) {
       throw AccessCodeAPI.handleError(error);

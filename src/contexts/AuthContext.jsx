@@ -129,34 +129,38 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
 
-      // Sử dụng API mới để đăng nhập với access code
-      const response = await AccessCodeAPI.loginWithAccessCode(code);
+      // Sử dụng API GET để xác thực mã đăng nhập
+      const response = await AccessCodeAPI.verifyCodeForLogin(code);
 
-      // Lưu token nếu có
-      if (response.token) {
-        localStorage.setItem('token', response.token);
+      // Kiểm tra response có hợp lệ không
+      if (response.success && response.isValid) {
+        // Thiết lập thông tin user từ response
+        const matchInfo = response.data?.match;
+        const userData = {
+          id: 'code-user-' + code,
+          email: null,
+          name: matchInfo ? `${matchInfo.teamAName} vs ${matchInfo.teamBName}` : `Code User - ${code}`,
+          role: 'code-only',
+          avatar: null
+        };
+
+        setUser(userData);
+        setMatchCode(code);
+        setCodeOnly(true);
+        setAuthType('code');
+        setIsAuthenticated(true);
+
+        return {
+          success: true,
+          user: userData,
+          matchInfo: matchInfo
+        };
+      } else {
+        return {
+          success: false,
+          error: response.message || 'Mã không hợp lệ. Vui lòng thử lại.'
+        };
       }
-
-      // Thiết lập thông tin user từ response
-      const userData = {
-        id: response.userId || response.sessionId || 'code-user',
-        email: null,
-        name: response.userName || response.matchInfo?.title || `Code User - ${code}`,
-        role: 'code-only',
-        avatar: null
-      };
-
-      setUser(userData);
-      setMatchCode(code);
-      setCodeOnly(true);
-      setAuthType('code');
-      setIsAuthenticated(true);
-
-      return {
-        success: true,
-        user: userData,
-        matchInfo: response.matchInfo
-      };
     } catch (error) {
       console.error('Lỗi đăng nhập với code:', error);
       return {
@@ -278,16 +282,24 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
 
-      // Sử dụng API mới để xác thực code
+      // Sử dụng API GET để xác thực code
       const response = await AccessCodeAPI.verifyCodeForLogin(code);
 
-      setMatchCode(code);
-      setAuthType('full'); // Có cả tài khoản và code
-      return {
-        success: true,
-        matchData: response.matchInfo,
-        codeInfo: response
-      };
+      // Kiểm tra response có hợp lệ không
+      if (response.success && response.isValid) {
+        setMatchCode(code);
+        setAuthType('full'); // Có cả tài khoản và code
+        return {
+          success: true,
+          matchData: response.data?.match,
+          codeInfo: response.data
+        };
+      } else {
+        return {
+          success: false,
+          error: response.message || 'Mã trận đấu không hợp lệ.'
+        };
+      }
     } catch (error) {
       console.error('Lỗi xác thực mã trận đấu:', error);
       return {
