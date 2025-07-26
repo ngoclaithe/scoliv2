@@ -404,8 +404,8 @@ const MatchManagementSection = () => {
                     e.target.nextSibling.style.display = 'flex';
                   }}
                 />
-                <div className="w-full h-16 sm:h-24 bg-gray-100 items-center justify-center hidden">
-                  <span className="text-gray-500 font-medium text-xs sm:text-sm">Template {skinNumber}</span>
+                <div className="w-full h-12 sm:h-20 bg-gray-100 items-center justify-center hidden">
+                  <span className="text-gray-500 font-medium text-xs">T{skinNumber}</span>
                 </div>
 
                 {selectedSkin === skinNumber && (
