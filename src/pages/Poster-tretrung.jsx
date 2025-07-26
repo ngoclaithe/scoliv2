@@ -2,39 +2,37 @@ import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { useMatch } from '../contexts/MatchContext';
 
-const FootballMatchIntro = () => {
-  // Khai báo các biến state lên đầu
-  const [socketConnected, setSocketConnected] = useState(false);
-  const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
-  
-  // Match data state
+const FootballMatchIntro = ({ accessCode }) => {
+  // Sử dụng MatchContext
+  const {
+    matchData: contextMatchData,
+    marqueeData,
+    sponsors,
+    socketConnected,
+    lastUpdateTime
+  } = useMatch();
+
+  // Transform context data to poster format
   const [matchData, setMatchData] = useState({
     matchTitle: 'GIẢI BÓNG ĐÁ',
     subTitle: 'VÒNG CHUNG KẾT',
-    team1: 'DOI-A',
-    team2: 'DOI-B',
-    logo1: '/api/placeholder/200/200',
-    logo2: '/api/placeholder/200/200',
-    stadium: 'SÂN VẬN ĐỘNG QUỐC GIA',
-    liveText: 'KÊNH THỂ THAO',
+    team1: contextMatchData.homeTeam.name || 'ĐỘI-A',
+    team2: contextMatchData.awayTeam.name || 'ĐỘI-B',
+    logo1: contextMatchData.homeTeam.logo || '/api/placeholder/200/200',
+    logo2: contextMatchData.awayTeam.logo || '/api/placeholder/200/200',
+    stadium: contextMatchData.stadium || 'SÂN VẬN ĐỘNG QUỐC GIA',
+    liveText: contextMatchData.liveText || 'KÊNH THỂ THAO',
     time: '19:30',
-    date: '25/12/2024',
+    date: new Date().toLocaleDateString('vi-VN'),
     skin: 'skin1',
     poster: 'poster1'
   });
 
-  // Partners state
+  // Partners state - transform sponsors to partners format
   const [partners, setPartners] = useState({
-    sponsor: [],
-    organizer: [],
-    media: []
-  });
-
-  // Marquee state
-  const [marqueeData, setMarqueeData] = useState({
-    text: '',
-    mode: 'none',
-    interval: 0
+    sponsor: sponsors.main || [],
+    organizer: sponsors.secondary || [],
+    media: sponsors.media || []
   });
 
   const [isMarqueeRunning, setIsMarqueeRunning] = useState(false);
