@@ -298,7 +298,7 @@ const MatchManagementSection = () => {
                 variant="outline"
                 size="sm"
                 className="px-1 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
-                onClick={() => setFutsalErrors(prev => ({ ...prev, awayTeam: Math.max(0, prev.awayTeam - 1) }))}
+                onClick={() => updateFutsalErrors('awayTeam', -1)}
               >
                 -
               </Button>
