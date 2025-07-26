@@ -64,7 +64,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     },
     {
       id: "logo-4",
-      name: "FPT Play - N��n tảng giải trí số",
+      name: "FPT Play - Nền tảng giải trí số",
       url: null,
       category: "media",
     },
@@ -133,10 +133,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     },
   ];
 
-
-
-
-
   const PosterCard = ({ poster, isSelected, onClick }) => (
     <div
       onClick={onClick}
@@ -182,8 +178,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       )}
     </div>
   );
-
-
 
   const AddLogoForm = () => {
     const [logoData, setLogoData] = useState({
@@ -344,135 +338,138 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     onClose();
   };
 
-  const renderContent = () => {
-    switch (activeSection) {
-      case "posters":
-        return (
-          <div className="space-y-2">
-            {selectedPoster && (
-              <div className="bg-blue-50 border border-blue-200 rounded px-2 py-1">
-                <p className="text-xs font-medium text-blue-800">
-                  ✅ Đ�� chọn: {selectedPoster.name}
-                </p>
-              </div>
-            )}
-
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-              {availablePosters.map((poster) => (
-                <div key={poster.id} className="flex-none w-40">
-                  <PosterCard
-                    poster={poster}
-                    isSelected={selectedPoster?.id === poster.id}
-                    onClick={() => handlePosterSelect(poster)}
-                  />
-                </div>
-              ))}
-            </div>
+  const renderPosterSection = () => {
+    return (
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <span className="text-lg">🎨</span>
+          <h3 className="text-lg font-semibold text-gray-900">Chọn Poster</h3>
+        </div>
+        
+        {selectedPoster && (
+          <div className="bg-blue-50 border border-blue-200 rounded px-3 py-2">
+            <p className="text-sm font-medium text-blue-800">
+              ✅ Đã chọn: {selectedPoster.name}
+            </p>
           </div>
-        );
+        )}
 
-      case "logos":
-        const currentCategoryLogos = selectedLogos.filter(logo => logo.category === activeLogoCategory);
-
-        return (
-          <div className="space-y-2">
-            {/* Logo Category Tabs */}
-            <div className="flex justify-center mb-3">
-              <div className="inline-flex bg-gray-100 rounded p-1">
-                {logoTypes.map((type) => (
-                  <button
-                    key={type.id}
-                    onClick={() => setActiveLogoCategory(type.id)}
-                    className={`
-                      px-2 py-1 text-xs font-medium rounded transition-all duration-200
-                      ${activeLogoCategory === type.id
-                        ? 'bg-white text-blue-600 shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
-                      }
-                    `}
-                  >
-                    {type.name}
-                  </button>
-                ))}
-              </div>
+        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+          {availablePosters.map((poster) => (
+            <div key={poster.id} className="flex-none w-40">
+              <PosterCard
+                poster={poster}
+                isSelected={selectedPoster?.id === poster.id}
+                onClick={() => handlePosterSelect(poster)}
+              />
             </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
-            {/* Selected Logos Display - Horizontal Scroll */}
-            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide mb-2">
-              {currentCategoryLogos.map((logo) => (
-                <div key={logo.id} className="flex-none w-32 bg-white border border-gray-200 rounded p-2 relative">
-                  <button
-                    onClick={() => handleLogoSelect(logo)}
-                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600"
-                  >
-                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
+  const renderLogoSection = () => {
+    const currentCategoryLogos = selectedLogos.filter(logo => logo.category === activeLogoCategory);
 
-                  <div className="aspect-square bg-gray-100 rounded mb-1 flex items-center justify-center">
-                    {logo.url ? (
-                      <img
-                        src={logo.url}
-                        alt={logo.name}
-                        className="w-full h-full object-contain p-1"
-                      />
-                    ) : (
-                      <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center">
-                        <span className="text-white font-bold text-xs">
-                          {logo.name.charAt(0)}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="text-center">
-                    <p className="text-xs text-gray-600 mb-1 font-mono truncate">{logo.logoCode || logo.name}</p>
-                    <div className="flex justify-center gap-1 mb-1">
-                      <div className="w-4 h-4 bg-blue-100 rounded flex items-center justify-center text-xs" title="Góc trái trên">📍</div>
-                      <div className="w-4 h-4 bg-blue-100 rounded flex items-center justify-center text-xs" title="Góc trái dưới">🎯</div>
-                      <div className="w-4 h-4 bg-blue-100 rounded flex items-center justify-center text-xs" title="Góc phải dưới">🏷️</div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-
-              {/* Add New Logo Button */}
-              <div
-                onClick={() => setShowAddLogoForm(true)}
-                className="flex-none w-32 bg-white border-2 border-dashed border-gray-300 rounded p-2 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 flex flex-col items-center justify-center h-24"
+    return (
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <span className="text-lg">🏆</span>
+          <h3 className="text-lg font-semibold text-gray-900">Chọn Logo</h3>
+        </div>
+        
+        {/* Logo Category Tabs */}
+        <div className="flex justify-center mb-3">
+          <div className="inline-flex bg-gray-100 rounded p-1">
+            {logoTypes.map((type) => (
+              <button
+                key={type.id}
+                onClick={() => setActiveLogoCategory(type.id)}
+                className={`
+                  px-3 py-2 text-xs font-medium rounded transition-all duration-200
+                  ${activeLogoCategory === type.id
+                    ? 'bg-white text-blue-600 shadow-sm'
+                    : 'text-gray-600 hover:text-gray-900'
+                  }
+                `}
               >
-                <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mb-1">
-                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                  </svg>
+                {type.name}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Selected Logos Display - Horizontal Scroll */}
+        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide mb-2">
+          {currentCategoryLogos.map((logo) => (
+            <div key={logo.id} className="flex-none w-32 bg-white border border-gray-200 rounded p-2 relative">
+              <button
+                onClick={() => handleLogoSelect(logo)}
+                className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center hover:bg-red-600"
+              >
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+
+              <div className="aspect-square bg-gray-100 rounded mb-1 flex items-center justify-center">
+                {logo.url ? (
+                  <img
+                    src={logo.url}
+                    alt={logo.name}
+                    className="w-full h-full object-contain p-1"
+                  />
+                ) : (
+                  <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold text-xs">
+                      {logo.name.charAt(0)}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              <div className="text-center">
+                <p className="text-xs text-gray-600 mb-1 font-mono truncate">{logo.logoCode || logo.name}</p>
+                <div className="flex justify-center gap-1 mb-1">
+                  <div className="w-4 h-4 bg-blue-100 rounded flex items-center justify-center text-xs" title="Góc trái trên">📍</div>
+                  <div className="w-4 h-4 bg-blue-100 rounded flex items-center justify-center text-xs" title="Góc trái dưới">🎯</div>
+                  <div className="w-4 h-4 bg-blue-100 rounded flex items-center justify-center text-xs" title="Góc phải dưới">🏷️</div>
                 </div>
-                <p className="text-xs text-gray-600 font-medium text-center">
-                  Thêm
-                </p>
               </div>
             </div>
+          ))}
 
-            {/* Add Logo Form - Show below when active */}
-            {showAddLogoForm && (
-              <div className="bg-gray-50 border border-gray-200 rounded p-3 mb-2">
-                <AddLogoForm />
-              </div>
-            )}
-
-            
+          {/* Add New Logo Button */}
+          <div
+            onClick={() => setShowAddLogoForm(true)}
+            className="flex-none w-32 bg-white border-2 border-dashed border-gray-300 rounded p-2 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 flex flex-col items-center justify-center h-24"
+          >
+            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center mb-1">
+              <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+            </div>
+            <p className="text-xs text-gray-600 font-medium text-center">
+              Thêm
+            </p>
           </div>
-        );
+        </div>
 
-      default:
-        return null;
-    }
+        {/* Add Logo Form - Show below when active */}
+        {showAddLogoForm && (
+          <div className="bg-gray-50 border border-gray-200 rounded p-3 mb-2">
+            <AddLogoForm />
+          </div>
+        )}
+      </div>
+    );
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-6">
       {/* Copy Poster Section */}
-      <div className="flex items-center justify-between gap-2 mb-2">
+      <div className="flex items-center justify-between gap-2">
         <span className="text-xs font-medium text-gray-700">Copy poster trận trước:</span>
         <select className="text-xs border border-gray-300 rounded px-2 py-1 bg-white">
           <option value="">Chọn trận</option>
@@ -482,32 +479,14 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         </select>
       </div>
 
-      {/* Section Navigation */}
-      <div className="border-b border-gray-200">
-        <nav className="flex space-x-1">
-          {sections.map((section) => (
-            <button
-              key={section.id}
-              onClick={() => setActiveSection(section.id)}
-              className={`
-                flex-1 py-2 px-2 text-center font-medium text-xs border-b-2 transition-all duration-200
-                ${
-                  activeSection === section.id
-                    ? "border-blue-500 text-blue-600 bg-blue-50"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }
-              `}
-            >
-              <span className="mr-1">{section.icon}</span>
-              <span>{section.name}</span>
-            </button>
-          ))}
-        </nav>
+      {/* Poster Section */}
+      <div className="bg-white border border-gray-200 rounded-lg p-4">
+        {renderPosterSection()}
       </div>
 
-      {/* Content */}
-      <div className="min-h-96">
-        {renderContent()}
+      {/* Logo Section */}
+      <div className="bg-white border border-gray-200 rounded-lg p-4">
+        {renderLogoSection()}
       </div>
 
       {/* Footer Actions */}
