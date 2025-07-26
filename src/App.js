@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // Import auth context
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { MatchProvider } from "./contexts/MatchContext";
 
 // Import pages
 import Home from "./pages/Home";
