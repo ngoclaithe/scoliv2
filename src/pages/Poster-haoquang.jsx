@@ -1,7 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { io } from 'socket.io-client';
+import { usePublicMatch } from '../contexts/PublicMatchContext';
 
-export default function MatchIntroduction() {
+export default function MatchIntroduction({ accessCode }) {
+  // Sử dụng PublicMatchContext
+  const {
+    matchData: contextMatchData,
+    marqueeData,
+    sponsors,
+    socketConnected,
+    lastUpdateTime
+  } = usePublicMatch();
   // State management
   const [matchData, setMatchData] = useState({
     matchTitle: 'GIẢI BÓNG ĐÁ PHONG TRÀO',
