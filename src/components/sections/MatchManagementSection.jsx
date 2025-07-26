@@ -183,7 +183,7 @@ const MatchManagementSection = () => {
       />
       <div className="w-full h-full bg-gray-200 items-center justify-center hidden">
         <span className="text-gray-600 font-medium">
-          {skinData[selectedSkin].name}
+          {skinData[displaySettings.selectedSkin].name}
         </span>
       </div>
     </div>
