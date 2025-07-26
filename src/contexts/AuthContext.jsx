@@ -130,25 +130,35 @@ export const AuthProvider = ({ children }) => {
       // Giả lập đăng nhập chỉ bằng code (không có tài khoản)
       // Trong thực tế, API sẽ xác thực code và trả về thông tin trận đấu
 
-      // Fake validation
-      if (code.toLowerCase() === 'ffff' || code.toLowerCase() === 'demo') {
-        setUser({
-          id: 'code-user',
-          email: null,
-          name: `Code User - ${code}`,
-          role: 'code-only',
-          avatar: null
-        });
+      // Gọi API để xác thực access code
+      const response = await fetch('/api/auth/verify-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }),
+      });
 
-        setMatchCode(code);
-        setCodeOnly(true);
-        setAuthType('code');
-        setIsAuthenticated(true);
-
-        return { success: true, user: { name: `Code User - ${code}`, role: 'code-only' } };
-      } else {
-        throw new Error('Mã không hợp lệ');
+      if (!response.ok) {
+        throw new Error('Mã không hợp lệ hoặc đã hết hạn');
       }
+
+      const data = await response.json();
+
+      setUser({
+        id: data.userId || 'code-user',
+        email: null,
+        name: data.userName || `Code User - ${code}`,
+        role: 'code-only',
+        avatar: null
+      });
+
+      setMatchCode(code);
+      setCodeOnly(true);
+      setAuthType('code');
+      setIsAuthenticated(true);
+
+      return { success: true, user: { name: data.userName || `Code User - ${code}`, role: 'code-only' } };
     } catch (error) {
       return {
         success: false,
