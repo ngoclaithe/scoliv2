@@ -114,7 +114,7 @@ const MatchManagementSection = () => {
     }));
   };
 
-  // Component để hiển thị/ch��nh sửa thống kê
+  // Component để hiển thị/chỉnh sửa thống kê
   const EditableStatBar = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => {
     if (!isEditingStats) {
       // Chế độ hiển thị
@@ -221,22 +221,22 @@ const MatchManagementSection = () => {
         <div className="grid grid-cols-2 gap-2 sm:gap-4">
           {/* Đội nhà */}
           <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-blue-200">
-            <div className="flex space-x-1 sm:space-x-2">
+            <div className="flex space-x-1">
               <Button
                 variant="primary"
                 size="sm"
-                className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-8 sm:h-10"
+                className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
                 onClick={() => handleScoreChange("homeTeam", 1)}
               >
-                <span className="text-lg sm:text-xl">+</span>
+                <span className="text-sm sm:text-lg">+</span>
               </Button>
               <Button
                 variant="primary"
                 size="sm"
-                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-8 sm:h-10"
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
                 onClick={() => handleScoreChange("homeTeam", -1)}
               >
-                <span className="text-lg sm:text-xl">-</span>
+                <span className="text-sm sm:text-lg">-</span>
               </Button>
             </div>
           </div>
@@ -277,7 +277,7 @@ const MatchManagementSection = () => {
           </Button>
 
           <div className="flex space-x-2">
-            {/* Lỗi đội nhà */}
+            {/* L���i đội nhà */}
             <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
               <Button
                 variant="outline"
@@ -481,7 +481,7 @@ const MatchManagementSection = () => {
                 onUpdate={(team, value) => updateStat('yellowCards', team, value)}
               />
 
-              {/* Phạm lỗi */}
+              {/* Ph���m lỗi */}
               <EditableStatBar
                 label="Phạm lỗi"
                 statKey="fouls"
