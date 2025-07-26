@@ -328,7 +328,7 @@ const MatchManagementSection = () => {
                 : "bg-gradient-to-r from-green-100 to-green-200 text-green-700 hover:from-green-200 hover:to-green-300"
               }`}
           >
-            <span className="mr-0.5 text-xs">📊</span>
+            <span className="mr-0.5 text-xs">��</span>
             <span className="hidden sm:inline">THÔNG SỐ</span>
             <span className="sm:hidden">TK</span>
           </button>
@@ -367,10 +367,10 @@ const MatchManagementSection = () => {
               <div
                 key={skinNumber}
                 onClick={() => {
-                  setSelectedSkin(skinNumber);
+                  updateTemplate(skinNumber);
                   console.log('Template selected:', skinNumber);
                 }}
-                className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${selectedSkin === skinNumber
+                className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedSkin === skinNumber
                     ? "border-blue-500 ring-2 ring-blue-200"
                     : "border-gray-200 hover:border-blue-300"
                   }`}
