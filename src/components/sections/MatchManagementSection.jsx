@@ -187,7 +187,7 @@ const MatchManagementSection = () => {
   return (
     <div className="p-2 sm:p-4 space-y-3 sm:space-y-4">
       {/* Scoreboard */}
-      <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-xl p-3 sm:p-4 border-2 sm:border-4 border-yellow-400 shadow-2xl">
+      <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-lg p-2 sm:p-3 border-2 border-yellow-400 shadow-xl">
         {selectedSkin && skinData[selectedSkin] ? (
           <div className="w-full h-40 bg-gray-100 rounded-lg overflow-hidden">
             <img
