@@ -339,15 +339,15 @@ const MatchManagementSection = () => {
         <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
           <button
             onClick={() => setSelectedOption("thong-so")}
-            className={`py-2 sm:py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 shadow-md ${
+            className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${
               selectedOption === "thong-so"
                 ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-xl"
                 : "bg-gradient-to-r from-green-100 to-green-200 text-green-700 hover:from-green-200 hover:to-green-300"
             }`}
           >
-            <span className="mr-1 text-sm">📊</span>
+            <span className="mr-0.5 text-xs">📊</span>
             <span className="hidden sm:inline">THÔNG SỐ</span>
-            <span className="sm:hidden">STATS</span>
+            <span className="sm:hidden">TK</span>
           </button>
           <button
             onClick={() => setSelectedOption("dieu-khien")}
