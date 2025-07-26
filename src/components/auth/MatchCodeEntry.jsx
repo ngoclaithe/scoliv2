@@ -55,7 +55,7 @@ const MatchCodeEntry = () => {
             <div>
               <Input
                 type="text"
-                placeholder="Nhập mã trận đấu (demo: ffff)"
+                placeholder="Nhập mã trận đấu"
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 className="w-full text-center font-mono text-sm"
@@ -80,7 +80,7 @@ const MatchCodeEntry = () => {
             <ul className="text-xs text-blue-700 space-y-1">
               <li>• Nhập mã code để truy cập quản lý trận đấu</li>
               <li>• Với tài khoản đã đăng nhập, bạn vẫn cần code để quản lý trận</li>
-              <li>• Demo: nhập "ffff" hoặc "demo"</li>
+              <li>• Liên hệ admin để lấy mã trận đấu</li>
             </ul>
           </div>
         </div>
