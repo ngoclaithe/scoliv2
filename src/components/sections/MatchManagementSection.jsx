@@ -380,8 +380,8 @@ const MatchManagementSection = () => {
 
       {/* Inline Template Selection */}
       {selectedOption === "chon-skin" && (
-        <div className="bg-white rounded-xl p-3 sm:p-4 shadow-lg border border-gray-200 animate-slide-up">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
+        <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200 animate-slide-up">
+          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-1.5 sm:gap-2">
             {[1, 2, 3, 4, 5].map((skinNumber) => (
               <div
                 key={skinNumber}
@@ -729,7 +729,7 @@ const MatchManagementSection = () => {
               max="120"
               value={customTime}
               onChange={(e) => setCustomTime(e.target.value)}
-              placeholder="Nh���p phút (VD: 30)"
+              placeholder="Nhập phút (VD: 30)"
               className="flex-1 text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
             />
             <span className="text-sm font-medium text-yellow-800">phút</span>
