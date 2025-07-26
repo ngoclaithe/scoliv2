@@ -29,11 +29,12 @@ export default function MatchIntroduction({ accessCode }) {
     media: sponsors.media || []
   });
 
+  // Transform marquee data
   const [marquee, setMarquee] = useState({
-    text: '',
-    mode: 'none',
-    interval: 0,
-    isRunning: false
+    text: marqueeData.text || '',
+    mode: marqueeData.mode || 'none',
+    interval: marqueeData.interval || 0,
+    isRunning: marqueeData.mode !== 'none'
   });
 
   const [currentSkin, setCurrentSkin] = useState('skin1');
