@@ -51,7 +51,7 @@ const FootballMatchIntro = () => {
     const connectWebSocket = () => {
       try {
         // Thay thế với URL WebSocket thực tế
-        socketRef.current = new WebSocket('ws://localhost:5000');
+        socketRef.current = new WebSocket('ws://103.216.112.171:5000');
         
         socketRef.current.onopen = () => {
           console.log("Socket đã kết nối thành công");
