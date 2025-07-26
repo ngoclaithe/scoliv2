@@ -38,71 +38,40 @@ export default function MatchIntroduction({ accessCode }) {
   });
 
   const [currentSkin, setCurrentSkin] = useState('skin1');
-  const socketRef = useRef(null);
   const marqueeRef = useRef(null);
-  const passcode = 'demo123'; // Có thể lấy từ URL params
 
-  // Socket connection
+  // Sync context data với local state
   useEffect(() => {
-    socketRef.current = io('http://103.216.112.171:5000', {
-      transports: ['websocket', 'polling'],
-      upgrade: true,
-      forceNew: true,
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-      timeout: 20000
+    setMatchData(prev => ({
+      ...prev,
+      matchTitle: contextMatchData.tournament || prev.matchTitle,
+      team1: contextMatchData.homeTeam.name || prev.team1,
+      team2: contextMatchData.awayTeam.name || prev.team2,
+      logo1: contextMatchData.homeTeam.logo || prev.logo1,
+      logo2: contextMatchData.awayTeam.logo || prev.logo2,
+      stadium: contextMatchData.stadium || prev.stadium
+    }));
+  }, [contextMatchData]);
+
+  // Sync sponsors data
+  useEffect(() => {
+    setPartners({
+      sponsor: sponsors.main || [],
+      organizer: sponsors.secondary || [],
+      media: sponsors.media || []
     });
+  }, [sponsors]);
 
-    const socket = socketRef.current;
-
-    // Socket event listeners
-    socket.on('connect', () => {
-      console.log('Connected to server');
-      socket.emit('join_room', passcode);
-    });
-
-    socket.on('match_config_updated', (config) => {
-      setMatchData(prev => ({
-        ...prev,
-        team1: config.team1 || prev.team1,
-        team2: config.team2 || prev.team2,
-        matchTitle: config.match_title || prev.matchTitle,
-        stadium: config.stadium || prev.stadium
-      }));
-
-      if (config.skin && config.skin !== currentSkin) {
-        setCurrentSkin(config.skin);
-      }
-    });
-
-    socket.on('partners_updated', (data) => {
-      setPartners({
-        sponsor: data.sponsor || [],
-        organizer: data.organizer || [],
-        media: data.media || []
-      });
-    });
-
-    socket.on('marquee_updated', (data) => {
-      setMarquee(prev => ({
-        ...prev,
-        text: data.text || '',
-        mode: data.mode || 'none',
-        interval: data.interval || 0
-      }));
-    });
-
-    socket.on('skin_changed', (data) => {
-      if (data.code === passcode) {
-        setCurrentSkin(data.skin);
-      }
-    });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, [passcode, currentSkin]);
+  // Sync marquee data
+  useEffect(() => {
+    setMarquee(prev => ({
+      ...prev,
+      text: marqueeData.text || '',
+      mode: marqueeData.mode || 'none',
+      interval: marqueeData.interval || 0,
+      isRunning: marqueeData.mode !== 'none'
+    }));
+  }, [marqueeData]);
 
   // Font size adjustment function
   const adjustFontSize = (element) => {
