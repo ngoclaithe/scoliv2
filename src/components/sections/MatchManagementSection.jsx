@@ -328,7 +328,7 @@ const MatchManagementSection = () => {
                 : "bg-gradient-to-r from-green-100 to-green-200 text-green-700 hover:from-green-200 hover:to-green-300"
               }`}
           >
-            <span className="mr-0.5 text-xs">��</span>
+            <span className="mr-0.5 text-xs">📊</span>
             <span className="hidden sm:inline">THÔNG SỐ</span>
             <span className="sm:hidden">TK</span>
           </button>
@@ -388,7 +388,7 @@ const MatchManagementSection = () => {
                   <span className="text-gray-500 font-medium text-xs">T{skinNumber}</span>
                 </div>
 
-                {selectedSkin === skinNumber && (
+                {displaySettings.selectedSkin === skinNumber && (
                   <div className="absolute top-0.5 right-0.5 bg-blue-500 text-white rounded-full w-3 h-3 sm:w-5 sm:h-5 flex items-center justify-center">
                     <span className="text-xs sm:text-sm">✓</span>
                   </div>
@@ -671,7 +671,7 @@ const MatchManagementSection = () => {
 
           {/* Text content */}
           <Input
-            placeholder="Nội dung chữ chạy..."
+            placeholder="Nội dung ch��� chạy..."
             value={clockText}
             onChange={(e) => setClockText(e.target.value)}
             maxLength={100}
