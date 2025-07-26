@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useMatch } from '../../contexts/MatchContext';
+import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import PublicAPI from '../../API/apiPublic';
 import PosterTreTrung from '../../pages/Poster-tretrung';
 import PosterHaoQuang from '../../pages/Poster-haoquang';
