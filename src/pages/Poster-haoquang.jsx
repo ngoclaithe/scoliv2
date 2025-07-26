@@ -22,10 +22,11 @@ export default function MatchIntroduction({ accessCode }) {
     currentDate: new Date().toLocaleDateString('vi-VN')
   });
 
+  // Transform sponsors to partners format
   const [partners, setPartners] = useState({
-    sponsor: [],
-    organizer: [],
-    media: []
+    sponsor: sponsors.main || [],
+    organizer: sponsors.secondary || [],
+    media: sponsors.media || []
   });
 
   const [marquee, setMarquee] = useState({
