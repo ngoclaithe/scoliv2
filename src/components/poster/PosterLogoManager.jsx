@@ -770,7 +770,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         <div className="flex gap-2 w-full sm:w-auto">
           <Button 
             variant="outline" 
-            onClick={onClose}
+            onClick={() => onClose?.()}
             className="flex-1 sm:flex-none text-xs px-3 py-1"
           >
             Hủy
