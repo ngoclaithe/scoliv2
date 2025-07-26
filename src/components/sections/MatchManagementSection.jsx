@@ -268,7 +268,7 @@ const MatchManagementSection = () => {
                 variant="outline"
                 size="sm"
                 className="px-1 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
-                onClick={() => setFutsalErrors(prev => ({ ...prev, homeTeam: Math.max(0, prev.homeTeam - 1) }))}
+                onClick={() => updateFutsalErrors('homeTeam', -1)}
               >
                 -
               </Button>
@@ -671,7 +671,7 @@ const MatchManagementSection = () => {
 
           {/* Text content */}
           <Input
-            placeholder="Nội dung ch��� chạy..."
+            placeholder="Nội dung chữ chạy..."
             value={clockText}
             onChange={(e) => setClockText(e.target.value)}
             maxLength={100}
