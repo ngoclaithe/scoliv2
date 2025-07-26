@@ -176,6 +176,48 @@ const AccessCodeAPI = {
   },
 
   /**
+   * Xác thực mã truy cập cho đăng nhập
+   * @param {string} code - Mã truy cập cần xác thực
+   * @returns {Promise<Object>} Thông tin xác thực và dữ liệu trận đấu
+   */
+  verifyCodeForLogin: async (code) => {
+    try {
+      const response = await api.post(`/access-codes/${code}/verify-login`);
+      return response.data;
+    } catch (error) {
+      throw AccessCodeAPI.handleError(error);
+    }
+  },
+
+  /**
+   * Đăng nhập sử dụng mã truy cập
+   * @param {string} code - Mã truy cập
+   * @returns {Promise<Object>} Token xác thực và thông tin session
+   */
+  loginWithAccessCode: async (code) => {
+    try {
+      const response = await api.post(`/access-codes/${code}/login`);
+      return response.data;
+    } catch (error) {
+      throw AccessCodeAPI.handleError(error);
+    }
+  },
+
+  /**
+   * Kiểm tra trạng thái và quyền của mã truy cập
+   * @param {string} code - Mã truy cập
+   * @returns {Promise<Object>} Thông tin trạng thái và quyền
+   */
+  checkCodeStatus: async (code) => {
+    try {
+      const response = await api.get(`/access-codes/${code}/status`);
+      return response.data;
+    } catch (error) {
+      throw AccessCodeAPI.handleError(error);
+    }
+  },
+
+  /**
    * Xử lý lỗi từ API
    * @private
    * @param {Error} error - Lỗi từ axios
