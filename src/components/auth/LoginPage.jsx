@@ -169,14 +169,7 @@ const LoginPage = () => {
               </div>
 
               <div className="mt-3 space-y-2 text-center text-xs text-gray-600">
-                {/* <div className="bg-blue-50 rounded p-2">
-                  <div className="text-blue-800 font-medium">💡 Đăng nhập tài khoản:</div>
-                  <div className="text-blue-700">Để tạo code + quản lý code đã tạo</div>
-                </div>
-                <div className="bg-green-50 rounded p-2">
-                  <div className="text-green-800 font-medium">🎯 Demo User:</div>
-                  <div className="text-green-700">Email: demo@user.com | Pass: demo123</div>
-                </div> */}
+  
                 <div>
                   Chưa có tài khoản?{' '}
                   <button
@@ -211,7 +204,7 @@ const LoginPage = () => {
                 <div>
                   <Input
                     type="text"
-                    placeholder="Nhập mã (demo: ffff)"
+                    placeholder="Nhập mã trận đấu"
                     value={codeForm}
                     onChange={(e) => setCodeForm(e.target.value)}
                     className="w-full text-center font-mono text-sm"

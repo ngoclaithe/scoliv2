@@ -6,7 +6,7 @@ import PosterLogoManager from "./PosterLogoManager";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
 
-const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
+const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose }) => {
   const [selectedPoster, setSelectedPoster] = useState(null);
   const [selectedLogo, setSelectedLogo] = useState(null);
   const [showPosterSelector, setShowPosterSelector] = useState(false);
@@ -112,6 +112,7 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate }) => {
           matchData={matchData}
           onPosterUpdate={handlePosterLogoUpdate}
           onLogoUpdate={handleLogoUpdateFromManager}
+          onClose={onClose}
         />
       </div>
 

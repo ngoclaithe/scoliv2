@@ -130,25 +130,36 @@ export const AuthProvider = ({ children }) => {
       // Giả lập đăng nhập chỉ bằng code (không có tài khoản)
       // Trong thực tế, API sẽ xác thực code và trả về thông tin trận đấu
 
-      // Fake validation
-      if (code.toLowerCase() === 'ffff' || code.toLowerCase() === 'demo') {
-        setUser({
-          id: 'code-user',
-          email: null,
-          name: `Code User - ${code}`,
-          role: 'code-only',
-          avatar: null
-        });
+      // Gọi API để xác thực access code
+      const apiResult = await fetch('/api/auth/verify-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }),
+      }).catch(() => null);
 
-        setMatchCode(code);
-        setCodeOnly(true);
-        setAuthType('code');
-        setIsAuthenticated(true);
-
-        return { success: true, user: { name: `Code User - ${code}`, role: 'code-only' } };
-      } else {
-        throw new Error('Mã không hợp lệ');
+      // Nếu API không khả dụng, trả về lỗi
+      if (!apiResult || !apiResult.ok) {
+        throw new Error('Mã không hợp lệ hoặc đã hết hạn');
       }
+
+      const data = await apiResult.json();
+
+      setUser({
+        id: data.userId || 'code-user',
+        email: null,
+        name: data.userName || `Code User - ${code}`,
+        role: 'code-only',
+        avatar: null
+      });
+
+      setMatchCode(code);
+      setCodeOnly(true);
+      setAuthType('code');
+      setIsAuthenticated(true);
+
+      return { success: true, user: { name: data.userName || `Code User - ${code}`, role: 'code-only' } };
     } catch (error) {
       return {
         success: false,
@@ -268,14 +279,26 @@ export const AuthProvider = ({ children }) => {
   const enterMatchCode = async (code) => {
     try {
       setLoading(true);
-      // Xác thực code trận đấu
-      if (code.toLowerCase() === 'ffff' || code.toLowerCase() === 'demo') {
-        setMatchCode(code);
-        setAuthType('full'); // Có cả tài khoản và code
-        return { success: true };
-      } else {
-        throw new Error('Mã trận đấu không hợp lệ');
+      // Gọi API để xác thực mã trận đấu
+      const apiResult = await fetch('/api/match/verify-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user?.token || ''}`,
+        },
+        body: JSON.stringify({ code }),
+      }).catch(() => null);
+
+      // Nếu API không khả dụng, trả về lỗi
+      if (!apiResult || !apiResult.ok) {
+        throw new Error('Mã trận đấu không hợp lệ hoặc đã hết hạn');
       }
+
+      const data = await apiResult.json();
+
+      setMatchCode(code);
+      setAuthType('full'); // Có cả tài khoản và code
+      return { success: true, matchData: data };
     } catch (error) {
       return {
         success: false,
