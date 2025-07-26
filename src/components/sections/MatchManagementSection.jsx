@@ -288,7 +288,7 @@ const MatchManagementSection = () => {
               >
                 -
               </Button>
-              <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-6 text-center">
+              <div className="px-1.5 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-5 text-center">
                 {futsalErrors.homeTeam}
               </div>
               <Button
