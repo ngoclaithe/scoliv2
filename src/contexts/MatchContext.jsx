@@ -116,12 +116,19 @@ export const MatchProvider = ({ children }) => {
   // Khởi tạo socket connection
   const initializeSocket = useCallback(async (accessCode) => {
     try {
+      // Tránh khởi tạo socket trùng lặp
+      if (socketService.getConnectionStatus().accessCode === accessCode &&
+          socketService.getConnectionStatus().isConnected) {
+        console.log(`Socket already connected for access code: ${accessCode}`);
+        return;
+      }
+
       await socketService.connect(accessCode);
       setSocketConnected(true);
-      
+
       // Lắng nghe các event từ server
       setupSocketListeners();
-      
+
       console.log(`Socket initialized for access code: ${accessCode}`);
     } catch (error) {
       console.error('Failed to initialize socket:', error);
@@ -263,7 +270,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [matchData, socketConnected]);
 
-  // Cập nhật thông tin trận đấu
+  // Cập nhật thông tin trận đ���u
   const updateMatchInfo = useCallback((newMatchInfo) => {
     setMatchData(prev => ({ ...prev, ...newMatchInfo }));
     
