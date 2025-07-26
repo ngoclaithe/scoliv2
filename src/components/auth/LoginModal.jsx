@@ -258,7 +258,7 @@ const LoginModal = ({ isOpen, onClose }) => {
                 </label>
                 <Input
                   type="text"
-                  placeholder="Nhập mã code (demo: ffff)"
+                  placeholder="Nhập mã code"
                   value={codeForm}
                   onChange={(e) => setCodeForm(e.target.value)}
                   className="w-full text-center font-mono"

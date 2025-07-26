@@ -311,7 +311,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
-              📋 Danh sách mã
+              ���� Danh sách mã
             </button>
           </div>
         </div>
@@ -565,7 +565,7 @@ const ManageAccessCode = ({ onNavigate }) => {
           <div>
             <Input
               type="text"
-              placeholder="Nhập mã trận đấu (demo: ffff)"
+              placeholder="Nhập mã trận đấu"
               value={matchCode}
               onChange={(e) => setMatchCode(e.target.value)}
               className="w-full text-center font-mono"
