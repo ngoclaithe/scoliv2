@@ -242,7 +242,7 @@ const MatchManagementSection = () => {
           </div>
 
           {/* Đội khách */}
-          <div className="bg-white rounded-lg p-2 sm:p-4 shadow-md border border-purple-200">
+          <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-purple-200">
             <div className="flex space-x-1 sm:space-x-2">
               <Button
                 variant="primary"
@@ -277,7 +277,7 @@ const MatchManagementSection = () => {
           </Button>
 
           <div className="flex space-x-2">
-            {/* L���i đội nhà */}
+            {/* Lỗi đội nhà */}
             <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
               <Button
                 variant="outline"
@@ -481,7 +481,7 @@ const MatchManagementSection = () => {
                 onUpdate={(team, value) => updateStat('yellowCards', team, value)}
               />
 
-              {/* Ph���m lỗi */}
+              {/* Phạm lỗi */}
               <EditableStatBar
                 label="Phạm lỗi"
                 statKey="fouls"
