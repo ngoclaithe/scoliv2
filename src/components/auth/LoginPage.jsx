@@ -77,6 +77,29 @@ const LoginPage = () => {
     }
   };
 
+  const handleAccessCodeSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    if (accessCode.trim()) {
+      // Nếu có access code, đăng nhập bằng code
+      const result = await loginWithCode(accessCode.trim());
+      if (result.success) {
+        resetForms();
+      } else {
+        setError(result.error);
+      }
+    } else {
+      // Nếu không có access code, đăng nhập bình thường
+      const result = await login(loginForm);
+      if (result.success) {
+        resetForms();
+      } else {
+        setError(result.error);
+      }
+    }
+  };
+
   const resetForms = () => {
     setLoginForm({ email: '', password: '', rememberMe: false });
     setRegisterForm({
@@ -128,7 +151,7 @@ const LoginPage = () => {
                 <div>
                   <Input
                     type="password"
-                    placeholder="M��t khẩu"
+                    placeholder="Mật khẩu"
                     value={loginForm.password}
                     onChange={(e) => setLoginForm(prev => ({...prev, password: e.target.value}))}
                     className="w-full text-sm"
@@ -228,7 +251,7 @@ const LoginPage = () => {
                   onClick={() => setShowCodeLogin(false)}
                   className="text-blue-600"
                 >
-                  ← Quay lại đăng nhập
+                  �� Quay lại đăng nhập
                 </button>
               </div>
             </div>
