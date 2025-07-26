@@ -133,10 +133,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     },
   ];
 
-  const sections = [
-    { id: "posters", name: "Chọn Poster", icon: "🎨" },
-    { id: "logos", name: "Chọn Logo", icon: "🏆" },
-  ];
+
 
 
 
