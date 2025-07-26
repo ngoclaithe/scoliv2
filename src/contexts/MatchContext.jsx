@@ -97,16 +97,19 @@ export const MatchProvider = ({ children }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
 
-  // Kết nối socket khi có matchCode
+  // Kết nối socket khi có matchCode (cho authenticated users)
   useEffect(() => {
     if (matchCode && isAuthenticated) {
       initializeSocket(matchCode);
-    } else {
+    } else if (!matchCode && isAuthenticated) {
       disconnectSocket();
     }
 
     return () => {
-      disconnectSocket();
+      // Chỉ disconnect nếu không có external socket connection
+      if (isAuthenticated) {
+        disconnectSocket();
+      }
     };
   }, [matchCode, isAuthenticated]);
 
