@@ -278,14 +278,25 @@ export const AuthProvider = ({ children }) => {
   const enterMatchCode = async (code) => {
     try {
       setLoading(true);
-      // Xác thực code trận đấu
-      if (code.toLowerCase() === 'ffff' || code.toLowerCase() === 'demo') {
-        setMatchCode(code);
-        setAuthType('full'); // Có cả tài khoản và code
-        return { success: true };
-      } else {
-        throw new Error('Mã trận đấu không hợp lệ');
+      // Gọi API để xác thực mã trận đấu
+      const response = await fetch('/api/match/verify-code', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({ code }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Mã trận đấu không hợp lệ hoặc đã hết hạn');
       }
+
+      const data = await response.json();
+
+      setMatchCode(code);
+      setAuthType('full'); // Có cả tài kho��n và code
+      return { success: true, matchData: data };
     } catch (error) {
       return {
         success: false,
