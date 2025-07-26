@@ -584,7 +584,7 @@ const MatchManagementSection = () => {
       )}
 
       {/* Options - Các action buttons điều khiển */}
-      {selectedOption !== "chon-skin" && selectedOption !== "thong-so" && (
+      {selectedOption !== "chon-skin" && selectedOption !== "thong-so" && selectedOption !== "chon-poster" && (
         <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-2 sm:p-3 border border-indigo-200">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
             {/* Poster */}
@@ -658,7 +658,7 @@ const MatchManagementSection = () => {
               onClick={() => setSelectedOption("gioi-thieu")}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">📢</span>
+              <span className="text-sm mr-1">���</span>
               <span className="text-xs font-bold text-center">GIỚI THIỆU</span>
             </button>
 
