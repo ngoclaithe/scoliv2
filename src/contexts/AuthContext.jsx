@@ -128,40 +128,37 @@ export const AuthProvider = ({ children }) => {
   const loginWithCode = async (code) => {
     try {
       setLoading(true);
-      // Giả lập đăng nhập chỉ bằng code (không có tài khoản)
-      // Trong thực tế, API sẽ xác thực code và trả về thông tin trận đấu
 
-      // Gọi API để xác thực access code
-      const apiResult = await fetch('/api/auth/verify-code', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ code }),
-      }).catch(() => null);
+      // Sử dụng API mới để đăng nhập với access code
+      const response = await AccessCodeAPI.loginWithAccessCode(code);
 
-      // Nếu API không khả dụng, trả về lỗi
-      if (!apiResult || !apiResult.ok) {
-        throw new Error('Mã không hợp lệ hoặc đã hết hạn');
+      // Lưu token nếu có
+      if (response.token) {
+        localStorage.setItem('token', response.token);
       }
 
-      const data = await apiResult.json();
-
-      setUser({
-        id: data.userId || 'code-user',
+      // Thiết lập thông tin user từ response
+      const userData = {
+        id: response.userId || response.sessionId || 'code-user',
         email: null,
-        name: data.userName || `Code User - ${code}`,
+        name: response.userName || response.matchInfo?.title || `Code User - ${code}`,
         role: 'code-only',
         avatar: null
-      });
+      };
 
+      setUser(userData);
       setMatchCode(code);
       setCodeOnly(true);
       setAuthType('code');
       setIsAuthenticated(true);
 
-      return { success: true, user: { name: data.userName || `Code User - ${code}`, role: 'code-only' } };
+      return {
+        success: true,
+        user: userData,
+        matchInfo: response.matchInfo
+      };
     } catch (error) {
+      console.error('Lỗi đăng nhập với code:', error);
       return {
         success: false,
         error: error.message || 'Mã không hợp lệ. Vui lòng thử lại.'
