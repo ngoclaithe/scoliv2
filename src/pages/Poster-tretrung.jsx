@@ -46,6 +46,28 @@ const FootballMatchIntro = ({ accessCode }) => {
   const teamTextRef1 = useRef(null);
   const teamTextRef2 = useRef(null);
 
+  // Sync context data with local state
+  useEffect(() => {
+    setMatchData(prev => ({
+      ...prev,
+      team1: contextMatchData.homeTeam.name || 'ĐỘI-A',
+      team2: contextMatchData.awayTeam.name || 'ĐỘI-B',
+      logo1: contextMatchData.homeTeam.logo || '/api/placeholder/200/200',
+      logo2: contextMatchData.awayTeam.logo || '/api/placeholder/200/200',
+      stadium: contextMatchData.stadium || 'SÂN VẬN ĐỘNG QUỐC GIA',
+      liveText: contextMatchData.liveText || 'KÊNH THỂ THAO'
+    }));
+  }, [contextMatchData]);
+
+  // Sync sponsors data
+  useEffect(() => {
+    setPartners({
+      sponsor: sponsors.main || [],
+      organizer: sponsors.secondary || [],
+      media: sponsors.media || []
+    });
+  }, [sponsors]);
+
   // Kết nối WebSocket sử dụng socket.io với cơ chế fallback
   useEffect(() => {
     const connectWebSocket = () => {
