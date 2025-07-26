@@ -56,15 +56,7 @@ const MatchManagementSection = () => {
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
   const [showTimerModal, setShowTimerModal] = useState(false);
 
-  // State cho penalty shootout
-  const [penaltyData, setPenaltyData] = useState({
-    homeGoals: 0,
-    awayGoals: 0,
-    currentTurn: 'home',
-    shootHistory: [],
-    status: 'ready',
-    lastUpdated: null
-  });
+
 
   // Memoized callback to prevent infinite loops
   const handlePenaltyChange = useCallback((newPenaltyData) => {
