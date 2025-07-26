@@ -14,6 +14,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
+    console.log("Giá trị của token trước khi gửi là ", token);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -28,14 +29,20 @@ const AccessCodeAPI = {
   /**
    * Tạo mã truy cập mới
    * @param {Object} codeData - Thông tin mã truy cập
-   * @param {string} codeData.name - Tên mô tả cho mã
-   * @param {number} codeData.duration - Thời gian sử dụng (giờ)
-   * @param {string} [codeData.description] - Mô tả chi tiết
+   * @param {string} [codeData.matchId] - ID của trận đấu
+   * @param {string} [codeData.expiresAt] - Ngày hết hạn (ISO string)
+   * @param {number} [codeData.maxUses=1] - Số lần sử dụng tối đa
+   * @param {object} [codeData.metadata] - Thông tin bổ sung
    * @returns {Promise<Object>} Thông tin mã truy cập đã tạo
    */
   createCode: async (codeData) => {
     try {
-      const response = await api.post('/access-codes', codeData);
+      const response = await api.post('/access-codes', {
+        matchId: codeData.matchId,
+        expiresAt: codeData.expiresAt,
+        maxUses: codeData.maxUses || 1,
+        metadata: codeData.metadata || {}
+      });
       return response.data;
     } catch (error) {
       throw AccessCodeAPI.handleError(error);
@@ -43,17 +50,27 @@ const AccessCodeAPI = {
   },
 
   /**
-   * Lấy danh sách mã truy cập của người dùng
+   * Lấy danh sách mã truy cập
    * @param {Object} params - Tham số lọc
-   * @param {number} [params.page=1] - Trang hiện tại
-   * @param {number} [params.limit=10] - Số lượng mỗi trang
-   * @param {string} [params.status] - Trạng thái (active, expired, used)
+   * @param {string} [params.status] - Trạng thái (active, used, expired, revoked)
+   * @param {string} [params.matchId] - Lọc theo ID trận đấu
+   * @param {string} [params.createdBy] - Lọc theo người tạo
+   * @param {number} [params.page=1] - Số trang hiện tại
+   * @param {number} [params.limit=10] - Số lượng kết quả mỗi trang
    * @returns {Promise<Object>} Danh sách mã truy cập
    */
   getCodes: async (params = {}) => {
     try {
-      const queryParams = new URLSearchParams(params).toString();
-      const response = await api.get(`/access-codes?${queryParams}`);
+      const queryParams = new URLSearchParams();
+      
+      // Thêm các tham số nếu có
+      if (params.status) queryParams.append('status', params.status);
+      if (params.matchId) queryParams.append('matchId', params.matchId);
+      if (params.createdBy) queryParams.append('createdBy', params.createdBy);
+      if (params.page) queryParams.append('page', params.page);
+      if (params.limit) queryParams.append('limit', params.limit);
+
+      const response = await api.get(`/access-codes?${queryParams.toString()}`);
       return response.data;
     } catch (error) {
       throw AccessCodeAPI.handleError(error);
@@ -61,13 +78,13 @@ const AccessCodeAPI = {
   },
 
   /**
-   * Lấy thông tin chi tiết một mã truy cập
-   * @param {string} codeId - ID của mã truy cập
+   * Lấy thông tin chi tiết mã truy cập
+   * @param {string} code - Mã truy cập
    * @returns {Promise<Object>} Thông tin chi tiết mã truy cập
    */
-  getCodeById: async (codeId) => {
+  getCode: async (code) => {
     try {
-      const response = await api.get(`/access-codes/${codeId}`);
+      const response = await api.get(`/access-codes/${code}`);
       return response.data;
     } catch (error) {
       throw AccessCodeAPI.handleError(error);
@@ -75,17 +92,18 @@ const AccessCodeAPI = {
   },
 
   /**
-   * Cập nhật thông tin mã truy cập
-   * @param {string} codeId - ID của mã truy cập
+   * Cập nhật mã truy cập
+   * @param {string} code - Mã truy cập cần cập nhật
    * @param {Object} updateData - Dữ liệu cập nhật
-   * @param {string} [updateData.name] - Tên mới
-   * @param {string} [updateData.description] - Mô tả mới
-   * @param {boolean} [updateData.isActive] - Trạng thái hoạt động
+   * @param {string} [updateData.status] - Trạng thái mới
+   * @param {string} [updateData.expiresAt] - Ngày hết hạn mới (ISO string)
+   * @param {number} [updateData.maxUses] - Số lần sử dụng tối đa mới
+   * @param {object} [updateData.metadata] - Thông tin bổ sung
    * @returns {Promise<Object>} Thông tin mã truy cập đã cập nhật
    */
-  updateCode: async (codeId, updateData) => {
+  updateCode: async (code, updateData) => {
     try {
-      const response = await api.put(`/access-codes/${codeId}`, updateData);
+      const response = await api.put(`/access-codes/${code}`, updateData);
       return response.data;
     } catch (error) {
       throw AccessCodeAPI.handleError(error);
@@ -94,12 +112,12 @@ const AccessCodeAPI = {
 
   /**
    * Xóa mã truy cập
-   * @param {string} codeId - ID của mã truy cập
+   * @param {string} code - Mã truy cập cần xóa
    * @returns {Promise<Object>} Kết quả xóa
    */
-  deleteCode: async (codeId) => {
+  deleteCode: async (code) => {
     try {
-      const response = await api.delete(`/access-codes/${codeId}`);
+      const response = await api.delete(`/access-codes/${code}`);
       return response.data;
     } catch (error) {
       throw AccessCodeAPI.handleError(error);
@@ -107,16 +125,13 @@ const AccessCodeAPI = {
   },
 
   /**
-   * Gia hạn mã truy cập
-   * @param {string} codeId - ID của mã truy cập
-   * @param {number} additionalHours - Số giờ gia hạn thêm
-   * @returns {Promise<Object>} Thông tin mã truy cập sau khi gia hạn
+   * Sử dụng mã truy cập
+   * @param {string} code - Mã truy cập cần sử dụng
+   * @returns {Promise<Object>} Kết quả sử dụng mã
    */
-  extendCode: async (codeId, additionalHours) => {
+  useCode: async (code) => {
     try {
-      const response = await api.post(`/access-codes/${codeId}/extend`, {
-        additionalHours
-      });
+      const response = await api.post(`/access-codes/${code}/use`);
       return response.data;
     } catch (error) {
       throw AccessCodeAPI.handleError(error);
@@ -124,16 +139,22 @@ const AccessCodeAPI = {
   },
 
   /**
-   * Kích hoạt/Vô hiệu hóa mã truy cập
-   * @param {string} codeId - ID của mã truy cập
-   * @param {boolean} isActive - Trạng thái kích hoạt
-   * @returns {Promise<Object>} Kết quả thay đổi trạng thái
+   * Cập nhật thông tin trận đấu của mã truy cập
+   * @param {string} code - Mã truy cập
+   * @param {Object} matchData - Thông tin trận đấu
+   * @param {string} [matchData.teamAName] - Tên đội A
+   * @param {string} [matchData.teamBName] - Tên đội B
+   * @param {string} [matchData.teamALogo] - URL logo đội A
+   * @param {string} [matchData.teamBLogo] - URL logo đội B
+   * @param {string} [matchData.tournamentName] - Tên giải đấu
+   * @param {string} [matchData.tournamentLogo] - URL logo giải đấu
+   * @param {string} [matchData.typeMatch] - Loại trận đấu (soccer, pickleball, other)
+   * @param {string} [matchData.matchDate] - Ngày giờ diễn ra trận đấu (ISO string)
+   * @returns {Promise<Object>} Thông tin trận đấu đã cập nhật
    */
-  toggleCodeStatus: async (codeId, isActive) => {
+  updateMatchInfo: async (code, matchData) => {
     try {
-      const response = await api.patch(`/access-codes/${codeId}/status`, {
-        isActive
-      });
+      const response = await api.put(`/access-codes/${code}/match`, matchData);
       return response.data;
     } catch (error) {
       throw AccessCodeAPI.handleError(error);
@@ -141,45 +162,13 @@ const AccessCodeAPI = {
   },
 
   /**
-   * Lấy thống kê sử dụng mã truy cập
-   * @param {string} [timeRange='30d'] - Khoảng thời gian (7d, 30d, 90d)
-   * @returns {Promise<Object>} Thống kê sử dụng
+   * Lấy thông tin trận đấu của mã truy cập
+   * @param {string} code - Mã truy cập
+   * @returns {Promise<Object>} Thông tin trận đấu
    */
-  getUsageStats: async (timeRange = '30d') => {
+  getMatchInfo: async (code) => {
     try {
-      const response = await api.get(`/access-codes/stats?range=${timeRange}`);
-      return response.data;
-    } catch (error) {
-      throw AccessCodeAPI.handleError(error);
-    }
-  },
-
-  /**
-   * Xác thực mã truy cập (dành cho việc đăng nhập bằng code)
-   * @param {string} code - Mã truy cập cần xác thực
-   * @returns {Promise<Object>} Kết quả xác thực
-   */
-  validateCode: async (code) => {
-    try {
-      const response = await api.post('/access-codes/validate', { code });
-      return response.data;
-    } catch (error) {
-      throw AccessCodeAPI.handleError(error);
-    }
-  },
-
-  /**
-   * Lấy lịch sử sử dụng của một mã truy cập
-   * @param {string} codeId - ID của mã truy cập
-   * @param {Object} params - Tham số lọc
-   * @param {number} [params.page=1] - Trang hiện tại
-   * @param {number} [params.limit=10] - Số lượng mỗi trang
-   * @returns {Promise<Object>} Lịch sử sử dụng
-   */
-  getCodeHistory: async (codeId, params = {}) => {
-    try {
-      const queryParams = new URLSearchParams(params).toString();
-      const response = await api.get(`/access-codes/${codeId}/history?${queryParams}`);
+      const response = await api.get(`/access-codes/${code}/match`);
       return response.data;
     } catch (error) {
       throw AccessCodeAPI.handleError(error);
@@ -189,27 +178,26 @@ const AccessCodeAPI = {
   /**
    * Xử lý lỗi từ API
    * @private
+   * @param {Error} error - Lỗi từ axios
+   * @throws {Error} Lỗi đã được xử lý
    */
   handleError: (error) => {
     if (error.response) {
-      // Yêu cầu đã được gửi và server đã phản hồi với mã lỗi
-      const { status, data } = error.response;
-      const message = data?.message || 'Đã có lỗi xảy ra';
+      // Lỗi từ phản hồi của server
+      const message = error.response.data?.message || 'Đã có lỗi xảy ra';
+      const status = error.response.status;
       
-      // Tạo thông báo lỗi chi tiết hơn nếu có
-      let errorMessage = message;
-      if (status === 400 && data.errors) {
-        // Xử lý lỗi validate
-        errorMessage = Object.values(data.errors).join('\n');
-      }
+      const errorWithStatus = new Error(message);
+      errorWithStatus.status = status;
+      errorWithStatus.details = error.response.data?.errors;
       
-      return new Error(`Lỗi (${status}): ${errorMessage}`);
+      throw errorWithStatus;
     } else if (error.request) {
-      // Yêu cầu đã được gửi nhưng không nhận được phản hồi
-      return new Error('Không nhận được phản hồi từ máy chủ. Vui lòng kiểm tra kết nối mạng.');
+      // Không nhận được phản hồi từ server
+      throw new Error('Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng của bạn.');
     } else {
-      // L��i khi thiết lập yêu cầu
-      return new Error(`Lỗi yêu cầu: ${error.message}`);
+      // Lỗi khi thiết lập request
+      throw new Error('Đã xảy ra lỗi khi thiết lập yêu cầu: ' + error.message);
     }
   }
 };

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 // Import auth context
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 
@@ -451,6 +452,22 @@ function App() {
   return (
     <AuthProvider>
       <AppContent />
+      
+      {/* Toast Container - thêm phần này */}
+      <ToastContainer
+        position="top-left"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        toastClassName="custom-toast"
+        bodyClassName="custom-toast-body"
+      />
     </AuthProvider>
   );
 }

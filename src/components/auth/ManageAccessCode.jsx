@@ -5,6 +5,8 @@ import Modal from '../common/Modal';
 import Loading from '../common/Loading';
 import { useAuth } from '../../contexts/AuthContext';
 import AccessCodeAPI from '../../API/apiAccessCode';
+import { PlusIcon } from '@heroicons/react/24/outline';
+import { toast } from 'react-toastify';
 
 const ManageAccessCode = ({ onNavigate }) => {
   const { user, logout, enterMatchCode, loading: authLoading } = useAuth();
@@ -12,6 +14,7 @@ const ManageAccessCode = ({ onNavigate }) => {
   const [showCodeEntry, setShowCodeEntry] = useState(false);
   const [matchCode, setMatchCode] = useState('');
   const [loading, setLoading] = useState(false);
+  const [createLoading, setCreateLoading] = useState(false);
   const [codes, setCodes] = useState([]);
   const [pagination, setPagination] = useState({
     page: 1,
@@ -20,131 +23,78 @@ const ManageAccessCode = ({ onNavigate }) => {
     limit: 10
   });
   const [selectedCode, setSelectedCode] = useState(null);
-  const [showCreateModal, setShowCreateModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-
-  // Form tạo code mới
-  const [createForm, setCreateForm] = useState({
-    name: '',
-    duration: 24,
-    description: ''
-  });
 
   // Load danh sách codes
   const loadCodes = useCallback(async (page = 1, status = '') => {
     try {
       setLoading(true);
-      setError('');
-      
-      // Trong demo, tạo dữ liệu giả
-      const mockData = {
-        success: true,
-        pagination: {
-          page,
-          pages: 2,
-          total: 15,
-          limit: 10
-        },
-        data: [
-          {
-            id: '1',
-            code: 'DEMO2024',
-            name: 'Code Demo trận đấu',
-            description: 'Mã demo cho trận đấu thử nghiệm',
-            status: 'active',
-            duration: 24,
-            createdAt: '2024-01-15T10:30:00Z',
-            expiresAt: '2024-01-16T10:30:00Z',
-            usageCount: 5,
-            maxUsage: 100,
-            lastUsed: '2024-01-15T15:20:00Z'
-          },
-          {
-            id: '2',
-            code: 'MATCH001',
-            name: 'Trận Hà Nội vs TPHCM',
-            description: 'Code cho trận đấu chính thức',
-            status: 'active',
-            duration: 48,
-            createdAt: '2024-01-14T08:00:00Z',
-            expiresAt: '2024-01-16T08:00:00Z',
-            usageCount: 12,
-            maxUsage: 50,
-            lastUsed: '2024-01-15T16:45:00Z'
-          },
-          {
-            id: '3',
-            code: 'EXPIRE001',
-            name: 'Code đã hết hạn',
-            description: 'Mã test đã hết hạn sử dụng',
-            status: 'expired',
-            duration: 12,
-            createdAt: '2024-01-10T12:00:00Z',
-            expiresAt: '2024-01-10T24:00:00Z',
-            usageCount: 8,
-            maxUsage: 20,
-            lastUsed: '2024-01-10T23:30:00Z'
-          }
-        ]
-      };
-
-      setCodes(mockData.data);
-      setPagination(mockData.pagination);
+      const response = await AccessCodeAPI.getCodes({ page, limit: pagination.limit, status });
+      if (response.success) {
+        setCodes(response.data);
+        setPagination(prev => ({
+          ...prev,
+          page: response.pagination.page,
+          pages: response.pagination.pages,
+          total: response.pagination.total
+        }));
+      }
     } catch (error) {
-      setError(error.message);
+      toast.error(error.message, {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } finally {
       setLoading(false);
     }
-  }, []);
-
-  // Load dữ liệu khi component mount
-  useEffect(() => {
-    loadCodes();
-  }, [loadCodes]);
+  }, [pagination.limit]);
 
   // Tạo code mới
-  const handleCreateCode = async (e) => {
-    e.preventDefault();
-    if (!createForm.name.trim()) {
-      setError('Vui lòng nhập tên cho mã truy cập');
-      return;
-    }
-
+  const handleCreateCode = async () => {
     try {
-      setLoading(true);
-      setError('');
+      setCreateLoading(true);
       
-      // Trong demo, giả lập tạo code thành công
-      const newCode = {
-        id: Date.now().toString(),
-        code: `CODE${Math.random().toString(36).substr(2, 6).toUpperCase()}`,
-        name: createForm.name,
-        description: createForm.description,
-        status: 'active',
-        duration: createForm.duration,
-        createdAt: new Date().toISOString(),
-        expiresAt: new Date(Date.now() + createForm.duration * 3600000).toISOString(),
-        usageCount: 0,
-        maxUsage: 100,
-        lastUsed: null
-      };
-
-      setCodes(prev => [newCode, ...prev]);
-      setCreateForm({ name: '', duration: 24, description: '' });
-      setShowCreateModal(false);
-      setSuccess('Tạo mã truy cập thành công!');
+      // Gọi API để tạo mã mới với giá trị mặc định
+      const response = await AccessCodeAPI.createCode({ maxUses: 1 });
       
-      setTimeout(() => setSuccess(''), 3000);
+      if (response && response.data) {
+        // Cập nhật danh sách mã sau khi tạo thành công
+        setCodes(prev => [response.data, ...prev]);
+        toast.success('Tạo mã truy cập thành công!', {
+          position: "top-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      } else {
+        throw new Error(response?.message || 'Không thể tạo mã truy cập');
+      }
     } catch (error) {
-      setError(error.message);
+      toast.error('Có lỗi xảy ra khi tạo mã: ' + (error.message || 'Vui lòng thử lại sau'), {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      console.error('Lỗi khi tạo mã truy cập:', error);
     } finally {
-      setLoading(false);
+      setCreateLoading(false);
     }
   };
 
-  // Xóa code
+  useEffect(() => {
+    loadCodes();
+  }, []);
+
+  // Xóa code - gọi API đúng cách
   const handleDeleteCode = async (codeId) => {
     if (!window.confirm('Bạn có chắc muốn xóa mã truy cập này?')) {
       return;
@@ -152,30 +102,78 @@ const ManageAccessCode = ({ onNavigate }) => {
 
     try {
       setLoading(true);
-      setCodes(prev => prev.filter(code => code.id !== codeId));
-      setSuccess('Xóa mã truy cập thành công!');
-      setTimeout(() => setSuccess(''), 3000);
+      
+      // Gọi API xóa code
+      const response = await AccessCodeAPI.deleteCode(codeId);
+      
+      if (response.success) {
+        // Cập nhật danh sách sau khi xóa thành công
+        setCodes(prev => prev.filter(code => code.id !== codeId));
+        toast.success('Xóa mã truy cập thành công!', {
+          position: "top-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      } else {
+        throw new Error(response?.message || 'Không thể xóa mã truy cập');
+      }
     } catch (error) {
-      setError(error.message);
+      toast.error('Có lỗi xảy ra khi xóa mã: ' + (error.message || 'Vui lòng thử lại sau'), {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      console.error('Lỗi khi xóa mã truy cập:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  // Toggle trạng thái code
+  // Xử lý cập nhật trạng thái code
   const handleToggleStatus = async (codeId, currentStatus) => {
+    setLoading(true);
+    
     try {
-      setLoading(true);
       const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
       
-      setCodes(prev => prev.map(code => 
-        code.id === codeId ? { ...code, status: newStatus } : code
-      ));
+      const response = await AccessCodeAPI.updateCode(codeId, { 
+        status: newStatus 
+      });
       
-      setSuccess(`${newStatus === 'active' ? 'Kích hoạt' : 'Vô hiệu hóa'} mã thành công!`);
-      setTimeout(() => setSuccess(''), 3000);
+      if (response.success) {
+        setCodes(codes.map(code => 
+          code.id === codeId 
+            ? { 
+                ...code, 
+                status: newStatus,
+                isActive: newStatus === 'active'
+              } 
+            : code
+        ));
+        toast.success(`Đã ${currentStatus === 'active' ? 'vô hiệu hóa' : 'kích hoạt'} mã thành công`, {
+          position: "top-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      }
     } catch (error) {
-      setError(error.message);
+      toast.error('Có lỗi xảy ra khi cập nhật trạng thái: ' + (error.message || 'Vui lòng thử lại sau'), {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     } finally {
       setLoading(false);
     }
@@ -210,7 +208,14 @@ const ManageAccessCode = ({ onNavigate }) => {
   const handleEnterCode = async (e) => {
     e.preventDefault();
     if (!matchCode.trim()) {
-      setError('Vui lòng nhập mã trận đấu');
+      toast.error('Vui lòng nhập mã trận đấu', {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       return;
     }
 
@@ -218,11 +223,26 @@ const ManageAccessCode = ({ onNavigate }) => {
     if (result.success) {
       setShowCodeEntry(false);
       setMatchCode('');
+      toast.success('Nhập mã thành công!', {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
       if (onNavigate) {
         onNavigate('home');
       }
     } else {
-      setError(result.error);
+      toast.error(result.error, {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
     }
   };
 
@@ -236,6 +256,7 @@ const ManageAccessCode = ({ onNavigate }) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+
       {/* Header */}
       <header className="bg-gradient-to-r from-purple-600 via-blue-600 to-purple-800 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -281,7 +302,7 @@ const ManageAccessCode = ({ onNavigate }) => {
       {/* Navigation tabs */}
       <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8">
+          <div className="flex space-x-8 border-b border-gray-200 mb-6">
             <button
               onClick={() => setActiveTab('list')}
               className={`py-4 px-1 border-b-2 font-medium text-sm ${
@@ -292,56 +313,25 @@ const ManageAccessCode = ({ onNavigate }) => {
             >
               📋 Danh sách mã
             </button>
-            <button
-              onClick={() => setActiveTab('create')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'create'
-                  ? 'border-purple-500 text-purple-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              ➕ Tạo mã mới
-            </button>
-            <button
-              onClick={() => setActiveTab('stats')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'stats'
-                  ? 'border-purple-500 text-purple-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              📊 Thống kê
-            </button>
           </div>
         </div>
       </div>
 
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Alerts */}
-        {error && (
-          <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-            {error}
-          </div>
-        )}
-        
-        {success && (
-          <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
-            {success}
-          </div>
-        )}
-
         {/* Tab content */}
-        {activeTab === 'list' && (
-          <div>
+        <div>
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-900">Danh sách mã truy cập</h2>
+              <h2 className="text-2xl font-bold text-gray-900">Quản lý mã truy cập</h2>
               <Button
-                onClick={() => setShowCreateModal(true)}
+                onClick={handleCreateCode}
                 variant="primary"
-                className="bg-purple-600 hover:bg-purple-700"
+                className="flex items-center gap-2"
+                loading={createLoading}
+                disabled={createLoading}
               >
-                ➕ Tạo mã mới
+                <PlusIcon className="h-5 w-5" />
+                Tạo mã truy cập
               </Button>
             </div>
 
@@ -469,188 +459,7 @@ const ManageAccessCode = ({ onNavigate }) => {
               </div>
             )}
           </div>
-        )}
-
-        {activeTab === 'create' && (
-          <div className="max-w-2xl">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Tạo mã truy cập mới</h2>
-            
-            <div className="bg-white shadow rounded-lg p-6">
-              <form onSubmit={handleCreateCode} className="space-y-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Tên mã truy cập *
-                  </label>
-                  <Input
-                    type="text"
-                    value={createForm.name}
-                    onChange={(e) => setCreateForm(prev => ({...prev, name: e.target.value}))}
-                    placeholder="VD: Trận Hà Nội vs TPHCM"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Thời gian sử dụng (giờ) *
-                  </label>
-                  <select
-                    value={createForm.duration}
-                    onChange={(e) => setCreateForm(prev => ({...prev, duration: parseInt(e.target.value)}))}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
-                  >
-                    <option value={1}>1 giờ</option>
-                    <option value={3}>3 giờ</option>
-                    <option value={6}>6 giờ</option>
-                    <option value={12}>12 giờ</option>
-                    <option value={24}>24 giờ</option>
-                    <option value={48}>48 giờ</option>
-                    <option value={72}>72 giờ</option>
-                    <option value={168}>1 tuần</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Mô tả
-                  </label>
-                  <textarea
-                    value={createForm.description}
-                    onChange={(e) => setCreateForm(prev => ({...prev, description: e.target.value}))}
-                    placeholder="Mô tả chi tiết về mã truy cập này..."
-                    rows={3}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
-                  />
-                </div>
-
-                <div className="flex justify-end space-x-3">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => setCreateForm({ name: '', duration: 24, description: '' })}
-                  >
-                    Reset
-                  </Button>
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    loading={loading}
-                    className="bg-purple-600 hover:bg-purple-700"
-                  >
-                    Tạo mã truy cập
-                  </Button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'stats' && (
-          <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Thống kê sử dụng</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <div className="bg-white p-6 rounded-lg shadow">
-                <div className="text-2xl font-bold text-purple-600">15</div>
-                <div className="text-sm text-gray-600">Tổng số mã</div>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow">
-                <div className="text-2xl font-bold text-green-600">12</div>
-                <div className="text-sm text-gray-600">Đang hoạt động</div>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow">
-                <div className="text-2xl font-bold text-orange-600">2</div>
-                <div className="text-sm text-gray-600">Tạm dừng</div>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow">
-                <div className="text-2xl font-bold text-red-600">1</div>
-                <div className="text-sm text-gray-600">Hết hạn</div>
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Sử dụng theo thời gian</h3>
-              <div className="h-64 flex items-center justify-center bg-gray-50 rounded">
-                <p className="text-gray-500">Biểu đồ thống kê sẽ được hiển thị ở đây</p>
-              </div>
-            </div>
-          </div>
-        )}
       </main>
-
-      {/* Create Code Modal */}
-      <Modal
-        isOpen={showCreateModal}
-        onClose={() => setShowCreateModal(false)}
-        title="Tạo mã truy cập mới"
-        size="md"
-      >
-        <form onSubmit={handleCreateCode} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Tên mã truy cập *
-            </label>
-            <Input
-              type="text"
-              value={createForm.name}
-              onChange={(e) => setCreateForm(prev => ({...prev, name: e.target.value}))}
-              placeholder="VD: Trận Hà Nội vs TPHCM"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Thời gian sử dụng (giờ) *
-            </label>
-            <select
-              value={createForm.duration}
-              onChange={(e) => setCreateForm(prev => ({...prev, duration: parseInt(e.target.value)}))}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
-            >
-              <option value={1}>1 giờ</option>
-              <option value={3}>3 giờ</option>
-              <option value={6}>6 giờ</option>
-              <option value={12}>12 giờ</option>
-              <option value={24}>24 giờ</option>
-              <option value={48}>48 giờ</option>
-              <option value={72}>72 giờ</option>
-              <option value={168}>1 tuần</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Mô tả
-            </label>
-            <textarea
-              value={createForm.description}
-              onChange={(e) => setCreateForm(prev => ({...prev, description: e.target.value}))}
-              placeholder="Mô tả chi tiết về mã truy cập này..."
-              rows={3}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500"
-            />
-          </div>
-
-          <div className="flex justify-end space-x-3 pt-4">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => setShowCreateModal(false)}
-            >
-              Hủy
-            </Button>
-            <Button
-              type="submit"
-              variant="primary"
-              loading={loading}
-              className="bg-purple-600 hover:bg-purple-700"
-            >
-              Tạo mã
-            </Button>
-          </div>
-        </form>
-      </Modal>
 
       {/* Code Detail Modal */}
       {selectedCode && (
@@ -739,7 +548,6 @@ const ManageAccessCode = ({ onNavigate }) => {
         onClose={() => {
           setShowCodeEntry(false);
           setMatchCode('');
-          setError('');
         }}
         title="Nhập mã để vào trang chủ"
         size="sm"
@@ -753,12 +561,6 @@ const ManageAccessCode = ({ onNavigate }) => {
               Để truy cập trang chủ quản lý trận đấu, vui lòng nhập mã:
             </p>
           </div>
-
-          {error && (
-            <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded text-sm">
-              {error}
-            </div>
-          )}
 
           <div>
             <Input
@@ -778,7 +580,6 @@ const ManageAccessCode = ({ onNavigate }) => {
               onClick={() => {
                 setShowCodeEntry(false);
                 setMatchCode('');
-                setError('');
               }}
             >
               Hủy
