@@ -28,8 +28,11 @@ const MatchManagementSection = () => {
   const [tickerColor, setTickerColor] = useState("#ffffff");
   const [tickerFontSize, setTickerFontSize] = useState(16);
 
-  // State cho số lỗi futsal
-  const [futsalErrors, setFutsalErrors] = useState(0);
+  // State cho số lỗi futsal cho cả 2 đội
+  const [futsalErrors, setFutsalErrors] = useState({
+    homeTeam: 0,
+    awayTeam: 0
+  });
 
   // State cho thống kê bóng đá cho cả 2 đội
   const [matchStats, setMatchStats] = useState({
@@ -273,18 +276,55 @@ const MatchManagementSection = () => {
             TẠM DỪNG
           </Button>
 
-          <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
-            <Button
-              variant="outline"
-              size="sm"
-              className="px-2 py-1 text-xs border-0 hover:bg-red-50"
-              onClick={() => setFutsalErrors(prev => prev + 1)}
-            >
-              <span className="mr-1">⚠️</span>
-              Lỗi(futsal)
-            </Button>
-            <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-6 text-center rounded-r">
-              {futsalErrors}
+          <div className="flex space-x-2">
+            {/* Lỗi đội nhà */}
+            <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
+              <Button
+                variant="outline"
+                size="sm"
+                className="px-1 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
+                onClick={() => setFutsalErrors(prev => ({ ...prev, homeTeam: Math.max(0, prev.homeTeam - 1) }))}
+              >
+                -
+              </Button>
+              <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-6 text-center">
+                {futsalErrors.homeTeam}
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="px-1 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
+                onClick={() => setFutsalErrors(prev => ({ ...prev, homeTeam: prev.homeTeam + 1 }))}
+              >
+                +
+              </Button>
+            </div>
+
+            <div className="flex flex-col items-center justify-center">
+              <span className="text-xs font-medium text-gray-600">LỖI FUTSAL</span>
+            </div>
+
+            {/* Lỗi đội khách */}
+            <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
+              <Button
+                variant="outline"
+                size="sm"
+                className="px-1 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
+                onClick={() => setFutsalErrors(prev => ({ ...prev, awayTeam: Math.max(0, prev.awayTeam - 1) }))}
+              >
+                -
+              </Button>
+              <div className="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold min-w-6 text-center">
+                {futsalErrors.awayTeam}
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="px-1 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
+                onClick={() => setFutsalErrors(prev => ({ ...prev, awayTeam: prev.awayTeam + 1 }))}
+              >
+                +
+              </Button>
             </div>
           </div>
         </div>
