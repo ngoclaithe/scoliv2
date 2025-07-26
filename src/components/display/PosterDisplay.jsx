@@ -7,7 +7,7 @@ import PosterHaoQuang from '../../pages/Poster-haoquang';
 
 const PosterDisplay = () => {
   const { accessCode } = useParams();
-  const { initializeSocket, displaySettings, socketConnected, lastUpdateTime } = useMatch();
+  const { initializeSocket, displaySettings, socketConnected, lastUpdateTime } = usePublicMatch();
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
 
