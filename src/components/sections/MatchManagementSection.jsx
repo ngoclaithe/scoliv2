@@ -309,7 +309,7 @@ const MatchManagementSection = () => {
                 variant="outline"
                 size="sm"
                 className="px-1 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
-                onClick={() => setFutsalErrors(prev => ({ ...prev, awayTeam: prev.awayTeam + 1 }))}
+                onClick={() => updateFutsalErrors('awayTeam', 1)}
               >
                 +
               </Button>
@@ -405,7 +405,7 @@ const MatchManagementSection = () => {
           <div className="space-y-4">
             {/* Header với nút chỉnh sửa */}
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-gray-900">Thông số trận đấu</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Thông số trận ��ấu</h3>
               <Button
                 variant={isEditingStats ? "primary" : "outline"}
                 size="sm"
