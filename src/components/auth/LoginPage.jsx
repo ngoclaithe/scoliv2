@@ -20,6 +20,7 @@ const LoginPage = () => {
   });
   const [codeForm, setCodeForm] = useState('');
   const [showCodeLogin, setShowCodeLogin] = useState(false);
+  const [accessCode, setAccessCode] = useState('');
   const [error, setError] = useState('');
 
   const handleLoginSubmit = async (e) => {
@@ -127,7 +128,7 @@ const LoginPage = () => {
                 <div>
                   <Input
                     type="password"
-                    placeholder="Mật khẩu"
+                    placeholder="M��t khẩu"
                     value={loginForm.password}
                     onChange={(e) => setLoginForm(prev => ({...prev, password: e.target.value}))}
                     className="w-full text-sm"
