@@ -137,7 +137,7 @@ const LoginPage = () => {
                 </div>
               )}
 
-              <form className="space-y-3" onSubmit={handleLoginSubmit}>
+              <form className="space-y-3" onSubmit={handleAccessCodeSubmit}>
                 <div>
                   <Input
                     type="email"
@@ -145,7 +145,7 @@ const LoginPage = () => {
                     value={loginForm.email}
                     onChange={(e) => setLoginForm(prev => ({...prev, email: e.target.value}))}
                     className="w-full text-sm"
-                    required
+                    required={!accessCode.trim()}
                   />
                 </div>
 
@@ -156,7 +156,17 @@ const LoginPage = () => {
                     value={loginForm.password}
                     onChange={(e) => setLoginForm(prev => ({...prev, password: e.target.value}))}
                     className="w-full text-sm"
-                    required
+                    required={!accessCode.trim()}
+                  />
+                </div>
+
+                <div>
+                  <Input
+                    type="text"
+                    placeholder="Mã trận đấu (tùy chọn - nếu có thì không cần email/mật khẩu)"
+                    value={accessCode}
+                    onChange={(e) => setAccessCode(e.target.value)}
+                    className="w-full text-center font-mono text-sm"
                   />
                 </div>
 
