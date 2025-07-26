@@ -824,6 +824,7 @@ const MatchManagementSection = () => {
           matchData={matchData}
           onPosterUpdate={(poster) => console.log("Updated poster:", poster)}
           onLogoUpdate={(logoData) => console.log("Updated logo:", logoData)}
+          onClose={() => setShowPosterModal(false)}
         />
       </Modal>
 
