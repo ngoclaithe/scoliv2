@@ -10,16 +10,16 @@ export default function MatchIntroduction({ accessCode }) {
     socketConnected,
     lastUpdateTime
   } = usePublicMatch();
-  // State management
+  // Transform context data to poster format
   const [matchData, setMatchData] = useState({
-    matchTitle: 'GIẢI BÓNG ĐÁ PHONG TRÀO',
-    team1: 'DOI-A',
-    team2: 'DOI-B',
-    logo1: '/public/images/team1-logo.png',
-    logo2: '/public/images/team2-logo.png',
-    stadium: '',
+    matchTitle: contextMatchData.tournament || 'GIẢI BÓNG ĐÁ PHONG TRÀO',
+    team1: contextMatchData.homeTeam.name || 'DOI-A',
+    team2: contextMatchData.awayTeam.name || 'DOI-B',
+    logo1: contextMatchData.homeTeam.logo || '/public/images/team1-logo.png',
+    logo2: contextMatchData.awayTeam.logo || '/public/images/team2-logo.png',
+    stadium: contextMatchData.stadium || '',
     roundedTime: '15:30',
-    currentDate: '26/07/2025'
+    currentDate: new Date().toLocaleDateString('vi-VN')
   });
 
   const [partners, setPartners] = useState({
