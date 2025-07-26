@@ -6,44 +6,37 @@ import PosterManager from "../poster/PosterManager";
 import TeamLineupModal from "../lineup/TeamLineupModal";
 import Modal from "../common/Modal";
 import SimplePenaltyModal from "../common/SimplePenaltyModal";
+import { useMatch } from "../../contexts/MatchContext";
 
 const MatchManagementSection = () => {
-  // State cho match data
-  const [matchData, setMatchData] = useState({
-    homeTeam: { name: "ĐỘI-A", score: 0, logo: null },
-    awayTeam: { name: "ĐỘI-B", score: 0, logo: null },
-    matchTime: "39:15",
-    period: "Hiệp 1",
-    status: "live",
-  });
+  // Sử dụng MatchContext thay vì state local
+  const {
+    matchData,
+    matchStats,
+    futsalErrors,
+    penaltyData,
+    marqueeData,
+    displaySettings,
+    socketConnected,
+    updateScore,
+    updateStats,
+    updateTemplate,
+    updatePoster,
+    updateFutsalErrors,
+    updatePenalty,
+    updateMarquee
+  } = useMatch();
 
-  // State cho các tùy chọn điều khiển
+  // State cho các tùy chọn điều khiển UI
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
-  const [selectedSkin, setSelectedSkin] = useState(1);
 
-  // State cho custom time và cài đặt chữ chạy nâng cao
+  // State cho custom time
   const [customTime, setCustomTime] = useState("");
   const [quickCustomTime, setQuickCustomTime] = useState(""); // Cho input trực tiếp
   const [tickerColor, setTickerColor] = useState("#ffffff");
   const [tickerFontSize, setTickerFontSize] = useState(16);
-
-  // State cho số lỗi futsal cho cả 2 đội
-  const [futsalErrors, setFutsalErrors] = useState({
-    homeTeam: 0,
-    awayTeam: 0
-  });
-
-  // State cho thống kê bóng đá cho cả 2 đội
-  const [matchStats, setMatchStats] = useState({
-    possession: { team1: 45, team2: 55 }, // Kiểm soát bóng (%)
-    totalShots: { team1: 8, team2: 12 }, // Tổng số cú sút
-    shotsOnTarget: { team1: 3, team2: 5 }, // Sút trúng đích
-    corners: { team1: 2, team2: 6 }, // Phạt góc
-    yellowCards: { team1: 1, team2: 3 }, // Thẻ vàng
-    fouls: { team1: 7, team2: 9 }, // Phạm lỗi
-  });
 
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
@@ -63,41 +56,28 @@ const MatchManagementSection = () => {
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
   const [showTimerModal, setShowTimerModal] = useState(false);
 
-  // State cho penalty shootout
-  const [penaltyData, setPenaltyData] = useState({
-    homeGoals: 0,
-    awayGoals: 0,
-    currentTurn: 'home',
-    shootHistory: [],
-    status: 'ready',
-    lastUpdated: null
-  });
+
 
   // Memoized callback to prevent infinite loops
   const handlePenaltyChange = useCallback((newPenaltyData) => {
-    setPenaltyData(newPenaltyData);
+    updatePenalty(newPenaltyData);
     setSelectedOption("penalty");
-  }, []);
+  }, [updatePenalty]);
 
   const handleScoreChange = (team, increment) => {
-    setMatchData((prev) => ({
-      ...prev,
-      [team]: {
-        ...prev[team],
-        score: Math.max(0, prev[team].score + increment),
-      },
-    }));
+    updateScore(team, increment);
   };
 
   // Hàm cập nhật thống kê
   const updateStat = (statKey, team, value) => {
-    setMatchStats(prev => ({
-      ...prev,
+    const newStats = {
+      ...matchStats,
       [statKey]: {
-        ...prev[statKey],
+        ...matchStats[statKey],
         [team]: Math.max(0, parseInt(value) || 0)
       }
-    }));
+    };
+    updateStats(newStats);
   };
 
   // Hàm cập nhật kiểm soát bóng (đảm bảo tổng = 100%)
@@ -106,13 +86,14 @@ const MatchManagementSection = () => {
     const otherTeam = team === 'team1' ? 'team2' : 'team1';
     const otherValue = 100 - newValue;
 
-    setMatchStats(prev => ({
-      ...prev,
+    const newStats = {
+      ...matchStats,
       possession: {
         [team]: newValue,
         [otherTeam]: otherValue
       }
-    }));
+    };
+    updateStats(newStats);
   };
 
   // Component để hiển thị/chỉnh sửa thống kê
@@ -189,7 +170,7 @@ const MatchManagementSection = () => {
     <div className="p-2 sm:p-4 space-y-3 sm:space-y-4">
       {/* Scoreboard */}
       <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-lg p-2 sm:p-3 border-2 border-yellow-400 shadow-xl">
-  {selectedSkin && skinData[selectedSkin] ? (
+  {displaySettings.selectedSkin && skinData[displaySettings.selectedSkin] ? (
     <div className="w-full h-16 sm:h-20 bg-gray-100 rounded-lg overflow-hidden">
       <img
         src={skinData[selectedSkin].image}
@@ -287,7 +268,7 @@ const MatchManagementSection = () => {
                 variant="outline"
                 size="sm"
                 className="px-1 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
-                onClick={() => setFutsalErrors(prev => ({ ...prev, homeTeam: Math.max(0, prev.homeTeam - 1) }))}
+                onClick={() => updateFutsalErrors('homeTeam', -1)}
               >
                 -
               </Button>
@@ -298,7 +279,7 @@ const MatchManagementSection = () => {
                 variant="outline"
                 size="sm"
                 className="px-1 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
-                onClick={() => setFutsalErrors(prev => ({ ...prev, homeTeam: prev.homeTeam + 1 }))}
+                onClick={() => updateFutsalErrors('homeTeam', 1)}
               >
                 +
               </Button>
@@ -317,7 +298,7 @@ const MatchManagementSection = () => {
                 variant="outline"
                 size="sm"
                 className="px-1 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
-                onClick={() => setFutsalErrors(prev => ({ ...prev, awayTeam: Math.max(0, prev.awayTeam - 1) }))}
+                onClick={() => updateFutsalErrors('awayTeam', -1)}
               >
                 -
               </Button>
@@ -328,7 +309,7 @@ const MatchManagementSection = () => {
                 variant="outline"
                 size="sm"
                 className="px-1 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
-                onClick={() => setFutsalErrors(prev => ({ ...prev, awayTeam: prev.awayTeam + 1 }))}
+                onClick={() => updateFutsalErrors('awayTeam', 1)}
               >
                 +
               </Button>
@@ -339,7 +320,7 @@ const MatchManagementSection = () => {
 
       {/* Tab Controls */}
       <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200">
-        <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+        <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
           <button
             onClick={() => setSelectedOption("thong-so")}
             className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "thong-so"
@@ -375,6 +356,19 @@ const MatchManagementSection = () => {
             <span className="hidden sm:inline">TEMPLATE</span>
             <span className="sm:hidden">TL</span>
           </button>
+          <button
+            onClick={() => {
+              setSelectedOption(selectedOption === "chon-poster" ? "dieu-khien" : "chon-poster");
+            }}
+            className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "chon-poster"
+                ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-xl"
+                : "bg-gradient-to-r from-purple-100 to-purple-200 text-purple-700 hover:from-purple-200 hover:to-purple-300"
+              }`}
+          >
+            <span className="mr-0.5 text-xs">🖼️</span>
+            <span className="hidden sm:inline">POSTER</span>
+            <span className="sm:hidden">PT</span>
+          </button>
         </div>
       </div>
 
@@ -386,10 +380,10 @@ const MatchManagementSection = () => {
               <div
                 key={skinNumber}
                 onClick={() => {
-                  setSelectedSkin(skinNumber);
+                  updateTemplate(skinNumber);
                   console.log('Template selected:', skinNumber);
                 }}
-                className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${selectedSkin === skinNumber
+                className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedSkin === skinNumber
                     ? "border-blue-500 ring-2 ring-blue-200"
                     : "border-gray-200 hover:border-blue-300"
                   }`}
@@ -407,13 +401,81 @@ const MatchManagementSection = () => {
                   <span className="text-gray-500 font-medium text-xs">T{skinNumber}</span>
                 </div>
 
-                {selectedSkin === skinNumber && (
+                {displaySettings.selectedSkin === skinNumber && (
                   <div className="absolute top-0.5 right-0.5 bg-blue-500 text-white rounded-full w-3 h-3 sm:w-5 sm:h-5 flex items-center justify-center">
                     <span className="text-xs sm:text-sm">✓</span>
                   </div>
                 )}
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* Inline Poster Selection */}
+      {selectedOption === "chon-poster" && (
+        <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200 animate-slide-up">
+          <div className="grid grid-cols-2 gap-3">
+            <div
+              onClick={() => {
+                updatePoster('tretrung');
+                console.log('Poster selected: tretrung');
+              }}
+              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'tretrung'
+                  ? "border-purple-500 ring-2 ring-purple-200"
+                  : "border-gray-200 hover:border-purple-300"
+                }`}
+            >
+              <div className="w-full h-24 bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center">
+                <div className="text-center">
+                  <span className="text-2xl">🏆</span>
+                  <div className="text-sm font-bold text-gray-700 mt-1">Poster Tre Trung</div>
+                  <div className="text-xs text-gray-500">Football Match Intro</div>
+                </div>
+              </div>
+              {displaySettings.selectedPoster === 'tretrung' && (
+                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="text-sm">✓</span>
+                </div>
+              )}
+            </div>
+
+            <div
+              onClick={() => {
+                updatePoster('haoquang');
+                console.log('Poster selected: haoquang');
+              }}
+              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'haoquang'
+                  ? "border-purple-500 ring-2 ring-purple-200"
+                  : "border-gray-200 hover:border-purple-300"
+                }`}
+            >
+              <div className="w-full h-24 bg-gradient-to-r from-green-100 to-blue-100 flex items-center justify-center">
+                <div className="text-center">
+                  <span className="text-2xl">⚽</span>
+                  <div className="text-sm font-bold text-gray-700 mt-1">Poster Hao Quang</div>
+                  <div className="text-xs text-gray-500">Sports Display</div>
+                </div>
+              </div>
+              {displaySettings.selectedPoster === 'haoquang' && (
+                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="text-sm">✓</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Socket Status */}
+          <div className="mt-3 p-2 bg-gray-50 rounded border">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-gray-600">Trạng thái kết nối:</span>
+              <span className={`px-2 py-1 rounded ${socketConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                {socketConnected ? '🟢 Đã kết nối' : '🔴 Mất kết nối'}
+              </span>
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              Poster hiện tại: <strong>{displaySettings.selectedPoster}</strong>
+            </div>
           </div>
         </div>
       )}
@@ -502,7 +564,7 @@ const MatchManagementSection = () => {
                 variant="warning"
                 size="sm"
                 onClick={() => {
-                  setMatchStats({
+                  updateStats({
                     possession: { team1: 50, team2: 50 },
                     totalShots: { team1: 0, team2: 0 },
                     shotsOnTarget: { team1: 0, team2: 0 },
@@ -522,7 +584,7 @@ const MatchManagementSection = () => {
       )}
 
       {/* Options - Các action buttons điều khiển */}
-      {selectedOption !== "chon-skin" && selectedOption !== "thong-so" && (
+      {selectedOption !== "chon-skin" && selectedOption !== "thong-so" && selectedOption !== "chon-poster" && (
         <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-2 sm:p-3 border border-indigo-200">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
             {/* Poster */}
@@ -596,7 +658,7 @@ const MatchManagementSection = () => {
               onClick={() => setSelectedOption("gioi-thieu")}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">📢</span>
+              <span className="text-sm mr-1">���</span>
               <span className="text-xs font-bold text-center">GIỚI THIỆU</span>
             </button>
 

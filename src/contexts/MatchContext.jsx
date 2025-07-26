@@ -1,0 +1,434 @@
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import socketService from '../services/socketService';
+import { useAuth } from './AuthContext';
+
+const MatchContext = createContext();
+
+export const useMatch = () => {
+  const context = useContext(MatchContext);
+  if (!context) {
+    throw new Error('useMatch phải được sử dụng trong MatchProvider');
+  }
+  return context;
+};
+
+export const MatchProvider = ({ children }) => {
+  const { matchCode, isAuthenticated } = useAuth();
+  
+  // State cho thông tin trận đấu
+  const [matchData, setMatchData] = useState({
+    homeTeam: { 
+      name: "ĐỘI-A", 
+      score: 0, 
+      logo: null 
+    },
+    awayTeam: { 
+      name: "ĐỘI-B", 
+      score: 0, 
+      logo: null 
+    },
+    matchTime: "00:00",
+    period: "Chưa bắt đầu",
+    status: "waiting", // waiting, live, paused, ended
+    tournament: "",
+    stadium: "",
+    matchDate: "",
+    liveText: ""
+  });
+
+  // State cho thống kê trận đấu
+  const [matchStats, setMatchStats] = useState({
+    possession: { team1: 50, team2: 50 },
+    totalShots: { team1: 0, team2: 0 },
+    shotsOnTarget: { team1: 0, team2: 0 },
+    corners: { team1: 0, team2: 0 },
+    yellowCards: { team1: 0, team2: 0 },
+    fouls: { team1: 0, team2: 0 },
+  });
+
+  // State cho lỗi futsal
+  const [futsalErrors, setFutsalErrors] = useState({
+    homeTeam: 0,
+    awayTeam: 0
+  });
+
+  // State cho penalty
+  const [penaltyData, setPenaltyData] = useState({
+    homeGoals: 0,
+    awayGoals: 0,
+    currentTurn: 'home',
+    shootHistory: [],
+    status: 'ready',
+    lastUpdated: null
+  });
+
+  // State cho chữ chạy
+  const [marqueeData, setMarqueeData] = useState({
+    text: '',
+    mode: 'none', // none, continuous, interval
+    interval: 0,
+    color: '#ffffff',
+    fontSize: 16
+  });
+
+  // State cho template và poster
+  const [displaySettings, setDisplaySettings] = useState({
+    selectedSkin: 1,
+    selectedPoster: 'tretrung', // tretrung, haoquang
+    showStats: false,
+    showPenalty: false,
+    showLineup: false
+  });
+
+  // State cho danh sách cầu thủ
+  const [lineupData, setLineupData] = useState({
+    homeTeam: [],
+    awayTeam: []
+  });
+
+  // State cho nhà tài trợ
+  const [sponsors, setSponsors] = useState({
+    main: [],
+    secondary: [],
+    media: []
+  });
+
+  // State cho socket connection
+  const [socketConnected, setSocketConnected] = useState(false);
+  const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
+
+  // Kết nối socket khi có matchCode
+  useEffect(() => {
+    if (matchCode && isAuthenticated) {
+      initializeSocket(matchCode);
+    } else {
+      disconnectSocket();
+    }
+
+    return () => {
+      disconnectSocket();
+    };
+  }, [matchCode, isAuthenticated]);
+
+  // Khởi tạo socket connection
+  const initializeSocket = useCallback(async (accessCode) => {
+    try {
+      await socketService.connect(accessCode);
+      setSocketConnected(true);
+      
+      // Lắng nghe các event từ server
+      setupSocketListeners();
+      
+      console.log(`Socket initialized for access code: ${accessCode}`);
+    } catch (error) {
+      console.error('Failed to initialize socket:', error);
+      setSocketConnected(false);
+    }
+  }, []);
+
+  // Thiết lập các listener cho socket
+  const setupSocketListeners = useCallback(() => {
+    // Lắng nghe cập nhật thông tin trận đấu
+    socketService.on('match_info_updated', (data) => {
+      setMatchData(prev => ({ ...prev, ...data.matchInfo }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật tỉ số
+    socketService.on('score_updated', (data) => {
+      setMatchData(prev => ({
+        ...prev,
+        homeTeam: { ...prev.homeTeam, score: data.scores.home },
+        awayTeam: { ...prev.awayTeam, score: data.scores.away }
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật thống kê
+    socketService.on('match_stats_updated', (data) => {
+      setMatchStats(prev => ({ ...prev, ...data.stats }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật template
+    socketService.on('template_updated', (data) => {
+      setDisplaySettings(prev => ({ ...prev, selectedSkin: data.templateId }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật poster
+    socketService.on('poster_updated', (data) => {
+      setDisplaySettings(prev => ({ ...prev, selectedPoster: data.posterType }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật logo đội
+    socketService.on('team_logos_updated', (data) => {
+      setMatchData(prev => ({
+        ...prev,
+        homeTeam: { ...prev.homeTeam, logo: data.logos.home },
+        awayTeam: { ...prev.awayTeam, logo: data.logos.away }
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật tên đội
+    socketService.on('team_names_updated', (data) => {
+      setMatchData(prev => ({
+        ...prev,
+        homeTeam: { ...prev.homeTeam, name: data.names.home },
+        awayTeam: { ...prev.awayTeam, name: data.names.away }
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật chữ chạy
+    socketService.on('marquee_updated', (data) => {
+      setMarqueeData(prev => ({ ...prev, ...data.marqueeData }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật thời gian
+    socketService.on('match_time_updated', (data) => {
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.time.matchTime,
+        period: data.time.period,
+        status: data.time.status
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật penalty
+    socketService.on('penalty_updated', (data) => {
+      setPenaltyData(prev => ({ ...prev, ...data.penaltyData }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe c��p nhật danh sách
+    socketService.on('lineup_updated', (data) => {
+      setLineupData({
+        homeTeam: data.lineup.home,
+        awayTeam: data.lineup.away
+      });
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật nhà tài trợ
+    socketService.on('sponsors_updated', (data) => {
+      setSponsors(prev => ({ ...prev, ...data.sponsors }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe trạng thái kết nối
+    socketService.on('disconnect', () => {
+      setSocketConnected(false);
+    });
+
+    socketService.on('connect', () => {
+      setSocketConnected(true);
+    });
+  }, []);
+
+  // Ngắt kết nối socket
+  const disconnectSocket = useCallback(() => {
+    socketService.disconnect();
+    setSocketConnected(false);
+  }, []);
+
+  // === ACTION FUNCTIONS ===
+
+  // Cập nhật tỉ số
+  const updateScore = useCallback((team, increment) => {
+    const newMatchData = { ...matchData };
+    newMatchData[team].score = Math.max(0, newMatchData[team].score + increment);
+    
+    setMatchData(newMatchData);
+    
+    // Emit to socket
+    if (socketConnected) {
+      socketService.updateScore(newMatchData.homeTeam.score, newMatchData.awayTeam.score);
+    }
+  }, [matchData, socketConnected]);
+
+  // Cập nhật thông tin tr��n đấu
+  const updateMatchInfo = useCallback((newMatchInfo) => {
+    setMatchData(prev => ({ ...prev, ...newMatchInfo }));
+    
+    if (socketConnected) {
+      socketService.updateMatchInfo(newMatchInfo);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật thống kê
+  const updateStats = useCallback((newStats) => {
+    setMatchStats(prev => ({ ...prev, ...newStats }));
+    
+    if (socketConnected) {
+      socketService.updateMatchStats(newStats);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật template
+  const updateTemplate = useCallback((templateId) => {
+    setDisplaySettings(prev => ({ ...prev, selectedSkin: templateId }));
+    
+    if (socketConnected) {
+      socketService.updateTemplate(templateId);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật poster
+  const updatePoster = useCallback((posterType) => {
+    setDisplaySettings(prev => ({ ...prev, selectedPoster: posterType }));
+    
+    if (socketConnected) {
+      socketService.updatePoster(posterType);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật logo đội
+  const updateTeamLogos = useCallback((homeTeamLogo, awayTeamLogo) => {
+    setMatchData(prev => ({
+      ...prev,
+      homeTeam: { ...prev.homeTeam, logo: homeTeamLogo },
+      awayTeam: { ...prev.awayTeam, logo: awayTeamLogo }
+    }));
+    
+    if (socketConnected) {
+      socketService.updateTeamLogos(homeTeamLogo, awayTeamLogo);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật tên đội
+  const updateTeamNames = useCallback((homeTeamName, awayTeamName) => {
+    setMatchData(prev => ({
+      ...prev,
+      homeTeam: { ...prev.homeTeam, name: homeTeamName },
+      awayTeam: { ...prev.awayTeam, name: awayTeamName }
+    }));
+    
+    if (socketConnected) {
+      socketService.updateTeamNames(homeTeamName, awayTeamName);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật chữ chạy
+  const updateMarquee = useCallback((newMarqueeData) => {
+    setMarqueeData(prev => ({ ...prev, ...newMarqueeData }));
+    
+    if (socketConnected) {
+      socketService.updateMarquee(newMarqueeData);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật thời gian trận đấu
+  const updateMatchTime = useCallback((matchTime, period, status) => {
+    setMatchData(prev => ({ ...prev, matchTime, period, status }));
+    
+    if (socketConnected) {
+      socketService.updateMatchTime(matchTime, period, status);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật penalty
+  const updatePenalty = useCallback((newPenaltyData) => {
+    setPenaltyData(prev => ({ ...prev, ...newPenaltyData }));
+    
+    if (socketConnected) {
+      socketService.updatePenalty(newPenaltyData);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật danh sách cầu thủ
+  const updateLineup = useCallback((homeLineup, awayLineup) => {
+    setLineupData({ homeTeam: homeLineup, awayTeam: awayLineup });
+    
+    if (socketConnected) {
+      socketService.updateLineup(homeLineup, awayLineup);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật lỗi futsal
+  const updateFutsalErrors = useCallback((team, increment) => {
+    setFutsalErrors(prev => ({
+      ...prev,
+      [team]: Math.max(0, prev[team] + increment)
+    }));
+  }, []);
+
+  // Reset toàn bộ dữ liệu trận đấu
+  const resetMatch = useCallback(() => {
+    setMatchData({
+      homeTeam: { name: "ĐỘI-A", score: 0, logo: null },
+      awayTeam: { name: "ĐỘI-B", score: 0, logo: null },
+      matchTime: "00:00",
+      period: "Chưa bắt đầu",
+      status: "waiting",
+      tournament: "",
+      stadium: "",
+      matchDate: "",
+      liveText: ""
+    });
+    
+    setMatchStats({
+      possession: { team1: 50, team2: 50 },
+      totalShots: { team1: 0, team2: 0 },
+      shotsOnTarget: { team1: 0, team2: 0 },
+      corners: { team1: 0, team2: 0 },
+      yellowCards: { team1: 0, team2: 0 },
+      fouls: { team1: 0, team2: 0 },
+    });
+    
+    setFutsalErrors({ homeTeam: 0, awayTeam: 0 });
+    setPenaltyData({
+      homeGoals: 0,
+      awayGoals: 0,
+      currentTurn: 'home',
+      shootHistory: [],
+      status: 'ready',
+      lastUpdated: null
+    });
+  }, []);
+
+  const value = {
+    // State
+    matchData,
+    matchStats,
+    futsalErrors,
+    penaltyData,
+    marqueeData,
+    displaySettings,
+    lineupData,
+    sponsors,
+    socketConnected,
+    lastUpdateTime,
+    
+    // Actions
+    updateScore,
+    updateMatchInfo,
+    updateStats,
+    updateTemplate,
+    updatePoster,
+    updateTeamLogos,
+    updateTeamNames,
+    updateMarquee,
+    updateMatchTime,
+    updatePenalty,
+    updateLineup,
+    updateFutsalErrors,
+    resetMatch,
+    
+    // Socket functions
+    initializeSocket,
+    disconnectSocket
+  };
+
+  return (
+    <MatchContext.Provider value={value}>
+      {children}
+    </MatchContext.Provider>
+  );
+};
+
+export default MatchContext;

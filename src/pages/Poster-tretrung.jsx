@@ -1,39 +1,38 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
+import { useMatch } from '../contexts/MatchContext';
 
-const FootballMatchIntro = () => {
-  // Khai báo các biến state lên đầu
-  const [socketConnected, setSocketConnected] = useState(false);
-  const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
-  
-  // Match data state
+const FootballMatchIntro = ({ accessCode }) => {
+  // Sử dụng MatchContext
+  const {
+    matchData: contextMatchData,
+    marqueeData,
+    sponsors,
+    socketConnected,
+    lastUpdateTime
+  } = useMatch();
+
+  // Transform context data to poster format
   const [matchData, setMatchData] = useState({
     matchTitle: 'GIẢI BÓNG ĐÁ',
     subTitle: 'VÒNG CHUNG KẾT',
-    team1: 'DOI-A',
-    team2: 'DOI-B',
-    logo1: '/api/placeholder/200/200',
-    logo2: '/api/placeholder/200/200',
-    stadium: 'SÂN VẬN ĐỘNG QUỐC GIA',
-    liveText: 'KÊNH THỂ THAO',
+    team1: contextMatchData.homeTeam.name || 'ĐỘI-A',
+    team2: contextMatchData.awayTeam.name || 'ĐỘI-B',
+    logo1: contextMatchData.homeTeam.logo || '/api/placeholder/200/200',
+    logo2: contextMatchData.awayTeam.logo || '/api/placeholder/200/200',
+    stadium: contextMatchData.stadium || 'SÂN VẬN ĐỘNG QUỐC GIA',
+    liveText: contextMatchData.liveText || 'KÊNH THỂ THAO',
     time: '19:30',
-    date: '25/12/2024',
+    date: new Date().toLocaleDateString('vi-VN'),
     skin: 'skin1',
     poster: 'poster1'
   });
 
-  // Partners state
+  // Partners state - transform sponsors to partners format
   const [partners, setPartners] = useState({
-    sponsor: [],
-    organizer: [],
-    media: []
-  });
-
-  // Marquee state
-  const [marqueeData, setMarqueeData] = useState({
-    text: '',
-    mode: 'none',
-    interval: 0
+    sponsor: sponsors.main || [],
+    organizer: sponsors.secondary || [],
+    media: sponsors.media || []
   });
 
   const [isMarqueeRunning, setIsMarqueeRunning] = useState(false);
@@ -47,109 +46,34 @@ const FootballMatchIntro = () => {
   const teamTextRef1 = useRef(null);
   const teamTextRef2 = useRef(null);
 
-  // Kết nối WebSocket sử dụng socket.io với cơ chế fallback
+  // Sync context data with local state
   useEffect(() => {
-    const connectWebSocket = () => {
-      try {
-        // Khởi tạo socket.io với cấu hình phù hợp
-        const socket = io('http://103.216.112.171:5000', {
-          transports: ['websocket', 'polling'], // Ưu tiên WebSocket, fallback về polling nếu cần
-          upgrade: true,
-          forceNew: true,
-          reconnection: true,
-          reconnectionAttempts: 5,
-          reconnectionDelay: 1000,
-          timeout: 20000
-        });
-        
-        socket.on('connect', () => {
-          console.log("Socket đã kết nối thành công");
-          setSocketConnected(true);
-          setLastUpdateTime(Date.now());
-        });
-        
-        socket.on('disconnect', () => {
-          console.log("Socket đã ngắt kết nối");
-          setSocketConnected(false);
-        });
+    setMatchData(prev => ({
+      ...prev,
+      team1: contextMatchData.homeTeam.name || 'ĐỘI-A',
+      team2: contextMatchData.awayTeam.name || 'ĐỘI-B',
+      logo1: contextMatchData.homeTeam.logo || '/api/placeholder/200/200',
+      logo2: contextMatchData.awayTeam.logo || '/api/placeholder/200/200',
+      stadium: contextMatchData.stadium || 'SÂN VẬN ĐỘNG QUỐC GIA',
+      liveText: contextMatchData.liveText || 'KÊNH THỂ THAO'
+    }));
+  }, [contextMatchData]);
 
-        socket.on('connect_error', (error) => {
-          console.error("Lỗi kết nối socket:", error);
-          setSocketConnected(false);
-        });
+  // Sync sponsors data
+  useEffect(() => {
+    setPartners({
+      sponsor: sponsors.main || [],
+      organizer: sponsors.secondary || [],
+      media: sponsors.media || []
+    });
+  }, [sponsors]);
 
-        // Xử lý các sự kiện từ server
-        socket.on('updateConfig', (config) => {
-          setMatchData(prev => ({ ...prev, ...config }));
-          setLastUpdateTime(Date.now());
-        });
-
-        socket.on('updatePartners', (partnersData) => {
-          setPartners(partnersData);
-          setLastUpdateTime(Date.now());
-        });
-
-        socket.on('updateMarquee', (marquee) => {
-          setMarqueeData(marquee);
-          setLastUpdateTime(Date.now());
-        });
-
-        socket.on('updateTeams', (teams) => {
-          setMatchData(prev => ({
-            ...prev,
-            team1: teams.team1 || prev.team1,
-            team2: teams.team2 || prev.team2
-          }));
-          setLastUpdateTime(Date.now());
-        });
-
-        // Xử lý sự kiện tùy chỉnh khác
-        socket.onAny((eventName, ...args) => {
-          console.log("Nhận sự kiện:", eventName, args);
-          setLastUpdateTime(Date.now());
-        });
-
-      } catch (error) {
-        console.error("Lỗi kết nối socket:", error);
-        setSocketConnected(false);
-        
-        // Simulate data cho demo khi không có socket
-        simulateSocketData();
-      }
-    };
-
-    const simulateSocketData = () => {
-      console.log("Chạy mode demo - không có socket thực");
-      
-      // Simulate periodic updates
-      setInterval(() => {
-        if (Math.random() > 0.8) {
-          setMatchData(prev => ({
-            ...prev,
-            team1: prev.team1 === 'DOI-A' ? 'ĐOÀN QUÂN' : 'DOI-A',
-            team2: prev.team2 === 'DOI-B' ? 'CHIẾN BINH' : 'DOI-B'
-          }));
-        }
-      }, 5000);
-
-      // Simulate marquee
-      setTimeout(() => {
-        setMarqueeData({
-          text: 'CHÀO MỪNG QUÝ KHÁN GIẢ ĐẾN VỚI TRẬN ĐẤU HÔM NAY',
-          mode: 'continuous',
-          interval: 0
-        });
-      }, 3000);
-    };
-
-    connectWebSocket();
-
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.close();
-      }
-    };
-  }, []);
+  // Socket connection is managed by MatchContext, no need for separate connection
+  // Just log the connection status
+  useEffect(() => {
+    console.log(`Poster-tretrung: Socket status: ${socketConnected ? 'Connected' : 'Disconnected'}`);
+    console.log(`Access code: ${accessCode}`);
+  }, [socketConnected, accessCode]);
 
   // Stars animation effect
   useEffect(() => {

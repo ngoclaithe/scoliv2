@@ -4,6 +4,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 // Import auth context
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import { MatchProvider } from "./contexts/MatchContext";
 
 // Import pages
 import Home from "./pages/Home";
@@ -451,23 +452,25 @@ function AppContent() {
 function App() {
   return (
     <AuthProvider>
-      <AppContent />
-      
-      {/* Toast Container - thêm phần này */}
-      <ToastContainer
-        position="top-left"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        toastClassName="custom-toast"
-        bodyClassName="custom-toast-body"
-      />
+      <MatchProvider>
+        <AppContent />
+
+        {/* Toast Container - thêm phần này */}
+        <ToastContainer
+          position="top-left"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          toastClassName="custom-toast"
+          bodyClassName="custom-toast-body"
+        />
+      </MatchProvider>
     </AuthProvider>
   );
 }
