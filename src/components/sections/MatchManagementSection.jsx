@@ -412,6 +412,74 @@ const MatchManagementSection = () => {
         </div>
       )}
 
+      {/* Inline Poster Selection */}
+      {selectedOption === "chon-poster" && (
+        <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200 animate-slide-up">
+          <div className="grid grid-cols-2 gap-3">
+            <div
+              onClick={() => {
+                updatePoster('tretrung');
+                console.log('Poster selected: tretrung');
+              }}
+              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'tretrung'
+                  ? "border-purple-500 ring-2 ring-purple-200"
+                  : "border-gray-200 hover:border-purple-300"
+                }`}
+            >
+              <div className="w-full h-24 bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center">
+                <div className="text-center">
+                  <span className="text-2xl">🏆</span>
+                  <div className="text-sm font-bold text-gray-700 mt-1">Poster Tre Trung</div>
+                  <div className="text-xs text-gray-500">Football Match Intro</div>
+                </div>
+              </div>
+              {displaySettings.selectedPoster === 'tretrung' && (
+                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="text-sm">✓</span>
+                </div>
+              )}
+            </div>
+
+            <div
+              onClick={() => {
+                updatePoster('haoquang');
+                console.log('Poster selected: haoquang');
+              }}
+              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'haoquang'
+                  ? "border-purple-500 ring-2 ring-purple-200"
+                  : "border-gray-200 hover:border-purple-300"
+                }`}
+            >
+              <div className="w-full h-24 bg-gradient-to-r from-green-100 to-blue-100 flex items-center justify-center">
+                <div className="text-center">
+                  <span className="text-2xl">⚽</span>
+                  <div className="text-sm font-bold text-gray-700 mt-1">Poster Hao Quang</div>
+                  <div className="text-xs text-gray-500">Sports Display</div>
+                </div>
+              </div>
+              {displaySettings.selectedPoster === 'haoquang' && (
+                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="text-sm">✓</span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Socket Status */}
+          <div className="mt-3 p-2 bg-gray-50 rounded border">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-gray-600">Trạng thái kết nối:</span>
+              <span className={`px-2 py-1 rounded ${socketConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                {socketConnected ? '🟢 Đã kết nối' : '🔴 Mất kết nối'}
+              </span>
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              Poster hiện tại: <strong>{displaySettings.selectedPoster}</strong>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Tab Thông số */}
       {selectedOption === "thong-so" && (
         <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
