@@ -65,13 +65,7 @@ const MatchManagementSection = () => {
   }, [updatePenalty]);
 
   const handleScoreChange = (team, increment) => {
-    setMatchData((prev) => ({
-      ...prev,
-      [team]: {
-        ...prev[team],
-        score: Math.max(0, prev[team].score + increment),
-      },
-    }));
+    updateScore(team, increment);
   };
 
   // Hàm cập nhật thống kê
@@ -261,7 +255,7 @@ const MatchManagementSection = () => {
             onClick={() => setSelectedOption("tam-dung")}
           >
             <span className="mr-1">⏸️</span>
-            <span className="hidden sm:inline">TẠM D���NG</span>
+            <span className="hidden sm:inline">TẠM DỪNG</span>
             <span className="sm:hidden">DỪNG</span>
           </Button>
 
