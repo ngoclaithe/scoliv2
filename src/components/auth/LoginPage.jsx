@@ -201,7 +201,6 @@ const LoginPage = () => {
                     <span className="mr-1">🔑</span>
                     Đăng nhập bằng mã trận đấu
                   </h3>
-                  <p className="text-xs text-gray-500">Dành cho quản lý trận đấu</p>
                 </div>
 
                 <form className="space-y-3" onSubmit={(e) => {
