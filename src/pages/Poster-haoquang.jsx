@@ -1,98 +1,77 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { io } from 'socket.io-client';
+import { usePublicMatch } from '../contexts/PublicMatchContext';
 
-export default function MatchIntroduction() {
-  // State management
+export default function MatchIntroduction({ accessCode }) {
+  // Sử dụng PublicMatchContext
+  const {
+    matchData: contextMatchData,
+    marqueeData,
+    sponsors,
+    socketConnected,
+    lastUpdateTime
+  } = usePublicMatch();
+  // Transform context data to poster format
   const [matchData, setMatchData] = useState({
-    matchTitle: 'GIẢI BÓNG ĐÁ PHONG TRÀO',
-    team1: 'DOI-A',
-    team2: 'DOI-B',
-    logo1: '/public/images/team1-logo.png',
-    logo2: '/public/images/team2-logo.png',
-    stadium: '',
+    matchTitle: contextMatchData.tournament || 'GIẢI BÓNG ĐÁ PHONG TRÀO',
+    team1: contextMatchData.homeTeam.name || 'DOI-A',
+    team2: contextMatchData.awayTeam.name || 'DOI-B',
+    logo1: contextMatchData.homeTeam.logo || '/public/images/team1-logo.png',
+    logo2: contextMatchData.awayTeam.logo || '/public/images/team2-logo.png',
+    stadium: contextMatchData.stadium || '',
     roundedTime: '15:30',
-    currentDate: '26/07/2025'
+    currentDate: new Date().toLocaleDateString('vi-VN')
   });
 
+  // Transform sponsors to partners format
   const [partners, setPartners] = useState({
-    sponsor: [],
-    organizer: [],
-    media: []
+    sponsor: sponsors.main || [],
+    organizer: sponsors.secondary || [],
+    media: sponsors.media || []
   });
 
+  // Transform marquee data
   const [marquee, setMarquee] = useState({
-    text: '',
-    mode: 'none',
-    interval: 0,
-    isRunning: false
+    text: marqueeData.text || '',
+    mode: marqueeData.mode || 'none',
+    interval: marqueeData.interval || 0,
+    isRunning: marqueeData.mode !== 'none'
   });
 
   const [currentSkin, setCurrentSkin] = useState('skin1');
-  const socketRef = useRef(null);
   const marqueeRef = useRef(null);
-  const passcode = 'demo123'; // Có thể lấy từ URL params
 
-  // Socket connection
+  // Sync context data với local state
   useEffect(() => {
-    socketRef.current = io('http://103.216.112.171:5000', {
-      transports: ['websocket', 'polling'],
-      upgrade: true,
-      forceNew: true,
-      reconnection: true,
-      reconnectionAttempts: 5,
-      reconnectionDelay: 1000,
-      timeout: 20000
+    setMatchData(prev => ({
+      ...prev,
+      matchTitle: contextMatchData.tournament || prev.matchTitle,
+      team1: contextMatchData.homeTeam.name || prev.team1,
+      team2: contextMatchData.awayTeam.name || prev.team2,
+      logo1: contextMatchData.homeTeam.logo || prev.logo1,
+      logo2: contextMatchData.awayTeam.logo || prev.logo2,
+      stadium: contextMatchData.stadium || prev.stadium
+    }));
+  }, [contextMatchData]);
+
+  // Sync sponsors data
+  useEffect(() => {
+    setPartners({
+      sponsor: sponsors.main || [],
+      organizer: sponsors.secondary || [],
+      media: sponsors.media || []
     });
+  }, [sponsors]);
 
-    const socket = socketRef.current;
-
-    // Socket event listeners
-    socket.on('connect', () => {
-      console.log('Connected to server');
-      socket.emit('join_room', passcode);
-    });
-
-    socket.on('match_config_updated', (config) => {
-      setMatchData(prev => ({
-        ...prev,
-        team1: config.team1 || prev.team1,
-        team2: config.team2 || prev.team2,
-        matchTitle: config.match_title || prev.matchTitle,
-        stadium: config.stadium || prev.stadium
-      }));
-
-      if (config.skin && config.skin !== currentSkin) {
-        setCurrentSkin(config.skin);
-      }
-    });
-
-    socket.on('partners_updated', (data) => {
-      setPartners({
-        sponsor: data.sponsor || [],
-        organizer: data.organizer || [],
-        media: data.media || []
-      });
-    });
-
-    socket.on('marquee_updated', (data) => {
-      setMarquee(prev => ({
-        ...prev,
-        text: data.text || '',
-        mode: data.mode || 'none',
-        interval: data.interval || 0
-      }));
-    });
-
-    socket.on('skin_changed', (data) => {
-      if (data.code === passcode) {
-        setCurrentSkin(data.skin);
-      }
-    });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, [passcode, currentSkin]);
+  // Sync marquee data
+  useEffect(() => {
+    setMarquee(prev => ({
+      ...prev,
+      text: marqueeData.text || '',
+      mode: marqueeData.mode || 'none',
+      interval: marqueeData.interval || 0,
+      isRunning: marqueeData.mode !== 'none'
+    }));
+  }, [marqueeData]);
 
   // Font size adjustment function
   const adjustFontSize = (element) => {

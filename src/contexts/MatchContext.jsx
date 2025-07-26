@@ -97,28 +97,38 @@ export const MatchProvider = ({ children }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
 
-  // Kết nối socket khi có matchCode
+  // Kết nối socket khi có matchCode (cho authenticated users)
   useEffect(() => {
     if (matchCode && isAuthenticated) {
       initializeSocket(matchCode);
-    } else {
+    } else if (!matchCode && isAuthenticated) {
       disconnectSocket();
     }
 
     return () => {
-      disconnectSocket();
+      // Chỉ disconnect nếu không có external socket connection
+      if (isAuthenticated) {
+        disconnectSocket();
+      }
     };
   }, [matchCode, isAuthenticated]);
 
   // Khởi tạo socket connection
   const initializeSocket = useCallback(async (accessCode) => {
     try {
+      // Tránh khởi tạo socket trùng lặp
+      if (socketService.getConnectionStatus().accessCode === accessCode &&
+          socketService.getConnectionStatus().isConnected) {
+        console.log(`Socket already connected for access code: ${accessCode}`);
+        return;
+      }
+
       await socketService.connect(accessCode);
       setSocketConnected(true);
-      
+
       // Lắng nghe các event từ server
       setupSocketListeners();
-      
+
       console.log(`Socket initialized for access code: ${accessCode}`);
     } catch (error) {
       console.error('Failed to initialize socket:', error);
@@ -260,7 +270,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [matchData, socketConnected]);
 
-  // Cập nhật thông tin trận đấu
+  // Cập nhật thông tin trận đ���u
   const updateMatchInfo = useCallback((newMatchInfo) => {
     setMatchData(prev => ({ ...prev, ...newMatchInfo }));
     
