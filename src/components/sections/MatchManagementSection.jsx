@@ -218,7 +218,7 @@ const MatchManagementSection = () => {
 
       {/* Score Controls */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
-        <div className="grid grid-cols-2 gap-3 sm:gap-6">
+        <div className="grid grid-cols-2 gap-2 sm:gap-4">
           {/* Đội nhà */}
           <div className="bg-white rounded-lg p-2 sm:p-4 shadow-md border border-blue-200">
             <div className="flex space-x-1 sm:space-x-2">
@@ -264,7 +264,7 @@ const MatchManagementSection = () => {
           </div>
         </div>
 
-        {/* Nút TẠM D���NG và LỖI(FUTSAL) */}
+        {/* Nút TẠM DỪNG và LỖI(FUTSAL) */}
         <div className="flex justify-center items-center mt-3 space-x-3">
           <Button
             variant="primary"
