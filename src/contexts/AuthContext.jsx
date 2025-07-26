@@ -278,16 +278,24 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
 
-      // Sử dụng API mới để xác thực code
+      // Sử dụng API GET để xác thực code
       const response = await AccessCodeAPI.verifyCodeForLogin(code);
 
-      setMatchCode(code);
-      setAuthType('full'); // Có cả tài khoản và code
-      return {
-        success: true,
-        matchData: response.matchInfo,
-        codeInfo: response
-      };
+      // Kiểm tra response có hợp lệ không
+      if (response.success && response.isValid) {
+        setMatchCode(code);
+        setAuthType('full'); // Có cả tài khoản và code
+        return {
+          success: true,
+          matchData: response.data?.match,
+          codeInfo: response.data
+        };
+      } else {
+        return {
+          success: false,
+          error: response.message || 'Mã trận đấu không hợp lệ.'
+        };
+      }
     } catch (error) {
       console.error('Lỗi xác thực mã trận đấu:', error);
       return {
