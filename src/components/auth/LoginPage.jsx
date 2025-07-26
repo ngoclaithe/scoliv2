@@ -23,17 +23,7 @@ const LoginPage = () => {
   const [accessCode, setAccessCode] = useState('');
   const [error, setError] = useState('');
 
-  const handleLoginSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    
-    const result = await login(loginForm);
-    if (result.success) {
-      resetForms();
-    } else {
-      setError(result.error);
-    }
-  };
+
 
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
