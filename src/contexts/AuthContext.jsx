@@ -131,19 +131,20 @@ export const AuthProvider = ({ children }) => {
       // Trong thực tế, API sẽ xác thực code và trả về thông tin trận đấu
 
       // Gọi API để xác thực access code
-      const response = await fetch('/api/auth/verify-code', {
+      const apiResult = await fetch('/api/auth/verify-code', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ code }),
-      });
+      }).catch(() => null);
 
-      if (!response.ok) {
+      // Nếu API không khả dụng, trả về lỗi
+      if (!apiResult || !apiResult.ok) {
         throw new Error('Mã không hợp lệ hoặc đã hết hạn');
       }
 
-      const data = await response.json();
+      const data = await apiResult.json();
 
       setUser({
         id: data.userId || 'code-user',
@@ -295,7 +296,7 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       setMatchCode(code);
-      setAuthType('full'); // Có cả tài kho��n và code
+      setAuthType('full'); // Có cả tài khoản và code
       return { success: true, matchData: data };
     } catch (error) {
       return {
