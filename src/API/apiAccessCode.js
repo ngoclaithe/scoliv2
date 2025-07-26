@@ -10,14 +10,38 @@ const api = axios.create({
   },
 });
 
-// Thêm interceptor để tự động thêm token vào header
+// Danh sách các endpoints không cần token
+const NO_TOKEN_ENDPOINTS = [
+  '/access-codes/:code/verify-login',
+  '/access-codes/:code/match',
+  '/access-codes/:code/status'
+];
+
+// Kiểm tra xem endpoint có cần token không
+const requiresToken = (url) => {
+  return !NO_TOKEN_ENDPOINTS.some(endpoint => {
+    // Chuyển đổi pattern endpoint thành regex
+    const pattern = endpoint.replace(':code', '[^/]+');
+    const regex = new RegExp(`^${pattern}$`);
+    return regex.test(url);
+  });
+};
+
+// Thêm interceptor để tự động thêm token vào header (chỉ khi cần)
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
-    console.log("Giá trị của token trước khi gửi là ", token);
-    if (token) {
+
+    // Chỉ thêm token nếu endpoint yêu cầu
+    if (requiresToken(config.url) && token) {
+      console.log("Thêm token vào request:", config.url);
       config.headers.Authorization = `Bearer ${token}`;
+    } else if (!requiresToken(config.url)) {
+      console.log("Endpoint không cần token:", config.url);
+    } else {
+      console.log("Không có token cho endpoint:", config.url);
     }
+
     return config;
   },
   (error) => {
@@ -238,7 +262,7 @@ const AccessCodeAPI = {
       // Không nhận được phản hồi từ server
       throw new Error('Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng của bạn.');
     } else {
-      // Lỗi khi thiết lập request
+      // Lỗi khi thi���t lập request
       throw new Error('Đã xảy ra lỗi khi thiết lập yêu cầu: ' + error.message);
     }
   }
