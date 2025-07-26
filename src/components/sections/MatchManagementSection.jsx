@@ -9,42 +9,34 @@ import SimplePenaltyModal from "../common/SimplePenaltyModal";
 import { useMatch } from "../../contexts/MatchContext";
 
 const MatchManagementSection = () => {
-  // State cho match data
-  const [matchData, setMatchData] = useState({
-    homeTeam: { name: "ĐỘI-A", score: 0, logo: null },
-    awayTeam: { name: "ĐỘI-B", score: 0, logo: null },
-    matchTime: "39:15",
-    period: "Hiệp 1",
-    status: "live",
-  });
+  // Sử dụng MatchContext thay vì state local
+  const {
+    matchData,
+    matchStats,
+    futsalErrors,
+    penaltyData,
+    marqueeData,
+    displaySettings,
+    socketConnected,
+    updateScore,
+    updateStats,
+    updateTemplate,
+    updatePoster,
+    updateFutsalErrors,
+    updatePenalty,
+    updateMarquee
+  } = useMatch();
 
-  // State cho các tùy chọn điều khiển
+  // State cho các tùy chọn điều khiển UI
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
-  const [selectedSkin, setSelectedSkin] = useState(1);
 
-  // State cho custom time và cài đặt chữ chạy nâng cao
+  // State cho custom time
   const [customTime, setCustomTime] = useState("");
   const [quickCustomTime, setQuickCustomTime] = useState(""); // Cho input trực tiếp
   const [tickerColor, setTickerColor] = useState("#ffffff");
   const [tickerFontSize, setTickerFontSize] = useState(16);
-
-  // State cho số lỗi futsal cho cả 2 đội
-  const [futsalErrors, setFutsalErrors] = useState({
-    homeTeam: 0,
-    awayTeam: 0
-  });
-
-  // State cho thống kê bóng đá cho cả 2 đội
-  const [matchStats, setMatchStats] = useState({
-    possession: { team1: 45, team2: 55 }, // Kiểm soát bóng (%)
-    totalShots: { team1: 8, team2: 12 }, // Tổng số cú sút
-    shotsOnTarget: { team1: 3, team2: 5 }, // Sút trúng đích
-    corners: { team1: 2, team2: 6 }, // Phạt góc
-    yellowCards: { team1: 1, team2: 3 }, // Thẻ vàng
-    fouls: { team1: 7, team2: 9 }, // Phạm lỗi
-  });
 
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
@@ -601,7 +593,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">GIỚI THIỆU</span>
             </button>
 
-            {/* T��� số dưới */}
+            {/* Tỉ số dưới */}
             <button
               onClick={() => setSelectedOption("ti-so-duoi")}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -798,7 +790,7 @@ const MatchManagementSection = () => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ bắt đầu chạy từ th��i điểm này
+              Trận đấu sẽ bắt đầu chạy từ thời điểm này
             </p>
           </div>
 
