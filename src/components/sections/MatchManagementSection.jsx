@@ -25,11 +25,15 @@ const MatchManagementSection = () => {
 
   // State cho custom time và cài đặt chữ chạy nâng cao
   const [customTime, setCustomTime] = useState("");
+  const [quickCustomTime, setQuickCustomTime] = useState(""); // Cho input trực tiếp
   const [tickerColor, setTickerColor] = useState("#ffffff");
   const [tickerFontSize, setTickerFontSize] = useState(16);
 
-  // State cho số lỗi futsal
-  const [futsalErrors, setFutsalErrors] = useState(0);
+  // State cho số lỗi futsal cho cả 2 đội
+  const [futsalErrors, setFutsalErrors] = useState({
+    homeTeam: 0,
+    awayTeam: 0
+  });
 
   // State cho thống kê bóng đá cho cả 2 đội
   const [matchStats, setMatchStats] = useState({
@@ -182,11 +186,11 @@ const MatchManagementSection = () => {
   };
 
   return (
-    <div className="p-3 sm:p-6 space-y-4 sm:space-y-6">
+    <div className="p-2 sm:p-4 space-y-3 sm:space-y-4">
       {/* Scoreboard */}
-      <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-xl p-3 sm:p-4 border-2 sm:border-4 border-yellow-400 shadow-2xl">
+      <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-lg p-2 sm:p-3 border-2 border-yellow-400 shadow-xl">
         {selectedSkin && skinData[selectedSkin] ? (
-          <div className="w-full h-40 bg-gray-100 rounded-lg overflow-hidden">
+          <div className="w-full h-32 sm:h-40 bg-gray-100 rounded-lg overflow-hidden">
             <img
               src={skinData[selectedSkin].image}
               alt={skinData[selectedSkin].name}
@@ -214,130 +218,171 @@ const MatchManagementSection = () => {
       </div>
 
       {/* Score Controls */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-3 sm:p-6 border border-blue-200">
-        <div className="grid grid-cols-2 gap-3 sm:gap-6">
+      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
+        <div className="grid grid-cols-2 gap-2 sm:gap-4">
           {/* Đội nhà */}
-          <div className="bg-white rounded-lg p-2 sm:p-4 shadow-md border border-blue-200">
-            <div className="flex space-x-1 sm:space-x-2">
+          <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-blue-200">
+            <div className="flex space-x-1">
               <Button
                 variant="primary"
                 size="sm"
-                className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-8 sm:h-10"
+                className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
                 onClick={() => handleScoreChange("homeTeam", 1)}
               >
-                <span className="text-lg sm:text-xl">+</span>
+                <span className="text-sm sm:text-lg">+</span>
               </Button>
               <Button
                 variant="primary"
                 size="sm"
-                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-8 sm:h-10"
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
                 onClick={() => handleScoreChange("homeTeam", -1)}
               >
-                <span className="text-lg sm:text-xl">-</span>
+                <span className="text-sm sm:text-lg">-</span>
               </Button>
             </div>
           </div>
 
           {/* Đội khách */}
-          <div className="bg-white rounded-lg p-2 sm:p-4 shadow-md border border-purple-200">
-            <div className="flex space-x-1 sm:space-x-2">
+          <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-purple-200">
+            <div className="flex space-x-1">
               <Button
                 variant="primary"
                 size="sm"
-                className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-8 sm:h-10"
+                className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
                 onClick={() => handleScoreChange("awayTeam", 1)}
               >
-                <span className="text-lg sm:text-xl">+</span>
+                <span className="text-sm sm:text-lg">+</span>
               </Button>
               <Button
                 variant="primary"
                 size="sm"
-                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-8 sm:h-10"
+                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
                 onClick={() => handleScoreChange("awayTeam", -1)}
               >
-                <span className="text-lg sm:text-xl">-</span>
+                <span className="text-sm sm:text-lg">-</span>
               </Button>
             </div>
           </div>
         </div>
 
         {/* Nút TẠM DỪNG và LỖI(FUTSAL) */}
-        <div className="flex justify-center items-center mt-3 space-x-3">
+        <div className="flex justify-center items-center mt-2 space-x-2">
           <Button
             variant="primary"
             size="sm"
-            className="px-4 py-2 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+            className="px-2 py-1 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
             onClick={() => setSelectedOption("tam-dung")}
           >
             <span className="mr-1">⏸️</span>
-            TẠM DỪNG
+            <span className="hidden sm:inline">TẠM DỪNG</span>
+            <span className="sm:hidden">DỪNG</span>
           </Button>
 
-          <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
-            <Button
-              variant="outline"
-              size="sm"
-              className="px-2 py-1 text-xs border-0 hover:bg-red-50"
-              onClick={() => setFutsalErrors(prev => prev + 1)}
-            >
-              <span className="mr-1">⚠️</span>
-              Lỗi(futsal)
-            </Button>
-            <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-6 text-center rounded-r">
-              {futsalErrors}
+          <div className="flex space-x-2">
+            {/* Lỗi đội nhà */}
+            <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
+              <Button
+                variant="outline"
+                size="sm"
+                className="px-1 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
+                onClick={() => setFutsalErrors(prev => ({ ...prev, homeTeam: Math.max(0, prev.homeTeam - 1) }))}
+              >
+                -
+              </Button>
+              <div className="px-1.5 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-5 text-center">
+                {futsalErrors.homeTeam}
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="px-1 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
+                onClick={() => setFutsalErrors(prev => ({ ...prev, homeTeam: prev.homeTeam + 1 }))}
+              >
+                +
+              </Button>
+            </div>
+
+            <div className="flex flex-col items-center justify-center">
+              <span className="text-xs font-medium text-gray-600">
+                <span className="hidden sm:inline">LỖI FUTSAL</span>
+                <span className="sm:hidden">LỖI</span>
+              </span>
+            </div>
+
+            {/* Lỗi đội khách */}
+            <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
+              <Button
+                variant="outline"
+                size="sm"
+                className="px-1 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
+                onClick={() => setFutsalErrors(prev => ({ ...prev, awayTeam: Math.max(0, prev.awayTeam - 1) }))}
+              >
+                -
+              </Button>
+              <div className="px-1.5 py-1 bg-gray-100 text-gray-800 text-xs font-bold min-w-5 text-center">
+                {futsalErrors.awayTeam}
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="px-1 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
+                onClick={() => setFutsalErrors(prev => ({ ...prev, awayTeam: prev.awayTeam + 1 }))}
+              >
+                +
+              </Button>
             </div>
           </div>
         </div>
       </div>
 
       {/* Tab Controls */}
-      <div className="bg-white rounded-xl p-3 sm:p-4 shadow-lg border border-gray-200">
-        <div className="grid grid-cols-3 gap-2 sm:gap-3">
+      <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200">
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
           <button
             onClick={() => setSelectedOption("thong-so")}
-            className={`py-2 sm:py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 shadow-md ${
+            className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${
               selectedOption === "thong-so"
                 ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-xl"
                 : "bg-gradient-to-r from-green-100 to-green-200 text-green-700 hover:from-green-200 hover:to-green-300"
             }`}
           >
-            <span className="mr-1 text-sm">📊</span>
-            <span className="hidden sm:inline">THÔNG SỐ</span>
-            <span className="sm:hidden">STATS</span>
+            <span className="mr-0.5 text-xs">📊</span>
+            <span className="hidden sm:inline">TH��NG SỐ</span>
+            <span className="sm:hidden">TK</span>
           </button>
           <button
             onClick={() => setSelectedOption("dieu-khien")}
-            className={`py-2 sm:py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 shadow-md ${
+            className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${
               selectedOption === "dieu-khien"
                 ? "bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-xl"
                 : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
             }`}
           >
-            <span className="mr-1 text-sm">🎮</span>
+            <span className="mr-0.5 text-xs">🎮</span>
             <span className="hidden sm:inline">ĐIỀU KHIỂN</span>
-            <span className="sm:hidden">CTRL</span>
+            <span className="sm:hidden">DK</span>
           </button>
           <button
             onClick={() => {
               setSelectedOption(selectedOption === "chon-skin" ? "dieu-khien" : "chon-skin");
             }}
-            className={`py-2 sm:py-3 px-2 sm:px-4 rounded-xl font-bold text-xs sm:text-sm transition-all duration-300 transform hover:scale-105 shadow-md ${
+            className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${
               selectedOption === "chon-skin"
                 ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
                 : "bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 hover:from-blue-200 hover:to-blue-300"
             }`}
           >
-            <span className="mr-1 text-sm">🎨</span>
+            <span className="mr-0.5 text-xs">🎨</span>
             <span className="hidden sm:inline">TEMPLATE</span>
-            <span className="sm:hidden">TPL</span>
+            <span className="sm:hidden">TL</span>
           </button>
         </div>
       </div>
 
       {/* Inline Template Selection */}
       {selectedOption === "chon-skin" && (
-        <div className="bg-white rounded-xl p-3 sm:p-4 shadow-lg border border-gray-200 animate-slide-up">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-3">
+        <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200 animate-slide-up">
+          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-1.5 sm:gap-2">
             {[1, 2, 3, 4, 5].map((skinNumber) => (
               <div
                 key={skinNumber}
@@ -354,19 +399,19 @@ const MatchManagementSection = () => {
                 <img
                   src={`/images/templates/skin${skinNumber}.png`}
                   alt={`Template ${skinNumber}`}
-                  className="w-full h-16 sm:h-24 object-contain bg-gray-50"
+                  className="w-full h-12 sm:h-20 object-contain bg-gray-50"
                   onError={(e) => {
                     e.target.style.display = 'none';
                     e.target.nextSibling.style.display = 'flex';
                   }}
                 />
-                <div className="w-full h-16 sm:h-24 bg-gray-100 items-center justify-center hidden">
-                  <span className="text-gray-500 font-medium text-xs sm:text-sm">Template {skinNumber}</span>
+                <div className="w-full h-12 sm:h-20 bg-gray-100 items-center justify-center hidden">
+                  <span className="text-gray-500 font-medium text-xs">T{skinNumber}</span>
                 </div>
 
                 {selectedSkin === skinNumber && (
-                  <div className="absolute top-1 right-1 bg-blue-500 text-white rounded-full w-4 h-4 sm:w-6 sm:h-6 flex items-center justify-center">
-                    <span className="text-xs">✓</span>
+                  <div className="absolute top-0.5 right-0.5 bg-blue-500 text-white rounded-full w-3 h-3 sm:w-5 sm:h-5 flex items-center justify-center">
+                    <span className="text-xs sm:text-sm">✓</span>
                   </div>
                 )}
               </div>
@@ -381,7 +426,7 @@ const MatchManagementSection = () => {
           <div className="space-y-4">
             {/* Header với nút chỉnh sửa */}
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-gray-900">📊 Thông số trận đấu</h3>
+              <h3 className="text-lg font-semibold text-gray-900">���� Thông số trận đấu</h3>
               <Button
                 variant={isEditingStats ? "primary" : "outline"}
                 size="sm"
@@ -480,7 +525,7 @@ const MatchManagementSection = () => {
 
       {/* Options - Các action buttons điều khiển */}
       {selectedOption !== "chon-skin" && selectedOption !== "thong-so" && (
-        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-3 sm:p-4 border border-indigo-200">
+        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-2 sm:p-3 border border-indigo-200">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
             {/* Poster */}
             <button
@@ -512,14 +557,95 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">PENALTY</span>
             </button>
 
-            {/* Timer Modal */}
+            {/* Đếm 0 */}
             <button
-              onClick={() => setShowTimerModal(true)}
-              className="flex flex-row items-center justify-center p-1.5 sm:p-2 rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 bg-gradient-to-br from-teal-100 to-cyan-200 text-teal-700 hover:from-teal-200 hover:to-cyan-300"
+              onClick={() => setSelectedOption("dem-0")}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">🕰️</span>
-              <span className="text-xs font-bold text-center">ĐẾM T</span>
+              <span className="text-sm mr-1">🕐</span>
+              <span className="text-xs font-bold text-center">ĐẾM 0</span>
             </button>
+
+            {/* Đếm 25' */}
+            <button
+              onClick={() => setSelectedOption("dem-25")}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">🕐</span>
+              <span className="text-xs font-bold text-center">ĐẾM 25'</span>
+            </button>
+
+            {/* Đếm 30' */}
+            <button
+              onClick={() => setSelectedOption("dem-30")}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">🕑</span>
+              <span className="text-xs font-bold text-center">ĐẾM 30'</span>
+            </button>
+
+            {/* Đếm 35' */}
+            <button
+              onClick={() => setSelectedOption("dem-35")}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">🕒</span>
+              <span className="text-xs font-bold text-center">ĐẾM 35'</span>
+            </button>
+
+            {/* Giới thiệu */}
+            <button
+              onClick={() => setSelectedOption("gioi-thieu")}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">📢</span>
+              <span className="text-xs font-bold text-center">GIỚI THIỆU</span>
+            </button>
+
+            {/* Tỉ số dưới */}
+            <button
+              onClick={() => setSelectedOption("ti-so-duoi")}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">📊</span>
+              <span className="text-xs font-bold text-center">TỈ SỐ DƯỚI</span>
+            </button>
+          </div>
+
+          {/* Đếm T - Input trực tiếp */}
+          <div className="mt-3 bg-white rounded-lg p-2 border border-teal-200">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
+                <span className="text-sm">🕰️</span>
+                <span className="text-xs font-medium text-gray-700">Đếm T:</span>
+              </div>
+              <input
+                type="number"
+                min="0"
+                max="120"
+                value={quickCustomTime}
+                onChange={(e) => setQuickCustomTime(e.target.value)}
+                placeholder="Phút"
+                className="flex-1 text-xs border border-gray-300 rounded px-2 py-1 focus:border-teal-500 focus:outline-none text-center font-bold"
+              />
+              <span className="text-xs text-gray-600">phút</span>
+              <Button
+                variant="primary"
+                size="sm"
+                className="px-2 py-1 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                onClick={() => {
+                  if (quickCustomTime) {
+                    setSelectedOption("dem-tuy-chinh");
+                    console.log('Áp dụng thời gian tùy chỉnh:', quickCustomTime);
+                    alert(`Đã áp dụng: Trận đấu bắt đầu từ ${quickCustomTime} phút`);
+                  }
+                }}
+                disabled={!quickCustomTime}
+              >
+                <span className="mr-1">✅</span>
+                ÁP DỤNG
+              </Button>
+            </div>
           </div>
         </div>
       )}
