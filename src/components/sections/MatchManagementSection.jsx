@@ -346,7 +346,7 @@ const MatchManagementSection = () => {
             }`}
           >
             <span className="mr-0.5 text-xs">📊</span>
-            <span className="hidden sm:inline">THÔNG SỐ</span>
+            <span className="hidden sm:inline">TH��NG SỐ</span>
             <span className="sm:hidden">TK</span>
           </button>
           <button
@@ -409,8 +409,8 @@ const MatchManagementSection = () => {
                 </div>
 
                 {selectedSkin === skinNumber && (
-                  <div className="absolute top-1 right-1 bg-blue-500 text-white rounded-full w-4 h-4 sm:w-6 sm:h-6 flex items-center justify-center">
-                    <span className="text-xs">✓</span>
+                  <div className="absolute top-0.5 right-0.5 bg-blue-500 text-white rounded-full w-3 h-3 sm:w-5 sm:h-5 flex items-center justify-center">
+                    <span className="text-xs sm:text-sm">✓</span>
                   </div>
                 )}
               </div>
@@ -425,7 +425,7 @@ const MatchManagementSection = () => {
           <div className="space-y-4">
             {/* Header với nút chỉnh sửa */}
             <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-gray-900">📊 Thông số trận đấu</h3>
+              <h3 className="text-lg font-semibold text-gray-900">���� Thông số trận đấu</h3>
               <Button
                 variant={isEditingStats ? "primary" : "outline"}
                 size="sm"
