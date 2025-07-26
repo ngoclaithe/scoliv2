@@ -217,7 +217,7 @@ const MatchManagementSection = () => {
       </div>
 
       {/* Score Controls */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-3 sm:p-6 border border-blue-200">
+      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
         <div className="grid grid-cols-2 gap-3 sm:gap-6">
           {/* Đội nhà */}
           <div className="bg-white rounded-lg p-2 sm:p-4 shadow-md border border-blue-200">
@@ -264,7 +264,7 @@ const MatchManagementSection = () => {
           </div>
         </div>
 
-        {/* Nút TẠM DỪNG và LỖI(FUTSAL) */}
+        {/* Nút TẠM D���NG và LỖI(FUTSAL) */}
         <div className="flex justify-center items-center mt-3 space-x-3">
           <Button
             variant="primary"
@@ -725,7 +725,7 @@ const MatchManagementSection = () => {
               max="120"
               value={customTime}
               onChange={(e) => setCustomTime(e.target.value)}
-              placeholder="Nh��p phút (VD: 30)"
+              placeholder="Nhập phút (VD: 30)"
               className="flex-1 text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
             />
             <span className="text-sm font-medium text-yellow-800">phút</span>
