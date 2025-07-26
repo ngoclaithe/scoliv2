@@ -173,8 +173,8 @@ const MatchManagementSection = () => {
   {displaySettings.selectedSkin && skinData[displaySettings.selectedSkin] ? (
     <div className="w-full h-16 sm:h-20 bg-gray-100 rounded-lg overflow-hidden">
       <img
-        src={skinData[selectedSkin].image}
-        alt={skinData[selectedSkin].name}
+        src={skinData[displaySettings.selectedSkin].image}
+        alt={skinData[displaySettings.selectedSkin].name}
         className="w-full h-full object-contain"
         onError={(e) => {
           e.target.style.display = 'none';
