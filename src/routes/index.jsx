@@ -6,7 +6,7 @@ import { PublicMatchProvider } from '../contexts/PublicMatchContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import App from '../App';
-import PosterDisplay from '../components/display/PosterDisplay';
+import DisplayController from '../components/display/DisplayController';
 
 const AppRoutes = () => {
   return (
