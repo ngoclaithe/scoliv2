@@ -7,6 +7,7 @@ import TeamLineupModal from "../lineup/TeamLineupModal";
 import Modal from "../common/Modal";
 import SimplePenaltyModal from "../common/SimplePenaltyModal";
 import { useMatch } from "../../contexts/MatchContext";
+import TestControls from "../debug/TestControls";
 
 const MatchManagementSection = () => {
   // Sử dụng MatchContext thay vì state local
@@ -204,7 +205,7 @@ const MatchManagementSection = () => {
       {/* Score Controls */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
         <div className="grid grid-cols-2 gap-2 sm:gap-4">
-          {/* Đội nhà */}
+          {/* Đội nh�� */}
           <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-blue-200">
             <div className="flex space-x-1">
               <Button
@@ -690,7 +691,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">ĐẾM 30'</span>
             </button>
 
-            {/* Đếm 35' */}
+            {/* Đ��m 35' */}
             <button
               onClick={() => setSelectedOption("dem-35")}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -717,7 +718,7 @@ const MatchManagementSection = () => {
               onClick={() => {
                 updateView('scoreboard');
                 setSelectedOption("ti-so-duoi");
-                console.log('Chuy���n sang scoreboard');
+                console.log('Chuyển sang scoreboard');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -909,7 +910,7 @@ const MatchManagementSection = () => {
         <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-4">
           <div className="text-center mb-4">
             <h4 className="text-lg font-bold text-yellow-800 flex items-center justify-center">
-              <span className="mr-2">����️</span>
+              <span className="mr-2">🕰️</span>
               THIẾT LẬP ĐẾM T
               <span className="ml-2">🕰️</span>
             </h4>
