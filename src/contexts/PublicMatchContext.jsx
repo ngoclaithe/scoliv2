@@ -110,7 +110,7 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nh���t thống kê
+    // Lắng nghe cập nhật thống kê
     socketService.on('match_stats_updated', (data) => {
       setMatchStats(prev => ({ ...prev, ...data.stats }));
       setLastUpdateTime(Date.now());
@@ -247,7 +247,8 @@ export const PublicMatchProvider = ({ children }) => {
     socketConnected,
     lastUpdateTime,
     currentAccessCode,
-    
+    currentView,
+
     // Actions
     initializeSocket,
     disconnectSocket
