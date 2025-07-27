@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const TopScoreboard = () => {
+const TopScoreboard = ({ template = 1 }) => {
   // Sample data - in real app this would be props
   const [scoreboardData, setScoreboardData] = useState({
     team1: "HÀ NỘI FC",
@@ -21,6 +21,79 @@ const TopScoreboard = () => {
   });
 
   const [scoreboardScale, setScoreboardScale] = useState(1);
+
+  // Template styles based on provided images
+  const getTemplateStyles = (templateId) => {
+    switch (templateId) {
+      case 1: // Classic Navy - Template 1
+        return {
+          background: 'bg-blue-900',
+          border: 'border-yellow-400',
+          scoreBackground: 'bg-white',
+          scoreText: 'text-blue-900',
+          timerBackground: 'bg-blue-900',
+          timerText: 'text-white',
+          teamBackground: 'bg-blue-900',
+          teamText: 'text-white',
+          team1Background: 'bg-blue-900',
+          team2Background: 'bg-blue-900'
+        };
+      case 2: // Blue Red - Template 2
+        return {
+          background: 'bg-blue-600',
+          border: 'border-yellow-500',
+          scoreBackground: 'bg-white',
+          scoreText: 'text-blue-900',
+          timerBackground: 'bg-gray-700',
+          timerText: 'text-white',
+          teamBackground: 'bg-blue-600',
+          teamText: 'text-white',
+          team1Background: 'bg-blue-600',
+          team2Background: 'bg-red-600'
+        };
+      case 3: // Teal Modern - Template 3
+        return {
+          background: 'bg-teal-500',
+          border: 'border-white',
+          scoreBackground: 'bg-red-600',
+          scoreText: 'text-white',
+          timerBackground: 'bg-teal-600',
+          timerText: 'text-white',
+          teamBackground: 'bg-teal-500',
+          teamText: 'text-white',
+          team1Background: 'bg-teal-500',
+          team2Background: 'bg-teal-500'
+        };
+      case 4: // Red Orange - Template 4
+        return {
+          background: 'bg-red-500',
+          border: 'border-yellow-300',
+          scoreBackground: 'bg-blue-900',
+          scoreText: 'text-white',
+          timerBackground: 'bg-yellow-500',
+          timerText: 'text-blue-900',
+          teamBackground: 'bg-red-500',
+          teamText: 'text-white',
+          team1Background: 'bg-red-500',
+          team2Background: 'bg-red-500'
+        };
+      default:
+        return {
+          background: 'bg-blue-900',
+          border: 'border-yellow-400',
+          scoreBackground: 'bg-white',
+          scoreText: 'text-blue-900',
+          timerBackground: 'bg-blue-900',
+          timerText: 'text-white',
+          teamBackground: 'bg-blue-900',
+          teamText: 'text-white',
+          team1Background: 'bg-blue-900',
+          team2Background: 'bg-blue-900'
+        };
+    }
+  };
+
+  const templateStyles = getTemplateStyles(template);
 
   // Auto-adjust scale based on window size
   useEffect(() => {
@@ -80,48 +153,48 @@ const TopScoreboard = () => {
           }}
         >
           {/* Scoreboard Container */}
-          <div className="flex items-center h-14 text-white rounded-lg overflow-hidden shadow-lg">
+          <div className={`flex items-center h-14 ${templateStyles.teamText} rounded-lg overflow-hidden shadow-lg border-2 ${templateStyles.border}`}>
             {/* Team 1 Score */}
-            <div className="w-11 h-14 bg-yellow-400 text-blue-900 flex items-center justify-center text-4xl font-bold">
+            <div className={`w-11 h-14 ${templateStyles.scoreBackground} ${templateStyles.scoreText} flex items-center justify-center text-4xl font-bold`}>
               {scoreboardData.score1}
             </div>
-            
+
             {/* Team 1 */}
-            <div className="w-48 h-14 bg-blue-900 relative flex items-center justify-center pb-2">
-              <div 
-                className="text-white font-bold uppercase whitespace-nowrap z-10 leading-none"
+            <div className={`w-48 h-14 ${templateStyles.team1Background} relative flex items-center justify-center pb-2`}>
+              <div
+                className={`${templateStyles.teamText} font-bold uppercase whitespace-nowrap z-10 leading-none`}
                 style={{ fontSize: `${adjustFontSize(scoreboardData.team1)}px` }}
               >
                 {scoreboardData.team1}
               </div>
-              <div 
+              <div
                 className="absolute bottom-0 left-0 w-full h-1.5"
                 style={{ backgroundColor: scoreboardData.color1 }}
               ></div>
             </div>
-            
+
             {/* Timer */}
-            <div className="w-24 h-14 bg-gray-800 text-white flex items-center justify-center text-3xl font-bold relative">
+            <div className={`w-24 h-14 ${templateStyles.timerBackground} ${templateStyles.timerText} flex items-center justify-center text-3xl font-bold relative`}>
               <div className="z-10">{scoreboardData.timer}</div>
               <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-green-500"></div>
             </div>
-            
+
             {/* Team 2 */}
-            <div className="w-48 h-14 bg-blue-900 relative flex items-center justify-center pb-2">
-              <div 
-                className="text-white font-bold uppercase whitespace-nowrap z-10 leading-none"
+            <div className={`w-48 h-14 ${templateStyles.team2Background} relative flex items-center justify-center pb-2`}>
+              <div
+                className={`${templateStyles.teamText} font-bold uppercase whitespace-nowrap z-10 leading-none`}
                 style={{ fontSize: `${adjustFontSize(scoreboardData.team2)}px` }}
               >
                 {scoreboardData.team2}
               </div>
-              <div 
+              <div
                 className="absolute bottom-0 left-0 w-full h-1.5"
                 style={{ backgroundColor: scoreboardData.color2 }}
               ></div>
             </div>
-            
+
             {/* Team 2 Score */}
-            <div className="w-11 h-14 bg-yellow-400 text-blue-900 flex items-center justify-center text-4xl font-bold">
+            <div className={`w-11 h-14 ${templateStyles.scoreBackground} ${templateStyles.scoreText} flex items-center justify-center text-4xl font-bold`}>
               {scoreboardData.score2}
             </div>
           </div>
@@ -194,114 +267,7 @@ const TopScoreboard = () => {
         }
       `}</style>
 
-      {/* Control Panel for Demo */}
-      <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white/95 p-4 rounded-lg shadow-lg text-black max-w-4xl pointer-events-auto">
-        <h3 className="font-bold mb-4 text-center">Scoreboard Demo Controls</h3>
-        
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Team 1:</label>
-            <input 
-              className="w-full p-2 border rounded text-sm"
-              value={scoreboardData.team1}
-              onChange={(e) => setScoreboardData({...scoreboardData, team1: e.target.value})}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-1">Score 1:</label>
-            <input 
-              className="w-full p-2 border rounded text-sm"
-              value={scoreboardData.score1}
-              onChange={(e) => setScoreboardData({...scoreboardData, score1: e.target.value})}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-1">Team 2:</label>
-            <input 
-              className="w-full p-2 border rounded text-sm"
-              value={scoreboardData.team2}
-              onChange={(e) => setScoreboardData({...scoreboardData, team2: e.target.value})}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-1">Score 2:</label>
-            <input 
-              className="w-full p-2 border rounded text-sm"
-              value={scoreboardData.score2}
-              onChange={(e) => setScoreboardData({...scoreboardData, score2: e.target.value})}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-1">Timer:</label>
-            <input 
-              className="w-full p-2 border rounded text-sm"
-              value={scoreboardData.timer}
-              onChange={(e) => setScoreboardData({...scoreboardData, timer: e.target.value})}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-1">Team 1 Color:</label>
-            <input 
-              type="color"
-              className="w-full p-1 border rounded"
-              value={scoreboardData.color1}
-              onChange={(e) => setScoreboardData({...scoreboardData, color1: e.target.value})}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-1">Team 2 Color:</label>
-            <input 
-              type="color"
-              className="w-full p-1 border rounded"
-              value={scoreboardData.color2}
-              onChange={(e) => setScoreboardData({...scoreboardData, color2: e.target.value})}
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium mb-1">Live Text:</label>
-            <input 
-              className="w-full p-2 border rounded text-sm"
-              value={scoreboardData.live}
-              onChange={(e) => setScoreboardData({...scoreboardData, live: e.target.value})}
-              placeholder="NSB, BDPXT, or other"
-            />
-          </div>
-        </div>
 
-        <div className="mt-4 flex items-center gap-4">
-          <label className="flex items-center text-sm">
-            <input 
-              type="checkbox"
-              checked={scoreboardData.showMarquee}
-              onChange={(e) => setScoreboardData({...scoreboardData, showMarquee: e.target.checked})}
-              className="mr-2"
-            />
-            Show Marquee
-          </label>
-
-          {scoreboardData.showMarquee && (
-            <div className="flex-1">
-              <input 
-                className="w-full p-2 border rounded text-sm"
-                placeholder="Marquee text..."
-                value={scoreboardData.marqueeText}
-                onChange={(e) => setScoreboardData({...scoreboardData, marqueeText: e.target.value})}
-              />
-            </div>
-          )}
-        </div>
-
-        <div className="mt-2 text-xs text-gray-600 text-center">
-          Scoreboard automatically scales to 42% of screen width • Partner positions available for sponsor logos
-        </div>
-      </div>
     </div>
   );
 };

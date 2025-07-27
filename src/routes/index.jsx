@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import App from '../App';
 import DisplayController from '../components/display/DisplayController';
+import ScoreboardTest from '../pages/ScoreboardTest';
 
 const AppRoutes = () => {
   return (
@@ -20,6 +21,9 @@ const AppRoutes = () => {
             </MatchProvider>
           </AuthProvider>
         } />
+
+        {/* Test page for scoreboard templates */}
+        <Route path="/test-scoreboard" element={<ScoreboardTest />} />
 
         {/* Public dynamic routes for access codes - không cần authentication */}
         <Route path="/:accessCode" element={
