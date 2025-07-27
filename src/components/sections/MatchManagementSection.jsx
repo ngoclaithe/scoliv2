@@ -211,14 +211,14 @@ const MatchManagementSection = () => {
       {/* Score Controls */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
         <div className="grid grid-cols-2 gap-2 sm:gap-4">
-          {/* Đội nhà */}
+          {/* Đội A */}
           <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-blue-200">
             <div className="flex space-x-1">
               <Button
                 variant="primary"
                 size="sm"
                 className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
-                onClick={() => handleScoreChange("homeTeam", 1)}
+                onClick={() => handleScoreChange("teamA", 1)}
               >
                 <span className="text-sm sm:text-lg">+</span>
               </Button>
@@ -226,21 +226,21 @@ const MatchManagementSection = () => {
                 variant="primary"
                 size="sm"
                 className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
-                onClick={() => handleScoreChange("homeTeam", -1)}
+                onClick={() => handleScoreChange("teamA", -1)}
               >
                 <span className="text-sm sm:text-lg">-</span>
               </Button>
             </div>
           </div>
 
-          {/* Đội khách */}
+          {/* Đội B */}
           <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-purple-200">
             <div className="flex space-x-1">
               <Button
                 variant="primary"
                 size="sm"
                 className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
-                onClick={() => handleScoreChange("awayTeam", 1)}
+                onClick={() => handleScoreChange("teamB", 1)}
               >
                 <span className="text-sm sm:text-lg">+</span>
               </Button>
@@ -248,7 +248,7 @@ const MatchManagementSection = () => {
                 variant="primary"
                 size="sm"
                 className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
-                onClick={() => handleScoreChange("awayTeam", -1)}
+                onClick={() => handleScoreChange("teamB", -1)}
               >
                 <span className="text-sm sm:text-lg">-</span>
               </Button>
