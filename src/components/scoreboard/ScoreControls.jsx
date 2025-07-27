@@ -4,8 +4,8 @@ import Input from "../common/Input";
 import Modal from "../common/Modal";
 
 const ScoreControls = ({
-  homeTeam,
-  awayTeam,
+  teamA,
+  teamB,
   onScoreChange,
   onTeamNameChange,
   onReset,
@@ -18,7 +18,7 @@ const ScoreControls = ({
   const [tempName, setTempName] = useState("");
 
   const handleScoreChange = (team, increment) => {
-    const currentScore = team === "home" ? homeTeam.score : awayTeam.score;
+    const currentScore = team === "teamA" ? teamA.score : teamB.score;
     const newScore = Math.max(0, currentScore + increment);
     onScoreChange(team, newScore);
   };
@@ -30,7 +30,7 @@ const ScoreControls = ({
 
   const handleTeamNameEdit = (team) => {
     setEditingTeam(team);
-    setTempName(team === "home" ? homeTeam.name : awayTeam.name);
+    setTempName(team === "teamA" ? teamA.name : teamB.name);
     setShowModal(true);
   };
 
@@ -149,14 +149,14 @@ const ScoreControls = ({
           {/* Score Controls Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <ScoreControlSection
-              team="home"
-              teamData={homeTeam}
-              label="Đội nhà"
+              team="teamA"
+              teamData={teamA}
+              label="Đội A"
             />
             <ScoreControlSection
-              team="away"
-              teamData={awayTeam}
-              label="Đội khách"
+              team="teamB"
+              teamData={teamB}
+              label="Đội B"
             />
           </div>
 
@@ -189,7 +189,7 @@ const ScoreControls = ({
           <div className="mt-4 text-center text-sm text-gray-600">
             Tỉ số hiện tại:{" "}
             <span className="font-bold">
-              {homeTeam.score} - {awayTeam.score}
+              {teamA.score} - {teamB.score}
             </span>
           </div>
         </div>
@@ -199,7 +199,7 @@ const ScoreControls = ({
       <Modal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
-        title={`Chỉnh sửa tên ${editingTeam === "home" ? "đội nhà" : "đội khách"}`}
+        title={`Chỉnh sửa tên ${editingTeam === "teamA" ? "đội A" : "đội B"}`}
         footer={
           <>
             <Button variant="outline" onClick={() => setShowModal(false)}>

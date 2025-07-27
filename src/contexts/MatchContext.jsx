@@ -17,15 +17,15 @@ export const MatchProvider = ({ children }) => {
   
   // State cho thông tin trận đấu
   const [matchData, setMatchData] = useState({
-    homeTeam: { 
-      name: "ĐỘI-A", 
-      score: 0, 
-      logo: null 
+    teamA: {
+      name: "ĐỘI-A",
+      score: 0,
+      logo: null
     },
-    awayTeam: { 
-      name: "ĐỘI-B", 
-      score: 0, 
-      logo: null 
+    teamB: {
+      name: "ĐỘI-B",
+      score: 0,
+      logo: null
     },
     matchTime: "00:00",
     period: "Chưa bắt đầu",
@@ -48,15 +48,15 @@ export const MatchProvider = ({ children }) => {
 
   // State cho lỗi futsal
   const [futsalErrors, setFutsalErrors] = useState({
-    homeTeam: 0,
-    awayTeam: 0
+    teamA: 0,
+    teamB: 0
   });
 
   // State cho penalty
   const [penaltyData, setPenaltyData] = useState({
-    homeGoals: 0,
-    awayGoals: 0,
-    currentTurn: 'home',
+    teamAGoals: 0,
+    teamBGoals: 0,
+    currentTurn: 'teamA',
     shootHistory: [],
     status: 'ready',
     lastUpdated: null
@@ -82,8 +82,8 @@ export const MatchProvider = ({ children }) => {
 
   // State cho danh sách cầu thủ
   const [lineupData, setLineupData] = useState({
-    homeTeam: [],
-    awayTeam: []
+    teamA: [],
+    teamB: []
   });
 
   // State cho nhà tài trợ
@@ -148,8 +148,8 @@ export const MatchProvider = ({ children }) => {
     socketService.on('score_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
-        homeTeam: { ...prev.homeTeam, score: data.scores.home },
-        awayTeam: { ...prev.awayTeam, score: data.scores.away }
+        teamA: { ...prev.teamA, score: data.scores.teamA },
+        teamB: { ...prev.teamB, score: data.scores.teamB }
       }));
       setLastUpdateTime(Date.now());
     });
@@ -176,8 +176,8 @@ export const MatchProvider = ({ children }) => {
     socketService.on('team_logos_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
-        homeTeam: { ...prev.homeTeam, logo: data.logos.home },
-        awayTeam: { ...prev.awayTeam, logo: data.logos.away }
+        teamA: { ...prev.teamA, logo: data.logos.teamA },
+        teamB: { ...prev.teamB, logo: data.logos.teamB }
       }));
       setLastUpdateTime(Date.now());
     });
@@ -186,8 +186,8 @@ export const MatchProvider = ({ children }) => {
     socketService.on('team_names_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
-        homeTeam: { ...prev.homeTeam, name: data.names.home },
-        awayTeam: { ...prev.awayTeam, name: data.names.away }
+        teamA: { ...prev.teamA, name: data.names.teamA },
+        teamB: { ...prev.teamB, name: data.names.teamB }
       }));
       setLastUpdateTime(Date.now());
     });
@@ -218,8 +218,8 @@ export const MatchProvider = ({ children }) => {
     // Lắng nghe cập nhật danh sách
     socketService.on('lineup_updated', (data) => {
       setLineupData({
-        homeTeam: data.lineup.home,
-        awayTeam: data.lineup.away
+        teamA: data.lineup.teamA,
+        teamB: data.lineup.teamB
       });
       setLastUpdateTime(Date.now());
     });
@@ -266,7 +266,7 @@ export const MatchProvider = ({ children }) => {
 
     // Emit to socket
     if (socketConnected) {
-      socketService.updateScore(newMatchData.homeTeam.score, newMatchData.awayTeam.score);
+      socketService.updateScore(newMatchData.teamA.score, newMatchData.teamB.score);
     }
   }, [matchData, socketConnected]);
 
@@ -307,28 +307,28 @@ export const MatchProvider = ({ children }) => {
   }, [socketConnected]);
 
   // Cập nhật logo đội
-  const updateTeamLogos = useCallback((homeTeamLogo, awayTeamLogo) => {
+  const updateTeamLogos = useCallback((teamALogo, teamBLogo) => {
     setMatchData(prev => ({
       ...prev,
-      homeTeam: { ...prev.homeTeam, logo: homeTeamLogo },
-      awayTeam: { ...prev.awayTeam, logo: awayTeamLogo }
+      teamA: { ...prev.teamA, logo: teamALogo },
+      teamB: { ...prev.teamB, logo: teamBLogo }
     }));
-    
+
     if (socketConnected) {
-      socketService.updateTeamLogos(homeTeamLogo, awayTeamLogo);
+      socketService.updateTeamLogos(teamALogo, teamBLogo);
     }
   }, [socketConnected]);
 
   // Cập nhật tên đội
-  const updateTeamNames = useCallback((homeTeamName, awayTeamName) => {
+  const updateTeamNames = useCallback((teamAName, teamBName) => {
     setMatchData(prev => ({
       ...prev,
-      homeTeam: { ...prev.homeTeam, name: homeTeamName },
-      awayTeam: { ...prev.awayTeam, name: awayTeamName }
+      teamA: { ...prev.teamA, name: teamAName },
+      teamB: { ...prev.teamB, name: teamBName }
     }));
-    
+
     if (socketConnected) {
-      socketService.updateTeamNames(homeTeamName, awayTeamName);
+      socketService.updateTeamNames(teamAName, teamBName);
     }
   }, [socketConnected]);
 
@@ -360,11 +360,11 @@ export const MatchProvider = ({ children }) => {
   }, [socketConnected]);
 
   // Cập nhật danh sách cầu thủ
-  const updateLineup = useCallback((homeLineup, awayLineup) => {
-    setLineupData({ homeTeam: homeLineup, awayTeam: awayLineup });
-    
+  const updateLineup = useCallback((teamALineup, teamBLineup) => {
+    setLineupData({ teamA: teamALineup, teamB: teamBLineup });
+
     if (socketConnected) {
-      socketService.updateLineup(homeLineup, awayLineup);
+      socketService.updateLineup(teamALineup, teamBLineup);
     }
   }, [socketConnected]);
 
@@ -387,8 +387,8 @@ export const MatchProvider = ({ children }) => {
   // Reset toàn bộ dữ liệu trận đấu
   const resetMatch = useCallback(() => {
     setMatchData({
-      homeTeam: { name: "ĐỘI-A", score: 0, logo: null },
-      awayTeam: { name: "ĐỘI-B", score: 0, logo: null },
+      teamA: { name: "ĐỘI-A", score: 0, logo: null },
+      teamB: { name: "ĐỘI-B", score: 0, logo: null },
       matchTime: "00:00",
       period: "Chưa bắt đầu",
       status: "waiting",
@@ -407,11 +407,11 @@ export const MatchProvider = ({ children }) => {
       fouls: { team1: 0, team2: 0 },
     });
     
-    setFutsalErrors({ homeTeam: 0, awayTeam: 0 });
+    setFutsalErrors({ teamA: 0, teamB: 0 });
     setPenaltyData({
-      homeGoals: 0,
-      awayGoals: 0,
-      currentTurn: 'home',
+      teamAGoals: 0,
+      teamBGoals: 0,
+      currentTurn: 'teamA',
       shootHistory: [],
       status: 'ready',
       lastUpdated: null

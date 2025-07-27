@@ -147,7 +147,7 @@ const MatchManagementSection = () => {
         </div>
         <div className="flex items-center gap-3">
           <div className="flex-1">
-            <label className="block text-xs text-red-600 font-medium mb-1">Đội nhà</label>
+            <label className="block text-xs text-red-600 font-medium mb-1">Đội A</label>
             <input
               type="number"
               min="0"
@@ -159,7 +159,7 @@ const MatchManagementSection = () => {
           </div>
           <div className="text-gray-400 text-sm">vs</div>
           <div className="flex-1">
-            <label className="block text-xs text-gray-800 font-medium mb-1">Đội khách</label>
+            <label className="block text-xs text-gray-800 font-medium mb-1">Đội B</label>
             <input
               type="number"
               min="0"
@@ -197,8 +197,8 @@ const MatchManagementSection = () => {
     </div>
   ) : (
     <ScoreDisplay
-      homeTeam={matchData.homeTeam}
-      awayTeam={matchData.awayTeam}
+      teamA={matchData.teamA}
+      teamB={matchData.teamB}
       matchTime={matchData.matchTime}
       period={matchData.period}
       status={matchData.status}
@@ -211,14 +211,14 @@ const MatchManagementSection = () => {
       {/* Score Controls */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
         <div className="grid grid-cols-2 gap-2 sm:gap-4">
-          {/* Đội nhà */}
+          {/* Đội A */}
           <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-blue-200">
             <div className="flex space-x-1">
               <Button
                 variant="primary"
                 size="sm"
                 className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
-                onClick={() => handleScoreChange("homeTeam", 1)}
+                onClick={() => handleScoreChange("teamA", 1)}
               >
                 <span className="text-sm sm:text-lg">+</span>
               </Button>
@@ -226,21 +226,21 @@ const MatchManagementSection = () => {
                 variant="primary"
                 size="sm"
                 className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
-                onClick={() => handleScoreChange("homeTeam", -1)}
+                onClick={() => handleScoreChange("teamA", -1)}
               >
                 <span className="text-sm sm:text-lg">-</span>
               </Button>
             </div>
           </div>
 
-          {/* Đội khách */}
+          {/* Đội B */}
           <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-purple-200">
             <div className="flex space-x-1">
               <Button
                 variant="primary"
                 size="sm"
                 className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
-                onClick={() => handleScoreChange("awayTeam", 1)}
+                onClick={() => handleScoreChange("teamB", 1)}
               >
                 <span className="text-sm sm:text-lg">+</span>
               </Button>
@@ -248,7 +248,7 @@ const MatchManagementSection = () => {
                 variant="primary"
                 size="sm"
                 className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
-                onClick={() => handleScoreChange("awayTeam", -1)}
+                onClick={() => handleScoreChange("teamB", -1)}
               >
                 <span className="text-sm sm:text-lg">-</span>
               </Button>
@@ -291,24 +291,24 @@ const MatchManagementSection = () => {
           </Button>
 
           <div className="flex space-x-2">
-            {/* Lỗi đội nhà */}
+            {/* Lỗi đội A */}
             <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
               <Button
                 variant="outline"
                 size="sm"
                 className="px-1 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
-                onClick={() => updateFutsalErrors('homeTeam', -1)}
+                onClick={() => updateFutsalErrors('teamA', -1)}
               >
                 -
               </Button>
               <div className="px-1.5 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-5 text-center">
-                {futsalErrors.homeTeam}
+                {futsalErrors.teamA}
               </div>
               <Button
                 variant="outline"
                 size="sm"
                 className="px-1 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
-                onClick={() => updateFutsalErrors('homeTeam', 1)}
+                onClick={() => updateFutsalErrors('teamA', 1)}
               >
                 +
               </Button>
@@ -321,24 +321,24 @@ const MatchManagementSection = () => {
               </span>
             </div>
 
-            {/* Lỗi đội khách */}
+            {/* Lỗi đội B */}
             <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
               <Button
                 variant="outline"
                 size="sm"
                 className="px-1 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
-                onClick={() => updateFutsalErrors('awayTeam', -1)}
+                onClick={() => updateFutsalErrors('teamB', -1)}
               >
                 -
               </Button>
               <div className="px-1.5 py-1 bg-gray-100 text-gray-800 text-xs font-bold min-w-5 text-center">
-                {futsalErrors.awayTeam}
+                {futsalErrors.teamB}
               </div>
               <Button
                 variant="outline"
                 size="sm"
                 className="px-1 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
-                onClick={() => updateFutsalErrors('awayTeam', 1)}
+                onClick={() => updateFutsalErrors('teamB', 1)}
               >
                 +
               </Button>
@@ -353,9 +353,9 @@ const MatchManagementSection = () => {
           <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
             <input
               type="text"
-              placeholder="Tên đội nhà"
-              value={matchData.homeTeam.name}
-              onChange={(e) => updateScore("homeTeam", 0, { name: e.target.value })}
+              placeholder="Tên đội A"
+              value={matchData.teamA.name}
+              onChange={(e) => updateScore("teamA", 0, { name: e.target.value })}
               className="w-full px-2 py-1.5 text-sm font-medium text-center text-red-600 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-red-300 rounded-lg"
               maxLength={20}
             />
@@ -366,9 +366,9 @@ const MatchManagementSection = () => {
           <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
             <input
               type="text"
-              placeholder="Tên đội khách"
-              value={matchData.awayTeam.name}
-              onChange={(e) => updateScore("awayTeam", 0, { name: e.target.value })}
+              placeholder="Tên đội B"
+              value={matchData.teamB.name}
+              onChange={(e) => updateScore("teamB", 0, { name: e.target.value })}
               className="w-full px-2 py-1.5 text-sm font-medium text-center text-gray-800 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-gray-300 rounded-lg"
               maxLength={20}
             />
