@@ -4,8 +4,8 @@ import Input from "../common/Input";
 import Modal from "../common/Modal";
 
 const ScoreControls = ({
-  homeTeam,
-  awayTeam,
+  teamA,
+  teamB,
   onScoreChange,
   onTeamNameChange,
   onReset,
@@ -18,7 +18,7 @@ const ScoreControls = ({
   const [tempName, setTempName] = useState("");
 
   const handleScoreChange = (team, increment) => {
-    const currentScore = team === "home" ? homeTeam.score : awayTeam.score;
+    const currentScore = team === "teamA" ? teamA.score : teamB.score;
     const newScore = Math.max(0, currentScore + increment);
     onScoreChange(team, newScore);
   };
@@ -30,7 +30,7 @@ const ScoreControls = ({
 
   const handleTeamNameEdit = (team) => {
     setEditingTeam(team);
-    setTempName(team === "home" ? homeTeam.name : awayTeam.name);
+    setTempName(team === "teamA" ? teamA.name : teamB.name);
     setShowModal(true);
   };
 
