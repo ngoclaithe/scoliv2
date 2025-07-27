@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
-const ScoreboardBelow = ({ 
+const ScoreboardBelow = ({
   accessCode,
   onTeamUpdate,
   onScoreUpdate,
-  onLogoUpdate 
+  onLogoUpdate,
+  template = 1
 }) => {
   // State cho scoreboard data
   const [scoreboardData, setScoreboardData] = useState({
@@ -31,6 +32,69 @@ const ScoreboardBelow = ({
   const [scoreboardScale, setScoreboardScale] = useState(1);
   const [editMode, setEditMode] = useState(false);
   const [logoUploadMode, setLogoUploadMode] = useState(null); // 'team1' or 'team2'
+
+  // Template styles
+  const getTemplateStyles = (templateId) => {
+    switch (templateId) {
+      case 1: // Classic Navy
+        return {
+          background: 'bg-gradient-to-r from-blue-900 via-gray-800 to-blue-900',
+          border: 'border-yellow-400',
+          scoreBackground: 'bg-yellow-400',
+          scoreText: 'text-blue-900',
+          timerBackground: 'bg-gray-800',
+          timerText: 'text-white',
+          teamBackground: 'bg-blue-900/80',
+          teamText: 'text-white'
+        };
+      case 2: // Blue Red
+        return {
+          background: 'bg-gradient-to-r from-blue-600 to-red-600',
+          border: 'border-yellow-500',
+          scoreBackground: 'bg-white',
+          scoreText: 'text-blue-900',
+          timerBackground: 'bg-gray-700',
+          timerText: 'text-white',
+          teamBackground: 'bg-blue-600/80',
+          teamText: 'text-white'
+        };
+      case 3: // Teal Modern
+        return {
+          background: 'bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600',
+          border: 'border-white',
+          scoreBackground: 'bg-red-500',
+          scoreText: 'text-white',
+          timerBackground: 'bg-teal-700',
+          timerText: 'text-white',
+          teamBackground: 'bg-teal-500/80',
+          teamText: 'text-white'
+        };
+      case 4: // Red Orange
+        return {
+          background: 'bg-gradient-to-r from-red-500 via-orange-500 to-red-500',
+          border: 'border-yellow-300',
+          scoreBackground: 'bg-blue-900',
+          scoreText: 'text-white',
+          timerBackground: 'bg-yellow-500',
+          timerText: 'text-blue-900',
+          teamBackground: 'bg-red-500/80',
+          teamText: 'text-white'
+        };
+      default:
+        return {
+          background: 'bg-gradient-to-r from-blue-900 via-gray-800 to-blue-900',
+          border: 'border-yellow-400',
+          scoreBackground: 'bg-yellow-400',
+          scoreText: 'text-blue-900',
+          timerBackground: 'bg-gray-800',
+          timerText: 'text-white',
+          teamBackground: 'bg-blue-900/80',
+          teamText: 'text-white'
+        };
+    }
+  };
+
+  const templateStyles = getTemplateStyles(template);
 
   // Auto-adjust scale based on window size
   useEffect(() => {
@@ -165,12 +229,12 @@ const ScoreboardBelow = ({
             )}
 
             {/* Main Scoreboard */}
-            <div className="flex items-center bg-gradient-to-r from-blue-900 via-gray-800 to-blue-900 rounded-xl overflow-hidden shadow-2xl border-4 border-yellow-400">
+            <div className={`flex items-center ${templateStyles.background} rounded-xl overflow-hidden shadow-2xl border-4 ${templateStyles.border}`}>
               {/* Team 1 Section */}
               <div className="flex items-center">
                 {/* Team 1 Logo */}
-                <div 
-                  className="w-16 h-16 bg-white/10 flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all duration-300 group"
+                <div
+                  className={`w-16 h-16 ${templateStyles.teamBackground} flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all duration-300 group`}
                   onClick={() => setLogoUploadMode('team1')}
                 >
                   {scoreboardData.logo1 ? (
@@ -187,18 +251,18 @@ const ScoreboardBelow = ({
                 </div>
 
                 {/* Team 1 Name */}
-                <div className="w-40 px-4 py-2 relative">
+                <div className={`w-40 px-4 py-2 relative ${templateStyles.teamBackground}`}>
                   {editMode ? (
                     <input
                       type="text"
                       value={scoreboardData.team1}
                       onChange={(e) => handleTeamNameUpdate('team1', e.target.value)}
-                      className="w-full bg-transparent text-white font-bold text-center border-b-2 border-white/50 focus:border-white outline-none"
+                      className={`w-full bg-transparent ${templateStyles.teamText} font-bold text-center border-b-2 border-white/50 focus:border-white outline-none`}
                       style={{ fontSize: `${adjustFontSize(scoreboardData.team1)}px` }}
                     />
                   ) : (
-                    <div 
-                      className="text-white font-bold text-center cursor-pointer hover:text-yellow-300 transition-colors"
+                    <div
+                      className={`${templateStyles.teamText} font-bold text-center cursor-pointer hover:text-yellow-300 transition-colors`}
                       style={{ fontSize: `${adjustFontSize(scoreboardData.team1)}px` }}
                       onClick={() => setEditMode(true)}
                     >
@@ -212,7 +276,7 @@ const ScoreboardBelow = ({
                 </div>
 
                 {/* Team 1 Score */}
-                <div className="w-20 h-16 bg-yellow-400 text-blue-900 flex flex-col items-center justify-center font-bold border-r-2 border-white/20">
+                <div className={`w-20 h-16 ${templateStyles.scoreBackground} ${templateStyles.scoreText} flex flex-col items-center justify-center font-bold border-r-2 border-white/20`}>
                   <div className="text-4xl leading-none">{scoreboardData.score1}</div>
                   {scoreboardData.penaltyMode && (
                     <div className="text-xs leading-none text-blue-700">
@@ -223,7 +287,7 @@ const ScoreboardBelow = ({
               </div>
 
               {/* Center Section - Timer & Period */}
-              <div className="w-32 h-16 bg-gray-800 text-white flex flex-col items-center justify-center relative overflow-hidden">
+              <div className={`w-32 h-16 ${templateStyles.timerBackground} ${templateStyles.timerText} flex flex-col items-center justify-center relative overflow-hidden`}>
                 <div className="text-2xl font-bold leading-none z-10">{scoreboardData.timer}</div>
                 <div className="text-xs font-medium z-10">{scoreboardData.period}</div>
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-green-500"></div>
@@ -235,7 +299,7 @@ const ScoreboardBelow = ({
               {/* Team 2 Section */}
               <div className="flex items-center">
                 {/* Team 2 Score */}
-                <div className="w-20 h-16 bg-yellow-400 text-blue-900 flex flex-col items-center justify-center font-bold border-l-2 border-white/20">
+                <div className={`w-20 h-16 ${templateStyles.scoreBackground} ${templateStyles.scoreText} flex flex-col items-center justify-center font-bold border-l-2 border-white/20`}>
                   <div className="text-4xl leading-none">{scoreboardData.score2}</div>
                   {scoreboardData.penaltyMode && (
                     <div className="text-xs leading-none text-blue-700">
@@ -245,18 +309,18 @@ const ScoreboardBelow = ({
                 </div>
 
                 {/* Team 2 Name */}
-                <div className="w-40 px-4 py-2 relative">
+                <div className={`w-40 px-4 py-2 relative ${templateStyles.teamBackground}`}>
                   {editMode ? (
                     <input
                       type="text"
                       value={scoreboardData.team2}
                       onChange={(e) => handleTeamNameUpdate('team2', e.target.value)}
-                      className="w-full bg-transparent text-white font-bold text-center border-b-2 border-white/50 focus:border-white outline-none"
+                      className={`w-full bg-transparent ${templateStyles.teamText} font-bold text-center border-b-2 border-white/50 focus:border-white outline-none`}
                       style={{ fontSize: `${adjustFontSize(scoreboardData.team2)}px` }}
                     />
                   ) : (
-                    <div 
-                      className="text-white font-bold text-center cursor-pointer hover:text-yellow-300 transition-colors"
+                    <div
+                      className={`${templateStyles.teamText} font-bold text-center cursor-pointer hover:text-yellow-300 transition-colors`}
                       style={{ fontSize: `${adjustFontSize(scoreboardData.team2)}px` }}
                       onClick={() => setEditMode(true)}
                     >
@@ -270,8 +334,8 @@ const ScoreboardBelow = ({
                 </div>
 
                 {/* Team 2 Logo */}
-                <div 
-                  className="w-16 h-16 bg-white/10 flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all duration-300 group"
+                <div
+                  className={`w-16 h-16 ${templateStyles.teamBackground} flex items-center justify-center cursor-pointer hover:bg-white/20 transition-all duration-300 group`}
                   onClick={() => setLogoUploadMode('team2')}
                 >
                   {scoreboardData.logo2 ? (
