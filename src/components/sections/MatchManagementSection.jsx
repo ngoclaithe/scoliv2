@@ -463,6 +463,7 @@ const MatchManagementSection = () => {
             <div
               onClick={() => {
                 updatePoster('tretrung');
+                updateView('poster');
                 console.log('Poster selected: tretrung');
               }}
               className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'tretrung'
