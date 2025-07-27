@@ -45,10 +45,10 @@ export default function MatchIntroduction({ accessCode }) {
     setMatchData(prev => ({
       ...prev,
       matchTitle: contextMatchData.tournament || prev.matchTitle,
-      team1: contextMatchData.homeTeam.name || prev.team1,
-      team2: contextMatchData.awayTeam.name || prev.team2,
-      logo1: contextMatchData.homeTeam.logo || prev.logo1,
-      logo2: contextMatchData.awayTeam.logo || prev.logo2,
+      team1: contextMatchData.teamA.name || prev.team1,
+      team2: contextMatchData.teamB.name || prev.team2,
+      logo1: contextMatchData.teamA.logo || prev.logo1,
+      logo2: contextMatchData.teamB.logo || prev.logo2,
       stadium: contextMatchData.stadium || prev.stadium
     }));
   }, [contextMatchData]);
