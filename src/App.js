@@ -37,7 +37,7 @@ function AppContent() {
   } = useAuth();
   const [currentPage, setCurrentPage] = useState("manage-access-code");
 
-  // Cập nhật currentPage khi authType thay đ��i
+  // Cập nhật currentPage khi authType thay đổi
   React.useEffect(() => {
     if (authType === 'account') {
       setCurrentPage("manage-access-code"); // User account bắt đầu từ quản lý mã
@@ -180,7 +180,7 @@ function AppContent() {
   const renderCurrentPage = () => {
     switch (currentPage) {
       case "home":
-        return <Home />;
+        return <NewHomeLayout />;
 
       case "manage-access-code":
         return <ManageAccessCode onNavigate={setCurrentPage} />;
