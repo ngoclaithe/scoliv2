@@ -33,7 +33,7 @@ export const PublicMatchProvider = ({ children }) => {
     liveText: ""
   });
 
-  // State cho thống kê trận đấu
+  // State cho thống k�� trận đấu
   const [matchStats, setMatchStats] = useState({
     possession: { team1: 50, team2: 50 },
     totalShots: { team1: 0, team2: 0 },
@@ -70,6 +70,9 @@ export const PublicMatchProvider = ({ children }) => {
     showPenalty: false,
     showLineup: false
   });
+
+  // State cho view hiện tại trên route dynamic
+  const [currentView, setCurrentView] = useState('poster'); // poster, intro, halftime, scoreboard
 
   // State cho danh sách cầu thủ
   const [lineupData, setLineupData] = useState({
