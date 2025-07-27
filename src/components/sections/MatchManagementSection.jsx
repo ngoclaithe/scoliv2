@@ -699,7 +699,11 @@ const MatchManagementSection = () => {
 
             {/* Giới thiệu */}
             <button
-              onClick={() => setSelectedOption("gioi-thieu")}
+              onClick={() => {
+                updateView('intro');
+                setSelectedOption("gioi-thieu");
+                console.log('Chuyển sang giới thiệu');
+              }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               {/* <span className="text-sm mr-1">���</span> */}
@@ -708,7 +712,11 @@ const MatchManagementSection = () => {
 
             {/* Tỉ số dưới */}
             <button
-              onClick={() => setSelectedOption("ti-so-duoi")}
+              onClick={() => {
+                updateView('scoreboard');
+                setSelectedOption("ti-so-duoi");
+                console.log('Chuyển sang scoreboard');
+              }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">📊</span>
