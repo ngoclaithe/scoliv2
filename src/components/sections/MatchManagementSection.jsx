@@ -249,7 +249,7 @@ const MatchManagementSection = () => {
           </div>
         </div>
 
-        {/* Nút TẠM DỪNG và LỖI(FUTSAL) */}
+        {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và LỖI(FUTSAL) */}
         <div className="flex justify-center items-center mt-2 space-x-2">
           <Button
             variant="primary"
@@ -260,6 +260,20 @@ const MatchManagementSection = () => {
             <span className="mr-1">⏸️</span>
             <span className="hidden sm:inline">TẠM DỪNG</span>
             <span className="sm:hidden">DỪNG</span>
+          </Button>
+
+          <Button
+            variant="primary"
+            size="sm"
+            className="px-2 py-1 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+            onClick={() => {
+              updateView('halftime');
+              console.log('Chuyển sang nghỉ giữa hiệp');
+            }}
+          >
+            <span className="mr-1">🥤</span>
+            <span className="hidden sm:inline">NGHỈ GIỮA HIỆP</span>
+            <span className="sm:hidden">NGHỈ</span>
           </Button>
 
           <div className="flex space-x-2">
@@ -500,7 +514,7 @@ const MatchManagementSection = () => {
             <div className="flex items-center justify-between text-xs">
               <span className="text-gray-600">Trạng thái kết nối:</span>
               <span className={`px-2 py-1 rounded ${socketConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                {socketConnected ? '🟢 Đã kết nối' : '🔴 Mất kết nối'}
+                {socketConnected ? '🟢 Đã kết nối' : '🔴 Mất k��t nối'}
               </span>
             </div>
             <div className="text-xs text-gray-500 mt-1">
@@ -532,7 +546,7 @@ const MatchManagementSection = () => {
             <div className="space-y-3">
               {/* Kiểm soát bóng */}
               <EditableStatBar
-                label="Kiểm soát bóng"
+                label="Ki��m soát bóng"
                 statKey="possession"
                 team1Value={matchStats.possession.team1}
                 team2Value={matchStats.possession.team2}
