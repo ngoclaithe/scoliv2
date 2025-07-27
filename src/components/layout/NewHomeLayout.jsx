@@ -119,75 +119,52 @@ const NewHomeLayout = () => {
       <main className="mx-auto">
         {/* Navigation Tabs */}
         <div className="bg-white border-b border-gray-200 shadow-sm">
-          <div className="flex">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => handleTabChange(tab.id)}
-                className={`flex-1 py-4 px-6 text-center font-bold text-sm border-b-4 transition-all duration-300 hover:bg-gray-50 ${
-                  activeTab === tab.id
-                    ? `border-${tab.color}-500 text-${tab.color}-700 bg-${tab.color}-50`
-                    : "border-transparent text-gray-600 hover:text-gray-800"
-                }`}
-                style={{
-                  borderBottomColor: activeTab === tab.id ? (
-                    tab.color === 'blue' ? '#3b82f6' :
-                    tab.color === 'purple' ? '#8b5cf6' :
-                    tab.color === 'red' ? '#ef4444' : '#3b82f6'
-                  ) : 'transparent',
-                  backgroundColor: activeTab === tab.id ? (
-                    tab.color === 'blue' ? '#eff6ff' :
-                    tab.color === 'purple' ? '#f3e8ff' :
-                    tab.color === 'red' ? '#fef2f2' : '#eff6ff'
-                  ) : 'transparent',
-                  color: activeTab === tab.id ? (
-                    tab.color === 'blue' ? '#1d4ed8' :
-                    tab.color === 'purple' ? '#7c3aed' :
-                    tab.color === 'red' ? '#dc2626' : '#1d4ed8'
-                  ) : undefined
-                }}
-              >
-                <span className="flex flex-col items-center">
-                  <span className="text-lg mb-1">{tab.icon}</span>
-                  <span className="hidden sm:inline">{tab.name}</span>
-                  <span className="sm:hidden">
-                    {tab.id === "upload-logo" ? "LOGO" : 
-                     tab.id === "quan-ly-tran" ? "TRẬN" : "AUDIO"}
-                  </span>
-                  {activeTab === tab.id && (
-                    <span className="text-xs text-gray-500 mt-1 hidden md:block">
-                      {tab.description}
-                    </span>
-                  )}
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
+  <div className="flex">
+    {tabs.map((tab) => (
+      <button
+        key={tab.id}
+        onClick={() => handleTabChange(tab.id)}
+        className={`flex-1 py-1 px-2 text-center font-semibold text-[11px] border-b-2 transition-all duration-300 hover:bg-gray-50 ${
+          activeTab === tab.id
+            ? `border-${tab.color}-500 text-${tab.color}-700 bg-${tab.color}-50`
+            : "border-transparent text-gray-600 hover:text-gray-800"
+        }`}
+        style={{
+          borderBottomColor: activeTab === tab.id ? (
+            tab.color === 'blue' ? '#3b82f6' :
+            tab.color === 'purple' ? '#8b5cf6' :
+            tab.color === 'red' ? '#ef4444' : '#3b82f6'
+          ) : 'transparent',
+          backgroundColor: activeTab === tab.id ? (
+            tab.color === 'blue' ? '#eff6ff' :
+            tab.color === 'purple' ? '#f3e8ff' :
+            tab.color === 'red' ? '#fef2f2' : '#eff6ff'
+          ) : 'transparent',
+          color: activeTab === tab.id ? (
+            tab.color === 'blue' ? '#1d4ed8' :
+            tab.color === 'purple' ? '#7c3aed' :
+            tab.color === 'red' ? '#dc2626' : '#1d4ed8'
+          ) : undefined
+        }}
+      >
+        <span className="flex flex-col items-center leading-none">
+          <span className="text-sm mb-0.5">{tab.icon}</span>
+          <span className="hidden sm:inline">{tab.name}</span>
+          <span className="sm:hidden text-[10px]">
+            {tab.id === "upload-logo" ? "LOGO" : 
+             tab.id === "quan-ly-tran" ? "TRẬN" : "AUDIO"}
+          </span>
+        </span>
+      </button>
+    ))}
+  </div>
+</div>
+
 
         {/* Tab Content Container */}
         <div className="bg-white min-h-screen">
           <div className="max-w-7xl mx-auto">
             {/* Content Header */}
-            <div className={`bg-gradient-to-r ${
-              getCurrentTabColor() === 'blue' ? 'from-blue-500 to-blue-600' :
-              getCurrentTabColor() === 'purple' ? 'from-purple-500 to-purple-600' :
-              'from-red-500 to-red-600'
-            } text-white p-4`}>
-              <div className="flex items-center space-x-3">
-                <span className="text-2xl">
-                  {tabs.find(tab => tab.id === activeTab)?.icon}
-                </span>
-                <div>
-                  <h2 className="text-xl font-bold">
-                    {tabs.find(tab => tab.id === activeTab)?.name}
-                  </h2>
-                  <p className="text-sm opacity-90">
-                    {tabs.find(tab => tab.id === activeTab)?.description}
-                  </p>
-                </div>
-              </div>
-            </div>
 
             {/* Tab Content */}
             <div className="p-4">
