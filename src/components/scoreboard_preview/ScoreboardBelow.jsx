@@ -33,43 +33,55 @@ const ScoreboardBelow = ({
   const [editMode, setEditMode] = useState(false);
   const [logoUploadMode, setLogoUploadMode] = useState(null); // 'team1' or 'team2'
 
-  // Template styles
+  // Template styles based on provided images
   const getTemplateStyles = (templateId) => {
     switch (templateId) {
-      case 1: // Classic Navy
+      case 1: // Classic Navy - Template 1
         return {
-          background: 'bg-gradient-to-r from-blue-900 via-gray-800 to-blue-900',
+          background: 'bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900',
           border: 'border-yellow-400',
-          scoreBackground: 'bg-yellow-400',
+          scoreBackground: 'bg-white',
           scoreText: 'text-blue-900',
-          timerBackground: 'bg-gray-800',
+          timerBackground: 'bg-blue-900',
           timerText: 'text-white',
-          teamBackground: 'bg-blue-900/80',
-          teamText: 'text-white'
+          teamBackground: 'bg-blue-900',
+          teamText: 'text-white',
+          team1Background: 'bg-blue-900',
+          team2Background: 'bg-blue-900',
+          headerBackground: 'bg-yellow-400',
+          headerText: 'text-blue-900'
         };
-      case 2: // Blue Red
+      case 2: // Blue Red - Template 2
         return {
-          background: 'bg-gradient-to-r from-blue-600 to-red-600',
+          background: 'bg-gradient-to-r from-blue-600 via-blue-500 to-red-600',
           border: 'border-yellow-500',
           scoreBackground: 'bg-white',
           scoreText: 'text-blue-900',
           timerBackground: 'bg-gray-700',
           timerText: 'text-white',
-          teamBackground: 'bg-blue-600/80',
-          teamText: 'text-white'
+          teamBackground: 'bg-blue-600',
+          teamText: 'text-white',
+          team1Background: 'bg-blue-600',
+          team2Background: 'bg-red-600',
+          headerBackground: 'bg-yellow-500',
+          headerText: 'text-blue-900'
         };
-      case 3: // Teal Modern
+      case 3: // Teal Modern - Template 3
         return {
-          background: 'bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600',
+          background: 'bg-gradient-to-r from-teal-500 via-teal-400 to-teal-500',
           border: 'border-white',
-          scoreBackground: 'bg-red-500',
+          scoreBackground: 'bg-red-600',
           scoreText: 'text-white',
-          timerBackground: 'bg-teal-700',
+          timerBackground: 'bg-teal-600',
           timerText: 'text-white',
-          teamBackground: 'bg-teal-500/80',
-          teamText: 'text-white'
+          teamBackground: 'bg-teal-500',
+          teamText: 'text-white',
+          team1Background: 'bg-teal-500',
+          team2Background: 'bg-teal-500',
+          headerBackground: 'bg-teal-400',
+          headerText: 'text-white'
         };
-      case 4: // Red Orange
+      case 4: // Red Orange - Template 4
         return {
           background: 'bg-gradient-to-r from-red-500 via-orange-500 to-red-500',
           border: 'border-yellow-300',
@@ -77,19 +89,27 @@ const ScoreboardBelow = ({
           scoreText: 'text-white',
           timerBackground: 'bg-yellow-500',
           timerText: 'text-blue-900',
-          teamBackground: 'bg-red-500/80',
-          teamText: 'text-white'
+          teamBackground: 'bg-red-500',
+          teamText: 'text-white',
+          team1Background: 'bg-red-500',
+          team2Background: 'bg-red-500',
+          headerBackground: 'bg-yellow-500',
+          headerText: 'text-blue-900'
         };
       default:
         return {
-          background: 'bg-gradient-to-r from-blue-900 via-gray-800 to-blue-900',
+          background: 'bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900',
           border: 'border-yellow-400',
-          scoreBackground: 'bg-yellow-400',
+          scoreBackground: 'bg-white',
           scoreText: 'text-blue-900',
-          timerBackground: 'bg-gray-800',
+          timerBackground: 'bg-blue-900',
           timerText: 'text-white',
-          teamBackground: 'bg-blue-900/80',
-          teamText: 'text-white'
+          teamBackground: 'bg-blue-900',
+          teamText: 'text-white',
+          team1Background: 'bg-blue-900',
+          team2Background: 'bg-blue-900',
+          headerBackground: 'bg-yellow-400',
+          headerText: 'text-blue-900'
         };
     }
   };
@@ -251,7 +271,7 @@ const ScoreboardBelow = ({
                 </div>
 
                 {/* Team 1 Name */}
-                <div className={`w-40 px-4 py-2 relative ${templateStyles.teamBackground}`}>
+                <div className={`w-40 px-4 py-2 relative ${templateStyles.team1Background}`}>
                   {editMode ? (
                     <input
                       type="text"
@@ -309,7 +329,7 @@ const ScoreboardBelow = ({
                 </div>
 
                 {/* Team 2 Name */}
-                <div className={`w-40 px-4 py-2 relative ${templateStyles.teamBackground}`}>
+                <div className={`w-40 px-4 py-2 relative ${templateStyles.team2Background}`}>
                   {editMode ? (
                     <input
                       type="text"
@@ -354,8 +374,8 @@ const ScoreboardBelow = ({
             </div>
 
             {/* Live Stream Info */}
-            <div className="mt-2 bg-red-600/90 text-white px-4 py-1 rounded-full text-center font-bold text-sm shadow-lg">
-              🔴 LIVE: {scoreboardData.live}
+            <div className={`mt-2 ${templateStyles.headerBackground} ${templateStyles.headerText} px-4 py-1 rounded-full text-center font-bold text-sm shadow-lg`}>
+              TRỰC TIẾP TRẬN BÓNG ĐÁ
             </div>
           </div>
 
