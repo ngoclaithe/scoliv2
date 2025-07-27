@@ -13,10 +13,10 @@ export default function MatchIntroduction({ accessCode }) {
   // Transform context data to poster format
   const [matchData, setMatchData] = useState({
     matchTitle: contextMatchData.tournament || 'GIẢI BÓNG ĐÁ PHONG TRÀO',
-    team1: contextMatchData.homeTeam.name || 'DOI-A',
-    team2: contextMatchData.awayTeam.name || 'DOI-B',
-    logo1: contextMatchData.homeTeam.logo || '/public/images/team1-logo.png',
-    logo2: contextMatchData.awayTeam.logo || '/public/images/team2-logo.png',
+    team1: contextMatchData.teamA.name || 'DOI-A',
+    team2: contextMatchData.teamB.name || 'DOI-B',
+    logo1: contextMatchData.teamA.logo || '/public/images/team1-logo.png',
+    logo2: contextMatchData.teamB.logo || '/public/images/team2-logo.png',
     stadium: contextMatchData.stadium || '',
     roundedTime: '15:30',
     currentDate: new Date().toLocaleDateString('vi-VN')
