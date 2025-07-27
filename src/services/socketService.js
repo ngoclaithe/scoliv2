@@ -7,16 +7,18 @@ class SocketService {
     this.currentAccessCode = null;
     this.listeners = new Map();
     this.connectionPromise = null;
+    this.clientType = null; // Lưu loại client: "client", "admin", "display"
   }
 
   // Khởi tạo kết nối socket với access code
-  async connect(accessCode) {
-    if (this.socket && this.currentAccessCode === accessCode) {
+  async connect(accessCode, clientType = 'client') {
+    if (this.socket && this.currentAccessCode === accessCode && this.clientType === clientType) {
       return this.socket;
     }
 
     this.disconnect();
     this.currentAccessCode = accessCode;
+    this.clientType = clientType;
 
     const socketUrl = process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000';
     
@@ -37,7 +39,12 @@ class SocketService {
       this.socket.on('connect', () => {
         console.log(`Socket connected for access code: ${accessCode}`);
         this.isConnected = true;
-        this.socket.emit('join_room', accessCode);
+        this.socket.emit('join_room', {
+          accessCode: accessCode,
+          clientType: this.clientType,
+          timestamp: Date.now(),
+          viewType: 'intro'
+        });
         resolve(this.socket);
       });
 
@@ -56,8 +63,13 @@ class SocketService {
       this.socket.on('reconnect', () => {
         console.log('Socket reconnected');
         this.isConnected = true;
-        if (this.currentAccessCode) {
-          this.socket.emit('join_room', this.currentAccessCode);
+        if (this.currentAccessCode && this.clientType) {
+          this.socket.emit('join_room', {
+            accessCode: this.currentAccessCode,
+            clientType: this.clientType,
+            timestamp: Date.now(),
+            viewType: 'intro'
+          });
         }
       });
     });
@@ -73,6 +85,7 @@ class SocketService {
     }
     this.isConnected = false;
     this.currentAccessCode = null;
+    this.clientType = null;
     this.connectionPromise = null;
   }
 
@@ -134,6 +147,7 @@ class SocketService {
     return {
       isConnected: this.isConnected,
       accessCode: this.currentAccessCode,
+      clientType: this.clientType,
       socketId: this.socket?.id
     };
   }

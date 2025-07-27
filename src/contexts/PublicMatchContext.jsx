@@ -213,8 +213,9 @@ export const PublicMatchProvider = ({ children }) => {
       }
 
       console.log(`Initializing public socket for: ${accessCode}`);
-      
-      await socketService.connect(accessCode);
+
+      // Public route luôn sử dụng clientType 'display'
+      await socketService.connect(accessCode, 'display');
       setSocketConnected(true);
       setCurrentAccessCode(accessCode);
       

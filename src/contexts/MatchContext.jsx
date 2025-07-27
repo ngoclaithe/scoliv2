@@ -13,7 +13,7 @@ export const useMatch = () => {
 };
 
 export const MatchProvider = ({ children }) => {
-  const { matchCode, isAuthenticated } = useAuth();
+  const { matchCode, isAuthenticated, user } = useAuth();
   
   // State cho thông tin trận đấu
   const [matchData, setMatchData] = useState({
@@ -116,14 +116,21 @@ export const MatchProvider = ({ children }) => {
   // Khởi tạo socket connection
   const initializeSocket = useCallback(async (accessCode) => {
     try {
+      // Xác định client type dựa trên user role
+      let clientType = 'client'; // mặc định
+      if (user?.role === 'admin') {
+        clientType = 'admin';
+      }
+
       // Tránh khởi tạo socket trùng lặp
       if (socketService.getConnectionStatus().accessCode === accessCode &&
-          socketService.getConnectionStatus().isConnected) {
+          socketService.getConnectionStatus().isConnected &&
+          socketService.getConnectionStatus().clientType === clientType) {
         console.log(`Socket already connected for access code: ${accessCode}`);
         return;
       }
 
-      await socketService.connect(accessCode);
+      await socketService.connect(accessCode, clientType);
       setSocketConnected(true);
 
       // Lắng nghe các event từ server
@@ -384,7 +391,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Reset toàn bộ dữ liệu trận đấu
+  // Reset toàn bộ dữ liệu trận ��ấu
   const resetMatch = useCallback(() => {
     setMatchData({
       teamA: { name: "ĐỘI-A", score: 0, logo: null },
