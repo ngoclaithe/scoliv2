@@ -24,7 +24,7 @@ const AppRoutes = () => {
         {/* Public dynamic routes for access codes - không cần authentication */}
         <Route path="/:accessCode" element={
           <PublicMatchProvider>
-            <PosterDisplay />
+            <DisplayController />
           </PublicMatchProvider>
         } />
       </Routes>
