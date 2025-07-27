@@ -49,10 +49,10 @@ const FootballMatchIntro = ({ accessCode }) => {
   useEffect(() => {
     setMatchData(prev => ({
       ...prev,
-      team1: contextMatchData.homeTeam.name || 'ĐỘI-A',
-      team2: contextMatchData.awayTeam.name || 'ĐỘI-B',
-      logo1: contextMatchData.homeTeam.logo || '/api/placeholder/200/200',
-      logo2: contextMatchData.awayTeam.logo || '/api/placeholder/200/200',
+      team1: contextMatchData.teamA.name || 'ĐỘI-A',
+      team2: contextMatchData.teamB.name || 'ĐỘI-B',
+      logo1: contextMatchData.teamA.logo || '/api/placeholder/200/200',
+      logo2: contextMatchData.teamB.logo || '/api/placeholder/200/200',
       stadium: contextMatchData.stadium || 'SÂN VẬN ĐỘNG QUỐC GIA',
       liveText: contextMatchData.liveText || 'KÊNH THỂ THAO'
     }));
