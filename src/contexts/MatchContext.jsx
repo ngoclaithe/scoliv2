@@ -116,11 +116,8 @@ export const MatchProvider = ({ children }) => {
   // Khởi tạo socket connection
   const initializeSocket = useCallback(async (accessCode) => {
     try {
-      // Xác định client type dựa trên user role
-      let clientType = 'client'; // mặc định
-      if (user?.role === 'admin') {
-        clientType = 'admin';
-      }
+      // Tất cả người vào Home.jsx đều là admin (theo yêu cầu)
+      let clientType = 'admin';
 
       // Tránh khởi tạo socket trùng lặp
       if (socketService.getConnectionStatus().accessCode === accessCode &&
