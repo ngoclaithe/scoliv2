@@ -146,9 +146,9 @@ class SocketService {
   }
 
   // Cập nhật tỉ số
-  updateScore(homeScore, awayScore) {
-    return this.emit('score_update', { 
-      scores: { home: homeScore, away: awayScore }
+  updateScore(teamAScore, teamBScore) {
+    return this.emit('score_update', {
+      scores: { teamA: teamAScore, teamB: teamBScore }
     });
   }
 
@@ -168,16 +168,16 @@ class SocketService {
   }
 
   // Cập nhật logo đội bóng
-  updateTeamLogos(homeTeamLogo, awayTeamLogo) {
-    return this.emit('team_logos_update', { 
-      logos: { home: homeTeamLogo, away: awayTeamLogo }
+  updateTeamLogos(teamALogo, teamBLogo) {
+    return this.emit('team_logos_update', {
+      logos: { teamA: teamALogo, teamB: teamBLogo }
     });
   }
 
   // Cập nhật tên đội
-  updateTeamNames(homeTeamName, awayTeamName) {
-    return this.emit('team_names_update', { 
-      names: { home: homeTeamName, away: awayTeamName }
+  updateTeamNames(teamAName, teamBName) {
+    return this.emit('team_names_update', {
+      names: { teamA: teamAName, teamB: teamBName }
     });
   }
 
@@ -194,9 +194,9 @@ class SocketService {
   }
 
   // Cập nhật danh sách cầu thủ
-  updateLineup(homeLineup, awayLineup) {
-    return this.emit('lineup_update', { 
-      lineup: { home: homeLineup, away: awayLineup }
+  updateLineup(teamALineup, teamBLineup) {
+    return this.emit('lineup_update', {
+      lineup: { teamA: teamALineup, teamB: teamBLineup }
     });
   }
 
