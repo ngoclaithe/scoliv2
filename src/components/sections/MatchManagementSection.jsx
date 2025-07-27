@@ -353,9 +353,9 @@ const MatchManagementSection = () => {
           <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
             <input
               type="text"
-              placeholder="Tên đội nhà"
-              value={matchData.homeTeam.name}
-              onChange={(e) => updateScore("homeTeam", 0, { name: e.target.value })}
+              placeholder="Tên đội A"
+              value={matchData.teamA.name}
+              onChange={(e) => updateScore("teamA", 0, { name: e.target.value })}
               className="w-full px-2 py-1.5 text-sm font-medium text-center text-red-600 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-red-300 rounded-lg"
               maxLength={20}
             />
@@ -366,9 +366,9 @@ const MatchManagementSection = () => {
           <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
             <input
               type="text"
-              placeholder="Tên đội khách"
-              value={matchData.awayTeam.name}
-              onChange={(e) => updateScore("awayTeam", 0, { name: e.target.value })}
+              placeholder="Tên đội B"
+              value={matchData.teamB.name}
+              onChange={(e) => updateScore("teamB", 0, { name: e.target.value })}
               className="w-full px-2 py-1.5 text-sm font-medium text-center text-gray-800 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-gray-300 rounded-lg"
               maxLength={20}
             />
