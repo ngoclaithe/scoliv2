@@ -22,21 +22,23 @@ const TopScoreboard = ({ template = 1 }) => {
 
   const [scoreboardScale, setScoreboardScale] = useState(1);
 
-  // Template styles
+  // Template styles based on provided images
   const getTemplateStyles = (templateId) => {
     switch (templateId) {
-      case 1: // Classic Navy
+      case 1: // Classic Navy - Template 1
         return {
           background: 'bg-blue-900',
           border: 'border-yellow-400',
-          scoreBackground: 'bg-yellow-400',
+          scoreBackground: 'bg-white',
           scoreText: 'text-blue-900',
-          timerBackground: 'bg-gray-800',
+          timerBackground: 'bg-blue-900',
           timerText: 'text-white',
           teamBackground: 'bg-blue-900',
-          teamText: 'text-white'
+          teamText: 'text-white',
+          team1Background: 'bg-blue-900',
+          team2Background: 'bg-blue-900'
         };
-      case 2: // Blue Red
+      case 2: // Blue Red - Template 2
         return {
           background: 'bg-blue-600',
           border: 'border-yellow-500',
@@ -45,20 +47,24 @@ const TopScoreboard = ({ template = 1 }) => {
           timerBackground: 'bg-gray-700',
           timerText: 'text-white',
           teamBackground: 'bg-blue-600',
-          teamText: 'text-white'
+          teamText: 'text-white',
+          team1Background: 'bg-blue-600',
+          team2Background: 'bg-red-600'
         };
-      case 3: // Teal Modern
+      case 3: // Teal Modern - Template 3
         return {
           background: 'bg-teal-500',
           border: 'border-white',
-          scoreBackground: 'bg-red-500',
+          scoreBackground: 'bg-red-600',
           scoreText: 'text-white',
-          timerBackground: 'bg-teal-700',
+          timerBackground: 'bg-teal-600',
           timerText: 'text-white',
           teamBackground: 'bg-teal-500',
-          teamText: 'text-white'
+          teamText: 'text-white',
+          team1Background: 'bg-teal-500',
+          team2Background: 'bg-teal-500'
         };
-      case 4: // Red Orange
+      case 4: // Red Orange - Template 4
         return {
           background: 'bg-red-500',
           border: 'border-yellow-300',
@@ -67,18 +73,22 @@ const TopScoreboard = ({ template = 1 }) => {
           timerBackground: 'bg-yellow-500',
           timerText: 'text-blue-900',
           teamBackground: 'bg-red-500',
-          teamText: 'text-white'
+          teamText: 'text-white',
+          team1Background: 'bg-red-500',
+          team2Background: 'bg-red-500'
         };
       default:
         return {
           background: 'bg-blue-900',
           border: 'border-yellow-400',
-          scoreBackground: 'bg-yellow-400',
+          scoreBackground: 'bg-white',
           scoreText: 'text-blue-900',
-          timerBackground: 'bg-gray-800',
+          timerBackground: 'bg-blue-900',
           timerText: 'text-white',
           teamBackground: 'bg-blue-900',
-          teamText: 'text-white'
+          teamText: 'text-white',
+          team1Background: 'bg-blue-900',
+          team2Background: 'bg-blue-900'
         };
     }
   };
@@ -150,7 +160,7 @@ const TopScoreboard = ({ template = 1 }) => {
             </div>
 
             {/* Team 1 */}
-            <div className={`w-48 h-14 ${templateStyles.teamBackground} relative flex items-center justify-center pb-2`}>
+            <div className={`w-48 h-14 ${templateStyles.team1Background} relative flex items-center justify-center pb-2`}>
               <div
                 className={`${templateStyles.teamText} font-bold uppercase whitespace-nowrap z-10 leading-none`}
                 style={{ fontSize: `${adjustFontSize(scoreboardData.team1)}px` }}
@@ -170,7 +180,7 @@ const TopScoreboard = ({ template = 1 }) => {
             </div>
 
             {/* Team 2 */}
-            <div className={`w-48 h-14 ${templateStyles.teamBackground} relative flex items-center justify-center pb-2`}>
+            <div className={`w-48 h-14 ${templateStyles.team2Background} relative flex items-center justify-center pb-2`}>
               <div
                 className={`${templateStyles.teamText} font-bold uppercase whitespace-nowrap z-10 leading-none`}
                 style={{ fontSize: `${adjustFontSize(scoreboardData.team2)}px` }}
