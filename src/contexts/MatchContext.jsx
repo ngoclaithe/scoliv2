@@ -376,6 +376,14 @@ export const MatchProvider = ({ children }) => {
     }));
   }, []);
 
+  // Cập nhật view hiện tại cho route dynamic (MỚI)
+  const updateView = useCallback((viewType) => {
+    if (socketConnected) {
+      socketService.emit('view_update', { viewType });
+      console.log('Sent view update:', viewType);
+    }
+  }, [socketConnected]);
+
   // Reset toàn bộ dữ liệu trận đấu
   const resetMatch = useCallback(() => {
     setMatchData({
