@@ -9,6 +9,7 @@ import PosterHaoQuang from '../../pages/Poster-haoquang';
 import Intro from '../introduce/Intro';
 import HalfTime from '../halftime/HalfTime';
 import ScoreboardAbove from '../scoreboard_preview/ScoreboardAbove';
+import ScoreboardBelow from '../scoreboard_preview/ScoreboardBelow';
 
 const DisplayController = () => {
   const { accessCode } = useParams();
