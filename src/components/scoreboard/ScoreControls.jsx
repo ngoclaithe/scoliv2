@@ -149,14 +149,14 @@ const ScoreControls = ({
           {/* Score Controls Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <ScoreControlSection
-              team="home"
-              teamData={homeTeam}
-              label="Đội nhà"
+              team="teamA"
+              teamData={teamA}
+              label="Đội A"
             />
             <ScoreControlSection
-              team="away"
-              teamData={awayTeam}
-              label="Đội khách"
+              team="teamB"
+              teamData={teamB}
+              label="Đội B"
             />
           </div>
 
