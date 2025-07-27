@@ -5,6 +5,7 @@ import { useAuth } from "./contexts/AuthContext";
 
 // Import pages
 import Home from "./pages/Home";
+import NewHomeLayout from "./components/layout/NewHomeLayout";
 import LoginPage from "./components/auth/LoginPage";
 import MatchCodeEntry from "./components/auth/MatchCodeEntry";
 import ManageAccessCode from "./components/auth/ManageAccessCode";
