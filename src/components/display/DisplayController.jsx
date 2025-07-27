@@ -9,6 +9,7 @@ import PosterHaoQuang from '../../pages/Poster-haoquang';
 import Intro from '../introduce/Intro';
 import HalfTime from '../halftime/HalfTime';
 import ScoreboardAbove from '../scoreboard_preview/ScoreboardAbove';
+import ScoreboardBelow from '../scoreboard_preview/ScoreboardBelow';
 
 const DisplayController = () => {
   const { accessCode } = useParams();
@@ -96,6 +97,8 @@ const DisplayController = () => {
         return <HalfTime accessCode={accessCode} />;
       case 'scoreboard':
         return <ScoreboardAbove accessCode={accessCode} />;
+      case 'scoreboard_below':
+        return <ScoreboardBelow accessCode={accessCode} />;
       case 'poster':
         // Render poster theo selectedPoster
         switch (displaySettings.selectedPoster) {

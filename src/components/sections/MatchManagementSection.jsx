@@ -82,7 +82,7 @@ const MatchManagementSection = () => {
     updateStats(newStats);
   };
 
-  // Hàm cập nhật kiểm soát bóng (đảm bảo tổng = 100%)
+  // Hàm cập nhật ki���m soát bóng (đảm bảo tổng = 100%)
   const updatePossession = (team, value) => {
     const newValue = Math.max(0, Math.min(100, parseInt(value) || 0));
     const otherTeam = team === 'team1' ? 'team2' : 'team1';
@@ -716,9 +716,9 @@ const MatchManagementSection = () => {
             {/* Tỉ số dưới */}
             <button
               onClick={() => {
-                updateView('scoreboard');
+                updateView('scoreboard_below');
                 setSelectedOption("ti-so-duoi");
-                console.log('Chuyển sang scoreboard');
+                console.log('Chuyển sang scoreboard below');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
