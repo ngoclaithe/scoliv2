@@ -199,7 +199,7 @@ const ScoreControls = ({
       <Modal
         isOpen={showModal}
         onClose={() => setShowModal(false)}
-        title={`Chỉnh sửa tên ${editingTeam === "home" ? "đội nhà" : "đội khách"}`}
+        title={`Chỉnh sửa tên ${editingTeam === "teamA" ? "đội A" : "đội B"}`}
         footer={
           <>
             <Button variant="outline" onClick={() => setShowModal(false)}>
