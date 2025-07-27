@@ -1,10 +1,5 @@
 # Socket Events mà Backend cần emit
 
-## Vấn đề hiện tại:
-- Token luôn null vì đăng nhập bằng access code, không có JWT token (đây là hành vi bình thường)
-- Socket khởi tạo nhiều lần do dependency changes trong React useEffect
-- Console log liên tục xuất hiện do re-render và socket reconnection
-
 ## Backend cần emit các events sau:
 
 ### 1. Match Data Events (Server → Client)
@@ -172,18 +167,3 @@ socket.on('score_update', (data) => {
 socket.on('template_update', (data) => {
   // Broadcast đến tất cả clients trong room
 });
-
-// ... các events update khác
-```
-
-## Khuyến nghị:
-1. **Token null là bình thường** - không cần lo lắng về việc này khi dùng access code login
-2. **Socket reconnection** - backend nên handle gracefully khi client reconnect
-3. **Room-based broadcasting** - sử dụng access code làm room ID để chỉ broadcast đến đúng clients
-4. **Validation** - luôn validate access code trước khi cho phép join room
-5. **Error handling** - emit proper error events khi có vấn đề
-
-## Giải pháp cho FE (để giảm log spam):
-1. Chỉ log token warning khi thực sự cần authentication
-2. Debounce socket initialization
-3. Cleanup effect dependencies properly
