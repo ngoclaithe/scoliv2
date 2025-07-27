@@ -2,13 +2,13 @@ import React from "react";
 
 const CommentarySection = () => {
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-2 sm:p-4 space-y-3 sm:space-y-4">
       {/* Microphone Section */}
-      <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-8 border border-red-200">
-        <h3 className="text-center text-lg font-bold text-red-800 mb-8 flex items-center justify-center">
-          <span className="mr-2">🎙️</span>
+      <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-lg p-3 sm:p-4 border border-red-200">
+        <h3 className="text-center text-sm sm:text-base font-bold text-red-800 mb-4 flex items-center justify-center">
+          <span className="mr-1">🎙️</span>
           THU ÂM BÌNH LUẬN
-          <span className="ml-2">🎙️</span>
+          <span className="ml-1">🎙️</span>
         </h3>
 
         <div className="flex justify-center">
@@ -17,10 +17,10 @@ const CommentarySection = () => {
               // Logic thu âm sẽ được thêm sau
               console.log("Microphone clicked - logic will be added later");
             }}
-            className="w-32 h-32 bg-gradient-to-br from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white rounded-full flex items-center justify-center shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300"
+            className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 text-white rounded-full flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
           >
             <svg
-              className="w-16 h-16"
+              className="w-8 h-8 sm:w-10 sm:h-10"
               fill="currentColor"
               viewBox="0 0 24 24"
             >
@@ -29,8 +29,8 @@ const CommentarySection = () => {
           </button>
         </div>
 
-        <div className="text-center mt-6">
-          <p className="text-sm text-gray-600">
+        <div className="text-center mt-3">
+          <p className="text-xs sm:text-sm text-gray-600">
             Nhấn vào micro để bắt đầu thu âm bình luận
           </p>
         </div>
