@@ -488,6 +488,7 @@ const MatchManagementSection = () => {
             <div
               onClick={() => {
                 updatePoster('haoquang');
+                updateView('poster');
                 console.log('Poster selected: haoquang');
               }}
               className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'haoquang'
@@ -716,7 +717,7 @@ const MatchManagementSection = () => {
               onClick={() => {
                 updateView('scoreboard');
                 setSelectedOption("ti-so-duoi");
-                console.log('Chuyển sang scoreboard');
+                console.log('Chuy���n sang scoreboard');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -908,7 +909,7 @@ const MatchManagementSection = () => {
         <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-4">
           <div className="text-center mb-4">
             <h4 className="text-lg font-bold text-yellow-800 flex items-center justify-center">
-              <span className="mr-2">🕰️</span>
+              <span className="mr-2">����️</span>
               THIẾT LẬP ĐẾM T
               <span className="ml-2">🕰️</span>
             </h4>
