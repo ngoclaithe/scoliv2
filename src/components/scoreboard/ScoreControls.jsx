@@ -189,7 +189,7 @@ const ScoreControls = ({
           <div className="mt-4 text-center text-sm text-gray-600">
             Tỉ số hiện tại:{" "}
             <span className="font-bold">
-              {homeTeam.score} - {awayTeam.score}
+              {teamA.score} - {teamB.score}
             </span>
           </div>
         </div>
