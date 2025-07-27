@@ -444,8 +444,9 @@ export const MatchProvider = ({ children }) => {
     updatePenalty,
     updateLineup,
     updateFutsalErrors,
+    updateView,
     resetMatch,
-    
+
     // Socket functions
     initializeSocket,
     disconnectSocket
