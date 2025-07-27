@@ -374,7 +374,7 @@ const ScoreboardBelow = ({
             </div>
 
             {/* Live Stream Info */}
-            <div className={`mt-2 ${templateStyles.headerBackground} ${templateStyles.headerText} px-4 py-1 rounded-full text-center font-bold text-sm shadow-lg`}>
+            <div className={`mt-2 ${templateStyles.headerBackground} ${templateStyles.headerText} px-4 py-1 rounded-full text-center font-bold text-sm shadow-lg border-2 ${templateStyles.border}`}>
               TRỰC TIẾP TRẬN BÓNG ĐÁ
             </div>
           </div>
