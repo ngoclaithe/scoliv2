@@ -205,7 +205,7 @@ const MatchManagementSection = () => {
       {/* Score Controls */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
         <div className="grid grid-cols-2 gap-2 sm:gap-4">
-          {/* Đội nh�� */}
+          {/* Đội nhà */}
           <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-blue-200">
             <div className="flex space-x-1">
               <Button
@@ -691,7 +691,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">ĐẾM 30'</span>
             </button>
 
-            {/* Đ��m 35' */}
+            {/* Đếm 35' */}
             <button
               onClick={() => setSelectedOption("dem-35")}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -959,6 +959,11 @@ const MatchManagementSection = () => {
           </div>
         </div>
       </Modal>
+
+      {/* Test Controls - chỉ hiện khi development */}
+      {process.env.NODE_ENV === 'development' && (
+        <TestControls />
+      )}
     </div>
   );
 };
