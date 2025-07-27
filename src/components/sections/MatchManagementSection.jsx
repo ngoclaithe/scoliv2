@@ -7,7 +7,7 @@ import TeamLineupModal from "../lineup/TeamLineupModal";
 import Modal from "../common/Modal";
 import SimplePenaltyModal from "../common/SimplePenaltyModal";
 import { useMatch } from "../../contexts/MatchContext";
-import TestControls from "../debug/TestControls";
+
 
 const MatchManagementSection = () => {
   // Sử dụng MatchContext thay vì state local
@@ -960,10 +960,7 @@ const MatchManagementSection = () => {
         </div>
       </Modal>
 
-      {/* Test Controls - chỉ hiện khi development */}
-      {process.env.NODE_ENV === 'development' && (
-        <TestControls />
-      )}
+
     </div>
   );
 };
