@@ -53,12 +53,6 @@ function AppContent() {
     return <NewHomeLayout />;
   }
 
-
-
-
-
-
-
   const renderCurrentPage = () => {
     switch (currentPage) {
       case "home":

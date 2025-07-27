@@ -67,11 +67,14 @@ const MatchManagementSection = () => {
   }, [updatePenalty]);
 
   const handleScoreChange = (team, increment) => {
+    console.log('handleScoreChange - team:', team, 'increment:', increment);
+    console.log('Current matchData before update:', JSON.stringify(matchData, null, 2));
     updateScore(team, increment);
   };
 
   // Hàm cập nhật thống kê
   const updateStat = (statKey, team, value) => {
+    console.log('updateStat - statKey:', statKey, 'team:', team, 'value:', value);
     const newStats = {
       ...matchStats,
       [statKey]: {
@@ -79,11 +82,13 @@ const MatchManagementSection = () => {
         [team]: Math.max(0, parseInt(value) || 0)
       }
     };
+    console.log('New stats:', JSON.stringify(newStats, null, 2));
     updateStats(newStats);
   };
 
   // Hàm cập nhật ki���m soát bóng (đảm bảo tổng = 100%)
   const updatePossession = (team, value) => {
+    console.log('updatePossession - team:', team, 'value:', value);
     const newValue = Math.max(0, Math.min(100, parseInt(value) || 0));
     const otherTeam = team === 'team1' ? 'team2' : 'team1';
     const otherValue = 100 - newValue;
@@ -95,6 +100,7 @@ const MatchManagementSection = () => {
         [otherTeam]: otherValue
       }
     };
+    console.log('Updated possession stats:', JSON.stringify(newStats.possession, null, 2));
     updateStats(newStats);
   };
 
@@ -256,7 +262,12 @@ const MatchManagementSection = () => {
             variant="primary"
             size="sm"
             className="px-2 py-1 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
-            onClick={() => setSelectedOption("tam-dung")}
+            onClick={() => {
+              console.log('Tạm dừng được chọn');
+              console.log('Current selectedOption before:', selectedOption);
+              setSelectedOption("tam-dung");
+              console.log('Current selectedOption after:', "tam-dung");
+            }}
           >
             <span className="mr-1">⏸️</span>
             <span className="hidden sm:inline">TẠM DỪNG</span>
@@ -268,8 +279,10 @@ const MatchManagementSection = () => {
             size="sm"
             className="px-2 py-1 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
             onClick={() => {
-              updateView('halftime');
               console.log('Chuyển sang nghỉ giữa hiệp');
+              console.log('Current view before update:', matchData.status);
+              updateView('halftime');
+              console.log('Updated view to halftime');
             }}
           >
             <span className="mr-1">🥤</span>
