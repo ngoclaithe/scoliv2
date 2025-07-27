@@ -14,15 +14,15 @@ export const usePublicMatch = () => {
 export const PublicMatchProvider = ({ children }) => {
   // State cho thông tin trận đấu
   const [matchData, setMatchData] = useState({
-    homeTeam: { 
-      name: "ĐỘI-A", 
-      score: 0, 
-      logo: null 
+    teamA: {
+      name: "ĐỘI-A",
+      score: 0,
+      logo: null
     },
-    awayTeam: { 
-      name: "ĐỘI-B", 
-      score: 0, 
-      logo: null 
+    teamB: {
+      name: "ĐỘI-B",
+      score: 0,
+      logo: null
     },
     matchTime: "00:00",
     period: "Chưa bắt đầu",
@@ -45,9 +45,9 @@ export const PublicMatchProvider = ({ children }) => {
 
   // State cho penalty
   const [penaltyData, setPenaltyData] = useState({
-    homeGoals: 0,
-    awayGoals: 0,
-    currentTurn: 'home',
+    teamAGoals: 0,
+    teamBGoals: 0,
+    currentTurn: 'teamA',
     shootHistory: [],
     status: 'ready',
     lastUpdated: null
@@ -76,8 +76,8 @@ export const PublicMatchProvider = ({ children }) => {
 
   // State cho danh sách cầu thủ
   const [lineupData, setLineupData] = useState({
-    homeTeam: [],
-    awayTeam: []
+    teamA: [],
+    teamB: []
   });
 
   // State cho nhà tài trợ
@@ -104,8 +104,8 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('score_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
-        homeTeam: { ...prev.homeTeam, score: data.scores.home },
-        awayTeam: { ...prev.awayTeam, score: data.scores.away }
+        teamA: { ...prev.teamA, score: data.scores.teamA },
+        teamB: { ...prev.teamB, score: data.scores.teamB }
       }));
       setLastUpdateTime(Date.now());
     });
@@ -132,8 +132,8 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('team_logos_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
-        homeTeam: { ...prev.homeTeam, logo: data.logos.home },
-        awayTeam: { ...prev.awayTeam, logo: data.logos.away }
+        teamA: { ...prev.teamA, logo: data.logos.teamA },
+        teamB: { ...prev.teamB, logo: data.logos.teamB }
       }));
       setLastUpdateTime(Date.now());
     });
@@ -142,8 +142,8 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('team_names_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
-        homeTeam: { ...prev.homeTeam, name: data.names.home },
-        awayTeam: { ...prev.awayTeam, name: data.names.away }
+        teamA: { ...prev.teamA, name: data.names.teamA },
+        teamB: { ...prev.teamB, name: data.names.teamB }
       }));
       setLastUpdateTime(Date.now());
     });
@@ -174,8 +174,8 @@ export const PublicMatchProvider = ({ children }) => {
     // Lắng nghe cập nhật danh sách
     socketService.on('lineup_updated', (data) => {
       setLineupData({
-        homeTeam: data.lineup.home,
-        awayTeam: data.lineup.away
+        teamA: data.lineup.teamA,
+        teamB: data.lineup.teamB
       });
       setLastUpdateTime(Date.now());
     });
