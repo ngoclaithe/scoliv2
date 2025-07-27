@@ -6,7 +6,7 @@ import { PublicMatchProvider } from '../contexts/PublicMatchContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import App from '../App';
-import PosterDisplay from '../components/display/PosterDisplay';
+import DisplayController from '../components/display/DisplayController';
 
 const AppRoutes = () => {
   return (
@@ -24,7 +24,7 @@ const AppRoutes = () => {
         {/* Public dynamic routes for access codes - không cần authentication */}
         <Route path="/:accessCode" element={
           <PublicMatchProvider>
-            <PosterDisplay />
+            <DisplayController />
           </PublicMatchProvider>
         } />
       </Routes>

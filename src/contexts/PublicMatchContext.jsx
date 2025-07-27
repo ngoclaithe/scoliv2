@@ -71,6 +71,9 @@ export const PublicMatchProvider = ({ children }) => {
     showLineup: false
   });
 
+  // State cho view hiện tại trên route dynamic
+  const [currentView, setCurrentView] = useState('poster'); // poster, intro, halftime, scoreboard
+
   // State cho danh sách cầu thủ
   const [lineupData, setLineupData] = useState({
     homeTeam: [],
@@ -183,6 +186,13 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
+    // Lắng nghe cập nhật view hiện tại (MỚI)
+    socketService.on('view_updated', (data) => {
+      setCurrentView(data.viewType);
+      setLastUpdateTime(Date.now());
+      console.log('View updated to:', data.viewType);
+    });
+
     // Lắng nghe trạng thái kết nối
     socketService.on('disconnect', () => {
       setSocketConnected(false);
@@ -237,7 +247,8 @@ export const PublicMatchProvider = ({ children }) => {
     socketConnected,
     lastUpdateTime,
     currentAccessCode,
-    
+    currentView,
+
     // Actions
     initializeSocket,
     disconnectSocket

@@ -7,6 +7,7 @@ import TeamLineupModal from "../lineup/TeamLineupModal";
 import Modal from "../common/Modal";
 import SimplePenaltyModal from "../common/SimplePenaltyModal";
 import { useMatch } from "../../contexts/MatchContext";
+import TestControls from "../debug/TestControls";
 
 const MatchManagementSection = () => {
   // Sử dụng MatchContext thay vì state local
@@ -24,7 +25,8 @@ const MatchManagementSection = () => {
     updatePoster,
     updateFutsalErrors,
     updatePenalty,
-    updateMarquee
+    updateMarquee,
+    updateView
   } = useMatch();
 
   // State cho các tùy chọn điều khiển UI
@@ -248,7 +250,7 @@ const MatchManagementSection = () => {
           </div>
         </div>
 
-        {/* Nút TẠM DỪNG và LỖI(FUTSAL) */}
+        {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và LỖI(FUTSAL) */}
         <div className="flex justify-center items-center mt-2 space-x-2">
           <Button
             variant="primary"
@@ -259,6 +261,20 @@ const MatchManagementSection = () => {
             <span className="mr-1">⏸️</span>
             <span className="hidden sm:inline">TẠM DỪNG</span>
             <span className="sm:hidden">DỪNG</span>
+          </Button>
+
+          <Button
+            variant="primary"
+            size="sm"
+            className="px-2 py-1 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+            onClick={() => {
+              updateView('halftime');
+              console.log('Chuyển sang nghỉ giữa hiệp');
+            }}
+          >
+            <span className="mr-1">🥤</span>
+            <span className="hidden sm:inline">NGHỈ GIỮA HIỆP</span>
+            <span className="sm:hidden">NGHỈ</span>
           </Button>
 
           <div className="flex space-x-2">
@@ -448,6 +464,7 @@ const MatchManagementSection = () => {
             <div
               onClick={() => {
                 updatePoster('tretrung');
+                updateView('poster');
                 console.log('Poster selected: tretrung');
               }}
               className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'tretrung'
@@ -472,6 +489,7 @@ const MatchManagementSection = () => {
             <div
               onClick={() => {
                 updatePoster('haoquang');
+                updateView('poster');
                 console.log('Poster selected: haoquang');
               }}
               className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'haoquang'
@@ -499,7 +517,7 @@ const MatchManagementSection = () => {
             <div className="flex items-center justify-between text-xs">
               <span className="text-gray-600">Trạng thái kết nối:</span>
               <span className={`px-2 py-1 rounded ${socketConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                {socketConnected ? '🟢 Đã kết nối' : '🔴 Mất kết nối'}
+                {socketConnected ? '🟢 Đã kết nối' : '🔴 Mất k��t nối'}
               </span>
             </div>
             <div className="text-xs text-gray-500 mt-1">
@@ -531,7 +549,7 @@ const MatchManagementSection = () => {
             <div className="space-y-3">
               {/* Kiểm soát bóng */}
               <EditableStatBar
-                label="Kiểm soát bóng"
+                label="Ki��m soát bóng"
                 statKey="possession"
                 team1Value={matchStats.possession.team1}
                 team2Value={matchStats.possession.team2}
@@ -684,7 +702,11 @@ const MatchManagementSection = () => {
 
             {/* Giới thiệu */}
             <button
-              onClick={() => setSelectedOption("gioi-thieu")}
+              onClick={() => {
+                updateView('intro');
+                setSelectedOption("gioi-thieu");
+                console.log('Chuyển sang giới thiệu');
+              }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               {/* <span className="text-sm mr-1">���</span> */}
@@ -693,7 +715,11 @@ const MatchManagementSection = () => {
 
             {/* Tỉ số dưới */}
             <button
-              onClick={() => setSelectedOption("ti-so-duoi")}
+              onClick={() => {
+                updateView('scoreboard');
+                setSelectedOption("ti-so-duoi");
+                console.log('Chuyển sang scoreboard');
+              }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">📊</span>
@@ -933,6 +959,11 @@ const MatchManagementSection = () => {
           </div>
         </div>
       </Modal>
+
+      {/* Test Controls - chỉ hiện khi development */}
+      {process.env.NODE_ENV === 'development' && (
+        <TestControls />
+      )}
     </div>
   );
 };
