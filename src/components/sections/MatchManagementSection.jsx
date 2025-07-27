@@ -291,24 +291,24 @@ const MatchManagementSection = () => {
           </Button>
 
           <div className="flex space-x-2">
-            {/* Lỗi đội nhà */}
+            {/* Lỗi đội A */}
             <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
               <Button
                 variant="outline"
                 size="sm"
                 className="px-1 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
-                onClick={() => updateFutsalErrors('homeTeam', -1)}
+                onClick={() => updateFutsalErrors('teamA', -1)}
               >
                 -
               </Button>
               <div className="px-1.5 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-5 text-center">
-                {futsalErrors.homeTeam}
+                {futsalErrors.teamA}
               </div>
               <Button
                 variant="outline"
                 size="sm"
                 className="px-1 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
-                onClick={() => updateFutsalErrors('homeTeam', 1)}
+                onClick={() => updateFutsalErrors('teamA', 1)}
               >
                 +
               </Button>
@@ -321,24 +321,24 @@ const MatchManagementSection = () => {
               </span>
             </div>
 
-            {/* Lỗi đội khách */}
+            {/* Lỗi đội B */}
             <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
               <Button
                 variant="outline"
                 size="sm"
                 className="px-1 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
-                onClick={() => updateFutsalErrors('awayTeam', -1)}
+                onClick={() => updateFutsalErrors('teamB', -1)}
               >
                 -
               </Button>
               <div className="px-1.5 py-1 bg-gray-100 text-gray-800 text-xs font-bold min-w-5 text-center">
-                {futsalErrors.awayTeam}
+                {futsalErrors.teamB}
               </div>
               <Button
                 variant="outline"
                 size="sm"
                 className="px-1 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
-                onClick={() => updateFutsalErrors('awayTeam', 1)}
+                onClick={() => updateFutsalErrors('teamB', 1)}
               >
                 +
               </Button>
