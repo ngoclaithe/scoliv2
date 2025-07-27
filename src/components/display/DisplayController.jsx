@@ -97,6 +97,8 @@ const DisplayController = () => {
         return <HalfTime accessCode={accessCode} />;
       case 'scoreboard':
         return <ScoreboardAbove accessCode={accessCode} />;
+      case 'scoreboard_below':
+        return <ScoreboardBelow accessCode={accessCode} />;
       case 'poster':
         // Render poster theo selectedPoster
         switch (displaySettings.selectedPoster) {
