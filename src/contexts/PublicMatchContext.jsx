@@ -33,7 +33,7 @@ export const PublicMatchProvider = ({ children }) => {
     liveText: ""
   });
 
-  // State cho thống k�� trận đấu
+  // State cho thống kê trận đấu
   const [matchStats, setMatchStats] = useState({
     possession: { team1: 50, team2: 50 },
     totalShots: { team1: 0, team2: 0 },
@@ -110,7 +110,7 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật thống kê
+    // Lắng nghe cập nh���t thống kê
     socketService.on('match_stats_updated', (data) => {
       setMatchStats(prev => ({ ...prev, ...data.stats }));
       setLastUpdateTime(Date.now());
@@ -184,6 +184,13 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('sponsors_updated', (data) => {
       setSponsors(prev => ({ ...prev, ...data.sponsors }));
       setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật view hiện tại (MỚI)
+    socketService.on('view_updated', (data) => {
+      setCurrentView(data.viewType);
+      setLastUpdateTime(Date.now());
+      console.log('View updated to:', data.viewType);
     });
 
     // Lắng nghe trạng thái kết nối
