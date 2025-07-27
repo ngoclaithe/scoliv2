@@ -118,7 +118,7 @@ import ScoreboardBelowDemo from './components/scoreboard_preview/ScoreboardBelow
 ```
 
 ### Browser Support:
-- �� Chrome 80+
+-  Chrome 80+
 - ✅ Firefox 75+
 - ✅ Safari 13+
 - ✅ Edge 80+

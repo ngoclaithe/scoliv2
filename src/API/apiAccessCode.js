@@ -262,7 +262,7 @@ const AccessCodeAPI = {
       // Không nhận được phản hồi từ server
       throw new Error('Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng của bạn.');
     } else {
-      // Lỗi khi thi���t lập request
+      // Lỗi khi thiết lập request
       throw new Error('Đã xảy ra lỗi khi thiết lập yêu cầu: ' + error.message);
     }
   }

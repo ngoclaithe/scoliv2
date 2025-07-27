@@ -277,7 +277,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [matchData, socketConnected]);
 
-  // Cập nhật thông tin trận đ���u
+  // Cập nhật thông tin trận đấu
   const updateMatchInfo = useCallback((newMatchInfo) => {
     setMatchData(prev => ({ ...prev, ...newMatchInfo }));
     
@@ -391,7 +391,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Reset toàn bộ dữ liệu trận ��ấu
+  // Reset toàn bộ dữ liệu trận đấu
   const resetMatch = useCallback(() => {
     setMatchData({
       teamA: { name: "ĐỘI-A", score: 0, logo: null },

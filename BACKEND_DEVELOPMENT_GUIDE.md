@@ -86,7 +86,7 @@ graph TB
    └── socketService.connect(accessCode)
 
 2. SOCKET LISTENERS:
-   ┌─────────────���───────────┐
+   ┌────────────────────────┐
    │ PublicMatchContext      │ → Lắng nghe tất cả events:
    └─────────────────────────┘   
    ├── 'view_updated' → setCurrentView()
