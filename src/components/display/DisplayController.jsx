@@ -148,14 +148,6 @@ const DisplayController = () => {
       </div>
 
       {/* Debug info (chỉ hiện khi development) */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="fixed bottom-4 left-4 bg-black/80 text-white p-3 rounded-lg text-xs max-w-xs">
-          <div>🎯 Current View: <span className="font-bold">{currentView || 'poster'}</span></div>
-          <div>🎨 Poster Type: <span className="font-bold">{displaySettings.selectedPoster}</span></div>
-          <div>🎪 Template: <span className="font-bold">{displaySettings.selectedSkin}</span></div>
-          <div>📶 Socket: <span className={socketConnected ? 'text-green-400' : 'text-red-400'}>{socketConnected ? 'Connected' : 'Disconnected'}</span></div>
-        </div>
-      )}
     </div>
   );
 };
