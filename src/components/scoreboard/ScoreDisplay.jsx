@@ -1,8 +1,8 @@
 import React from "react";
 
 const ScoreDisplay = ({
-  homeTeam = { name: "Đội nhà", score: 0, logo: null },
-  awayTeam = { name: "Đội khách", score: 0, logo: null },
+  teamA = { name: "Đội A", score: 0, logo: null },
+  teamB = { name: "Đội B", score: 0, logo: null },
   matchTime = "00:00",
   period = "Hiệp 1",
   status = "live", // live, pause, ended
@@ -111,14 +111,14 @@ const ScoreDisplay = ({
 
       {/* Score Display */}
       <div className="flex items-center justify-between">
-        {/* Home Team */}
+        {/* Team A */}
         <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3">
-          <TeamLogo team={homeTeam} position="home" />
+          <TeamLogo team={teamA} position="teamA" />
           <div className="text-center">
             <h3
               className={`${currentSize.teamName} font-bold truncate max-w-full`}
             >
-              {homeTeam.name}
+              {teamA.name}
             </h3>
           </div>
         </div>
@@ -127,23 +127,23 @@ const ScoreDisplay = ({
         <div className="flex-1 flex items-center justify-center">
           <div className="flex items-center space-x-3 sm:space-x-6">
             <span className={`${currentSize.score} font-bold font-mono`}>
-              {homeTeam.score}
+              {teamA.score}
             </span>
             <span className={`${currentSize.time} opacity-75`}>-</span>
             <span className={`${currentSize.score} font-bold font-mono`}>
-              {awayTeam.score}
+              {teamB.score}
             </span>
           </div>
         </div>
 
-        {/* Away Team */}
+        {/* Team B */}
         <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3">
-          <TeamLogo team={awayTeam} position="away" />
+          <TeamLogo team={teamB} position="teamB" />
           <div className="text-center">
             <h3
               className={`${currentSize.teamName} font-bold truncate max-w-full`}
             >
-              {awayTeam.name}
+              {teamB.name}
             </h3>
           </div>
         </div>
@@ -151,11 +151,11 @@ const ScoreDisplay = ({
 
       {/* Additional info cho mobile */}
       <div className="mt-4 sm:hidden flex justify-center items-center space-x-4 text-xs opacity-90">
-        <span>{homeTeam.name}</span>
+        <span>{teamA.name}</span>
         <span>
-          {homeTeam.score} - {awayTeam.score}
+          {teamA.score} - {teamB.score}
         </span>
-        <span>{awayTeam.name}</span>
+        <span>{teamB.name}</span>
       </div>
     </div>
   );
