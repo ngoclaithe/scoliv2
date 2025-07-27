@@ -37,7 +37,7 @@ function AppContent() {
   } = useAuth();
   const [currentPage, setCurrentPage] = useState("manage-access-code");
 
-  // Cập nhật currentPage khi authType thay đổi
+  // Cập nhật currentPage khi authType thay đ��i
   React.useEffect(() => {
     if (authType === 'account') {
       setCurrentPage("manage-access-code"); // User account bắt đầu từ quản lý mã
@@ -76,9 +76,9 @@ function AppContent() {
     return <LoginPage />;
   }
 
-  // Đăng nhập chỉ bằng code -> vào thẳng Home
+  // Đăng nhập chỉ bằng code -> vào thẳng NewHomeLayout
   if (authType === 'code') {
-    return <Home />;
+    return <NewHomeLayout />;
   }
 
   const demoLineup = {
