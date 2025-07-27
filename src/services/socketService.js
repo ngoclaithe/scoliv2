@@ -210,6 +210,11 @@ class SocketService {
     return this.emit('sponsors_update', { sponsors });
   }
 
+  // Cập nhật view hiện tại cho route dynamic (MỚI)
+  updateView(viewType) {
+    return this.emit('view_update', { viewType });
+  }
+
   // === LISTENER HELPERS ===
 
   // Lắng nghe tất cả các update của match
