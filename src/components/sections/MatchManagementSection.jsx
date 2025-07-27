@@ -197,8 +197,8 @@ const MatchManagementSection = () => {
     </div>
   ) : (
     <ScoreDisplay
-      homeTeam={matchData.homeTeam}
-      awayTeam={matchData.awayTeam}
+      teamA={matchData.teamA}
+      teamB={matchData.teamB}
       matchTime={matchData.matchTime}
       period={matchData.period}
       status={matchData.status}
