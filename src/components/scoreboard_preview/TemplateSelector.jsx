@@ -6,10 +6,10 @@ const TemplateSelector = ({ selectedTemplate, onTemplateChange }) => {
       id: 1,
       name: 'Template 1 - Classic Navy',
       preview: {
-        backgroundColor: 'bg-gradient-to-r from-blue-900 via-gray-800 to-blue-900',
+        backgroundColor: 'bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900',
         borderColor: 'border-yellow-400',
-        scoreColor: 'bg-yellow-400 text-blue-900',
-        timerColor: 'bg-gray-800 text-white',
+        scoreColor: 'bg-white text-blue-900',
+        timerColor: 'bg-blue-900 text-white',
         description: 'Màu xanh navy cổ điển với viền vàng'
       }
     },
@@ -17,7 +17,7 @@ const TemplateSelector = ({ selectedTemplate, onTemplateChange }) => {
       id: 2,
       name: 'Template 2 - Blue Red',
       preview: {
-        backgroundColor: 'bg-gradient-to-r from-blue-600 to-red-600',
+        backgroundColor: 'bg-gradient-to-r from-blue-600 via-blue-500 to-red-600',
         borderColor: 'border-yellow-500',
         scoreColor: 'bg-white text-blue-900',
         timerColor: 'bg-gray-700 text-white',
@@ -28,10 +28,10 @@ const TemplateSelector = ({ selectedTemplate, onTemplateChange }) => {
       id: 3,
       name: 'Template 3 - Teal Modern',
       preview: {
-        backgroundColor: 'bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600',
+        backgroundColor: 'bg-gradient-to-r from-teal-500 via-teal-400 to-teal-500',
         borderColor: 'border-white',
-        scoreColor: 'bg-red-500 text-white',
-        timerColor: 'bg-teal-700 text-white',
+        scoreColor: 'bg-red-600 text-white',
+        timerColor: 'bg-teal-600 text-white',
         description: 'Màu xanh ngọc hiện đại'
       }
     },
