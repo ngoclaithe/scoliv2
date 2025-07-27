@@ -7,6 +7,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import App from '../App';
 import DisplayController from '../components/display/DisplayController';
+import ScoreboardTest from '../pages/ScoreboardTest';
 
 const AppRoutes = () => {
   return (
