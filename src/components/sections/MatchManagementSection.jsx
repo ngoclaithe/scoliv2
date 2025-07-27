@@ -24,7 +24,8 @@ const MatchManagementSection = () => {
     updatePoster,
     updateFutsalErrors,
     updatePenalty,
-    updateMarquee
+    updateMarquee,
+    updateView
   } = useMatch();
 
   // State cho các tùy chọn điều khiển UI
