@@ -104,8 +104,8 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('score_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
-        teamA: { ...prev.teamA, score: data.scores.teamA },
-        teamB: { ...prev.teamB, score: data.scores.teamB }
+        teamA: { ...prev.teamA, score: data.scores.home },
+        teamB: { ...prev.teamB, score: data.scores.away }
       }));
       setLastUpdateTime(Date.now());
     });
@@ -132,8 +132,8 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('team_logos_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
-        teamA: { ...prev.teamA, logo: data.logos.teamA },
-        teamB: { ...prev.teamB, logo: data.logos.teamB }
+        teamA: { ...prev.teamA, logo: data.logos.home },
+        teamB: { ...prev.teamB, logo: data.logos.away }
       }));
       setLastUpdateTime(Date.now());
     });
@@ -142,8 +142,8 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('team_names_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
-        teamA: { ...prev.teamA, name: data.names.teamA },
-        teamB: { ...prev.teamB, name: data.names.teamB }
+        teamA: { ...prev.teamA, name: data.names.home },
+        teamB: { ...prev.teamB, name: data.names.away }
       }));
       setLastUpdateTime(Date.now());
     });
