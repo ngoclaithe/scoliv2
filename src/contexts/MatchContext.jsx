@@ -307,6 +307,42 @@ export const MatchProvider = ({ children }) => {
     socketService.on('connect', () => {
       setSocketConnected(true);
     });
+
+    // Lắng nghe response state hiện tại từ server
+    socketService.on('current_state_response', (data) => {
+      console.log('🔄 [MatchContext] Received current_state_response:', data);
+
+      if (data.matchData) {
+        setMatchData(prev => ({ ...prev, ...data.matchData }));
+      }
+
+      if (data.matchStats) {
+        setMatchStats(prev => ({ ...prev, ...data.matchStats }));
+      }
+
+      if (data.displaySettings) {
+        setDisplaySettings(prev => ({ ...prev, ...data.displaySettings }));
+      }
+
+      if (data.marqueeData) {
+        setMarqueeData(prev => ({ ...prev, ...data.marqueeData }));
+      }
+
+      if (data.penaltyData) {
+        setPenaltyData(prev => ({ ...prev, ...data.penaltyData }));
+      }
+
+      if (data.lineupData) {
+        setLineupData(data.lineupData);
+      }
+
+      if (data.futsalErrors) {
+        setFutsalErrors(prev => ({ ...prev, ...data.futsalErrors }));
+      }
+
+      console.log('✅ [MatchContext] State loaded from server successfully');
+      setLastUpdateTime(Date.now());
+    });
   }, []);
 
   // Ngắt kết nối socket
@@ -446,7 +482,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Cập nhật danh sách c���u thủ
+  // Cập nhật danh sách cầu thủ
   const updateLineup = useCallback((teamALineup, teamBLineup) => {
     setLineupData({ teamA: teamALineup, teamB: teamBLineup });
 
