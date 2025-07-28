@@ -411,7 +411,7 @@ export const MatchProvider = ({ children }) => {
 
   // === ACTION FUNCTIONS ===
 
-  // Cập nhật tỉ số và thông tin đ��i
+  // Cập nhật tỉ số và thông tin đội
   const updateScore = useCallback((team, increment, additionalData = {}) => {
     const newMatchData = { ...matchData };
 
@@ -514,22 +514,25 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Cập nhật thời gian trận đấu
+  // Cập nhật thời gian trận đấu - Sử dụng server timer
   const updateMatchTime = useCallback((matchTime, period, status) => {
-    const currentTime = parseTimeToSeconds(matchTime);
-    const now = Date.now();
-
-    // Cập nhật startTime khi set thời gian mới
-    if (status === "live") {
-      setStartTime(now - (currentTime * 1000));
-    }
-
+    // Cập nhật local state trước khi gửi đến server
     setMatchData(prev => ({ ...prev, matchTime, period, status }));
 
     if (socketConnected) {
-      socketService.updateMatchTime(matchTime, period, status);
+      // Sử dụng server timer events thay vì match_time_update
+      if (status === "live") {
+        socketService.startServerTimer(matchTime, period);
+        console.log('▶️ [MatchContext] Started server timer:', { matchTime, period });
+      } else if (status === "paused") {
+        socketService.pauseServerTimer();
+        console.log('⏸️ [MatchContext] Paused server timer');
+      } else if (status === "waiting") {
+        socketService.resetServerTimer(matchTime, period);
+        console.log('🔄 [MatchContext] Reset server timer:', { matchTime, period });
+      }
     }
-  }, [socketConnected, parseTimeToSeconds]);
+  }, [socketConnected]);
 
   // Cập nhật penalty
   const updatePenalty = useCallback((newPenaltyData) => {
