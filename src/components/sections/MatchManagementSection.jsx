@@ -171,7 +171,7 @@ const MatchManagementSection = () => {
       }
     } catch (error) {
       console.error('Lỗi tìm kiếm logo A:', error);
-      toast.error('Lỗi khi tìm kiếm logo. Vui l��ng thử lại.');
+      toast.error('Lỗi khi tìm kiếm logo. Vui lòng thử lại.');
     } finally {
       setIsSearchingLogoA(false);
     }
@@ -357,7 +357,7 @@ const MatchManagementSection = () => {
               ⚽ THỜI GIAN TRẬN ĐẤU: {matchData.matchTime}
             </div>
             <div className="text-green-100 text-sm">
-              {matchData.period} • {matchData.status === "live" ? "ĐANG DIỄN RA" : "TẠM DỪNG"}
+              {matchData.period} • {displayStatus}
             </div>
           </div>
         </div>
