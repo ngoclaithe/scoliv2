@@ -442,7 +442,7 @@ const MatchManagementSection = () => {
             />
           </div>
           <div className="flex-1">
-            <label className="block text-xs text-blue-600 font-medium mb-1">Địa đi��m</label>
+            <label className="block text-xs text-blue-600 font-medium mb-1">Địa điểm</label>
             <input
               type="text"
               placeholder="Sân vận động..."
@@ -578,7 +578,7 @@ const MatchManagementSection = () => {
       {/* Inline Poster Selection */}
       {selectedOption === "chon-poster" && (
         <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200 animate-slide-up">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
             <div
               onClick={() => {
                 updatePoster('tretrung');
@@ -590,16 +590,16 @@ const MatchManagementSection = () => {
                   : "border-gray-200 hover:border-purple-300"
                 }`}
             >
-              <div className="w-full h-24 bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center">
+              <div className="w-full h-20 bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center">
                 <div className="text-center">
-                  <span className="text-2xl">🏆</span>
-                  <div className="text-sm font-bold text-gray-700 mt-1">Poster Tre Trung</div>
-                  <div className="text-xs text-gray-500">Football Match Intro</div>
+                  <span className="text-xl">🏆</span>
+                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Tre Trung</div>
+                  <div className="text-xs text-gray-500">Football Match</div>
                 </div>
               </div>
               {displaySettings.selectedPoster === 'tretrung' && (
-                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
-                  <span className="text-sm">✓</span>
+                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
+                  <span className="text-xs">✓</span>
                 </div>
               )}
             </div>
@@ -615,16 +615,116 @@ const MatchManagementSection = () => {
                   : "border-gray-200 hover:border-purple-300"
                 }`}
             >
-              <div className="w-full h-24 bg-gradient-to-r from-green-100 to-blue-100 flex items-center justify-center">
+              <div className="w-full h-20 bg-gradient-to-r from-green-100 to-blue-100 flex items-center justify-center">
                 <div className="text-center">
-                  <span className="text-2xl">⚽</span>
-                  <div className="text-sm font-bold text-gray-700 mt-1">Poster Hao Quang</div>
+                  <span className="text-xl">⚽</span>
+                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Hao Quang</div>
                   <div className="text-xs text-gray-500">Sports Display</div>
                 </div>
               </div>
               {displaySettings.selectedPoster === 'haoquang' && (
-                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
-                  <span className="text-sm">✓</span>
+                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
+                  <span className="text-xs">✓</span>
+                </div>
+              )}
+            </div>
+
+            <div
+              onClick={() => {
+                updatePoster('vangxanh');
+                updateView('poster');
+                console.log('Poster selected: vangxanh');
+              }}
+              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'vangxanh'
+                  ? "border-purple-500 ring-2 ring-purple-200"
+                  : "border-gray-200 hover:border-purple-300"
+                }`}
+            >
+              <div className="w-full h-20 bg-gradient-to-r from-green-100 to-teal-100 flex items-center justify-center">
+                <div className="text-center">
+                  <span className="text-xl">🌟</span>
+                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Vang Xanh</div>
+                  <div className="text-xs text-gray-500">Modern Style</div>
+                </div>
+              </div>
+              {displaySettings.selectedPoster === 'vangxanh' && (
+                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
+                  <span className="text-xs">✓</span>
+                </div>
+              )}
+            </div>
+
+            <div
+              onClick={() => {
+                updatePoster('xanhduong');
+                updateView('poster');
+                console.log('Poster selected: xanhduong');
+              }}
+              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'xanhduong'
+                  ? "border-purple-500 ring-2 ring-purple-200"
+                  : "border-gray-200 hover:border-purple-300"
+                }`}
+            >
+              <div className="w-full h-20 bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                <div className="text-center">
+                  <span className="text-xl">💙</span>
+                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Xanh Dương</div>
+                  <div className="text-xs text-gray-500">Blue Theme</div>
+                </div>
+              </div>
+              {displaySettings.selectedPoster === 'xanhduong' && (
+                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
+                  <span className="text-xs">✓</span>
+                </div>
+              )}
+            </div>
+
+            <div
+              onClick={() => {
+                updatePoster('doden');
+                updateView('poster');
+                console.log('Poster selected: doden');
+              }}
+              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'doden'
+                  ? "border-purple-500 ring-2 ring-purple-200"
+                  : "border-gray-200 hover:border-purple-300"
+                }`}
+            >
+              <div className="w-full h-20 bg-gradient-to-r from-red-100 to-black/10 flex items-center justify-center">
+                <div className="text-center">
+                  <span className="text-xl">🔥</span>
+                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Đỏ Đen</div>
+                  <div className="text-xs text-gray-500">Fire Style</div>
+                </div>
+              </div>
+              {displaySettings.selectedPoster === 'doden' && (
+                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
+                  <span className="text-xs">✓</span>
+                </div>
+              )}
+            </div>
+
+            <div
+              onClick={() => {
+                updatePoster('vangkim');
+                updateView('poster');
+                console.log('Poster selected: vangkim');
+              }}
+              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'vangkim'
+                  ? "border-purple-500 ring-2 ring-purple-200"
+                  : "border-gray-200 hover:border-purple-300"
+                }`}
+            >
+              <div className="w-full h-20 bg-gradient-to-r from-yellow-100 to-amber-100 flex items-center justify-center">
+                <div className="text-center">
+                  <span className="text-xl">⭐</span>
+                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Vàng Kim</div>
+                  <div className="text-xs text-gray-500">Golden Style</div>
+                </div>
+              </div>
+              {displaySettings.selectedPoster === 'vangkim' && (
+                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
+                  <span className="text-xs">✓</span>
                 </div>
               )}
             </div>
@@ -635,7 +735,7 @@ const MatchManagementSection = () => {
             <div className="flex items-center justify-between text-xs">
               <span className="text-gray-600">Trạng thái kết nối:</span>
               <span className={`px-2 py-1 rounded ${socketConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                {socketConnected ? '🟢 Đã kết nối' : '🔴 Mất kết nối'}
+                {socketConnected ? '🟢 Đã kết n��i' : '🔴 Mất kết nối'}
               </span>
             </div>
             <div className="text-xs text-gray-500 mt-1">
@@ -748,7 +848,7 @@ const MatchManagementSection = () => {
         </div>
       )}
 
-      {/* Options - Các action buttons điều khi���n */}
+      {/* Options - Các action buttons điều khiển */}
       {selectedOption !== "chon-skin" && selectedOption !== "thong-so" && selectedOption !== "chon-poster" && (
         <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-2 sm:p-3 border border-indigo-200">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
@@ -791,7 +891,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">ĐẾM 0</span>
             </button>
 
-            {/* ��ếm 25' */}
+            {/* Đếm 25' */}
             <button
               onClick={() => setSelectedOption("dem-25")}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -1054,7 +1154,7 @@ const MatchManagementSection = () => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ bắt đầu chạy từ thời điểm này
+              Trận đấu sẽ bắt đầu ch���y từ thời điểm này
             </p>
           </div>
 
