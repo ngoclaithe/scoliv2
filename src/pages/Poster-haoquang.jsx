@@ -193,17 +193,18 @@ export default function MatchIntroduction() {
           </div>
         )}
 
-        {/* Falling Stars Effect */}
+        {/* Floating Bubbles Effect */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {[...Array(16)].map((_, i) => (
             <div
               key={i}
-              className="absolute w-1 h-1 bg-yellow-400 rounded-full opacity-80"
+              className="absolute bg-gradient-to-r from-cyan-300 to-blue-400 rounded-full opacity-60"
               style={{
+                width: `${8 + Math.random() * 16}px`,
+                height: `${8 + Math.random() * 16}px`,
                 left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${3 + Math.random() * 2}s`,
-                animation: 'fallingStar 5s linear infinite'
+                bottom: '-20px',
+                animation: `floatUp ${8 + Math.random() * 12}s ease-in-out infinite`
               }}
             />
           ))}
@@ -215,19 +216,20 @@ export default function MatchIntroduction() {
             0% { transform: translateX(100%) translateY(-50%); }
             100% { transform: translateX(-100%) translateY(-50%); }
           }
-          @keyframes fallingStar {
+          @keyframes floatUp {
             0% {
-              transform: translateY(-10px) rotate(45deg);
+              transform: translateY(0) translateX(0) scale(0);
               opacity: 0;
             }
             10% {
-              opacity: 1;
+              opacity: 0.6;
+              transform: scale(1);
             }
             90% {
-              opacity: 1;
+              opacity: 0.6;
             }
             100% {
-              transform: translateY(100vh) rotate(45deg);
+              transform: translateY(-100vh) translateX(${Math.random() * 200 - 100}px) scale(0);
               opacity: 0;
             }
           }
