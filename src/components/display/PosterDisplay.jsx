@@ -78,13 +78,21 @@ const PosterDisplay = () => {
 
   // Render poster theo selectedPoster
   const renderPoster = () => {
-    switch (displaySettings.selectedPoster) {
+    switch (displaySettings.selectedPoster?.id || displaySettings.selectedPoster) {
       case 'tretrung':
         return <PosterTreTrung accessCode={accessCode} />;
       case 'haoquang':
         return <PosterHaoQuang accessCode={accessCode} />;
+      case 'doden':
+        return <PosterDoDen accessCode={accessCode} />;
+      case 'vangkim':
+        return <PosterVangKim accessCode={accessCode} />;
+      case 'vangxanh':
+        return <PosterVangXanh accessCode={accessCode} />;
+      case 'xanhduong':
+        return <PosterXanhDuong accessCode={accessCode} />;
       default:
-        return <PosterTreTrung accessCode={accessCode} />;
+        return <PosterHaoQuang accessCode={accessCode} />;
     }
   };
 
