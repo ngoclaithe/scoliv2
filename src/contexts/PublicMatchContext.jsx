@@ -281,8 +281,6 @@ export const PublicMatchProvider = ({ children }) => {
       
       // Lắng nghe các event từ server
       setupSocketListeners();
-      
-      console.log(`Public socket initialized for access code: ${accessCode}`);
     } catch (error) {
       console.error('Failed to initialize public socket:', error);
       setSocketConnected(false);
