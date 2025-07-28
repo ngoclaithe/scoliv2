@@ -203,7 +203,7 @@ class SocketService {
     });
   }
 
-  // C��p nhật danh sách cầu thủ
+  // Cập nhật danh sách cầu thủ
   updateLineup(teamALineup, teamBLineup) {
     return this.emit('lineup_update', {
       lineup: { teamA: teamALineup, teamB: teamBLineup }
@@ -234,16 +234,6 @@ class SocketService {
   }
 
   // === AUDIO & COMMENTARY EVENTS ===
-
-  // Gửi audio bình luận
-  sendCommentaryAudio(audioData, mimeType = 'audio/webm;codecs=opus') {
-    return this.emit('commentary_audio', {
-      audioData,
-      mimeType,
-      timestamp: Date.now(),
-      duration: null // Có thể thêm thời lượng audio nếu cần
-    });
-  }
 
   // === TIMER REAL-TIME EVENTS ===
 
