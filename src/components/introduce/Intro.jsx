@@ -1,16 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
-import { useAudio } from '../../contexts/AudioContext';
 
 const Intro = () => {
     // Sử dụng dữ liệu từ PublicMatchContext
     const { matchData: contextMatchData, marqueeData } = usePublicMatch();
 
-    // Sử dụng AudioContext để phát audio
-    const { playAudio, isComponentPlaying } = useAudio();
-
-    // State cho user interaction
-    const [userInteracted, setUserInteracted] = useState(false);
+    const audioRef = useRef(null);
 
     // Kết hợp dữ liệu từ context với dữ liệu mặc định
     const matchData = {
@@ -45,23 +40,31 @@ const Intro = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // Tự động phát audio poster.mp3 khi user đã interaction - CHỈ PHÁT 1 LẦN
+    // Tự động phát audio poster.mp3 khi component mount
     useEffect(() => {
-        if (userInteracted) {
-            // Chỉ phát audio một lần duy nhất khi user tương tác
-            console.log('🎵 [Intro] Playing poster audio once after user interaction');
-            playAudio('poster', 'intro');
-        }
-    }, [userInteracted]); // Bỏ playAudio khỏi dependency để tránh re-trigger
-
-    // Xử lý user interaction - chỉ set một lần
-    const handleUserInteraction = () => {
-        if (!userInteracted) {
-            setUserInteracted(true);
-        }
-    };
-
-    // Dữ liệu đã được tự động cập nhật thông qua MatchContext
+        const audio = new Audio('/audio/poster.mp3');
+        audio.loop = true;
+        audio.volume = 0.5;
+        
+        const playAudio = async () => {
+            try {
+                await audio.play();
+                console.log('🎵 [Intro] Playing poster.mp3');
+            } catch (error) {
+                console.log('⚠️ [Intro] Audio autoplay blocked:', error);
+            }
+        };
+        
+        playAudio();
+        audioRef.current = audio;
+        
+        return () => {
+            if (audioRef.current) {
+                audioRef.current.pause();
+                audioRef.current = null;
+            }
+        };
+    }, []);
 
     // Responsive calculations
     const isMobile = windowSize.width < 768;
@@ -83,18 +86,7 @@ const Intro = () => {
     const showSCOLogo = !showNSBLogo && !showBDPXTLogo;
 
     return (
-        <div className="min-h-screen bg-white flex items-center justify-center p-4 relative overflow-hidden" onClick={handleUserInteraction}>
-            {/* User interaction overlay */}
-            {!userInteracted && (
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 cursor-pointer">
-                    <div className="bg-white rounded-3xl p-8 text-center shadow-2xl max-w-md mx-4 animate-bounce-subtle">
-                        <div className="text-6xl mb-4">🎵</div>
-                        <h2 className="text-2xl font-bold text-gray-800 mb-2">Chào mừng!</h2>
-                        <p className="text-gray-600 mb-4">Nhấn vào màn hình để bắt đầu</p>
-                        <div className="text-4xl animate-pulse">👆</div>
-                    </div>
-                </div>
-            )}
+        <div className="min-h-screen bg-white flex items-center justify-center p-4 relative overflow-hidden">
             {/* Top left logos */}
             {showNSBLogo && (
                 <div className={`fixed z-50 ${isMobile ? 'top-4 left-4' : 'top-8 left-8'}`}>
