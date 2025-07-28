@@ -45,7 +45,10 @@ const MatchManagementSection = () => {
 
   // State cho custom time
   const [customTime, setCustomTime] = useState("");
+  const [customSeconds, setCustomSeconds] = useState("");
   const [quickCustomTime, setQuickCustomTime] = useState(""); // Cho input trực tiếp
+  const [quickCustomMinutes, setQuickCustomMinutes] = useState(""); // Phút
+  const [quickCustomSeconds, setQuickCustomSeconds] = useState(""); // Giây
   const [tickerColor, setTickerColor] = useState("#ffffff");
   const [tickerFontSize, setTickerFontSize] = useState(16);
 
@@ -531,7 +534,7 @@ const MatchManagementSection = () => {
             variant="primary"
             size="sm"
             onClick={() => {
-              // Cập nhật tên đội
+              // Cập nhật t��n đội
               updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
 
               // Luôn cập nhật logo đội (kể cả logo mặc định hoặc logo mới)
@@ -958,46 +961,84 @@ const MatchManagementSection = () => {
             </button>
           </div>
 
-          {/* Đếm T - Input trực tiếp */}
-          <div className="mt-3 bg-white rounded-lg p-2 border border-teal-200">
-            <div className="flex items-center gap-2">
+          {/* Đếm T - Input trực tiếp với phút và giây */}
+          <div className="mt-3 bg-white rounded-lg p-3 border border-teal-200">
+            <div className="flex items-center gap-2 mb-2">
               <div className="flex items-center gap-1">
                 <span className="text-sm">🕰️</span>
                 <span className="text-xs font-medium text-gray-700">Đếm T:</span>
               </div>
-              <input
-                type="number"
-                min="0"
-                max="120"
-                value={quickCustomTime}
-                onChange={(e) => setQuickCustomTime(e.target.value)}
-                placeholder="Phút"
-                className="flex-1 text-xs border border-gray-300 rounded px-2 py-1 focus:border-teal-500 focus:outline-none text-center font-bold"
-              />
-              <span className="text-xs text-gray-600">phút</span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <div className="flex-1">
+                <input
+                  type="number"
+                  min="0"
+                  max="120"
+                  value={quickCustomMinutes}
+                  onChange={(e) => setQuickCustomMinutes(e.target.value)}
+                  placeholder="0"
+                  className="w-full text-xs border border-gray-300 rounded px-2 py-1 focus:border-teal-500 focus:outline-none text-center font-bold"
+                />
+                <label className="block text-xs text-center text-gray-600 mt-1">Phút</label>
+              </div>
+
+              <span className="text-gray-400 font-bold">:</span>
+
+              <div className="flex-1">
+                <input
+                  type="number"
+                  min="0"
+                  max="59"
+                  value={quickCustomSeconds}
+                  onChange={(e) => setQuickCustomSeconds(e.target.value)}
+                  placeholder="0"
+                  className="w-full text-xs border border-gray-300 rounded px-2 py-1 focus:border-teal-500 focus:outline-none text-center font-bold"
+                />
+                <label className="block text-xs text-center text-gray-600 mt-1">Giây</label>
+              </div>
+
               <Button
                 variant="primary"
                 size="sm"
-                className="px-2 py-1 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                className="px-3 py-2 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
                 onClick={() => {
-                  if (quickCustomTime) {
+                  const minutes = parseInt(quickCustomMinutes) || 0;
+                  const seconds = parseInt(quickCustomSeconds) || 0;
+
+                  if (minutes > 0 || seconds > 0) {
                     // Format thời gian (phút:giây)
-                    const timeString = `${quickCustomTime.toString().padStart(2, '0')}:00`;
-                    // Set thời gian và bắt đầu đếm tiến
+                    const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    // Set thời gian và bắt đầu đếm tiến từ server timer
                     updateMatchTime(timeString, "Hiệp 1", "live");
                     // Chuyển sang tỉ số trên
                     updateView('scoreboard');
                     setSelectedOption("ti-so-tren");
-                    console.log('Áp dụng thời gian tùy chỉnh:', quickCustomTime);
-                    toast.success(`⏰ Đã bắt đầu timer từ ${quickCustomTime}:00!`);
+                    console.log('🕰️ Đã áp dụng thời gian tùy chỉnh:', timeString);
+                    console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
+                    toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
+                  } else {
+                    toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
                   }
                 }}
-                disabled={!quickCustomTime}
+                disabled={(!quickCustomMinutes || quickCustomMinutes === '0') && (!quickCustomSeconds || quickCustomSeconds === '0')}
               >
                 <span className="mr-1">✅</span>
                 ÁP DỤNG
               </Button>
             </div>
+
+            {/* Hiển thị preview thời gian */}
+            {(quickCustomMinutes || quickCustomSeconds) && (
+              <div className="mt-2 text-center">
+                <span className="text-xs text-gray-600">Xem trước: </span>
+                <span className="text-sm font-bold text-teal-600">
+                  {(parseInt(quickCustomMinutes) || 0).toString().padStart(2, '0')}:
+                  {(parseInt(quickCustomSeconds) || 0).toString().padStart(2, '0')}
+                </span>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -1117,7 +1158,7 @@ const MatchManagementSection = () => {
               console.log("🎨 [MatchManagementSection] Closing poster modal");
               setShowPosterModal(false);
             } else {
-              console.log("⚠️ [MatchManagementSection] No poster provided to onPosterUpdate");
+              console.log("⚠��� [MatchManagementSection] No poster provided to onPosterUpdate");
             }
           }}
           onLogoUpdate={(logoData) => console.log("Updated logo:", logoData)}
@@ -1163,21 +1204,43 @@ const MatchManagementSection = () => {
             </p>
           </div>
 
-          <div className="flex items-center space-x-2 mb-4">
-            <Input
-              type="number"
-              min="0"
-              max="120"
-              value={customTime}
-              onChange={(e) => setCustomTime(e.target.value)}
-              placeholder="Nhập phút (VD: 30)"
-              className="flex-1 text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
-            />
-            <span className="text-sm font-medium text-yellow-800">ph��t</span>
+          <div className="space-y-3 mb-4">
+            <div className="flex items-center gap-3">
+              <div className="flex-1">
+                <Input
+                  type="number"
+                  min="0"
+                  max="120"
+                  value={customTime}
+                  onChange={(e) => setCustomTime(e.target.value)}
+                  placeholder="Nhập phút (VD: 30)"
+                  className="text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
+                />
+                <label className="block text-xs text-center text-yellow-700 mt-1">Phút</label>
+              </div>
+
+              <span className="text-yellow-600 font-bold text-lg">:</span>
+
+              <div className="flex-1">
+                <Input
+                  type="number"
+                  min="0"
+                  max="59"
+                  value={customSeconds || ''}
+                  onChange={(e) => setCustomSeconds(e.target.value)}
+                  placeholder="Nhập giây (VD: 30)"
+                  className="text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
+                />
+                <label className="block text-xs text-center text-yellow-700 mt-1">Giây</label>
+              </div>
+            </div>
           </div>
 
           <div className="text-center text-sm text-yellow-700 mb-4">
-            ⏱️ Trận đấu sẽ bắt đầu từ: <strong>{customTime || "0"}:00</strong>
+            ⏱️ Trận đấu sẽ bắt đầu từ: <strong>
+              {(parseInt(customTime) || 0).toString().padStart(2, '0')}:
+              {(parseInt(customSeconds) || 0).toString().padStart(2, '0')}
+            </strong>
           </div>
 
           <div className="flex justify-center gap-3">
@@ -1192,9 +1255,12 @@ const MatchManagementSection = () => {
               variant="primary"
               className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-sm rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
               onClick={() => {
-                if (customTime) {
+                const minutes = parseInt(customTime) || 0;
+                const seconds = parseInt(customSeconds) || 0;
+
+                if (minutes > 0 || seconds > 0) {
                   // Format thời gian (phút:giây)
-                  const timeString = `${customTime.toString().padStart(2, '0')}:00`;
+                  const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
                   // Set thời gian và bắt đầu đếm tiến từ server timer
                   updateMatchTime(timeString, "Hiệp 1", "live");
@@ -1206,7 +1272,9 @@ const MatchManagementSection = () => {
                   console.log('🕰️ Áp dụng thời gian tùy chỉnh từ modal - Timer sẽ đếm từ:', timeString);
                   console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
 
-                  toast.success(`⏰ Đã bắt đầu timer từ ${customTime}:00!`);
+                  toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
+                } else {
+                  toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
                 }
                 setShowTimerModal(false);
               }}
