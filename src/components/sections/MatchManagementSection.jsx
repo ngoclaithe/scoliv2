@@ -104,7 +104,7 @@ const MatchManagementSection = () => {
     updateStats(newStats);
   };
 
-  // Hàm cập nhật kiểm soát b��ng (đảm bảo tổng = 100%)
+  // Hàm cập nhật kiểm soát bóng (đảm bảo tổng = 100%)
   const updatePossession = (team, value) => {
     console.log('updatePossession - team:', team, 'value:', value);
     const newValue = Math.max(0, Math.min(100, parseInt(value) || 0));
@@ -434,7 +434,7 @@ const MatchManagementSection = () => {
             }}
             className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
           >
-            <span className="mr-1">��</span>
+            <span className="mr-1">✅</span>
             ÁP DỤNG
           </Button>
         </div>
@@ -719,7 +719,14 @@ const MatchManagementSection = () => {
 
             {/* Đếm 0 */}
             <button
-              onClick={() => setSelectedOption("dem-0")}
+              onClick={() => {
+                // Set thời gian về 0 và bắt đầu đếm tiến
+                updateMatchTime("00:00", "Hiệp 1", "live");
+                // Chuyển sang tỉ số trên
+                updateView('scoreboard');
+                setSelectedOption("ti-so-tren");
+                console.log('Đã áp dụng: Bắt đầu đếm từ 0:00');
+              }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🕐</span>
