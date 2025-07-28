@@ -166,8 +166,16 @@ export const AudioProvider = ({ children }) => {
   // Dừng audio hiện tại
   const stopCurrentAudio = () => {
     if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
+      try {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        // Xóa event listeners để tránh memory leak
+        audioRef.current.onended = null;
+        audioRef.current.onerror = null;
+      } catch (error) {
+        console.warn('Error stopping audio:', error);
+      }
+      audioRef.current = null;
     }
     dispatch({ type: audioActions.STOP_AUDIO });
   };
@@ -188,54 +196,53 @@ export const AudioProvider = ({ children }) => {
     // Dừng audio hiện tại trước khi phát audio mới
     stopCurrentAudio();
 
-    // Tạo audio element mới
-    const audio = new Audio(audioFile);
-    audioRef.current = audio;
+    // Đợi một chút để đảm bảo audio cũ đã dừng hoàn toàn
+    setTimeout(() => {
+      // Tạo audio element mới
+      const audio = new Audio(audioFile);
+      audioRef.current = audio;
 
-    // Thiết lập volume
-    audio.volume = state.isMuted ? 0 : state.volume;
+      // Thiết lập volume
+      audio.volume = state.isMuted ? 0 : state.volume;
 
-    // Cập nhật state
-    dispatch({ 
-      type: audioActions.PLAY_AUDIO, 
-      payload: { audioFile: audioKey, component } 
-    });
+      // Cập nhật state
+      dispatch({
+        type: audioActions.PLAY_AUDIO,
+        payload: { audioFile: audioKey, component }
+      });
 
-    // Sự kiện khi audio kết thúc
-    audio.onended = () => {
-      dispatch({ type: audioActions.STOP_AUDIO });
-    };
+      // Sự kiện khi audio kết thúc
+      audio.onended = () => {
+        dispatch({ type: audioActions.STOP_AUDIO });
+      };
 
-    // Sự kiện lỗi
-    audio.onerror = (e) => {
-      console.error('Audio playback error:', e);
-      dispatch({ type: audioActions.STOP_AUDIO });
-    };
+      // Sự kiện lỗi
+      audio.onerror = (e) => {
+        console.error('Audio playback error:', e);
+        dispatch({ type: audioActions.STOP_AUDIO });
+      };
 
-    // Phát audio
-    audio.play().catch((error) => {
-      console.error('Failed to play audio:', error);
-      dispatch({ type: audioActions.STOP_AUDIO });
-    });
+      // Phát audio
+      audio.play().catch((error) => {
+        console.error('Failed to play audio:', error);
+        dispatch({ type: audioActions.STOP_AUDIO });
+      });
+    }, 50); // Delay nhỏ để tránh interrupt
   };
 
   // Điều chỉnh volume
   const setVolume = (volume) => {
     const clampedVolume = Math.max(0, Math.min(1, volume));
     dispatch({ type: audioActions.SET_VOLUME, payload: clampedVolume });
-    
-    if (audioRef.current) {
-      audioRef.current.volume = state.isMuted ? 0 : clampedVolume;
-    }
+
+    // Volume sẽ được update trong useEffect thay vì tại đây để tránh stale state
   };
 
   // Toggle mute
   const toggleMute = () => {
     dispatch({ type: audioActions.TOGGLE_MUTE });
-    
-    if (audioRef.current) {
-      audioRef.current.volume = !state.isMuted ? 0 : state.volume;
-    }
+
+    // Volume sẽ được update trong useEffect thay vì tại đây để tránh stale state
   };
 
   // Toggle audio toàn cục
@@ -522,11 +529,30 @@ export const AudioProvider = ({ children }) => {
   // Cleanup khi unmount
   useEffect(() => {
     return () => {
+      // Cleanup audio
       if (audioRef.current) {
-        audioRef.current.pause();
+        try {
+          audioRef.current.pause();
+          audioRef.current.onended = null;
+          audioRef.current.onerror = null;
+        } catch (error) {
+          console.warn('Error cleaning up audio:', error);
+        }
+        audioRef.current = null;
       }
+
+      // Cleanup media recorder
       if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-        mediaRecorderRef.current.stop();
+        try {
+          mediaRecorderRef.current.stop();
+        } catch (error) {
+          console.warn('Error stopping media recorder:', error);
+        }
+      }
+
+      // Cleanup WebRTC streams
+      if (localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach(track => track.stop());
       }
     };
   }, []);

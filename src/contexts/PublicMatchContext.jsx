@@ -243,10 +243,10 @@ export const PublicMatchProvider = ({ children }) => {
       console.log('🎯 [Audio] View updated to:', data.viewType);
     });
 
-    // Lắng nghe audio events
+    // Lắng nghe audio events - chỉ update timestamp, audio được xử lý bởi DisplayController
     socketService.on('component_audio_triggered', (data) => {
-      console.log('🔊 [Audio] component_audio_triggered received:', data);
-      // Trigger audio trong AudioContext sẽ được xử lý ở DisplayController
+      console.log('🔊 [Audio] PublicMatchContext received component_audio_triggered:', data);
+      // Chỉ update timestamp, DisplayController sẽ xử lý việc phát audio
       setLastUpdateTime(Date.now());
     });
 
