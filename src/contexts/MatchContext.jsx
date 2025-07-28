@@ -175,7 +175,7 @@ export const MatchProvider = ({ children }) => {
       // Tất cả người vào Home.jsx đều là admin (theo yêu cầu)
       let clientType = 'admin';
 
-      // Tránh khởi tạo socket trùng lặp
+      // Tr��nh khởi tạo socket trùng lặp
       if (socketService.getConnectionStatus().accessCode === accessCode &&
           socketService.getConnectionStatus().isConnected &&
           socketService.getConnectionStatus().clientType === clientType) {
@@ -274,6 +274,80 @@ export const MatchProvider = ({ children }) => {
         matchTime: data.time.matchTime,
         period: data.time.period,
         status: data.time.status
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // === TIMER REAL-TIME LISTENERS ===
+
+    // Lắng nghe timer sync từ server
+    socketService.on('timer_sync_response', (data) => {
+      console.log('⏰ [MatchContext] Received timer_sync_response:', data);
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.currentTime,
+        period: data.period,
+        status: data.status,
+        serverTimestamp: data.serverTimestamp
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer real-time updates từ server
+    socketService.on('timer_tick', (data) => {
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.currentTime,
+        serverTimestamp: data.serverTimestamp
+      }));
+    });
+
+    // Lắng nghe timer start từ server
+    socketService.on('timer_started', (data) => {
+      console.log('▶️ [MatchContext] Timer started from server:', data);
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.currentTime,
+        period: data.period,
+        status: 'live',
+        serverTimestamp: data.serverTimestamp
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer pause từ server
+    socketService.on('timer_paused', (data) => {
+      console.log('⏸️ [MatchContext] Timer paused from server:', data);
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.currentTime,
+        status: 'paused',
+        serverTimestamp: data.serverTimestamp
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer resume từ server
+    socketService.on('timer_resumed', (data) => {
+      console.log('▶️ [MatchContext] Timer resumed from server:', data);
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.currentTime,
+        status: 'live',
+        serverTimestamp: data.serverTimestamp
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer reset từ server
+    socketService.on('timer_reset', (data) => {
+      console.log('🔄 [MatchContext] Timer reset from server:', data);
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.resetTime,
+        period: data.period,
+        status: 'waiting',
+        serverTimestamp: data.serverTimestamp
       }));
       setLastUpdateTime(Date.now());
     });
