@@ -689,7 +689,7 @@ const MatchManagementSection = () => {
 
               {/* Sút trúng đích */}
               <EditableStatBar
-                label="Sút trúng đích"
+                label="Sút trúng ��ích"
                 statKey="shotsOnTarget"
                 team1Value={matchStats.shotsOnTarget.team1}
                 team2Value={matchStats.shotsOnTarget.team2}
@@ -847,7 +847,7 @@ const MatchManagementSection = () => {
               onClick={() => {
                 const timeString = "00:00";
                 // Set thời gian về 0 và bắt đầu đếm tiến từ server timer
-                updateMatchTime("00:00", "Hiệp 1", "live");
+                updateMatchTime(timeString, "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
