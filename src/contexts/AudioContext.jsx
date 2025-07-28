@@ -529,11 +529,30 @@ export const AudioProvider = ({ children }) => {
   // Cleanup khi unmount
   useEffect(() => {
     return () => {
+      // Cleanup audio
       if (audioRef.current) {
-        audioRef.current.pause();
+        try {
+          audioRef.current.pause();
+          audioRef.current.onended = null;
+          audioRef.current.onerror = null;
+        } catch (error) {
+          console.warn('Error cleaning up audio:', error);
+        }
+        audioRef.current = null;
       }
+
+      // Cleanup media recorder
       if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-        mediaRecorderRef.current.stop();
+        try {
+          mediaRecorderRef.current.stop();
+        } catch (error) {
+          console.warn('Error stopping media recorder:', error);
+        }
+      }
+
+      // Cleanup WebRTC streams
+      if (localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach(track => track.stop());
       }
     };
   }, []);
