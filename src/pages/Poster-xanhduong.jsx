@@ -156,7 +156,7 @@ export default function XanhDuongMatchIntro() {
             {hasPartners && (
               <div className="text-center mt-3 sm:mt-4">
                 <h3 className="text-blue-400 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3 uppercase tracking-wide">
-                  🤝 Đơn vị đồng hành
+                  🤝 Đơn v�� đồng hành
                 </h3>
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-2xl p-2 sm:p-4 border border-white/30 mx-4 sm:mx-8">
                   <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
@@ -192,17 +192,19 @@ export default function XanhDuongMatchIntro() {
           </div>
         )}
 
-        {/* Falling Stars Effect */}
+        {/* Twinkle Stars Effect */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {[...Array(14)].map((_, i) => (
             <div
               key={i}
-              className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-80"
+              className="absolute bg-blue-300 opacity-80"
               style={{
+                width: `${3 + Math.random() * 4}px`,
+                height: `${3 + Math.random() * 4}px`,
                 left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${3 + Math.random() * 2}s`,
-                animation: 'fallingStar 5s linear infinite'
+                top: `${Math.random() * 100}%`,
+                borderRadius: Math.random() > 0.5 ? '50%' : '0%',
+                animation: `twinkle ${1 + Math.random() * 3}s ease-in-out infinite`
               }}
             />
           ))}
@@ -214,20 +216,14 @@ export default function XanhDuongMatchIntro() {
             0% { transform: translateX(100%) translateY(-50%); }
             100% { transform: translateX(-100%) translateY(-50%); }
           }
-          @keyframes fallingStar {
-            0% {
-              transform: translateY(-10px) rotate(45deg);
-              opacity: 0;
+          @keyframes twinkle {
+            0%, 100% {
+              opacity: 0.2;
+              transform: scale(1);
             }
-            10% {
+            50% {
               opacity: 1;
-            }
-            90% {
-              opacity: 1;
-            }
-            100% {
-              transform: translateY(100vh) rotate(45deg);
-              opacity: 0;
+              transform: scale(1.3);
             }
           }
         `}</style>
