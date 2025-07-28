@@ -87,6 +87,14 @@ const MatchManagementSection = () => {
     }
   }, [matchData.startTime, matchData.stadium, matchData.matchDate]);
 
+  // Request timer sync khi component mount và socket connected
+  useEffect(() => {
+    if (socketConnected) {
+      requestTimerSync();
+      console.log('⏰ [MatchManagementSection] Requested timer sync on mount');
+    }
+  }, [socketConnected, requestTimerSync]);
+
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
 
@@ -1084,7 +1092,7 @@ const MatchManagementSection = () => {
             console.log("🎨 [MatchManagementSection] onPosterUpdate called with:", poster);
             console.log("🎨 [MatchManagementSection] poster.id:", poster?.id);
             console.log("🎨 [MatchManagementSection] poster.name:", poster?.name);
-            console.log("�� [MatchManagementSection] updatePoster function exists:", !!updatePoster);
+            console.log("🎨 [MatchManagementSection] updatePoster function exists:", !!updatePoster);
             console.log("🎨 [MatchManagementSection] updateView function exists:", !!updateView);
 
             if (poster) {
