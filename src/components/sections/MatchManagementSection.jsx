@@ -94,7 +94,7 @@ const MatchManagementSection = () => {
   useEffect(() => {
     if (socketConnected) {
       requestTimerSync();
-      console.log('⏰ [MatchManagementSection] Requested timer sync on mount');
+      // console.log('⏰ [MatchManagementSection] Requested timer sync on mount');
     }
   }, [socketConnected, requestTimerSync]);
 
@@ -319,18 +319,16 @@ const MatchManagementSection = () => {
       {/* Score Controls */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
         {/* Hiển thị thời gian trận đấu khi đang diễn ra */}
-        {matchData.status === "live" && (
-          <div className="bg-gradient-to-r from-green-400 to-blue-500 rounded-lg p-2 mb-3 border-2 border-white shadow-lg">
-            <div className="text-center">
-              <div className="text-white font-bold text-lg sm:text-xl">
-                ⚽ THỜI GIAN TRẬN ĐẤU: {matchData.matchTime}
-              </div>
-              <div className="text-green-100 text-sm">
-                {matchData.period} • {matchData.status === "live" ? "ĐANG DIỄN RA" : "TẠM DỪNG"}
-              </div>
+        <div className="bg-gradient-to-r from-green-400 to-blue-500 rounded-lg p-2 mb-3 border-2 border-white shadow-lg">
+          <div className="text-center">
+            <div className="text-white font-bold text-lg sm:text-xl">
+              ⚽ THỜI GIAN TRẬN ĐẤU: {matchData.matchTime}
+            </div>
+            <div className="text-green-100 text-sm">
+              {matchData.period} • {matchData.status === "live" ? "ĐANG DIỄN RA" : "TẠM DỪNG"}
             </div>
           </div>
-        )}
+        </div>
 
         <div className="grid grid-cols-2 gap-2 sm:gap-4">
           {/* Đội A */}
@@ -868,8 +866,8 @@ const MatchManagementSection = () => {
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
-                console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
+                // console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                // console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 0:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -1132,11 +1130,6 @@ const MatchManagementSection = () => {
         <PosterManager
           matchData={matchData}
           onPosterUpdate={(poster) => {
-            console.log("🎨 [MatchManagementSection] onPosterUpdate called with:", poster);
-            console.log("🎨 [MatchManagementSection] poster.id:", poster?.id);
-            console.log("🎨 [MatchManagementSection] poster.name:", poster?.name);
-            console.log("🎨 [MatchManagementSection] updatePoster function exists:", !!updatePoster);
-            console.log("🎨 [MatchManagementSection] updateView function exists:", !!updateView);
 
             if (poster) {
               const posterType = poster.id || poster.name;

@@ -142,7 +142,7 @@ export const MatchProvider = ({ children }) => {
     // Khi status thay đổi thành "live", request timer sync từ server
     if (matchData.status === "live" && socketConnected) {
       socketService.requestTimerSync();
-      console.log('⏰ [MatchContext] Requested timer sync due to status change to live');
+      // console.log('⏰ [MatchContext] Requested timer sync due to status change to live');
     }
 
     // Cleanup khi component unmount
@@ -176,7 +176,7 @@ export const MatchProvider = ({ children }) => {
       // Request state hiện tại từ server sau khi connect
       setTimeout(() => {
         socketService.requestCurrentState();
-        console.log('🔄 [MatchContext] Requested current state from server');
+        // console.log('🔄 [MatchContext] Requested current state from server');
       }, 1000); // Delay 1s để đảm bảo connect thành công
 
       console.log(`Socket initialized for access code: ${accessCode}`);
@@ -266,7 +266,7 @@ export const MatchProvider = ({ children }) => {
 
     // Lắng nghe timer sync từ server
     socketService.on('timer_sync_response', (data) => {
-      console.log('⏰ [MatchContext] Received timer_sync_response:', data);
+      // console.log('⏰ [MatchContext] Received timer_sync_response:', data);
       setMatchData(prev => ({
         ...prev,
         matchTime: data.currentTime,
@@ -288,7 +288,7 @@ export const MatchProvider = ({ children }) => {
 
     // Lắng nghe timer start từ server
     socketService.on('timer_started', (data) => {
-      console.log('▶️ [MatchContext] Timer started from server:', data);
+      // console.log('▶️ [MatchContext] Timer started from server:', data);
       setMatchData(prev => ({
         ...prev,
         matchTime: data.currentTime,
@@ -523,7 +523,7 @@ export const MatchProvider = ({ children }) => {
       // Sử dụng server timer events thay vì match_time_update
       if (status === "live") {
         socketService.startServerTimer(matchTime, period, "live");
-        console.log('▶️ [MatchContext] Started server timer:', { matchTime, period, status: "live" });
+        // console.log('▶️ [MatchContext] Started server timer:', { matchTime, period, status: "live" });
       } else if (status === "paused") {
         socketService.pauseServerTimer();
         console.log('⏸️ [MatchContext] Paused server timer');
@@ -580,7 +580,7 @@ export const MatchProvider = ({ children }) => {
   const requestTimerSync = useCallback(() => {
     if (socketConnected) {
       socketService.requestTimerSync();
-      console.log('⏰ [MatchContext] Requested timer sync');
+      // console.log('⏰ [MatchContext] Requested timer sync');
     }
   }, [socketConnected]);
 
