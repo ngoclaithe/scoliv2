@@ -140,10 +140,7 @@ export const MatchProvider = ({ children }) => {
 
     // ĐÃ TẮT LOCAL TIMER - Server sẽ gửi timer updates qua socket
     // Khi status thay đổi thành "live", request timer sync từ server
-    if (matchData.status === "live" && socketConnected) {
-      socketService.requestTimerSync();
-      // console.log('⏰ [MatchContext] Requested timer sync due to status change to live');
-    }
+
 
     // Cleanup khi component unmount
     return () => {
@@ -438,7 +435,7 @@ export const MatchProvider = ({ children }) => {
   const updateScore = useCallback((team, increment, additionalData = {}) => {
     const newMatchData = { ...matchData };
 
-    // Cập nhật tỉ số nếu có increment
+    // Cập nhật tỉ số nếu c�� increment
     if (increment !== 0) {
       newMatchData[team].score = Math.max(0, newMatchData[team].score + increment);
     }
@@ -599,13 +596,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Request timer sync từ server
-  const requestTimerSync = useCallback(() => {
-    if (socketConnected) {
-      socketService.requestTimerSync();
-      // console.log('⏰ [MatchContext] Requested timer sync');
-    }
-  }, [socketConnected]);
+
 
   // Reset toàn bộ dữ liệu trận đấu
   const resetMatch = useCallback(() => {
@@ -672,7 +663,6 @@ export const MatchProvider = ({ children }) => {
 
     // Timer functions
     resumeTimer,
-    requestTimerSync,
 
     // Socket functions
     initializeSocket,
