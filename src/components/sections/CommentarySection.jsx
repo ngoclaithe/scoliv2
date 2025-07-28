@@ -243,7 +243,7 @@ const CommentarySection = () => {
         
         {/* Info */}
         <div className="mt-4 p-2 bg-blue-100 border border-blue-300 rounded text-xs text-blue-800 text-center">
-          ℹ️ Sử dụng opus-media-recorder để gửi audio qua socket
+          ℹ️ Sử dụng opus-media-recorder để gửi voice-chunk qua socket
         </div>
       </div>
     </div>

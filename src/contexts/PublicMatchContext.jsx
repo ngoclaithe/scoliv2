@@ -247,17 +247,7 @@ export const PublicMatchProvider = ({ children }) => {
       console.log('🎯 [Audio] View updated to:', data.viewType);
     });
 
-    // Lắng nghe audio events - chỉ log, không update timestamp
-    socketService.on('component_audio_triggered', (data) => {
-      console.log('🔊 [Audio] PublicMatchContext received component_audio_triggered:', data);
-      // Không update timestamp để tránh re-render loop
-    });
 
-    // Lắng nghe audio settings update - KHÔNG update time
-    socketService.on('audio_settings_updated', (data) => {
-      console.log('🔊 [Audio] audio_settings_updated received:', data);
-      // Không update time để tránh re-render liên tục
-    });
 
     // Lắng nghe trạng thái kết nối
     socketService.on('disconnect', () => {

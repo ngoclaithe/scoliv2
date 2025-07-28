@@ -235,37 +235,6 @@ class SocketService {
 
   // === AUDIO & COMMENTARY EVENTS ===
 
-  // Gửi audio bình luận
-  sendCommentaryAudio(audioData, mimeType = 'audio/webm;codecs=opus') {
-    return this.emit('commentary_audio', {
-      audioData,
-      mimeType,
-      timestamp: Date.now(),
-      duration: null // Có thể thêm thời lượng audio nếu cần
-    });
-  }
-
-  // Điều khiển audio toàn cục
-  updateAudioSettings(settings) {
-    return this.emit('audio_settings_update', {
-      settings: {
-        enabled: settings.enabled,
-        volume: settings.volume,
-        muted: settings.muted,
-        ...settings
-      }
-    });
-  }
-
-  // Phát audio tự động cho component
-  triggerComponentAudio(component, audioKey) {
-    return this.emit('component_audio_trigger', {
-      component, // 'intro', 'halftime', 'scoreboardAbove', 'scoreboardBelow'
-      audioKey,  // 'poster', 'rasan', 'gialap'
-      timestamp: Date.now()
-    });
-  }
-
   // === TIMER REAL-TIME EVENTS ===
 
 
@@ -320,9 +289,7 @@ class SocketService {
       'match_time_updated',
       'lineup_updated',
       'penalty_updated',
-      'sponsors_updated',
-      'audio_settings_updated',
-      'component_audio_triggered'
+      'sponsors_updated'
     ];
 
     events.forEach(event => {
@@ -335,9 +302,7 @@ class SocketService {
   // Lắng nghe các sự kiện audio
   onAudioEvents(callback) {
     const audioEvents = [
-      'commentary_audio_received',     // Nhận audio bình luận từ người khác
-      'audio_settings_updated',        // Cài đặt audio được cập nhật
-      'component_audio_triggered',     // Yêu cầu phát audio từ component
+      'voice-chunk-received',          // Nhận voice chunk từ người khác
       'audio_playback_sync'           // Đồng bộ phát audio giữa các client
     ];
 

@@ -214,10 +214,13 @@ export const AudioProvider = ({ children }) => {
 
   // Toggle audio toàn cục
   const toggleAudioEnabled = () => {
+    // Kiểm tra trước khi dispatch để có state cũ
+    const wasEnabled = state.audioEnabled;
+
     dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
-    
-    // Nếu đang tắt audio, dừng phát
-    if (state.audioEnabled && audioRef.current) {
+
+    // Nếu đang từ enabled -> disabled, dừng phát audio hiện tại
+    if (wasEnabled && audioRef.current) {
       stopCurrentAudio();
     }
   };
@@ -295,16 +298,10 @@ export const AudioProvider = ({ children }) => {
     try {
       const reader = new FileReader();
       reader.onload = () => {
-        const base64Audio = reader.result.split(',')[1];
-
-        socketService.emit('commentary_audio', {
-          accessCode,
-          audioData: base64Audio,
-          timestamp: Date.now(),
-          mimeType: 'audio/webm;codecs=opus'
-        });
+        const buffer = reader.result;
+        socketService.emit('voice-chunk', buffer);
       };
-      reader.readAsDataURL(state.recordedAudio);
+      reader.readAsArrayBuffer(state.recordedAudio);
     } catch (error) {
       console.error('Error sending recorded audio:', error);
     }
