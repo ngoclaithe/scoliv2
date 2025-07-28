@@ -1,16 +1,21 @@
 import React, { useState, useRef } from 'react';
+import { usePublicMatch } from '../contexts/PublicMatchContext';
 
 export default function TreTrungMatchIntro() {
-  const [matchData, setMatchData] = useState({
-    matchTitle: 'GIẢI BÓNG ĐÁ TRẺ TRUNG',
-    team1: 'TEAM ALPHA',
-    team2: 'TEAM BETA',
-    logo1: '/images/background-poster/default_logoA.png',
-    logo2: '/images/background-poster/default_logoB.png',
-    stadium: 'SVĐ THỐNG NHẤT',
-    roundedTime: '15:30',
-    currentDate: new Date().toLocaleDateString('vi-VN')
-  });
+  // Sử dụng dữ liệu từ PublicMatchContext
+  const { matchData: contextMatchData, marqueeData } = usePublicMatch();
+
+  // Kết hợp dữ liệu từ context với dữ liệu mặc định
+  const matchData = {
+    matchTitle: contextMatchData.tournament || 'GIẢI BÓNG ĐÁ TRẺ TRUNG',
+    team1: contextMatchData.teamA.name || 'TEAM ALPHA',
+    team2: contextMatchData.teamB.name || 'TEAM BETA',
+    logo1: contextMatchData.teamA.logo || '/images/background-poster/default_logoA.png',
+    logo2: contextMatchData.teamB.logo || '/images/background-poster/default_logoB.png',
+    stadium: contextMatchData.stadium || 'SVĐ THỐNG NHẤT',
+    roundedTime: contextMatchData.startTime || contextMatchData.time || '15:30',
+    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN')
+  };
 
   const [partners, setPartners] = useState([]);
   const [marquee, setMarquee] = useState({
