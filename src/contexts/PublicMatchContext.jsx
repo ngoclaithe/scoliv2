@@ -172,6 +172,53 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
+    // Lắng nghe timer tick real-time từ backend
+    socketService.on('timer_tick', (data) => {
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.displayTime
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer started
+    socketService.on('timer_started', (data) => {
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.initialTime,
+        status: 'live'
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer paused
+    socketService.on('timer_paused', (data) => {
+      setMatchData(prev => ({
+        ...prev,
+        status: 'pause'
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer resumed
+    socketService.on('timer_resumed', (data) => {
+      setMatchData(prev => ({
+        ...prev,
+        status: 'live'
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer reset
+    socketService.on('timer_reset', (data) => {
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.resetTime || '00:00',
+        status: 'waiting'
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
     // Lắng nghe cập nhật penalty
     socketService.on('penalty_updated', (data) => {
       setPenaltyData(prev => ({ ...prev, ...data.penaltyData }));
