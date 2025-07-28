@@ -384,9 +384,9 @@ const MatchManagementSection = () => {
             } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
               toggleAudioEnabled();
-              toast.info(audioEnabled ? '🔇 Đã tắt audio' : '🔊 Đã bật audio');
+              toast.info(audioEnabled ? '🔇 Đã tắt tất cả audio tĩnh' : '🔊 Đã bật tất cả audio tĩnh');
             }}
-            title={audioEnabled ? "Tắt audio" : "Bật audio"}
+            title={audioEnabled ? "Tắt tất cả audio tĩnh" : "Bật tất cả audio tĩnh"}
           >
             <span className="mr-1">{audioEnabled ? "🔊" : "🔇"}</span>
             <span className="hidden sm:inline">{audioEnabled ? "AUDIO" : "TẮTED"}</span>
