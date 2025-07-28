@@ -4,6 +4,10 @@ import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import PublicAPI from '../../API/apiPublic';
 import PosterTreTrung from '../../pages/Poster-tretrung';
 import PosterHaoQuang from '../../pages/Poster-haoquang';
+import PosterDoDen from '../../pages/Poster-doden';
+import PosterVangKim from '../../pages/Poster-vangkim';
+import PosterVangXanh from '../../pages/Poster-vangxanh';
+import PosterXanhDuong from '../../pages/Poster-xanhduong';
 
 const PosterDisplay = () => {
   const { accessCode } = useParams();
