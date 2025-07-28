@@ -193,17 +193,19 @@ export default function VangKimMatchIntro() {
           </div>
         )}
 
-        {/* Falling Stars Effect */}
+        {/* Golden Rain Effect */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {[...Array(18)].map((_, i) => (
             <div
               key={i}
-              className="absolute w-1 h-1 bg-yellow-400 rounded-full opacity-80"
+              className="absolute bg-gradient-to-b from-yellow-300 to-amber-500 opacity-80"
               style={{
+                width: '2px',
+                height: `${10 + Math.random() * 20}px`,
                 left: `${Math.random() * 100}%`,
-                animationDelay: `${Math.random() * 3}s`,
-                animationDuration: `${3 + Math.random() * 2}s`,
-                animation: 'fallingStar 5s linear infinite'
+                top: '-30px',
+                borderRadius: '1px',
+                animation: `goldenRain ${3 + Math.random() * 4}s linear infinite`
               }}
             />
           ))}
@@ -215,19 +217,19 @@ export default function VangKimMatchIntro() {
             0% { transform: translateX(100%) translateY(-50%); }
             100% { transform: translateX(-100%) translateY(-50%); }
           }
-          @keyframes fallingStar {
+          @keyframes goldenRain {
             0% {
-              transform: translateY(-10px) rotate(45deg);
+              transform: translateY(-30px) rotate(10deg);
               opacity: 0;
             }
             10% {
-              opacity: 1;
+              opacity: 0.8;
             }
             90% {
-              opacity: 1;
+              opacity: 0.8;
             }
             100% {
-              transform: translateY(100vh) rotate(45deg);
+              transform: translateY(100vh) rotate(10deg);
               opacity: 0;
             }
           }
