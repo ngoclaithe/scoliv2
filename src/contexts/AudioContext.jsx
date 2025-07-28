@@ -163,8 +163,18 @@ export const AudioProvider = ({ children }) => {
     gialap: '/audio/gialap.mp3',
   };
 
+  // Pending audio requests để tránh multiple triggers
+  const pendingAudioRef = useRef(null);
+  const lastAudioRequestRef = useRef(null);
+
   // Dừng audio hiện tại
   const stopCurrentAudio = () => {
+    // Cancel pending audio request nếu có
+    if (pendingAudioRef.current) {
+      clearTimeout(pendingAudioRef.current);
+      pendingAudioRef.current = null;
+    }
+
     if (audioRef.current) {
       try {
         audioRef.current.pause();
@@ -180,7 +190,7 @@ export const AudioProvider = ({ children }) => {
     dispatch({ type: audioActions.STOP_AUDIO });
   };
 
-  // Phát audio
+  // Phát audio với debounce để tránh multiple triggers
   const playAudio = (audioKey, component = null) => {
     if (!state.audioEnabled) {
       console.log('Audio disabled globally');
@@ -193,41 +203,92 @@ export const AudioProvider = ({ children }) => {
       return;
     }
 
+    // Tạo unique request ID để tracking
+    const requestId = `${audioKey}-${component}-${Date.now()}`;
+
+    // Nếu cùng audio và component đang được request, bỏ qua
+    if (lastAudioRequestRef.current === `${audioKey}-${component}` &&
+        state.currentAudio === audioKey &&
+        state.currentComponent === component &&
+        state.isPlaying) {
+      console.log('Same audio already playing, skipping duplicate request');
+      return;
+    }
+
+    lastAudioRequestRef.current = `${audioKey}-${component}`;
+
     // Dừng audio hiện tại trước khi phát audio mới
     stopCurrentAudio();
 
-    // Đợi một chút để đảm bảo audio cũ đã dừng hoàn toàn
-    setTimeout(() => {
-      // Tạo audio element mới
-      const audio = new Audio(audioFile);
-      audioRef.current = audio;
+    // Đợi để đảm bảo audio cũ đã dừng hoàn toàn và tránh race condition
+    pendingAudioRef.current = setTimeout(() => {
+      // Kiểm tra nếu request đã bị hủy
+      if (pendingAudioRef.current === null) {
+        return;
+      }
 
-      // Thiết lập volume
-      audio.volume = state.isMuted ? 0 : state.volume;
+      try {
+        // Tạo audio element mới
+        const audio = new Audio(audioFile);
+        audioRef.current = audio;
 
-      // Cập nhật state
-      dispatch({
-        type: audioActions.PLAY_AUDIO,
-        payload: { audioFile: audioKey, component }
-      });
+        // Thiết lập volume
+        audio.volume = state.isMuted ? 0 : state.volume;
 
-      // Sự kiện khi audio kết thúc
-      audio.onended = () => {
+        // Cập nhật state
+        dispatch({
+          type: audioActions.PLAY_AUDIO,
+          payload: { audioFile: audioKey, component }
+        });
+
+        // Sự kiện khi audio kết thúc
+        audio.onended = () => {
+          dispatch({ type: audioActions.STOP_AUDIO });
+          lastAudioRequestRef.current = null;
+        };
+
+        // Sự kiện lỗi
+        audio.onerror = (e) => {
+          console.error('Audio playback error:', e);
+          dispatch({ type: audioActions.STOP_AUDIO });
+          lastAudioRequestRef.current = null;
+        };
+
+        // Đảm bảo audio sẵn sàng trước khi phát
+        audio.addEventListener('canplaythrough', () => {
+          // Phát audio với proper error handling
+          const playPromise = audio.play();
+          if (playPromise) {
+            playPromise.catch((error) => {
+              console.error('Failed to play audio:', error);
+              dispatch({ type: audioActions.STOP_AUDIO });
+              lastAudioRequestRef.current = null;
+            });
+          }
+        }, { once: true });
+
+        // Fallback nếu canplaythrough không fire
+        setTimeout(() => {
+          if (audio && audioRef.current === audio) {
+            const playPromise = audio.play();
+            if (playPromise) {
+              playPromise.catch((error) => {
+                console.error('Failed to play audio (fallback):', error);
+                dispatch({ type: audioActions.STOP_AUDIO });
+                lastAudioRequestRef.current = null;
+              });
+            }
+          }
+        }, 100);
+
+      } catch (error) {
+        console.error('Error creating audio:', error);
         dispatch({ type: audioActions.STOP_AUDIO });
-      };
+        lastAudioRequestRef.current = null;
+      }
 
-      // Sự kiện lỗi
-      audio.onerror = (e) => {
-        console.error('Audio playback error:', e);
-        dispatch({ type: audioActions.STOP_AUDIO });
-      };
-
-      // Phát audio
-      audio.play().catch((error) => {
-        console.error('Failed to play audio:', error);
-        dispatch({ type: audioActions.STOP_AUDIO });
-      });
-    }, 50); // Delay nhỏ để tránh interrupt
+      pendingAudioRef.current = null;
+    }, 100); // Tăng delay để đảm bảo stability
   };
 
   // Điều chỉnh volume
@@ -529,6 +590,12 @@ export const AudioProvider = ({ children }) => {
   // Cleanup khi unmount
   useEffect(() => {
     return () => {
+      // Cancel pending audio requests
+      if (pendingAudioRef.current) {
+        clearTimeout(pendingAudioRef.current);
+        pendingAudioRef.current = null;
+      }
+
       // Cleanup audio
       if (audioRef.current) {
         try {
@@ -554,6 +621,9 @@ export const AudioProvider = ({ children }) => {
       if (localStreamRef.current) {
         localStreamRef.current.getTracks().forEach(track => track.stop());
       }
+
+      // Reset tracking refs
+      lastAudioRequestRef.current = null;
     };
   }, []);
 
