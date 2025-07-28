@@ -4,6 +4,7 @@ import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { useAudio } from '../../contexts/AudioContext';
 import PublicAPI from '../../API/apiPublic';
 import socketService from '../../services/socketService';
+import MediaSourceAudio from '../audio/MediaSourceAudio';
 
 // Import các component hiển thị
 import PosterTreTrung from '../../pages/Poster-tretrung';
@@ -27,10 +28,11 @@ const DisplayController = () => {
   } = usePublicMatch();
 
   // Sử dụng AudioContext
-  const { playAudio } = useAudio();
+  const { playAudio, audioEnabled } = useAudio();
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
+  const [currentAudioFile, setCurrentAudioFile] = useState(null);
 
   // Khởi tạo kết nối socket và thiết lập audio listeners
   useEffect(() => {
@@ -69,8 +71,22 @@ const DisplayController = () => {
       console.log('🔊 [Audio] DisplayController received component_audio_triggered:', data);
 
       if (data.audioKey && data.component) {
-        console.log(`🔊 [Audio] Playing audio: ${data.audioKey} for component: ${data.component}`);
-        playAudio(data.audioKey, data.component);
+        if (audioEnabled) {
+          console.log(`🔊 [Audio] Playing audio: ${data.audioKey} for component: ${data.component}`);
+          playAudio(data.audioKey, data.component);
+        } else {
+          // When audio is OFF, use MediaSource for playback
+          console.log(`🔊 [MediaSource] Using MediaSource for audio: ${data.audioKey}`);
+          const audioFiles = {
+            poster: '/audio/poster.mp3',
+            rasan: '/audio/rasan.mp3',
+            gialap: '/audio/gialap.mp3',
+          };
+          const audioFile = audioFiles[data.audioKey];
+          if (audioFile) {
+            setCurrentAudioFile(audioFile);
+          }
+        }
       }
     };
 
@@ -203,13 +219,17 @@ const DisplayController = () => {
 
   return (
     <div className="relative min-h-screen bg-white">
-
       {/* Current view content */}
       <div className="w-full h-full">
         {renderCurrentView()}
       </div>
 
-
+      {/* MediaSource Audio Player (when audio is OFF) */}
+      <MediaSourceAudio
+        audioFile={currentAudioFile}
+        isEnabled={!audioEnabled && currentAudioFile}
+        onEnded={() => setCurrentAudioFile(null)}
+      />
     </div>
   );
 };
