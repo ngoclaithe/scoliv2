@@ -449,31 +449,31 @@ const MatchManagementSection = () => {
           </div>
 
           {/* Tên đội */}
-        <div className="flex gap-2">
-          <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
-            <input
-              type="text"
-              placeholder="Tên đội A"
-              value={teamAInfo.name}
-              onChange={(e) => setTeamAInfo(prev => ({ ...prev, name: e.target.value }))}
-              className="w-full px-2 py-1.5 text-sm font-medium text-center text-red-600 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-red-300 rounded-lg"
-              maxLength={20}
-            />
+          <div className="flex gap-2">
+            <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
+              <input
+                type="text"
+                placeholder="Tên đội A"
+                value={teamAInfo.name}
+                onChange={(e) => setTeamAInfo(prev => ({ ...prev, name: e.target.value }))}
+                className="w-full px-2 py-1.5 text-sm font-medium text-center text-red-600 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-red-300 rounded-lg"
+                maxLength={20}
+              />
+            </div>
+            <div className="flex items-center justify-center px-2">
+              <span className="text-sm font-bold text-gray-500">VS</span>
+            </div>
+            <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
+              <input
+                type="text"
+                placeholder="Tên đội B"
+                value={teamBInfo.name}
+                onChange={(e) => setTeamBInfo(prev => ({ ...prev, name: e.target.value }))}
+                className="w-full px-2 py-1.5 text-sm font-medium text-center text-gray-800 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-gray-300 rounded-lg"
+                maxLength={20}
+              />
+            </div>
           </div>
-          <div className="flex items-center justify-center px-2">
-            <span className="text-sm font-bold text-gray-500">VS</span>
-          </div>
-          <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
-            <input
-              type="text"
-              placeholder="Tên đội B"
-              value={teamBInfo.name}
-              onChange={(e) => setTeamBInfo(prev => ({ ...prev, name: e.target.value }))}
-              className="w-full px-2 py-1.5 text-sm font-medium text-center text-gray-800 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-gray-300 rounded-lg"
-              maxLength={20}
-            />
-          </div>
-        </div>
 
         {/* Logo đội */}
         <div className="flex gap-2">
