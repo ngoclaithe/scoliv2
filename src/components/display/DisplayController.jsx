@@ -33,23 +33,10 @@ const DisplayController = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
 
-  // Thiết lập audio listeners
-  const setupAudioListeners = () => {
-    console.log('🔊 [Audio] Setting up audio listeners for DisplayController');
-
-    // Lắng nghe component_audio_triggered từ server
-    socketService.on('component_audio_triggered', (data) => {
-      console.log('🔊 [Audio] Received component_audio_triggered in DisplayController:', data);
-
-      if (data.audioKey && data.component) {
-        console.log(`🔊 [Audio] Playing audio: ${data.audioKey} for component: ${data.component}`);
-        playAudio(data.audioKey, data.component);
-      }
-    });
-  };
-
-  // Khởi tạo kết nối socket
+  // Khởi tạo kết nối socket và thiết lập audio listeners
   useEffect(() => {
+    let isCleanedUp = false;
+
     const initializeDisplay = async () => {
       try {
         // Xác thực access code
@@ -64,21 +51,42 @@ const DisplayController = () => {
 
         // Khởi tạo socket connection
         await initializeSocket(accessCode);
-        setIsInitialized(true);
 
-        // Thiết lập audio event listeners
-        setupAudioListeners();
+        if (!isCleanedUp) {
+          setIsInitialized(true);
+        }
 
       } catch (err) {
         console.error('Failed to initialize display:', err);
-        setError('Không thể kết nối đến hệ thống');
+        if (!isCleanedUp) {
+          setError('Không thể kết nối đến hệ thống');
+        }
+      }
+    };
+
+    // Thiết lập audio event listener riêng cho DisplayController
+    const handleAudioTriggered = (data) => {
+      console.log('🔊 [Audio] DisplayController received component_audio_triggered:', data);
+
+      if (data.audioKey && data.component) {
+        console.log(`🔊 [Audio] Playing audio: ${data.audioKey} for component: ${data.component}`);
+        playAudio(data.audioKey, data.component);
       }
     };
 
     if (accessCode) {
       initializeDisplay();
+
+      // Setup audio listener với cleanup
+      socketService.on('component_audio_triggered', handleAudioTriggered);
     }
-  }, [accessCode, initializeSocket]);
+
+    // Cleanup function
+    return () => {
+      isCleanedUp = true;
+      socketService.off('component_audio_triggered', handleAudioTriggered);
+    };
+  }, [accessCode, initializeSocket, playAudio]);
 
   // Render loading state
   if (!isInitialized) {
