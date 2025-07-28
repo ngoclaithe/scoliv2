@@ -689,7 +689,7 @@ const MatchManagementSection = () => {
 
               {/* Sút trúng đích */}
               <EditableStatBar
-                label="Sút trúng ��ích"
+                label="Sút trúng đích"
                 statKey="shotsOnTarget"
                 team1Value={matchStats.shotsOnTarget.team1}
                 team2Value={matchStats.shotsOnTarget.team2}
@@ -851,7 +851,8 @@ const MatchManagementSection = () => {
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                console.log('Đã áp dụng: Bắt đầu đếm từ 0:00');
+                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 0:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
