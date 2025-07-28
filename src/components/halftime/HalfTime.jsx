@@ -39,6 +39,11 @@ const HalftimeBreakPoster = () => {
         return () => window.removeEventListener('resize', updateScreenSize);
     }, []);
 
+    // Tự động phát audio poster.mp3 khi component mount
+    useEffect(() => {
+        playAudio('poster', 'halftime');
+    }, [playAudio]);
+
     // Check if live text contains specific keywords
     const liveTextLower = matchData.liveText.toLowerCase();
     const showNSBLogo = liveTextLower.includes('nsb') || liveTextLower.includes('nga son biz');
