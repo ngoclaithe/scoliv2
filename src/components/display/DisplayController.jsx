@@ -33,6 +33,21 @@ const DisplayController = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
 
+  // Thiết lập audio listeners
+  const setupAudioListeners = () => {
+    console.log('🔊 [Audio] Setting up audio listeners for DisplayController');
+
+    // Lắng nghe component_audio_triggered từ server
+    socketService.on('component_audio_triggered', (data) => {
+      console.log('🔊 [Audio] Received component_audio_triggered in DisplayController:', data);
+
+      if (data.audioKey && data.component) {
+        console.log(`🔊 [Audio] Playing audio: ${data.audioKey} for component: ${data.component}`);
+        playAudio(data.audioKey, data.component);
+      }
+    });
+  };
+
   // Khởi tạo kết nối socket
   useEffect(() => {
     const initializeDisplay = async () => {
