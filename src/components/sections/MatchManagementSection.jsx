@@ -902,12 +902,14 @@ const MatchManagementSection = () => {
             {/* Đếm 35' */}
             <button
               onClick={() => {
-                // Set thời gian về 35:00 và bắt đầu đếm tiến
-                updateMatchTime("35:00", "Hiệp 1", "live");
+                const timeString = "35:00";
+                // Set thời gian về 35:00 và bắt đầu đếm tiến từ server timer
+                updateMatchTime(timeString, "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                console.log('Đã áp dụng: Bắt đầu đếm từ 35:00');
+                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 35:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -1042,7 +1044,7 @@ const MatchManagementSection = () => {
 
           {/* Text content */}
           <Input
-            placeholder="Nội dung chữ ch��y..."
+            placeholder="Nội dung chữ chạy..."
             value={clockText}
             onChange={(e) => setClockText(e.target.value)}
             maxLength={100}
