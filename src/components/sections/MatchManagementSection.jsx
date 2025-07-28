@@ -15,7 +15,7 @@ import MatchTimeDisplay from './MatchTimeDisplay';
 
 
 const MatchManagementSection = () => {
-  // Sử dụng MatchContext thay vì state local
+  // S��� dụng MatchContext thay vì state local
   const {
     matchData,
     matchStats,
@@ -163,8 +163,8 @@ const MatchManagementSection = () => {
         toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeB}"`);
       }
     } catch (error) {
-      console.error('Lỗi tìm kiếm logo B:', error);
-      toast.error('Lỗi khi tìm kiếm logo. Vui lòng thử lại.');
+      console.error('Lỗi t��m kiếm logo B:', error);
+      toast.error('Lỗi khi tìm kiếm logo. Vui lòng thử l��i.');
     } finally {
       setIsSearchingLogoB(false);
     }
@@ -389,7 +389,7 @@ const MatchManagementSection = () => {
                 resumeTimer();
                 toast.info('▶️ Đã tiếp tục timer từ server');
               } else {
-                // Pause timer - sử dụng updateMatchTime với status paused
+                // Pause timer - sử d���ng updateMatchTime với status paused
                 updateMatchTime(matchData.matchTime, matchData.period, "paused");
                 toast.info('⏸️ Đã tạm dừng timer');
               }
@@ -399,22 +399,6 @@ const MatchManagementSection = () => {
             <span className="mr-1">{matchData.status === "paused" ? "▶️" : "⏸️"}</span>
             <span className="hidden sm:inline">{matchData.status === "paused" ? "TIẾP TỤC" : "TẠM DỪNG"}</span>
             <span className="sm:hidden">{matchData.status === "paused" ? "TIẾP" : "DỪNG"}</span>
-          </Button>
-
-          <Button
-            variant="primary"
-            size="sm"
-            className="px-2 py-1 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
-            onClick={() => {
-              console.log('Chuyển sang nghỉ giữa hiệp');
-              console.log('Current view before update:', matchData.status);
-              updateView('halftime');
-              console.log('Updated view to halftime');
-            }}
-          >
-            <span className="mr-1">🥤</span>
-            <span className="hidden sm:inline">NGHỈ GIỮA HIỆP</span>
-            <span className="sm:hidden">NGHỈ</span>
           </Button>
 
           <Button
@@ -433,9 +417,9 @@ const MatchManagementSection = () => {
       </div>
 
       {/* Phần nhập tên đội A và đội B cho mobile */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 border border-blue-200 space-y-3">
-        {/* Tên trận đấu - chỉ hiện khi bấm nút Thông tin */}
-        {showMatchInfo && (
+      {showMatchInfo && (
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 border border-blue-200 space-y-3">
+          {/* Tên trận đấu */}
           <div className="bg-white rounded-lg border border-blue-300 shadow-sm p-2">
             <label className="block text-xs text-blue-600 font-medium mb-1">Tên trận đấu</label>
             <input
@@ -447,131 +431,131 @@ const MatchManagementSection = () => {
               maxLength={50}
             />
           </div>
-        )}
-        {/* Tên đội */}
-        <div className="flex gap-2">
-          <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
-            <input
-              type="text"
-              placeholder="Tên đội A"
-              value={teamAInfo.name}
-              onChange={(e) => setTeamAInfo(prev => ({ ...prev, name: e.target.value }))}
-              className="w-full px-2 py-1.5 text-sm font-medium text-center text-red-600 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-red-300 rounded-lg"
-              maxLength={20}
-            />
-          </div>
-          <div className="flex items-center justify-center px-2">
-            <span className="text-sm font-bold text-gray-500">VS</span>
-          </div>
-          <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
-            <input
-              type="text"
-              placeholder="Tên đội B"
-              value={teamBInfo.name}
-              onChange={(e) => setTeamBInfo(prev => ({ ...prev, name: e.target.value }))}
-              className="w-full px-2 py-1.5 text-sm font-medium text-center text-gray-800 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-gray-300 rounded-lg"
-              maxLength={20}
-            />
-          </div>
-        </div>
 
-        {/* Logo đội */}
-        <div className="flex gap-2">
-          <div className="flex-1">
-            <label className="block text-xs text-red-600 font-medium mb-1">Logo Đội A</label>
-            <div className="flex items-center gap-1">
+          {/* Tên đội */}
+          <div className="flex gap-2">
+            <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
               <input
                 type="text"
-                placeholder="Nhập code logo..."
-                value={logoCodeA}
-                onChange={(e) => setLogoCodeA(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearchLogoA()}
-                className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:border-red-500 text-center bg-white"
+                placeholder="Tên đội A"
+                value={teamAInfo.name}
+                onChange={(e) => setTeamAInfo(prev => ({ ...prev, name: e.target.value }))}
+                className="w-full px-2 py-1.5 text-sm font-medium text-center text-red-600 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-red-300 rounded-lg"
+                maxLength={20}
               />
-              <button
-                onClick={handleSearchLogoA}
-                disabled={!logoCodeA.trim() || isSearchingLogoA}
-                className="ml-1 px-2 py-1 text-xs border border-red-500 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSearchingLogoA ? '⏳' : '🔍'}
-              </button>
-              {teamAInfo.logo && (
-                <div className="w-6 h-6 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
-                  <img src={teamAInfo.logo} alt="Logo A" className="w-full h-full object-contain" />
-                </div>
-              )}
             </div>
-          </div>
-          <div className="flex-1">
-            <label className="block text-xs text-gray-800 font-medium mb-1">Logo Đội B</label>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center justify-center px-2">
+              <span className="text-sm font-bold text-gray-500">VS</span>
+            </div>
+            <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
               <input
                 type="text"
-                placeholder="Nhập code logo..."
-                value={logoCodeB}
-                onChange={(e) => setLogoCodeB(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearchLogoB()}
-                className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 text-center bg-white"
+                placeholder="Tên đội B"
+                value={teamBInfo.name}
+                onChange={(e) => setTeamBInfo(prev => ({ ...prev, name: e.target.value }))}
+                className="w-full px-2 py-1.5 text-sm font-medium text-center text-gray-800 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-gray-300 rounded-lg"
+                maxLength={20}
               />
-              <button
-                onClick={handleSearchLogoB}
-                disabled={!logoCodeB.trim() || isSearchingLogoB}
-                className="ml-1 px-2 py-1 text-xs border border-gray-700 bg-gray-700 text-white rounded hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSearchingLogoB ? '⏳' : '🔍'}
-              </button>
-              {teamBInfo.logo && (
-                <div className="w-6 h-6 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
-                  <img src={teamBInfo.logo} alt="Logo B" className="w-full h-full object-contain" />
-                </div>
-              )}
             </div>
           </div>
-        </div>
 
-        {/* Ngày giờ bắt đầu và địa điểm */}
-        <div className="flex gap-2">
-          <div className="flex-1">
-            <label className="block text-xs text-blue-600 font-medium mb-1">Ngày bắt đầu</label>
-            <input
-              type="date"
-              value={matchInfo.matchDate || new Date().toISOString().split('T')[0]}
-              onChange={(e) => setMatchInfo(prev => ({ ...prev, matchDate: e.target.value }))}
-              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
-            />
+          {/* Logo đội */}
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <label className="block text-xs text-red-600 font-medium mb-1">Logo Đội A</label>
+              <div className="flex items-center gap-1">
+                <input
+                  type="text"
+                  placeholder="Code..."
+                  value={logoCodeA}
+                  onChange={(e) => setLogoCodeA(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSearchLogoA()}
+                  className="w-12 px-1 py-1 text-xs border border-gray-300 rounded focus:border-red-500 text-center bg-white"
+                />
+                <button
+                  onClick={handleSearchLogoA}
+                  disabled={!logoCodeA.trim() || isSearchingLogoA}
+                  className="px-2 py-1 text-xs border border-red-500 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSearchingLogoA ? '⏳' : '🔍'}
+                </button>
+                {teamAInfo.logo && (
+                  <div className="w-6 h-6 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
+                    <img src={teamAInfo.logo} alt="Logo A" className="w-full h-full object-contain" />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="flex-1">
+              <label className="block text-xs text-gray-800 font-medium mb-1">Logo Đội B</label>
+              <div className="flex items-center gap-1">
+                <input
+                  type="text"
+                  placeholder="Code..."
+                  value={logoCodeB}
+                  onChange={(e) => setLogoCodeB(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSearchLogoB()}
+                  className="w-12 px-1 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 text-center bg-white"
+                />
+                <button
+                  onClick={handleSearchLogoB}
+                  disabled={!logoCodeB.trim() || isSearchingLogoB}
+                  className="px-2 py-1 text-xs border border-gray-700 bg-gray-700 text-white rounded hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSearchingLogoB ? '⏳' : '🔍'}
+                </button>
+                {teamBInfo.logo && (
+                  <div className="w-6 h-6 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
+                    <img src={teamBInfo.logo} alt="Logo B" className="w-full h-full object-contain" />
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
-          <div className="flex-1">
-            <label className="block text-xs text-blue-600 font-medium mb-1">Giờ bắt đầu</label>
-            <input
-              type="time"
-              value={matchInfo.startTime}
-              onChange={(e) => setMatchInfo(prev => ({ ...prev, startTime: e.target.value }))}
-              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
-            />
-          </div>
-          <div className="flex-1">
-            <label className="block text-xs text-blue-600 font-medium mb-1">Địa điểm</label>
-            <input
-              type="text"
-              placeholder="Sân vận động..."
-              value={matchInfo.location}
-              onChange={(e) => setMatchInfo(prev => ({ ...prev, location: e.target.value }))}
-              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
-              maxLength={50}
-            />
-          </div>
-        </div>
 
-        {/* Nút áp dụng */}
-        <div className="flex justify-center pt-2 border-t border-blue-200">
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={() => {
-              // Cập nhật tên đội
-              updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
+          {/* Ngày giờ bắt đầu và địa điểm */}
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <label className="block text-xs text-blue-600 font-medium mb-1">Ngày bắt đầu</label>
+              <input
+                type="date"
+                value={matchInfo.matchDate || new Date().toISOString().split('T')[0]}
+                onChange={(e) => setMatchInfo(prev => ({ ...prev, matchDate: e.target.value }))}
+                className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="block text-xs text-blue-600 font-medium mb-1">Giờ bắt đầu</label>
+              <input
+                type="time"
+                value={matchInfo.startTime}
+                onChange={(e) => setMatchInfo(prev => ({ ...prev, startTime: e.target.value }))}
+                className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="block text-xs text-blue-600 font-medium mb-1">Địa điểm</label>
+              <input
+                type="text"
+                placeholder="Sân vận động..."
+                value={matchInfo.location}
+                onChange={(e) => setMatchInfo(prev => ({ ...prev, location: e.target.value }))}
+                className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
+                maxLength={50}
+              />
+            </div>
+          </div>
 
-              // Luôn cập nhật logo đội (kể cả logo mặc định hoặc logo mới)
+          {/* Nút áp dụng */}
+          <div className="flex justify-center pt-2 border-t border-blue-200">
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={() => {
+                // Cập nhật tên đội
+                updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
+
+              // Luôn cập nhật logo đ���i (kể cả logo mặc định hoặc logo mới)
               updateTeamLogos(
                 teamAInfo.logo || matchData.teamA.logo || "",
                 teamBInfo.logo || matchData.teamB.logo || ""
@@ -602,6 +586,7 @@ const MatchManagementSection = () => {
           </Button>
         </div>
       </div>
+      )}
 
       {/* Tab Controls */}
       <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200">
@@ -876,7 +861,7 @@ const MatchManagementSection = () => {
               onClick={() => setShowPenaltyModal(true)}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-gray-600 to-gray-800 hover:from-gray-700 hover:to-gray-900 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">🥅</span>
+              <span className="text-sm mr-1">��</span>
               <span className="text-xs font-bold text-center">PENALTY</span>
             </button>
 
@@ -908,7 +893,7 @@ const MatchManagementSection = () => {
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                console.log('��️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
                 console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 25:00!');
               }}
@@ -922,7 +907,7 @@ const MatchManagementSection = () => {
             <button
               onClick={() => {
                 const timeString = "30:00";
-                // Set thời gian về 30:00 và bắt đầu đếm tiến từ server timer
+                // Set thời gian về 30:00 và bắt đầu đếm ti���n từ server timer
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
@@ -943,7 +928,7 @@ const MatchManagementSection = () => {
                 const timeString = "35:00";
                 // Set thời gian về 35:00 và bắt đầu đếm tiến từ server timer
                 updateMatchTime(timeString, "Hiệp 1", "live");
-                // Chuyển sang tỉ số trên
+                // Chuy��n sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
@@ -994,64 +979,115 @@ const MatchManagementSection = () => {
               <span className="text-sm mr-1">📊</span>
               <span className="text-xs font-bold text-center">TỈ SỐ DƯỚI</span>
             </button>
+
+            {/* Đếm 40' */}
+            <button
+              onClick={() => {
+                const timeString = "40:00";
+                updateMatchTime(timeString, "Hiệp 1", "live");
+                updateView('scoreboard');
+                setSelectedOption("ti-so-tren");
+                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                toast.success('⏰ Đã bắt đầu timer từ 40:00!');
+              }}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">🕓</span>
+              <span className="text-xs font-bold text-center">ĐẾM 40'</span>
+            </button>
+
+            {/* Đếm 45' */}
+            <button
+              onClick={() => {
+                const timeString = "45:00";
+                updateMatchTime(timeString, "Hiệp 1", "live");
+                updateView('scoreboard');
+                setSelectedOption("ti-so-tren");
+                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                toast.success('⏰ Đã bắt đầu timer từ 45:00!');
+              }}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">🕔</span>
+              <span className="text-xs font-bold text-center">ĐẾM 45'</span>
+            </button>
+
+            {/* Nghỉ giữa hiệp */}
+            <button
+              onClick={() => {
+                console.log('Chuyển sang nghỉ giữa hiệp');
+                console.log('Current view before update:', matchData.status);
+                updateView('halftime');
+                console.log('Updated view to halftime');
+              }}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">🥤</span>
+              <span className="text-xs font-bold text-center">NGHỈ GIỮA</span>
+            </button>
           </div>
 
-          {/* Đếm T - Input đơn giản */}
+          {/* Đếm T - Input phút đơn giản */}
           <div className="mt-2 bg-white rounded-lg p-2 border border-teal-200">
-            <div className="flex items-center gap-1 mb-2">
-              <span className="text-sm">🕰️</span>
-              <span className="text-sm font-medium text-gray-700">Đếm T:</span>
-            </div>
-
             <div className="flex items-center gap-2">
-              <div className="flex-1">
-                <input
-                  type="number"
-                  min="0"
-                  max="120"
-                  value={quickCustomMinutes}
-                  onChange={(e) => setQuickCustomMinutes(e.target.value)}
-                  placeholder="25"
-                  className="w-full text-sm border border-gray-300 rounded px-2 py-1 focus:border-teal-500 focus:outline-none text-center font-bold h-8"
-                />
-              </div>
+              <button
+                onClick={() => {
+                  const currentValue = parseInt(quickCustomMinutes) || 0;
+                  if (currentValue > 0) {
+                    setQuickCustomMinutes((currentValue - 1).toString());
+                  }
+                }}
+                className="px-2 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded border text-sm font-bold"
+              >
+                -
+              </button>
 
-              <span className="text-gray-400 text-sm font-bold">:</span>
+              <input
+                type="number"
+                min="0"
+                max="120"
+                value={quickCustomMinutes}
+                onChange={(e) => setQuickCustomMinutes(e.target.value)}
+                placeholder="25"
+                className="w-16 text-sm border border-gray-300 rounded px-2 py-1 focus:border-teal-500 focus:outline-none text-center font-bold h-8"
+              />
 
-              <div className="flex-1">
-                <input
-                  type="number"
-                  min="0"
-                  max="59"
-                  value={quickCustomSeconds}
-                  onChange={(e) => setQuickCustomSeconds(e.target.value)}
-                  placeholder="00"
-                  className="w-full text-sm border border-gray-300 rounded px-2 py-1 focus:border-teal-500 focus:outline-none text-center font-bold h-8"
-                />
-              </div>
+              <button
+                onClick={() => {
+                  const currentValue = parseInt(quickCustomMinutes) || 0;
+                  if (currentValue < 120) {
+                    setQuickCustomMinutes((currentValue + 1).toString());
+                  }
+                }}
+                className="px-2 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded border text-sm font-bold"
+              >
+                +
+              </button>
+
+
 
               <button
                 className="px-3 py-1 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-sm font-bold h-8"
                 onClick={() => {
                   const minutes = parseInt(quickCustomMinutes) || 0;
-                  const seconds = parseInt(quickCustomSeconds) || 0;
 
-                  if (minutes > 0 || seconds > 0) {
-                    const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                  if (minutes > 0) {
+                    const timeString = `${minutes.toString().padStart(2, '0')}:00`;
                     updateMatchTime(timeString, "Hiệp 1", "live");
                     updateView('scoreboard');
                     setSelectedOption("ti-so-tren");
                     console.log('🕰️ Đã áp dụng thời gian tùy chỉnh:', timeString);
-                    console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
+
                     toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                   } else {
                     toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
                   }
                 }}
-                disabled={(!quickCustomMinutes || quickCustomMinutes === '0') && (!quickCustomSeconds || quickCustomSeconds === '0')}
+                disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
                 title="Áp dụng"
               >
-                ĐẾM T
+                OK
               </button>
             </div>
           </div>
@@ -1100,7 +1136,7 @@ const MatchManagementSection = () => {
 
           {/* Text content */}
           <Input
-            placeholder="Nội dung chữ chạy..."
+            placeholder="Nội dung ch��� chạy..."
             value={clockText}
             onChange={(e) => setClockText(e.target.value)}
             maxLength={100}
@@ -1156,7 +1192,7 @@ const MatchManagementSection = () => {
 
             if (poster) {
               const posterType = poster.id || poster.name;
-              console.log("🎨 [MatchManagementSection] About to call updatePoster with:", posterType);
+              console.log("���� [MatchManagementSection] About to call updatePoster with:", posterType);
               updatePoster(posterType);
 
               console.log("🎨 [MatchManagementSection] About to call updateView with: poster");
@@ -1210,7 +1246,7 @@ const MatchManagementSection = () => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ bắt đầu chạy từ thời điểm này
+              Trận đ��u sẽ bắt đầu chạy từ thời điểm này
             </p>
           </div>
 
