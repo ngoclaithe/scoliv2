@@ -160,7 +160,6 @@ export const MatchProvider = ({ children }) => {
       if (socketService.getConnectionStatus().accessCode === accessCode &&
           socketService.getConnectionStatus().isConnected &&
           socketService.getConnectionStatus().clientType === clientType) {
-        console.log(`Socket already connected for access code: ${accessCode}`);
         return;
       }
 
