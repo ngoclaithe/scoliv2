@@ -7,7 +7,7 @@ import CommentarySection from "../components/sections/CommentarySection";
 
 const Home = () => {
   const { user, logout, authType, hasAccountAccess, codeOnly, matchCode, clearMatchCode } = useAuth();
-  const [activeTab, setActiveTab] = useState("upload-logo");
+  const [activeTab, setActiveTab] = useState("quan-ly-tran");
   const [codeInfo] = useState({
     code: "DEMO",
     generatedAt: "16:13:11 19/7/2025",
