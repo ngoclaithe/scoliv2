@@ -151,10 +151,10 @@ const TopScoreboard = ({ template = 1, accessCode }) => {
     return () => window.removeEventListener('resize', adjustScale);
   }, []);
 
-  // Tự động phát audio gialap.mp3 khi component mount
+  // Tự động phát audio gialap.mp3 khi component mount - CHỈ 1 LẦN
   useEffect(() => {
     playAudio('gialap', 'scoreboardAbove');
-  }, [playAudio]);
+  }, []); // Bỏ playAudio khỏi dependency để chỉ phát 1 lần
 
   // Adjust font size based on content length
   const adjustFontSize = (text, minSize = 20, maxSize = 35) => {
