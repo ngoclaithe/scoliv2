@@ -188,35 +188,38 @@ export const AudioProvider = ({ children }) => {
     // Dừng audio hiện tại trước khi phát audio mới
     stopCurrentAudio();
 
-    // Tạo audio element mới
-    const audio = new Audio(audioFile);
-    audioRef.current = audio;
+    // Đợi một chút để đảm bảo audio cũ đã dừng hoàn toàn
+    setTimeout(() => {
+      // Tạo audio element mới
+      const audio = new Audio(audioFile);
+      audioRef.current = audio;
 
-    // Thiết lập volume
-    audio.volume = state.isMuted ? 0 : state.volume;
+      // Thiết lập volume
+      audio.volume = state.isMuted ? 0 : state.volume;
 
-    // Cập nhật state
-    dispatch({ 
-      type: audioActions.PLAY_AUDIO, 
-      payload: { audioFile: audioKey, component } 
-    });
+      // Cập nhật state
+      dispatch({
+        type: audioActions.PLAY_AUDIO,
+        payload: { audioFile: audioKey, component }
+      });
 
-    // Sự kiện khi audio kết thúc
-    audio.onended = () => {
-      dispatch({ type: audioActions.STOP_AUDIO });
-    };
+      // Sự kiện khi audio kết thúc
+      audio.onended = () => {
+        dispatch({ type: audioActions.STOP_AUDIO });
+      };
 
-    // Sự kiện lỗi
-    audio.onerror = (e) => {
-      console.error('Audio playback error:', e);
-      dispatch({ type: audioActions.STOP_AUDIO });
-    };
+      // Sự kiện lỗi
+      audio.onerror = (e) => {
+        console.error('Audio playback error:', e);
+        dispatch({ type: audioActions.STOP_AUDIO });
+      };
 
-    // Phát audio
-    audio.play().catch((error) => {
-      console.error('Failed to play audio:', error);
-      dispatch({ type: audioActions.STOP_AUDIO });
-    });
+      // Phát audio
+      audio.play().catch((error) => {
+        console.error('Failed to play audio:', error);
+        dispatch({ type: audioActions.STOP_AUDIO });
+      });
+    }, 50); // Delay nhỏ để tránh interrupt
   };
 
   // Điều chỉnh volume
