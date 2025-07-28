@@ -92,6 +92,19 @@ export const PublicMatchProvider = ({ children }) => {
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
   const [currentAccessCode, setCurrentAccessCode] = useState(null);
 
+  // Ref để debounce update events
+  const updateTimeoutRef = React.useRef(null);
+
+  // Debounced update function
+  const debouncedUpdateTime = useCallback(() => {
+    if (updateTimeoutRef.current) {
+      clearTimeout(updateTimeoutRef.current);
+    }
+    updateTimeoutRef.current = setTimeout(() => {
+      setLastUpdateTime(Date.now());
+    }, 100); // Debounce 100ms
+  }, []);
+
   // Thiết lập các listener cho socket
   const setupSocketListeners = useCallback(() => {
     // Lắng nghe cập nhật thông tin trận đấu
