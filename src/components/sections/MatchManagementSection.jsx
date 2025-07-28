@@ -364,10 +364,16 @@ const MatchManagementSection = () => {
                 : "bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700"
             } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
-              const newStatus = matchData.status === "paused" ? "live" : "paused";
-              updateMatchTime(matchData.matchTime, matchData.period, newStatus);
-              console.log('Timer status changed to:', newStatus);
-              toast.info(newStatus === 'paused' ? '⏸️ Đã tạm dừng timer' : '▶️ Đã tiếp tục timer');
+              if (matchData.status === "paused") {
+                // Resume timer từ server
+                resumeTimer();
+                toast.info('▶️ Đã tiếp tục timer từ server');
+              } else {
+                // Pause timer - sử dụng updateMatchTime với status paused
+                updateMatchTime(matchData.matchTime, matchData.period, "paused");
+                toast.info('⏸️ Đã tạm dừng timer');
+              }
+              console.log('Timer status changed from:', matchData.status);
             }}
           >
             <span className="mr-1">{matchData.status === "paused" ? "▶️" : "⏸️"}</span>
@@ -1078,7 +1084,7 @@ const MatchManagementSection = () => {
             console.log("🎨 [MatchManagementSection] onPosterUpdate called with:", poster);
             console.log("🎨 [MatchManagementSection] poster.id:", poster?.id);
             console.log("🎨 [MatchManagementSection] poster.name:", poster?.name);
-            console.log("🎨 [MatchManagementSection] updatePoster function exists:", !!updatePoster);
+            console.log("�� [MatchManagementSection] updatePoster function exists:", !!updatePoster);
             console.log("🎨 [MatchManagementSection] updateView function exists:", !!updateView);
 
             if (poster) {
