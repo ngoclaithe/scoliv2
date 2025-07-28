@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { usePublicMatch } from '../../contexts/PublicMatchContext';
 
-const TopScoreboard = ({ template = 1 }) => {
-  // Sample data - in real app this would be props
+const TopScoreboard = ({ template = 1, accessCode }) => {
+  // Sử dụng PublicMatchContext để nhận dữ liệu real-time
+  const {
+    matchData,
+    displaySettings,
+    marqueeData,
+    socketConnected
+  } = usePublicMatch();
+
+  // Sample data - sẽ được override bởi context data
   const [scoreboardData, setScoreboardData] = useState({
     team1: "HÀ NỘI FC",
     team2: "HCM CITY",
@@ -19,6 +28,31 @@ const TopScoreboard = ({ template = 1 }) => {
       rightDown: []
     }
   });
+
+  // Cập nhật state khi nhận dữ liệu từ context
+  useEffect(() => {
+    if (matchData) {
+      setScoreboardData(prev => ({
+        ...prev,
+        team1: matchData.teamA?.name || prev.team1,
+        team2: matchData.teamB?.name || prev.team2,
+        score1: String(matchData.teamA?.score || 0),
+        score2: String(matchData.teamB?.score || 0),
+        timer: matchData.matchTime || prev.timer
+      }));
+    }
+  }, [matchData]);
+
+  // Cập nhật marquee data từ context
+  useEffect(() => {
+    if (marqueeData) {
+      setScoreboardData(prev => ({
+        ...prev,
+        showMarquee: marqueeData.mode !== 'none',
+        marqueeText: marqueeData.text || prev.marqueeText
+      }));
+    }
+  }, [marqueeData]);
 
   const [scoreboardScale, setScoreboardScale] = useState(1);
 
@@ -93,7 +127,9 @@ const TopScoreboard = ({ template = 1 }) => {
     }
   };
 
-  const templateStyles = getTemplateStyles(template);
+  // Sử dụng template từ displaySettings context, fallback về prop
+  const currentTemplate = displaySettings?.selectedSkin || template;
+  const templateStyles = getTemplateStyles(currentTemplate);
 
   // Auto-adjust scale based on window size
   useEffect(() => {
@@ -267,6 +303,21 @@ const TopScoreboard = ({ template = 1 }) => {
         }
       `}</style>
 
+      {/* Debug Info */}
+      {accessCode && (
+        <div className="fixed top-4 left-4 z-50 pointer-events-auto">
+          <div className="bg-black/70 text-white p-3 rounded-lg text-xs space-y-1">
+            <div className={`flex items-center gap-2 ${socketConnected ? 'text-green-400' : 'text-red-400'}`}>
+              <span>{socketConnected ? '🟢' : '🔴'}</span>
+              <span>{socketConnected ? 'Kết nối' : 'Mất kết nối'}</span>
+            </div>
+            <div>Template: <span className="font-bold text-yellow-400">{currentTemplate}</span></div>
+            <div>Access Code: <span className="font-bold text-blue-400">{accessCode}</span></div>
+            <div>Tỉ số: <span className="font-bold text-green-400">{scoreboardData.score1}-{scoreboardData.score2}</span></div>
+            <div>Vị trí: <span className="font-bold text-purple-400">Trên</span></div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

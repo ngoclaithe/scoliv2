@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { usePublicMatch } from '../../contexts/PublicMatchContext';
 
 const ScoreboardBelow = ({
   accessCode,
@@ -7,10 +8,19 @@ const ScoreboardBelow = ({
   onLogoUpdate,
   template = 1
 }) => {
-  // State cho scoreboard data
+  // Sử dụng PublicMatchContext để nhận dữ liệu real-time
+  const {
+    matchData,
+    displaySettings,
+    marqueeData,
+    penaltyData,
+    socketConnected
+  } = usePublicMatch();
+
+  // State cho scoreboard data (merge với context data)
   const [scoreboardData, setScoreboardData] = useState({
     team1: "ĐỘI A",
-    team2: "ĐỘI B", 
+    team2: "ĐỘI B",
     score1: 0,
     score2: 0,
     logo1: null,
@@ -28,6 +38,46 @@ const ScoreboardBelow = ({
     showPenaltyAnimation: false,
     lastPenaltyTeam: null
   });
+
+  // Cập nhật state khi nhận dữ liệu từ context
+  useEffect(() => {
+    if (matchData) {
+      setScoreboardData(prev => ({
+        ...prev,
+        team1: matchData.teamA?.name || prev.team1,
+        team2: matchData.teamB?.name || prev.team2,
+        score1: matchData.teamA?.score || 0,
+        score2: matchData.teamB?.score || 0,
+        logo1: matchData.teamA?.logo || prev.logo1,
+        logo2: matchData.teamB?.logo || prev.logo2,
+        timer: matchData.matchTime || prev.timer,
+        period: matchData.period || prev.period
+      }));
+    }
+  }, [matchData]);
+
+  // Cập nhật marquee data từ context
+  useEffect(() => {
+    if (marqueeData) {
+      setScoreboardData(prev => ({
+        ...prev,
+        showMarquee: marqueeData.mode !== 'none',
+        marqueeText: marqueeData.text || prev.marqueeText
+      }));
+    }
+  }, [marqueeData]);
+
+  // Cập nhật penalty data từ context
+  useEffect(() => {
+    if (penaltyData) {
+      setScoreboardData(prev => ({
+        ...prev,
+        penaltyMode: penaltyData.status !== 'ready',
+        penaltyScore1: penaltyData.teamAGoals || 0,
+        penaltyScore2: penaltyData.teamBGoals || 0
+      }));
+    }
+  }, [penaltyData]);
 
   const [scoreboardScale, setScoreboardScale] = useState(1);
   const [editMode, setEditMode] = useState(false);
@@ -114,7 +164,9 @@ const ScoreboardBelow = ({
     }
   };
 
-  const templateStyles = getTemplateStyles(template);
+  // Sử dụng template từ displaySettings context, fallback về prop
+  const currentTemplate = displaySettings?.selectedSkin || template;
+  const templateStyles = getTemplateStyles(currentTemplate);
 
   // Auto-adjust scale based on window size
   useEffect(() => {
@@ -606,6 +658,20 @@ const ScoreboardBelow = ({
           </div>
         </div>
       )}
+
+      {/* Debug Info */}
+      <div className="fixed top-4 left-4 z-50 pointer-events-auto">
+        <div className="bg-black/70 text-white p-3 rounded-lg text-xs space-y-1">
+          <div className={`flex items-center gap-2 ${socketConnected ? 'text-green-400' : 'text-red-400'}`}>
+            <span>{socketConnected ? '🟢' : '🔴'}</span>
+            <span>{socketConnected ? 'Kết nối' : 'Mất kết nối'}</span>
+          </div>
+          <div>Template: <span className="font-bold text-yellow-400">{currentTemplate}</span></div>
+          <div>Access Code: <span className="font-bold text-blue-400">{accessCode}</span></div>
+          <div>Tỉ số: <span className="font-bold text-green-400">{scoreboardData.score1}-{scoreboardData.score2}</span></div>
+          <div>Vị trí: <span className="font-bold text-purple-400">Dưới</span></div>
+        </div>
+      </div>
 
       {/* Edit Mode Toggle Button */}
       {!editMode && (
