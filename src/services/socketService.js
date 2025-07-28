@@ -239,12 +239,7 @@ class SocketService {
 
   // === TIMER REAL-TIME EVENTS ===
 
-  // Request timer sync từ server
-  requestTimerSync() {
-    return this.emit('timer_sync_request', {
-      timestamp: Date.now()
-    });
-  }
+
 
   // Start timer từ server
   startServerTimer(startTime, period, status = "live") {

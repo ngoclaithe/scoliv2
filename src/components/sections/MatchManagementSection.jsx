@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import LogoSearch from '../logo/LogoSearch';
 import LogoAPI from '../../API/apiLogo';
 import MatchTimeDisplay from './MatchTimeDisplay';
-import useTimerSync from '../../hooks/useTimerSync';
+
 
 
 const MatchManagementSection = () => {
@@ -37,7 +37,7 @@ const MatchManagementSection = () => {
     updateMarquee,
     updateView,
     resumeTimer,
-    requestTimerSync
+
   } = useMatch();
 
   // State cho các tùy chọn điều khiển UI
@@ -94,8 +94,7 @@ const MatchManagementSection = () => {
     }
   }, [matchData.startTime, matchData.stadium, matchData.matchDate]);
 
-  // Sử dụng custom hook để quản lý timer sync requests một cách tối ưu
-  useTimerSync(socketConnected, requestTimerSync);
+
 
   // Status management moved to MatchTimeDisplay component
 

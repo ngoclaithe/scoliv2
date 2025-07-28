@@ -140,10 +140,7 @@ export const MatchProvider = ({ children }) => {
 
     // ĐÃ TẮT LOCAL TIMER - Server sẽ gửi timer updates qua socket
     // Khi status thay đổi thành "live", request timer sync từ server
-    if (matchData.status === "live" && socketConnected) {
-      socketService.requestTimerSync();
-      // console.log('⏰ [MatchContext] Requested timer sync due to status change to live');
-    }
+
 
     // Cleanup khi component unmount
     return () => {
@@ -264,30 +261,7 @@ export const MatchProvider = ({ children }) => {
 
     // === TIMER REAL-TIME LISTENERS ===
 
-    // Lắng nghe timer sync từ server
-    socketService.on('timer_sync_response', (data) => {
-      // console.log('⏰ [MatchContext] Received timer_sync_response:', data);
-      setMatchData(prev => {
-        // Chỉ cập nhật nếu có thay đổi thực sự để tránh rerender không cần thiết
-        const hasTimeChanged = prev.matchTime !== data.currentTime;
-        const hasPeriodChanged = prev.period !== data.period;
-        const hasStatusChanged = prev.status !== data.status;
 
-        if (!hasTimeChanged && !hasPeriodChanged && !hasStatusChanged) {
-          // Không có thay đổi, trả về state cũ để tránh rerender
-          return prev;
-        }
-
-        return {
-          ...prev,
-          matchTime: data.currentTime,
-          period: data.period,
-          status: data.status,
-          serverTimestamp: data.serverTimestamp
-        };
-      });
-      setLastUpdateTime(Date.now());
-    });
 
     // Lắng nghe timer real-time updates từ server
     socketService.on('timer_tick', (data) => {
@@ -438,7 +412,7 @@ export const MatchProvider = ({ children }) => {
   const updateScore = useCallback((team, increment, additionalData = {}) => {
     const newMatchData = { ...matchData };
 
-    // Cập nhật tỉ số nếu có increment
+    // Cập nhật tỉ số nếu c�� increment
     if (increment !== 0) {
       newMatchData[team].score = Math.max(0, newMatchData[team].score + increment);
     }
@@ -599,13 +573,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Request timer sync từ server
-  const requestTimerSync = useCallback(() => {
-    if (socketConnected) {
-      socketService.requestTimerSync();
-      // console.log('⏰ [MatchContext] Requested timer sync');
-    }
-  }, [socketConnected]);
+
 
   // Reset toàn bộ dữ liệu trận đấu
   const resetMatch = useCallback(() => {
@@ -672,7 +640,6 @@ export const MatchProvider = ({ children }) => {
 
     // Timer functions
     resumeTimer,
-    requestTimerSync,
 
     // Socket functions
     initializeSocket,
