@@ -261,30 +261,7 @@ export const MatchProvider = ({ children }) => {
 
     // === TIMER REAL-TIME LISTENERS ===
 
-    // Lắng nghe timer sync từ server
-    socketService.on('timer_sync_response', (data) => {
-      // console.log('⏰ [MatchContext] Received timer_sync_response:', data);
-      setMatchData(prev => {
-        // Chỉ cập nhật nếu có thay đổi thực sự để tránh rerender không cần thiết
-        const hasTimeChanged = prev.matchTime !== data.currentTime;
-        const hasPeriodChanged = prev.period !== data.period;
-        const hasStatusChanged = prev.status !== data.status;
 
-        if (!hasTimeChanged && !hasPeriodChanged && !hasStatusChanged) {
-          // Không có thay đổi, trả về state cũ để tránh rerender
-          return prev;
-        }
-
-        return {
-          ...prev,
-          matchTime: data.currentTime,
-          period: data.period,
-          status: data.status,
-          serverTimestamp: data.serverTimestamp
-        };
-      });
-      setLastUpdateTime(Date.now());
-    });
 
     // Lắng nghe timer real-time updates từ server
     socketService.on('timer_tick', (data) => {
