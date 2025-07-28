@@ -9,6 +9,7 @@ import SimplePenaltyModal from "../common/SimplePenaltyModal";
 import { useMatch } from "../../contexts/MatchContext";
 import { toast } from 'react-toastify';
 import LogoSearch from '../logo/LogoSearch';
+import LogoAPI from '../../API/apiLogo';
 
 
 const MatchManagementSection = () => {
@@ -57,7 +58,8 @@ const MatchManagementSection = () => {
   });
   const [matchInfo, setMatchInfo] = useState({
     startTime: "19:30",
-    location: "SÂN VẬN ĐỘNG QUỐC GIA"
+    location: "SÂN VẬN ĐỘNG QUỐC GIA",
+    matchDate: new Date().toISOString().split('T')[0]
   });
 
   // State cho chế độ chỉnh sửa thống kê
@@ -77,10 +79,58 @@ const MatchManagementSection = () => {
   const [showLineupModal, setShowLineupModal] = useState(false);
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
   const [showTimerModal, setShowTimerModal] = useState(false);
-  const [showLogoSearchA, setShowLogoSearchA] = useState(false);
-  const [showLogoSearchB, setShowLogoSearchB] = useState(false);
+  const [logoCodeA, setLogoCodeA] = useState("");
+  const [logoCodeB, setLogoCodeB] = useState("");
+  const [isSearchingLogoA, setIsSearchingLogoA] = useState(false);
+  const [isSearchingLogoB, setIsSearchingLogoB] = useState(false);
 
 
+
+  // Xử lý tìm kiếm logo cho đội A
+  const handleSearchLogoA = async () => {
+    if (!logoCodeA.trim()) return;
+
+    setIsSearchingLogoA(true);
+    try {
+      const response = await LogoAPI.searchLogosByCode(logoCodeA.trim(), true);
+      if (response.success && response.data && response.data.length > 0) {
+        const logo = response.data[0];
+        setTeamAInfo(prev => ({ ...prev, logo: logo.url }));
+        toast.success(`✅ Đã chọn logo ${logo.code_logo} cho Đội A!`);
+        setLogoCodeA(""); // Clear input sau khi thành công
+      } else {
+        toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeA}"`);
+      }
+    } catch (error) {
+      console.error('Lỗi tìm kiếm logo A:', error);
+      toast.error('Lỗi khi tìm kiếm logo. Vui lòng thử lại.');
+    } finally {
+      setIsSearchingLogoA(false);
+    }
+  };
+
+  // Xử lý tìm kiếm logo cho đội B
+  const handleSearchLogoB = async () => {
+    if (!logoCodeB.trim()) return;
+
+    setIsSearchingLogoB(true);
+    try {
+      const response = await LogoAPI.searchLogosByCode(logoCodeB.trim(), true);
+      if (response.success && response.data && response.data.length > 0) {
+        const logo = response.data[0];
+        setTeamBInfo(prev => ({ ...prev, logo: logo.url }));
+        toast.success(`✅ Đã chọn logo ${logo.code_logo} cho Đội B!`);
+        setLogoCodeB(""); // Clear input sau khi thành công
+      } else {
+        toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeB}"`);
+      }
+    } catch (error) {
+      console.error('Lỗi tìm kiếm logo B:', error);
+      toast.error('Lỗi khi tìm kiếm logo. Vui lòng thử lại.');
+    } finally {
+      setIsSearchingLogoB(false);
+    }
+  };
 
   // Memoized callback to prevent infinite loops
   const handlePenaltyChange = useCallback((newPenaltyData) => {
@@ -313,7 +363,7 @@ const MatchManagementSection = () => {
           >
             <span className="mr-1">🥤</span>
             <span className="hidden sm:inline">NGHỈ GIỮA HIỆP</span>
-            <span className="sm:hidden">NGHỈ</span>
+            <span className="sm:hidden">NGH���</span>
           </Button>
 
 
@@ -354,11 +404,20 @@ const MatchManagementSection = () => {
           <div className="flex-1">
             <label className="block text-xs text-red-600 font-medium mb-1">Logo Đội A</label>
             <div className="flex items-center gap-1">
+              <input
+                type="text"
+                placeholder="Nhập code logo..."
+                value={logoCodeA}
+                onChange={(e) => setLogoCodeA(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSearchLogoA()}
+                className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:border-red-500 text-center bg-white"
+              />
               <button
-                onClick={() => setShowLogoSearchA(true)}
-                className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:border-red-500 hover:bg-red-50 transition-colors text-center bg-white"
+                onClick={handleSearchLogoA}
+                disabled={!logoCodeA.trim() || isSearchingLogoA}
+                className="ml-1 px-2 py-1 text-xs border border-red-500 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {teamAInfo.logo ? '🔄 Đổi logo' : '🔍 Tìm logo'}
+                {isSearchingLogoA ? '⏳' : '🔍'}
               </button>
               {teamAInfo.logo && (
                 <div className="w-6 h-6 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
@@ -370,11 +429,20 @@ const MatchManagementSection = () => {
           <div className="flex-1">
             <label className="block text-xs text-gray-800 font-medium mb-1">Logo Đội B</label>
             <div className="flex items-center gap-1">
+              <input
+                type="text"
+                placeholder="Nhập code logo..."
+                value={logoCodeB}
+                onChange={(e) => setLogoCodeB(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSearchLogoB()}
+                className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 text-center bg-white"
+              />
               <button
-                onClick={() => setShowLogoSearchB(true)}
-                className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 hover:bg-gray-50 transition-colors text-center bg-white"
+                onClick={handleSearchLogoB}
+                disabled={!logoCodeB.trim() || isSearchingLogoB}
+                className="ml-1 px-2 py-1 text-xs border border-gray-700 bg-gray-700 text-white rounded hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {teamBInfo.logo ? '🔄 Đổi logo' : '🔍 Tìm logo'}
+                {isSearchingLogoB ? '⏳' : '🔍'}
               </button>
               {teamBInfo.logo && (
                 <div className="w-6 h-6 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
@@ -385,8 +453,17 @@ const MatchManagementSection = () => {
           </div>
         </div>
 
-        {/* Giờ bắt đầu và địa điểm */}
+        {/* Ngày giờ bắt đầu và địa điểm */}
         <div className="flex gap-2">
+          <div className="flex-1">
+            <label className="block text-xs text-blue-600 font-medium mb-1">Ngày bắt đầu</label>
+            <input
+              type="date"
+              value={matchInfo.matchDate || new Date().toISOString().split('T')[0]}
+              onChange={(e) => setMatchInfo(prev => ({ ...prev, matchDate: e.target.value }))}
+              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
+            />
+          </div>
           <div className="flex-1">
             <label className="block text-xs text-blue-600 font-medium mb-1">Giờ bắt đầu</label>
             <input
@@ -430,8 +507,8 @@ const MatchManagementSection = () => {
               updateMatchInfo({
                 startTime: matchInfo.startTime,
                 stadium: matchInfo.location,
-                matchDate: new Date().toISOString().split('T')[0], // Ngày hiện tại
-                time: matchInfo.startTime
+                matchDate: matchInfo.matchDate || new Date().toISOString().split('T')[0],
+                time: matchInfo.startTime // Giữ key là time cho emit
               });
 
               console.log('Đã cập nhật thông tin trận đấu:', { teamAInfo, teamBInfo, matchInfo });
@@ -725,7 +802,7 @@ const MatchManagementSection = () => {
             {/* Đếm 0 */}
             <button
               onClick={() => {
-                // Set thời gian về 0 và bắt đầu đếm tiến
+                // Set thời gian về 0 và b���t đầu đếm tiến
                 updateMatchTime("00:00", "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
@@ -1015,37 +1092,7 @@ const MatchManagementSection = () => {
         onPenaltyChange={handlePenaltyChange}
       />
 
-      <Modal
-        isOpen={showLogoSearchA}
-        onClose={() => setShowLogoSearchA(false)}
-        title="🔍 Tìm kiếm logo cho Đội A"
-        size="full"
-      >
-        <LogoSearch
-          onLogoSelect={(logo) => {
-            setTeamAInfo(prev => ({ ...prev, logo: logo.url }));
-            setShowLogoSearchA(false);
-            toast.success(`✅ Đã chọn logo ${logo.name} cho Đội A!`);
-          }}
-          onClose={() => setShowLogoSearchA(false)}
-        />
-      </Modal>
 
-      <Modal
-        isOpen={showLogoSearchB}
-        onClose={() => setShowLogoSearchB(false)}
-        title="🔍 Tìm kiếm logo cho Đội B"
-        size="full"
-      >
-        <LogoSearch
-          onLogoSelect={(logo) => {
-            setTeamBInfo(prev => ({ ...prev, logo: logo.url }));
-            setShowLogoSearchB(false);
-            toast.success(`✅ Đã chọn logo ${logo.name} cho Đội B!`);
-          }}
-          onClose={() => setShowLogoSearchB(false)}
-        />
-      </Modal>
 
       <Modal
         isOpen={showTimerModal}

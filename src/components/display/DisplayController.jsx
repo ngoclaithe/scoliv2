@@ -172,7 +172,7 @@ const DisplayController = () => {
         {renderCurrentView()}
       </div>
 
-      {/* Debug info (chỉ hiện khi development) */}
+
     </div>
   );
 };

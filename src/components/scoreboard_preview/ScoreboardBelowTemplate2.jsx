@@ -206,7 +206,7 @@ const ScoreboardBelowTemplate2 = ({
           align-items: center;
           justify-content: space-between;
           gap: 4px;
-          background-color: red;
+          background-color: transparent;
           color: white;
           font-size: 40px;
           font-weight: bold;
