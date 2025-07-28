@@ -37,7 +37,6 @@ class SocketService {
       });
 
       this.socket.on('connect', () => {
-        console.log(`Socket connected for access code: ${accessCode}`);
         this.isConnected = true;
         this.socket.emit('join_room', {
           accessCode: accessCode,
