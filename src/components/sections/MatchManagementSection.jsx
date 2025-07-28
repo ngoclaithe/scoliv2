@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import ScoreDisplay from "../scoreboard/ScoreDisplay";
@@ -468,7 +468,7 @@ const MatchManagementSection = () => {
         {/* Ngày giờ bắt đầu và địa điểm */}
         <div className="flex gap-2">
           <div className="flex-1">
-            <label className="block text-xs text-blue-600 font-medium mb-1">Ngày bắt đầu</label>
+            <label className="block text-xs text-blue-600 font-medium mb-1">Ngày b���t đầu</label>
             <input
               type="date"
               value={matchInfo.matchDate || new Date().toISOString().split('T')[0]}
@@ -662,7 +662,7 @@ const MatchManagementSection = () => {
 
               {/* Sút trúng đích */}
               <EditableStatBar
-                label="Sút tr��ng đích"
+                label="Sút trúng đích"
                 statKey="shotsOnTarget"
                 team1Value={matchStats.shotsOnTarget.team1}
                 team2Value={matchStats.shotsOnTarget.team2}
@@ -874,7 +874,7 @@ const MatchManagementSection = () => {
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                console.log('Đã áp dụng: Bắt đầu đếm t�� 35:00');
+                console.log('Đã áp dụng: Bắt đầu đếm từ 35:00');
                 toast.success('⏰ Đã bắt đầu timer từ 35:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
