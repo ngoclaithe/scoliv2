@@ -198,7 +198,6 @@ const MatchManagementSection = () => {
 
   // Hàm cập nhật kiểm soát bóng (đảm bảo tổng = 100%)
   const updatePossession = (team, value) => {
-    console.log('updatePossession - team:', team, 'value:', value);
     const newValue = Math.max(0, Math.min(100, parseInt(value) || 0));
     const otherTeam = team === 'team1' ? 'team2' : 'team1';
     const otherValue = 100 - newValue;
@@ -210,7 +209,6 @@ const MatchManagementSection = () => {
         [otherTeam]: otherValue
       }
     };
-    console.log('Updated possession stats:', JSON.stringify(newStats.possession, null, 2));
     updateStats(newStats);
   };
 
