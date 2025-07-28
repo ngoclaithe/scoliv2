@@ -562,8 +562,8 @@ const MatchManagementSection = () => {
             </div>
           </div>
 
-        {/* Nút áp dụng */}
-        <div className="flex justify-center pt-2 border-t border-blue-200">
+          {/* Nút áp dụng */}
+          <div className="flex justify-center pt-2 border-t border-blue-200">
           <Button
             variant="primary"
             size="sm"
