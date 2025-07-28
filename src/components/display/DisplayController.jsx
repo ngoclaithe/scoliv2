@@ -19,14 +19,17 @@ import ScoreboardBelow from '../scoreboard_preview/ScoreboardBelow';
 
 const DisplayController = () => {
   const { accessCode } = useParams();
-  const { 
-    initializeSocket, 
-    displaySettings, 
-    socketConnected, 
+  const {
+    initializeSocket,
+    displaySettings,
+    socketConnected,
     lastUpdateTime,
     currentView // Thêm state để điều khiển view hiện tại
   } = usePublicMatch();
-  
+
+  // Sử dụng AudioContext
+  const { playAudio } = useAudio();
+
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
 
