@@ -229,6 +229,14 @@ class SocketService {
     return this.emit('view_update', { viewType });
   }
 
+  // Request toàn bộ state hiện tại từ server
+  requestCurrentState() {
+    return this.emit('request_current_state', {
+      timestamp: Date.now(),
+      clientType: this.clientType
+    });
+  }
+
   // === LISTENER HELPERS ===
 
   // Lắng nghe tất cả các update của match
