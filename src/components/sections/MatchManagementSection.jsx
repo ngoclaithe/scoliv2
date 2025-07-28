@@ -164,7 +164,7 @@ const MatchManagementSection = () => {
       }
     } catch (error) {
       console.error('Lỗi tìm kiếm logo B:', error);
-      toast.error('Lỗi khi tìm kiếm logo. Vui lòng thử lại.');
+      toast.error('Lỗi khi tìm kiếm logo. Vui lòng thử l��i.');
     } finally {
       setIsSearchingLogoB(false);
     }
@@ -564,14 +564,14 @@ const MatchManagementSection = () => {
 
           {/* Nút áp dụng */}
           <div className="flex justify-center pt-2 border-t border-blue-200">
-          <Button
-            variant="primary"
-            size="sm"
+            <Button
+              variant="primary"
+              size="sm"
             onClick={() => {
               // Cập nhật tên đội
               updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
 
-              // Luôn cập nhật logo đội (kể cả logo mặc định hoặc logo mới)
+              // Luôn cập nhật logo đ���i (kể cả logo mặc định hoặc logo mới)
               updateTeamLogos(
                 teamAInfo.logo || matchData.teamA.logo || "",
                 teamBInfo.logo || matchData.teamB.logo || ""
@@ -1157,7 +1157,7 @@ const MatchManagementSection = () => {
 
             if (poster) {
               const posterType = poster.id || poster.name;
-              console.log("🎨 [MatchManagementSection] About to call updatePoster with:", posterType);
+              console.log("���� [MatchManagementSection] About to call updatePoster with:", posterType);
               updatePoster(posterType);
 
               console.log("🎨 [MatchManagementSection] About to call updateView with: poster");
