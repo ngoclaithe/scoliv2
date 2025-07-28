@@ -23,7 +23,11 @@ const AppRoutes = () => {
         } />
 
         {/* Test page for scoreboard templates */}
-        <Route path="/test-scoreboard" element={<ScoreboardTest />} />
+        <Route path="/test-scoreboard" element={
+          <PublicMatchProvider>
+            <ScoreboardTest />
+          </PublicMatchProvider>
+        } />
 
         {/* Public dynamic routes for access codes - không cần authentication */}
         <Route path="/:accessCode" element={
