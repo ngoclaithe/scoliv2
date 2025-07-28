@@ -314,7 +314,7 @@ class SocketService {
   onMatchUpdate(callback) {
     const events = [
       'match_info_updated',
-      'score_updated', 
+      'score_updated',
       'match_stats_updated',
       'template_updated',
       'poster_updated',
@@ -324,10 +324,28 @@ class SocketService {
       'match_time_updated',
       'lineup_updated',
       'penalty_updated',
-      'sponsors_updated'
+      'sponsors_updated',
+      'audio_settings_updated',
+      'component_audio_triggered'
     ];
 
     events.forEach(event => {
+      this.on(event, (data) => {
+        callback(event, data);
+      });
+    });
+  }
+
+  // Lắng nghe các sự kiện audio
+  onAudioEvents(callback) {
+    const audioEvents = [
+      'commentary_audio_received',     // Nhận audio bình luận từ người khác
+      'audio_settings_updated',        // Cài đặt audio được cập nhật
+      'component_audio_triggered',     // Yêu cầu phát audio từ component
+      'audio_playback_sync'           // Đồng bộ phát audio giữa các client
+    ];
+
+    audioEvents.forEach(event => {
       this.on(event, (data) => {
         callback(event, data);
       });
