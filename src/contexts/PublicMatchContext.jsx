@@ -104,8 +104,8 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('score_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
-        teamA: { ...prev.teamA, score: data.scores.home },
-        teamB: { ...prev.teamB, score: data.scores.away }
+        teamA: { ...prev.teamA, score: data.scores.teamA || data.scores.home || 0 },
+        teamB: { ...prev.teamB, score: data.scores.teamB || data.scores.away || 0 }
       }));
       setLastUpdateTime(Date.now());
     });
