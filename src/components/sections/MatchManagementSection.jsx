@@ -318,6 +318,20 @@ const MatchManagementSection = () => {
 
       {/* Score Controls */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
+        {/* Hiển thị thời gian trận đấu khi đang diễn ra */}
+        {matchData.status === "live" && (
+          <div className="bg-gradient-to-r from-green-400 to-blue-500 rounded-lg p-2 mb-3 border-2 border-white shadow-lg">
+            <div className="text-center">
+              <div className="text-white font-bold text-lg sm:text-xl">
+                ⚽ THỜI GIAN TRẬN ĐẤU: {matchData.matchTime}
+              </div>
+              <div className="text-green-100 text-sm">
+                {matchData.period} • {matchData.status === "live" ? "ĐANG DIỄN RA" : "TẠM DỪNG"}
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-2 gap-2 sm:gap-4">
           {/* Đội A */}
           <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-blue-200">
@@ -961,15 +975,14 @@ const MatchManagementSection = () => {
             </button>
           </div>
 
-          {/* Đếm T - Input compact cho mobile */}
+          {/* Đếm T - Input đơn giản */}
           <div className="mt-2 bg-white rounded-lg p-2 border border-teal-200">
-            <div className="flex items-center gap-1 mb-1">
-              <span className="text-xs">🕰️</span>
-              <span className="text-xs font-medium text-gray-700">Đếm T:</span>
-              <span className="text-xs font-bold text-teal-600 ml-auto">⏱️ {matchData.matchTime}</span>
+            <div className="flex items-center gap-1 mb-2">
+              <span className="text-sm">🕰️</span>
+              <span className="text-sm font-medium text-gray-700">Đếm T:</span>
             </div>
 
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2">
               <div className="flex-1">
                 <input
                   type="number"
@@ -977,13 +990,12 @@ const MatchManagementSection = () => {
                   max="120"
                   value={quickCustomMinutes}
                   onChange={(e) => setQuickCustomMinutes(e.target.value)}
-                  placeholder="0"
-                  className="w-full text-xs border border-gray-300 rounded px-1 py-1 focus:border-teal-500 focus:outline-none text-center font-bold h-7"
+                  placeholder="25"
+                  className="w-full text-sm border border-gray-300 rounded px-2 py-1 focus:border-teal-500 focus:outline-none text-center font-bold h-8"
                 />
-                <label className="block text-xs text-center text-gray-600">P</label>
               </div>
 
-              <span className="text-gray-400 text-xs">:</span>
+              <span className="text-gray-400 text-sm font-bold">:</span>
 
               <div className="flex-1">
                 <input
@@ -992,14 +1004,13 @@ const MatchManagementSection = () => {
                   max="59"
                   value={quickCustomSeconds}
                   onChange={(e) => setQuickCustomSeconds(e.target.value)}
-                  placeholder="0"
-                  className="w-full text-xs border border-gray-300 rounded px-1 py-1 focus:border-teal-500 focus:outline-none text-center font-bold h-7"
+                  placeholder="00"
+                  className="w-full text-sm border border-gray-300 rounded px-2 py-1 focus:border-teal-500 focus:outline-none text-center font-bold h-8"
                 />
-                <label className="block text-xs text-center text-gray-600">G</label>
               </div>
 
               <button
-                className="w-7 h-7 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-3 py-1 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-sm font-bold h-8"
                 onClick={() => {
                   const minutes = parseInt(quickCustomMinutes) || 0;
                   const seconds = parseInt(quickCustomSeconds) || 0;
@@ -1019,7 +1030,7 @@ const MatchManagementSection = () => {
                 disabled={(!quickCustomMinutes || quickCustomMinutes === '0') && (!quickCustomSeconds || quickCustomSeconds === '0')}
                 title="Áp dụng"
               >
-                ✓
+                ĐẾM T
               </button>
             </div>
           </div>
