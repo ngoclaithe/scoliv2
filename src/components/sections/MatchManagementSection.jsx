@@ -102,6 +102,34 @@ const MatchManagementSection = () => {
     }
   }, [socketConnected, requestTimerSync]);
 
+  // Quản lý hiển thị trạng thái với debounce để tránh nhảy liên tục
+  useEffect(() => {
+    // Clear timeout cũ nếu có
+    if (statusChangeTimeout) {
+      clearTimeout(statusChangeTimeout);
+    }
+
+    if (matchData.status === "live") {
+      // Nếu status là live, hiển thị ngay lập tức "ĐANG DIỄN RA"
+      setDisplayStatus("ĐANG DIỄN RA");
+    } else {
+      // Nếu status không phải live, đợi 500ms trước khi chuyển sang "TẠM DỪNG"
+      // để tránh hiển thị nhảy khi backend emit liên tục
+      const timeout = setTimeout(() => {
+        setDisplayStatus("TẠM DỪNG");
+      }, 500);
+
+      setStatusChangeTimeout(timeout);
+    }
+
+    // Cleanup timeout khi component unmount hoặc dependency thay đổi
+    return () => {
+      if (statusChangeTimeout) {
+        clearTimeout(statusChangeTimeout);
+      }
+    };
+  }, [matchData.status]); // Chỉ phụ thuộc vào matchData.status
+
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
 
@@ -143,7 +171,7 @@ const MatchManagementSection = () => {
       }
     } catch (error) {
       console.error('Lỗi tìm kiếm logo A:', error);
-      toast.error('Lỗi khi tìm kiếm logo. Vui lòng thử lại.');
+      toast.error('Lỗi khi tìm kiếm logo. Vui l��ng thử lại.');
     } finally {
       setIsSearchingLogoA(false);
     }
@@ -535,7 +563,7 @@ const MatchManagementSection = () => {
             <label className="block text-xs text-blue-600 font-medium mb-1">Địa điểm</label>
             <input
               type="text"
-              placeholder="Sân v���n động..."
+              placeholder="Sân vận động..."
               value={matchInfo.location}
               onChange={(e) => setMatchInfo(prev => ({ ...prev, location: e.target.value }))}
               className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
@@ -1261,7 +1289,7 @@ const MatchManagementSection = () => {
                   setSelectedOption("ti-so-tren");
 
                   console.log('🕰️ Áp dụng thời gian tùy chỉnh từ modal - Timer sẽ đếm từ:', timeString);
-                  console.log('📡 Server s��� emit timer_tick events với displayTime format từ:', timeString);
+                  console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
 
                   toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                 } else {
