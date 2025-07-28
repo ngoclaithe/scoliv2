@@ -184,6 +184,7 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe timer started
     socketService.on('timer_started', (data) => {
+      console.log('▶️ [PublicMatchContext] timer_started received:', data);
       setMatchData(prev => ({
         ...prev,
         matchTime: data.initialTime,
