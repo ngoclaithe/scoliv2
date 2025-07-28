@@ -206,10 +206,11 @@ export const MatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật tỉ số
     socketService.on('score_updated', (data) => {
+      console.log('⚽ [MatchContext] Received score_updated:', data);
       setMatchData(prev => ({
         ...prev,
-        teamA: { ...prev.teamA, score: data.scores.home },
-        teamB: { ...prev.teamB, score: data.scores.away }
+        teamA: { ...prev.teamA, score: data.scores.teamA || data.scores.home },
+        teamB: { ...prev.teamB, score: data.scores.teamB || data.scores.away }
       }));
       setLastUpdateTime(Date.now());
     });
