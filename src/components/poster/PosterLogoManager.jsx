@@ -143,7 +143,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     reader.onload = async (e) => {
       const previewUrl = e.target.result;
       
-      // Cập nh���t UI với preview ảnh
+      // Cập nhật UI với preview ảnh
       setLogoItems(prev => prev.map(logo => 
         logo.id === item.id 
           ? { ...logo, 
@@ -342,7 +342,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
                 });
               }
             } else {
-              // Nếu không tìm thấy, vẫn cập nhật code
+              // Nếu không tìm thấy, v���n cập nhật code
               onUpdate(item.id, {
                 ...item,
                 code: localCode
