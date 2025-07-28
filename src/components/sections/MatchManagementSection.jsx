@@ -602,6 +602,7 @@ const MatchManagementSection = () => {
           </Button>
         </div>
       </div>
+      )}
 
       {/* Tab Controls */}
       <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200">
