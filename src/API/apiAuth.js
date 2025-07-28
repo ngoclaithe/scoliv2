@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/api/v1';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://192.168.31.186:5000/api/v1';
 
 // Tạo instance axios với cấu hình cơ bản
 const api = axios.create({
@@ -48,7 +48,7 @@ const AuthAPI = {
   },
 
   /**
-   * Đăng nhập
+   * Đăng nh��p
    * @param {Object} credentials - Thông tin đăng nhập
    * @param {string} credentials.email - Email
    * @param {string} credentials.password - Mật khẩu
