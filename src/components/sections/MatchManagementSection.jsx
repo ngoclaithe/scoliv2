@@ -864,12 +864,14 @@ const MatchManagementSection = () => {
             {/* Đếm 25' */}
             <button
               onClick={() => {
-                // Set thời gian về 25:00 và bắt đầu đếm tiến
-                updateMatchTime("25:00", "Hiệp 1", "live");
+                const timeString = "25:00";
+                // Set thời gian về 25:00 và bắt đầu đếm tiến từ server timer
+                updateMatchTime(timeString, "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                console.log('Đã áp dụng: Bắt đầu đếm từ 25:00');
+                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 25:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -925,7 +927,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">GIỚI THIỆU</span>
             </button>
 
-            {/* Tỉ số trên */}
+            {/* T�� số trên */}
             <button
               onClick={() => {
                 updateView('scoreboard');
