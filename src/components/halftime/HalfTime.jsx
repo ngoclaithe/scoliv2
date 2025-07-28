@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { usePublicMatch } from '../../contexts/PublicMatchContext';
 
 const HalftimeBreakPoster = () => {
-    // Sample data - in real app this would be props
-    const [matchData, setMatchData] = useState({
-        matchTitle: "GIẢI BÓNG ĐÁ PHONG TRÀO",
-        stadium: "Sân vận động Thiên Trường",
-        time: "19:30",
-        date: "15/12/2024",
-        team1: "ĐỘI A",
-        team2: "ĐỘI B",
-        logo1: "https://via.placeholder.com/200x200/ff0000/ffffff?text=A",
-        logo2: "https://via.placeholder.com/200x200/0000ff/ffffff?text=B",
-        liveText: "FACEBOOK LIVE",
-        showMarquee: false,
-        marqueeText: "",
-        captureMode: false
-    });
+    // Sử dụng dữ liệu từ PublicMatchContext
+    const { matchData: contextMatchData, marqueeData } = usePublicMatch();
+
+    // Kết hợp dữ liệu từ context với dữ liệu mặc định
+    const matchData = {
+        matchTitle: contextMatchData.tournament || "GIẢI BÓNG ĐÁ PHONG TRÀO",
+        stadium: contextMatchData.stadium || "Sân vận động Thiên Trường",
+        time: contextMatchData.startTime || contextMatchData.time || "19:30",
+        date: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
+        team1: contextMatchData.teamA.name || "ĐỘI A",
+        team2: contextMatchData.teamB.name || "ĐỘI B",
+        logo1: contextMatchData.teamA.logo || "/images/background-poster/default_logoA.png",
+        logo2: contextMatchData.teamB.logo || "/images/background-poster/default_logoB.png",
+        liveText: contextMatchData.liveText || "FACEBOOK LIVE",
+        showMarquee: marqueeData.mode !== 'none',
+        marqueeText: marqueeData.text || ""
+    };
 
     const [posterScale, setPosterScale] = useState(1);
     const [logoScale, setLogoScale] = useState(1);
@@ -103,6 +106,9 @@ const HalftimeBreakPoster = () => {
                                     animation: 'spin 4s linear infinite',
                                     transform: `scale(${logoScale})`
                                 }}
+                                onError={(e) => {
+                                    e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
+                                }}
                             />
                         </div>
                         <div
@@ -130,6 +136,9 @@ const HalftimeBreakPoster = () => {
                                 style={{
                                     animation: 'spin 4s linear infinite reverse',
                                     transform: `scale(${logoScale})`
+                                }}
+                                onError={(e) => {
+                                    e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjZGMyNjI2Ii8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBCPC90ZXh0Pgo8L3N2Zz4K';
                                 }}
                             />
                         </div>

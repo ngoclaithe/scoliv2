@@ -1,22 +1,29 @@
 import React, { useState, useRef } from 'react';
+import { usePublicMatch } from '../contexts/PublicMatchContext';
 
 export default function VangKimMatchIntro() {
-  const [matchData, setMatchData] = useState({
-    matchTitle: 'CÚP VÀNG CHAMPION',
-    team1: 'GOLDEN LIONS',
-    team2: 'SILVER WOLVES',
-    logo1: '/images/background-poster/default_logoA.png',
-    logo2: '/images/background-poster/default_logoB.png',
-    stadium: 'SVĐ HÀNG ĐÀY',
-    roundedTime: '15:00',
-    currentDate: new Date().toLocaleDateString('vi-VN')
-  });
+  // Sử dụng dữ liệu từ PublicMatchContext
+  const { matchData: contextMatchData, marqueeData } = usePublicMatch();
+
+  // Kết hợp dữ liệu từ context với dữ liệu mặc định
+  const matchData = {
+    matchTitle: contextMatchData.tournament || 'CÚP VÀNG CHAMPION',
+    team1: contextMatchData.teamA.name || 'GOLDEN LIONS',
+    team2: contextMatchData.teamB.name || 'SILVER WOLVES',
+    logo1: contextMatchData.teamA.logo || '/images/background-poster/default_logoA.png',
+    logo2: contextMatchData.teamB.logo || '/images/background-poster/default_logoB.png',
+    stadium: contextMatchData.stadium || 'SVĐ HÀNG ĐÀY',
+    roundedTime: contextMatchData.startTime || contextMatchData.time || '15:00',
+    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN')
+  };
 
   const [partners, setPartners] = useState([]);
-  const [marquee, setMarquee] = useState({
-    text: '',
-    isRunning: false
-  });
+
+  // Sử dụng marquee data từ context
+  const marquee = {
+    text: marqueeData.text || '',
+    isRunning: marqueeData.mode !== 'none'
+  };
 
   const marqueeRef = useRef(null);
 
