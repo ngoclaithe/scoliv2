@@ -44,6 +44,7 @@ const MatchManagementSection = () => {
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
+  const [showMatchInfo, setShowMatchInfo] = useState(false);
 
   // State cho custom time
   const [customTime, setCustomTime] = useState("");
@@ -65,6 +66,7 @@ const MatchManagementSection = () => {
     name: matchData.teamB.name || "",
     logo: matchData.teamB.logo || ""
   });
+  const [matchTitle, setMatchTitle] = useState(matchData.title || "");
 
   // Sync team info khi matchData thay đổi (từ server)
   useEffect(() => {
@@ -371,7 +373,7 @@ const MatchManagementSection = () => {
           </div>
         </div>
 
-        {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và LỖI(FUTSAL) */}
+        {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
         <div className="flex justify-center items-center mt-2 space-x-2">
           <Button
             variant="primary"
@@ -415,12 +417,37 @@ const MatchManagementSection = () => {
             <span className="sm:hidden">NGHỈ</span>
           </Button>
 
+          <Button
+            variant="primary"
+            size="sm"
+            className="px-2 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+            onClick={() => setShowMatchInfo(!showMatchInfo)}
+          >
+            <span className="mr-1">ℹ️</span>
+            <span className="hidden sm:inline">THÔNG TIN</span>
+            <span className="sm:hidden">INFO</span>
+          </Button>
+
 
         </div>
       </div>
 
       {/* Phần nhập tên đội A và đội B cho mobile */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 border border-blue-200 space-y-3">
+        {/* Tên trận đấu - chỉ hiện khi bấm nút Thông tin */}
+        {showMatchInfo && (
+          <div className="bg-white rounded-lg border border-blue-300 shadow-sm p-2">
+            <label className="block text-xs text-blue-600 font-medium mb-1">Tên trận đấu</label>
+            <input
+              type="text"
+              placeholder="VD: Chung kết Cup Quốc gia 2024"
+              value={matchTitle}
+              onChange={(e) => setMatchTitle(e.target.value)}
+              className="w-full px-2 py-1.5 text-sm font-medium text-center text-blue-700 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-blue-300 rounded-lg"
+              maxLength={50}
+            />
+          </div>
+        )}
         {/* Tên đội */}
         <div className="flex gap-2">
           <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
@@ -550,11 +577,12 @@ const MatchManagementSection = () => {
                 teamBInfo.logo || matchData.teamB.logo || ""
               );
 
-              // Cập nhật thông tin trận đấu (thời gian, địa điểm)
+              // Cập nhật thông tin trận đấu (thời gian, địa điểm, tên trận)
               updateMatchInfo({
                 startTime: matchInfo.startTime,
                 stadium: matchInfo.location,
                 matchDate: matchInfo.matchDate || new Date().toISOString().split('T')[0],
+                title: matchTitle,
                 time: matchInfo.startTime // Giữ key là time cho emit
               });
 
@@ -565,7 +593,7 @@ const MatchManagementSection = () => {
                 logoA: teamAInfo.logo || matchData.teamA.logo,
                 logoB: teamBInfo.logo || matchData.teamB.logo
               });
-              toast.success('✅ Đã cập nhật thông tin trận đấu thành công!');
+              toast.success('✅ Đã cập nhật thông tin trận đ��u thành công!');
             }}
             className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
           >

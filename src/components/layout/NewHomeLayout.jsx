@@ -8,7 +8,7 @@ import CommentarySection from "../sections/CommentarySection";
 
 const NewHomeLayout = () => {
   const { user, logout, authType, hasAccountAccess, codeOnly, matchCode, clearMatchCode } = useAuth();
-  const [activeTab, setActiveTab] = useState("upload-logo");
+  const [activeTab, setActiveTab] = useState("quan-ly-tran");
 
   // Định nghĩa các tab theo yêu cầu
   const tabs = [
@@ -35,7 +35,7 @@ const NewHomeLayout = () => {
     },
   ];
 
-  // Hàm chuyển tab
+  // Hàm chuy��n tab
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
   };
@@ -61,11 +61,11 @@ const NewHomeLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="max-w-sm mx-auto min-h-screen bg-gray-50">
       {/* Header - Thanh điều hướng trên cùng */}
       <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-800 shadow-lg sticky top-0 z-40">
         <div className="mx-auto px-3">
-          <div className="flex justify-between items-center h-12">
+          <div className="flex justify-between items-center h-10">
             {/* Left - Logo và thông tin */}
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
@@ -116,7 +116,7 @@ const NewHomeLayout = () => {
         </div>
       </header>
 
-      <main className="mx-auto">
+      <main>
         {/* Navigation Tabs */}
         <div className="bg-white border-b border-gray-200 shadow-sm">
   <div className="flex">
@@ -124,7 +124,7 @@ const NewHomeLayout = () => {
       <button
         key={tab.id}
         onClick={() => handleTabChange(tab.id)}
-        className={`flex-1 py-1 px-2 text-center font-semibold text-[11px] border-b-2 transition-all duration-300 hover:bg-gray-50 ${
+        className={`flex-1 py-3 px-2 text-center font-semibold text-xs border-b-2 transition-all duration-300 hover:bg-gray-50 ${
           activeTab === tab.id
             ? `border-${tab.color}-500 text-${tab.color}-700 bg-${tab.color}-50`
             : "border-transparent text-gray-600 hover:text-gray-800"
@@ -147,14 +147,13 @@ const NewHomeLayout = () => {
           ) : undefined
         }}
       >
-        <span className="flex flex-col items-center leading-none">
-          <span className="text-sm mb-0.5">{tab.icon}</span>
-          <span className="hidden sm:inline">{tab.name}</span>
-          <span className="sm:hidden text-[10px]">
-            {tab.id === "upload-logo" ? "LOGO" : 
+        <div className="flex flex-col items-center space-y-1">
+          <span className="text-lg">{tab.icon}</span>
+          <span className="text-xs">
+            {tab.id === "upload-logo" ? "LOGO" :
              tab.id === "quan-ly-tran" ? "TRẬN" : "AUDIO"}
           </span>
-        </span>
+        </div>
       </button>
     ))}
   </div>
@@ -163,13 +162,8 @@ const NewHomeLayout = () => {
 
         {/* Tab Content Container */}
         <div className="bg-white min-h-screen">
-          <div className="max-w-7xl mx-auto">
-            {/* Content Header */}
-
-            {/* Tab Content */}
-            <div className="p-4">
-              {renderTabContent()}
-            </div>
+          <div className="p-4">
+            {renderTabContent()}
           </div>
         </div>
       </main>
