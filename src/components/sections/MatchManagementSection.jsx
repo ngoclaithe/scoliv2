@@ -121,7 +121,7 @@ const MatchManagementSection = () => {
   // Component để hiển thị/chỉnh sửa thống kê
   const EditableStatBar = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => {
     if (!isEditingStats) {
-      // Chế đ�� hiển thị
+      // Chế độ hiển thị
       return (
         <div className="space-y-1">
           <div className="flex justify-between items-center text-sm">
@@ -285,7 +285,7 @@ const MatchManagementSection = () => {
           >
             <span className="mr-1">⏸️</span>
             <span className="hidden sm:inline">TẠM DỪNG</span>
-            <span className="sm:hidden">DỪNG</span>
+            <span className="sm:hidden">D���NG</span>
           </Button>
 
           <Button
@@ -672,7 +672,7 @@ const MatchManagementSection = () => {
       )}
 
       {/* Options - Các action buttons điều khiển */}
-      {selectedOption !== "chon-skin" && selectedOption !== "thong-so" && selectedOption !== "chon-poster" && (
+      {selectedOption !== "chon-skin" && selectedOption !== "thong-so" && (
         <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-2 sm:p-3 border border-indigo-200">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
             {/* Poster */}
