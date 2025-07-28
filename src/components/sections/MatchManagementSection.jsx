@@ -414,7 +414,7 @@ const MatchManagementSection = () => {
               // Cập nhật tên đội
               updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
 
-              // Cập nhật logo đội nếu có
+              // Cập nhật logo đ���i nếu có
               if (teamAInfo.logo || teamBInfo.logo) {
                 updateTeamLogos(
                   teamAInfo.logo || matchData.teamA.logo,
@@ -767,7 +767,14 @@ const MatchManagementSection = () => {
 
             {/* Đếm 35' */}
             <button
-              onClick={() => setSelectedOption("dem-35")}
+              onClick={() => {
+                // Set thời gian về 35:00 và bắt đầu đếm tiến
+                updateMatchTime("35:00", "Hiệp 1", "live");
+                // Chuyển sang tỉ số trên
+                updateView('scoreboard');
+                setSelectedOption("ti-so-tren");
+                console.log('Đã áp dụng: Bắt đầu đếm từ 35:00');
+              }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🕒</span>
