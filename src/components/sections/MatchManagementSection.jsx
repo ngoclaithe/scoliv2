@@ -45,7 +45,10 @@ const MatchManagementSection = () => {
 
   // State cho custom time
   const [customTime, setCustomTime] = useState("");
+  const [customSeconds, setCustomSeconds] = useState("");
   const [quickCustomTime, setQuickCustomTime] = useState(""); // Cho input trực tiếp
+  const [quickCustomMinutes, setQuickCustomMinutes] = useState(""); // Phút
+  const [quickCustomSeconds, setQuickCustomSeconds] = useState(""); // Giây
   const [tickerColor, setTickerColor] = useState("#ffffff");
   const [tickerFontSize, setTickerFontSize] = useState(16);
 
