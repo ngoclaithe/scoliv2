@@ -78,21 +78,21 @@ export default function XanhDuongMatchIntro() {
             </div>
 
             {/* Match Section */}
-            <div className="relative flex items-center justify-center w-full px-2 sm:px-8 h-full">
-              
-              {/* Team 1 - Trên cùng trung tâm */}
-              <div className="absolute top-16 left-1/2 transform -translate-x-1/2 flex flex-col items-center space-y-3">
+            <div className="flex items-center justify-between w-full px-2 sm:px-8">
+
+              {/* Team 1 */}
+              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-300 rotate-45"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <img
                     src={matchData.logo1}
                     alt={matchData.team1}
-                    className="relative w-18 h-18 sm:w-22 sm:h-22 md:w-26 md:h-26 lg:w-30 lg:h-30 xl:w-34 xl:h-34 rounded-lg object-cover border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300 rotate-45"
+                    className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300"
                   />
                 </div>
-                <div className="bg-gradient-to-r from-blue-500 to-blue-700 px-4 py-2 rounded-xl shadow-lg border-2 border-white/50 backdrop-blur-sm">
+                <div className="bg-gradient-to-r from-blue-500 to-blue-700 px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
                   <span
-                    className="text-sm sm:text-base md:text-lg font-bold uppercase tracking-wide text-white text-center block"
+                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block"
                     ref={(el) => el && adjustFontSize(el)}
                   >
                     {matchData.team1}
@@ -100,36 +100,41 @@ export default function XanhDuongMatchIntro() {
                 </div>
               </div>
 
-              {/* VS Section - Trung tâm */}
-              <div className="flex flex-col items-center space-y-4">
+              {/* VS Section */}
+              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-4 max-w-xs">
                 <div className="relative flex flex-col items-center">
                   <img
                     src="/images/background-poster/vs2.png"
                     alt="VS"
-                    className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 object-contain animate-spin"
+                    className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain animate-pulse"
                   />
                 </div>
 
-                <div className="flex flex-col items-center space-y-2">
-                  <div className="text-sm sm:text-base font-bold bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 px-6 py-3 rounded-full backdrop-blur-sm text-white text-center border-3 border-white shadow-2xl transform hover:scale-105 transition-all">
+                <div className="flex flex-col items-center space-y-1 sm:space-y-2">
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <div className="bg-blue-600 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-xs sm:text-sm font-bold animate-pulse shadow-lg text-white">
+                      LIVE
+                    </div>
+                  </div>
+                  <div className="text-xs sm:text-sm font-semibold bg-black/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center">
                     {matchData.roundedTime} - {matchData.currentDate}
                   </div>
                 </div>
               </div>
 
-              {/* Team 2 - Dưới cùng trung tâm */}
-              <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 flex flex-col items-center space-y-3">
+              {/* Team 2 */}
+              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-red-400 to-red-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <img
                     src={matchData.logo2}
                     alt={matchData.team2}
-                    className="relative w-18 h-18 sm:w-22 sm:h-22 md:w-26 md:h-26 lg:w-30 lg:h-30 xl:w-34 xl:h-34 rounded-full object-cover border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300"
+                    className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300"
                   />
                 </div>
-                <div className="bg-gradient-to-r from-red-500 to-red-700 px-4 py-2 rounded-xl shadow-lg border-2 border-white/50 backdrop-blur-sm">
+                <div className="bg-gradient-to-r from-red-500 to-red-700 px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
                   <span
-                    className="text-sm sm:text-base md:text-lg font-bold uppercase tracking-wide text-white text-center block"
+                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block"
                     ref={(el) => el && adjustFontSize(el)}
                   >
                     {matchData.team2}
@@ -189,11 +194,43 @@ export default function XanhDuongMatchIntro() {
           </div>
         )}
 
+        {/* Falling Stars Effect */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {[...Array(14)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-80"
+              style={{
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${3 + Math.random() * 2}s`,
+                animation: 'fallingStar 5s linear infinite'
+              }}
+            />
+          ))}
+        </div>
+
         {/* CSS Animations */}
         <style jsx>{`
           @keyframes marquee {
             0% { transform: translateX(100%) translateY(-50%); }
             100% { transform: translateX(-100%) translateY(-50%); }
+          }
+          @keyframes fallingStar {
+            0% {
+              transform: translateY(-10px) rotate(45deg);
+              opacity: 0;
+            }
+            10% {
+              opacity: 1;
+            }
+            90% {
+              opacity: 1;
+            }
+            100% {
+              transform: translateY(100vh) rotate(45deg);
+              opacity: 0;
+            }
           }
         `}</style>
       </div>
