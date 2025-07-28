@@ -751,7 +751,14 @@ const MatchManagementSection = () => {
 
             {/* Đếm 30' */}
             <button
-              onClick={() => setSelectedOption("dem-30")}
+              onClick={() => {
+                // Set thời gian về 30:00 và bắt đầu đếm tiến
+                updateMatchTime("30:00", "Hiệp 1", "live");
+                // Chuyển sang tỉ số trên
+                updateView('scoreboard');
+                setSelectedOption("ti-so-tren");
+                console.log('Đã áp dụng: Bắt đầu đếm từ 30:00');
+              }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🕑</span>
