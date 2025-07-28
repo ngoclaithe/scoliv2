@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { useAudio } from '../../contexts/AudioContext';
 import PublicAPI from '../../API/apiPublic';
-import socketService from '../../services/socketService';
 import MediaSourceAudio from '../audio/MediaSourceAudio';
 
 // Import các component hiển thị
@@ -37,7 +36,6 @@ const DisplayController = () => {
   // Khởi tạo kết nối socket và thiết lập audio listeners
   useEffect(() => {
     let isCleanedUp = false;
-    let audioListenerRegistered = false;
 
     const initializeDisplay = async () => {
       try {
@@ -66,18 +64,15 @@ const DisplayController = () => {
       }
     };
 
-    // Không còn cần handle socket audio - audio sẽ được handle cứng trong từng component
 
     if (accessCode && !isCleanedUp) {
       initializeDisplay();
 
-      // Không setup audio listener nữa - components sẽ tự handle audio
     }
 
     // Cleanup function
     return () => {
       isCleanedUp = true;
-      // Không cần cleanup audio listener nữa
     };
   }, [accessCode]); // Chỉ dependency accessCode
 

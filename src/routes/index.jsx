@@ -25,15 +25,6 @@ const AppRoutes = () => {
           </AuthProvider>
         } />
 
-        {/* Test page for scoreboard templates */}
-        <Route path="/test-scoreboard" element={
-          <AudioProvider>
-            <PublicMatchProvider>
-              <ScoreboardTest />
-            </PublicMatchProvider>
-          </AudioProvider>
-        } />
-
         {/* Public dynamic routes for access codes - không cần authentication */}
         <Route path="/:accessCode" element={
           <AudioProvider>
@@ -45,7 +36,7 @@ const AppRoutes = () => {
       </Routes>
 
       {/* Toast Container - để ở đây để có thể dùng cho tất cả routes */}
-      <ToastContainer
+      {/* <ToastContainer
         position="top-left"
         autoClose={3000}
         hideProgressBar={false}
@@ -58,7 +49,7 @@ const AppRoutes = () => {
         theme="light"
         toastClassName="custom-toast"
         bodyClassName="custom-toast-body"
-      />
+      /> */}
     </>
   );
 };
