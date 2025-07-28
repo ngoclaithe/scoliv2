@@ -693,7 +693,7 @@ const MatchManagementSection = () => {
               <div className="w-full h-20 bg-gradient-to-r from-red-100 to-black/10 flex items-center justify-center">
                 <div className="text-center">
                   <span className="text-xl">🔥</span>
-                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Đỏ Đen</div>
+                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Đ�� Đen</div>
                   <div className="text-xs text-gray-500">Fire Style</div>
                 </div>
               </div>
@@ -1109,12 +1109,27 @@ const MatchManagementSection = () => {
         <PosterManager
           matchData={matchData}
           onPosterUpdate={(poster) => {
-            console.log("Updated poster:", poster);
+            console.log("🎨 [MatchManagementSection] onPosterUpdate called with:", poster);
+            console.log("🎨 [MatchManagementSection] poster.id:", poster?.id);
+            console.log("🎨 [MatchManagementSection] poster.name:", poster?.name);
+            console.log("🎨 [MatchManagementSection] updatePoster function exists:", !!updatePoster);
+            console.log("🎨 [MatchManagementSection] updateView function exists:", !!updateView);
+
             if (poster) {
-              updatePoster(poster.id || poster.name);
+              const posterType = poster.id || poster.name;
+              console.log("🎨 [MatchManagementSection] About to call updatePoster with:", posterType);
+              updatePoster(posterType);
+
+              console.log("🎨 [MatchManagementSection] About to call updateView with: poster");
               updateView('poster');
+
+              console.log("🎨 [MatchManagementSection] Setting selectedOption to: chon-poster");
               setSelectedOption("chon-poster");
+
+              console.log("🎨 [MatchManagementSection] Closing poster modal");
               setShowPosterModal(false);
+            } else {
+              console.log("⚠️ [MatchManagementSection] No poster provided to onPosterUpdate");
             }
           }}
           onLogoUpdate={(logoData) => console.log("Updated logo:", logoData)}

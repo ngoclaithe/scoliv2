@@ -124,7 +124,14 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật poster
     socketService.on('poster_updated', (data) => {
-      setDisplaySettings(prev => ({ ...prev, selectedPoster: data.posterType }));
+      console.log('🎨 [PublicMatchContext] poster_updated received:', data);
+      console.log('🎨 [PublicMatchContext] Current displaySettings before update:', displaySettings);
+
+      setDisplaySettings(prev => {
+        const newSettings = { ...prev, selectedPoster: data.posterType };
+        console.log('🎨 [PublicMatchContext] Updated displaySettings:', newSettings);
+        return newSettings;
+      });
       setLastUpdateTime(Date.now());
     });
 

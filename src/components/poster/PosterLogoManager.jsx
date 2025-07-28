@@ -517,6 +517,9 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   });
 
   const handlePosterSelect = (poster) => {
+    console.log('🎨 [PosterLogoManager] handlePosterSelect called with:', poster);
+    console.log('���� [PosterLogoManager] Current selectedPoster before update:', selectedPoster);
+
     setSelectedPoster(poster);
   };
 
@@ -596,21 +599,33 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   };
 
   const handleSave = () => {
+    console.log('💾 [PosterLogoManager] handleSave called');
+    console.log('💾 [PosterLogoManager] selectedPoster:', selectedPoster);
+    console.log('💾 [PosterLogoManager] onPosterUpdate function exists:', !!onPosterUpdate);
+
     if (selectedPoster) {
+      console.log('💾 [PosterLogoManager] Calling onPosterUpdate with selectedPoster:', selectedPoster);
       onPosterUpdate?.(selectedPoster);
+    } else {
+      console.log('⚠️ [PosterLogoManager] No selectedPoster to update');
     }
-    
-    const activeItems = allLogoItems.filter(item => 
-      item.category === activeLogoCategory && 
+
+    const activeItems = allLogoItems.filter(item =>
+      item.category === activeLogoCategory &&
       (item.displayPositions.length > 0 || logoItems.includes(item))
     );
-    
+
+    console.log('💾 [PosterLogoManager] activeItems for logo update:', activeItems);
+
     if (activeItems.length > 0) {
+      console.log('💾 [PosterLogoManager] Calling onLogoUpdate');
       onLogoUpdate?.({
         logoItems: activeItems,
         displayOptions: logoDisplayOptions
       });
     }
+
+    console.log('💾 [PosterLogoManager] Calling onClose');
     onClose?.();
   };
 
