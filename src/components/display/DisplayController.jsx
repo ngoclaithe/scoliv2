@@ -66,47 +66,18 @@ const DisplayController = () => {
       }
     };
 
-    // Thiết lập audio event listener riêng cho DisplayController
-    const handleAudioTriggered = (data) => {
-      console.log('🔊 [Audio] DisplayController received component_audio_triggered:', data);
-
-      if (data.audioKey && data.component) {
-        if (audioEnabled) {
-          console.log(`🔊 [Audio] Playing audio: ${data.audioKey} for component: ${data.component}`);
-          playAudio(data.audioKey, data.component);
-        } else {
-          // When audio is OFF, use MediaSource for playback
-          console.log(`🔊 [MediaSource] Using MediaSource for audio: ${data.audioKey}`);
-          const audioFiles = {
-            poster: '/audio/poster.mp3',
-            rasan: '/audio/rasan.mp3',
-            gialap: '/audio/gialap.mp3',
-          };
-          const audioFile = audioFiles[data.audioKey];
-          if (audioFile) {
-            setCurrentAudioFile(audioFile);
-          }
-        }
-      }
-    };
+    // Không còn cần handle socket audio - audio sẽ được handle cứng trong từng component
 
     if (accessCode && !isCleanedUp) {
       initializeDisplay();
 
-      // Setup audio listener với cleanup và tránh duplicate registration
-      if (!audioListenerRegistered) {
-        socketService.on('component_audio_triggered', handleAudioTriggered);
-        audioListenerRegistered = true;
-      }
+      // Không setup audio listener nữa - components sẽ tự handle audio
     }
 
     // Cleanup function
     return () => {
       isCleanedUp = true;
-      if (audioListenerRegistered) {
-        socketService.off('component_audio_triggered', handleAudioTriggered);
-        audioListenerRegistered = false;
-      }
+      // Không cần cleanup audio listener nữa
     };
   }, [accessCode]); // Chỉ dependency accessCode
 
