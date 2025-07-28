@@ -68,7 +68,7 @@ const ScoreControls = ({
             </svg>
           </button>
         )}
-        <span className="text-sm text-gray-600">{label}</span>
+        <span className="hidden sm:block text-sm text-gray-600">{label}</span>
       </div>
 
       {/* Score Display và Input */}
