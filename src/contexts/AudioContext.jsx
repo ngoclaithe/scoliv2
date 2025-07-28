@@ -214,10 +214,13 @@ export const AudioProvider = ({ children }) => {
 
   // Toggle audio toàn cục
   const toggleAudioEnabled = () => {
+    // Kiểm tra trước khi dispatch để có state cũ
+    const wasEnabled = state.audioEnabled;
+
     dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
-    
-    // Nếu đang tắt audio, dừng phát
-    if (state.audioEnabled && audioRef.current) {
+
+    // Nếu đang từ enabled -> disabled, dừng phát audio hiện tại
+    if (wasEnabled && audioRef.current) {
       stopCurrentAudio();
     }
   };
