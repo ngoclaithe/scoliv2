@@ -1078,7 +1078,7 @@ const MatchManagementSection = () => {
                     updateView('scoreboard');
                     setSelectedOption("ti-so-tren");
                     console.log('🕰️ Đã áp dụng thời gian tùy chỉnh:', timeString);
-                    console.log('��� Server sẽ emit timer_tick events với displayTime format từ:', timeString);
+
                     toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                   } else {
                     toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
