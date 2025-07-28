@@ -51,6 +51,9 @@ const DisplayController = () => {
         await initializeSocket(accessCode);
         setIsInitialized(true);
 
+        // Thiết lập audio event listeners
+        setupAudioListeners();
+
       } catch (err) {
         console.error('Failed to initialize display:', err);
         setError('Không thể kết nối đến hệ thống');
