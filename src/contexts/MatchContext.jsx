@@ -528,8 +528,8 @@ export const MatchProvider = ({ children }) => {
         socketService.pauseServerTimer();
         console.log('⏸️ [MatchContext] Paused server timer');
       } else if (status === "waiting") {
-        socketService.resetServerTimer(matchTime, period);
-        console.log('🔄 [MatchContext] Reset server timer:', { matchTime, period });
+        socketService.resetServerTimer(matchTime, period, "waiting");
+        console.log('🔄 [MatchContext] Reset server timer:', { matchTime, period, status: "waiting" });
       }
     }
   }, [socketConnected]);
