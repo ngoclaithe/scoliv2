@@ -1195,12 +1195,17 @@ const MatchManagementSection = () => {
                 if (customTime) {
                   // Format thời gian (phút:giây)
                   const timeString = `${customTime.toString().padStart(2, '0')}:00`;
-                  // Set thời gian và bắt đầu đếm tiến
+
+                  // Set thời gian và bắt đầu đếm tiến từ server timer
                   updateMatchTime(timeString, "Hiệp 1", "live");
+
                   // Chuyển sang tỉ số trên
                   updateView('scoreboard');
                   setSelectedOption("ti-so-tren");
-                  console.log('Áp dụng thời gian tùy chỉnh:', customTime);
+
+                  console.log('🕰️ Áp dụng thời gian tùy chỉnh từ modal - Timer sẽ đếm từ:', timeString);
+                  console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
+
                   toast.success(`⏰ Đã bắt đầu timer từ ${customTime}:00!`);
                 }
                 setShowTimerModal(false);
