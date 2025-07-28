@@ -328,7 +328,7 @@ const MatchManagementSection = () => {
           </div>
         </div>
 
-        {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và L��I(FUTSAL) */}
+        {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và LỖI(FUTSAL) */}
         <div className="flex justify-center items-center mt-2 space-x-2">
           <Button
             variant="primary"
@@ -347,7 +347,7 @@ const MatchManagementSection = () => {
           >
             <span className="mr-1">{matchData.status === "paused" ? "▶️" : "⏸️"}</span>
             <span className="hidden sm:inline">{matchData.status === "paused" ? "TIẾP TỤC" : "TẠM DỪNG"}</span>
-            <span className="sm:hidden">{matchData.status === "paused" ? "TIẾP" : "D��NG"}</span>
+            <span className="sm:hidden">{matchData.status === "paused" ? "TIẾP" : "DỪNG"}</span>
           </Button>
 
           <Button
@@ -363,7 +363,7 @@ const MatchManagementSection = () => {
           >
             <span className="mr-1">🥤</span>
             <span className="hidden sm:inline">NGHỈ GIỮA HIỆP</span>
-            <span className="sm:hidden">NGHỈ</span>
+            <span className="sm:hidden">NGH���</span>
           </Button>
 
 
@@ -511,7 +511,7 @@ const MatchManagementSection = () => {
                 time: matchInfo.startTime // Giữ key là time cho emit
               });
 
-              console.log('Đã c���p nhật thông tin trận đấu:', { teamAInfo, teamBInfo, matchInfo });
+              console.log('Đã cập nhật thông tin trận đấu:', { teamAInfo, teamBInfo, matchInfo });
               toast.success('✅ Đã cập nhật thông tin trận đấu thành công!');
             }}
             className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -802,7 +802,7 @@ const MatchManagementSection = () => {
             {/* Đếm 0 */}
             <button
               onClick={() => {
-                // Set thời gian về 0 và bắt đầu đếm tiến
+                // Set thời gian về 0 và b���t đầu đếm tiến
                 updateMatchTime("00:00", "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
@@ -907,7 +907,7 @@ const MatchManagementSection = () => {
             </button>
           </div>
 
-          {/* Đếm T - Input tr���c tiếp */}
+          {/* Đếm T - Input trực tiếp */}
           <div className="mt-3 bg-white rounded-lg p-2 border border-teal-200">
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1">
@@ -1092,37 +1092,7 @@ const MatchManagementSection = () => {
         onPenaltyChange={handlePenaltyChange}
       />
 
-      <Modal
-        isOpen={showLogoSearchA}
-        onClose={() => setShowLogoSearchA(false)}
-        title="🔍 Tìm kiếm logo cho Đội A"
-        size="full"
-      >
-        <LogoSearch
-          onLogoSelect={(logo) => {
-            setTeamAInfo(prev => ({ ...prev, logo: logo.url }));
-            setShowLogoSearchA(false);
-            toast.success(`✅ Đã chọn logo ${logo.name} cho Đội A!`);
-          }}
-          onClose={() => setShowLogoSearchA(false)}
-        />
-      </Modal>
 
-      <Modal
-        isOpen={showLogoSearchB}
-        onClose={() => setShowLogoSearchB(false)}
-        title="🔍 Tìm kiếm logo cho Đội B"
-        size="full"
-      >
-        <LogoSearch
-          onLogoSelect={(logo) => {
-            setTeamBInfo(prev => ({ ...prev, logo: logo.url }));
-            setShowLogoSearchB(false);
-            toast.success(`✅ Đã chọn logo ${logo.name} cho Đội B!`);
-          }}
-          onClose={() => setShowLogoSearchB(false)}
-        />
-      </Modal>
 
       <Modal
         isOpen={showTimerModal}
