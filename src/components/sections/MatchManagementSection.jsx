@@ -161,7 +161,7 @@ const MatchManagementSection = () => {
         </div>
         <div className="flex items-center gap-3">
           <div className="flex-1">
-            <label className="hidden sm:block text-xs text-red-600 font-medium mb-1">Đội A</label>
+            {/* <label className="hidden sm:block text-xs text-red-600 font-medium mb-1">Đội A</label> */}
             <input
               type="number"
               min="0"
@@ -173,7 +173,7 @@ const MatchManagementSection = () => {
           </div>
           <div className="text-gray-400 text-sm">vs</div>
           <div className="flex-1">
-            <label className="hidden sm:block text-xs text-gray-800 font-medium mb-1">Đội B</label>
+            {/* <label className="hidden sm:block text-xs text-gray-800 font-medium mb-1">Đội B</label> */}
             <input
               type="number"
               min="0"
