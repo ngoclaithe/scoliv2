@@ -318,6 +318,20 @@ const MatchManagementSection = () => {
 
       {/* Score Controls */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
+        {/* Hiển thị thời gian trận đấu khi đang diễn ra */}
+        {matchData.status === "live" && (
+          <div className="bg-gradient-to-r from-green-400 to-blue-500 rounded-lg p-2 mb-3 border-2 border-white shadow-lg">
+            <div className="text-center">
+              <div className="text-white font-bold text-lg sm:text-xl">
+                ⚽ THỜI GIAN TRẬN ĐẤU: {matchData.matchTime}
+              </div>
+              <div className="text-green-100 text-sm">
+                {matchData.period} • {matchData.status === "live" ? "ĐANG DIỄN RA" : "TẠM DỪNG"}
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="grid grid-cols-2 gap-2 sm:gap-4">
           {/* Đội A */}
           <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-blue-200">
