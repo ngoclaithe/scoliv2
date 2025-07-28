@@ -569,7 +569,7 @@ const MatchManagementSection = () => {
               size="sm"
               onClick={() => {
                 // Cập nhật tên đội
-              updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
+                updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
 
               // Luôn cập nhật logo đ���i (kể cả logo mặc định hoặc logo mới)
               updateTeamLogos(
@@ -923,7 +923,7 @@ const MatchManagementSection = () => {
             <button
               onClick={() => {
                 const timeString = "30:00";
-                // Set thời gian về 30:00 và bắt đầu đếm tiến từ server timer
+                // Set thời gian về 30:00 và bắt đầu đếm ti���n từ server timer
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
@@ -1043,7 +1043,7 @@ const MatchManagementSection = () => {
                     updateView('scoreboard');
                     setSelectedOption("ti-so-tren");
                     console.log('🕰️ Đã áp dụng thời gian tùy chỉnh:', timeString);
-                    console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
+                    console.log('��� Server sẽ emit timer_tick events với displayTime format từ:', timeString);
                     toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                   } else {
                     toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
