@@ -129,7 +129,7 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật template
+    // Lắng nghe c��p nhật template
     socketService.on('template_updated', (data) => {
       setDisplaySettings(prev => ({ ...prev, selectedSkin: data.templateId }));
       setLastUpdateTime(Date.now());
@@ -252,7 +252,7 @@ export const PublicMatchProvider = ({ children }) => {
     // Lắng nghe cập nhật view hiện tại (MỚI)
     socketService.on('view_updated', (data) => {
       setCurrentView(data.viewType);
-      setLastUpdateTime(Date.now());
+      debouncedUpdateTime();
       console.log('🎯 [Audio] View updated to:', data.viewType);
     });
 
