@@ -33,7 +33,9 @@ const MatchManagementSection = () => {
     updateFutsalErrors,
     updatePenalty,
     updateMarquee,
-    updateView
+    updateView,
+    resumeTimer,
+    requestTimerSync
   } = useMatch();
 
   // State cho các tùy chọn điều khiển UI
