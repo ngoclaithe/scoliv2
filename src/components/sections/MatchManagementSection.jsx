@@ -1094,8 +1094,8 @@ const MatchManagementSection = () => {
         </div>
       )}
 
-      {/* Clock Settings */}
-      <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-3 border border-orange-200">
+{/* Clock Settings */}
+<div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-3 border border-orange-200">
         <div className="space-y-3">
           {/* Radio buttons */}
           <div className="flex justify-center space-x-4">
@@ -1132,37 +1132,71 @@ const MatchManagementSection = () => {
               />
               <label className="text-xs">MỖI 2'</label>
             </div>
+            <div className="flex items-center space-x-1">
+              <input
+                type="radio"
+                name="clock"
+                value="moi-5"
+                checked={clockSetting === "moi-5"}
+                onChange={(e) => setClockSetting(e.target.value)}
+                className="scale-75"
+              />
+              <label className="text-xs">MỖI 5'</label>
+            </div>
           </div>
 
           {/* Text content */}
           <Input
-            placeholder="Nội dung ch��� chạy..."
+            placeholder="Nội dung chữ chạy..."
             value={clockText}
             onChange={(e) => setClockText(e.target.value)}
             maxLength={100}
             className="w-full text-xs"
           />
 
-          {/* Color Only */}
+          {/* Text Style Selection */}
           <div>
-            <div className="flex items-center space-x-1 mb-1">
-              <input
-                type="color"
-                value={tickerColor}
-                onChange={(e) => setTickerColor(e.target.value)}
-                className="w-5 h-5 border border-orange-300 rounded cursor-pointer"
-              />
-            </div>
-            <div className="flex gap-0.5 flex-wrap">
-              {["#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff6600", "#ff00ff"].map((color) => (
-                <button
-                  key={color}
-                  onClick={() => setTickerColor(color)}
-                  className={`w-3 h-3 rounded border ${tickerColor === color ? "border-orange-600 border-2" : "border-gray-300"
-                    }`}
-                  style={{ backgroundColor: color }}
-                />
-              ))}
+            <div className="flex gap-1 flex-wrap justify-center">
+              <button
+                onClick={() => setTickerColor("white-black")}
+                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-black text-white ${
+                  tickerColor === "white-black" ? "border-orange-600" : "border-gray-300"
+                }`}
+              >
+                Chữ
+              </button>
+              <button
+                onClick={() => setTickerColor("black-white")}
+                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-white text-black ${
+                  tickerColor === "black-white" ? "border-orange-600" : "border-gray-300"
+                }`}
+              >
+                Chữ
+              </button>
+              <button
+                onClick={() => setTickerColor("white-blue")}
+                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-blue-600 text-white ${
+                  tickerColor === "white-blue" ? "border-orange-600" : "border-gray-300"
+                }`}
+              >
+                Chữ
+              </button>
+              <button
+                onClick={() => setTickerColor("white-red")}
+                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-red-600 text-white ${
+                  tickerColor === "white-red" ? "border-orange-600" : "border-gray-300"
+                }`}
+              >
+                Chữ
+              </button>
+              <button
+                onClick={() => setTickerColor("white-green")}
+                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-green-600 text-white ${
+                  tickerColor === "white-green" ? "border-orange-600" : "border-gray-300"
+                }`}
+              >
+                Chữ
+              </button>
             </div>
           </div>
 
@@ -1178,7 +1212,6 @@ const MatchManagementSection = () => {
           </div>
         </div>
       </div>
-
       {/* Modals */}
       <Modal
         isOpen={showPosterModal}
