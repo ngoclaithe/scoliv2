@@ -1016,7 +1016,7 @@ const MatchManagementSection = () => {
                     updateView('scoreboard');
                     setSelectedOption("ti-so-tren");
                     console.log('🕰️ Đã áp dụng thời gian tùy chỉnh:', timeString);
-                    console.log('📡 Server sẽ emit timer_tick events v��i displayTime format từ:', timeString);
+                    console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
                     toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                   } else {
                     toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
@@ -1204,17 +1204,36 @@ const MatchManagementSection = () => {
             </p>
           </div>
 
-          <div className="flex items-center space-x-2 mb-4">
-            <Input
-              type="number"
-              min="0"
-              max="120"
-              value={customTime}
-              onChange={(e) => setCustomTime(e.target.value)}
-              placeholder="Nhập phút (VD: 30)"
-              className="flex-1 text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
-            />
-            <span className="text-sm font-medium text-yellow-800">phút</span>
+          <div className="space-y-3 mb-4">
+            <div className="flex items-center gap-3">
+              <div className="flex-1">
+                <Input
+                  type="number"
+                  min="0"
+                  max="120"
+                  value={customTime}
+                  onChange={(e) => setCustomTime(e.target.value)}
+                  placeholder="Nhập phút (VD: 30)"
+                  className="text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
+                />
+                <label className="block text-xs text-center text-yellow-700 mt-1">Phút</label>
+              </div>
+
+              <span className="text-yellow-600 font-bold text-lg">:</span>
+
+              <div className="flex-1">
+                <Input
+                  type="number"
+                  min="0"
+                  max="59"
+                  value={customSeconds || ''}
+                  onChange={(e) => setCustomSeconds(e.target.value)}
+                  placeholder="Nhập giây (VD: 30)"
+                  className="text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
+                />
+                <label className="block text-xs text-center text-yellow-700 mt-1">Giây</label>
+              </div>
+            </div>
           </div>
 
           <div className="text-center text-sm text-yellow-700 mb-4">
