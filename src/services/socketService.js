@@ -302,7 +302,7 @@ class SocketService {
   // Lắng nghe các sự kiện audio
   onAudioEvents(callback) {
     const audioEvents = [
-      'commentary_audio_received',     // Nhận audio bình luận từ người khác
+      'voice-chunk-received',          // Nhận voice chunk từ người khác
       'audio_playback_sync'           // Đồng bộ phát audio giữa các client
     ];
 
