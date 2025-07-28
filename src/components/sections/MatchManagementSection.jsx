@@ -289,6 +289,7 @@ const MatchManagementSection = () => {
               const newStatus = matchData.status === "paused" ? "live" : "paused";
               updateMatchTime(matchData.matchTime, matchData.period, newStatus);
               console.log('Timer status changed to:', newStatus);
+              toast.info(newStatus === 'paused' ? '⏸️ Đã tạm dừng timer' : '▶️ Đã tiếp tục timer');
             }}
           >
             <span className="mr-1">{matchData.status === "paused" ? "▶️" : "⏸️"}</span>
@@ -336,7 +337,7 @@ const MatchManagementSection = () => {
           <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
             <input
               type="text"
-              placeholder="Tên đội B"
+              placeholder="T��n đội B"
               value={teamBInfo.name}
               onChange={(e) => setTeamBInfo(prev => ({ ...prev, name: e.target.value }))}
               className="w-full px-2 py-1.5 text-sm font-medium text-center text-gray-800 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-gray-300 rounded-lg"
@@ -558,7 +559,7 @@ const MatchManagementSection = () => {
                 onUpdate={(team, value) => updatePossession(team, value)}
               />
 
-              {/* Tổng số cú sút */}
+              {/* Tổng số cú s��t */}
               <EditableStatBar
                 label="Tổng số cú sút"
                 statKey="totalShots"
@@ -748,6 +749,7 @@ const MatchManagementSection = () => {
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
                 console.log('Đã áp dụng: Bắt đầu đếm từ 25:00');
+                toast.success('⏰ Đã bắt đầu timer từ 25:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -763,7 +765,8 @@ const MatchManagementSection = () => {
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                console.log('Đ�� áp dụng: Bắt đầu đếm từ 30:00');
+                console.log('Đã áp dụng: Bắt đầu đếm từ 30:00');
+                toast.success('⏰ Đã bắt đầu timer từ 30:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -780,6 +783,7 @@ const MatchManagementSection = () => {
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
                 console.log('Đã áp dụng: Bắt đầu đếm từ 35:00');
+                toast.success('⏰ Đã bắt đầu timer từ 35:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -858,6 +862,7 @@ const MatchManagementSection = () => {
                     updateView('scoreboard');
                     setSelectedOption("ti-so-tren");
                     console.log('Áp dụng thời gian tùy chỉnh:', quickCustomTime);
+                    toast.success(`⏰ Đã bắt đầu timer từ ${quickCustomTime}:00!`);
                   }
                 }}
                 disabled={!quickCustomTime}
@@ -1067,6 +1072,7 @@ const MatchManagementSection = () => {
                   updateView('scoreboard');
                   setSelectedOption("ti-so-tren");
                   console.log('Áp dụng thời gian tùy chỉnh:', customTime);
+                  toast.success(`⏰ Đã bắt đầu timer từ ${customTime}:00!`);
                 }
                 setShowTimerModal(false);
               }}
