@@ -49,8 +49,16 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose }) => 
   ];
 
   const handlePosterSelect = (poster) => {
+    console.log('🎯 [PosterManager] handlePosterSelect called with:', poster);
+    console.log('🎯 [PosterManager] onPosterUpdate function exists:', !!onPosterUpdate);
+
     setSelectedPoster(poster);
-    onPosterUpdate?.(poster);
+
+    if (onPosterUpdate) {
+      console.log('🎯 [PosterManager] Calling onPosterUpdate with:', poster);
+      onPosterUpdate(poster);
+    }
+
     setShowPosterSelector(false);
   };
 
