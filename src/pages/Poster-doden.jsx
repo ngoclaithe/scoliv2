@@ -77,21 +77,21 @@ export default function DodenMatchIntro() {
             </div>
 
             {/* Match Section */}
-            <div className="flex items-center justify-between w-full px-2 sm:px-8">
+            <div className="flex items-center justify-center w-full px-2 sm:px-8">
               
-              {/* Team 1 */}
-              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3">
+              {/* Team 1 - Bên trái trên */}
+              <div className="absolute top-16 left-8 flex flex-col items-center space-y-2 sm:space-y-3">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <img
                     src={matchData.logo1}
                     alt={matchData.team1}
-                    className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300"
+                    className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 rounded-full object-cover border-4 sm:border-6 border-white shadow-2xl transform hover:scale-110 transition duration-300"
                   />
                 </div>
-                <div className="bg-gradient-to-r from-red-600 to-red-800 px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
-                  <span 
-                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block"
+                <div className="bg-gradient-to-r from-red-600 to-red-800 px-3 sm:px-4 py-2 sm:py-3 rounded-xl sm:rounded-2xl shadow-lg border border-white/30 backdrop-blur-sm">
+                  <span
+                    className="text-sm sm:text-base md:text-lg lg:text-xl font-bold uppercase tracking-wide text-white text-center block"
                     ref={(el) => el && adjustFontSize(el)}
                   >
                     {matchData.team1}
@@ -99,41 +99,36 @@ export default function DodenMatchIntro() {
                 </div>
               </div>
 
-              {/* VS Section */}
-              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-4 max-w-xs">
+              {/* VS Section - Trung tâm */}
+              <div className="flex flex-col items-center space-y-3 sm:space-y-6">
                 <div className="relative flex flex-col items-center">
                   <img
                     src="/images/background-poster/vs3.png"
                     alt="VS"
-                    className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain animate-pulse"
+                    className="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 object-contain animate-pulse"
                   />
                 </div>
-                
-                <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  <div className="flex items-center space-x-2 sm:space-x-3">
-                    <div className="bg-red-600 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-xs sm:text-sm font-bold animate-pulse shadow-lg text-white">
-                      LIVE
-                    </div>
-                  </div>
-                  <div className="text-xs sm:text-sm font-semibold bg-black/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center">
+
+                <div className="flex flex-col items-center space-y-2">
+                  <div className="text-sm sm:text-base font-bold bg-gradient-to-r from-red-600 to-black px-4 sm:px-6 py-2 sm:py-3 rounded-full backdrop-blur-sm text-white text-center border-2 border-white shadow-xl">
                     {matchData.roundedTime} - {matchData.currentDate}
                   </div>
                 </div>
               </div>
 
-              {/* Team 2 */}
-              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3">
+              {/* Team 2 - Bên phải dưới */}
+              <div className="absolute bottom-32 right-8 flex flex-col items-center space-y-2 sm:space-y-3">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-gray-700 to-black rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-gray-700 to-black rounded-square blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <img
                     src={matchData.logo2}
                     alt={matchData.team2}
-                    className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300"
+                    className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 rounded-lg object-cover border-4 sm:border-6 border-white shadow-2xl transform hover:scale-110 transition duration-300"
                   />
                 </div>
-                <div className="bg-gradient-to-r from-gray-700 to-black px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
-                  <span 
-                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block"
+                <div className="bg-gradient-to-r from-gray-700 to-black px-3 sm:px-4 py-2 sm:py-3 rounded-xl sm:rounded-2xl shadow-lg border border-white/30 backdrop-blur-sm">
+                  <span
+                    className="text-sm sm:text-base md:text-lg lg:text-xl font-bold uppercase tracking-wide text-white text-center block"
                     ref={(el) => el && adjustFontSize(el)}
                   >
                     {matchData.team2}

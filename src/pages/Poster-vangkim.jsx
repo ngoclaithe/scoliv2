@@ -77,21 +77,22 @@ export default function VangKimMatchIntro() {
             </div>
 
             {/* Match Section */}
-            <div className="flex items-center justify-between w-full px-2 sm:px-8">
+            <div className="relative flex items-center justify-center w-full px-2 sm:px-8 h-full">
               
-              {/* Team 1 */}
-              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3">
+              {/* Team 1 - Trung tâm trái */}
+              <div className="absolute left-16 top-1/2 transform -translate-y-1/2 flex flex-col items-center space-y-4">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300 animate-ping"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full blur opacity-50"></div>
                   <img
                     src={matchData.logo1}
                     alt={matchData.team1}
-                    className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300"
+                    className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 xl:w-36 xl:h-36 rounded-full object-cover border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300"
                   />
                 </div>
-                <div className="bg-gradient-to-r from-yellow-500 to-amber-600 px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
-                  <span 
-                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block"
+                <div className="bg-gradient-to-r from-yellow-500 to-amber-600 px-6 py-3 rounded-2xl shadow-2xl border-3 border-white backdrop-blur-sm">
+                  <span
+                    className="text-base sm:text-lg md:text-xl font-black uppercase tracking-wide text-white text-center block"
                     ref={(el) => el && adjustFontSize(el)}
                   >
                     {matchData.team1}
@@ -99,41 +100,37 @@ export default function VangKimMatchIntro() {
                 </div>
               </div>
 
-              {/* VS Section */}
-              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-4 max-w-xs">
+              {/* VS Section - Trung tâm */}
+              <div className="flex flex-col items-center space-y-6">
                 <div className="relative flex flex-col items-center">
                   <img
                     src="/images/background-poster/vs5.png"
                     alt="VS"
-                    className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain animate-pulse"
+                    className="w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 object-contain animate-pulse"
                   />
                 </div>
-                
-                <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  <div className="flex items-center space-x-2 sm:space-x-3">
-                    <div className="bg-yellow-600 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-xs sm:text-sm font-bold animate-pulse shadow-lg text-white">
-                      LIVE
-                    </div>
-                  </div>
-                  <div className="text-xs sm:text-sm font-semibold bg-black/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center">
+
+                <div className="flex flex-col items-center space-y-3">
+                  <div className="text-lg sm:text-xl font-black bg-gradient-to-r from-yellow-600 via-amber-500 to-orange-500 px-8 py-4 rounded-full backdrop-blur-sm text-white text-center border-4 border-white shadow-2xl transform hover:scale-105 transition-all">
                     {matchData.roundedTime} - {matchData.currentDate}
                   </div>
                 </div>
               </div>
 
-              {/* Team 2 */}
-              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3">
+              {/* Team 2 - Trung tâm phải */}
+              <div className="absolute right-16 top-1/2 transform -translate-y-1/2 flex flex-col items-center space-y-4">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-gray-400 to-gray-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-gray-400 to-gray-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300 animate-ping"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-gray-400 to-gray-600 rounded-full blur opacity-50"></div>
                   <img
                     src={matchData.logo2}
                     alt={matchData.team2}
-                    className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300"
+                    className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 lg:w-32 lg:h-32 xl:w-36 xl:h-36 rounded-full object-cover border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300"
                   />
                 </div>
-                <div className="bg-gradient-to-r from-gray-500 to-gray-700 px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
-                  <span 
-                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block"
+                <div className="bg-gradient-to-r from-gray-500 to-gray-700 px-6 py-3 rounded-2xl shadow-2xl border-3 border-white backdrop-blur-sm">
+                  <span
+                    className="text-base sm:text-lg md:text-xl font-black uppercase tracking-wide text-white text-center block"
                     ref={(el) => el && adjustFontSize(el)}
                   >
                     {matchData.team2}

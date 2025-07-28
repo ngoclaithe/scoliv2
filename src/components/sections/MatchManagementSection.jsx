@@ -161,7 +161,7 @@ const MatchManagementSection = () => {
         </div>
         <div className="flex items-center gap-3">
           <div className="flex-1">
-            <label className="block text-xs text-red-600 font-medium mb-1">Đội A</label>
+            <label className="hidden sm:block text-xs text-red-600 font-medium mb-1">Đội A</label>
             <input
               type="number"
               min="0"
@@ -173,7 +173,7 @@ const MatchManagementSection = () => {
           </div>
           <div className="text-gray-400 text-sm">vs</div>
           <div className="flex-1">
-            <label className="block text-xs text-gray-800 font-medium mb-1">Đội B</label>
+            <label className="hidden sm:block text-xs text-gray-800 font-medium mb-1">Đội B</label>
             <input
               type="number"
               min="0"
@@ -304,60 +304,7 @@ const MatchManagementSection = () => {
             <span className="sm:hidden">NGHỈ</span>
           </Button>
 
-          <div className="flex space-x-2">
-            {/* Lỗi đội A */}
-            <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
-              <Button
-                variant="outline"
-                size="sm"
-                className="px-1 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
-                onClick={() => updateFutsalErrors('teamA', -1)}
-              >
-                -
-              </Button>
-              <div className="px-1.5 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-5 text-center">
-                {futsalErrors.teamA}
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                className="px-1 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
-                onClick={() => updateFutsalErrors('teamA', 1)}
-              >
-                +
-              </Button>
-            </div>
 
-            <div className="flex flex-col items-center justify-center">
-              <span className="text-xs font-medium text-gray-600">
-                <span className="hidden sm:inline">LỖI FUTSAL</span>
-                <span className="sm:hidden">LỖI</span>
-              </span>
-            </div>
-
-            {/* Lỗi đội B */}
-            <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
-              <Button
-                variant="outline"
-                size="sm"
-                className="px-1 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
-                onClick={() => updateFutsalErrors('teamB', -1)}
-              >
-                -
-              </Button>
-              <div className="px-1.5 py-1 bg-gray-100 text-gray-800 text-xs font-bold min-w-5 text-center">
-                {futsalErrors.teamB}
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                className="px-1 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
-                onClick={() => updateFutsalErrors('teamB', 1)}
-              >
-                +
-              </Button>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -393,7 +340,7 @@ const MatchManagementSection = () => {
         {/* Logo đội */}
         <div className="flex gap-2">
           <div className="flex-1">
-            <label className="block text-xs text-red-600 font-medium mb-1">Logo Đội A</label>
+            <label className="hidden sm:block text-xs text-red-600 font-medium mb-1">Logo Đội A</label>
             <input
               type="file"
               accept="image/*"
@@ -411,7 +358,7 @@ const MatchManagementSection = () => {
             />
           </div>
           <div className="flex-1">
-            <label className="block text-xs text-gray-800 font-medium mb-1">Logo Đội B</label>
+            <label className="hidden sm:block text-xs text-gray-800 font-medium mb-1">Logo Đội B</label>
             <input
               type="file"
               accept="image/*"
@@ -820,6 +767,63 @@ const MatchManagementSection = () => {
                 onUpdate={(team, value) => updateStat('fouls', team, value)}
               />
 
+              {/* Lỗi Futsal */}
+              <div className="space-y-2 p-3 bg-gray-50 rounded-lg border">
+                <div className="text-center">
+                  <span className="font-medium text-gray-700 text-sm">Lỗi Futsal</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="flex-1">
+                    <label className="hidden sm:block text-xs text-red-600 font-medium mb-1">Đội A</label>
+                    <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="px-2 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
+                        onClick={() => updateFutsalErrors('teamA', -1)}
+                      >
+                        -
+                      </Button>
+                      <div className="px-3 py-1 bg-red-100 text-red-800 text-sm font-bold min-w-8 text-center">
+                        {futsalErrors.teamA}
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="px-2 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
+                        onClick={() => updateFutsalErrors('teamA', 1)}
+                      >
+                        +
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="text-gray-400 text-sm">vs</div>
+                  <div className="flex-1">
+                    <label className="hidden sm:block text-xs text-gray-800 font-medium mb-1">Đội B</label>
+                    <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="px-2 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
+                        onClick={() => updateFutsalErrors('teamB', -1)}
+                      >
+                        -
+                      </Button>
+                      <div className="px-3 py-1 bg-gray-100 text-gray-800 text-sm font-bold min-w-8 text-center">
+                        {futsalErrors.teamB}
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="px-2 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
+                        onClick={() => updateFutsalErrors('teamB', 1)}
+                      >
+                        +
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
             </div>
 
