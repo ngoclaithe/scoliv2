@@ -234,20 +234,22 @@ export const MatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật logo đội
     socketService.on('team_logos_updated', (data) => {
+      console.log('🏆 [MatchContext] Received team_logos_updated:', data);
       setMatchData(prev => ({
         ...prev,
-        teamA: { ...prev.teamA, logo: data.logos.home },
-        teamB: { ...prev.teamB, logo: data.logos.away }
+        teamA: { ...prev.teamA, logo: data.logos.teamA },
+        teamB: { ...prev.teamB, logo: data.logos.teamB }
       }));
       setLastUpdateTime(Date.now());
     });
 
     // Lắng nghe cập nhật tên đội
     socketService.on('team_names_updated', (data) => {
+      console.log('📛 [MatchContext] Received team_names_updated:', data);
       setMatchData(prev => ({
         ...prev,
-        teamA: { ...prev.teamA, name: data.names.home },
-        teamB: { ...prev.teamB, name: data.names.away }
+        teamA: { ...prev.teamA, name: data.names.teamA },
+        teamB: { ...prev.teamB, name: data.names.teamB }
       }));
       setLastUpdateTime(Date.now());
     });
