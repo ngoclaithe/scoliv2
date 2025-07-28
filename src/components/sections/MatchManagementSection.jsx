@@ -8,6 +8,7 @@ import Modal from "../common/Modal";
 import SimplePenaltyModal from "../common/SimplePenaltyModal";
 import { useMatch } from "../../contexts/MatchContext";
 import { toast } from 'react-toastify';
+import LogoSearch from '../logo/LogoSearch';
 
 
 const MatchManagementSection = () => {
@@ -76,6 +77,8 @@ const MatchManagementSection = () => {
   const [showLineupModal, setShowLineupModal] = useState(false);
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
   const [showTimerModal, setShowTimerModal] = useState(false);
+  const [showLogoSearchA, setShowLogoSearchA] = useState(false);
+  const [showLogoSearchB, setShowLogoSearchB] = useState(false);
 
 
 
@@ -337,7 +340,7 @@ const MatchManagementSection = () => {
           <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
             <input
               type="text"
-              placeholder="T��n đội B"
+              placeholder="Tên đội B"
               value={teamBInfo.name}
               onChange={(e) => setTeamBInfo(prev => ({ ...prev, name: e.target.value }))}
               className="w-full px-2 py-1.5 text-sm font-medium text-center text-gray-800 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-gray-300 rounded-lg"
@@ -349,40 +352,36 @@ const MatchManagementSection = () => {
         {/* Logo đội */}
         <div className="flex gap-2">
           <div className="flex-1">
-            <label className="hidden sm:block text-xs text-red-600 font-medium mb-1">Logo Đội A</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files[0];
-                if (file) {
-                  const reader = new FileReader();
-                  reader.onload = (event) => {
-                    setTeamAInfo(prev => ({ ...prev, logo: event.target.result }));
-                  };
-                  reader.readAsDataURL(file);
-                }
-              }}
-              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-red-500 focus:outline-none"
-            />
+            <label className="block text-xs text-red-600 font-medium mb-1">Logo Đội A</label>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setShowLogoSearchA(true)}
+                className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:border-red-500 hover:bg-red-50 transition-colors text-center bg-white"
+              >
+                {teamAInfo.logo ? '🔄 Đổi logo' : '🔍 Tìm logo'}
+              </button>
+              {teamAInfo.logo && (
+                <div className="w-6 h-6 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
+                  <img src={teamAInfo.logo} alt="Logo A" className="w-full h-full object-contain" />
+                </div>
+              )}
+            </div>
           </div>
           <div className="flex-1">
-            <label className="hidden sm:block text-xs text-gray-800 font-medium mb-1">Logo Đội B</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                const file = e.target.files[0];
-                if (file) {
-                  const reader = new FileReader();
-                  reader.onload = (event) => {
-                    setTeamBInfo(prev => ({ ...prev, logo: event.target.result }));
-                  };
-                  reader.readAsDataURL(file);
-                }
-              }}
-              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 focus:outline-none"
-            />
+            <label className="block text-xs text-gray-800 font-medium mb-1">Logo Đội B</label>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setShowLogoSearchB(true)}
+                className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 hover:bg-gray-50 transition-colors text-center bg-white"
+              >
+                {teamBInfo.logo ? '🔄 Đổi logo' : '🔍 Tìm logo'}
+              </button>
+              {teamBInfo.logo && (
+                <div className="w-6 h-6 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
+                  <img src={teamBInfo.logo} alt="Logo B" className="w-full h-full object-contain" />
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -456,7 +455,7 @@ const MatchManagementSection = () => {
                 : "bg-gradient-to-r from-green-100 to-green-200 text-green-700 hover:from-green-200 hover:to-green-300"
               }`}
           >
-            <span className="mr-0.5 text-xs">���</span>
+            <span className="mr-0.5 text-xs">📊</span>
             <span className="hidden sm:inline">THÔNG SỐ</span>
             <span className="sm:hidden">TK</span>
           </button>
@@ -559,7 +558,7 @@ const MatchManagementSection = () => {
                 onUpdate={(team, value) => updatePossession(team, value)}
               />
 
-              {/* Tổng số cú s��t */}
+              {/* Tổng số cú sút */}
               <EditableStatBar
                 label="Tổng số cú sút"
                 statKey="totalShots"
@@ -1017,6 +1016,38 @@ const MatchManagementSection = () => {
       />
 
       <Modal
+        isOpen={showLogoSearchA}
+        onClose={() => setShowLogoSearchA(false)}
+        title="🔍 Tìm kiếm logo cho Đội A"
+        size="full"
+      >
+        <LogoSearch
+          onLogoSelect={(logo) => {
+            setTeamAInfo(prev => ({ ...prev, logo: logo.url }));
+            setShowLogoSearchA(false);
+            toast.success(`✅ Đã chọn logo ${logo.name} cho Đội A!`);
+          }}
+          onClose={() => setShowLogoSearchA(false)}
+        />
+      </Modal>
+
+      <Modal
+        isOpen={showLogoSearchB}
+        onClose={() => setShowLogoSearchB(false)}
+        title="🔍 Tìm kiếm logo cho Đội B"
+        size="full"
+      >
+        <LogoSearch
+          onLogoSelect={(logo) => {
+            setTeamBInfo(prev => ({ ...prev, logo: logo.url }));
+            setShowLogoSearchB(false);
+            toast.success(`✅ Đã chọn logo ${logo.name} cho Đội B!`);
+          }}
+          onClose={() => setShowLogoSearchB(false)}
+        />
+      </Modal>
+
+      <Modal
         isOpen={showTimerModal}
         onClose={() => setShowTimerModal(false)}
         title="🕰️ Thiết Lập Thời Gian Tùy Chỉnh"
@@ -1044,7 +1075,7 @@ const MatchManagementSection = () => {
               placeholder="Nhập phút (VD: 30)"
               className="flex-1 text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
             />
-            <span className="text-sm font-medium text-yellow-800">phút</span>
+            <span className="text-sm font-medium text-yellow-800">ph��t</span>
           </div>
 
           <div className="text-center text-sm text-yellow-700 mb-4">

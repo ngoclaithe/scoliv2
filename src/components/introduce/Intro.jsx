@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useMatch } from '../../contexts/MatchContext';
+import { usePublicMatch } from '../../contexts/PublicMatchContext';
 
 const Intro = () => {
-    // Sử dụng dữ liệu từ MatchContext
-    const { matchData: contextMatchData, marqueeData } = useMatch();
+    // Sử dụng dữ liệu từ PublicMatchContext
+    const { matchData: contextMatchData, marqueeData } = usePublicMatch();
 
     // Kết hợp dữ liệu từ context với dữ liệu mặc định
     const matchData = {
