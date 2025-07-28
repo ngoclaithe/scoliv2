@@ -140,7 +140,7 @@ const MatchManagementSection = () => {
         toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeA}"`);
       }
     } catch (error) {
-      console.error('Lỗi tìm ki���m logo A:', error);
+      console.error('Lỗi tìm kiếm logo A:', error);
       toast.error('Lỗi khi tìm kiếm logo. Vui lòng thử lại.');
     } finally {
       setIsSearchingLogoA(false);
@@ -1072,7 +1072,7 @@ const MatchManagementSection = () => {
                   const minutes = parseInt(quickCustomMinutes) || 0;
 
 
-                  if (minutes > 0 || seconds > 0) {
+                  if (minutes > 0) {
                     const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                     updateMatchTime(timeString, "Hiệp 1", "live");
                     updateView('scoreboard');
