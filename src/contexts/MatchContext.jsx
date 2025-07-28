@@ -97,6 +97,10 @@ export const MatchProvider = ({ children }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
 
+  // State cho timer tự động
+  const [timerInterval, setTimerInterval] = useState(null);
+  const [startTime, setStartTime] = useState(null);
+
   // Kết nối socket khi có matchCode (cho authenticated users)
   useEffect(() => {
     if (matchCode && isAuthenticated) {
@@ -112,6 +116,58 @@ export const MatchProvider = ({ children }) => {
       }
     };
   }, [matchCode, isAuthenticated]);
+
+  // Hàm helper để chuyển đổi thời gian
+  const parseTimeToSeconds = (timeString) => {
+    if (!timeString || typeof timeString !== 'string') return 0;
+    const [minutes, seconds] = timeString.split(':').map(Number);
+    return (minutes || 0) * 60 + (seconds || 0);
+  };
+
+  const formatSecondsToTime = (totalSeconds) => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  // Timer tự động để cập nhật thời gian trận đấu
+  useEffect(() => {
+    // Dọn dẹp interval cũ
+    if (timerInterval) {
+      clearInterval(timerInterval);
+      setTimerInterval(null);
+    }
+
+    // Tạo interval mới nếu status là "live"
+    if (matchData.status === "live") {
+      const currentTime = parseTimeToSeconds(matchData.matchTime);
+      const now = Date.now();
+      const calculatedStartTime = now - (currentTime * 1000); // Tính thời điểm bắt đầu
+      setStartTime(calculatedStartTime);
+
+      const interval = setInterval(() => {
+        const elapsed = Math.floor((Date.now() - calculatedStartTime) / 1000);
+        const newTime = formatSecondsToTime(elapsed);
+
+        setMatchData(prev => {
+          if (prev.status === "live" && prev.matchTime !== newTime) {
+            // Chỉ cập nhật local state, không emit socket để tránh tốn tài nguyên
+            return { ...prev, matchTime: newTime };
+          }
+          return prev;
+        });
+      }, 1000);
+
+      setTimerInterval(interval);
+    }
+
+    // Cleanup khi component unmount hoặc status thay đổi
+    return () => {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+    };
+  }, [matchData.status, matchData.matchTime]);
 
   // Khởi tạo socket connection
   const initializeSocket = useCallback(async (accessCode) => {
@@ -357,12 +413,20 @@ export const MatchProvider = ({ children }) => {
 
   // Cập nhật thời gian trận đấu
   const updateMatchTime = useCallback((matchTime, period, status) => {
+    const currentTime = parseTimeToSeconds(matchTime);
+    const now = Date.now();
+
+    // Cập nhật startTime khi set thời gian mới
+    if (status === "live") {
+      setStartTime(now - (currentTime * 1000));
+    }
+
     setMatchData(prev => ({ ...prev, matchTime, period, status }));
-    
+
     if (socketConnected) {
       socketService.updateMatchTime(matchTime, period, status);
     }
-  }, [socketConnected]);
+  }, [socketConnected, parseTimeToSeconds]);
 
   // Cập nhật penalty
   const updatePenalty = useCallback((newPenaltyData) => {
