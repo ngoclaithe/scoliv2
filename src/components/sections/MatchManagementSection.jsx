@@ -7,6 +7,7 @@ import TeamLineupModal from "../lineup/TeamLineupModal";
 import Modal from "../common/Modal";
 import SimplePenaltyModal from "../common/SimplePenaltyModal";
 import { useMatch } from "../../contexts/MatchContext";
+import { useAudio } from "../../contexts/AudioContext";
 import { toast } from 'react-toastify';
 import LogoSearch from '../logo/LogoSearch';
 import LogoAPI from '../../API/apiLogo';
@@ -39,6 +40,9 @@ const MatchManagementSection = () => {
     resumeTimer,
 
   } = useMatch();
+
+  // Sử dụng AudioContext cho điều khiển audio
+  const { audioEnabled, toggleAudioEnabled, currentAudio, isPlaying } = useAudio();
 
   // State cho các tùy chọn điều khiển UI
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
@@ -375,6 +379,26 @@ const MatchManagementSection = () => {
 
         {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
         <div className="flex justify-center items-center mt-2 space-x-2">
+          {/* Audio Toggle Button */}
+          <Button
+            variant="primary"
+            size="sm"
+            className={`px-2 py-1 ${
+              audioEnabled
+                ? "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
+                : "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700"
+            } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
+            onClick={() => {
+              toggleAudioEnabled();
+              toast.info(audioEnabled ? '🔇 Đã tắt audio' : '🔊 Đã bật audio');
+            }}
+            title={audioEnabled ? "Tắt audio" : "Bật audio"}
+          >
+            <span className="mr-1">{audioEnabled ? "🔊" : "🔇"}</span>
+            <span className="hidden sm:inline">{audioEnabled ? "AUDIO" : "TẮTED"}</span>
+            <span className="sm:hidden">{audioEnabled ? "ON" : "OFF"}</span>
+          </Button>
+
           <Button
             variant="primary"
             size="sm"
@@ -988,7 +1012,7 @@ const MatchManagementSection = () => {
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
-                toast.success('⏰ Đã bắt đầu timer từ 40:00!');
+                toast.success('⏰ Đã bắt đầu timer t��� 40:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >

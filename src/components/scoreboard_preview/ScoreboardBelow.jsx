@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
+import { useAudio } from '../../contexts/AudioContext';
 import ScoreboardBelowTemplate1 from './ScoreboardBelowTemplate1';
 import ScoreboardBelowTemplate2 from './ScoreboardBelowTemplate2';
 
@@ -18,6 +19,9 @@ const ScoreboardBelow = ({
     penaltyData,
     socketConnected
   } = usePublicMatch();
+
+  // Sử dụng AudioContext để phát audio
+  const { playAudio, isComponentPlaying } = useAudio();
 
   // State cho scoreboard data (merge với context data)
   const [scoreboardData, setScoreboardData] = useState({
@@ -83,6 +87,11 @@ const ScoreboardBelow = ({
 
   // Sử dụng template từ displaySettings context, fallback về prop
   const currentTemplate = displaySettings?.selectedSkin || template;
+
+  // Tự động phát audio rasan.mp3 khi component mount
+  useEffect(() => {
+    playAudio('rasan', 'scoreboardBelow');
+  }, [playAudio]);
 
   // Render the appropriate template based on selectedSkin
   const renderTemplate = () => {

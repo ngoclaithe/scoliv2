@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000/api/v1';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://192.168.31.186:5000/api/v1';
 
 // Tạo instance axios với cấu hình cơ bản
 const api = axios.create({
@@ -163,7 +163,7 @@ const AccessCodeAPI = {
   },
 
   /**
-   * Cập nhật thông tin trận đấu của mã truy cập
+   * Cập nhật thông tin tr��n đấu của mã truy cập
    * @param {string} code - Mã truy cập
    * @param {Object} matchData - Thông tin trận đấu
    * @param {string} [matchData.teamAName] - Tên đội A

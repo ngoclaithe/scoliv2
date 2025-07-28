@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
+import { useAudio } from '../../contexts/AudioContext';
 
 const Intro = () => {
     // Sử dụng dữ liệu từ PublicMatchContext
     const { matchData: contextMatchData, marqueeData } = usePublicMatch();
+
+    // Sử dụng AudioContext để phát audio
+    const { playAudio, isComponentPlaying } = useAudio();
 
     // Kết hợp dữ liệu từ context với dữ liệu mặc định
     const matchData = {
@@ -37,6 +41,11 @@ const Intro = () => {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    // Tự động phát audio poster.mp3 khi component mount
+    useEffect(() => {
+        playAudio('poster', 'intro');
+    }, [playAudio]);
 
     // Dữ liệu đã được tự động cập nhật thông qua MatchContext
 

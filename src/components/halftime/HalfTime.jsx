@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
+import { useAudio } from '../../contexts/AudioContext';
 
 const HalftimeBreakPoster = () => {
     // Sử dụng dữ liệu từ PublicMatchContext
     const { matchData: contextMatchData, marqueeData } = usePublicMatch();
+
+    // Sử dụng AudioContext để phát audio
+    const { playAudio, isComponentPlaying } = useAudio();
 
     // Kết hợp dữ liệu từ context với dữ liệu mặc định
     const matchData = {
@@ -34,6 +38,11 @@ const HalftimeBreakPoster = () => {
         window.addEventListener('resize', updateScreenSize);
         return () => window.removeEventListener('resize', updateScreenSize);
     }, []);
+
+    // Tự động phát audio poster.mp3 khi component mount
+    useEffect(() => {
+        playAudio('poster', 'halftime');
+    }, [playAudio]);
 
     // Check if live text contains specific keywords
     const liveTextLower = matchData.liveText.toLowerCase();

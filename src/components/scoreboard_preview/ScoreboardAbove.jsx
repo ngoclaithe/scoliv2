@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
+import { useAudio } from '../../contexts/AudioContext';
 
 const TopScoreboard = ({ template = 1, accessCode }) => {
   // Sử dụng PublicMatchContext để nhận dữ liệu real-time
@@ -9,6 +10,9 @@ const TopScoreboard = ({ template = 1, accessCode }) => {
     marqueeData,
     socketConnected
   } = usePublicMatch();
+
+  // Sử dụng AudioContext để phát audio
+  const { playAudio, isComponentPlaying } = useAudio();
 
   // Sample data - sẽ được override bởi context data
   const [scoreboardData, setScoreboardData] = useState({
@@ -143,9 +147,14 @@ const TopScoreboard = ({ template = 1, accessCode }) => {
 
     adjustScale();
     window.addEventListener('resize', adjustScale);
-    
+
     return () => window.removeEventListener('resize', adjustScale);
   }, []);
+
+  // Tự động phát audio gialap.mp3 khi component mount
+  useEffect(() => {
+    playAudio('gialap', 'scoreboardAbove');
+  }, [playAudio]);
 
   // Adjust font size based on content length
   const adjustFontSize = (text, minSize = 20, maxSize = 35) => {
