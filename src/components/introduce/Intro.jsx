@@ -38,15 +38,7 @@ const Intro = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // Socket connection effect (example - replace with actual socket implementation)
-    useEffect(() => {
-        // Example socket listener
-        // const socket = io();
-        // socket.on('matchUpdate', (data) => {
-        //     setMatchData(prev => ({ ...prev, ...data }));
-        // });
-        // return () => socket.disconnect();
-    }, []);
+    // Dữ liệu đã được tự động cập nhật thông qua MatchContext
 
     // Responsive calculations
     const isMobile = windowSize.width < 768;
