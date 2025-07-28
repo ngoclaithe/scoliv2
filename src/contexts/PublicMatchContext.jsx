@@ -174,6 +174,7 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe timer tick real-time từ backend
     socketService.on('timer_tick', (data) => {
+      console.log('🕐 [PublicMatchContext] timer_tick received:', data);
       setMatchData(prev => ({
         ...prev,
         matchTime: data.displayTime
