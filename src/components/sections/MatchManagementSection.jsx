@@ -890,7 +890,15 @@ const MatchManagementSection = () => {
       >
         <PosterManager
           matchData={matchData}
-          onPosterUpdate={(poster) => console.log("Updated poster:", poster)}
+          onPosterUpdate={(poster) => {
+            console.log("Updated poster:", poster);
+            if (poster) {
+              updatePoster(poster.id || poster.name);
+              updateView('poster');
+              setSelectedOption("chon-poster");
+              setShowPosterModal(false);
+            }
+          }}
           onLogoUpdate={(logoData) => console.log("Updated logo:", logoData)}
           onClose={() => setShowPosterModal(false)}
         />

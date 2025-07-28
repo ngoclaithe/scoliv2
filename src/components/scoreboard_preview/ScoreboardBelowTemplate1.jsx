@@ -21,7 +21,7 @@ const ScoreboardBelowTemplate1 = ({
 
   // Helper functions từ scoreboard-common.js
   const adjustScale = ({ selector, baseWidth, percentWidth }) => {
-    const elements = selector.startsWith('#') || selector.startsWith('.') 
+    const elements = typeof selector === 'string' && (selector.startsWith('#') || selector.startsWith('.'))
       ? document.querySelectorAll(selector)
       : [selector];
     
