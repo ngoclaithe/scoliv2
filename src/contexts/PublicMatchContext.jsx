@@ -124,12 +124,8 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật poster
     socketService.on('poster_updated', (data) => {
-      console.log('🎨 [PublicMatchContext] poster_updated received:', data);
-      console.log('🎨 [PublicMatchContext] Current displaySettings before update:', displaySettings);
-
       setDisplaySettings(prev => {
         const newSettings = { ...prev, selectedPoster: data.posterType };
-        console.log('🎨 [PublicMatchContext] Updated displaySettings:', newSettings);
         return newSettings;
       });
       setLastUpdateTime(Date.now());
@@ -174,7 +170,6 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe timer tick real-time từ backend
     socketService.on('timer_tick', (data) => {
-      console.log('🕐 [PublicMatchContext] timer_tick received:', data);
       setMatchData(prev => ({
         ...prev,
         matchTime: data.displayTime
@@ -184,7 +179,6 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe timer started
     socketService.on('timer_started', (data) => {
-      console.log('▶️ [PublicMatchContext] timer_started received:', data);
       setMatchData(prev => ({
         ...prev,
         matchTime: data.initialTime,
@@ -246,7 +240,20 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('view_updated', (data) => {
       setCurrentView(data.viewType);
       setLastUpdateTime(Date.now());
-      console.log('View updated to:', data.viewType);
+      console.log('🎯 [Audio] View updated to:', data.viewType);
+    });
+
+    // Lắng nghe audio events
+    socketService.on('component_audio_triggered', (data) => {
+      console.log('🔊 [Audio] component_audio_triggered received:', data);
+      // Trigger audio trong AudioContext sẽ được xử lý ở DisplayController
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe audio settings update
+    socketService.on('audio_settings_updated', (data) => {
+      console.log('🔊 [Audio] audio_settings_updated received:', data);
+      setLastUpdateTime(Date.now());
     });
 
     // Lắng nghe trạng thái kết nối
@@ -264,11 +271,8 @@ export const PublicMatchProvider = ({ children }) => {
     try {
       // Tránh khởi tạo socket trùng lặp
       if (currentAccessCode === accessCode && socketConnected) {
-        console.log(`Public socket already connected for: ${accessCode}`);
         return;
       }
-
-      console.log(`Initializing public socket for: ${accessCode}`);
 
       // Public route luôn sử dụng clientType 'display'
       await socketService.connect(accessCode, 'display');
@@ -277,8 +281,6 @@ export const PublicMatchProvider = ({ children }) => {
       
       // Lắng nghe các event từ server
       setupSocketListeners();
-      
-      console.log(`Public socket initialized for access code: ${accessCode}`);
     } catch (error) {
       console.error('Failed to initialize public socket:', error);
       setSocketConnected(false);

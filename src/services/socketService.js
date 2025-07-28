@@ -37,7 +37,6 @@ class SocketService {
       });
 
       this.socket.on('connect', () => {
-        console.log(`Socket connected for access code: ${accessCode}`);
         this.isConnected = true;
         this.socket.emit('join_room', {
           accessCode: accessCode,
@@ -49,7 +48,6 @@ class SocketService {
       });
 
       this.socket.on('disconnect', () => {
-        console.log('Socket disconnected');
         this.isConnected = false;
       });
 
@@ -61,7 +59,6 @@ class SocketService {
 
       // Auto-reconnect khi mất kết nối
       this.socket.on('reconnect', () => {
-        console.log('Socket reconnected');
         this.isConnected = true;
         if (this.currentAccessCode && this.clientType) {
           this.socket.emit('join_room', {
@@ -103,7 +100,6 @@ class SocketService {
     };
 
     this.socket.emit(eventName, payload);
-    console.log(`Emitted ${eventName}:`, payload);
     return true;
   }
 

@@ -181,14 +181,11 @@ const MatchManagementSection = () => {
   }, [updatePenalty]);
 
   const handleScoreChange = (team, increment) => {
-    console.log('handleScoreChange - team:', team, 'increment:', increment);
-    console.log('Current matchData before update:', JSON.stringify(matchData, null, 2));
     updateScore(team, increment);
   };
 
   // Hàm cập nhật thống kê
   const updateStat = (statKey, team, value) => {
-    console.log('updateStat - statKey:', statKey, 'team:', team, 'value:', value);
     const newStats = {
       ...matchStats,
       [statKey]: {
@@ -196,13 +193,11 @@ const MatchManagementSection = () => {
         [team]: Math.max(0, parseInt(value) || 0)
       }
     };
-    console.log('New stats:', JSON.stringify(newStats, null, 2));
     updateStats(newStats);
   };
 
   // Hàm cập nhật kiểm soát bóng (đảm bảo tổng = 100%)
   const updatePossession = (team, value) => {
-    console.log('updatePossession - team:', team, 'value:', value);
     const newValue = Math.max(0, Math.min(100, parseInt(value) || 0));
     const otherTeam = team === 'team1' ? 'team2' : 'team1';
     const otherValue = 100 - newValue;
@@ -214,7 +209,6 @@ const MatchManagementSection = () => {
         [otherTeam]: otherValue
       }
     };
-    console.log('Updated possession stats:', JSON.stringify(newStats.possession, null, 2));
     updateStats(newStats);
   };
 
@@ -417,7 +411,6 @@ const MatchManagementSection = () => {
                 updateMatchTime(matchData.matchTime, matchData.period, "paused");
                 toast.info('⏸️ Đã tạm dừng timer');
               }
-              console.log('Timer status changed from:', matchData.status);
             }}
           >
             <span className="mr-1">{matchData.status === "paused" ? "▶️" : "⏸️"}</span>
@@ -1036,7 +1029,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">ĐẾM 45'</span>
             </button>
 
-            {/* Nghỉ giữa hiệp */}
+            {/* Nghỉ giữa hi��p */}
             <button
               onClick={() => {
                 console.log('Chuyển sang nghỉ giữa hiệp');
@@ -1109,7 +1102,7 @@ const MatchManagementSection = () => {
                   }
                 }}
                 disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
-                title="Áp dụng"
+                title="��p dụng"
               >
                 OK
               </button>

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
+import { useAudio } from '../../contexts/AudioContext';
 import PublicAPI from '../../API/apiPublic';
+import socketService from '../../services/socketService';
 
 // Import các component hiển thị
 import PosterTreTrung from '../../pages/Poster-tretrung';
@@ -17,16 +19,34 @@ import ScoreboardBelow from '../scoreboard_preview/ScoreboardBelow';
 
 const DisplayController = () => {
   const { accessCode } = useParams();
-  const { 
-    initializeSocket, 
-    displaySettings, 
-    socketConnected, 
+  const {
+    initializeSocket,
+    displaySettings,
+    socketConnected,
     lastUpdateTime,
     currentView // Thêm state để điều khiển view hiện tại
   } = usePublicMatch();
-  
+
+  // Sử dụng AudioContext
+  const { playAudio } = useAudio();
+
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
+
+  // Thiết lập audio listeners
+  const setupAudioListeners = () => {
+    console.log('🔊 [Audio] Setting up audio listeners for DisplayController');
+
+    // Lắng nghe component_audio_triggered từ server
+    socketService.on('component_audio_triggered', (data) => {
+      console.log('🔊 [Audio] Received component_audio_triggered in DisplayController:', data);
+
+      if (data.audioKey && data.component) {
+        console.log(`🔊 [Audio] Playing audio: ${data.audioKey} for component: ${data.component}`);
+        playAudio(data.audioKey, data.component);
+      }
+    });
+  };
 
   // Khởi tạo kết nối socket
   useEffect(() => {
@@ -45,6 +65,9 @@ const DisplayController = () => {
         // Khởi tạo socket connection
         await initializeSocket(accessCode);
         setIsInitialized(true);
+
+        // Thiết lập audio event listeners
+        setupAudioListeners();
 
       } catch (err) {
         console.error('Failed to initialize display:', err);
