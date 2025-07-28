@@ -56,6 +56,18 @@ const MatchManagementSection = () => {
     name: matchData.teamB.name || "",
     logo: matchData.teamB.logo || ""
   });
+
+  // Sync team info khi matchData thay đổi (từ server)
+  useEffect(() => {
+    setTeamAInfo(prev => ({
+      name: matchData.teamA.name || prev.name,
+      logo: matchData.teamA.logo || prev.logo
+    }));
+    setTeamBInfo(prev => ({
+      name: matchData.teamB.name || prev.name,
+      logo: matchData.teamB.logo || prev.logo
+    }));
+  }, [matchData.teamA.name, matchData.teamA.logo, matchData.teamB.name, matchData.teamB.logo]);
   const [matchInfo, setMatchInfo] = useState({
     startTime: "19:30",
     location: "SÂN VẬN ĐỘNG QUỐC GIA",
@@ -650,7 +662,7 @@ const MatchManagementSection = () => {
 
               {/* Sút trúng đích */}
               <EditableStatBar
-                label="Sút trúng đích"
+                label="Sút tr��ng đích"
                 statKey="shotsOnTarget"
                 team1Value={matchStats.shotsOnTarget.team1}
                 team2Value={matchStats.shotsOnTarget.team2}
@@ -862,7 +874,7 @@ const MatchManagementSection = () => {
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                console.log('Đã áp dụng: Bắt đầu đếm từ 35:00');
+                console.log('Đã áp dụng: Bắt đầu đếm t�� 35:00');
                 toast.success('⏰ Đã bắt đầu timer từ 35:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -936,7 +948,7 @@ const MatchManagementSection = () => {
                   if (quickCustomTime) {
                     // Format thời gian (phút:giây)
                     const timeString = `${quickCustomTime.toString().padStart(2, '0')}:00`;
-                    // Set th��i gian và bắt đầu đếm tiến
+                    // Set thời gian và bắt đầu đếm tiến
                     updateMatchTime(timeString, "Hiệp 1", "live");
                     // Chuyển sang tỉ số trên
                     updateView('scoreboard');
