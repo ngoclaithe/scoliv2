@@ -40,6 +40,20 @@ const MatchManagementSection = () => {
   const [tickerColor, setTickerColor] = useState("#ffffff");
   const [tickerFontSize, setTickerFontSize] = useState(16);
 
+  // State cho thông tin đội và trận đấu
+  const [teamAInfo, setTeamAInfo] = useState({
+    name: matchData.teamA.name || "",
+    logo: matchData.teamA.logo || ""
+  });
+  const [teamBInfo, setTeamBInfo] = useState({
+    name: matchData.teamB.name || "",
+    logo: matchData.teamB.logo || ""
+  });
+  const [matchInfo, setMatchInfo] = useState({
+    startTime: "19:30",
+    location: "SÂN VẬN ĐỘNG QUỐC GIA"
+  });
+
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
 
@@ -348,14 +362,15 @@ const MatchManagementSection = () => {
       </div>
 
       {/* Phần nhập tên đội A và đội B cho mobile */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 border border-blue-200">
+      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 border border-blue-200 space-y-3">
+        {/* Tên đội */}
         <div className="flex gap-2">
           <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
             <input
               type="text"
               placeholder="Tên đội A"
-              value={matchData.teamA.name}
-              onChange={(e) => updateScore("teamA", 0, { name: e.target.value })}
+              value={teamAInfo.name}
+              onChange={(e) => setTeamAInfo(prev => ({ ...prev, name: e.target.value }))}
               className="w-full px-2 py-1.5 text-sm font-medium text-center text-red-600 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-red-300 rounded-lg"
               maxLength={20}
             />
@@ -367,12 +382,102 @@ const MatchManagementSection = () => {
             <input
               type="text"
               placeholder="Tên đội B"
-              value={matchData.teamB.name}
-              onChange={(e) => updateScore("teamB", 0, { name: e.target.value })}
+              value={teamBInfo.name}
+              onChange={(e) => setTeamBInfo(prev => ({ ...prev, name: e.target.value }))}
               className="w-full px-2 py-1.5 text-sm font-medium text-center text-gray-800 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-gray-300 rounded-lg"
               maxLength={20}
             />
           </div>
+        </div>
+
+        {/* Logo đội */}
+        <div className="flex gap-2">
+          <div className="flex-1">
+            <label className="block text-xs text-red-600 font-medium mb-1">Logo Đội A</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = (event) => {
+                    setTeamAInfo(prev => ({ ...prev, logo: event.target.result }));
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-red-500 focus:outline-none"
+            />
+          </div>
+          <div className="flex-1">
+            <label className="block text-xs text-gray-800 font-medium mb-1">Logo Đội B</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = (event) => {
+                    setTeamBInfo(prev => ({ ...prev, logo: event.target.result }));
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 focus:outline-none"
+            />
+          </div>
+        </div>
+
+        {/* Giờ bắt đầu và địa điểm */}
+        <div className="flex gap-2">
+          <div className="flex-1">
+            <label className="block text-xs text-blue-600 font-medium mb-1">Giờ bắt đầu</label>
+            <input
+              type="time"
+              value={matchInfo.startTime}
+              onChange={(e) => setMatchInfo(prev => ({ ...prev, startTime: e.target.value }))}
+              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
+            />
+          </div>
+          <div className="flex-1">
+            <label className="block text-xs text-blue-600 font-medium mb-1">Địa điểm</label>
+            <input
+              type="text"
+              placeholder="Sân vận động..."
+              value={matchInfo.location}
+              onChange={(e) => setMatchInfo(prev => ({ ...prev, location: e.target.value }))}
+              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
+              maxLength={50}
+            />
+          </div>
+        </div>
+
+        {/* Nút áp dụng */}
+        <div className="flex justify-center pt-2 border-t border-blue-200">
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => {
+              // Cập nhật thông tin đội A
+              updateScore("teamA", 0, {
+                name: teamAInfo.name,
+                logo: teamAInfo.logo || matchData.teamA.logo
+              });
+              // Cập nhật thông tin đội B
+              updateScore("teamB", 0, {
+                name: teamBInfo.name,
+                logo: teamBInfo.logo || matchData.teamB.logo
+              });
+              // Có thể thêm logic cập nhật giờ và địa điểm tại đây
+              console.log('Đã cập nhật thông tin trận đấu:', { teamAInfo, teamBInfo, matchInfo });
+            }}
+            className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+          >
+            <span className="mr-1">✅</span>
+            ÁP DỤNG
+          </Button>
         </div>
       </div>
 
@@ -473,7 +578,7 @@ const MatchManagementSection = () => {
       {/* Inline Poster Selection */}
       {selectedOption === "chon-poster" && (
         <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200 animate-slide-up">
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
             <div
               onClick={() => {
                 updatePoster('tretrung');
@@ -485,16 +590,16 @@ const MatchManagementSection = () => {
                   : "border-gray-200 hover:border-purple-300"
                 }`}
             >
-              <div className="w-full h-24 bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center">
+              <div className="w-full h-20 bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center">
                 <div className="text-center">
-                  <span className="text-2xl">🏆</span>
-                  <div className="text-sm font-bold text-gray-700 mt-1">Poster Tre Trung</div>
-                  <div className="text-xs text-gray-500">Football Match Intro</div>
+                  <span className="text-xl">🏆</span>
+                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Tre Trung</div>
+                  <div className="text-xs text-gray-500">Football Match</div>
                 </div>
               </div>
               {displaySettings.selectedPoster === 'tretrung' && (
-                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
-                  <span className="text-sm">✓</span>
+                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
+                  <span className="text-xs">✓</span>
                 </div>
               )}
             </div>
@@ -510,16 +615,116 @@ const MatchManagementSection = () => {
                   : "border-gray-200 hover:border-purple-300"
                 }`}
             >
-              <div className="w-full h-24 bg-gradient-to-r from-green-100 to-blue-100 flex items-center justify-center">
+              <div className="w-full h-20 bg-gradient-to-r from-green-100 to-blue-100 flex items-center justify-center">
                 <div className="text-center">
-                  <span className="text-2xl">⚽</span>
-                  <div className="text-sm font-bold text-gray-700 mt-1">Poster Hao Quang</div>
+                  <span className="text-xl">⚽</span>
+                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Hao Quang</div>
                   <div className="text-xs text-gray-500">Sports Display</div>
                 </div>
               </div>
               {displaySettings.selectedPoster === 'haoquang' && (
-                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
-                  <span className="text-sm">✓</span>
+                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
+                  <span className="text-xs">✓</span>
+                </div>
+              )}
+            </div>
+
+            <div
+              onClick={() => {
+                updatePoster('vangxanh');
+                updateView('poster');
+                console.log('Poster selected: vangxanh');
+              }}
+              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'vangxanh'
+                  ? "border-purple-500 ring-2 ring-purple-200"
+                  : "border-gray-200 hover:border-purple-300"
+                }`}
+            >
+              <div className="w-full h-20 bg-gradient-to-r from-green-100 to-teal-100 flex items-center justify-center">
+                <div className="text-center">
+                  <span className="text-xl">🌟</span>
+                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Vang Xanh</div>
+                  <div className="text-xs text-gray-500">Modern Style</div>
+                </div>
+              </div>
+              {displaySettings.selectedPoster === 'vangxanh' && (
+                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
+                  <span className="text-xs">✓</span>
+                </div>
+              )}
+            </div>
+
+            <div
+              onClick={() => {
+                updatePoster('xanhduong');
+                updateView('poster');
+                console.log('Poster selected: xanhduong');
+              }}
+              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'xanhduong'
+                  ? "border-purple-500 ring-2 ring-purple-200"
+                  : "border-gray-200 hover:border-purple-300"
+                }`}
+            >
+              <div className="w-full h-20 bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
+                <div className="text-center">
+                  <span className="text-xl">💙</span>
+                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Xanh Dương</div>
+                  <div className="text-xs text-gray-500">Blue Theme</div>
+                </div>
+              </div>
+              {displaySettings.selectedPoster === 'xanhduong' && (
+                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
+                  <span className="text-xs">✓</span>
+                </div>
+              )}
+            </div>
+
+            <div
+              onClick={() => {
+                updatePoster('doden');
+                updateView('poster');
+                console.log('Poster selected: doden');
+              }}
+              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'doden'
+                  ? "border-purple-500 ring-2 ring-purple-200"
+                  : "border-gray-200 hover:border-purple-300"
+                }`}
+            >
+              <div className="w-full h-20 bg-gradient-to-r from-red-100 to-black/10 flex items-center justify-center">
+                <div className="text-center">
+                  <span className="text-xl">🔥</span>
+                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Đỏ Đen</div>
+                  <div className="text-xs text-gray-500">Fire Style</div>
+                </div>
+              </div>
+              {displaySettings.selectedPoster === 'doden' && (
+                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
+                  <span className="text-xs">✓</span>
+                </div>
+              )}
+            </div>
+
+            <div
+              onClick={() => {
+                updatePoster('vangkim');
+                updateView('poster');
+                console.log('Poster selected: vangkim');
+              }}
+              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'vangkim'
+                  ? "border-purple-500 ring-2 ring-purple-200"
+                  : "border-gray-200 hover:border-purple-300"
+                }`}
+            >
+              <div className="w-full h-20 bg-gradient-to-r from-yellow-100 to-amber-100 flex items-center justify-center">
+                <div className="text-center">
+                  <span className="text-xl">⭐</span>
+                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Vàng Kim</div>
+                  <div className="text-xs text-gray-500">Golden Style</div>
+                </div>
+              </div>
+              {displaySettings.selectedPoster === 'vangkim' && (
+                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
+                  <span className="text-xs">✓</span>
                 </div>
               )}
             </div>
@@ -530,7 +735,7 @@ const MatchManagementSection = () => {
             <div className="flex items-center justify-between text-xs">
               <span className="text-gray-600">Trạng thái kết nối:</span>
               <span className={`px-2 py-1 rounded ${socketConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                {socketConnected ? '🟢 Đã kết nối' : '🔴 Mất kết nối'}
+                {socketConnected ? '🟢 Đã kết n��i' : '🔴 Mất kết nối'}
               </span>
             </div>
             <div className="text-xs text-gray-500 mt-1">
@@ -724,6 +929,19 @@ const MatchManagementSection = () => {
             >
               {/* <span className="text-sm mr-1"></span> */}
               <span className="text-xs font-bold text-center">GIỚI THIỆU</span>
+            </button>
+
+            {/* Tỉ số trên */}
+            <button
+              onClick={() => {
+                updateView('scoreboard');
+                setSelectedOption("ti-so-tren");
+                console.log('Chuyển sang scoreboard trên');
+              }}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">📊</span>
+              <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
             </button>
 
             {/* Tỉ số dưới */}
@@ -936,7 +1154,7 @@ const MatchManagementSection = () => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ bắt đầu chạy từ thời điểm này
+              Trận đấu sẽ bắt đầu ch���y từ thời điểm này
             </p>
           </div>
 

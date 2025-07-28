@@ -172,52 +172,18 @@ const FootballMatchIntro = ({ accessCode }) => {
     adjustFontSize(teamTextRef2.current);
   }, [matchData.team1, matchData.team2]);
 
-  // Render partners section
+  // Render partners section - Vị trí bên dưới thời gian và địa điểm
   const renderPartners = () => {
-    const hasAnyPartners = partners.sponsor.length > 0 || 
-                          partners.organizer.length > 0 || 
+    const hasAnyPartners = partners.sponsor.length > 0 ||
+                          partners.organizer.length > 0 ||
                           partners.media.length > 0;
 
     if (!hasAnyPartners) return null;
 
     return (
-      <div className="grid grid-cols-3 gap-4 mx-8 mt-10 mb-5">
-        {/* Media - Left */}
+      <div className="grid grid-cols-3 gap-4 mx-8 mt-6 mb-4">
+        {/* Tài trợ - Trái */}
         <div className="flex justify-start">
-          {partners.media.length > 0 && (
-            <div className="flex flex-col items-center">
-              <div className="text-white text-lg font-bold mb-3 uppercase tracking-wide opacity-80">
-                Truyền thông
-              </div>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {partners.media.map((media, idx) => (
-                  <img key={idx} src={`/logo/${media.logo}.png`} alt="Media" 
-                       className="w-12 h-12 rounded-full object-cover bg-white p-1 shadow-lg" />
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-        
-        {/* Organizer - Center */}
-        <div className="flex justify-center">
-          {partners.organizer.length > 0 && (
-            <div className="flex flex-col items-center">
-              <div className="text-white text-lg font-bold mb-3 uppercase tracking-wide opacity-80">
-                Tổ chức
-              </div>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {partners.organizer.map((org, idx) => (
-                  <img key={idx} src={`/logo/${org.logo}.png`} alt="Organizer" 
-                       className="w-12 h-12 rounded-full object-cover bg-white p-1 shadow-lg" />
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-        
-        {/* Sponsor - Right */}
-        <div className="flex justify-end">
           {partners.sponsor.length > 0 && (
             <div className="flex flex-col items-center">
               <div className="text-white text-lg font-bold mb-3 uppercase tracking-wide opacity-80">
@@ -225,7 +191,41 @@ const FootballMatchIntro = ({ accessCode }) => {
               </div>
               <div className="flex flex-wrap gap-2 justify-center">
                 {partners.sponsor.map((sponsor, idx) => (
-                  <img key={idx} src={`/logo/${sponsor.logo}.png`} alt="Sponsor" 
+                  <img key={idx} src={`/logo/${sponsor.logo}.png`} alt="Sponsor"
+                       className="w-12 h-12 rounded-full object-cover bg-white p-1 shadow-lg" />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Truy���n thông - Giữa */}
+        <div className="flex justify-center">
+          {partners.media.length > 0 && (
+            <div className="flex flex-col items-center">
+              <div className="text-white text-lg font-bold mb-3 uppercase tracking-wide opacity-80">
+                Truyền thông
+              </div>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {partners.media.map((media, idx) => (
+                  <img key={idx} src={`/logo/${media.logo}.png`} alt="Media"
+                       className="w-12 h-12 rounded-full object-cover bg-white p-1 shadow-lg" />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Tổ chức - Phải */}
+        <div className="flex justify-end">
+          {partners.organizer.length > 0 && (
+            <div className="flex flex-col items-center">
+              <div className="text-white text-lg font-bold mb-3 uppercase tracking-wide opacity-80">
+                Tổ chức
+              </div>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {partners.organizer.map((org, idx) => (
+                  <img key={idx} src={`/logo/${org.logo}.png`} alt="Organizer"
                        className="w-12 h-12 rounded-full object-cover bg-white p-1 shadow-lg" />
                 ))}
               </div>
@@ -247,8 +247,7 @@ const FootballMatchIntro = ({ accessCode }) => {
       <div className="absolute inset-0 w-full h-full max-w-screen-2xl max-h-screen mx-auto"
            style={{ aspectRatio: '16/9' }}>
         
-        {/* Partners section - moved to top */}
-        {renderPartners()}
+
         
         {/* Match info section */}
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center"
@@ -329,8 +328,8 @@ const FootballMatchIntro = ({ accessCode }) => {
         
         {/* Time section with updated style */}
         <div className="absolute left-1/2 transform -translate-x-1/2 z-50"
-             style={{ bottom: '120px' }}>
-          <div 
+             style={{ bottom: '200px' }}>
+          <div
             className="border-solid text-white font-bold flex items-center justify-center text-center uppercase"
             style={{
               alignItems: 'center',
@@ -352,6 +351,12 @@ const FootballMatchIntro = ({ accessCode }) => {
             }}>
             {matchData.time} NGÀY {matchData.date}
           </div>
+        </div>
+
+        {/* Partners section - moved below time and location */}
+        <div className="absolute left-1/2 transform -translate-x-1/2 w-full z-40"
+             style={{ bottom: '100px' }}>
+          {renderPartners()}
         </div>
         
         {/* Info bar */}
