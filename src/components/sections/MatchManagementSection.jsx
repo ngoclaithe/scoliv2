@@ -181,8 +181,6 @@ const MatchManagementSection = () => {
   }, [updatePenalty]);
 
   const handleScoreChange = (team, increment) => {
-    console.log('handleScoreChange - team:', team, 'increment:', increment);
-    console.log('Current matchData before update:', JSON.stringify(matchData, null, 2));
     updateScore(team, increment);
   };
 
