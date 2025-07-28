@@ -124,12 +124,8 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật poster
     socketService.on('poster_updated', (data) => {
-      console.log('🎨 [PublicMatchContext] poster_updated received:', data);
-      console.log('🎨 [PublicMatchContext] Current displaySettings before update:', displaySettings);
-
       setDisplaySettings(prev => {
         const newSettings = { ...prev, selectedPoster: data.posterType };
-        console.log('🎨 [PublicMatchContext] Updated displaySettings:', newSettings);
         return newSettings;
       });
       setLastUpdateTime(Date.now());
@@ -275,7 +271,7 @@ export const PublicMatchProvider = ({ children }) => {
   // Khởi tạo socket connection cho public route
   const initializeSocket = useCallback(async (accessCode) => {
     try {
-      // Tránh kh��i tạo socket trùng lặp
+      // Tránh khởi tạo socket trùng lặp
       if (currentAccessCode === accessCode && socketConnected) {
         console.log(`Public socket already connected for: ${accessCode}`);
         return;
