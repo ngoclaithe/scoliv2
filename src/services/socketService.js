@@ -59,7 +59,6 @@ class SocketService {
 
       // Auto-reconnect khi mất kết nối
       this.socket.on('reconnect', () => {
-        console.log('Socket reconnected');
         this.isConnected = true;
         if (this.currentAccessCode && this.clientType) {
           this.socket.emit('join_room', {
@@ -152,7 +151,7 @@ class SocketService {
 
   // === MATCH DATA EVENTS ===
 
-  // Cập nhật thông tin trận đấu
+  // Cập nhật thông tin trận ��ấu
   updateMatchInfo(matchInfo) {
     return this.emit('match_info_update', { matchInfo });
   }
@@ -308,7 +307,7 @@ class SocketService {
 
   // === LISTENER HELPERS ===
 
-  // Lắng nghe tất cả các update của match
+  // Lắng nghe tất cả c��c update của match
   onMatchUpdate(callback) {
     const events = [
       'match_info_updated',
