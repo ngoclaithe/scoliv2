@@ -1084,10 +1084,10 @@ const MatchManagementSection = () => {
                     toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
                   }
                 }}
-                disabled={(!quickCustomMinutes || quickCustomMinutes === '0') && (!quickCustomSeconds || quickCustomSeconds === '0')}
+                disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
                 title="Áp dụng"
               >
-                ĐẾM T
+                OK
               </button>
             </div>
           </div>
