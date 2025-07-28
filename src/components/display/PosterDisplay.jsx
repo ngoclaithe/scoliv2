@@ -4,6 +4,10 @@ import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import PublicAPI from '../../API/apiPublic';
 import PosterTreTrung from '../../pages/Poster-tretrung';
 import PosterHaoQuang from '../../pages/Poster-haoquang';
+import PosterDoDen from '../../pages/Poster-doden';
+import PosterVangKim from '../../pages/Poster-vangkim';
+import PosterVangXanh from '../../pages/Poster-vangxanh';
+import PosterXanhDuong from '../../pages/Poster-xanhduong';
 
 const PosterDisplay = () => {
   const { accessCode } = useParams();
@@ -74,13 +78,21 @@ const PosterDisplay = () => {
 
   // Render poster theo selectedPoster
   const renderPoster = () => {
-    switch (displaySettings.selectedPoster) {
+    switch (displaySettings.selectedPoster?.id || displaySettings.selectedPoster) {
       case 'tretrung':
         return <PosterTreTrung accessCode={accessCode} />;
       case 'haoquang':
         return <PosterHaoQuang accessCode={accessCode} />;
+      case 'doden':
+        return <PosterDoDen accessCode={accessCode} />;
+      case 'vangkim':
+        return <PosterVangKim accessCode={accessCode} />;
+      case 'vangxanh':
+        return <PosterVangXanh accessCode={accessCode} />;
+      case 'xanhduong':
+        return <PosterXanhDuong accessCode={accessCode} />;
       default:
-        return <PosterTreTrung accessCode={accessCode} />;
+        return <PosterHaoQuang accessCode={accessCode} />;
     }
   };
 

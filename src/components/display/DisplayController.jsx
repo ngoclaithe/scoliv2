@@ -104,8 +104,8 @@ const DisplayController = () => {
       case 'scoreboard_below':
         return <ScoreboardBelow accessCode={accessCode} />;
       case 'poster':
-        // Render poster theo selectedPoster
-        switch (displaySettings.selectedPoster) {
+        // Render poster theo selectedPoster với id mapping
+        switch (displaySettings.selectedPoster?.id || displaySettings.selectedPoster) {
           case 'haoquang':
             return <PosterHaoQuang accessCode={accessCode} />;
           case 'tretrung':
@@ -122,8 +122,8 @@ const DisplayController = () => {
             return <PosterHaoQuang accessCode={accessCode} />;
         }
       default:
-        // Mặc định hiển thị poster
-        switch (displaySettings.selectedPoster) {
+        // Mặc định hiển thị poster với id mapping
+        switch (displaySettings.selectedPoster?.id || displaySettings.selectedPoster) {
           case 'haoquang':
             return <PosterHaoQuang accessCode={accessCode} />;
           case 'tretrung':

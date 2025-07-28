@@ -34,33 +34,33 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
   const availablePosters = [
     {
-      id: "poster-1",
+      id: "tretrung",
       name: "Trẻ trung",
       thumbnail: "/images/posters/poster1.jpg",
     },
     {
-      id: "poster-2",
+      id: "haoquang",
       name: "Hào Quang",
       thumbnail: "/images/posters/poster2.jpg",
     },
     {
-      id: "poster-3",
-      name: "Cầu trường",
+      id: "doden",
+      name: "Đỏ đen",
       thumbnail: "/images/posters/poster3.jpg",
     },
     {
-      id: "poster-4",
-      name: "Nền vàng",
+      id: "vangkim",
+      name: "Vàng kim",
       thumbnail: "/images/posters/poster4.jpg",
     },
     {
-      id: "poster-5",
+      id: "vangxanh",
       name: "Vàng xanh",
       thumbnail: "/images/posters/poster5.jpg",
     },
     {
-      id: "poster-6",
-      name: "Tranh tài",
+      id: "xanhduong",
+      name: "Xanh dương",
       thumbnail: "/images/posters/poster6.jpg",
     },
   ];
