@@ -659,6 +659,19 @@ const ScoreboardBelow = ({
         </div>
       )}
 
+      {/* Debug Info */}
+      <div className="fixed top-4 left-4 z-50 pointer-events-auto">
+        <div className="bg-black/70 text-white p-3 rounded-lg text-xs space-y-1">
+          <div className={`flex items-center gap-2 ${socketConnected ? 'text-green-400' : 'text-red-400'}`}>
+            <span>{socketConnected ? '🟢' : '🔴'}</span>
+            <span>{socketConnected ? 'Kết nối' : 'Mất kết nối'}</span>
+          </div>
+          <div>Template: <span className="font-bold text-yellow-400">{currentTemplate}</span></div>
+          <div>Access Code: <span className="font-bold text-blue-400">{accessCode}</span></div>
+          <div>Tỉ số: <span className="font-bold text-green-400">{scoreboardData.score1}-{scoreboardData.score2}</span></div>
+        </div>
+      </div>
+
       {/* Edit Mode Toggle Button */}
       {!editMode && (
         <div className="fixed bottom-4 right-4 z-50 pointer-events-auto">
