@@ -868,44 +868,26 @@ const MatchManagementSection = () => {
             className="w-full text-xs"
           />
 
-          {/* Color and Font Size */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <div className="flex items-center space-x-1 mb-1">
-                <input
-                  type="color"
-                  value={tickerColor}
-                  onChange={(e) => setTickerColor(e.target.value)}
-                  className="w-5 h-5 border border-orange-300 rounded cursor-pointer"
-                />
-              </div>
-              <div className="flex gap-0.5 flex-wrap">
-                {["#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff6600", "#ff00ff"].map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => setTickerColor(color)}
-                    className={`w-3 h-3 rounded border ${tickerColor === color ? "border-orange-600 border-2" : "border-gray-300"
-                      }`}
-                    style={{ backgroundColor: color }}
-                  />
-                ))}
-              </div>
+          {/* Color Only */}
+          <div>
+            <div className="flex items-center space-x-1 mb-1">
+              <input
+                type="color"
+                value={tickerColor}
+                onChange={(e) => setTickerColor(e.target.value)}
+                className="w-5 h-5 border border-orange-300 rounded cursor-pointer"
+              />
             </div>
-
-            <div>
-              <div className="flex items-center space-x-2 mb-1">
-                <input
-                  type="range"
-                  min="12"
-                  max="32"
-                  value={tickerFontSize}
-                  onChange={(e) => setTickerFontSize(parseInt(e.target.value))}
-                  className="flex-1 h-1 bg-orange-200 rounded appearance-none cursor-pointer"
+            <div className="flex gap-0.5 flex-wrap">
+              {["#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff6600", "#ff00ff"].map((color) => (
+                <button
+                  key={color}
+                  onClick={() => setTickerColor(color)}
+                  className={`w-3 h-3 rounded border ${tickerColor === color ? "border-orange-600 border-2" : "border-gray-300"
+                    }`}
+                  style={{ backgroundColor: color }}
                 />
-                <span className="text-xs font-medium min-w-8">
-                  {tickerFontSize}px
-                </span>
-              </div>
+              ))}
             </div>
           </div>
 
