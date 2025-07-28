@@ -41,6 +41,9 @@ const MatchManagementSection = () => {
 
   } = useMatch();
 
+  // Sử dụng AudioContext cho điều khiển audio
+  const { audioEnabled, toggleAudioEnabled, currentAudio, isPlaying } = useAudio();
+
   // State cho các tùy chọn điều khiển UI
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
   const [clockSetting, setClockSetting] = useState("khong");
@@ -981,7 +984,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">TỈ SỐ DƯỚI</span>
             </button>
 
-            {/* Đ��m 40' */}
+            {/* Đếm 40' */}
             <button
               onClick={() => {
                 const timeString = "40:00";
@@ -989,7 +992,7 @@ const MatchManagementSection = () => {
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
-                toast.success('⏰ Đã bắt đầu timer từ 40:00!');
+                toast.success('⏰ Đã bắt đầu timer t��� 40:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
