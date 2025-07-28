@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import ScoreDisplay from "../scoreboard/ScoreDisplay";
@@ -52,9 +52,7 @@ const MatchManagementSection = () => {
   const [tickerColor, setTickerColor] = useState("#ffffff");
   const [tickerFontSize, setTickerFontSize] = useState(16);
 
-  // State cho hiển thị trạng thái ổn định
-  const [displayStatus, setDisplayStatus] = useState("TẠM DỪNG");
-  const [statusChangeTimeout, setStatusChangeTimeout] = useState(null);
+  // State cho hiển thị trạng thái ổn định - REMOVED (moved to MatchTimeDisplay component)
 
   // State cho thông tin đội và trận đấu
   const [teamAInfo, setTeamAInfo] = useState({
@@ -102,33 +100,7 @@ const MatchManagementSection = () => {
     }
   }, [socketConnected, requestTimerSync]);
 
-  // Quản lý hiển thị trạng thái với debounce để tránh nhảy liên tục
-  useEffect(() => {
-    // Clear timeout cũ nếu có
-    if (statusChangeTimeout) {
-      clearTimeout(statusChangeTimeout);
-    }
-
-    if (matchData.status === "live") {
-      // Nếu status là live, hiển thị ngay lập tức "ĐANG DIỄN RA"
-      setDisplayStatus("ĐANG DIỄN RA");
-    } else {
-      // Nếu status không phải live, đợi 500ms trước khi chuyển sang "TẠM DỪNG"
-      // để tránh hiển thị nhảy khi backend emit liên tục
-      const timeout = setTimeout(() => {
-        setDisplayStatus("TẠM DỪNG");
-      }, 500);
-
-      setStatusChangeTimeout(timeout);
-    }
-
-    // Cleanup timeout khi component unmount hoặc dependency thay đổi
-    return () => {
-      if (statusChangeTimeout) {
-        clearTimeout(statusChangeTimeout);
-      }
-    };
-  }, [matchData.status]); // Chỉ phụ thuộc vào matchData.status
+  // Status management moved to MatchTimeDisplay component
 
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
@@ -351,16 +323,11 @@ const MatchManagementSection = () => {
       {/* Score Controls */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
         {/* Hiển thị thời gian trận đấu khi đang diễn ra */}
-        <div className="bg-gradient-to-r from-green-400 to-blue-500 rounded-lg p-2 mb-3 border-2 border-white shadow-lg">
-          <div className="text-center">
-            <div className="text-white font-bold text-lg sm:text-xl">
-              ⚽ THỜI GIAN TRẬN ĐẤU: {matchData.matchTime}
-            </div>
-            <div className="text-green-100 text-sm">
-              {matchData.period} • {displayStatus}
-            </div>
-          </div>
-        </div>
+        <MatchTimeDisplay
+          matchTime={matchData.matchTime}
+          period={matchData.period}
+          status={matchData.status}
+        />
 
         <div className="grid grid-cols-2 gap-2 sm:gap-4">
           {/* Đội A */}
@@ -1298,7 +1265,7 @@ const MatchManagementSection = () => {
                 setShowTimerModal(false);
               }}
             >
-              <span className="mr-1">✅</span>
+              <span className="mr-1">��</span>
               ÁP DỤNG
             </Button>
           </div>
