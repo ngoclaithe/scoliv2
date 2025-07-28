@@ -20,7 +20,7 @@ class SocketService {
     this.currentAccessCode = accessCode;
     this.clientType = clientType;
 
-    const socketUrl = process.env.REACT_APP_SOCKET_URL || 'http://localhost:5000';
+    const socketUrl = process.env.REACT_APP_SOCKET_URL || 'http://192.168.31.186:5000';
     
     this.connectionPromise = new Promise((resolve, reject) => {
       this.socket = io(socketUrl, {
