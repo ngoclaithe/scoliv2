@@ -892,7 +892,7 @@ const MatchManagementSection = () => {
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                console.log('🕰️ Đã áp d���ng: Timer sẽ đếm từ:', timeString);
                 console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 30:00!');
               }}
@@ -1237,7 +1237,10 @@ const MatchManagementSection = () => {
           </div>
 
           <div className="text-center text-sm text-yellow-700 mb-4">
-            ⏱️ Trận đấu sẽ bắt đầu từ: <strong>{customTime || "0"}:00</strong>
+            ⏱��� Trận đấu sẽ bắt đầu từ: <strong>
+              {(parseInt(customTime) || 0).toString().padStart(2, '0')}:
+              {(parseInt(customSeconds) || 0).toString().padStart(2, '0')}
+            </strong>
           </div>
 
           <div className="flex justify-center gap-3">
