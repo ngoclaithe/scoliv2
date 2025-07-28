@@ -404,22 +404,6 @@ const MatchManagementSection = () => {
           <Button
             variant="primary"
             size="sm"
-            className="px-2 py-1 bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
-            onClick={() => {
-              console.log('Chuyển sang nghỉ giữa hiệp');
-              console.log('Current view before update:', matchData.status);
-              updateView('halftime');
-              console.log('Updated view to halftime');
-            }}
-          >
-            <span className="mr-1">🥤</span>
-            <span className="hidden sm:inline">NGHỈ GIỮA HIỆP</span>
-            <span className="sm:hidden">NGHỈ</span>
-          </Button>
-
-          <Button
-            variant="primary"
-            size="sm"
             className="px-2 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
             onClick={() => setShowMatchInfo(!showMatchInfo)}
           >
