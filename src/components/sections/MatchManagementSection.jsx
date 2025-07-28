@@ -845,12 +845,14 @@ const MatchManagementSection = () => {
             {/* Đếm 0 */}
             <button
               onClick={() => {
-                // Set thời gian về 0 và b���t đầu đếm tiến
-                updateMatchTime("00:00", "Hiệp 1", "live");
+                const timeString = "00:00";
+                // Set thời gian về 0 và bắt đầu đếm tiến từ server timer
+                updateMatchTime(timeString, "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                console.log('Đã áp dụng: Bắt đầu đếm từ 0:00');
+                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 0:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -862,12 +864,14 @@ const MatchManagementSection = () => {
             {/* Đếm 25' */}
             <button
               onClick={() => {
-                // Set thời gian về 25:00 và bắt đầu đếm tiến
-                updateMatchTime("25:00", "Hiệp 1", "live");
+                const timeString = "25:00";
+                // Set thời gian về 25:00 và bắt đầu đếm tiến từ server timer
+                updateMatchTime(timeString, "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                console.log('Đã áp dụng: Bắt đầu đếm từ 25:00');
+                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 25:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -879,12 +883,14 @@ const MatchManagementSection = () => {
             {/* Đếm 30' */}
             <button
               onClick={() => {
-                // Set thời gian về 30:00 và bắt đầu đếm tiến
-                updateMatchTime("30:00", "Hiệp 1", "live");
+                const timeString = "30:00";
+                // Set thời gian về 30:00 và bắt đầu đếm tiến từ server timer
+                updateMatchTime(timeString, "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                console.log('Đã áp dụng: Bắt đầu đếm từ 30:00');
+                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 30:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -896,12 +902,14 @@ const MatchManagementSection = () => {
             {/* Đếm 35' */}
             <button
               onClick={() => {
-                // Set thời gian về 35:00 và bắt đầu đếm tiến
-                updateMatchTime("35:00", "Hiệp 1", "live");
+                const timeString = "35:00";
+                // Set thời gian về 35:00 và bắt đầu đếm tiến từ server timer
+                updateMatchTime(timeString, "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                console.log('Đã áp dụng: Bắt đầu đếm từ 35:00');
+                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 35:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -1187,12 +1195,17 @@ const MatchManagementSection = () => {
                 if (customTime) {
                   // Format thời gian (phút:giây)
                   const timeString = `${customTime.toString().padStart(2, '0')}:00`;
-                  // Set thời gian và bắt đầu đếm tiến
+
+                  // Set thời gian và bắt đầu đếm tiến từ server timer
                   updateMatchTime(timeString, "Hiệp 1", "live");
+
                   // Chuyển sang tỉ số trên
                   updateView('scoreboard');
                   setSelectedOption("ti-so-tren");
-                  console.log('Áp dụng thời gian tùy chỉnh:', customTime);
+
+                  console.log('🕰️ Áp dụng thời gian tùy chỉnh từ modal - Timer sẽ đếm từ:', timeString);
+                  console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
+
                   toast.success(`⏰ Đã bắt đầu timer từ ${customTime}:00!`);
                 }
                 setShowTimerModal(false);
