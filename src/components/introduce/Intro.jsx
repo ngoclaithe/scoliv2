@@ -42,9 +42,15 @@ const Intro = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // Tự động phát audio poster.mp3 khi component mount
+    // Tự động phát audio poster.mp3 khi component mount với debounce protection
     useEffect(() => {
-        playAudio('poster', 'intro');
+        // Delay nhỏ để tránh conflict với socket events
+        const timer = setTimeout(() => {
+            console.log('🎵 [Intro] Auto-playing poster audio');
+            playAudio('poster', 'intro');
+        }, 200);
+
+        return () => clearTimeout(timer);
     }, [playAudio]);
 
     // Dữ liệu đã được tự động cập nhật thông qua MatchContext
