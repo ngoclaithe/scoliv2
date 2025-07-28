@@ -51,6 +51,7 @@ const ScoreDisplay = ({
           </div>
         );
       case "pause":
+      case "paused":
         return (
           <div className="flex items-center space-x-1">
             <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
