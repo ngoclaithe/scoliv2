@@ -568,6 +568,22 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
+  // Resume timer từ server
+  const resumeTimer = useCallback(() => {
+    if (socketConnected) {
+      socketService.resumeServerTimer();
+      console.log('▶️ [MatchContext] Resumed server timer');
+    }
+  }, [socketConnected]);
+
+  // Request timer sync từ server
+  const requestTimerSync = useCallback(() => {
+    if (socketConnected) {
+      socketService.requestTimerSync();
+      console.log('⏰ [MatchContext] Requested timer sync');
+    }
+  }, [socketConnected]);
+
   // Reset toàn bộ dữ liệu trận đấu
   const resetMatch = useCallback(() => {
     setMatchData({
