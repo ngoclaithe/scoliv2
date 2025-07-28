@@ -104,8 +104,8 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('score_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
-        teamA: { ...prev.teamA, score: data.scores.home },
-        teamB: { ...prev.teamB, score: data.scores.away }
+        teamA: { ...prev.teamA, score: data.scores.teamA || data.scores.home || 0 },
+        teamB: { ...prev.teamB, score: data.scores.teamB || data.scores.away || 0 }
       }));
       setLastUpdateTime(Date.now());
     });
@@ -139,8 +139,8 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('team_logos_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
-        teamA: { ...prev.teamA, logo: data.logos.home },
-        teamB: { ...prev.teamB, logo: data.logos.away }
+        teamA: { ...prev.teamA, logo: data.logos.teamA || data.logos.home },
+        teamB: { ...prev.teamB, logo: data.logos.teamB || data.logos.away }
       }));
       setLastUpdateTime(Date.now());
     });
@@ -149,8 +149,8 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('team_names_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
-        teamA: { ...prev.teamA, name: data.names.home },
-        teamB: { ...prev.teamB, name: data.names.away }
+        teamA: { ...prev.teamA, name: data.names.teamA || data.names.home },
+        teamB: { ...prev.teamB, name: data.names.teamB || data.names.away }
       }));
       setLastUpdateTime(Date.now());
     });
@@ -168,6 +168,55 @@ export const PublicMatchProvider = ({ children }) => {
         matchTime: data.time.matchTime,
         period: data.time.period,
         status: data.time.status
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer tick real-time từ backend
+    socketService.on('timer_tick', (data) => {
+      console.log('🕐 [PublicMatchContext] timer_tick received:', data);
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.displayTime
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer started
+    socketService.on('timer_started', (data) => {
+      console.log('▶️ [PublicMatchContext] timer_started received:', data);
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.initialTime,
+        status: 'live'
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer paused
+    socketService.on('timer_paused', (data) => {
+      setMatchData(prev => ({
+        ...prev,
+        status: 'pause'
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer resumed
+    socketService.on('timer_resumed', (data) => {
+      setMatchData(prev => ({
+        ...prev,
+        status: 'live'
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer reset
+    socketService.on('timer_reset', (data) => {
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.resetTime || '00:00',
+        status: 'waiting'
       }));
       setLastUpdateTime(Date.now());
     });
