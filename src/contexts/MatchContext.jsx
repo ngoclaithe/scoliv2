@@ -130,44 +130,28 @@ export const MatchProvider = ({ children }) => {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  // Timer tự động để cập nhật thời gian trận đấu
+  // Timer tự động DISABLED - Sử dụng server timer thay thế
   useEffect(() => {
-    // Dọn dẹp interval cũ
+    // Dọn dẹp interval cũ nếu có
     if (timerInterval) {
       clearInterval(timerInterval);
       setTimerInterval(null);
     }
 
-    // Tạo interval mới nếu status là "live"
-    if (matchData.status === "live") {
-      const currentTime = parseTimeToSeconds(matchData.matchTime);
-      const now = Date.now();
-      const calculatedStartTime = now - (currentTime * 1000); // Tính thời điểm bắt đầu
-      setStartTime(calculatedStartTime);
-
-      const interval = setInterval(() => {
-        const elapsed = Math.floor((Date.now() - calculatedStartTime) / 1000);
-        const newTime = formatSecondsToTime(elapsed);
-
-        setMatchData(prev => {
-          if (prev.status === "live" && prev.matchTime !== newTime) {
-            // Chỉ cập nhật local state, không emit socket để tránh tốn tài nguyên
-            return { ...prev, matchTime: newTime };
-          }
-          return prev;
-        });
-      }, 1000);
-
-      setTimerInterval(interval);
+    // ĐÃ TẮT LOCAL TIMER - Server sẽ gửi timer updates qua socket
+    // Khi status thay đổi thành "live", request timer sync từ server
+    if (matchData.status === "live" && socketConnected) {
+      socketService.requestTimerSync();
+      console.log('⏰ [MatchContext] Requested timer sync due to status change to live');
     }
 
-    // Cleanup khi component unmount hoặc status thay đổi
+    // Cleanup khi component unmount
     return () => {
       if (timerInterval) {
         clearInterval(timerInterval);
       }
     };
-  }, [matchData.status, matchData.matchTime]);
+  }, [matchData.status, socketConnected]);
 
   // Khởi tạo socket connection
   const initializeSocket = useCallback(async (accessCode) => {
@@ -175,7 +159,7 @@ export const MatchProvider = ({ children }) => {
       // Tất cả người vào Home.jsx đều là admin (theo yêu cầu)
       let clientType = 'admin';
 
-      // Tr��nh khởi tạo socket trùng lặp
+      // Tránh khởi tạo socket trùng lặp
       if (socketService.getConnectionStatus().accessCode === accessCode &&
           socketService.getConnectionStatus().isConnected &&
           socketService.getConnectionStatus().clientType === clientType) {
@@ -427,7 +411,7 @@ export const MatchProvider = ({ children }) => {
 
   // === ACTION FUNCTIONS ===
 
-  // Cập nhật tỉ số và thông tin đội
+  // Cập nhật tỉ số và thông tin đ��i
   const updateScore = useCallback((team, increment, additionalData = {}) => {
     const newMatchData = { ...matchData };
 
