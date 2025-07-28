@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '../contexts/AuthContext';
 import { MatchProvider } from '../contexts/MatchContext';
 import { PublicMatchProvider } from '../contexts/PublicMatchContext';
+import { AudioProvider } from '../contexts/AudioContext';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import App from '../App';
