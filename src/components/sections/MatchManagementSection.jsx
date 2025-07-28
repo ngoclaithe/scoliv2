@@ -163,7 +163,7 @@ const MatchManagementSection = () => {
         toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeB}"`);
       }
     } catch (error) {
-      console.error('Lỗi tìm kiếm logo B:', error);
+      console.error('Lỗi t��m kiếm logo B:', error);
       toast.error('Lỗi khi tìm kiếm logo. Vui lòng thử l��i.');
     } finally {
       setIsSearchingLogoB(false);
@@ -389,7 +389,7 @@ const MatchManagementSection = () => {
                 resumeTimer();
                 toast.info('▶️ Đã tiếp tục timer từ server');
               } else {
-                // Pause timer - sử dụng updateMatchTime với status paused
+                // Pause timer - sử d���ng updateMatchTime với status paused
                 updateMatchTime(matchData.matchTime, matchData.period, "paused");
                 toast.info('⏸️ Đã tạm dừng timer');
               }
@@ -978,6 +978,52 @@ const MatchManagementSection = () => {
             >
               <span className="text-sm mr-1">📊</span>
               <span className="text-xs font-bold text-center">TỈ SỐ DƯỚI</span>
+            </button>
+
+            {/* Đếm 40' */}
+            <button
+              onClick={() => {
+                const timeString = "40:00";
+                updateMatchTime(timeString, "Hiệp 1", "live");
+                updateView('scoreboard');
+                setSelectedOption("ti-so-tren");
+                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                toast.success('⏰ Đã bắt đầu timer từ 40:00!');
+              }}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">🕓</span>
+              <span className="text-xs font-bold text-center">ĐẾM 40'</span>
+            </button>
+
+            {/* Đếm 45' */}
+            <button
+              onClick={() => {
+                const timeString = "45:00";
+                updateMatchTime(timeString, "Hiệp 1", "live");
+                updateView('scoreboard');
+                setSelectedOption("ti-so-tren");
+                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                toast.success('⏰ Đã bắt đầu timer từ 45:00!');
+              }}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">🕔</span>
+              <span className="text-xs font-bold text-center">ĐẾM 45'</span>
+            </button>
+
+            {/* Nghỉ giữa hiệp */}
+            <button
+              onClick={() => {
+                console.log('Chuyển sang nghỉ giữa hiệp');
+                console.log('Current view before update:', matchData.status);
+                updateView('halftime');
+                console.log('Updated view to halftime');
+              }}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">🥤</span>
+              <span className="text-xs font-bold text-center">NGHỈ GIỮA</span>
             </button>
           </div>
 
