@@ -194,11 +194,43 @@ export default function VangXanhMatchIntro() {
           </div>
         )}
 
+        {/* Falling Stars Effect */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {[...Array(17)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-80"
+              style={{
+                left: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 3}s`,
+                animationDuration: `${3 + Math.random() * 2}s`,
+                animation: 'fallingStar 5s linear infinite'
+              }}
+            />
+          ))}
+        </div>
+
         {/* CSS Animations */}
         <style jsx>{`
           @keyframes marquee {
             0% { transform: translateX(100%) translateY(-50%); }
             100% { transform: translateX(-100%) translateY(-50%); }
+          }
+          @keyframes fallingStar {
+            0% {
+              transform: translateY(-10px) rotate(45deg);
+              opacity: 0;
+            }
+            10% {
+              opacity: 1;
+            }
+            90% {
+              opacity: 1;
+            }
+            100% {
+              transform: translateY(100vh) rotate(45deg);
+              opacity: 0;
+            }
           }
         `}</style>
       </div>
