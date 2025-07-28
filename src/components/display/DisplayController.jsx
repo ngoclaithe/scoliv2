@@ -165,7 +165,7 @@ const DisplayController = () => {
   };
 
   return (
-    <div className="relative min-h-screen bg-black">
+    <div className="relative min-h-screen bg-white">
 
       {/* Current view content */}
       <div className="w-full h-full">
