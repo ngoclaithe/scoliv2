@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { usePublicMatch } from '../../contexts/PublicMatchContext';
 
-const TopScoreboard = ({ template = 1 }) => {
-  // Sample data - in real app this would be props
+const TopScoreboard = ({ template = 1, accessCode }) => {
+  // Sử dụng PublicMatchContext để nhận dữ liệu real-time
+  const {
+    matchData,
+    displaySettings,
+    marqueeData,
+    socketConnected
+  } = usePublicMatch();
+
+  // Sample data - sẽ được override bởi context data
   const [scoreboardData, setScoreboardData] = useState({
     team1: "HÀ NỘI FC",
     team2: "HCM CITY",
@@ -19,6 +28,31 @@ const TopScoreboard = ({ template = 1 }) => {
       rightDown: []
     }
   });
+
+  // Cập nhật state khi nhận dữ liệu từ context
+  useEffect(() => {
+    if (matchData) {
+      setScoreboardData(prev => ({
+        ...prev,
+        team1: matchData.teamA?.name || prev.team1,
+        team2: matchData.teamB?.name || prev.team2,
+        score1: String(matchData.teamA?.score || 0),
+        score2: String(matchData.teamB?.score || 0),
+        timer: matchData.matchTime || prev.timer
+      }));
+    }
+  }, [matchData]);
+
+  // Cập nhật marquee data từ context
+  useEffect(() => {
+    if (marqueeData) {
+      setScoreboardData(prev => ({
+        ...prev,
+        showMarquee: marqueeData.mode !== 'none',
+        marqueeText: marqueeData.text || prev.marqueeText
+      }));
+    }
+  }, [marqueeData]);
 
   const [scoreboardScale, setScoreboardScale] = useState(1);
 
