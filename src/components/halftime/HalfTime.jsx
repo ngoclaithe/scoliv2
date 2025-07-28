@@ -39,10 +39,10 @@ const HalftimeBreakPoster = () => {
         return () => window.removeEventListener('resize', updateScreenSize);
     }, []);
 
-    // Tự động phát audio poster.mp3 khi component mount
+    // Tự động phát audio poster.mp3 khi component mount - CHỈ 1 LẦN
     useEffect(() => {
         playAudio('poster', 'halftime');
-    }, [playAudio]);
+    }, []); // Bỏ playAudio khỏi dependency để chỉ phát 1 lần
 
     // Check if live text contains specific keywords
     const liveTextLower = matchData.liveText.toLowerCase();
