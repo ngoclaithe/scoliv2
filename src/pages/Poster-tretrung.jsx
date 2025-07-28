@@ -1,419 +1,207 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 
-const FootballMatchIntro = ({ accessCode }) => {
-  // Mock data - replace with actual context later
-  const contextMatchData = {
-    teamA: { name: 'ĐỘI-A', logo: '/images/background-poster/default_logoA.png' },
-    teamB: { name: 'ĐỘI-B', logo: '/images/background-poster/default_logoB.png' },
-    stadium: 'SÂN VẬN ĐỘNG QUỐC GIA',
-    liveText: 'KÊNH THỂ THAO'
-  };
-
-  const marqueeData = {
-    mode: 'none',
-    text: '',
-    interval: 5
-  };
-
-  const sponsors = {
-    main: [],
-    secondary: [],
-    media: []
-  };
-
-  const socketConnected = false;
-
-  // Transform context data to poster format
+export default function TreTrungMatchIntro() {
   const [matchData, setMatchData] = useState({
-    matchTitle: 'GIẢI BÓNG ĐÁ',
-    subTitle: 'VÒNG CHUNG KẾT',
-    team1: contextMatchData.teamA.name || 'ĐỘI-A',
-    team2: contextMatchData.teamB.name || 'ĐỘI-B',
-    logo1: contextMatchData.teamA.logo || '/images/background-poster/default_logoA.png',
-    logo2: contextMatchData.teamB.logo || '/images/background-poster/default_logoB.png',
-    stadium: contextMatchData.stadium || 'SÂN VẬN ĐỘNG QUỐC GIA',
-    liveText: contextMatchData.liveText || 'KÊNH THỂ THAO',
-    time: '19:30',
-    date: new Date().toLocaleDateString('vi-VN'),
-    skin: 'skin1',
-    poster: 'poster1'
+    matchTitle: 'GIẢI BÓNG ĐÁ TRẺ TRUNG',
+    team1: 'TEAM ALPHA',
+    team2: 'TEAM BETA',
+    logo1: '/images/background-poster/default_logoA.png',
+    logo2: '/images/background-poster/default_logoB.png',
+    stadium: 'SVĐ THỐNG NHẤT',
+    roundedTime: '15:30',
+    currentDate: new Date().toLocaleDateString('vi-VN')
   });
 
-  // Partners state - transform sponsors to partners format
-  const [partners, setPartners] = useState({
-    sponsor: sponsors.main || [],
-    organizer: sponsors.secondary || [],
-    media: sponsors.media || []
+  const [partners, setPartners] = useState([]);
+  const [marquee, setMarquee] = useState({
+    text: '',
+    isRunning: false
   });
 
-  const [isMarqueeRunning, setIsMarqueeRunning] = useState(false);
-  const [currentMarqueeText, setCurrentMarqueeText] = useState('');
-  const [lastMarqueeTime, setLastMarqueeTime] = useState(0);
-
-  // Refs
   const marqueeRef = useRef(null);
-  const starsContainerRef = useRef(null);
-  const teamTextRef1 = useRef(null);
-  const teamTextRef2 = useRef(null);
 
-  // Sync context data with local state
-  useEffect(() => {
-    setMatchData(prev => ({
-      ...prev,
-      team1: contextMatchData.teamA.name || 'ĐỘI-A',
-      team2: contextMatchData.teamB.name || 'ĐỘI-B',
-      logo1: contextMatchData.teamA.logo || '/api/placeholder/200/200',
-      logo2: contextMatchData.teamB.logo || '/api/placeholder/200/200',
-      stadium: contextMatchData.stadium || 'SÂN VẬN ĐỘNG QUỐC GIA',
-      liveText: contextMatchData.liveText || 'KÊNH THỂ THAO'
-    }));
-  }, [contextMatchData]);
-
-  // Sync sponsors data
-  useEffect(() => {
-    setPartners({
-      sponsor: sponsors.main || [],
-      organizer: sponsors.secondary || [],
-      media: sponsors.media || []
-    });
-  }, [sponsors]);
-
-  // Socket connection status
-  useEffect(() => {
-    console.log(`Poster-tretrung: Socket status: ${socketConnected ? 'Connected' : 'Disconnected'}`);
-    console.log(`Access code: ${accessCode}`);
-  }, [socketConnected, accessCode]);
-
-  // Stars animation effect
-  useEffect(() => {
-    const spawnStar = () => {
-      if (!starsContainerRef.current) return;
-
-      const star = document.createElement('div');
-      star.className = 'absolute w-12 h-12 opacity-100 pointer-events-none z-50';
-      
-      star.innerHTML = `
-        <svg viewBox="0 0 24 24" fill="white" class="w-full h-full">
-          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-        </svg>
-      `;
-      
-      const x = Math.random() * window.innerWidth;
-      const y = Math.random() * window.innerHeight;
-      star.style.left = `${x}px`;
-      star.style.top = `${y}px`;
-
-      const duration = 10 + Math.random() * 20;
-      star.style.transition = `all ${duration}s linear`;
-      star.style.transform = 'translateY(0)';
-
-      setTimeout(() => {
-        star.style.opacity = '0';
-        star.style.transform = 'translateY(100vh)';
-      }, 100);
-
-      setTimeout(() => {
-        star.remove();
-      }, duration * 1000);
-
-      starsContainerRef.current.appendChild(star);
-    };
-
-    const starInterval = setInterval(spawnStar, 200);
-    return () => clearInterval(starInterval);
-  }, []);
-
-  // Marquee animation
-  useEffect(() => {
-    if (marqueeData.mode === 'none' || !marqueeData.text) {
-      setIsMarqueeRunning(false);
-      setCurrentMarqueeText('');
-      return;
-    }
-
-    if (marqueeData.mode === 'continuous') {
-      if (marqueeData.text !== currentMarqueeText) {
-        setCurrentMarqueeText(marqueeData.text);
-        setIsMarqueeRunning(true);
-      }
-    } else if (marqueeData.mode === 'interval') {
-      const currentTime = Date.now();
-      const interval = marqueeData.interval * 60 * 1000;
-      
-      if (marqueeData.text !== currentMarqueeText || 
-          (!isMarqueeRunning && currentTime - lastMarqueeTime >= interval)) {
-        setCurrentMarqueeText(marqueeData.text);
-        setLastMarqueeTime(currentTime);
-        setIsMarqueeRunning(true);
-        
-        // Stop after one cycle for interval mode
-        setTimeout(() => {
-          setIsMarqueeRunning(false);
-        }, 20000);
-      }
-    }
-  }, [marqueeData, currentMarqueeText, isMarqueeRunning, lastMarqueeTime]);
-
-  // Auto-adjust font size for team names
+  // Font size adjustment function
   const adjustFontSize = (element) => {
     if (!element) return;
+    let fontSize = parseInt(window.getComputedStyle(element).fontSize);
+    const minFontSize = 14;
     
-    let fontSize = 60;
-    element.style.fontSize = `${fontSize}px`;
-    
-    while (element.scrollWidth > element.offsetWidth && fontSize > 20) {
-      fontSize--;
-      element.style.fontSize = `${fontSize}px`;
+    while (element.scrollWidth > element.offsetWidth && fontSize > minFontSize) {
+      fontSize -= 1;
+      element.style.fontSize = fontSize + "px";
     }
   };
 
-  useEffect(() => {
-    adjustFontSize(teamTextRef1.current);
-    adjustFontSize(teamTextRef2.current);
-  }, [matchData.team1, matchData.team2]);
-
-  // Render partners section - Vị trí bên dưới thời gian và địa điểm
-  const renderPartners = () => {
-    const hasAnyPartners = partners.sponsor.length > 0 ||
-                          partners.organizer.length > 0 ||
-                          partners.media.length > 0;
-
-    if (!hasAnyPartners) return null;
-
-    return (
-      <div className="grid grid-cols-3 gap-4 mx-8 mt-6 mb-4">
-        {/* Tài trợ - Trái */}
-        <div className="flex justify-start">
-          {partners.sponsor.length > 0 && (
-            <div className="flex flex-col items-center">
-              <div className="text-white text-lg font-bold mb-3 uppercase tracking-wide opacity-80">
-                Tài trợ
-              </div>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {partners.sponsor.map((sponsor, idx) => (
-                  <img key={idx} src={`/logo/${sponsor.logo}.png`} alt="Sponsor"
-                       className="w-12 h-12 rounded-full object-cover bg-white p-1 shadow-lg" />
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Truy���n thông - Giữa */}
-        <div className="flex justify-center">
-          {partners.media.length > 0 && (
-            <div className="flex flex-col items-center">
-              <div className="text-white text-lg font-bold mb-3 uppercase tracking-wide opacity-80">
-                Truyền thông
-              </div>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {partners.media.map((media, idx) => (
-                  <img key={idx} src={`/logo/${media.logo}.png`} alt="Media"
-                       className="w-12 h-12 rounded-full object-cover bg-white p-1 shadow-lg" />
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Tổ chức - Phải */}
-        <div className="flex justify-end">
-          {partners.organizer.length > 0 && (
-            <div className="flex flex-col items-center">
-              <div className="text-white text-lg font-bold mb-3 uppercase tracking-wide opacity-80">
-                Tổ chức
-              </div>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {partners.organizer.map((org, idx) => (
-                  <img key={idx} src={`/logo/${org.logo}.png`} alt="Organizer"
-                       className="w-12 h-12 rounded-full object-cover bg-white p-1 shadow-lg" />
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
+  const hasPartners = partners.length > 0;
 
   return (
-    <div className="fixed inset-0 bg-cover bg-center bg-no-repeat text-white overflow-hidden uppercase font-bold"
-         style={{ backgroundImage: "url('/images/background-poster/bg1.jpg')" }}>
-      
-      {/* Stars container */}
-      <div ref={starsContainerRef} className="fixed inset-0 pointer-events-none"></div>
-      
-      {/* Main poster wrapper */}
-      <div className="absolute inset-0 w-full h-full max-w-screen-2xl max-h-screen mx-auto"
-           style={{ aspectRatio: '16/9' }}>
+    <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
+      {/* Main container with fixed aspect ratio */}
+      <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
         
+        {/* Background image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('/images/background-poster/bg1.jpg')"
+          }}
+        >
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-green-900/80 via-green-800/70 to-green-900/80"></div>
+        </div>
 
-        
-        {/* Match info section */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center"
-             style={{ top: '48%' }}>
+        {/* Content */}
+        <div className="relative z-10 h-full flex flex-col justify-between p-3 sm:p-6">
           
-          {/* Match title with updated style */}
-          <div className="mb-8" style={{ marginTop: '-70px', marginBottom: '30px' }}>
-            <h1 
-              className="font-bold mb-8 leading-tight"
-              style={{ 
-                color: '#fff',
-                fontSize: '80px',
-                lineHeight: '96px',
-                textAlign: 'center',
-                textShadow: '#727272 4px 4px 0px',
-                textTransform: 'uppercase'
-              }}>
-              {matchData.matchTitle}
-            </h1>
-            {matchData.subTitle && (
-              <h2 className="text-yellow-300 font-bold whitespace-nowrap"
-                  style={{ 
-                    fontSize: '50px',
-                    textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)' 
-                  }}>
-                {matchData.subTitle}
-              </h2>
+          {/* Top Section */}
+          <div className="flex-1 flex flex-col justify-center">
+            
+            {/* Tournament Title */}
+            <div className="text-center mb-3 sm:mb-6">
+              <h1 
+                className="font-black uppercase text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl"
+                style={{
+                  textShadow: '#166534 2px 2px 4px',
+                }}
+              >
+                {matchData.matchTitle}
+              </h1>
+              
+              {/* Divider */}
+              <div className="flex items-center justify-center mt-2 sm:mt-4">
+                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full mx-1 sm:mx-2"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-emerald-500 rounded-full mx-1 sm:mx-2"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-lime-500 rounded-full mx-1 sm:mx-2"></div>
+                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
+              </div>
+            </div>
+
+            {/* Match Section */}
+            <div className="flex items-center justify-between w-full px-2 sm:px-8">
+              
+              {/* Team 1 */}
+              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <img
+                    src={matchData.logo1}
+                    alt={matchData.team1}
+                    className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300"
+                  />
+                </div>
+                <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
+                  <span 
+                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block"
+                    ref={(el) => el && adjustFontSize(el)}
+                  >
+                    {matchData.team1}
+                  </span>
+                </div>
+              </div>
+
+              {/* VS Section */}
+              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-4 max-w-xs">
+                <div className="relative flex flex-col items-center">
+                  <img
+                    src="/images/background-poster/vs3.png"
+                    alt="VS"
+                    className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain animate-pulse"
+                  />
+                </div>
+                
+                <div className="flex flex-col items-center space-y-1 sm:space-y-2">
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <div className="bg-green-600 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-xs sm:text-sm font-bold animate-pulse shadow-lg text-white">
+                      LIVE
+                    </div>
+                  </div>
+                  <div className="text-xs sm:text-sm font-semibold bg-black/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center">
+                    {matchData.roundedTime} - {matchData.currentDate}
+                  </div>
+                </div>
+              </div>
+
+              {/* Team 2 */}
+              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3">
+                <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <img
+                    src={matchData.logo2}
+                    alt={matchData.team2}
+                    className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300"
+                  />
+                </div>
+                <div className="bg-gradient-to-r from-yellow-500 to-orange-600 px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
+                  <span 
+                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block"
+                    ref={(el) => el && adjustFontSize(el)}
+                  >
+                    {matchData.team2}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Stadium */}
+            {matchData.stadium && (
+              <div className="text-center mt-3 sm:mt-4">
+                <div className="inline-block bg-black/50 backdrop-blur-sm px-3 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl border border-white/30">
+                  <span className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-white">
+                    📍 {matchData.stadium}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Partners - Hidden by default, will show when socket updates */}
+            {hasPartners && (
+              <div className="text-center mt-3 sm:mt-4">
+                <h3 className="text-green-400 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3 uppercase tracking-wide">
+                  🤝 Đơn vị đồng hành
+                </h3>
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-2xl p-2 sm:p-4 border border-white/30 mx-4 sm:mx-8">
+                  <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
+                    {partners.map((partner, index) => (
+                      <div key={index} className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 flex justify-center items-center bg-white rounded-full p-1 shadow-lg">
+                        <img
+                          src={partner.logo}
+                          alt={partner.name}
+                          className="max-h-full max-w-full object-contain rounded-full"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
             )}
           </div>
-          
-          {/* Teams section */}
-          <div className="flex justify-between items-start mx-auto"
-               style={{ 
-                 marginTop: '6%',
-                 marginLeft: '240px',
-                 marginRight: '240px'
-               }}>
-            {/* Team 1 */}
-            <div className="flex-1 flex flex-col items-center min-w-0">
-              <img src={matchData.logo1} alt={matchData.team1} 
-                   className="rounded-full bg-white object-cover mb-2"
-                   style={{ height: '180px', width: '180px' }} />
-              <div ref={teamTextRef1}
-                   className="text-white font-bold px-8 py-2 whitespace-nowrap w-fit"
-                   style={{ 
-                     fontSize: '60px',
-                     textShadow: '4px 4px #727272',
-                     minWidth: '35%'
-                   }}>
-                {matchData.team1}
-              </div>
-            </div>
-            
-            {/* VS section with vs3.png */}
-            <div className="flex-shrink-0 flex flex-col items-center justify-center">
-              <img src="/images/background-poster/vs3.png" alt="VS" 
-                   className="w-auto object-contain"
-                   style={{ height: '200px', marginTop: '55px' }} />
-            </div>
-            
-            {/* Team 2 */}
-            <div className="flex-1 flex flex-col items-center min-w-0">
-              <img src={matchData.logo2} alt={matchData.team2} 
-                   className="rounded-full bg-white object-cover mb-2"
-                   style={{ height: '180px', width: '180px' }} />
-              <div ref={teamTextRef2}
-                   className="text-white font-bold px-8 py-2 whitespace-nowrap w-fit"
-                   style={{ 
-                     fontSize: '60px',
-                     textShadow: '4px 4px #727272',
-                     minWidth: '35%'
-                   }}>
-                {matchData.team2}
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Time section with updated style */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 z-50"
-             style={{ bottom: '200px' }}>
-          <div
-            className="border-solid text-white font-bold flex items-center justify-center text-center uppercase"
-            style={{
-              alignItems: 'center',
-              backgroundImage: 'linear-gradient(to right, rgb(255, 49, 49), rgb(255, 145, 77))',
-              borderColor: '#fff',
-              borderRadius: '45px',
-              borderStyle: 'solid',
-              borderWidth: '5.33333px',
-              boxShadow: '#1877f21c 0px 4px 20px 0px',
-              color: '#fff',
-              display: 'flex',
-              fontSize: '50px',
-              justifyContent: 'center',
-              letterSpacing: '1px',
-              padding: '8px 40px 12px',
-              textAlign: 'center',
-              textShadow: '#0e306c22 1px 2px 3px',
-              textTransform: 'uppercase'
-            }}>
-            {matchData.time} NGÀY {matchData.date}
-          </div>
         </div>
 
-        {/* Partners section - moved below time and location */}
-        <div className="absolute left-1/2 transform -translate-x-1/2 w-full z-40"
-             style={{ bottom: '100px' }}>
-          {renderPartners()}
-        </div>
-        
-        {/* Info bar */}
-        {matchData.stadium && (
-          <div className="absolute bottom-0 left-0 w-full bg-transparent flex justify-center items-center py-1 z-10"
-               style={{ gap: '300px', padding: '5px 0' }}>
-            <div className="flex items-center text-white font-bold"
-                 style={{ fontSize: '50px' }}>
-              <img src="/api/placeholder/60/60" alt="Stadium" 
-                   className="w-auto px-5"
-                   style={{ height: '60px' }} />
-              {matchData.stadium}
-            </div>
-            <div className="flex items-center text-white font-bold"
-                 style={{ fontSize: '50px' }}>
-              <img src="/api/placeholder/70/70" alt="Live" 
-                   className="w-auto px-5"
-                   style={{ height: '70px' }} />
-              LIVESTREAM TRỰC TIẾP
-              {matchData.liveText && `: ${matchData.liveText}`}
+        {/* Marquee - Hidden by default, will show when socket updates */}
+        {marquee.isRunning && marquee.text && (
+          <div className="absolute bottom-0 left-0 w-full h-8 sm:h-12 bg-gradient-to-r from-green-900 via-emerald-900 to-green-900 border-t-2 border-green-400 overflow-hidden">
+            <div className="absolute inset-0 bg-black/50"></div>
+            <div
+              ref={marqueeRef}
+              className="absolute top-1/2 transform -translate-y-1/2 whitespace-nowrap text-sm sm:text-lg font-bold text-green-300 drop-shadow-lg"
+              style={{
+                animation: 'marquee 30s linear infinite'
+              }}
+            >
+              {marquee.text}
             </div>
           </div>
         )}
+
+        {/* CSS Animations */}
+        <style jsx>{`
+          @keyframes marquee {
+            0% { transform: translateX(100%) translateY(-50%); }
+            100% { transform: translateX(-100%) translateY(-50%); }
+          }
+        `}</style>
       </div>
-      
-      {/* Marquee */}
-      {isMarqueeRunning && currentMarqueeText && (
-        <div className="fixed bottom-0 left-0 w-full bg-black bg-opacity-30 text-white overflow-hidden z-50 whitespace-nowrap"
-             style={{ height: '3vw' }}>
-          <div ref={marqueeRef} 
-               className="absolute bottom-1 left-0 whitespace-nowrap font-bold"
-               style={{
-                 fontSize: '2.3vw',
-                 animation: marqueeData.mode === 'continuous' 
-                   ? 'marquee 20s linear infinite' 
-                   : 'marquee 20s linear 1'
-               }}>
-            {currentMarqueeText}
-          </div>
-        </div>
-      )}
-      
-      {/* CSS animations */}
-      <style jsx>{`
-        @keyframes marquee {
-          0% { transform: translateX(100%); }
-          100% { transform: translateX(-100%); }
-        }
-        
-        @keyframes fallFade {
-          0% { opacity: 1; transform: translateY(0); }
-          20% { opacity: 1; }
-          100% { opacity: 0; transform: translateY(100vh); }
-        }
-      `}</style>
     </div>
   );
-};
-
-export default FootballMatchIntro;
+}

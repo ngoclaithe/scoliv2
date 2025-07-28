@@ -6,6 +6,10 @@ import PublicAPI from '../../API/apiPublic';
 // Import các component hiển thị
 import PosterTreTrung from '../../pages/Poster-tretrung';
 import PosterHaoQuang from '../../pages/Poster-haoquang';
+import PosterDoDen from '../../pages/Poster-doden';
+import PosterVangKim from '../../pages/Poster-vangkim';
+import PosterVangXanh from '../../pages/Poster-vangxanh';
+import PosterXanhDuong from '../../pages/Poster-xanhduong';
 import Intro from '../introduce/Intro';
 import HalfTime from '../halftime/HalfTime';
 import ScoreboardAbove from '../scoreboard_preview/ScoreboardAbove';
@@ -105,8 +109,17 @@ const DisplayController = () => {
           case 'haoquang':
             return <PosterHaoQuang accessCode={accessCode} />;
           case 'tretrung':
-          default:
             return <PosterTreTrung accessCode={accessCode} />;
+          case 'doden':
+            return <PosterDoDen accessCode={accessCode} />;
+          case 'vangkim':
+            return <PosterVangKim accessCode={accessCode} />;
+          case 'vangxanh':
+            return <PosterVangXanh accessCode={accessCode} />;
+          case 'xanhduong':
+            return <PosterXanhDuong accessCode={accessCode} />;
+          default:
+            return <PosterHaoQuang accessCode={accessCode} />;
         }
       default:
         // Mặc định hiển thị poster
@@ -114,8 +127,17 @@ const DisplayController = () => {
           case 'haoquang':
             return <PosterHaoQuang accessCode={accessCode} />;
           case 'tretrung':
-          default:
             return <PosterTreTrung accessCode={accessCode} />;
+          case 'doden':
+            return <PosterDoDen accessCode={accessCode} />;
+          case 'vangkim':
+            return <PosterVangKim accessCode={accessCode} />;
+          case 'vangxanh':
+            return <PosterVangXanh accessCode={accessCode} />;
+          case 'xanhduong':
+            return <PosterXanhDuong accessCode={accessCode} />;
+          default:
+            return <PosterHaoQuang accessCode={accessCode} />;
         }
     }
   };
