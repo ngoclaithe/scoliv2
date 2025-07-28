@@ -567,8 +567,8 @@ const MatchManagementSection = () => {
             <Button
               variant="primary"
               size="sm"
-            onClick={() => {
-              // Cập nhật tên đội
+              onClick={() => {
+                // Cập nhật tên đội
               updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
 
               // Luôn cập nhật logo đ���i (kể cả logo mặc định hoặc logo mới)
@@ -877,7 +877,7 @@ const MatchManagementSection = () => {
               onClick={() => setShowPenaltyModal(true)}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-gray-600 to-gray-800 hover:from-gray-700 hover:to-gray-900 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">🥅</span>
+              <span className="text-sm mr-1">��</span>
               <span className="text-xs font-bold text-center">PENALTY</span>
             </button>
 
@@ -944,7 +944,7 @@ const MatchManagementSection = () => {
                 const timeString = "35:00";
                 // Set thời gian về 35:00 và bắt đầu đếm tiến từ server timer
                 updateMatchTime(timeString, "Hiệp 1", "live");
-                // Chuyển sang tỉ số trên
+                // Chuy��n sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
