@@ -285,7 +285,7 @@ const MatchManagementSection = () => {
           >
             <span className="mr-1">⏸️</span>
             <span className="hidden sm:inline">TẠM DỪNG</span>
-            <span className="sm:hidden">DỪNG</span>
+            <span className="sm:hidden">D���NG</span>
           </Button>
 
           <Button
@@ -430,7 +430,7 @@ const MatchManagementSection = () => {
 
       {/* Tab Controls */}
       <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200">
-        <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
           <button
             onClick={() => setSelectedOption("thong-so")}
             className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "thong-so"
@@ -465,19 +465,6 @@ const MatchManagementSection = () => {
             <span className="mr-0.5 text-xs">🎨</span>
             <span className="hidden sm:inline">TEMPLATE</span>
             <span className="sm:hidden">TL</span>
-          </button>
-          <button
-            onClick={() => {
-              setSelectedOption(selectedOption === "chon-poster" ? "dieu-khien" : "chon-poster");
-            }}
-            className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "chon-poster"
-                ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-xl"
-                : "bg-gradient-to-r from-purple-100 to-purple-200 text-purple-700 hover:from-purple-200 hover:to-purple-300"
-              }`}
-          >
-            <span className="mr-0.5 text-xs">🖼️</span>
-            <span className="hidden sm:inline">POSTER</span>
-            <span className="sm:hidden">PT</span>
           </button>
         </div>
       </div>
@@ -522,175 +509,7 @@ const MatchManagementSection = () => {
         </div>
       )}
 
-      {/* Inline Poster Selection */}
-      {selectedOption === "chon-poster" && (
-        <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200 animate-slide-up">
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-            <div
-              onClick={() => {
-                updatePoster('tretrung');
-                updateView('poster');
-                console.log('Poster selected: tretrung');
-              }}
-              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'tretrung'
-                  ? "border-purple-500 ring-2 ring-purple-200"
-                  : "border-gray-200 hover:border-purple-300"
-                }`}
-            >
-              <div className="w-full h-20 bg-gradient-to-r from-blue-100 to-purple-100 flex items-center justify-center">
-                <div className="text-center">
-                  <span className="text-xl">🏆</span>
-                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Tre Trung</div>
-                  <div className="text-xs text-gray-500">Football Match</div>
-                </div>
-              </div>
-              {displaySettings.selectedPoster === 'tretrung' && (
-                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
-                  <span className="text-xs">✓</span>
-                </div>
-              )}
-            </div>
 
-            <div
-              onClick={() => {
-                updatePoster('haoquang');
-                updateView('poster');
-                console.log('Poster selected: haoquang');
-              }}
-              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'haoquang'
-                  ? "border-purple-500 ring-2 ring-purple-200"
-                  : "border-gray-200 hover:border-purple-300"
-                }`}
-            >
-              <div className="w-full h-20 bg-gradient-to-r from-green-100 to-blue-100 flex items-center justify-center">
-                <div className="text-center">
-                  <span className="text-xl">⚽</span>
-                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Hao Quang</div>
-                  <div className="text-xs text-gray-500">Sports Display</div>
-                </div>
-              </div>
-              {displaySettings.selectedPoster === 'haoquang' && (
-                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
-                  <span className="text-xs">✓</span>
-                </div>
-              )}
-            </div>
-
-            <div
-              onClick={() => {
-                updatePoster('vangxanh');
-                updateView('poster');
-                console.log('Poster selected: vangxanh');
-              }}
-              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'vangxanh'
-                  ? "border-purple-500 ring-2 ring-purple-200"
-                  : "border-gray-200 hover:border-purple-300"
-                }`}
-            >
-              <div className="w-full h-20 bg-gradient-to-r from-green-100 to-teal-100 flex items-center justify-center">
-                <div className="text-center">
-                  <span className="text-xl">🌟</span>
-                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Vang Xanh</div>
-                  <div className="text-xs text-gray-500">Modern Style</div>
-                </div>
-              </div>
-              {displaySettings.selectedPoster === 'vangxanh' && (
-                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
-                  <span className="text-xs">✓</span>
-                </div>
-              )}
-            </div>
-
-            <div
-              onClick={() => {
-                updatePoster('xanhduong');
-                updateView('poster');
-                console.log('Poster selected: xanhduong');
-              }}
-              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'xanhduong'
-                  ? "border-purple-500 ring-2 ring-purple-200"
-                  : "border-gray-200 hover:border-purple-300"
-                }`}
-            >
-              <div className="w-full h-20 bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center">
-                <div className="text-center">
-                  <span className="text-xl">💙</span>
-                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Xanh Dương</div>
-                  <div className="text-xs text-gray-500">Blue Theme</div>
-                </div>
-              </div>
-              {displaySettings.selectedPoster === 'xanhduong' && (
-                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
-                  <span className="text-xs">✓</span>
-                </div>
-              )}
-            </div>
-
-            <div
-              onClick={() => {
-                updatePoster('doden');
-                updateView('poster');
-                console.log('Poster selected: doden');
-              }}
-              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'doden'
-                  ? "border-purple-500 ring-2 ring-purple-200"
-                  : "border-gray-200 hover:border-purple-300"
-                }`}
-            >
-              <div className="w-full h-20 bg-gradient-to-r from-red-100 to-black/10 flex items-center justify-center">
-                <div className="text-center">
-                  <span className="text-xl">🔥</span>
-                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Đỏ Đen</div>
-                  <div className="text-xs text-gray-500">Fire Style</div>
-                </div>
-              </div>
-              {displaySettings.selectedPoster === 'doden' && (
-                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
-                  <span className="text-xs">✓</span>
-                </div>
-              )}
-            </div>
-
-            <div
-              onClick={() => {
-                updatePoster('vangkim');
-                updateView('poster');
-                console.log('Poster selected: vangkim');
-              }}
-              className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedPoster === 'vangkim'
-                  ? "border-purple-500 ring-2 ring-purple-200"
-                  : "border-gray-200 hover:border-purple-300"
-                }`}
-            >
-              <div className="w-full h-20 bg-gradient-to-r from-yellow-100 to-amber-100 flex items-center justify-center">
-                <div className="text-center">
-                  <span className="text-xl">⭐</span>
-                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Vàng Kim</div>
-                  <div className="text-xs text-gray-500">Golden Style</div>
-                </div>
-              </div>
-              {displaySettings.selectedPoster === 'vangkim' && (
-                <div className="absolute top-1 right-1 bg-purple-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
-                  <span className="text-xs">✓</span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Socket Status */}
-          <div className="mt-3 p-2 bg-gray-50 rounded border">
-            <div className="flex items-center justify-between text-xs">
-              <span className="text-gray-600">Trạng thái kết nối:</span>
-              <span className={`px-2 py-1 rounded ${socketConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                {socketConnected ? '🟢 Đã kết nối' : '🔴 Mất kết nối'}
-              </span>
-            </div>
-            <div className="text-xs text-gray-500 mt-1">
-              Poster hiện tại: <strong>{displaySettings.selectedPoster}</strong>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Tab Thông số */}
       {selectedOption === "thong-so" && (
@@ -853,7 +672,7 @@ const MatchManagementSection = () => {
       )}
 
       {/* Options - Các action buttons điều khiển */}
-      {selectedOption !== "chon-skin" && selectedOption !== "thong-so" && selectedOption !== "chon-poster" && (
+      {selectedOption !== "chon-skin" && selectedOption !== "thong-so" && (
         <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-2 sm:p-3 border border-indigo-200">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
             {/* Poster */}
@@ -1049,44 +868,26 @@ const MatchManagementSection = () => {
             className="w-full text-xs"
           />
 
-          {/* Color and Font Size */}
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <div className="flex items-center space-x-1 mb-1">
-                <input
-                  type="color"
-                  value={tickerColor}
-                  onChange={(e) => setTickerColor(e.target.value)}
-                  className="w-5 h-5 border border-orange-300 rounded cursor-pointer"
-                />
-              </div>
-              <div className="flex gap-0.5 flex-wrap">
-                {["#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff6600", "#ff00ff"].map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => setTickerColor(color)}
-                    className={`w-3 h-3 rounded border ${tickerColor === color ? "border-orange-600 border-2" : "border-gray-300"
-                      }`}
-                    style={{ backgroundColor: color }}
-                  />
-                ))}
-              </div>
+          {/* Color Only */}
+          <div>
+            <div className="flex items-center space-x-1 mb-1">
+              <input
+                type="color"
+                value={tickerColor}
+                onChange={(e) => setTickerColor(e.target.value)}
+                className="w-5 h-5 border border-orange-300 rounded cursor-pointer"
+              />
             </div>
-
-            <div>
-              <div className="flex items-center space-x-2 mb-1">
-                <input
-                  type="range"
-                  min="12"
-                  max="32"
-                  value={tickerFontSize}
-                  onChange={(e) => setTickerFontSize(parseInt(e.target.value))}
-                  className="flex-1 h-1 bg-orange-200 rounded appearance-none cursor-pointer"
+            <div className="flex gap-0.5 flex-wrap">
+              {["#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff6600", "#ff00ff"].map((color) => (
+                <button
+                  key={color}
+                  onClick={() => setTickerColor(color)}
+                  className={`w-3 h-3 rounded border ${tickerColor === color ? "border-orange-600 border-2" : "border-gray-300"
+                    }`}
+                  style={{ backgroundColor: color }}
                 />
-                <span className="text-xs font-medium min-w-8">
-                  {tickerFontSize}px
-                </span>
-              </div>
+              ))}
             </div>
           </div>
 
