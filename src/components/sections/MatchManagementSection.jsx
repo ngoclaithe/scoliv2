@@ -1016,7 +1016,7 @@ const MatchManagementSection = () => {
                     updateView('scoreboard');
                     setSelectedOption("ti-so-tren");
                     console.log('🕰️ Đã áp dụng thời gian tùy chỉnh:', timeString);
-                    console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
+                    console.log('📡 Server sẽ emit timer_tick events v��i displayTime format từ:', timeString);
                     toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                   } else {
                     toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
@@ -1214,7 +1214,7 @@ const MatchManagementSection = () => {
               placeholder="Nhập phút (VD: 30)"
               className="flex-1 text-sm border-yellow-400 focus:ring-yellow-500 focus:border-yellow-500 font-bold text-center"
             />
-            <span className="text-sm font-medium text-yellow-800">ph��t</span>
+            <span className="text-sm font-medium text-yellow-800">phút</span>
           </div>
 
           <div className="text-center text-sm text-yellow-700 mb-4">
