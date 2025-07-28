@@ -166,8 +166,16 @@ export const AudioProvider = ({ children }) => {
   // Dừng audio hiện tại
   const stopCurrentAudio = () => {
     if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
+      try {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        // Xóa event listeners để tránh memory leak
+        audioRef.current.onended = null;
+        audioRef.current.onerror = null;
+      } catch (error) {
+        console.warn('Error stopping audio:', error);
+      }
+      audioRef.current = null;
     }
     dispatch({ type: audioActions.STOP_AUDIO });
   };
