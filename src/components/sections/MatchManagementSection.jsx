@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import ScoreDisplay from "../scoreboard/ScoreDisplay";
@@ -10,6 +10,8 @@ import { useMatch } from "../../contexts/MatchContext";
 import { toast } from 'react-toastify';
 import LogoSearch from '../logo/LogoSearch';
 import LogoAPI from '../../API/apiLogo';
+import MatchTimeDisplay from './MatchTimeDisplay';
+import useTimerSync from '../../hooks/useTimerSync';
 
 
 const MatchManagementSection = () => {
@@ -52,9 +54,7 @@ const MatchManagementSection = () => {
   const [tickerColor, setTickerColor] = useState("#ffffff");
   const [tickerFontSize, setTickerFontSize] = useState(16);
 
-  // State cho hiển thị trạng thái ổn định
-  const [displayStatus, setDisplayStatus] = useState("TẠM DỪNG");
-  const [statusChangeTimeout, setStatusChangeTimeout] = useState(null);
+  // State cho hiển thị trạng thái ổn định - REMOVED (moved to MatchTimeDisplay component)
 
   // State cho thông tin đội và trận đấu
   const [teamAInfo, setTeamAInfo] = useState({
@@ -94,41 +94,10 @@ const MatchManagementSection = () => {
     }
   }, [matchData.startTime, matchData.stadium, matchData.matchDate]);
 
-  // Request timer sync khi component mount và socket connected
-  useEffect(() => {
-    if (socketConnected) {
-      requestTimerSync();
-      // console.log('⏰ [MatchManagementSection] Requested timer sync on mount');
-    }
-  }, [socketConnected, requestTimerSync]);
+  // Sử dụng custom hook để quản lý timer sync requests một cách tối ưu
+  useTimerSync(socketConnected, requestTimerSync);
 
-  // Quản lý hiển thị trạng thái với debounce để tránh nhảy liên tục
-  useEffect(() => {
-    // Clear timeout cũ nếu có
-    if (statusChangeTimeout) {
-      clearTimeout(statusChangeTimeout);
-    }
-
-    if (matchData.status === "live") {
-      // Nếu status là live, hiển thị ngay lập tức "ĐANG DIỄN RA"
-      setDisplayStatus("ĐANG DIỄN RA");
-    } else {
-      // Nếu status không phải live, đợi 500ms trước khi chuyển sang "TẠM DỪNG"
-      // để tránh hiển thị nhảy khi backend emit liên tục
-      const timeout = setTimeout(() => {
-        setDisplayStatus("TẠM DỪNG");
-      }, 500);
-
-      setStatusChangeTimeout(timeout);
-    }
-
-    // Cleanup timeout khi component unmount hoặc dependency thay đổi
-    return () => {
-      if (statusChangeTimeout) {
-        clearTimeout(statusChangeTimeout);
-      }
-    };
-  }, [matchData.status]); // Chỉ phụ thuộc vào matchData.status
+  // Status management moved to MatchTimeDisplay component
 
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
@@ -154,7 +123,7 @@ const MatchManagementSection = () => {
 
 
 
-  // Xử lý tìm kiếm logo cho đội A
+  // Xử lý tìm ki���m logo cho đội A
   const handleSearchLogoA = async () => {
     if (!logoCodeA.trim()) return;
 
@@ -187,7 +156,7 @@ const MatchManagementSection = () => {
       if (response.success && response.data && response.data.length > 0) {
         const logo = response.data[0];
         setTeamBInfo(prev => ({ ...prev, logo: logo.url }));
-        toast.success(`✅ Đã chọn logo ${logo.code_logo} cho Đội B!`);
+        toast.success(`✅ Đã ch��n logo ${logo.code_logo} cho Đội B!`);
         setLogoCodeB(""); // Clear input sau khi thành công
       } else {
         toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeB}"`);
@@ -351,16 +320,11 @@ const MatchManagementSection = () => {
       {/* Score Controls */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
         {/* Hiển thị thời gian trận đấu khi đang diễn ra */}
-        <div className="bg-gradient-to-r from-green-400 to-blue-500 rounded-lg p-2 mb-3 border-2 border-white shadow-lg">
-          <div className="text-center">
-            <div className="text-white font-bold text-lg sm:text-xl">
-              ⚽ THỜI GIAN TRẬN ĐẤU: {matchData.matchTime}
-            </div>
-            <div className="text-green-100 text-sm">
-              {matchData.period} • {displayStatus}
-            </div>
-          </div>
-        </div>
+        <MatchTimeDisplay
+          matchTime={matchData.matchTime}
+          period={matchData.period}
+          status={matchData.status}
+        />
 
         <div className="grid grid-cols-2 gap-2 sm:gap-4">
           {/* Đội A */}
@@ -991,7 +955,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
             </button>
 
-            {/* Tỉ số dưới */}
+            {/* Tỉ số d��ới */}
             <button
               onClick={() => {
                 updateView('scoreboard_below');
