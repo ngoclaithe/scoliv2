@@ -410,17 +410,25 @@ const MatchManagementSection = () => {
             variant="primary"
             size="sm"
             onClick={() => {
-              // Cập nhật thông tin đội A
-              updateScore("teamA", 0, {
-                name: teamAInfo.name,
-                logo: teamAInfo.logo || matchData.teamA.logo
+              // Cập nhật tên đội
+              updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
+
+              // Cập nhật logo đội nếu có
+              if (teamAInfo.logo || teamBInfo.logo) {
+                updateTeamLogos(
+                  teamAInfo.logo || matchData.teamA.logo,
+                  teamBInfo.logo || matchData.teamB.logo
+                );
+              }
+
+              // Cập nhật thông tin trận đấu (thời gian, địa điểm)
+              updateMatchInfo({
+                startTime: matchInfo.startTime,
+                stadium: matchInfo.location,
+                matchDate: new Date().toISOString().split('T')[0], // Ngày hiện tại
+                time: matchInfo.startTime
               });
-              // Cập nhật thông tin đội B
-              updateScore("teamB", 0, {
-                name: teamBInfo.name,
-                logo: teamBInfo.logo || matchData.teamB.logo
-              });
-              // Có thể thêm logic cập nhật giờ và địa điểm tại đây
+
               console.log('Đã cập nhật thông tin trận đấu:', { teamAInfo, teamBInfo, matchInfo });
             }}
             className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
