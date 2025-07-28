@@ -411,7 +411,6 @@ const MatchManagementSection = () => {
                 updateMatchTime(matchData.matchTime, matchData.period, "paused");
                 toast.info('⏸️ Đã tạm dừng timer');
               }
-              console.log('Timer status changed from:', matchData.status);
             }}
           >
             <span className="mr-1">{matchData.status === "paused" ? "▶️" : "⏸️"}</span>
@@ -1103,7 +1102,7 @@ const MatchManagementSection = () => {
                   }
                 }}
                 disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
-                title="Áp dụng"
+                title="��p dụng"
               >
                 OK
               </button>
