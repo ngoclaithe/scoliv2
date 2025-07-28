@@ -230,10 +230,8 @@ export const AudioProvider = ({ children }) => {
   // Toggle mute
   const toggleMute = () => {
     dispatch({ type: audioActions.TOGGLE_MUTE });
-    
-    if (audioRef.current) {
-      audioRef.current.volume = !state.isMuted ? 0 : state.volume;
-    }
+
+    // Volume sẽ được update trong useEffect thay vì tại đây để tránh stale state
   };
 
   // Toggle audio toàn cục
