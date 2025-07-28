@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const Intro = () => {
-    // Sample data - in real app this would be props
+    // Sample data - in real app this would be props or socket data
     const [matchData, setMatchData] = useState({
         matchTitle: "GIẢI BÓNG ĐÁ PHONG TRÀO",
         stadium: "Sân vận động Thiên Trường",
@@ -9,37 +9,53 @@ const Intro = () => {
         date: "15/12/2024",
         team1: "ĐỘI A",
         team2: "ĐỘI B",
-        logo1: "https://via.placeholder.com/200x200/ff0000/ffffff?text=A",
-        logo2: "https://via.placeholder.com/200x200/0000ff/ffffff?text=B",
+        logo1: "/images/background-poster/default_logoA.png",
+        logo2: "/images/background-poster/default_logoB.png",
         liveText: "FACEBOOK LIVE",
         showMarquee: false,
         marqueeText: ""
     });
 
-    const [posterScale, setPosterScale] = useState(1);
-    const [logoScale, setLogoScale] = useState(1);
+    const [windowSize, setWindowSize] = useState({
+        width: typeof window !== 'undefined' ? window.innerWidth : 1200,
+        height: typeof window !== 'undefined' ? window.innerHeight : 800
+    });
 
-    // Auto-adjust scales based on window size
+    // Handle window resize
     useEffect(() => {
-        const adjustScales = () => {
-            const windowWidth = window.innerWidth;
-
-            // Poster scale adjustment
-            const originalPosterWidth = 1000;
-            const targetPosterWidth = 0.6 * windowWidth;
-            const newPosterScale = Math.min(targetPosterWidth / originalPosterWidth, 1);
-            setPosterScale(newPosterScale);
-
-            // Logo scale for mobile responsiveness
-            const newLogoScale = windowWidth < 768 ? 0.7 : 1;
-            setLogoScale(newLogoScale);
+        const handleResize = () => {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
         };
 
-        adjustScales();
-        window.addEventListener('resize', adjustScales);
-
-        return () => window.removeEventListener('resize', adjustScales);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    // Socket connection effect (example - replace with actual socket implementation)
+    useEffect(() => {
+        // Example socket listener
+        // const socket = io();
+        // socket.on('matchUpdate', (data) => {
+        //     setMatchData(prev => ({ ...prev, ...data }));
+        // });
+        // return () => socket.disconnect();
+    }, []);
+
+    // Responsive calculations
+    const isMobile = windowSize.width < 768;
+    const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
+    
+    const posterWidth = isMobile ? windowSize.width - 32 : isTablet ? 700 : 900;
+    const posterHeight = isMobile ? windowSize.height * 0.85 : isTablet ? 500 : 580;
+    const logoSize = isMobile ? 120 : isTablet ? 140 : 160;
+    const titleSize = isMobile ? 'text-2xl' : isTablet ? 'text-3xl' : 'text-4xl';
+    const subtitleSize = isMobile ? 'text-lg' : isTablet ? 'text-xl' : 'text-2xl';
+    const vsSize = isMobile ? 'text-4xl' : isTablet ? 'text-5xl' : 'text-6xl';
+    const teamNameSize = isMobile ? 'text-lg' : isTablet ? 'text-xl' : 'text-2xl';
+    const liveSize = isMobile ? 'text-lg' : isTablet ? 'text-xl' : 'text-2xl';
 
     // Check if live text contains specific keywords
     const liveTextLower = matchData.liveText.toLowerCase();
@@ -48,119 +64,147 @@ const Intro = () => {
     const showSCOLogo = !showNSBLogo && !showBDPXTLogo;
 
     return (
-        <div className="min-h-screen bg-transparent flex items-center justify-center p-4 relative overflow-hidden">
+        <div className="min-h-screen bg-white flex items-center justify-center p-4 relative overflow-hidden">
             {/* Top left logos */}
             {showNSBLogo && (
-                <div className="fixed top-8 left-8 z-50">
-                    <div className="w-32 h-16 bg-red-600 rounded flex items-center justify-center text-white font-bold">
-                        NSB
+                <div className={`fixed z-50 ${isMobile ? 'top-4 left-4' : 'top-8 left-8'}`}>
+                    <div className={`${isMobile ? 'w-24 h-12' : 'w-32 h-16'} bg-red-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg`}>
+                        <span className={isMobile ? 'text-sm' : 'text-base'}>NSB</span>
                     </div>
                 </div>
             )}
 
             {showBDPXTLogo && (
-                <div className="fixed top-8 left-8 z-50">
-                    <div className="w-32 h-16 bg-blue-600 rounded flex items-center justify-center text-white font-bold">
-                        BDPXT
+                <div className={`fixed z-50 ${isMobile ? 'top-4 left-4' : 'top-8 left-8'}`}>
+                    <div className={`${isMobile ? 'w-24 h-12' : 'w-32 h-16'} bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold shadow-lg`}>
+                        <span className={isMobile ? 'text-sm' : 'text-base'}>BDPXT</span>
                     </div>
                 </div>
             )}
 
             {/* Main poster */}
             <div
-                className="relative bg-gradient-to-br from-blue-800/70 to-green-700/70 rounded-3xl p-8 text-white text-center shadow-2xl"
+                className="relative bg-gradient-to-br from-blue-800/70 to-green-700/70 rounded-3xl text-white text-center shadow-2xl"
                 style={{
-                    width: '1000px',
-                    height: '620px',
-                    transform: `scale(${posterScale})`,
-                    transformOrigin: 'center'
+                    width: `${posterWidth}px`,
+                    height: `${posterHeight}px`,
+                    padding: isMobile ? '16px' : '32px'
                 }}
             >
+                {/* Decorative background elements */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent rounded-3xl"></div>
+                <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.1),transparent_50%)] rounded-3xl"></div>
+
                 {/* Title */}
-                <h1 className="text-5xl font-bold text-yellow-400 mt-8 drop-shadow-lg">
+                <h1 className={`${titleSize} font-bold text-yellow-300 drop-shadow-2xl relative z-10 ${isMobile ? 'mt-2' : 'mt-4'}`}>
                     {matchData.matchTitle}
                 </h1>
 
                 {/* Subtitle with time and venue */}
-                <div className="text-3xl mt-2 drop-shadow-md">
-                    {matchData.time} - {matchData.date}
-                    {matchData.stadium && matchData.stadium !== 'san' && (
-                        <span> | Địa điểm: {matchData.stadium}</span>
-                    )}
+                <div className={`${subtitleSize} ${isMobile ? 'mt-1' : 'mt-2'} drop-shadow-lg text-white/90 relative z-10`}>
+                    <div className="flex flex-col items-center space-y-1">
+                        <span className="font-semibold">{matchData.time} - {matchData.date}</span>
+                        {matchData.stadium && matchData.stadium !== 'san' && (
+                            <span className={`${isMobile ? 'text-base' : 'text-lg'} text-yellow-200`}>
+                                📍 {matchData.stadium}
+                            </span>
+                        )}
+                    </div>
                 </div>
 
                 {/* Match section */}
-                <div className="flex items-center justify-center mt-8 space-x-4">
+                <div className={`flex items-center justify-center space-x-2 relative z-10 ${isMobile ? 'mt-4' : 'mt-6'}`}>
                     {/* Team 1 */}
-                    <div className="flex-1 flex flex-direction-column items-center">
-                        <div className="relative">
+                    <div className="flex-1 flex flex-col items-center">
+                        <div className="relative group">
+                            <div className="absolute inset-0 bg-white/20 rounded-full blur-sm scale-110"></div>
                             <img
                                 src={matchData.logo1}
                                 alt={matchData.team1}
-                                className="w-48 h-48 rounded-full bg-white p-2 object-cover animate-spin"
+                                className="relative rounded-full bg-white p-2 object-cover shadow-xl border-4 border-white/30 group-hover:scale-105 transition-transform duration-300"
                                 style={{
-                                    animation: 'spin 4s linear infinite',
-                                    transform: `scale(${logoScale})`
+                                    width: `${logoSize}px`,
+                                    height: `${logoSize}px`,
+                                    animation: 'rotate 8s linear infinite'
+                                }}
+                                onError={(e) => {
+                                    e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
                                 }}
                             />
                         </div>
-                        <div
-                            className="bg-black/50 px-4 py-2 rounded-lg mt-6 text-2xl font-bold"
-                            style={{ width: '240px' }}
-                        >
+                        <div className={`bg-black/60 backdrop-blur-sm px-3 py-2 rounded-xl ${isMobile ? 'mt-2' : 'mt-4'} ${teamNameSize} font-bold shadow-lg border border-white/20`}>
                             {matchData.team1}
                         </div>
                     </div>
 
                     {/* VS */}
-                    <div className="flex-shrink-0">
-                        <div className="text-8xl font-bold text-yellow-400 drop-shadow-lg px-8">
+                    <div className="flex-shrink-0 px-2">
+                        <div className={`${vsSize} font-bold text-yellow-300 drop-shadow-2xl animate-pulse`}>
                             VS
                         </div>
                     </div>
 
                     {/* Team 2 */}
-                    <div className="flex-1 flex flex-direction-column items-center">
-                        <div className="relative">
+                    <div className="flex-1 flex flex-col items-center">
+                        <div className="relative group">
+                            <div className="absolute inset-0 bg-white/20 rounded-full blur-sm scale-110"></div>
                             <img
                                 src={matchData.logo2}
                                 alt={matchData.team2}
-                                className="w-48 h-48 rounded-full bg-white p-2 object-cover animate-spin"
+                                className="relative rounded-full bg-white p-2 object-cover shadow-xl border-4 border-white/30 group-hover:scale-105 transition-transform duration-300"
                                 style={{
-                                    animation: 'spin 4s linear infinite reverse',
-                                    transform: `scale(${logoScale})`
+                                    width: `${logoSize}px`,
+                                    height: `${logoSize}px`,
+                                    animation: 'rotate 8s linear infinite reverse'
+                                }}
+                                onError={(e) => {
+                                    e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjZGMyNjI2Ii8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBCPC90ZXh0Pgo8L3N2Zz4K';
                                 }}
                             />
                         </div>
-                        <div
-                            className="bg-black/50 px-4 py-2 rounded-lg mt-6 text-2xl font-bold"
-                            style={{ width: '240px' }}
-                        >
+                        <div className={`bg-black/60 backdrop-blur-sm px-3 py-2 rounded-xl ${isMobile ? 'mt-2' : 'mt-4'} ${teamNameSize} font-bold shadow-lg border border-white/20`}>
                             {matchData.team2}
                         </div>
                     </div>
                 </div>
 
                 {/* Live stream info */}
-                <div className="bg-orange-500 text-white px-6 py-2 inline-block mt-6 text-2xl font-bold rounded">
-                    LIVESTREAM TRỰC TIẾP
-                    {matchData.liveText && `: ${matchData.liveText}`}
+                <div className={`bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 inline-block ${isMobile ? 'mt-4' : 'mt-6'} ${liveSize} font-bold rounded-xl shadow-lg border-2 border-white/20 relative z-10`}>
+                    <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+                        <span>LIVESTREAM TRỰC TIẾP</span>
+                        {matchData.liveText && <span>: {matchData.liveText}</span>}
+                    </div>
                 </div>
             </div>
 
             {/* Bottom left SCO logo */}
             {showSCOLogo && (
-                <div className="fixed bottom-12 left-12 z-50">
-                    <div className="w-24 h-24 bg-gray-700 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                        SCO
+                <div className={`fixed z-50 ${isMobile ? 'bottom-4 left-4' : 'bottom-8 left-8'}`}>
+                    <div className="relative group">
+                        <div className="absolute inset-0 bg-white/20 rounded-lg blur-sm scale-110"></div>
+                        <img
+                            src="/images/basic/ScoLivLogo.png"
+                            alt="SCO Logo"
+                            className={`relative ${isMobile ? 'h-12' : 'h-16'} w-auto object-contain shadow-xl border-2 border-white/30 group-hover:scale-110 transition-transform duration-300 rounded-lg`}
+                            onError={(e) => {
+                                // Fallback to text logo if image fails
+                                e.target.style.display = 'none';
+                                e.target.parentElement.innerHTML = `
+                                    <div class="${isMobile ? 'w-24 h-12' : 'w-32 h-16'} bg-gray-700 rounded-lg flex items-center justify-center text-white font-bold shadow-xl border-2 border-white/30 group-hover:scale-110 transition-transform duration-300">
+                                        <span class="${isMobile ? 'text-sm' : 'text-base'}">SCO</span>
+                                    </div>
+                                `;
+                            }}
+                        />
                     </div>
                 </div>
             )}
 
             {/* Marquee (if enabled) */}
             {matchData.showMarquee && matchData.marqueeText && (
-                <div className="fixed bottom-0 left-0 w-full h-12 bg-black/30 text-white flex items-center overflow-hidden z-50">
-                    <div className="animate-marquee whitespace-nowrap text-2xl font-bold">
+                <div className={`fixed bottom-0 left-0 w-full ${isMobile ? 'h-10' : 'h-12'} bg-black/80 backdrop-blur-sm text-white flex items-center overflow-hidden z-50 border-t-2 border-white/20`}>
+                    <div className={`animate-marquee whitespace-nowrap ${isMobile ? 'text-lg' : 'text-xl'} font-bold px-4`}>
                         {matchData.marqueeText}
                     </div>
                 </div>
@@ -168,20 +212,26 @@ const Intro = () => {
 
             {/* Custom styles for animations */}
             <style jsx>{`
-        @keyframes spin {
-          from { transform: rotateY(0deg); }
-          to { transform: rotateY(360deg); }
-        }
-        
-        @keyframes marquee {
-          0% { transform: translateX(100%); }
-          100% { transform: translateX(-100%); }
-        }
-        
-        .animate-marquee {
-          animation: marquee 15s linear infinite;
-        }
-      `}</style>
+                @keyframes rotate {
+                    from { transform: rotateY(0deg); }
+                    to { transform: rotateY(360deg); }
+                }
+                
+                @keyframes marquee {
+                    0% { transform: translateX(100%); }
+                    100% { transform: translateX(-100%); }
+                }
+                
+                .animate-marquee {
+                    animation: marquee 15s linear infinite;
+                }
+
+                @media (max-width: 640px) {
+                    .animate-marquee {
+                        animation: marquee 20s linear infinite;
+                    }
+                }
+            `}</style>
         </div>
     );
 };
