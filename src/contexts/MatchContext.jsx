@@ -189,6 +189,12 @@ export const MatchProvider = ({ children }) => {
       // Lắng nghe các event từ server
       setupSocketListeners();
 
+      // Request state hiện tại từ server sau khi connect
+      setTimeout(() => {
+        socketService.requestCurrentState();
+        console.log('🔄 [MatchContext] Requested current state from server');
+      }, 1000); // Delay 1s để đảm bảo connect thành công
+
       console.log(`Socket initialized for access code: ${accessCode}`);
     } catch (error) {
       console.error('Failed to initialize socket:', error);
@@ -440,7 +446,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Cập nhật danh sách cầu thủ
+  // Cập nhật danh sách c���u thủ
   const updateLineup = useCallback((teamALineup, teamBLineup) => {
     setLineupData({ teamA: teamALineup, teamB: teamBLineup });
 
