@@ -433,9 +433,9 @@ const MatchManagementSection = () => {
       </div>
 
       {/* Phần nhập tên đội A và đội B cho mobile */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 border border-blue-200 space-y-3">
-        {/* Tên trận đấu - chỉ hiện khi bấm nút Thông tin */}
-        {showMatchInfo && (
+      {showMatchInfo && (
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 border border-blue-200 space-y-3">
+          {/* Tên trận đấu */}
           <div className="bg-white rounded-lg border border-blue-300 shadow-sm p-2">
             <label className="block text-xs text-blue-600 font-medium mb-1">Tên trận đấu</label>
             <input
@@ -447,8 +447,8 @@ const MatchManagementSection = () => {
               maxLength={50}
             />
           </div>
-        )}
-        {/* Tên đội */}
+
+          {/* Tên đội */}
         <div className="flex gap-2">
           <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
             <input
