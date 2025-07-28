@@ -18,7 +18,7 @@ export const MatchProvider = ({ children }) => {
   // State cho thông tin trận đấu
   const [matchData, setMatchData] = useState({
     teamA: {
-      name: "ĐỘI-A",
+      name: "Đ��I-A",
       score: 0,
       logo: null
     },
@@ -158,7 +158,7 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật thống kê
+    // L��ng nghe cập nhật thống kê
     socketService.on('match_stats_updated', (data) => {
       setMatchStats(prev => ({ ...prev, ...data.stats }));
       setLastUpdateTime(Date.now());
@@ -303,10 +303,20 @@ export const MatchProvider = ({ children }) => {
 
   // Cập nhật poster
   const updatePoster = useCallback((posterType) => {
-    setDisplaySettings(prev => ({ ...prev, selectedPoster: posterType }));
-    
+    console.log('🎨 [MatchContext] updatePoster called with:', posterType);
+    console.log('🎨 [MatchContext] socketConnected:', socketConnected);
+
+    setDisplaySettings(prev => {
+      const newSettings = { ...prev, selectedPoster: posterType };
+      console.log('🎨 [MatchContext] Updated displaySettings:', newSettings);
+      return newSettings;
+    });
+
     if (socketConnected) {
+      console.log('🎨 [MatchContext] Emitting updatePoster via socket:', posterType);
       socketService.updatePoster(posterType);
+    } else {
+      console.log('⚠️ [MatchContext] Socket not connected, cannot emit poster update');
     }
   }, [socketConnected]);
 
