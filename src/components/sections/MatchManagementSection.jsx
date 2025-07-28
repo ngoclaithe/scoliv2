@@ -274,7 +274,7 @@ const MatchManagementSection = () => {
           </div>
         </div>
 
-        {/* Nút TẠM DỪNG, NGHỈ GIỮA HI���P và LỖI(FUTSAL) */}
+        {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và LỖI(FUTSAL) */}
         <div className="flex justify-center items-center mt-2 space-x-2">
           <Button
             variant="primary"
@@ -422,7 +422,7 @@ const MatchManagementSection = () => {
                 );
               }
 
-              // Cập nhật thông tin trận đấu (th���i gian, địa điểm)
+              // Cập nhật thông tin trận đấu (thời gian, địa điểm)
               updateMatchInfo({
                 startTime: matchInfo.startTime,
                 stadium: matchInfo.location,
@@ -450,7 +450,7 @@ const MatchManagementSection = () => {
                 : "bg-gradient-to-r from-green-100 to-green-200 text-green-700 hover:from-green-200 hover:to-green-300"
               }`}
           >
-            <span className="mr-0.5 text-xs">📊</span>
+            <span className="mr-0.5 text-xs">���</span>
             <span className="hidden sm:inline">THÔNG SỐ</span>
             <span className="sm:hidden">TK</span>
           </button>
@@ -555,7 +555,7 @@ const MatchManagementSection = () => {
 
               {/* Tổng số cú sút */}
               <EditableStatBar
-                label="Tổng s�� cú sút"
+                label="Tổng số cú sút"
                 statKey="totalShots"
                 team1Value={matchStats.totalShots.team1}
                 team2Value={matchStats.totalShots.team2}
@@ -794,7 +794,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">GIỚI THIỆU</span>
             </button>
 
-            {/* T�� số trên */}
+            {/* Tỉ số trên */}
             <button
               onClick={() => {
                 updateView('scoreboard');
@@ -1052,8 +1052,16 @@ const MatchManagementSection = () => {
               variant="primary"
               className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-sm rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
               onClick={() => {
-                console.log('Áp dụng thời gian tùy chỉnh:', customTime);
-                alert(`Đã áp dụng: Trận đấu bắt đầu từ ${customTime || 0} phút`);
+                if (customTime) {
+                  // Format thời gian (phút:giây)
+                  const timeString = `${customTime.toString().padStart(2, '0')}:00`;
+                  // Set thời gian và bắt đầu đếm tiến
+                  updateMatchTime(timeString, "Hiệp 1", "live");
+                  // Chuyển sang tỉ số trên
+                  updateView('scoreboard');
+                  setSelectedOption("ti-so-tren");
+                  console.log('Áp dụng thời gian tùy chỉnh:', customTime);
+                }
                 setShowTimerModal(false);
               }}
             >
