@@ -281,8 +281,9 @@ export const MatchProvider = ({ children }) => {
     socketService.on('timer_tick', (data) => {
       setMatchData(prev => ({
         ...prev,
-        matchTime: data.currentTime,
-        serverTimestamp: data.serverTimestamp
+        matchTime: data.displayTime || data.currentTime,
+        status: prev.status === 'paused' ? 'paused' : 'live', // Duy trì status live khi timer đang chạy
+        serverTimestamp: data.timestamp || data.serverTimestamp
       }));
     });
 
