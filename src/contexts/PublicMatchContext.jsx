@@ -92,17 +92,9 @@ export const PublicMatchProvider = ({ children }) => {
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
   const [currentAccessCode, setCurrentAccessCode] = useState(null);
 
-  // Ref để debounce update events
-  const updateTimeoutRef = React.useRef(null);
-
-  // Debounced update function
-  const debouncedUpdateTime = useCallback(() => {
-    if (updateTimeoutRef.current) {
-      clearTimeout(updateTimeoutRef.current);
-    }
-    updateTimeoutRef.current = setTimeout(() => {
-      setLastUpdateTime(Date.now());
-    }, 100); // Debounce 100ms
+  // Simple update time function - không cần debounce nữa
+  const updateLastTime = useCallback(() => {
+    setLastUpdateTime(Date.now());
   }, []);
 
   // Thiết lập các listener cho socket
@@ -110,7 +102,7 @@ export const PublicMatchProvider = ({ children }) => {
     // Lắng nghe cập nhật thông tin trận đấu
     socketService.on('match_info_updated', (data) => {
       setMatchData(prev => ({ ...prev, ...data.matchInfo }));
-      debouncedUpdateTime();
+      updateLastTime();
     });
 
     // Lắng nghe cập nhật tỉ số
@@ -120,7 +112,7 @@ export const PublicMatchProvider = ({ children }) => {
         teamA: { ...prev.teamA, score: data.scores.teamA || data.scores.home || 0 },
         teamB: { ...prev.teamB, score: data.scores.teamB || data.scores.away || 0 }
       }));
-      debouncedUpdateTime();
+      updateLastTime();
     });
 
     // Lắng nghe cập nhật thống kê
@@ -249,10 +241,9 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật view hiện tại (MỚI)
+    // Lắng nghe cập nhật view hiện tại (MỚI) - KHÔNG update time để tránh re-render
     socketService.on('view_updated', (data) => {
       setCurrentView(data.viewType);
-      debouncedUpdateTime();
       console.log('🎯 [Audio] View updated to:', data.viewType);
     });
 
@@ -262,10 +253,10 @@ export const PublicMatchProvider = ({ children }) => {
       // Không update timestamp để tránh re-render loop
     });
 
-    // Lắng nghe audio settings update
+    // Lắng nghe audio settings update - KHÔNG update time
     socketService.on('audio_settings_updated', (data) => {
       console.log('🔊 [Audio] audio_settings_updated received:', data);
-      debouncedUpdateTime();
+      // Không update time để tránh re-render liên tục
     });
 
     // Lắng nghe trạng thái kết nối
@@ -276,7 +267,7 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('connect', () => {
       setSocketConnected(true);
     });
-  }, [debouncedUpdateTime]);
+  }, [updateLastTime]);
 
   // Khởi tạo socket connection cho public route
   const initializeSocket = useCallback(async (accessCode) => {

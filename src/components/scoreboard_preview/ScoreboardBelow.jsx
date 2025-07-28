@@ -88,10 +88,10 @@ const ScoreboardBelow = ({
   // Sử dụng template từ displaySettings context, fallback về prop
   const currentTemplate = displaySettings?.selectedSkin || template;
 
-  // Tự động phát audio rasan.mp3 khi component mount
+  // Tự động phát audio rasan.mp3 khi component mount - CHỈ 1 LẦN
   useEffect(() => {
     playAudio('rasan', 'scoreboardBelow');
-  }, [playAudio]);
+  }, []); // Bỏ playAudio khỏi dependency để chỉ phát 1 lần
 
   // Render the appropriate template based on selectedSkin
   const renderTemplate = () => {
