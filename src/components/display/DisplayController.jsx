@@ -133,25 +133,18 @@ const DisplayController = () => {
 
         switch (posterType) {
           case 'haoquang':
-            // console.log('✅ [DisplayController] Loading PosterHaoQuang');
             return <PosterHaoQuang accessCode={accessCode} />;
           case 'tretrung':
-            // console.log('✅ [DisplayController] Loading PosterTreTrung');
             return <PosterTreTrung accessCode={accessCode} />;
           case 'doden':
-            // console.log('✅ [DisplayController] Loading PosterDoDen');
             return <PosterDoDen accessCode={accessCode} />;
           case 'vangkim':
-            // console.log('✅ [DisplayController] Loading PosterVangKim');
             return <PosterVangKim accessCode={accessCode} />;
           case 'vangxanh':
-            // console.log('✅ [DisplayController] Loading PosterVangXanh');
             return <PosterVangXanh accessCode={accessCode} />;
           case 'xanhduong':
-            // console.log('✅ [DisplayController] Loading PosterXanhDuong');
             return <PosterXanhDuong accessCode={accessCode} />;
           default:
-            console.log('⚠️ [DisplayController] Unknown poster type, defaulting to PosterHaoQuang');
             return <PosterHaoQuang accessCode={accessCode} />;
         }
       default:
