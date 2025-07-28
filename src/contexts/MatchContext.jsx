@@ -18,7 +18,7 @@ export const MatchProvider = ({ children }) => {
   // State cho thông tin trận đấu
   const [matchData, setMatchData] = useState({
     teamA: {
-      name: "Đ��I-A",
+      name: "ĐỘI-A",
       score: 0,
       logo: null
     },
@@ -158,7 +158,7 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // L��ng nghe cập nhật thống kê
+    // Lắng nghe cập nhật thống kê
     socketService.on('match_stats_updated', (data) => {
       setMatchStats(prev => ({ ...prev, ...data.stats }));
       setLastUpdateTime(Date.now());

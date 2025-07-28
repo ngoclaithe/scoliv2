@@ -518,7 +518,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
   const handlePosterSelect = (poster) => {
     console.log('🎨 [PosterLogoManager] handlePosterSelect called with:', poster);
-    console.log('���� [PosterLogoManager] Current selectedPoster before update:', selectedPoster);
+    console.log('[PosterLogoManager] Current selectedPoster before update:', selectedPoster);
 
     setSelectedPoster(poster);
   };

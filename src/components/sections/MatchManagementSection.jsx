@@ -640,7 +640,7 @@ const MatchManagementSection = () => {
               <div className="w-full h-20 bg-gradient-to-r from-red-100 to-black/10 flex items-center justify-center">
                 <div className="text-center">
                   <span className="text-xl">🔥</span>
-                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Đ�� Đen</div>
+                  <div className="text-xs font-bold text-gray-700 mt-1">Poster Đỏ Đen</div>
                   <div className="text-xs text-gray-500">Fire Style</div>
                 </div>
               </div>
@@ -682,7 +682,7 @@ const MatchManagementSection = () => {
             <div className="flex items-center justify-between text-xs">
               <span className="text-gray-600">Trạng thái kết nối:</span>
               <span className={`px-2 py-1 rounded ${socketConnected ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                {socketConnected ? '🟢 Đã kết n��i' : '🔴 Mất kết nối'}
+                {socketConnected ? '🟢 Đã kết nối' : '🔴 Mất kết nối'}
               </span>
             </div>
             <div className="text-xs text-gray-500 mt-1">
@@ -1173,7 +1173,7 @@ const MatchManagementSection = () => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ bắt đầu ch���y từ thời điểm này
+              Trận đấu sẽ bắt đầu chạy từ thời điểm này
             </p>
           </div>
 
