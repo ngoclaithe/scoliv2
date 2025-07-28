@@ -15,7 +15,7 @@ import MatchTimeDisplay from './MatchTimeDisplay';
 
 
 const MatchManagementSection = () => {
-  // Sử dụng MatchContext thay vì state local
+  // S��� dụng MatchContext thay vì state local
   const {
     matchData,
     matchStats,
@@ -529,38 +529,38 @@ const MatchManagementSection = () => {
             </div>
           </div>
 
-        {/* Ngày giờ bắt đầu và địa điểm */}
-        <div className="flex gap-2">
-          <div className="flex-1">
-            <label className="block text-xs text-blue-600 font-medium mb-1">Ngày bắt đầu</label>
-            <input
-              type="date"
-              value={matchInfo.matchDate || new Date().toISOString().split('T')[0]}
-              onChange={(e) => setMatchInfo(prev => ({ ...prev, matchDate: e.target.value }))}
-              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
-            />
+          {/* Ngày giờ bắt đầu và địa điểm */}
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <label className="block text-xs text-blue-600 font-medium mb-1">Ngày bắt đầu</label>
+              <input
+                type="date"
+                value={matchInfo.matchDate || new Date().toISOString().split('T')[0]}
+                onChange={(e) => setMatchInfo(prev => ({ ...prev, matchDate: e.target.value }))}
+                className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="block text-xs text-blue-600 font-medium mb-1">Giờ bắt đầu</label>
+              <input
+                type="time"
+                value={matchInfo.startTime}
+                onChange={(e) => setMatchInfo(prev => ({ ...prev, startTime: e.target.value }))}
+                className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
+              />
+            </div>
+            <div className="flex-1">
+              <label className="block text-xs text-blue-600 font-medium mb-1">Địa điểm</label>
+              <input
+                type="text"
+                placeholder="Sân vận động..."
+                value={matchInfo.location}
+                onChange={(e) => setMatchInfo(prev => ({ ...prev, location: e.target.value }))}
+                className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
+                maxLength={50}
+              />
+            </div>
           </div>
-          <div className="flex-1">
-            <label className="block text-xs text-blue-600 font-medium mb-1">Giờ bắt đầu</label>
-            <input
-              type="time"
-              value={matchInfo.startTime}
-              onChange={(e) => setMatchInfo(prev => ({ ...prev, startTime: e.target.value }))}
-              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
-            />
-          </div>
-          <div className="flex-1">
-            <label className="block text-xs text-blue-600 font-medium mb-1">Địa điểm</label>
-            <input
-              type="text"
-              placeholder="Sân vận động..."
-              value={matchInfo.location}
-              onChange={(e) => setMatchInfo(prev => ({ ...prev, location: e.target.value }))}
-              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
-              maxLength={50}
-            />
-          </div>
-        </div>
 
         {/* Nút áp dụng */}
         <div className="flex justify-center pt-2 border-t border-blue-200">
