@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-const FootballScoreboardTemplate1 = ({
+const ScoreboardBelowTemplate1 = ({
   matchTitle = "GIẢI BÓNG ĐÁ",
   team1 = "TEAM 1",
   team2 = "TEAM 2", 
@@ -123,7 +123,7 @@ const FootballScoreboardTemplate1 = ({
           padding: 0;
           height: 100vh;
           box-sizing: border-box;
-          background-color: transparent;
+          background-color: white;
           font-family: 'Bebas Neue', sans-serif;
           display: flex;
           flex-direction: column;
@@ -325,4 +325,4 @@ const FootballScoreboardTemplate1 = ({
   );
 };
 
-export default FootballScoreboardTemplate1;
+export default ScoreboardBelowTemplate1;
