@@ -10,6 +10,7 @@ import { useMatch } from "../../contexts/MatchContext";
 import { toast } from 'react-toastify';
 import LogoSearch from '../logo/LogoSearch';
 import LogoAPI from '../../API/apiLogo';
+import MatchTimeDisplay from './MatchTimeDisplay';
 
 
 const MatchManagementSection = () => {
@@ -1265,7 +1266,7 @@ const MatchManagementSection = () => {
                 setShowTimerModal(false);
               }}
             >
-              <span className="mr-1">��</span>
+              <span className="mr-1">✅</span>
               ÁP DỤNG
             </Button>
           </div>
