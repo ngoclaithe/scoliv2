@@ -43,11 +43,9 @@ export default function XanhDuongMatchIntro() {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('/images/background-poster/bg2.jpg')"
+            backgroundImage: "url('/images/background-poster/bg6.jpg')"
           }}
         >
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-blue-900/70 via-blue-800/60 to-blue-900/80"></div>
         </div>
 
         {/* Content */}

@@ -47,7 +47,6 @@ export default function MatchIntroduction() {
           }}
         >
           {/* Overlay */}
-          <div className="absolute inset-0 bg-black bg-opacity-40"></div>
         </div>
 
         {/* Content */}

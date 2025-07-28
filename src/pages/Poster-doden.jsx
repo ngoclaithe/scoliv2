@@ -47,7 +47,6 @@ export default function DodenMatchIntro() {
           }}
         >
           {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-red-900/80 via-black/70 to-red-900/80"></div>
         </div>
 
         {/* Content */}

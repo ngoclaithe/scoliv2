@@ -47,7 +47,6 @@ export default function VangKimMatchIntro() {
           }}
         >
           {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-yellow-900/70 via-yellow-800/60 to-amber-900/80"></div>
         </div>
 
         {/* Content */}

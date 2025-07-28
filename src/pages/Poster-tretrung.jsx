@@ -46,8 +46,6 @@ export default function TreTrungMatchIntro() {
             backgroundImage: "url('/images/background-poster/bg1.jpg')"
           }}
         >
-          {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-green-900/80 via-green-800/70 to-green-900/80"></div>
         </div>
 
         {/* Content */}
