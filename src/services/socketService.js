@@ -237,6 +237,39 @@ class SocketService {
     });
   }
 
+  // === AUDIO & COMMENTARY EVENTS ===
+
+  // Gửi audio bình luận
+  sendCommentaryAudio(audioData, mimeType = 'audio/webm;codecs=opus') {
+    return this.emit('commentary_audio', {
+      audioData,
+      mimeType,
+      timestamp: Date.now(),
+      duration: null // Có thể thêm thời lượng audio nếu cần
+    });
+  }
+
+  // Điều khiển audio toàn cục
+  updateAudioSettings(settings) {
+    return this.emit('audio_settings_update', {
+      settings: {
+        enabled: settings.enabled,
+        volume: settings.volume,
+        muted: settings.muted,
+        ...settings
+      }
+    });
+  }
+
+  // Phát audio tự động cho component
+  triggerComponentAudio(component, audioKey) {
+    return this.emit('component_audio_trigger', {
+      component, // 'intro', 'halftime', 'scoreboardAbove', 'scoreboardBelow'
+      audioKey,  // 'poster', 'rasan', 'gialap'
+      timestamp: Date.now()
+    });
+  }
+
   // === TIMER REAL-TIME EVENTS ===
 
 
