@@ -163,7 +163,7 @@ export default function XanhDuongMatchIntro() {
             {hasPartners && (
               <div className="text-center mt-3 sm:mt-4">
                 <h3 className="text-blue-400 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3 uppercase tracking-wide">
-                  🤝 Đơn v�� đồng hành
+                  🤝 Đơn vị đồng hành
                 </h3>
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-2xl p-2 sm:p-4 border border-white/30 mx-4 sm:mx-8">
                   <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">

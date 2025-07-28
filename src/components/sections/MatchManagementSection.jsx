@@ -405,7 +405,7 @@ const MatchManagementSection = () => {
           >
             <span className="mr-1">🥤</span>
             <span className="hidden sm:inline">NGHỈ GIỮA HIỆP</span>
-            <span className="sm:hidden">NGH���</span>
+            <span className="sm:hidden">NGHỈ</span>
           </Button>
 
 
@@ -534,7 +534,7 @@ const MatchManagementSection = () => {
             variant="primary"
             size="sm"
             onClick={() => {
-              // Cập nhật t��n đội
+              // Cập nhật tên đội
               updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
 
               // Luôn cập nhật logo đội (kể cả logo mặc định hoặc logo mới)
@@ -1125,7 +1125,7 @@ const MatchManagementSection = () => {
             console.log("🎨 [MatchManagementSection] poster.id:", poster?.id);
             console.log("🎨 [MatchManagementSection] poster.name:", poster?.name);
             console.log("🎨 [MatchManagementSection] updatePoster function exists:", !!updatePoster);
-            console.log("�� [MatchManagementSection] updateView function exists:", !!updateView);
+            console.log("🎨 [MatchManagementSection] updateView function exists:", !!updateView);
 
             if (poster) {
               const posterType = poster.id || poster.name;
@@ -1141,7 +1141,7 @@ const MatchManagementSection = () => {
               console.log("🎨 [MatchManagementSection] Closing poster modal");
               setShowPosterModal(false);
             } else {
-              console.log("⚠��� [MatchManagementSection] No poster provided to onPosterUpdate");
+              console.log("⚠ [MatchManagementSection] No poster provided to onPosterUpdate");
             }
           }}
           onLogoUpdate={(logoData) => console.log("Updated logo:", logoData)}

@@ -154,7 +154,7 @@ class SocketService {
 
   // === MATCH DATA EVENTS ===
 
-  // Cập nh���t thông tin trận đấu
+  // Cập nhật thông tin trận đấu
   updateMatchInfo(matchInfo) {
     return this.emit('match_info_update', { matchInfo });
   }

@@ -342,7 +342,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
                 });
               }
             } else {
-              // Nếu không tìm thấy, v���n cập nhật code
+              // Nếu không tìm thấy, vẫn cập nhật code
               onUpdate(item.id, {
                 ...item,
                 code: localCode
