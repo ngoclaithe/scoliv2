@@ -77,8 +77,10 @@ const MatchManagementSection = () => {
   const [showLineupModal, setShowLineupModal] = useState(false);
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
   const [showTimerModal, setShowTimerModal] = useState(false);
-  const [showLogoSearchA, setShowLogoSearchA] = useState(false);
-  const [showLogoSearchB, setShowLogoSearchB] = useState(false);
+  const [logoCodeA, setLogoCodeA] = useState("");
+  const [logoCodeB, setLogoCodeB] = useState("");
+  const [isSearchingLogoA, setIsSearchingLogoA] = useState(false);
+  const [isSearchingLogoB, setIsSearchingLogoB] = useState(false);
 
 
 
@@ -354,11 +356,20 @@ const MatchManagementSection = () => {
           <div className="flex-1">
             <label className="block text-xs text-red-600 font-medium mb-1">Logo Đội A</label>
             <div className="flex items-center gap-1">
+              <input
+                type="text"
+                placeholder="Nhập code logo..."
+                value={logoCodeA}
+                onChange={(e) => setLogoCodeA(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSearchLogoA()}
+                className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:border-red-500 text-center bg-white"
+              />
               <button
-                onClick={() => setShowLogoSearchA(true)}
-                className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:border-red-500 hover:bg-red-50 transition-colors text-center bg-white"
+                onClick={handleSearchLogoA}
+                disabled={!logoCodeA.trim() || isSearchingLogoA}
+                className="ml-1 px-2 py-1 text-xs border border-red-500 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {teamAInfo.logo ? '🔄 Đổi logo' : '🔍 Tìm logo'}
+                {isSearchingLogoA ? '⏳' : '🔍'}
               </button>
               {teamAInfo.logo && (
                 <div className="w-6 h-6 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
@@ -370,11 +381,20 @@ const MatchManagementSection = () => {
           <div className="flex-1">
             <label className="block text-xs text-gray-800 font-medium mb-1">Logo Đội B</label>
             <div className="flex items-center gap-1">
+              <input
+                type="text"
+                placeholder="Nhập code logo..."
+                value={logoCodeB}
+                onChange={(e) => setLogoCodeB(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSearchLogoB()}
+                className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 text-center bg-white"
+              />
               <button
-                onClick={() => setShowLogoSearchB(true)}
-                className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 hover:bg-gray-50 transition-colors text-center bg-white"
+                onClick={handleSearchLogoB}
+                disabled={!logoCodeB.trim() || isSearchingLogoB}
+                className="ml-1 px-2 py-1 text-xs border border-gray-700 bg-gray-700 text-white rounded hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {teamBInfo.logo ? '🔄 Đổi logo' : '🔍 Tìm logo'}
+                {isSearchingLogoB ? '⏳' : '🔍'}
               </button>
               {teamBInfo.logo && (
                 <div className="w-6 h-6 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
@@ -1018,7 +1038,7 @@ const MatchManagementSection = () => {
       <Modal
         isOpen={showLogoSearchA}
         onClose={() => setShowLogoSearchA(false)}
-        title="🔍 Tìm kiếm logo cho Đội A"
+        title="🔍 Tìm ki��m logo cho Đội A"
         size="full"
       >
         <LogoSearch
