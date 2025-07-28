@@ -48,7 +48,6 @@ class SocketService {
       });
 
       this.socket.on('disconnect', () => {
-        console.log('Socket disconnected');
         this.isConnected = false;
       });
 
