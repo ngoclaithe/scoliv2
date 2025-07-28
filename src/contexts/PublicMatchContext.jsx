@@ -110,7 +110,7 @@ export const PublicMatchProvider = ({ children }) => {
     // Lắng nghe cập nhật thông tin trận đấu
     socketService.on('match_info_updated', (data) => {
       setMatchData(prev => ({ ...prev, ...data.matchInfo }));
-      setLastUpdateTime(Date.now());
+      debouncedUpdateTime();
     });
 
     // Lắng nghe cập nhật tỉ số
@@ -120,7 +120,7 @@ export const PublicMatchProvider = ({ children }) => {
         teamA: { ...prev.teamA, score: data.scores.teamA || data.scores.home || 0 },
         teamB: { ...prev.teamB, score: data.scores.teamB || data.scores.away || 0 }
       }));
-      setLastUpdateTime(Date.now());
+      debouncedUpdateTime();
     });
 
     // Lắng nghe cập nhật thống kê
