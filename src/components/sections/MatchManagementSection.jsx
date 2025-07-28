@@ -21,6 +21,7 @@ const MatchManagementSection = () => {
     socketConnected,
     updateScore,
     updateMatchInfo,
+    updateMatchTime,
     updateStats,
     updateTemplate,
     updatePoster,
@@ -103,7 +104,7 @@ const MatchManagementSection = () => {
     updateStats(newStats);
   };
 
-  // Hàm cập nhật kiểm soát bóng (đảm bảo tổng = 100%)
+  // Hàm cập nhật kiểm soát b��ng (đảm bảo tổng = 100%)
   const updatePossession = (team, value) => {
     console.log('updatePossession - team:', team, 'value:', value);
     const newValue = Math.max(0, Math.min(100, parseInt(value) || 0));
@@ -433,7 +434,7 @@ const MatchManagementSection = () => {
             }}
             className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
           >
-            <span className="mr-1">✅</span>
+            <span className="mr-1">��</span>
             ÁP DỤNG
           </Button>
         </div>
