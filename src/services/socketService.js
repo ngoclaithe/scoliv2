@@ -154,7 +154,7 @@ class SocketService {
 
   // === MATCH DATA EVENTS ===
 
-  // Cập nhật thông tin trận đấu
+  // Cập nh���t thông tin trận đấu
   updateMatchInfo(matchInfo) {
     return this.emit('match_info_update', { matchInfo });
   }
@@ -234,6 +234,47 @@ class SocketService {
     return this.emit('request_current_state', {
       timestamp: Date.now(),
       clientType: this.clientType
+    });
+  }
+
+  // === TIMER REAL-TIME EVENTS ===
+
+  // Request timer sync từ server
+  requestTimerSync() {
+    return this.emit('timer_sync_request', {
+      timestamp: Date.now()
+    });
+  }
+
+  // Start timer từ server
+  startServerTimer(startTime, period) {
+    return this.emit('timer_start', {
+      startTime,
+      period,
+      serverTimestamp: Date.now()
+    });
+  }
+
+  // Pause timer từ server
+  pauseServerTimer() {
+    return this.emit('timer_pause', {
+      serverTimestamp: Date.now()
+    });
+  }
+
+  // Resume timer từ server
+  resumeServerTimer() {
+    return this.emit('timer_resume', {
+      serverTimestamp: Date.now()
+    });
+  }
+
+  // Reset timer từ server
+  resetServerTimer(resetTime = "00:00", period = "Hiệp 1") {
+    return this.emit('timer_reset', {
+      resetTime,
+      period,
+      serverTimestamp: Date.now()
     });
   }
 
