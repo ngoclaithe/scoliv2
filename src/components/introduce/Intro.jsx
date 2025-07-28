@@ -45,22 +45,20 @@ const Intro = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // Tự động phát audio poster.mp3 khi user đã interaction
+    // Tự động phát audio poster.mp3 khi user đã interaction - CHỈ PHÁT 1 LẦN
     useEffect(() => {
         if (userInteracted) {
-            // Delay nhỏ để tránh conflict với socket events
-            const timer = setTimeout(() => {
-                console.log('🎵 [Intro] Auto-playing poster audio after user interaction');
-                playAudio('poster', 'intro');
-            }, 200);
-
-            return () => clearTimeout(timer);
+            // Chỉ phát audio một lần duy nhất khi user tương tác
+            console.log('🎵 [Intro] Playing poster audio once after user interaction');
+            playAudio('poster', 'intro');
         }
-    }, [userInteracted, playAudio]);
+    }, [userInteracted]); // Bỏ playAudio khỏi dependency để tránh re-trigger
 
-    // Xử lý user interaction
+    // Xử lý user interaction - chỉ set một lần
     const handleUserInteraction = () => {
-        setUserInteracted(true);
+        if (!userInteracted) {
+            setUserInteracted(true);
+        }
     };
 
     // Dữ liệu đã được tự động cập nhật thông qua MatchContext
