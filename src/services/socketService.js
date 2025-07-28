@@ -229,7 +229,7 @@ class SocketService {
     return this.emit('view_update', { viewType });
   }
 
-  // Request toàn bộ state hiện tại từ server
+  // Request toàn b��� state hiện tại từ server
   requestCurrentState() {
     return this.emit('request_current_state', {
       timestamp: Date.now(),
@@ -247,10 +247,11 @@ class SocketService {
   }
 
   // Start timer từ server
-  startServerTimer(startTime, period) {
+  startServerTimer(startTime, period, status = "live") {
     return this.emit('timer_start', {
       startTime,
       period,
+      status,
       serverTimestamp: Date.now()
     });
   }
