@@ -246,7 +246,20 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('view_updated', (data) => {
       setCurrentView(data.viewType);
       setLastUpdateTime(Date.now());
-      console.log('View updated to:', data.viewType);
+      console.log('🎯 [Audio] View updated to:', data.viewType);
+    });
+
+    // Lắng nghe audio events
+    socketService.on('component_audio_triggered', (data) => {
+      console.log('🔊 [Audio] component_audio_triggered received:', data);
+      // Trigger audio trong AudioContext sẽ được xử lý ở DisplayController
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe audio settings update
+    socketService.on('audio_settings_updated', (data) => {
+      console.log('🔊 [Audio] audio_settings_updated received:', data);
+      setLastUpdateTime(Date.now());
     });
 
     // Lắng nghe trạng thái kết nối
@@ -262,7 +275,7 @@ export const PublicMatchProvider = ({ children }) => {
   // Khởi tạo socket connection cho public route
   const initializeSocket = useCallback(async (accessCode) => {
     try {
-      // Tránh khởi tạo socket trùng lặp
+      // Tránh kh��i tạo socket trùng lặp
       if (currentAccessCode === accessCode && socketConnected) {
         console.log(`Public socket already connected for: ${accessCode}`);
         return;
