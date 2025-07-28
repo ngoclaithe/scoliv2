@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import LogoSearch from '../logo/LogoSearch';
 import LogoAPI from '../../API/apiLogo';
 import MatchTimeDisplay from './MatchTimeDisplay';
+import useTimerSync from '../../hooks/useTimerSync';
 
 
 const MatchManagementSection = () => {
@@ -93,13 +94,8 @@ const MatchManagementSection = () => {
     }
   }, [matchData.startTime, matchData.stadium, matchData.matchDate]);
 
-  // Request timer sync khi component mount và socket connected
-  useEffect(() => {
-    if (socketConnected) {
-      requestTimerSync();
-      // console.log('⏰ [MatchManagementSection] Requested timer sync on mount');
-    }
-  }, [socketConnected, requestTimerSync]);
+  // Sử dụng custom hook để quản lý timer sync requests một cách tối ưu
+  useTimerSync(socketConnected, requestTimerSync);
 
   // Status management moved to MatchTimeDisplay component
 
@@ -127,7 +123,7 @@ const MatchManagementSection = () => {
 
 
 
-  // Xử lý tìm kiếm logo cho đội A
+  // Xử lý tìm ki���m logo cho đội A
   const handleSearchLogoA = async () => {
     if (!logoCodeA.trim()) return;
 
@@ -160,7 +156,7 @@ const MatchManagementSection = () => {
       if (response.success && response.data && response.data.length > 0) {
         const logo = response.data[0];
         setTeamBInfo(prev => ({ ...prev, logo: logo.url }));
-        toast.success(`✅ Đã chọn logo ${logo.code_logo} cho Đội B!`);
+        toast.success(`✅ Đã ch��n logo ${logo.code_logo} cho Đội B!`);
         setLogoCodeB(""); // Clear input sau khi thành công
       } else {
         toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeB}"`);
@@ -959,7 +955,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
             </button>
 
-            {/* Tỉ số dưới */}
+            {/* Tỉ số d��ới */}
             <button
               onClick={() => {
                 updateView('scoreboard_below');
