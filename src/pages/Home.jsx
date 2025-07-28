@@ -43,7 +43,7 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="max-w-sm mx-auto min-h-screen bg-gray-50">
       {/* Header - tối ưu mobile */}
       <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 shadow-lg">
         <div className="mx-auto px-3">
@@ -108,14 +108,14 @@ const Home = () => {
         </div>
       </header>
 
-      <main className="mx-auto">
+      <main>
         {/* Tabs - tối ưu mobile */}
         <div className="flex bg-gray-100 border-b border-gray-300">
           {tabs.map((tab) => (
             <button
               key={tab.id}
               onClick={() => handleTabChange(tab.id)}
-              className={`flex-1 py-2 px-1 text-center font-bold text-xs border-b-2 transition-all ${
+              className={`flex-1 py-3 px-2 text-center font-bold text-xs border-b-2 transition-all ${
                 activeTab === tab.id
                   ? tab.id === "upload-logo"
                     ? "border-blue-500 text-blue-700 bg-blue-50"
@@ -125,24 +125,24 @@ const Home = () => {
                   : "border-transparent text-gray-600 hover:bg-gray-50"
               }`}
             >
-              <span className="flex items-center justify-center">
+              <div className="flex flex-col items-center justify-center space-y-1">
                 {tab.id === "upload-logo" ? (
                   <>
-                    <span className="mr-1">🏆</span>
-                    <span>LOGO</span>
+                    <span className="text-lg">🏆</span>
+                    <span className="text-xs">LOGO</span>
                   </>
                 ) : tab.id === "quan-ly-tran" ? (
                   <>
-                    <span className="mr-1">⚽</span>
-                    <span>TRẬN</span>
+                    <span className="text-lg">⚽</span>
+                    <span className="text-xs">TRẬN</span>
                   </>
                 ) : (
                   <>
-                    <span className="mr-1">🎙️</span>
-                    <span>AUDIO</span>
+                    <span className="text-lg">🎙️</span>
+                    <span className="text-xs">AUDIO</span>
                   </>
                 )}
-              </span>
+              </div>
             </button>
           ))}
         </div>
