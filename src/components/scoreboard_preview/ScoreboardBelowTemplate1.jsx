@@ -234,7 +234,7 @@ const ScoreboardBelowTemplate1 = ({
         .score {
           width: 50px;
           height: 55px;
-          background-color: #333;
+          background-color: transparent;
           display: flex;
           align-items: center;
           justify-content: center;
