@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useMatch } from '../../contexts/MatchContext';
 
 const Intro = () => {
     // Sample data - in real app this would be props or socket data
