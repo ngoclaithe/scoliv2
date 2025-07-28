@@ -223,10 +223,8 @@ export const AudioProvider = ({ children }) => {
   const setVolume = (volume) => {
     const clampedVolume = Math.max(0, Math.min(1, volume));
     dispatch({ type: audioActions.SET_VOLUME, payload: clampedVolume });
-    
-    if (audioRef.current) {
-      audioRef.current.volume = state.isMuted ? 0 : clampedVolume;
-    }
+
+    // Volume sẽ được update trong useEffect thay vì tại đây để tránh stale state
   };
 
   // Toggle mute
