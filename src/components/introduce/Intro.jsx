@@ -9,6 +9,9 @@ const Intro = () => {
     // Sử dụng AudioContext để phát audio
     const { playAudio, isComponentPlaying } = useAudio();
 
+    // State cho user interaction
+    const [userInteracted, setUserInteracted] = useState(false);
+
     // Kết hợp dữ liệu từ context với dữ liệu mặc định
     const matchData = {
         matchTitle: contextMatchData.tournament || "GIẢI BÓNG ĐÁ PHONG TRÀO",
@@ -42,16 +45,23 @@ const Intro = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // Tự động phát audio poster.mp3 khi component mount với debounce protection
+    // Tự động phát audio poster.mp3 khi user đã interaction
     useEffect(() => {
-        // Delay nhỏ để tránh conflict với socket events
-        const timer = setTimeout(() => {
-            console.log('🎵 [Intro] Auto-playing poster audio');
-            playAudio('poster', 'intro');
-        }, 200);
+        if (userInteracted) {
+            // Delay nhỏ để tránh conflict với socket events
+            const timer = setTimeout(() => {
+                console.log('🎵 [Intro] Auto-playing poster audio after user interaction');
+                playAudio('poster', 'intro');
+            }, 200);
 
-        return () => clearTimeout(timer);
-    }, [playAudio]);
+            return () => clearTimeout(timer);
+        }
+    }, [userInteracted, playAudio]);
+
+    // Xử lý user interaction
+    const handleUserInteraction = () => {
+        setUserInteracted(true);
+    };
 
     // Dữ liệu đã được tự động cập nhật thông qua MatchContext
 
@@ -75,7 +85,18 @@ const Intro = () => {
     const showSCOLogo = !showNSBLogo && !showBDPXTLogo;
 
     return (
-        <div className="min-h-screen bg-white flex items-center justify-center p-4 relative overflow-hidden">
+        <div className="min-h-screen bg-white flex items-center justify-center p-4 relative overflow-hidden" onClick={handleUserInteraction}>
+            {/* User interaction overlay */}
+            {!userInteracted && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 cursor-pointer">
+                    <div className="bg-white rounded-3xl p-8 text-center shadow-2xl max-w-md mx-4 animate-bounce-subtle">
+                        <div className="text-6xl mb-4">🎵</div>
+                        <h2 className="text-2xl font-bold text-gray-800 mb-2">Chào mừng!</h2>
+                        <p className="text-gray-600 mb-4">Nhấn vào màn hình để bắt đầu</p>
+                        <div className="text-4xl animate-pulse">👆</div>
+                    </div>
+                </div>
+            )}
             {/* Top left logos */}
             {showNSBLogo && (
                 <div className={`fixed z-50 ${isMobile ? 'top-4 left-4' : 'top-8 left-8'}`}>
