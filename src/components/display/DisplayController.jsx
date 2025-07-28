@@ -120,16 +120,12 @@ const DisplayController = () => {
   const renderCurrentView = () => {
     switch (currentView) {
       case 'intro':
-        console.log('🚀 [DisplayController] Rendering Intro view');
         return <Intro accessCode={accessCode} />;
       case 'halftime':
-        console.log('⏱️ [DisplayController] Rendering HalfTime view');
         return <HalfTime accessCode={accessCode} />;
       case 'scoreboard':
-        console.log('📊 [DisplayController] Rendering ScoreboardAbove view');
         return <ScoreboardAbove accessCode={accessCode} />;
       case 'scoreboard_below':
-        console.log('📊 [DisplayController] Rendering ScoreboardBelow view');
         return <ScoreboardBelow accessCode={accessCode} />;
       case 'poster':
         // Render poster theo selectedPoster với id mapping
