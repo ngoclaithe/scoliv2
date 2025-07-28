@@ -647,6 +647,10 @@ export const MatchProvider = ({ children }) => {
     updateView,
     resetMatch,
 
+    // Timer functions
+    resumeTimer,
+    requestTimerSync,
+
     // Socket functions
     initializeSocket,
     disconnectSocket
