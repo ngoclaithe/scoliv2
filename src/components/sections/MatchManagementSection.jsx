@@ -140,7 +140,7 @@ const MatchManagementSection = () => {
         toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeA}"`);
       }
     } catch (error) {
-      console.error('Lỗi tìm kiếm logo A:', error);
+      console.error('Lỗi tìm ki���m logo A:', error);
       toast.error('Lỗi khi tìm kiếm logo. Vui lòng thử lại.');
     } finally {
       setIsSearchingLogoA(false);
@@ -1070,7 +1070,7 @@ const MatchManagementSection = () => {
                 className="px-3 py-1 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-sm font-bold h-8"
                 onClick={() => {
                   const minutes = parseInt(quickCustomMinutes) || 0;
-                  const seconds = parseInt(quickCustomSeconds) || 0;
+
 
                   if (minutes > 0 || seconds > 0) {
                     const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
