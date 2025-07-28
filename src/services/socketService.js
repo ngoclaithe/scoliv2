@@ -100,7 +100,6 @@ class SocketService {
     };
 
     this.socket.emit(eventName, payload);
-    console.log(`Emitted ${eventName}:`, payload);
     return true;
   }
 
@@ -151,7 +150,7 @@ class SocketService {
 
   // === MATCH DATA EVENTS ===
 
-  // Cập nhật thông tin trận ��ấu
+  // Cập nhật thông tin trận đấu
   updateMatchInfo(matchInfo) {
     return this.emit('match_info_update', { matchInfo });
   }
@@ -307,7 +306,7 @@ class SocketService {
 
   // === LISTENER HELPERS ===
 
-  // Lắng nghe tất cả c��c update của match
+  // Lắng nghe tất cả các update của match
   onMatchUpdate(callback) {
     const events = [
       'match_info_updated',
