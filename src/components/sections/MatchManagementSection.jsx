@@ -7,6 +7,7 @@ import TeamLineupModal from "../lineup/TeamLineupModal";
 import Modal from "../common/Modal";
 import SimplePenaltyModal from "../common/SimplePenaltyModal";
 import { useMatch } from "../../contexts/MatchContext";
+import { toast } from 'react-toastify';
 
 
 const MatchManagementSection = () => {
@@ -20,9 +21,13 @@ const MatchManagementSection = () => {
     displaySettings,
     socketConnected,
     updateScore,
+    updateMatchInfo,
+    updateMatchTime,
     updateStats,
     updateTemplate,
     updatePoster,
+    updateTeamNames,
+    updateTeamLogos,
     updateFutsalErrors,
     updatePenalty,
     updateMarquee,
@@ -275,17 +280,21 @@ const MatchManagementSection = () => {
           <Button
             variant="primary"
             size="sm"
-            className="px-2 py-1 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+            className={`px-2 py-1 ${
+              matchData.status === "paused"
+                ? "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+                : "bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700"
+            } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
-              console.log('Tạm dừng được chọn');
-              console.log('Current selectedOption before:', selectedOption);
-              setSelectedOption("tam-dung");
-              console.log('Current selectedOption after:', "tam-dung");
+              const newStatus = matchData.status === "paused" ? "live" : "paused";
+              updateMatchTime(matchData.matchTime, matchData.period, newStatus);
+              console.log('Timer status changed to:', newStatus);
+              toast.info(newStatus === 'paused' ? '⏸️ Đã tạm dừng timer' : '▶️ Đã tiếp tục timer');
             }}
           >
-            <span className="mr-1">⏸️</span>
-            <span className="hidden sm:inline">TẠM DỪNG</span>
-            <span className="sm:hidden">D���NG</span>
+            <span className="mr-1">{matchData.status === "paused" ? "▶️" : "⏸️"}</span>
+            <span className="hidden sm:inline">{matchData.status === "paused" ? "TIẾP TỤC" : "TẠM DỪNG"}</span>
+            <span className="sm:hidden">{matchData.status === "paused" ? "TIẾP" : "DỪNG"}</span>
           </Button>
 
           <Button
@@ -328,7 +337,7 @@ const MatchManagementSection = () => {
           <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
             <input
               type="text"
-              placeholder="Tên đội B"
+              placeholder="T��n đội B"
               value={teamBInfo.name}
               onChange={(e) => setTeamBInfo(prev => ({ ...prev, name: e.target.value }))}
               className="w-full px-2 py-1.5 text-sm font-medium text-center text-gray-800 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-gray-300 rounded-lg"
@@ -407,18 +416,27 @@ const MatchManagementSection = () => {
             variant="primary"
             size="sm"
             onClick={() => {
-              // Cập nhật thông tin đội A
-              updateScore("teamA", 0, {
-                name: teamAInfo.name,
-                logo: teamAInfo.logo || matchData.teamA.logo
+              // Cập nhật tên đội
+              updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
+
+              // Cập nhật logo đội nếu có
+              if (teamAInfo.logo || teamBInfo.logo) {
+                updateTeamLogos(
+                  teamAInfo.logo || matchData.teamA.logo,
+                  teamBInfo.logo || matchData.teamB.logo
+                );
+              }
+
+              // Cập nhật thông tin trận đấu (thời gian, địa điểm)
+              updateMatchInfo({
+                startTime: matchInfo.startTime,
+                stadium: matchInfo.location,
+                matchDate: new Date().toISOString().split('T')[0], // Ngày hiện tại
+                time: matchInfo.startTime
               });
-              // Cập nhật thông tin đội B
-              updateScore("teamB", 0, {
-                name: teamBInfo.name,
-                logo: teamBInfo.logo || matchData.teamB.logo
-              });
-              // Có thể thêm logic cập nhật giờ và địa điểm tại đây
+
               console.log('Đã cập nhật thông tin trận đấu:', { teamAInfo, teamBInfo, matchInfo });
+              toast.success('✅ Đã cập nhật thông tin trận đấu thành công!');
             }}
             className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
           >
@@ -438,7 +456,7 @@ const MatchManagementSection = () => {
                 : "bg-gradient-to-r from-green-100 to-green-200 text-green-700 hover:from-green-200 hover:to-green-300"
               }`}
           >
-            <span className="mr-0.5 text-xs">📊</span>
+            <span className="mr-0.5 text-xs">���</span>
             <span className="hidden sm:inline">THÔNG SỐ</span>
             <span className="sm:hidden">TK</span>
           </button>
@@ -541,7 +559,7 @@ const MatchManagementSection = () => {
                 onUpdate={(team, value) => updatePossession(team, value)}
               />
 
-              {/* Tổng số cú sút */}
+              {/* Tổng số cú s��t */}
               <EditableStatBar
                 label="Tổng số cú sút"
                 statKey="totalShots"
@@ -707,7 +725,15 @@ const MatchManagementSection = () => {
 
             {/* Đếm 0 */}
             <button
-              onClick={() => setSelectedOption("dem-0")}
+              onClick={() => {
+                // Set thời gian về 0 và bắt đầu đếm tiến
+                updateMatchTime("00:00", "Hiệp 1", "live");
+                // Chuyển sang tỉ số trên
+                updateView('scoreboard');
+                setSelectedOption("ti-so-tren");
+                console.log('Đã áp dụng: Bắt đầu đếm từ 0:00');
+                toast.success('⏰ Đã bắt đầu timer từ 0:00!');
+              }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🕐</span>
@@ -716,7 +742,15 @@ const MatchManagementSection = () => {
 
             {/* Đếm 25' */}
             <button
-              onClick={() => setSelectedOption("dem-25")}
+              onClick={() => {
+                // Set thời gian về 25:00 và bắt đầu đếm tiến
+                updateMatchTime("25:00", "Hiệp 1", "live");
+                // Chuyển sang tỉ số trên
+                updateView('scoreboard');
+                setSelectedOption("ti-so-tren");
+                console.log('Đã áp dụng: Bắt đầu đếm từ 25:00');
+                toast.success('⏰ Đã bắt đầu timer từ 25:00!');
+              }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🕐</span>
@@ -725,7 +759,15 @@ const MatchManagementSection = () => {
 
             {/* Đếm 30' */}
             <button
-              onClick={() => setSelectedOption("dem-30")}
+              onClick={() => {
+                // Set thời gian về 30:00 và bắt đầu đếm tiến
+                updateMatchTime("30:00", "Hiệp 1", "live");
+                // Chuyển sang tỉ số trên
+                updateView('scoreboard');
+                setSelectedOption("ti-so-tren");
+                console.log('Đã áp dụng: Bắt đầu đếm từ 30:00');
+                toast.success('⏰ Đã bắt đầu timer từ 30:00!');
+              }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🕑</span>
@@ -734,7 +776,15 @@ const MatchManagementSection = () => {
 
             {/* Đếm 35' */}
             <button
-              onClick={() => setSelectedOption("dem-35")}
+              onClick={() => {
+                // Set thời gian về 35:00 và bắt đầu đếm tiến
+                updateMatchTime("35:00", "Hiệp 1", "live");
+                // Chuyển sang tỉ số trên
+                updateView('scoreboard');
+                setSelectedOption("ti-so-tren");
+                console.log('Đã áp dụng: Bắt đầu đếm từ 35:00');
+                toast.success('⏰ Đã bắt đầu timer từ 35:00!');
+              }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🕒</span>
@@ -804,9 +854,15 @@ const MatchManagementSection = () => {
                 className="px-2 py-1 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
                 onClick={() => {
                   if (quickCustomTime) {
-                    setSelectedOption("dem-tuy-chinh");
+                    // Format thời gian (phút:giây)
+                    const timeString = `${quickCustomTime.toString().padStart(2, '0')}:00`;
+                    // Set thời gian và bắt đầu đếm tiến
+                    updateMatchTime(timeString, "Hiệp 1", "live");
+                    // Chuyển sang tỉ số trên
+                    updateView('scoreboard');
+                    setSelectedOption("ti-so-tren");
                     console.log('Áp dụng thời gian tùy chỉnh:', quickCustomTime);
-                    alert(`Đã áp dụng: Trận đấu bắt đầu từ ${quickCustomTime} phút`);
+                    toast.success(`⏰ Đã bắt đầu timer từ ${quickCustomTime}:00!`);
                   }
                 }}
                 disabled={!quickCustomTime}
@@ -1007,8 +1063,17 @@ const MatchManagementSection = () => {
               variant="primary"
               className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-sm rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
               onClick={() => {
-                console.log('Áp dụng thời gian tùy chỉnh:', customTime);
-                alert(`Đã áp dụng: Trận đấu bắt đầu từ ${customTime || 0} phút`);
+                if (customTime) {
+                  // Format thời gian (phút:giây)
+                  const timeString = `${customTime.toString().padStart(2, '0')}:00`;
+                  // Set thời gian và bắt đầu đếm tiến
+                  updateMatchTime(timeString, "Hiệp 1", "live");
+                  // Chuyển sang tỉ số trên
+                  updateView('scoreboard');
+                  setSelectedOption("ti-so-tren");
+                  console.log('Áp dụng thời gian tùy chỉnh:', customTime);
+                  toast.success(`⏰ Đã bắt đầu timer từ ${customTime}:00!`);
+                }
                 setShowTimerModal(false);
               }}
             >
