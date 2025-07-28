@@ -10,6 +10,13 @@ const initialState = {
   recordingState: 'stopped', // 'recording', 'paused', 'stopped'
   recordedAudio: null,
   currentComponent: null, // Component nào đang phát audio
+
+  // WebRTC Commentary State
+  webrtcConnections: new Map(), // Map của peer connections
+  isCommentator: false, // Có phải người bình luận không
+  commentaryStream: null, // Local media stream
+  incomingCommentaryStreams: new Map(), // Map của incoming streams
+  webrtcState: 'disconnected', // 'connecting', 'connected', 'disconnected'
 };
 
 // Audio Actions
@@ -22,6 +29,15 @@ const audioActions = {
   SET_RECORDING_STATE: 'SET_RECORDING_STATE',
   SET_RECORDED_AUDIO: 'SET_RECORDED_AUDIO',
   SET_CURRENT_COMPONENT: 'SET_CURRENT_COMPONENT',
+
+  // WebRTC Actions
+  SET_WEBRTC_STATE: 'SET_WEBRTC_STATE',
+  SET_COMMENTATOR: 'SET_COMMENTATOR',
+  SET_COMMENTARY_STREAM: 'SET_COMMENTARY_STREAM',
+  ADD_WEBRTC_CONNECTION: 'ADD_WEBRTC_CONNECTION',
+  REMOVE_WEBRTC_CONNECTION: 'REMOVE_WEBRTC_CONNECTION',
+  ADD_INCOMING_STREAM: 'ADD_INCOMING_STREAM',
+  REMOVE_INCOMING_STREAM: 'REMOVE_INCOMING_STREAM',
 };
 
 // Audio Reducer
@@ -73,6 +89,49 @@ const audioReducer = (state, action) => {
         ...state,
         currentComponent: action.payload,
       };
+    case audioActions.SET_WEBRTC_STATE:
+      return {
+        ...state,
+        webrtcState: action.payload,
+      };
+    case audioActions.SET_COMMENTATOR:
+      return {
+        ...state,
+        isCommentator: action.payload,
+      };
+    case audioActions.SET_COMMENTARY_STREAM:
+      return {
+        ...state,
+        commentaryStream: action.payload,
+      };
+    case audioActions.ADD_WEBRTC_CONNECTION:
+      const newConnections = new Map(state.webrtcConnections);
+      newConnections.set(action.payload.id, action.payload.connection);
+      return {
+        ...state,
+        webrtcConnections: newConnections,
+      };
+    case audioActions.REMOVE_WEBRTC_CONNECTION:
+      const updatedConnections = new Map(state.webrtcConnections);
+      updatedConnections.delete(action.payload);
+      return {
+        ...state,
+        webrtcConnections: updatedConnections,
+      };
+    case audioActions.ADD_INCOMING_STREAM:
+      const newStreams = new Map(state.incomingCommentaryStreams);
+      newStreams.set(action.payload.id, action.payload.stream);
+      return {
+        ...state,
+        incomingCommentaryStreams: newStreams,
+      };
+    case audioActions.REMOVE_INCOMING_STREAM:
+      const updatedStreams = new Map(state.incomingCommentaryStreams);
+      updatedStreams.delete(action.payload);
+      return {
+        ...state,
+        incomingCommentaryStreams: updatedStreams,
+      };
     default:
       return state;
   }
@@ -87,6 +146,15 @@ export const AudioProvider = ({ children }) => {
   const audioRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
+
+  // WebRTC refs
+  const localStreamRef = useRef(null);
+  const webrtcConfigRef = useRef({
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' }
+    ]
+  });
 
   // Audio file mapping
   const audioFiles = {
@@ -243,7 +311,7 @@ export const AudioProvider = ({ children }) => {
     }
   };
 
-  // Gửi audio qua socket
+  // Gửi audio qua socket (deprecated - dùng cho fallback)
   const sendRecordedAudio = async (socketService, accessCode) => {
     if (!state.recordedAudio) {
       console.error('No recorded audio to send');
@@ -255,7 +323,7 @@ export const AudioProvider = ({ children }) => {
       const reader = new FileReader();
       reader.onload = () => {
         const base64Audio = reader.result.split(',')[1]; // Remove data:audio/webm;base64,
-        
+
         // Emit via socket
         socketService.emit('commentary_audio', {
           accessCode,
@@ -268,6 +336,187 @@ export const AudioProvider = ({ children }) => {
     } catch (error) {
       console.error('Error sending recorded audio:', error);
     }
+  };
+
+  // === WebRTC Commentary Functions ===
+
+  // Bắt đầu commentary stream với WebRTC
+  const startWebRTCCommentary = async (socketService, accessCode) => {
+    try {
+      dispatch({ type: audioActions.SET_WEBRTC_STATE, payload: 'connecting' });
+
+      // Lấy audio stream
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: 44100,
+          channelCount: 1
+        }
+      });
+
+      localStreamRef.current = stream;
+      dispatch({ type: audioActions.SET_COMMENTARY_STREAM, payload: stream });
+      dispatch({ type: audioActions.SET_COMMENTATOR, payload: true });
+
+      // Thông báo server là commentator
+      socketService.emit('webrtc_commentator_ready', {
+        accessCode,
+        timestamp: Date.now()
+      });
+
+      dispatch({ type: audioActions.SET_WEBRTC_STATE, payload: 'connected' });
+
+      return stream;
+    } catch (error) {
+      console.error('Error starting WebRTC commentary:', error);
+      dispatch({ type: audioActions.SET_WEBRTC_STATE, payload: 'disconnected' });
+      throw error;
+    }
+  };
+
+  // Dừng commentary stream
+  const stopWebRTCCommentary = (socketService, accessCode) => {
+    try {
+      // Dừng local stream
+      if (localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach(track => track.stop());
+        localStreamRef.current = null;
+      }
+
+      // Đóng tất cả peer connections
+      state.webrtcConnections.forEach((connection, peerId) => {
+        connection.close();
+        dispatch({ type: audioActions.REMOVE_WEBRTC_CONNECTION, payload: peerId });
+      });
+
+      // Clear incoming streams
+      state.incomingCommentaryStreams.forEach((stream, peerId) => {
+        dispatch({ type: audioActions.REMOVE_INCOMING_STREAM, payload: peerId });
+      });
+
+      dispatch({ type: audioActions.SET_COMMENTARY_STREAM, payload: null });
+      dispatch({ type: audioActions.SET_COMMENTATOR, payload: false });
+      dispatch({ type: audioActions.SET_WEBRTC_STATE, payload: 'disconnected' });
+
+      // Thông báo server
+      socketService.emit('webrtc_commentator_stopped', {
+        accessCode,
+        timestamp: Date.now()
+      });
+
+    } catch (error) {
+      console.error('Error stopping WebRTC commentary:', error);
+    }
+  };
+
+  // Tạo peer connection cho listener
+  const createPeerConnection = async (socketService, accessCode, targetPeerId) => {
+    try {
+      const pc = new RTCPeerConnection(webrtcConfigRef.current);
+
+      // Handle incoming stream
+      pc.ontrack = (event) => {
+        console.log('Received remote stream from:', targetPeerId);
+        const [remoteStream] = event.streams;
+        dispatch({
+          type: audioActions.ADD_INCOMING_STREAM,
+          payload: { id: targetPeerId, stream: remoteStream }
+        });
+      };
+
+      // Handle ICE candidates
+      pc.onicecandidate = (event) => {
+        if (event.candidate) {
+          socketService.emit('webrtc_ice_candidate', {
+            accessCode,
+            targetPeerId,
+            candidate: event.candidate,
+            timestamp: Date.now()
+          });
+        }
+      };
+
+      // Handle connection state change
+      pc.onconnectionstatechange = () => {
+        console.log('Connection state:', pc.connectionState, 'with peer:', targetPeerId);
+        if (pc.connectionState === 'disconnected' || pc.connectionState === 'failed') {
+          dispatch({ type: audioActions.REMOVE_WEBRTC_CONNECTION, payload: targetPeerId });
+          dispatch({ type: audioActions.REMOVE_INCOMING_STREAM, payload: targetPeerId });
+        }
+      };
+
+      // Thêm local stream nếu là commentator
+      if (state.isCommentator && localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach(track => {
+          pc.addTrack(track, localStreamRef.current);
+        });
+      }
+
+      dispatch({
+        type: audioActions.ADD_WEBRTC_CONNECTION,
+        payload: { id: targetPeerId, connection: pc }
+      });
+
+      return pc;
+    } catch (error) {
+      console.error('Error creating peer connection:', error);
+      throw error;
+    }
+  };
+
+  // Handle WebRTC offer (cho listeners)
+  const handleWebRTCOffer = async (socketService, accessCode, fromPeerId, offer) => {
+    try {
+      const pc = await createPeerConnection(socketService, accessCode, fromPeerId);
+
+      await pc.setRemoteDescription(offer);
+      const answer = await pc.createAnswer();
+      await pc.setLocalDescription(answer);
+
+      socketService.emit('webrtc_answer', {
+        accessCode,
+        targetPeerId: fromPeerId,
+        answer: answer,
+        timestamp: Date.now()
+      });
+
+    } catch (error) {
+      console.error('Error handling WebRTC offer:', error);
+    }
+  };
+
+  // Handle WebRTC answer (cho commentator)
+  const handleWebRTCAnswer = async (fromPeerId, answer) => {
+    try {
+      const pc = state.webrtcConnections.get(fromPeerId);
+      if (pc) {
+        await pc.setRemoteDescription(answer);
+      }
+    } catch (error) {
+      console.error('Error handling WebRTC answer:', error);
+    }
+  };
+
+  // Handle ICE candidate
+  const handleWebRTCIceCandidate = async (fromPeerId, candidate) => {
+    try {
+      const pc = state.webrtcConnections.get(fromPeerId);
+      if (pc) {
+        await pc.addIceCandidate(candidate);
+      }
+    } catch (error) {
+      console.error('Error handling ICE candidate:', error);
+    }
+  };
+
+  // Join như listener
+  const joinAsListener = (socketService, accessCode) => {
+    dispatch({ type: audioActions.SET_COMMENTATOR, payload: false });
+    socketService.emit('webrtc_listener_ready', {
+      accessCode,
+      timestamp: Date.now()
+    });
   };
 
   // Cleanup khi unmount
@@ -306,7 +555,16 @@ export const AudioProvider = ({ children }) => {
     pauseRecording,
     resumeRecording,
     sendRecordedAudio,
-    
+
+    // WebRTC Commentary functions
+    startWebRTCCommentary,
+    stopWebRTCCommentary,
+    createPeerConnection,
+    handleWebRTCOffer,
+    handleWebRTCAnswer,
+    handleWebRTCIceCandidate,
+    joinAsListener,
+
     // Helper functions
     isComponentPlaying: (component) => state.currentComponent === component && state.isPlaying,
   };
