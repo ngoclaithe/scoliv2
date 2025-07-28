@@ -256,17 +256,16 @@ export const PublicMatchProvider = ({ children }) => {
       console.log('🎯 [Audio] View updated to:', data.viewType);
     });
 
-    // Lắng nghe audio events - chỉ update timestamp, audio được xử lý bởi DisplayController
+    // Lắng nghe audio events - chỉ log, không update timestamp
     socketService.on('component_audio_triggered', (data) => {
       console.log('🔊 [Audio] PublicMatchContext received component_audio_triggered:', data);
-      // Chỉ update timestamp, DisplayController sẽ xử lý việc phát audio
-      setLastUpdateTime(Date.now());
+      // Không update timestamp để tránh re-render loop
     });
 
     // Lắng nghe audio settings update
     socketService.on('audio_settings_updated', (data) => {
       console.log('🔊 [Audio] audio_settings_updated received:', data);
-      setLastUpdateTime(Date.now());
+      debouncedUpdateTime();
     });
 
     // Lắng nghe trạng thái kết nối
@@ -277,7 +276,7 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('connect', () => {
       setSocketConnected(true);
     });
-  }, []);
+  }, [debouncedUpdateTime]);
 
   // Khởi tạo socket connection cho public route
   const initializeSocket = useCallback(async (accessCode) => {
