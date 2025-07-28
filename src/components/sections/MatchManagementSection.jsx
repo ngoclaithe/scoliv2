@@ -577,7 +577,7 @@ const MatchManagementSection = () => {
                 logoA: teamAInfo.logo || matchData.teamA.logo,
                 logoB: teamBInfo.logo || matchData.teamB.logo
               });
-              toast.success('✅ Đã cập nhật thông tin tr���n đ��u thành công!');
+              toast.success('✅ Đã cập nhật thông tin trận đ��u thành công!');
             }}
             className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
           >
@@ -918,7 +918,7 @@ const MatchManagementSection = () => {
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">���</span>
+              <span className="text-sm mr-1">🕑</span>
               <span className="text-xs font-bold text-center">ĐẾM 30'</span>
             </button>
 
@@ -941,7 +941,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">ĐẾM 35'</span>
             </button>
 
-            {/* Gi���i thiệu */}
+            {/* Giới thiệu */}
             <button
               onClick={() => {
                 updateView('intro');
@@ -1029,11 +1029,6 @@ const MatchManagementSection = () => {
 
           {/* Đếm T - Input phút đơn giản */}
           <div className="mt-2 bg-white rounded-lg p-2 border border-teal-200">
-            <div className="flex items-center gap-1 mb-2">
-              <span className="text-sm">🕰️</span>
-              <span className="text-sm font-medium text-gray-700">Đếm T:</span>
-            </div>
-
             <div className="flex items-center gap-2">
               <div className="flex-1">
                 <input
