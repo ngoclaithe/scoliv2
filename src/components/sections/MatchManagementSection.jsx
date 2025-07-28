@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import ScoreDisplay from "../scoreboard/ScoreDisplay";
@@ -33,7 +33,9 @@ const MatchManagementSection = () => {
     updateFutsalErrors,
     updatePenalty,
     updateMarquee,
-    updateView
+    updateView,
+    resumeTimer,
+    requestTimerSync
   } = useMatch();
 
   // State cho các tùy chọn điều khiển UI
@@ -56,11 +58,42 @@ const MatchManagementSection = () => {
     name: matchData.teamB.name || "",
     logo: matchData.teamB.logo || ""
   });
+
+  // Sync team info khi matchData thay đổi (từ server)
+  useEffect(() => {
+    setTeamAInfo(prev => ({
+      name: matchData.teamA.name || prev.name,
+      logo: matchData.teamA.logo || prev.logo
+    }));
+    setTeamBInfo(prev => ({
+      name: matchData.teamB.name || prev.name,
+      logo: matchData.teamB.logo || prev.logo
+    }));
+  }, [matchData.teamA.name, matchData.teamA.logo, matchData.teamB.name, matchData.teamB.logo]);
   const [matchInfo, setMatchInfo] = useState({
-    startTime: "19:30",
-    location: "SÂN VẬN ĐỘNG QUỐC GIA",
-    matchDate: new Date().toISOString().split('T')[0]
+    startTime: matchData.startTime || "19:30",
+    location: matchData.stadium || "SÂN VẬN ĐỘNG QUỐC GIA",
+    matchDate: matchData.matchDate || new Date().toISOString().split('T')[0]
   });
+
+  // Sync match info khi matchData thay đổi
+  useEffect(() => {
+    if (matchData.startTime || matchData.stadium || matchData.matchDate) {
+      setMatchInfo(prev => ({
+        startTime: matchData.startTime || prev.startTime,
+        location: matchData.stadium || prev.location,
+        matchDate: matchData.matchDate || prev.matchDate
+      }));
+    }
+  }, [matchData.startTime, matchData.stadium, matchData.matchDate]);
+
+  // Request timer sync khi component mount và socket connected
+  useEffect(() => {
+    if (socketConnected) {
+      requestTimerSync();
+      console.log('⏰ [MatchManagementSection] Requested timer sync on mount');
+    }
+  }, [socketConnected, requestTimerSync]);
 
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
@@ -339,10 +372,16 @@ const MatchManagementSection = () => {
                 : "bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700"
             } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
-              const newStatus = matchData.status === "paused" ? "live" : "paused";
-              updateMatchTime(matchData.matchTime, matchData.period, newStatus);
-              console.log('Timer status changed to:', newStatus);
-              toast.info(newStatus === 'paused' ? '⏸️ Đã tạm dừng timer' : '▶️ Đã tiếp tục timer');
+              if (matchData.status === "paused") {
+                // Resume timer từ server
+                resumeTimer();
+                toast.info('▶️ Đã tiếp tục timer từ server');
+              } else {
+                // Pause timer - sử dụng updateMatchTime với status paused
+                updateMatchTime(matchData.matchTime, matchData.period, "paused");
+                toast.info('⏸️ Đã tạm dừng timer');
+              }
+              console.log('Timer status changed from:', matchData.status);
             }}
           >
             <span className="mr-1">{matchData.status === "paused" ? "▶️" : "⏸️"}</span>
@@ -495,13 +534,11 @@ const MatchManagementSection = () => {
               // Cập nhật tên đội
               updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
 
-              // Cập nhật logo đội nếu có
-              if (teamAInfo.logo || teamBInfo.logo) {
-                updateTeamLogos(
-                  teamAInfo.logo || matchData.teamA.logo,
-                  teamBInfo.logo || matchData.teamB.logo
-                );
-              }
+              // Luôn cập nhật logo đội (kể cả logo mặc định hoặc logo mới)
+              updateTeamLogos(
+                teamAInfo.logo || matchData.teamA.logo || "",
+                teamBInfo.logo || matchData.teamB.logo || ""
+              );
 
               // Cập nhật thông tin trận đấu (thời gian, địa điểm)
               updateMatchInfo({
@@ -511,7 +548,13 @@ const MatchManagementSection = () => {
                 time: matchInfo.startTime // Giữ key là time cho emit
               });
 
-              console.log('Đã cập nhật thông tin trận đấu:', { teamAInfo, teamBInfo, matchInfo });
+              console.log('Đã cập nhật thông tin trận đấu:', {
+                teamAInfo,
+                teamBInfo,
+                matchInfo,
+                logoA: teamAInfo.logo || matchData.teamA.logo,
+                logoB: teamBInfo.logo || matchData.teamB.logo
+              });
               toast.success('✅ Đã cập nhật thông tin trận đấu thành công!');
             }}
             className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"

@@ -130,44 +130,28 @@ export const MatchProvider = ({ children }) => {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  // Timer tự động để cập nhật thời gian trận đấu
+  // Timer tự động DISABLED - Sử dụng server timer thay thế
   useEffect(() => {
-    // Dọn dẹp interval cũ
+    // Dọn dẹp interval cũ nếu có
     if (timerInterval) {
       clearInterval(timerInterval);
       setTimerInterval(null);
     }
 
-    // Tạo interval mới nếu status là "live"
-    if (matchData.status === "live") {
-      const currentTime = parseTimeToSeconds(matchData.matchTime);
-      const now = Date.now();
-      const calculatedStartTime = now - (currentTime * 1000); // Tính thời điểm bắt đầu
-      setStartTime(calculatedStartTime);
-
-      const interval = setInterval(() => {
-        const elapsed = Math.floor((Date.now() - calculatedStartTime) / 1000);
-        const newTime = formatSecondsToTime(elapsed);
-
-        setMatchData(prev => {
-          if (prev.status === "live" && prev.matchTime !== newTime) {
-            // Chỉ cập nhật local state, không emit socket để tránh tốn tài nguyên
-            return { ...prev, matchTime: newTime };
-          }
-          return prev;
-        });
-      }, 1000);
-
-      setTimerInterval(interval);
+    // ĐÃ TẮT LOCAL TIMER - Server sẽ gửi timer updates qua socket
+    // Khi status thay đổi thành "live", request timer sync từ server
+    if (matchData.status === "live" && socketConnected) {
+      socketService.requestTimerSync();
+      console.log('⏰ [MatchContext] Requested timer sync due to status change to live');
     }
 
-    // Cleanup khi component unmount hoặc status thay đổi
+    // Cleanup khi component unmount
     return () => {
       if (timerInterval) {
         clearInterval(timerInterval);
       }
     };
-  }, [matchData.status, matchData.matchTime]);
+  }, [matchData.status, socketConnected]);
 
   // Khởi tạo socket connection
   const initializeSocket = useCallback(async (accessCode) => {
@@ -189,6 +173,12 @@ export const MatchProvider = ({ children }) => {
       // Lắng nghe các event từ server
       setupSocketListeners();
 
+      // Request state hiện tại từ server sau khi connect
+      setTimeout(() => {
+        socketService.requestCurrentState();
+        console.log('🔄 [MatchContext] Requested current state from server');
+      }, 1000); // Delay 1s để đảm bảo connect thành công
+
       console.log(`Socket initialized for access code: ${accessCode}`);
     } catch (error) {
       console.error('Failed to initialize socket:', error);
@@ -206,10 +196,11 @@ export const MatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật tỉ số
     socketService.on('score_updated', (data) => {
+      console.log('⚽ [MatchContext] Received score_updated:', data);
       setMatchData(prev => ({
         ...prev,
-        teamA: { ...prev.teamA, score: data.scores.home },
-        teamB: { ...prev.teamB, score: data.scores.away }
+        teamA: { ...prev.teamA, score: data.scores.teamA || data.scores.home },
+        teamB: { ...prev.teamB, score: data.scores.teamB || data.scores.away }
       }));
       setLastUpdateTime(Date.now());
     });
@@ -234,20 +225,22 @@ export const MatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật logo đội
     socketService.on('team_logos_updated', (data) => {
+      console.log('🏆 [MatchContext] Received team_logos_updated:', data);
       setMatchData(prev => ({
         ...prev,
-        teamA: { ...prev.teamA, logo: data.logos.home },
-        teamB: { ...prev.teamB, logo: data.logos.away }
+        teamA: { ...prev.teamA, logo: data.logos.teamA },
+        teamB: { ...prev.teamB, logo: data.logos.teamB }
       }));
       setLastUpdateTime(Date.now());
     });
 
     // Lắng nghe cập nhật tên đội
     socketService.on('team_names_updated', (data) => {
+      console.log('📛 [MatchContext] Received team_names_updated:', data);
       setMatchData(prev => ({
         ...prev,
-        teamA: { ...prev.teamA, name: data.names.home },
-        teamB: { ...prev.teamB, name: data.names.away }
+        teamA: { ...prev.teamA, name: data.names.teamA },
+        teamB: { ...prev.teamB, name: data.names.teamB }
       }));
       setLastUpdateTime(Date.now());
     });
@@ -265,6 +258,80 @@ export const MatchProvider = ({ children }) => {
         matchTime: data.time.matchTime,
         period: data.time.period,
         status: data.time.status
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // === TIMER REAL-TIME LISTENERS ===
+
+    // Lắng nghe timer sync từ server
+    socketService.on('timer_sync_response', (data) => {
+      console.log('⏰ [MatchContext] Received timer_sync_response:', data);
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.currentTime,
+        period: data.period,
+        status: data.status,
+        serverTimestamp: data.serverTimestamp
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer real-time updates từ server
+    socketService.on('timer_tick', (data) => {
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.currentTime,
+        serverTimestamp: data.serverTimestamp
+      }));
+    });
+
+    // Lắng nghe timer start từ server
+    socketService.on('timer_started', (data) => {
+      console.log('▶️ [MatchContext] Timer started from server:', data);
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.currentTime,
+        period: data.period,
+        status: 'live',
+        serverTimestamp: data.serverTimestamp
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer pause từ server
+    socketService.on('timer_paused', (data) => {
+      console.log('⏸️ [MatchContext] Timer paused from server:', data);
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.currentTime,
+        status: 'paused',
+        serverTimestamp: data.serverTimestamp
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer resume từ server
+    socketService.on('timer_resumed', (data) => {
+      console.log('▶️ [MatchContext] Timer resumed from server:', data);
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.currentTime,
+        status: 'live',
+        serverTimestamp: data.serverTimestamp
+      }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe timer reset từ server
+    socketService.on('timer_reset', (data) => {
+      console.log('🔄 [MatchContext] Timer reset from server:', data);
+      setMatchData(prev => ({
+        ...prev,
+        matchTime: data.resetTime,
+        period: data.period,
+        status: 'waiting',
+        serverTimestamp: data.serverTimestamp
       }));
       setLastUpdateTime(Date.now());
     });
@@ -297,6 +364,42 @@ export const MatchProvider = ({ children }) => {
 
     socketService.on('connect', () => {
       setSocketConnected(true);
+    });
+
+    // Lắng nghe response state hiện tại từ server
+    socketService.on('current_state_response', (data) => {
+      console.log('🔄 [MatchContext] Received current_state_response:', data);
+
+      if (data.matchData) {
+        setMatchData(prev => ({ ...prev, ...data.matchData }));
+      }
+
+      if (data.matchStats) {
+        setMatchStats(prev => ({ ...prev, ...data.matchStats }));
+      }
+
+      if (data.displaySettings) {
+        setDisplaySettings(prev => ({ ...prev, ...data.displaySettings }));
+      }
+
+      if (data.marqueeData) {
+        setMarqueeData(prev => ({ ...prev, ...data.marqueeData }));
+      }
+
+      if (data.penaltyData) {
+        setPenaltyData(prev => ({ ...prev, ...data.penaltyData }));
+      }
+
+      if (data.lineupData) {
+        setLineupData(data.lineupData);
+      }
+
+      if (data.futsalErrors) {
+        setFutsalErrors(prev => ({ ...prev, ...data.futsalErrors }));
+      }
+
+      console.log('✅ [MatchContext] State loaded from server successfully');
+      setLastUpdateTime(Date.now());
     });
   }, []);
 
@@ -411,22 +514,25 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Cập nhật thời gian trận đấu
+  // Cập nhật thời gian trận đấu - Sử dụng server timer
   const updateMatchTime = useCallback((matchTime, period, status) => {
-    const currentTime = parseTimeToSeconds(matchTime);
-    const now = Date.now();
-
-    // Cập nhật startTime khi set thời gian mới
-    if (status === "live") {
-      setStartTime(now - (currentTime * 1000));
-    }
-
+    // Cập nhật local state trước khi gửi đến server
     setMatchData(prev => ({ ...prev, matchTime, period, status }));
 
     if (socketConnected) {
-      socketService.updateMatchTime(matchTime, period, status);
+      // Sử dụng server timer events thay vì match_time_update
+      if (status === "live") {
+        socketService.startServerTimer(matchTime, period);
+        console.log('▶️ [MatchContext] Started server timer:', { matchTime, period });
+      } else if (status === "paused") {
+        socketService.pauseServerTimer();
+        console.log('⏸️ [MatchContext] Paused server timer');
+      } else if (status === "waiting") {
+        socketService.resetServerTimer(matchTime, period);
+        console.log('🔄 [MatchContext] Reset server timer:', { matchTime, period });
+      }
     }
-  }, [socketConnected, parseTimeToSeconds]);
+  }, [socketConnected]);
 
   // Cập nhật penalty
   const updatePenalty = useCallback((newPenaltyData) => {
@@ -459,6 +565,22 @@ export const MatchProvider = ({ children }) => {
     if (socketConnected) {
       socketService.emit('view_update', { viewType });
       console.log('Sent view update:', viewType);
+    }
+  }, [socketConnected]);
+
+  // Resume timer từ server
+  const resumeTimer = useCallback(() => {
+    if (socketConnected) {
+      socketService.resumeServerTimer();
+      console.log('▶️ [MatchContext] Resumed server timer');
+    }
+  }, [socketConnected]);
+
+  // Request timer sync từ server
+  const requestTimerSync = useCallback(() => {
+    if (socketConnected) {
+      socketService.requestTimerSync();
+      console.log('⏰ [MatchContext] Requested timer sync');
     }
   }, [socketConnected]);
 
@@ -524,6 +646,10 @@ export const MatchProvider = ({ children }) => {
     updateFutsalErrors,
     updateView,
     resetMatch,
+
+    // Timer functions
+    resumeTimer,
+    requestTimerSync,
 
     // Socket functions
     initializeSocket,
