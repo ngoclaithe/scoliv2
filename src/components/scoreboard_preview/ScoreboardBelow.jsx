@@ -669,6 +669,7 @@ const ScoreboardBelow = ({
           <div>Template: <span className="font-bold text-yellow-400">{currentTemplate}</span></div>
           <div>Access Code: <span className="font-bold text-blue-400">{accessCode}</span></div>
           <div>Tỉ số: <span className="font-bold text-green-400">{scoreboardData.score1}-{scoreboardData.score2}</span></div>
+          <div>Vị trí: <span className="font-bold text-purple-400">Dưới</span></div>
         </div>
       </div>
 
