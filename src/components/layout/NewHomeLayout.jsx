@@ -8,7 +8,7 @@ import CommentarySection from "../sections/CommentarySection";
 
 const NewHomeLayout = () => {
   const { user, logout, authType, hasAccountAccess, codeOnly, matchCode, clearMatchCode } = useAuth();
-  const [activeTab, setActiveTab] = useState("upload-logo");
+  const [activeTab, setActiveTab] = useState("quan-ly-tran");
 
   // Định nghĩa các tab theo yêu cầu
   const tabs = [
