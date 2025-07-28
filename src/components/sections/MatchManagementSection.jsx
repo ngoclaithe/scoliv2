@@ -1073,7 +1073,7 @@ const MatchManagementSection = () => {
 
 
                   if (minutes > 0) {
-                    const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    const timeString = `${minutes.toString().padStart(2, '0')}:00`;
                     updateMatchTime(timeString, "Hiệp 1", "live");
                     updateView('scoreboard');
                     setSelectedOption("ti-so-tren");
@@ -1136,7 +1136,7 @@ const MatchManagementSection = () => {
 
           {/* Text content */}
           <Input
-            placeholder="Nội dung chữ chạy..."
+            placeholder="Nội dung ch��� chạy..."
             value={clockText}
             onChange={(e) => setClockText(e.target.value)}
             maxLength={100}
