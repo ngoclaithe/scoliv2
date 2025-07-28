@@ -40,6 +40,20 @@ const MatchManagementSection = () => {
   const [tickerColor, setTickerColor] = useState("#ffffff");
   const [tickerFontSize, setTickerFontSize] = useState(16);
 
+  // State cho thông tin đội và trận đấu
+  const [teamAInfo, setTeamAInfo] = useState({
+    name: matchData.teamA.name || "",
+    logo: matchData.teamA.logo || ""
+  });
+  const [teamBInfo, setTeamBInfo] = useState({
+    name: matchData.teamB.name || "",
+    logo: matchData.teamB.logo || ""
+  });
+  const [matchInfo, setMatchInfo] = useState({
+    startTime: "19:30",
+    location: "SÂN VẬN ĐỘNG QUỐC GIA"
+  });
+
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
 
@@ -348,14 +362,15 @@ const MatchManagementSection = () => {
       </div>
 
       {/* Phần nhập tên đội A và đội B cho mobile */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 border border-blue-200">
+      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 border border-blue-200 space-y-3">
+        {/* Tên đội */}
         <div className="flex gap-2">
           <div className="flex-1 bg-white rounded-lg border border-gray-300 shadow-sm">
             <input
               type="text"
               placeholder="Tên đội A"
-              value={matchData.teamA.name}
-              onChange={(e) => updateScore("teamA", 0, { name: e.target.value })}
+              value={teamAInfo.name}
+              onChange={(e) => setTeamAInfo(prev => ({ ...prev, name: e.target.value }))}
               className="w-full px-2 py-1.5 text-sm font-medium text-center text-red-600 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-red-300 rounded-lg"
               maxLength={20}
             />
@@ -367,12 +382,102 @@ const MatchManagementSection = () => {
             <input
               type="text"
               placeholder="Tên đội B"
-              value={matchData.teamB.name}
-              onChange={(e) => updateScore("teamB", 0, { name: e.target.value })}
+              value={teamBInfo.name}
+              onChange={(e) => setTeamBInfo(prev => ({ ...prev, name: e.target.value }))}
               className="w-full px-2 py-1.5 text-sm font-medium text-center text-gray-800 bg-transparent border-0 focus:outline-none focus:ring-1 focus:ring-gray-300 rounded-lg"
               maxLength={20}
             />
           </div>
+        </div>
+
+        {/* Logo đội */}
+        <div className="flex gap-2">
+          <div className="flex-1">
+            <label className="block text-xs text-red-600 font-medium mb-1">Logo Đội A</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = (event) => {
+                    setTeamAInfo(prev => ({ ...prev, logo: event.target.result }));
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-red-500 focus:outline-none"
+            />
+          </div>
+          <div className="flex-1">
+            <label className="block text-xs text-gray-800 font-medium mb-1">Logo Đội B</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = (event) => {
+                    setTeamBInfo(prev => ({ ...prev, logo: event.target.result }));
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 focus:outline-none"
+            />
+          </div>
+        </div>
+
+        {/* Giờ bắt đầu và địa điểm */}
+        <div className="flex gap-2">
+          <div className="flex-1">
+            <label className="block text-xs text-blue-600 font-medium mb-1">Giờ bắt đầu</label>
+            <input
+              type="time"
+              value={matchInfo.startTime}
+              onChange={(e) => setMatchInfo(prev => ({ ...prev, startTime: e.target.value }))}
+              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
+            />
+          </div>
+          <div className="flex-1">
+            <label className="block text-xs text-blue-600 font-medium mb-1">Địa đi��m</label>
+            <input
+              type="text"
+              placeholder="Sân vận động..."
+              value={matchInfo.location}
+              onChange={(e) => setMatchInfo(prev => ({ ...prev, location: e.target.value }))}
+              className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
+              maxLength={50}
+            />
+          </div>
+        </div>
+
+        {/* Nút áp dụng */}
+        <div className="flex justify-center pt-2 border-t border-blue-200">
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => {
+              // Cập nhật thông tin đội A
+              updateScore("teamA", 0, {
+                name: teamAInfo.name,
+                logo: teamAInfo.logo || matchData.teamA.logo
+              });
+              // Cập nhật thông tin đội B
+              updateScore("teamB", 0, {
+                name: teamBInfo.name,
+                logo: teamBInfo.logo || matchData.teamB.logo
+              });
+              // Có thể thêm logic cập nhật giờ và địa điểm tại đây
+              console.log('Đã cập nhật thông tin trận đấu:', { teamAInfo, teamBInfo, matchInfo });
+            }}
+            className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+          >
+            <span className="mr-1">✅</span>
+            ÁP DỤNG
+          </Button>
         </div>
       </div>
 
@@ -643,7 +748,7 @@ const MatchManagementSection = () => {
         </div>
       )}
 
-      {/* Options - Các action buttons điều khiển */}
+      {/* Options - Các action buttons điều khi���n */}
       {selectedOption !== "chon-skin" && selectedOption !== "thong-so" && selectedOption !== "chon-poster" && (
         <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-2 sm:p-3 border border-indigo-200">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
@@ -686,7 +791,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">ĐẾM 0</span>
             </button>
 
-            {/* Đếm 25' */}
+            {/* ��ếm 25' */}
             <button
               onClick={() => setSelectedOption("dem-25")}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -724,6 +829,19 @@ const MatchManagementSection = () => {
             >
               {/* <span className="text-sm mr-1"></span> */}
               <span className="text-xs font-bold text-center">GIỚI THIỆU</span>
+            </button>
+
+            {/* Tỉ số trên */}
+            <button
+              onClick={() => {
+                updateView('scoreboard');
+                setSelectedOption("ti-so-tren");
+                console.log('Chuyển sang scoreboard trên');
+              }}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">📊</span>
+              <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
             </button>
 
             {/* Tỉ số dưới */}
