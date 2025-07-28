@@ -389,7 +389,7 @@ const MatchManagementSection = () => {
             title={audioEnabled ? "Tắt tất cả audio tĩnh" : "Bật tất cả audio tĩnh"}
           >
             <span className="mr-1">{audioEnabled ? "🔊" : "🔇"}</span>
-            <span className="hidden sm:inline">{audioEnabled ? "AUDIO" : "TẮTED"}</span>
+            <span className="hidden sm:inline">{audioEnabled ? "AUDIO" : "OFF"}</span>
             <span className="sm:hidden">{audioEnabled ? "ON" : "OFF"}</span>
           </Button>
 
@@ -718,7 +718,7 @@ const MatchManagementSection = () => {
                 onUpdate={(team, value) => updatePossession(team, value)}
               />
 
-              {/* Tổng số cú sút */}
+              {/* Tổng số cú s��t */}
               <EditableStatBar
                 label="Tổng số cú sút"
                 statKey="totalShots"
