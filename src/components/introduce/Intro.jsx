@@ -42,6 +42,11 @@ const Intro = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    // Tự động phát audio poster.mp3 khi component mount
+    useEffect(() => {
+        playAudio('poster', 'intro');
+    }, [playAudio]);
+
     // Dữ liệu đã được tự động cập nhật thông qua MatchContext
 
     // Responsive calculations
