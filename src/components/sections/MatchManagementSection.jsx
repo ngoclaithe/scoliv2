@@ -495,13 +495,11 @@ const MatchManagementSection = () => {
               // Cập nhật tên đội
               updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
 
-              // Cập nhật logo đội nếu có
-              if (teamAInfo.logo || teamBInfo.logo) {
-                updateTeamLogos(
-                  teamAInfo.logo || matchData.teamA.logo,
-                  teamBInfo.logo || matchData.teamB.logo
-                );
-              }
+              // Luôn cập nhật logo đội (kể cả logo mặc định hoặc logo mới)
+              updateTeamLogos(
+                teamAInfo.logo || matchData.teamA.logo || "",
+                teamBInfo.logo || matchData.teamB.logo || ""
+              );
 
               // Cập nhật thông tin trận đấu (thời gian, địa điểm)
               updateMatchInfo({
@@ -511,7 +509,13 @@ const MatchManagementSection = () => {
                 time: matchInfo.startTime // Giữ key là time cho emit
               });
 
-              console.log('Đã cập nhật thông tin trận đấu:', { teamAInfo, teamBInfo, matchInfo });
+              console.log('Đã cập nhật thông tin trận đấu:', {
+                teamAInfo,
+                teamBInfo,
+                matchInfo,
+                logoA: teamAInfo.logo || matchData.teamA.logo,
+                logoB: teamBInfo.logo || matchData.teamB.logo
+              });
               toast.success('✅ Đã cập nhật thông tin trận đấu thành công!');
             }}
             className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -932,7 +936,7 @@ const MatchManagementSection = () => {
                   if (quickCustomTime) {
                     // Format thời gian (phút:giây)
                     const timeString = `${quickCustomTime.toString().padStart(2, '0')}:00`;
-                    // Set thời gian và bắt đầu đếm tiến
+                    // Set th��i gian và bắt đầu đếm tiến
                     updateMatchTime(timeString, "Hiệp 1", "live");
                     // Chuyển sang tỉ số trên
                     updateView('scoreboard');
