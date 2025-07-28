@@ -295,16 +295,10 @@ export const AudioProvider = ({ children }) => {
     try {
       const reader = new FileReader();
       reader.onload = () => {
-        const base64Audio = reader.result.split(',')[1];
-
-        socketService.emit('commentary_audio', {
-          accessCode,
-          audioData: base64Audio,
-          timestamp: Date.now(),
-          mimeType: 'audio/webm;codecs=opus'
-        });
+        const buffer = reader.result;
+        socketService.emit('voice-chunk', buffer);
       };
-      reader.readAsDataURL(state.recordedAudio);
+      reader.readAsArrayBuffer(state.recordedAudio);
     } catch (error) {
       console.error('Error sending recorded audio:', error);
     }
