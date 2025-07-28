@@ -475,59 +475,59 @@ const MatchManagementSection = () => {
             </div>
           </div>
 
-        {/* Logo đội */}
-        <div className="flex gap-2">
-          <div className="flex-1">
-            <label className="block text-xs text-red-600 font-medium mb-1">Logo Đội A</label>
-            <div className="flex items-center gap-1">
-              <input
-                type="text"
-                placeholder="Nhập code logo..."
-                value={logoCodeA}
-                onChange={(e) => setLogoCodeA(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearchLogoA()}
-                className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:border-red-500 text-center bg-white"
-              />
-              <button
-                onClick={handleSearchLogoA}
-                disabled={!logoCodeA.trim() || isSearchingLogoA}
-                className="ml-1 px-2 py-1 text-xs border border-red-500 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSearchingLogoA ? '⏳' : '🔍'}
-              </button>
-              {teamAInfo.logo && (
-                <div className="w-6 h-6 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
-                  <img src={teamAInfo.logo} alt="Logo A" className="w-full h-full object-contain" />
-                </div>
-              )}
+          {/* Logo đội */}
+          <div className="flex gap-2">
+            <div className="flex-1">
+              <label className="block text-xs text-red-600 font-medium mb-1">Logo Đội A</label>
+              <div className="flex items-center gap-1">
+                <input
+                  type="text"
+                  placeholder="Code..."
+                  value={logoCodeA}
+                  onChange={(e) => setLogoCodeA(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSearchLogoA()}
+                  className="w-12 px-1 py-1 text-xs border border-gray-300 rounded focus:border-red-500 text-center bg-white"
+                />
+                <button
+                  onClick={handleSearchLogoA}
+                  disabled={!logoCodeA.trim() || isSearchingLogoA}
+                  className="px-2 py-1 text-xs border border-red-500 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSearchingLogoA ? '⏳' : '🔍'}
+                </button>
+                {teamAInfo.logo && (
+                  <div className="w-6 h-6 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
+                    <img src={teamAInfo.logo} alt="Logo A" className="w-full h-full object-contain" />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="flex-1">
+              <label className="block text-xs text-gray-800 font-medium mb-1">Logo Đội B</label>
+              <div className="flex items-center gap-1">
+                <input
+                  type="text"
+                  placeholder="Code..."
+                  value={logoCodeB}
+                  onChange={(e) => setLogoCodeB(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSearchLogoB()}
+                  className="w-12 px-1 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 text-center bg-white"
+                />
+                <button
+                  onClick={handleSearchLogoB}
+                  disabled={!logoCodeB.trim() || isSearchingLogoB}
+                  className="px-2 py-1 text-xs border border-gray-700 bg-gray-700 text-white rounded hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSearchingLogoB ? '⏳' : '🔍'}
+                </button>
+                {teamBInfo.logo && (
+                  <div className="w-6 h-6 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
+                    <img src={teamBInfo.logo} alt="Logo B" className="w-full h-full object-contain" />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-          <div className="flex-1">
-            <label className="block text-xs text-gray-800 font-medium mb-1">Logo Đội B</label>
-            <div className="flex items-center gap-1">
-              <input
-                type="text"
-                placeholder="Nhập code logo..."
-                value={logoCodeB}
-                onChange={(e) => setLogoCodeB(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearchLogoB()}
-                className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 text-center bg-white"
-              />
-              <button
-                onClick={handleSearchLogoB}
-                disabled={!logoCodeB.trim() || isSearchingLogoB}
-                className="ml-1 px-2 py-1 text-xs border border-gray-700 bg-gray-700 text-white rounded hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSearchingLogoB ? '⏳' : '🔍'}
-              </button>
-              {teamBInfo.logo && (
-                <div className="w-6 h-6 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
-                  <img src={teamBInfo.logo} alt="Logo B" className="w-full h-full object-contain" />
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
 
         {/* Ngày giờ bắt đầu và địa điểm */}
         <div className="flex gap-2">
