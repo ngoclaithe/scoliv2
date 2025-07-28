@@ -17,9 +17,11 @@ const AppRoutes = () => {
         {/* Authenticated routes */}
         <Route path="/" element={
           <AuthProvider>
-            <MatchProvider>
-              <App />
-            </MatchProvider>
+            <AudioProvider>
+              <MatchProvider>
+                <App />
+              </MatchProvider>
+            </AudioProvider>
           </AuthProvider>
         } />
 
