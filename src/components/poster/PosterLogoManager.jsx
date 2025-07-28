@@ -143,7 +143,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     reader.onload = async (e) => {
       const previewUrl = e.target.result;
       
-      // Cập nhật UI với preview ảnh
+      // Cập nh���t UI với preview ảnh
       setLogoItems(prev => prev.map(logo => 
         logo.id === item.id 
           ? { ...logo, 
@@ -631,23 +631,23 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
   const renderPosterSection = () => {
     return (
-      <div className="space-y-2">
+      <div className="space-y-1">
         <div className="flex items-center gap-1">
-          <span className="text-sm">🎨</span>
-          <h3 className="text-sm font-semibold text-gray-900">Poster</h3>
+          <span className="text-xs">🎨</span>
+          <h3 className="text-xs font-semibold text-gray-900">Poster</h3>
         </div>
-        
+
         {selectedPoster && (
-          <div className="bg-blue-50 border border-blue-200 rounded px-2 py-1">
+          <div className="bg-blue-50 border border-blue-200 rounded px-1 py-0.5">
             <p className="text-xs font-medium text-blue-800">
               ✅ {selectedPoster.name}
             </p>
           </div>
         )}
 
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+        <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
           {availablePosters.map((poster) => (
-            <div key={poster.id} className="flex-none w-32">
+            <div key={poster.id} className="flex-none w-24">
               <PosterCard
                 poster={poster}
                 isSelected={selectedPoster?.id === poster.id}
@@ -664,20 +664,20 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     const currentItems = allLogoItems.filter(item => item.category === activeLogoCategory);
 
     return (
-      <div className="space-y-2">
+      <div className="space-y-1">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
-            <span className="text-sm">🏷️</span>
-            <h3 className="text-sm font-semibold text-gray-900">Logo & Banner</h3>
+            <span className="text-xs">🏷️</span>
+            <h3 className="text-xs font-semibold text-gray-900">Logo & Banner</h3>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-1">
+        <div className="flex flex-wrap gap-0.5">
           {logoTypes.map((type) => (
             <button
               key={type.id}
               onClick={() => setActiveLogoCategory(type.id)}
-              className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+              className={`px-1 py-0.5 rounded text-xs font-medium transition-colors ${
                 activeLogoCategory === type.id
                   ? 'bg-blue-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -688,7 +688,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
           ))}
         </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+        <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
           {currentItems.map((item) => (
             <LogoItem
               key={item.id}
@@ -723,23 +723,23 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
           </div>
         </div>
 
-        <div className="border-t border-gray-200 pt-2 space-y-2">
+        <div className="border-t border-gray-200 pt-1 space-y-1">
           <div className="text-xs font-medium text-gray-700">Tùy chọn hiển thị:</div>
-          
-          <div className="flex gap-2">
+
+          <div className="flex gap-1">
             {[
               { value: 'round', label: 'Tròn', icon: '⭕' },
               { value: 'square', label: 'Vuông', icon: '⬜' },
               { value: 'hexagon', label: 'Lục giác', icon: '⬡' }
             ].map((shape) => (
-              <label key={shape.value} className="flex items-center gap-1 cursor-pointer">
+              <label key={shape.value} className="flex items-center gap-0.5 cursor-pointer">
                 <input
                   type="radio"
                   name="logoShape"
                   value={shape.value}
                   checked={logoDisplayOptions.shape === shape.value}
                   onChange={(e) => setLogoDisplayOptions(prev => ({ ...prev, shape: e.target.value }))}
-                  className="w-3 h-3"
+                  className="w-2 h-2"
                 />
                 <span className="text-xs">{shape.icon}</span>
                 <span className="text-xs">{shape.label}</span>
@@ -747,12 +747,12 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             ))}
           </div>
 
-          <label className="flex items-center gap-1 cursor-pointer">
+          <label className="flex items-center gap-0.5 cursor-pointer">
             <input
               type="checkbox"
               checked={logoDisplayOptions.rotateDisplay}
               onChange={(e) => setLogoDisplayOptions(prev => ({ ...prev, rotateDisplay: e.target.checked }))}
-              className="w-3 h-3"
+              className="w-2 h-2"
             />
             <span className="text-xs">🔄 Hiển thị luân phiên</span>
           </label>
@@ -762,8 +762,8 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between gap-2">
+    <div className="space-y-2">
+      <div className="flex items-center justify-between gap-1">
         <span className="text-xs font-medium text-gray-700">Copy poster trận trước:</span>
         <select className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white">
           <option value="">Chọn trận</option>
@@ -773,27 +773,27 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         </select>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-lg p-3">
+      <div className="bg-white border border-gray-200 rounded-lg p-2">
         {renderPosterSection()}
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-lg p-3">
+      <div className="bg-white border border-gray-200 rounded-lg p-2">
         {renderLogoSection()}
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pt-3 border-t border-gray-200">     
-        <div className="flex gap-2 w-full sm:w-auto">
-          <Button 
-            variant="outline" 
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pt-2 border-t border-gray-200">
+        <div className="flex gap-1 w-full sm:w-auto">
+          <Button
+            variant="outline"
             onClick={() => onClose?.()}
-            className="flex-1 sm:flex-none text-xs px-3 py-1"
+            className="flex-1 sm:flex-none text-xs px-2 py-1"
           >
             Hủy
           </Button>
-          <Button 
-            variant="primary" 
+          <Button
+            variant="primary"
             onClick={handleSave}
-            className="flex-1 sm:flex-none text-xs px-3 py-1"
+            className="flex-1 sm:flex-none text-xs px-2 py-1"
             disabled={!selectedPoster && allLogoItems.filter(item => item.displayPositions.length > 0).length === 0}
           >
             <span className="mr-1">💾</span>
