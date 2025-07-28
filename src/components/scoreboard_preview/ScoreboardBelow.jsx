@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { usePublicMatch } from '../../contexts/PublicMatchContext';
 
 const ScoreboardBelow = ({
   accessCode,
@@ -7,10 +8,19 @@ const ScoreboardBelow = ({
   onLogoUpdate,
   template = 1
 }) => {
-  // State cho scoreboard data
+  // Sử dụng PublicMatchContext để nhận dữ liệu real-time
+  const {
+    matchData,
+    displaySettings,
+    marqueeData,
+    penaltyData,
+    socketConnected
+  } = usePublicMatch();
+
+  // State cho scoreboard data (merge với context data)
   const [scoreboardData, setScoreboardData] = useState({
     team1: "ĐỘI A",
-    team2: "ĐỘI B", 
+    team2: "ĐỘI B",
     score1: 0,
     score2: 0,
     logo1: null,
@@ -28,6 +38,46 @@ const ScoreboardBelow = ({
     showPenaltyAnimation: false,
     lastPenaltyTeam: null
   });
+
+  // Cập nhật state khi nhận dữ liệu từ context
+  useEffect(() => {
+    if (matchData) {
+      setScoreboardData(prev => ({
+        ...prev,
+        team1: matchData.teamA?.name || prev.team1,
+        team2: matchData.teamB?.name || prev.team2,
+        score1: matchData.teamA?.score || 0,
+        score2: matchData.teamB?.score || 0,
+        logo1: matchData.teamA?.logo || prev.logo1,
+        logo2: matchData.teamB?.logo || prev.logo2,
+        timer: matchData.matchTime || prev.timer,
+        period: matchData.period || prev.period
+      }));
+    }
+  }, [matchData]);
+
+  // Cập nhật marquee data từ context
+  useEffect(() => {
+    if (marqueeData) {
+      setScoreboardData(prev => ({
+        ...prev,
+        showMarquee: marqueeData.mode !== 'none',
+        marqueeText: marqueeData.text || prev.marqueeText
+      }));
+    }
+  }, [marqueeData]);
+
+  // Cập nhật penalty data từ context
+  useEffect(() => {
+    if (penaltyData) {
+      setScoreboardData(prev => ({
+        ...prev,
+        penaltyMode: penaltyData.status !== 'ready',
+        penaltyScore1: penaltyData.teamAGoals || 0,
+        penaltyScore2: penaltyData.teamBGoals || 0
+      }));
+    }
+  }, [penaltyData]);
 
   const [scoreboardScale, setScoreboardScale] = useState(1);
   const [editMode, setEditMode] = useState(false);
