@@ -20,6 +20,9 @@ const ScoreboardBelow = ({
     socketConnected
   } = usePublicMatch();
 
+  // Sử dụng AudioContext để phát audio
+  const { playAudio, isComponentPlaying } = useAudio();
+
   // State cho scoreboard data (merge với context data)
   const [scoreboardData, setScoreboardData] = useState({
     team1: "ĐỘI A",
