@@ -69,10 +69,21 @@ const MatchManagementSection = () => {
     }));
   }, [matchData.teamA.name, matchData.teamA.logo, matchData.teamB.name, matchData.teamB.logo]);
   const [matchInfo, setMatchInfo] = useState({
-    startTime: "19:30",
-    location: "SÂN VẬN ĐỘNG QUỐC GIA",
-    matchDate: new Date().toISOString().split('T')[0]
+    startTime: matchData.startTime || "19:30",
+    location: matchData.stadium || "SÂN VẬN ĐỘNG QUỐC GIA",
+    matchDate: matchData.matchDate || new Date().toISOString().split('T')[0]
   });
+
+  // Sync match info khi matchData thay đổi
+  useEffect(() => {
+    if (matchData.startTime || matchData.stadium || matchData.matchDate) {
+      setMatchInfo(prev => ({
+        startTime: matchData.startTime || prev.startTime,
+        location: matchData.stadium || prev.location,
+        matchDate: matchData.matchDate || prev.matchDate
+      }));
+    }
+  }, [matchData.startTime, matchData.stadium, matchData.matchDate]);
 
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
@@ -468,7 +479,7 @@ const MatchManagementSection = () => {
         {/* Ngày giờ bắt đầu và địa điểm */}
         <div className="flex gap-2">
           <div className="flex-1">
-            <label className="block text-xs text-blue-600 font-medium mb-1">Ngày b���t đầu</label>
+            <label className="block text-xs text-blue-600 font-medium mb-1">Ngày bắt đầu</label>
             <input
               type="date"
               value={matchInfo.matchDate || new Date().toISOString().split('T')[0]}
