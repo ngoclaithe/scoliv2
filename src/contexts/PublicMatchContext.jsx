@@ -271,11 +271,8 @@ export const PublicMatchProvider = ({ children }) => {
     try {
       // Tránh khởi tạo socket trùng lặp
       if (currentAccessCode === accessCode && socketConnected) {
-        console.log(`Public socket already connected for: ${accessCode}`);
         return;
       }
-
-      console.log(`Initializing public socket for: ${accessCode}`);
 
       // Public route luôn sử dụng clientType 'display'
       await socketService.connect(accessCode, 'display');
