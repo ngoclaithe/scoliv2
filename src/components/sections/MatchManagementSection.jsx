@@ -892,7 +892,7 @@ const MatchManagementSection = () => {
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                console.log('🕰️ Đã áp d���ng: Timer sẽ đếm từ:', timeString);
+                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
                 console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 30:00!');
               }}
@@ -1158,7 +1158,7 @@ const MatchManagementSection = () => {
               console.log("🎨 [MatchManagementSection] Closing poster modal");
               setShowPosterModal(false);
             } else {
-              console.log("⚠️ [MatchManagementSection] No poster provided to onPosterUpdate");
+              console.log("⚠��� [MatchManagementSection] No poster provided to onPosterUpdate");
             }
           }}
           onLogoUpdate={(logoData) => console.log("Updated logo:", logoData)}
@@ -1237,7 +1237,7 @@ const MatchManagementSection = () => {
           </div>
 
           <div className="text-center text-sm text-yellow-700 mb-4">
-            ⏱��� Trận đấu sẽ bắt đầu từ: <strong>
+            ⏱️ Trận đấu sẽ bắt đầu từ: <strong>
               {(parseInt(customTime) || 0).toString().padStart(2, '0')}:
               {(parseInt(customSeconds) || 0).toString().padStart(2, '0')}
             </strong>
@@ -1255,9 +1255,12 @@ const MatchManagementSection = () => {
               variant="primary"
               className="px-6 py-2 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-sm rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
               onClick={() => {
-                if (customTime) {
+                const minutes = parseInt(customTime) || 0;
+                const seconds = parseInt(customSeconds) || 0;
+
+                if (minutes > 0 || seconds > 0) {
                   // Format thời gian (phút:giây)
-                  const timeString = `${customTime.toString().padStart(2, '0')}:00`;
+                  const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
                   // Set thời gian và bắt đầu đếm tiến từ server timer
                   updateMatchTime(timeString, "Hiệp 1", "live");
@@ -1269,7 +1272,9 @@ const MatchManagementSection = () => {
                   console.log('🕰️ Áp dụng thời gian tùy chỉnh từ modal - Timer sẽ đếm từ:', timeString);
                   console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
 
-                  toast.success(`⏰ Đã bắt đầu timer từ ${customTime}:00!`);
+                  toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
+                } else {
+                  toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
                 }
                 setShowTimerModal(false);
               }}
