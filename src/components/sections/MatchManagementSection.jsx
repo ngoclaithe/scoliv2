@@ -1030,17 +1030,39 @@ const MatchManagementSection = () => {
           {/* Đếm T - Input phút đơn giản */}
           <div className="mt-2 bg-white rounded-lg p-2 border border-teal-200">
             <div className="flex items-center gap-2">
-              <div className="flex-1">
-                <input
-                  type="number"
-                  min="0"
-                  max="120"
-                  value={quickCustomMinutes}
-                  onChange={(e) => setQuickCustomMinutes(e.target.value)}
-                  placeholder="25"
-                  className="w-full text-sm border border-gray-300 rounded px-2 py-1 focus:border-teal-500 focus:outline-none text-center font-bold h-8"
-                />
-              </div>
+              <button
+                onClick={() => {
+                  const currentValue = parseInt(quickCustomMinutes) || 0;
+                  if (currentValue > 0) {
+                    setQuickCustomMinutes((currentValue - 1).toString());
+                  }
+                }}
+                className="px-2 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded border text-sm font-bold"
+              >
+                -
+              </button>
+
+              <input
+                type="number"
+                min="0"
+                max="120"
+                value={quickCustomMinutes}
+                onChange={(e) => setQuickCustomMinutes(e.target.value)}
+                placeholder="25"
+                className="w-16 text-sm border border-gray-300 rounded px-2 py-1 focus:border-teal-500 focus:outline-none text-center font-bold h-8"
+              />
+
+              <button
+                onClick={() => {
+                  const currentValue = parseInt(quickCustomMinutes) || 0;
+                  if (currentValue < 120) {
+                    setQuickCustomMinutes((currentValue + 1).toString());
+                  }
+                }}
+                className="px-2 py-1 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded border text-sm font-bold"
+              >
+                +
+              </button>
 
               <span className="text-gray-400 text-sm font-bold">:</span>
 
@@ -1236,7 +1258,7 @@ const MatchManagementSection = () => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ bắt đầu chạy từ thời điểm này
+              Trận đ��u sẽ bắt đầu chạy từ thời điểm này
             </p>
           </div>
 
