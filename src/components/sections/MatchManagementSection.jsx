@@ -186,7 +186,6 @@ const MatchManagementSection = () => {
 
   // Hàm cập nhật thống kê
   const updateStat = (statKey, team, value) => {
-    console.log('updateStat - statKey:', statKey, 'team:', team, 'value:', value);
     const newStats = {
       ...matchStats,
       [statKey]: {
@@ -194,7 +193,6 @@ const MatchManagementSection = () => {
         [team]: Math.max(0, parseInt(value) || 0)
       }
     };
-    console.log('New stats:', JSON.stringify(newStats, null, 2));
     updateStats(newStats);
   };
 
@@ -1034,7 +1032,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">ĐẾM 45'</span>
             </button>
 
-            {/* Nghỉ giữa hiệp */}
+            {/* Nghỉ giữa hi��p */}
             <button
               onClick={() => {
                 console.log('Chuyển sang nghỉ giữa hiệp');
