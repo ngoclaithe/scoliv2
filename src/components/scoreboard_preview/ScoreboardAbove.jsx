@@ -127,7 +127,9 @@ const TopScoreboard = ({ template = 1, accessCode }) => {
     }
   };
 
-  const templateStyles = getTemplateStyles(template);
+  // Sử dụng template từ displaySettings context, fallback về prop
+  const currentTemplate = displaySettings?.selectedSkin || template;
+  const templateStyles = getTemplateStyles(currentTemplate);
 
   // Auto-adjust scale based on window size
   useEffect(() => {
