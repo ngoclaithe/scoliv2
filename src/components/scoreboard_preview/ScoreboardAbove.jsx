@@ -11,6 +11,9 @@ const TopScoreboard = ({ template = 1, accessCode }) => {
     socketConnected
   } = usePublicMatch();
 
+  // Sử dụng AudioContext để phát audio
+  const { playAudio, isComponentPlaying } = useAudio();
+
   // Sample data - sẽ được override bởi context data
   const [scoreboardData, setScoreboardData] = useState({
     team1: "HÀ NỘI FC",
