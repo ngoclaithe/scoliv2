@@ -52,6 +52,10 @@ const MatchManagementSection = () => {
   const [tickerColor, setTickerColor] = useState("#ffffff");
   const [tickerFontSize, setTickerFontSize] = useState(16);
 
+  // State cho hiển thị trạng thái ổn định
+  const [displayStatus, setDisplayStatus] = useState("TẠM DỪNG");
+  const [statusChangeTimeout, setStatusChangeTimeout] = useState(null);
+
   // State cho thông tin đội và trận đấu
   const [teamAInfo, setTeamAInfo] = useState({
     name: matchData.teamA.name || "",
@@ -531,7 +535,7 @@ const MatchManagementSection = () => {
             <label className="block text-xs text-blue-600 font-medium mb-1">Địa điểm</label>
             <input
               type="text"
-              placeholder="Sân vận động..."
+              placeholder="Sân v���n động..."
               value={matchInfo.location}
               onChange={(e) => setMatchInfo(prev => ({ ...prev, location: e.target.value }))}
               className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
@@ -1257,7 +1261,7 @@ const MatchManagementSection = () => {
                   setSelectedOption("ti-so-tren");
 
                   console.log('🕰️ Áp dụng thời gian tùy chỉnh từ modal - Timer sẽ đếm từ:', timeString);
-                  console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
+                  console.log('📡 Server s��� emit timer_tick events với displayTime format từ:', timeString);
 
                   toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                 } else {
