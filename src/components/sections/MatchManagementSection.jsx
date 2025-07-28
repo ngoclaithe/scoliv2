@@ -52,6 +52,10 @@ const MatchManagementSection = () => {
   const [tickerColor, setTickerColor] = useState("#ffffff");
   const [tickerFontSize, setTickerFontSize] = useState(16);
 
+  // State cho hiển thị trạng thái ổn định
+  const [displayStatus, setDisplayStatus] = useState("TẠM DỪNG");
+  const [statusChangeTimeout, setStatusChangeTimeout] = useState(null);
+
   // State cho thông tin đội và trận đấu
   const [teamAInfo, setTeamAInfo] = useState({
     name: matchData.teamA.name || "",
@@ -97,6 +101,34 @@ const MatchManagementSection = () => {
       // console.log('⏰ [MatchManagementSection] Requested timer sync on mount');
     }
   }, [socketConnected, requestTimerSync]);
+
+  // Quản lý hiển thị trạng thái với debounce để tránh nhảy liên tục
+  useEffect(() => {
+    // Clear timeout cũ nếu có
+    if (statusChangeTimeout) {
+      clearTimeout(statusChangeTimeout);
+    }
+
+    if (matchData.status === "live") {
+      // Nếu status là live, hiển thị ngay lập tức "ĐANG DIỄN RA"
+      setDisplayStatus("ĐANG DIỄN RA");
+    } else {
+      // Nếu status không phải live, đợi 500ms trước khi chuyển sang "TẠM DỪNG"
+      // để tránh hiển thị nhảy khi backend emit liên tục
+      const timeout = setTimeout(() => {
+        setDisplayStatus("TẠM DỪNG");
+      }, 500);
+
+      setStatusChangeTimeout(timeout);
+    }
+
+    // Cleanup timeout khi component unmount hoặc dependency thay đổi
+    return () => {
+      if (statusChangeTimeout) {
+        clearTimeout(statusChangeTimeout);
+      }
+    };
+  }, [matchData.status]); // Chỉ phụ thuộc vào matchData.status
 
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
@@ -325,7 +357,7 @@ const MatchManagementSection = () => {
               ⚽ THỜI GIAN TRẬN ĐẤU: {matchData.matchTime}
             </div>
             <div className="text-green-100 text-sm">
-              {matchData.period} • {matchData.status === "live" ? "ĐANG DIỄN RA" : "TẠM DỪNG"}
+              {matchData.period} • {displayStatus}
             </div>
           </div>
         </div>
