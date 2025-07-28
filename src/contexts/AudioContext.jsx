@@ -590,6 +590,12 @@ export const AudioProvider = ({ children }) => {
   // Cleanup khi unmount
   useEffect(() => {
     return () => {
+      // Cancel pending audio requests
+      if (pendingAudioRef.current) {
+        clearTimeout(pendingAudioRef.current);
+        pendingAudioRef.current = null;
+      }
+
       // Cleanup audio
       if (audioRef.current) {
         try {
@@ -615,6 +621,9 @@ export const AudioProvider = ({ children }) => {
       if (localStreamRef.current) {
         localStreamRef.current.getTracks().forEach(track => track.stop());
       }
+
+      // Reset tracking refs
+      lastAudioRequestRef.current = null;
     };
   }, []);
 
