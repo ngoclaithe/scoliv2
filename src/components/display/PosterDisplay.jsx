@@ -87,7 +87,7 @@ const PosterDisplay = () => {
   return (
     <div className="relative">
       {/* Connection status indicator */}
-      <div className="absolute top-4 right-4 z-50">
+      {/* <div className="absolute top-4 right-4 z-50">
         <div className={`px-3 py-1 rounded text-sm ${
           socketConnected ? 'bg-green-600' : 'bg-red-600'
         }`}>
@@ -99,7 +99,7 @@ const PosterDisplay = () => {
         <div className="text-xs text-gray-300">
           Last update: {new Date(lastUpdateTime).toLocaleTimeString()}
         </div>
-      </div>
+      </div> */}
 
       {/* Poster content */}
       {renderPoster()}

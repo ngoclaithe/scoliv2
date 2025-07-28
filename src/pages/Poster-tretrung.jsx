@@ -1,15 +1,27 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { usePublicMatch } from '../contexts/PublicMatchContext';
 
 const FootballMatchIntro = ({ accessCode }) => {
-  // Sử dụng PublicMatchContext
-  const {
-    matchData: contextMatchData,
-    marqueeData,
-    sponsors,
-    socketConnected,
-    lastUpdateTime
-  } = usePublicMatch();
+  // Mock data - replace with actual context later
+  const contextMatchData = {
+    teamA: { name: 'ĐỘI-A', logo: '/images/background-poster/default_logoA.png' },
+    teamB: { name: 'ĐỘI-B', logo: '/images/background-poster/default_logoB.png' },
+    stadium: 'SÂN VẬN ĐỘNG QUỐC GIA',
+    liveText: 'KÊNH THỂ THAO'
+  };
+
+  const marqueeData = {
+    mode: 'none',
+    text: '',
+    interval: 5
+  };
+
+  const sponsors = {
+    main: [],
+    secondary: [],
+    media: []
+  };
+
+  const socketConnected = false;
 
   // Transform context data to poster format
   const [matchData, setMatchData] = useState({
@@ -17,8 +29,8 @@ const FootballMatchIntro = ({ accessCode }) => {
     subTitle: 'VÒNG CHUNG KẾT',
     team1: contextMatchData.teamA.name || 'ĐỘI-A',
     team2: contextMatchData.teamB.name || 'ĐỘI-B',
-    logo1: contextMatchData.teamA.logo || '/api/placeholder/200/200',
-    logo2: contextMatchData.teamB.logo || '/api/placeholder/200/200',
+    logo1: contextMatchData.teamA.logo || '/images/background-poster/default_logoA.png',
+    logo2: contextMatchData.teamB.logo || '/images/background-poster/default_logoB.png',
     stadium: contextMatchData.stadium || 'SÂN VẬN ĐỘNG QUỐC GIA',
     liveText: contextMatchData.liveText || 'KÊNH THỂ THAO',
     time: '19:30',
@@ -40,7 +52,6 @@ const FootballMatchIntro = ({ accessCode }) => {
 
   // Refs
   const marqueeRef = useRef(null);
-  const socketRef = useRef(null);
   const starsContainerRef = useRef(null);
   const teamTextRef1 = useRef(null);
   const teamTextRef2 = useRef(null);
@@ -67,8 +78,7 @@ const FootballMatchIntro = ({ accessCode }) => {
     });
   }, [sponsors]);
 
-  // Socket connection is managed by MatchContext, no need for separate connection
-  // Just log the connection status
+  // Socket connection status
   useEffect(() => {
     console.log(`Poster-tretrung: Socket status: ${socketConnected ? 'Connected' : 'Disconnected'}`);
     console.log(`Access code: ${accessCode}`);
@@ -171,41 +181,52 @@ const FootballMatchIntro = ({ accessCode }) => {
     if (!hasAnyPartners) return null;
 
     return (
-      <div className="flex justify-between mx-8 mt-10 mb-5">
-        <div className="flex gap-8">
-          {partners.sponsor.length > 0 && (
+      <div className="grid grid-cols-3 gap-4 mx-8 mt-10 mb-5">
+        {/* Media - Left */}
+        <div className="flex justify-start">
+          {partners.media.length > 0 && (
             <div className="flex flex-col items-center">
-              <div className="text-white text-2xl font-bold mb-5">ĐƠN VỊ TÀI TRỢ</div>
-              <div className="flex flex-wrap gap-4">
-                {partners.sponsor.map((sponsor, idx) => (
-                  <img key={idx} src={`/logo/${sponsor.logo}.png`} alt="Sponsor" 
-                       className="w-20 h-20 rounded-full object-cover" />
-                ))}
+              <div className="text-white text-lg font-bold mb-3 uppercase tracking-wide opacity-80">
+                Truyền thông
               </div>
-            </div>
-          )}
-          
-          {partners.organizer.length > 0 && (
-            <div className="flex flex-col items-center">
-              <div className="text-white text-2xl font-bold mb-5">ĐƠN VỊ TỔ CHỨC</div>
-              <div className="flex flex-wrap gap-4">
-                {partners.organizer.map((org, idx) => (
-                  <img key={idx} src={`/logo/${org.logo}.png`} alt="Organizer" 
-                       className="w-20 h-20 rounded-full object-cover" />
+              <div className="flex flex-wrap gap-2 justify-center">
+                {partners.media.map((media, idx) => (
+                  <img key={idx} src={`/logo/${media.logo}.png`} alt="Media" 
+                       className="w-12 h-12 rounded-full object-cover bg-white p-1 shadow-lg" />
                 ))}
               </div>
             </div>
           )}
         </div>
         
-        <div className="flex gap-8">
-          {partners.media.length > 0 && (
+        {/* Organizer - Center */}
+        <div className="flex justify-center">
+          {partners.organizer.length > 0 && (
             <div className="flex flex-col items-center">
-              <div className="text-white text-2xl font-bold mb-5">TRUYỀN THÔNG</div>
-              <div className="flex flex-wrap gap-4">
-                {partners.media.map((media, idx) => (
-                  <img key={idx} src={`/logo/${media.logo}.png`} alt="Media" 
-                       className="w-20 h-20 rounded-full object-cover" />
+              <div className="text-white text-lg font-bold mb-3 uppercase tracking-wide opacity-80">
+                Tổ chức
+              </div>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {partners.organizer.map((org, idx) => (
+                  <img key={idx} src={`/logo/${org.logo}.png`} alt="Organizer" 
+                       className="w-12 h-12 rounded-full object-cover bg-white p-1 shadow-lg" />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {/* Sponsor - Right */}
+        <div className="flex justify-end">
+          {partners.sponsor.length > 0 && (
+            <div className="flex flex-col items-center">
+              <div className="text-white text-lg font-bold mb-3 uppercase tracking-wide opacity-80">
+                Tài trợ
+              </div>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {partners.sponsor.map((sponsor, idx) => (
+                  <img key={idx} src={`/logo/${sponsor.logo}.png`} alt="Sponsor" 
+                       className="w-12 h-12 rounded-full object-cover bg-white p-1 shadow-lg" />
                 ))}
               </div>
             </div>
@@ -219,40 +240,32 @@ const FootballMatchIntro = ({ accessCode }) => {
     <div className="fixed inset-0 bg-cover bg-center bg-no-repeat text-white overflow-hidden uppercase font-bold"
          style={{ backgroundImage: "url('/images/background-poster/bg1.jpg')" }}>
       
-      {/* Socket status indicator */}
-      <div className="absolute top-4 right-4 z-50">
-        <div className={`px-3 py-1 rounded text-sm ${
-          socketConnected ? 'bg-green-600' : 'bg-red-600'
-        }`}>
-          {socketConnected ? '🟢 Socket OK' : '🔴 Socket Offline'}
-        </div>
-        <div className="text-xs text-gray-300 mt-1">
-          Last update: {new Date(lastUpdateTime).toLocaleTimeString()}
-        </div>
-      </div>
-      
       {/* Stars container */}
       <div ref={starsContainerRef} className="fixed inset-0 pointer-events-none"></div>
       
-      {/* Main poster wrapper - điều chỉnh để giống HTML */}
+      {/* Main poster wrapper */}
       <div className="absolute inset-0 w-full h-full max-w-screen-2xl max-h-screen mx-auto"
            style={{ aspectRatio: '16/9' }}>
         
-        {/* Partners section */}
+        {/* Partners section - moved to top */}
         {renderPartners()}
         
-        {/* Match info section - điều chỉnh vị trí giống HTML */}
+        {/* Match info section */}
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full text-center"
              style={{ top: '48%' }}>
           
-          {/* Match title */}
+          {/* Match title with updated style */}
           <div className="mb-8" style={{ marginTop: '-70px', marginBottom: '30px' }}>
-            <h1 className="text-white font-bold mb-8 leading-tight"
-                style={{ 
-                  fontSize: '80px',
-                  textShadow: '4px 4px #727272',
-                  lineHeight: '1.2'
-                }}>
+            <h1 
+              className="font-bold mb-8 leading-tight"
+              style={{ 
+                color: '#fff',
+                fontSize: '80px',
+                lineHeight: '96px',
+                textAlign: 'center',
+                textShadow: '#727272 4px 4px 0px',
+                textTransform: 'uppercase'
+              }}>
               {matchData.matchTitle}
             </h1>
             {matchData.subTitle && (
@@ -266,14 +279,7 @@ const FootballMatchIntro = ({ accessCode }) => {
             )}
           </div>
           
-          {/* Divider - giống HTML */}
-          <div className="flex items-center justify-center my-5 h-6">
-            <div className="bg-white" style={{ width: '35%', height: '1%' }}></div>
-            <div className="w-4 h-4 bg-white rounded-full mx-2"></div>
-            <div className="bg-white" style={{ width: '35%', height: '1%' }}></div>
-          </div>
-          
-          {/* Teams section - điều chỉnh margin giống HTML */}
+          {/* Teams section */}
           <div className="flex justify-between items-start mx-auto"
                style={{ 
                  marginTop: '6%',
@@ -284,7 +290,7 @@ const FootballMatchIntro = ({ accessCode }) => {
             <div className="flex-1 flex flex-col items-center min-w-0">
               <img src={matchData.logo1} alt={matchData.team1} 
                    className="rounded-full bg-white object-cover mb-2"
-                   style={{ height: '70%', width: 'auto' }} />
+                   style={{ height: '180px', width: '180px' }} />
               <div ref={teamTextRef1}
                    className="text-white font-bold px-8 py-2 whitespace-nowrap w-fit"
                    style={{ 
@@ -296,10 +302,10 @@ const FootballMatchIntro = ({ accessCode }) => {
               </div>
             </div>
             
-            {/* VS section */}
+            {/* VS section with vs3.png */}
             <div className="flex-shrink-0 flex flex-col items-center justify-center">
-              <img src="/api/placeholder/200/200" alt="VS" 
-                   className="w-auto"
+              <img src="/images/background-poster/vs3.png" alt="VS" 
+                   className="w-auto object-contain"
                    style={{ height: '200px', marginTop: '55px' }} />
             </div>
             
@@ -307,7 +313,7 @@ const FootballMatchIntro = ({ accessCode }) => {
             <div className="flex-1 flex flex-col items-center min-w-0">
               <img src={matchData.logo2} alt={matchData.team2} 
                    className="rounded-full bg-white object-cover mb-2"
-                   style={{ height: '70%', width: 'auto' }} />
+                   style={{ height: '180px', width: '180px' }} />
               <div ref={teamTextRef2}
                    className="text-white font-bold px-8 py-2 whitespace-nowrap w-fit"
                    style={{ 
@@ -321,22 +327,34 @@ const FootballMatchIntro = ({ accessCode }) => {
           </div>
         </div>
         
-        {/* Time section - điều chỉnh vị trí giống HTML */}
+        {/* Time section with updated style */}
         <div className="absolute left-1/2 transform -translate-x-1/2 z-50"
              style={{ bottom: '120px' }}>
-          <div className="bg-gradient-to-r from-red-500 to-orange-500 border-6 border-white rounded-full text-white font-bold"
-               style={{
-                 fontSize: '50px',
-                 padding: '8px 40px 12px 40px',
-                 boxShadow: '0 4px 20px rgba(24, 119, 242, 0.11)',
-                 letterSpacing: '1px',
-                 textShadow: '1px 2px 3px rgba(14, 48, 108, 0.13)'
-               }}>
+          <div 
+            className="border-solid text-white font-bold flex items-center justify-center text-center uppercase"
+            style={{
+              alignItems: 'center',
+              backgroundImage: 'linear-gradient(to right, rgb(255, 49, 49), rgb(255, 145, 77))',
+              borderColor: '#fff',
+              borderRadius: '45px',
+              borderStyle: 'solid',
+              borderWidth: '5.33333px',
+              boxShadow: '#1877f21c 0px 4px 20px 0px',
+              color: '#fff',
+              display: 'flex',
+              fontSize: '50px',
+              justifyContent: 'center',
+              letterSpacing: '1px',
+              padding: '8px 40px 12px',
+              textAlign: 'center',
+              textShadow: '#0e306c22 1px 2px 3px',
+              textTransform: 'uppercase'
+            }}>
             {matchData.time} NGÀY {matchData.date}
           </div>
         </div>
         
-        {/* Info bar - giống HTML */}
+        {/* Info bar */}
         {matchData.stadium && (
           <div className="absolute bottom-0 left-0 w-full bg-transparent flex justify-center items-center py-1 z-10"
                style={{ gap: '300px', padding: '5px 0' }}>

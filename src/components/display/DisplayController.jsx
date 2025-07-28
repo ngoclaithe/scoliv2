@@ -123,7 +123,7 @@ const DisplayController = () => {
   return (
     <div className="relative min-h-screen bg-black">
       {/* Connection status indicator */}
-      <div className="absolute top-4 right-4 z-50">
+      {/* <div className="absolute top-4 right-4 z-50">
         <div className={`px-3 py-1 rounded-lg text-sm font-medium ${
           socketConnected 
             ? 'bg-green-600/80 text-white' 
@@ -140,7 +140,7 @@ const DisplayController = () => {
         <div className="text-xs text-gray-300 bg-black/50 px-2 py-1 rounded">
           Last: {new Date(lastUpdateTime).toLocaleTimeString()}
         </div>
-      </div>
+      </div> */}
 
       {/* Current view content */}
       <div className="w-full h-full">

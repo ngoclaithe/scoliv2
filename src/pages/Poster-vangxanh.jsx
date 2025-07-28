@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 export default function MatchIntroduction() {
   const [matchData, setMatchData] = useState({
@@ -8,17 +8,53 @@ export default function MatchIntroduction() {
     logo1: '/images/background-poster/default_logoA.png',
     logo2: '/images/background-poster/default_logoB.png',
     stadium: 'SVĐ THỐNG NHẤT',
-    roundedTime: '15:30',
-    currentDate: new Date().toLocaleDateString('vi-VN')
+    matchTime: '15:30',
+    matchDate: new Date().toLocaleDateString('vi-VN')
   });
 
-  const [partners, setPartners] = useState([]);
+  const [sponsors, setSponsors] = useState({
+    media: [], // Đơn vị truyền thông - trái
+    organizer: [], // Đơn vị tổ chức - giữa  
+    sponsor: [] // Đơn vị tài trợ - phải
+  });
+
   const [marquee, setMarquee] = useState({
     text: '',
     isRunning: false
   });
 
   const marqueeRef = useRef(null);
+  const starsRef = useRef([]);
+
+  // Create falling stars effect
+  useEffect(() => {
+    const createStar = () => {
+      const star = {
+        id: Math.random(),
+        x: Math.random() * 100,
+        y: -5,
+        size: Math.random() * 3 + 1,
+        speed: Math.random() * 2 + 1,
+        opacity: Math.random() * 0.8 + 0.2
+      };
+      return star;
+    };
+
+    const updateStars = () => {
+      starsRef.current = starsRef.current.map(star => ({
+        ...star,
+        y: star.y + star.speed
+      })).filter(star => star.y < 105);
+
+      // Add new stars randomly
+      if (Math.random() < 0.3) {
+        starsRef.current.push(createStar());
+      }
+    };
+
+    const animationInterval = setInterval(updateStars, 100);
+    return () => clearInterval(animationInterval);
+  }, []);
 
   // Font size adjustment function
   const adjustFontSize = (element) => {
@@ -32,7 +68,45 @@ export default function MatchIntroduction() {
     }
   };
 
-  const hasPartners = partners.length > 0;
+  // Star component
+  const FallingStar = ({ star }) => (
+    <div
+      key={star.id}
+      className="absolute text-yellow-300 pointer-events-none"
+      style={{
+        left: `${star.x}%`,
+        top: `${star.y}%`,
+        fontSize: `${star.size}px`,
+        opacity: star.opacity,
+        animation: `twinkle 2s ease-in-out infinite`
+      }}
+    >
+      ★
+    </div>
+  );
+
+  const renderSponsorSection = (sponsorList, title) => {
+    if (sponsorList.length === 0) return null;
+    
+    return (
+      <div className="flex flex-col items-center space-y-1 sm:space-y-2">
+        <h4 className="text-white text-xs sm:text-sm font-semibold uppercase tracking-wide opacity-80">
+          {title}
+        </h4>
+        <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
+          {sponsorList.map((item, index) => (
+            <div key={index} className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex justify-center items-center bg-white rounded-full p-1 shadow-lg">
+              <img
+                src={item.logo}
+                alt={item.name}
+                className="max-h-full max-w-full object-contain"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
@@ -43,42 +117,62 @@ export default function MatchIntroduction() {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('/images/background-poster/bg2.jpg')"
+            backgroundImage: "url('/images/background-poster/bg5.jpg')"
           }}
         >
           {/* Overlay */}
           <div className="absolute inset-0 bg-black bg-opacity-40"></div>
         </div>
 
+        {/* Falling Stars */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {starsRef.current.map(star => (
+            <FallingStar key={star.id} star={star} />
+          ))}
+        </div>
+
         {/* Content */}
         <div className="relative z-10 h-full flex flex-col justify-between p-3 sm:p-6">
           
-          {/* Top Section */}
+          {/* Top Sponsors Section */}
+          <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
+            {/* Đơn vị truyền thông - Trái */}
+            <div className="flex justify-start">
+              {renderSponsorSection(sponsors.media, "Truyền thông")}
+            </div>
+            
+            {/* Đơn vị tổ chức - Giữa */}
+            <div className="flex justify-center">
+              {renderSponsorSection(sponsors.organizer, "Tổ chức")}
+            </div>
+            
+            {/* Đơn vị tài trợ - Phải */}
+            <div className="flex justify-end">
+              {renderSponsorSection(sponsors.sponsor, "Tài trợ")}
+            </div>
+          </div>
+
+          {/* Main Content */}
           <div className="flex-1 flex flex-col justify-center">
             
             {/* Tournament Title */}
-            <div className="text-center mb-3 sm:mb-6">
+            <div className="text-center mb-4 sm:mb-8">
               <h1 
-                className="font-black uppercase text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl"
+                className="font-black uppercase"
                 style={{
-                  textShadow: '#0006 2px 2px 4px',
+                  color: '#3e90ff',
+                  fontSize: 'clamp(24px, 5vw, 80px)',
+                  textAlign: 'center',
+                  textShadow: '#fff -3px -3px 0px',
+                  textTransform: 'uppercase'
                 }}
               >
                 {matchData.matchTitle}
               </h1>
-              
-              {/* Divider */}
-              <div className="flex items-center justify-center mt-2 sm:mt-4">
-                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-400 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-orange-500 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-500 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
-              </div>
             </div>
 
             {/* Match Section */}
-            <div className="flex items-center justify-between w-full px-2 sm:px-8">
+            <div className="flex items-center justify-between w-full px-2 sm:px-8 mb-4 sm:mb-6">
               
               {/* Team 1 */}
               <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3">
@@ -104,21 +198,10 @@ export default function MatchIntroduction() {
               <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-4 max-w-xs">
                 <div className="relative flex flex-col items-center">
                   <img
-                    src="/images/background-poster/vs2.png"
+                    src="/images/background-poster/vs5.png"
                     alt="VS"
                     className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain animate-pulse"
                   />
-                </div>
-                
-                <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  <div className="flex items-center space-x-2 sm:space-x-3">
-                    <div className="bg-red-600 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-xs sm:text-sm font-bold animate-pulse shadow-lg text-white">
-                      LIVE
-                    </div>
-                  </div>
-                  <div className="text-xs sm:text-sm font-semibold bg-black/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center">
-                    {matchData.roundedTime} - {matchData.currentDate}
-                  </div>
                 </div>
               </div>
 
@@ -143,38 +226,36 @@ export default function MatchIntroduction() {
               </div>
             </div>
 
-            {/* Stadium */}
-            {matchData.stadium && (
-              <div className="text-center mt-3 sm:mt-4">
-                <div className="inline-block bg-black/50 backdrop-blur-sm px-3 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl border border-white/30">
-                  <span className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-white">
-                    📍 {matchData.stadium}
-                  </span>
-                </div>
+            {/* Date, Time, Stadium Info */}
+            <div className="flex justify-center">
+              <div
+                className="flex items-center justify-center rounded-3xl border-solid shadow-lg text-center uppercase font-bold tracking-wider"
+                style={{
+                  alignItems: 'center',
+                  backgroundColor: '#3e90ff',
+                  borderColor: '#fff',
+                  borderRadius: '25px',
+                  borderStyle: 'solid',
+                  borderWidth: '5.33333px',
+                  boxShadow: '#1877f21c 0px 4px 20px 0px',
+                  color: '#fff',
+                  display: 'flex',
+                  fontSize: 'clamp(12px, 3vw, 60px)',
+                  justifyContent: 'center',
+                  letterSpacing: '1px',
+                  padding: '8px 20px 12px',
+                  textAlign: 'center',
+                  textShadow: '#0e306c22 1px 2px 3px',
+                  textTransform: 'uppercase'
+                }}
+              >
+                <span className="mx-2">📅 {matchData.matchDate}</span>
+                <span className="mx-2">•</span>
+                <span className="mx-2">⏰ {matchData.matchTime}</span>
+                <span className="mx-2">•</span>
+                <span className="mx-2">📍 {matchData.stadium}</span>
               </div>
-            )}
-
-            {/* Partners - Hidden by default, will show when socket updates */}
-            {hasPartners && (
-              <div className="text-center mt-3 sm:mt-4">
-                <h3 className="text-yellow-400 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3 uppercase tracking-wide">
-                  🤝 Đơn vị đồng hành
-                </h3>
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-2xl p-2 sm:p-4 border border-white/30 mx-4 sm:mx-8">
-                  <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
-                    {partners.map((partner, index) => (
-                      <div key={index} className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 flex justify-center items-center bg-white rounded-full p-1 shadow-lg">
-                        <img
-                          src={partner.logo}
-                          alt={partner.name}
-                          className="max-h-full max-w-full object-contain rounded-full"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
+            </div>
           </div>
         </div>
 
@@ -199,6 +280,11 @@ export default function MatchIntroduction() {
           @keyframes marquee {
             0% { transform: translateX(100%) translateY(-50%); }
             100% { transform: translateX(-100%) translateY(-50%); }
+          }
+          
+          @keyframes twinkle {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
           }
         `}</style>
       </div>
