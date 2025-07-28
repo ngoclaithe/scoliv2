@@ -23,7 +23,6 @@ const DisplayController = () => {
     initializeSocket,
     displaySettings,
     socketConnected,
-    lastUpdateTime,
     currentView // Thêm state để điều khiển view hiện tại
   } = usePublicMatch();
 
@@ -36,6 +35,7 @@ const DisplayController = () => {
   // Khởi tạo kết nối socket và thiết lập audio listeners
   useEffect(() => {
     let isCleanedUp = false;
+    let audioListenerRegistered = false;
 
     const initializeDisplay = async () => {
       try {
@@ -74,19 +74,25 @@ const DisplayController = () => {
       }
     };
 
-    if (accessCode) {
+    if (accessCode && !isCleanedUp) {
       initializeDisplay();
 
-      // Setup audio listener với cleanup
-      socketService.on('component_audio_triggered', handleAudioTriggered);
+      // Setup audio listener với cleanup và tránh duplicate registration
+      if (!audioListenerRegistered) {
+        socketService.on('component_audio_triggered', handleAudioTriggered);
+        audioListenerRegistered = true;
+      }
     }
 
     // Cleanup function
     return () => {
       isCleanedUp = true;
-      socketService.off('component_audio_triggered', handleAudioTriggered);
+      if (audioListenerRegistered) {
+        socketService.off('component_audio_triggered', handleAudioTriggered);
+        audioListenerRegistered = false;
+      }
     };
-  }, [accessCode, initializeSocket, playAudio]);
+  }, [accessCode]); // Chỉ dependency accessCode
 
   // Render loading state
   if (!isInitialized) {
