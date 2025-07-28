@@ -18,10 +18,12 @@ export default function TreTrungMatchIntro() {
   };
 
   const [partners, setPartners] = useState([]);
-  const [marquee, setMarquee] = useState({
-    text: '',
-    isRunning: false
-  });
+
+  // Sử dụng marquee data từ context
+  const marquee = {
+    text: marqueeData.text || '',
+    isRunning: marqueeData.mode !== 'none'
+  };
 
   const marqueeRef = useRef(null);
 
