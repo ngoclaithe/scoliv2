@@ -117,7 +117,7 @@ export const MatchProvider = ({ children }) => {
     };
   }, [matchCode, isAuthenticated]);
 
-  // Hàm helper để chuyển đổi thời gian
+  // Hàm helper để chuy���n đổi thời gian
   const parseTimeToSeconds = (timeString) => {
     if (!timeString || typeof timeString !== 'string') return 0;
     const [minutes, seconds] = timeString.split(':').map(Number);
@@ -291,12 +291,22 @@ export const MatchProvider = ({ children }) => {
 
     // Lắng nghe timer real-time updates từ server
     socketService.on('timer_tick', (data) => {
-      setMatchData(prev => ({
-        ...prev,
-        matchTime: data.displayTime || data.currentTime,
-        status: prev.status === 'paused' ? 'paused' : 'live', // Duy trì status live khi timer đang chạy
-        serverTimestamp: data.timestamp || data.serverTimestamp
-      }));
+      setMatchData(prev => {
+        const newTime = data.displayTime || data.currentTime;
+        const newStatus = prev.status === 'paused' ? 'paused' : 'live';
+
+        // Chỉ cập nhật nếu có thay đổi thực sự
+        if (prev.matchTime === newTime && prev.status === newStatus) {
+          return prev;
+        }
+
+        return {
+          ...prev,
+          matchTime: newTime,
+          status: newStatus,
+          serverTimestamp: data.timestamp || data.serverTimestamp
+        };
+      });
     });
 
     // Lắng nghe timer start từ server
