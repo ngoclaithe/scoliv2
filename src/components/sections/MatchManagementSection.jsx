@@ -379,6 +379,26 @@ const MatchManagementSection = () => {
 
         {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
         <div className="flex justify-center items-center mt-2 space-x-2">
+          {/* Audio Toggle Button */}
+          <Button
+            variant="primary"
+            size="sm"
+            className={`px-2 py-1 ${
+              audioEnabled
+                ? "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
+                : "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700"
+            } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
+            onClick={() => {
+              toggleAudioEnabled();
+              toast.info(audioEnabled ? '🔇 Đã tắt audio' : '🔊 Đã bật audio');
+            }}
+            title={audioEnabled ? "Tắt audio" : "Bật audio"}
+          >
+            <span className="mr-1">{audioEnabled ? "🔊" : "🔇"}</span>
+            <span className="hidden sm:inline">{audioEnabled ? "AUDIO" : "TẮTED"}</span>
+            <span className="sm:hidden">{audioEnabled ? "ON" : "OFF"}</span>
+          </Button>
+
           <Button
             variant="primary"
             size="sm"
