@@ -522,14 +522,14 @@ export const MatchProvider = ({ children }) => {
     if (socketConnected) {
       // Sử dụng server timer events thay vì match_time_update
       if (status === "live") {
-        socketService.startServerTimer(matchTime, period);
-        console.log('▶️ [MatchContext] Started server timer:', { matchTime, period });
+        socketService.startServerTimer(matchTime, period, "live");
+        console.log('▶️ [MatchContext] Started server timer:', { matchTime, period, status: "live" });
       } else if (status === "paused") {
         socketService.pauseServerTimer();
         console.log('⏸️ [MatchContext] Paused server timer');
       } else if (status === "waiting") {
-        socketService.resetServerTimer(matchTime, period);
-        console.log('🔄 [MatchContext] Reset server timer:', { matchTime, period });
+        socketService.resetServerTimer(matchTime, period, "waiting");
+        console.log('🔄 [MatchContext] Reset server timer:', { matchTime, period, status: "waiting" });
       }
     }
   }, [socketConnected]);

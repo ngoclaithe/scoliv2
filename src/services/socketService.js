@@ -247,10 +247,11 @@ class SocketService {
   }
 
   // Start timer từ server
-  startServerTimer(startTime, period) {
+  startServerTimer(startTime, period, status = "live") {
     return this.emit('timer_start', {
       startTime,
       period,
+      status,
       serverTimestamp: Date.now()
     });
   }
@@ -270,10 +271,11 @@ class SocketService {
   }
 
   // Reset timer từ server
-  resetServerTimer(resetTime = "00:00", period = "Hiệp 1") {
+  resetServerTimer(resetTime = "00:00", period = "Hiệp 1", status = "waiting") {
     return this.emit('timer_reset', {
       resetTime,
       period,
+      status,
       serverTimestamp: Date.now()
     });
   }
