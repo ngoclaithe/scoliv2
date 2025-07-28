@@ -845,7 +845,8 @@ const MatchManagementSection = () => {
             {/* Đếm 0 */}
             <button
               onClick={() => {
-                // Set thời gian về 0 và b���t đầu đếm tiến
+                const timeString = "00:00";
+                // Set thời gian về 0 và bắt đầu đếm tiến từ server timer
                 updateMatchTime("00:00", "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
