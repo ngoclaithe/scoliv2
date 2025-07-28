@@ -530,6 +530,15 @@ export const MatchProvider = ({ children }) => {
     disconnectSocket
   };
 
+  // Cleanup timer khi component unmount
+  useEffect(() => {
+    return () => {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+    };
+  }, [timerInterval]);
+
   return (
     <MatchContext.Provider value={value}>
       {children}
