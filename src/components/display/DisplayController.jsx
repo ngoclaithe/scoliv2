@@ -94,15 +94,6 @@ const DisplayController = () => {
 
   // Hàm render component theo currentView từ context
   const renderCurrentView = () => {
-    console.log('🎯 [DisplayController] renderCurrentView called:', {
-      currentView,
-      displaySettings,
-      selectedPoster: displaySettings.selectedPoster,
-      posterType: displaySettings.selectedPoster?.id || displaySettings.selectedPoster,
-      accessCode,
-      lastUpdateTime: new Date(lastUpdateTime).toLocaleTimeString()
-    });
-
     switch (currentView) {
       case 'intro':
         console.log('🚀 [DisplayController] Rendering Intro view');
@@ -119,26 +110,25 @@ const DisplayController = () => {
       case 'poster':
         // Render poster theo selectedPoster với id mapping
         const posterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;
-        console.log('🎨 [DisplayController] Rendering POSTER view, posterType:', posterType);
 
         switch (posterType) {
           case 'haoquang':
-            console.log('✅ [DisplayController] Loading PosterHaoQuang');
+            // console.log('✅ [DisplayController] Loading PosterHaoQuang');
             return <PosterHaoQuang accessCode={accessCode} />;
           case 'tretrung':
-            console.log('✅ [DisplayController] Loading PosterTreTrung');
+            // console.log('✅ [DisplayController] Loading PosterTreTrung');
             return <PosterTreTrung accessCode={accessCode} />;
           case 'doden':
-            console.log('✅ [DisplayController] Loading PosterDoDen');
+            // console.log('✅ [DisplayController] Loading PosterDoDen');
             return <PosterDoDen accessCode={accessCode} />;
           case 'vangkim':
-            console.log('✅ [DisplayController] Loading PosterVangKim');
+            // console.log('✅ [DisplayController] Loading PosterVangKim');
             return <PosterVangKim accessCode={accessCode} />;
           case 'vangxanh':
-            console.log('✅ [DisplayController] Loading PosterVangXanh');
+            // console.log('✅ [DisplayController] Loading PosterVangXanh');
             return <PosterVangXanh accessCode={accessCode} />;
           case 'xanhduong':
-            console.log('✅ [DisplayController] Loading PosterXanhDuong');
+            // console.log('✅ [DisplayController] Loading PosterXanhDuong');
             return <PosterXanhDuong accessCode={accessCode} />;
           default:
             console.log('⚠️ [DisplayController] Unknown poster type, defaulting to PosterHaoQuang');
@@ -147,7 +137,6 @@ const DisplayController = () => {
       default:
         // Mặc định hiển thị poster với id mapping
         const defaultPosterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;
-        console.log('🎨 [DisplayController] Rendering DEFAULT view (poster), posterType:', defaultPosterType);
 
         switch (defaultPosterType) {
           case 'haoquang':
