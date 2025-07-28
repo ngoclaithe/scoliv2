@@ -895,7 +895,8 @@ const MatchManagementSection = () => {
             if (poster) {
               updatePoster(poster.id || poster.name);
               updateView('poster');
-              setSelectedOption("poster");
+              setSelectedOption("chon-poster");
+              setShowPosterModal(false);
             }
           }}
           onLogoUpdate={(logoData) => console.log("Updated logo:", logoData)}
