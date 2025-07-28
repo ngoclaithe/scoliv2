@@ -279,17 +279,20 @@ const MatchManagementSection = () => {
           <Button
             variant="primary"
             size="sm"
-            className="px-2 py-1 bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+            className={`px-2 py-1 ${
+              matchData.status === "paused"
+                ? "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+                : "bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700"
+            } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
-              console.log('Tạm dừng được chọn');
-              console.log('Current selectedOption before:', selectedOption);
-              setSelectedOption("tam-dung");
-              console.log('Current selectedOption after:', "tam-dung");
+              const newStatus = matchData.status === "paused" ? "live" : "paused";
+              updateMatchTime(matchData.matchTime, matchData.period, newStatus);
+              console.log('Timer status changed to:', newStatus);
             }}
           >
-            <span className="mr-1">⏸️</span>
-            <span className="hidden sm:inline">TẠM DỪNG</span>
-            <span className="sm:hidden">D���NG</span>
+            <span className="mr-1">{matchData.status === "paused" ? "▶️" : "⏸️"}</span>
+            <span className="hidden sm:inline">{matchData.status === "paused" ? "TIẾP TỤC" : "TẠM DỪNG"}</span>
+            <span className="sm:hidden">{matchData.status === "paused" ? "TIẾP" : "DỪNG"}</span>
           </Button>
 
           <Button
