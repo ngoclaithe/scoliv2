@@ -196,6 +196,20 @@ export default function TreTrungMatchIntro() {
               </div>
             )}
           </div>
+
+          {/* Audio Test Button - chỉ để debug */}
+          <div className="absolute top-4 right-4 z-20">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                console.log('🎵 Manual audio test...');
+                audioUtils.playAudio('poster');
+              }}
+              className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-lg text-sm font-medium shadow-lg opacity-80 hover:opacity-100 transition-all"
+            >
+              🔊 Test Audio
+            </button>
+          </div>
         </div>
 
         {/* Marquee - Hidden by default, will show when socket updates */}
