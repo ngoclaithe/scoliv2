@@ -277,6 +277,12 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
+    // Lắng nghe cập nhật logo và banner
+    socketService.on('logo_data_updated', (data) => {
+      setLogoData(prev => ({ ...prev, ...data.logoData }));
+      setLastUpdateTime(Date.now());
+    });
+
     // Lắng nghe cập nhật view hiện tại (MỚI) - KHÔNG update time để tránh re-render
     socketService.on('view_updated', (data) => {
       setCurrentView(data.viewType);
