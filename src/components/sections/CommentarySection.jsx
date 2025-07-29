@@ -135,13 +135,17 @@ const CommentarySection = () => {
         const uint8Array = new Uint8Array(arrayBuffer);
 
         if (socketService.socket && socketService.socket.connected) {
-          // Gửi voice data qua socket
-          socketService.socket.emit('referee_voice', {
-            audioData: Array.from(uint8Array),
-            mimeType: 'audio/ogg; codecs=opus',
-            timestamp: Date.now()
-          });
-          resolve();
+          // Gửi voice data qua socketService
+          const success = socketService.sendRefereeVoice(
+            Array.from(uint8Array),
+            'audio/ogg; codecs=opus'
+          );
+
+          if (success) {
+            resolve();
+          } else {
+            reject(new Error('Failed to send voice through socket service'));
+          }
         } else {
           reject(new Error('Socket not connected'));
         }
