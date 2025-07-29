@@ -522,6 +522,9 @@ export const AudioProvider = ({ children }) => {
         if (socketService.socket) {
           console.log('📡 [AudioContext] Socket exists, registering listeners...');
 
+          // Setup debug listeners trước
+          setupGlobalDebugListeners();
+
           // Đăng ký TẤT CẢ possible event names
           socketService.on('audio_control', handleAudioControl);
           socketService.on('audio_control_broadcast', handleAudioControl);
