@@ -23,8 +23,6 @@ const DisplayController = () => {
     currentView
   } = usePublicMatch();
 
-  const { playRefereeVoice } = useAudio();
-
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
 
