@@ -5,7 +5,6 @@ import { Mic, MicOff } from "lucide-react";
 import socketService from "../../services/socketService";
 
 const CommentarySection = ({ isActive = true }) => {
-  const { matchData } = useMatch();
   // Remove dependency on AudioContext
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -237,7 +236,7 @@ const CommentarySection = ({ isActive = true }) => {
           <p className="text-red-600 font-medium animate-pulse">● Đang ghi âm...</p>
         )}
         {!isRecording && !isProcessing && (
-          <p className="text-gray-600">��n mic để bắt đầu bình luận</p>
+          <p className="text-gray-600">Ấn mic để bắt đầu bình luận</p>
         )}
         {!isSupported && (
           <p className="text-red-600">Trình duyệt không hỗ trợ ghi âm</p>
