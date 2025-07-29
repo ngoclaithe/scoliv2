@@ -384,14 +384,16 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
     return (
       <div className="bg-white rounded-lg border-2 border-green-400 p-2 shadow-lg relative w-48 flex-shrink-0">
-        {/* X button */}
-        <button
-          onClick={() => onRemove(item.id)}
-          className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 transition-colors flex items-center justify-center"
-          title="Xóa"
-        >
-          ×
-        </button>
+        {/* X button - ẩn cho logo mặc định */}
+        {!item.isDefault && (
+          <button
+            onClick={() => onRemove(item.id)}
+            className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 transition-colors flex items-center justify-center"
+            title="Xóa"
+          >
+            ×
+          </button>
+        )}
         
         <div className="text-center">
           <div className="text-xs font-bold text-green-600 mb-1">
