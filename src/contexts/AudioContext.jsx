@@ -445,6 +445,10 @@ export const AudioProvider = ({ children }) => {
     }
   };
 
+  // Tạo ref để track state hiện tại cho audio control listeners
+  const stateRef = useRef(state);
+  stateRef.current = state;
+
   // Lắng nghe thay đổi trạng thái audio từ server
   useEffect(() => {
     const handleAudioControl = (data) => {
