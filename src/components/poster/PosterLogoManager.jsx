@@ -174,7 +174,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       } catch (error) {
         console.error("Lỗi khi tải lên:", error);
         
-        // Cập nhật trạng thái lỗi
+        // C���p nhật trạng thái lỗi
         setLogoItems(prev => prev.map(logo => 
           logo.id === item.id 
             ? { ...logo, uploadStatus: 'error' }
@@ -241,36 +241,41 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   const LogoItem = React.memo(function LogoItem({ item, onUpdate, onRemove }) {
     const [localCode, setLocalCode] = useState(item.code);
     const [isSearching, setIsSearching] = useState(false);
-  
+
     const handleCodeChange = (e) => {
       const newCode = e.target.value.toUpperCase();
       setLocalCode(newCode);
+      // Không tự động tìm kiếm nữa, chỉ cập nhật state local
     };
-  
+
     // Chỉ tìm kiếm khi nhấn Enter
     const handleCodeKeyPress = async (e) => {
-      if (e.key === 'Enter' && localCode.length >= 3) {
+      if (e.key === 'Enter' && localCode.trim().length >= 3) {
+        e.preventDefault(); // Ngăn form submit
         try {
           setIsSearching(true);
-          const response = await LogoAPI.searchLogosByCode(localCode, true);
-          
+          console.log('🔍 [PosterLogoManager] Tìm kiếm logo với code:', localCode);
+          const response = await LogoAPI.searchLogosByCode(localCode.trim(), true);
+
           if (response?.data?.length > 0) {
             const foundLogo = response.data[0];
+            console.log('✅ [PosterLogoManager] Tìm thấy logo:', foundLogo);
             if (foundLogo.url_logo || foundLogo.file_path) {
               onUpdate(item.id, {
                 ...item,
-                code: localCode,
+                code: localCode.trim(),
                 url: foundLogo.url_logo || foundLogo.file_path,
                 unitName: foundLogo.name || item.unitName,
                 displayPositions: [...item.displayPositions]
               });
             } else {
               console.warn("Logo tìm thấy nhưng không có URL hợp lệ");
-              onUpdate(item.id, { ...item, code: localCode });
+              onUpdate(item.id, { ...item, code: localCode.trim() });
             }
           } else {
-            // Nếu không tìm thấy, vẫn cập nhật code
-            onUpdate(item.id, { ...item, code: localCode });
+            console.log('❌ [PosterLogoManager] Không tìm thấy logo với code:', localCode);
+            // Chỉ cập nhật code, không clear URL hiện tại
+            onUpdate(item.id, { ...item, code: localCode.trim() });
           }
         } catch (error) {
           console.error("Lỗi khi tìm kiếm logo:", error);
@@ -279,10 +284,12 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         }
       }
     };
-  
-    // Cập nhật code khi blur (rời khỏi input)
+
+    // Cập nhật code khi blur (rời khỏi input) - không tìm kiếm
     const handleCodeBlur = () => {
-      onUpdate(item.id, { ...item, code: localCode });
+      if (localCode.trim() !== item.code) {
+        onUpdate(item.id, { ...item, code: localCode.trim() });
+      }
     };
   
     const getShapeClass = () => {
