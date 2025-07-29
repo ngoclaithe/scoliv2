@@ -152,9 +152,10 @@ const CommentarySection = () => {
 
         if (socketService.socket && socketService.socket.connected) {
           // Gửi voice data qua socketService
+          const mimeType = mediaRecorderRef.current?.mimeType || getSupportedMimeType() || 'audio/webm';
           const success = socketService.sendRefereeVoice(
             Array.from(uint8Array),
-            'audio/ogg; codecs=opus'
+            mimeType
           );
 
           if (success) {
