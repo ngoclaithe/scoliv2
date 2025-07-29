@@ -180,7 +180,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeB}"`);
       }
     } catch (error) {
-      console.error('Lỗi t��m kiếm logo B:', error);
+      console.error('Lỗi tìm kiếm logo B:', error);
     } finally {
       setIsSearchingLogoB(false);
     }
@@ -587,7 +587,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Cập nhật tên đội
                 updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
 
-              // Luôn cập nh���t logo đội (kể cả logo mặc định hoặc logo mới)
+              // Luôn cập nhật logo đội (kể cả logo mặc định hoặc logo mới)
               updateTeamLogos(
                 teamAInfo.logo || matchData.teamA.logo || "",
                 teamBInfo.logo || matchData.teamB.logo || ""
@@ -909,8 +909,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                // console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
-                // console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
+                // Phát audio gialap cho đếm giờ
+                playAudioForAction('gialap');
                 toast.success('⏰ Đã bắt đầu timer từ 0:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -923,7 +923,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             <button
               onClick={() => {
                 const timeString = "25:00";
-                // Set thời gian về 25:00 và b��t đầu đếm tiến từ server timer
+                // Set thời gian về 25:00 và b��t đầu đếm ti��n từ server timer
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
@@ -1009,7 +1009,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               onClick={() => {
                 updateView('intro');
                 setSelectedOption("gioi-thieu");
-                console.log('Chuyển sang gi���i thiệu');
+                console.log('Chuyển sang giới thiệu');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
