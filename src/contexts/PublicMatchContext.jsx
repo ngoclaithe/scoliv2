@@ -88,6 +88,18 @@ export const PublicMatchProvider = ({ children }) => {
     media: []
   });
 
+  // State cho logo và banner
+  const [logoData, setLogoData] = useState({
+    sponsor: [],
+    organizer: [],
+    media: [],
+    tournament: [],
+    displayOptions: {
+      shape: "round",
+      rotateDisplay: false
+    }
+  });
+
   // State cho socket connection
   const [socketConnected, setSocketConnected] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
