@@ -207,11 +207,117 @@ const CommentarySection = ({ isActive = true }) => {
     });
   };
 
+  const startContinuousRecording = async () => {
+    if (!isSupported) {
+      alert('Trình duyệt không hỗ trợ ghi âm');
+      return;
+    }
+
+    const mimeType = getSupportedMimeType();
+    if (!mimeType) {
+      alert('Trình duyệt không hỗ trợ các codec audio cần thiết');
+      return;
+    }
+
+    try {
+      // Lấy stream một lần cho toàn bộ continuous session
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: 44100,
+          channelCount: 1,
+          autoGainControl: true
+        }
+      });
+
+      streamRef.current = stream;
+      setContinuousRecording(true);
+
+      // Bắt đầu chunk đầu tiên
+      await startNextContinuousChunk();
+
+      console.log('🎙️ Continuous recording started');
+    } catch (error) {
+      console.error('Lỗi khi bắt đầu ghi âm liên tục:', error);
+      alert('Không thể truy cập microphone. Vui lòng cho phép quyền truy cập.');
+    }
+  };
+
+  const startNextContinuousChunk = async () => {
+    if (!streamRef.current || !continuousRecording) return;
+
+    const mimeType = getSupportedMimeType();
+    const options = { mimeType };
+    if (mimeType.includes('opus') || mimeType.includes('webm')) {
+      options.audioBitsPerSecond = 64000;
+    }
+
+    const mediaRecorder = new MediaRecorder(streamRef.current, options);
+    mediaRecorderRef.current = mediaRecorder;
+    audioChunksRef.current = [];
+
+    mediaRecorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        audioChunksRef.current.push(event.data);
+      }
+    };
+
+    mediaRecorder.onstop = () => {
+      if (!isContinuousMode) {
+        // Chỉ stop stream trong normal mode
+        if (streamRef.current) {
+          streamRef.current.getTracks().forEach(track => track.stop());
+          streamRef.current = null;
+        }
+      }
+      processRecording();
+    };
+
+    mediaRecorder.start(100);
+    setIsRecording(true);
+
+    // Tự động dừng sau 3 giây để gửi chunk
+    setTimeout(() => {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+        mediaRecorderRef.current.stop();
+        setIsRecording(false);
+        setIsProcessing(true);
+      }
+    }, 3000);
+  };
+
+  const stopContinuousRecording = () => {
+    setContinuousRecording(false);
+
+    // Dừng current recording
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+
+    // Stop stream
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
+    }
+
+    console.log('🔇 Continuous recording stopped');
+  };
+
   const toggleRecording = () => {
     if (isRecording) {
       stopRecording();
     } else {
       startRecording();
+    }
+  };
+
+  const toggleContinuousMode = () => {
+    if (continuousRecording) {
+      stopContinuousRecording();
+    } else {
+      startContinuousRecording();
     }
   };
 
