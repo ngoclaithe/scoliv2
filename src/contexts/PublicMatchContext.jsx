@@ -247,7 +247,26 @@ export const PublicMatchProvider = ({ children }) => {
       console.log('🎯 [Audio] View updated to:', data.viewType);
     });
 
+    // Lắng nghe audio control events - để nhận referee voice từ CommentarySection
+    socketService.on('audio_control', (data) => {
+      console.log('🎙️ [PublicMatchContext] Received audio_control:', data);
 
+      // Gửi event này đến audioUtils hoặc các component cần xử lý audio
+      if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
+        const { audioData, mimeType } = data.payload;
+        try {
+          // Import audioUtils để phát audio trực tiếp
+          import('../utils/audioUtils').then(audioUtilsModule => {
+            const audioUtils = audioUtilsModule.default;
+            const uint8Array = new Uint8Array(audioData);
+            const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
+            audioUtils.playRefereeVoice(audioBlob);
+          });
+        } catch (error) {
+          console.error('❌ Error processing referee voice in DisplayController:', error);
+        }
+      }
+    });
 
     // Lắng nghe trạng thái kết nối
     socketService.on('disconnect', () => {
