@@ -270,30 +270,9 @@ const CommentarySection = ({ isActive = true }) => {
     await startRecording();
   };
 
-  const startNextContinuousChunk = async () => {
-    if (!streamRef.current || !continuousRecording) {
-      console.log('⚠️ Cannot start next chunk - no stream or not recording');
-      return;
-    }
-
-    console.log('🎙️ Starting next continuous chunk');
-    const mimeType = getSupportedMimeType();
-    await createMediaRecorder(streamRef.current, mimeType);
-  };
-
   const stopContinuousRecording = () => {
     console.log('🔇 Stopping continuous recording');
     setContinuousRecording(false);
-
-    if (continuousTimeoutRef.current) {
-      clearTimeout(continuousTimeoutRef.current);
-      continuousTimeoutRef.current = null;
-    }
-
-    if (emitIntervalRef.current) {
-      clearInterval(emitIntervalRef.current);
-      emitIntervalRef.current = null;
-    }
 
     // Dừng current recording
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
@@ -415,7 +394,7 @@ const CommentarySection = ({ isActive = true }) => {
           {isContinuousMode ? (
             <p>Chế độ nói liên tục: Audio được gửi mỗi 500ms</p>
           ) : (
-            <p>Chế độ ấn để nói: Ấn một lần để bắt đầu, ấn lại để dừng và gửi</p>
+            <p>Chế độ ấn để nói: ��n một lần để bắt đầu, ấn lại để dừng và gửi</p>
           )}
         </div>
       </div>
