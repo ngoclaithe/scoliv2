@@ -4,6 +4,7 @@ import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { useAudio } from '../../contexts/AudioContext';
 import PublicAPI from '../../API/apiPublic';
 import MediaSourceAudio from '../audio/MediaSourceAudio';
+import socketService from '../../services/socketService';
 
 // Import các component hiển thị
 import PosterTreTrung from '../../pages/Poster-tretrung';
@@ -48,7 +49,7 @@ const DisplayController = () => {
       audioControlledByServer: audioControlledByServerRef.current
     });
 
-    // Nếu audio đang được server kiểm soát, kh��ng tự động phát
+    // Nếu audio đang được server kiểm soát, không tự động phát
     if (audioControlledByServerRef.current) {
       console.log('🎮 Audio controlled by server, skipping auto-play');
       return;
