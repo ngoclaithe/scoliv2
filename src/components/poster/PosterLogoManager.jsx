@@ -527,21 +527,27 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   };
 
   const handleItemRemove = async (itemId) => {
+    // Ngăn xóa logo mặc định
+    if (itemId.startsWith('default-')) {
+      console.log('Cannot remove default logo');
+      return;
+    }
+
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);
     const item = logoItems.find(logo => logo.id === itemId);
-    
+
     if (item && item.url && item.url.startsWith('blob:')) {
       URL.revokeObjectURL(item.url);
     }
-    
+
     if (isFromAPI) {
       try {
-        setApiLogos(prev => prev.map(item => 
+        setApiLogos(prev => prev.map(item =>
           item.id === itemId ? { ...item, displayPositions: [] } : item
         ));
       } catch (error) {
         console.error("Error resetting API logo:", error);
-        setApiLogos(prev => prev.map(item => 
+        setApiLogos(prev => prev.map(item =>
           item.id === itemId ? { ...item, displayPositions: [] } : item
         ));
       }
