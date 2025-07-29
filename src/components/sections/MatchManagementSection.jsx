@@ -42,7 +42,7 @@ const MatchManagementSection = () => {
   } = useMatch();
 
   // Sử dụng AudioContext cho điều khiển audio
-  const { audioEnabled, toggleAudioEnabled, currentAudio, isPlaying } = useAudio();
+  const { audioEnabled, toggleAudioEnabled, currentAudio, isPlaying, playAudio } = useAudio();
 
   // State cho các tùy chọn điều khiển UI
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
@@ -97,6 +97,34 @@ const MatchManagementSection = () => {
       }));
     }
   }, [matchData.startTime, matchData.stadium, matchData.matchDate]);
+
+  // Lắng nghe currentView từ displaySettings để phát audio tương ứng
+  useEffect(() => {
+    if (!audioEnabled) {
+      return; // Không phát audio nếu đã tắt
+    }
+
+    const currentView = displaySettings?.currentView;
+    if (!currentView) return;
+
+    console.log('🎵 [MatchManagement] View changed, playing audio for:', currentView);
+
+    // Phát audio tương ứng theo view
+    let audioFile = null;
+
+    if (['intro', 'halftime', 'poster'].includes(currentView)) {
+      audioFile = 'poster';
+    } else if (currentView === 'scoreboard_below') {
+      audioFile = 'rasan';
+    } else if (currentView?.startsWith('scoreboard')) {
+      audioFile = 'gialap';
+    }
+
+    if (audioFile) {
+      console.log('🎵 [MatchManagement] Playing audio:', audioFile, 'for view:', currentView);
+      playAudio(audioFile);
+    }
+  }, [displaySettings?.currentView, audioEnabled, playAudio]);
 
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
@@ -514,7 +542,7 @@ const MatchManagementSection = () => {
                   disabled={!logoCodeB.trim() || isSearchingLogoB}
                   className="px-2 py-1 text-xs border border-gray-700 bg-gray-700 text-white rounded hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSearchingLogoB ? '⏳' : '🔍'}
+                  {isSearchingLogoB ? '⏳' : '����'}
                 </button>
                 {teamBInfo.logo && (
                   <div className="w-6 h-6 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
