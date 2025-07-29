@@ -137,7 +137,18 @@ class AudioManager {
 
   // Play referee voice from blob
   playRefereeVoice(audioBlob) {
-    console.log('🎙️ Playing referee voice');
+    console.log('🎙️ [AudioUtils] Playing referee voice, blob size:', audioBlob.size, 'type:', audioBlob.type);
+    console.log('🎙️ [AudioUtils] Current state:', {
+      audioEnabled: this.audioEnabled,
+      volume: this.volume,
+      isMuted: this.isMuted,
+      userInteracted: this.userInteracted
+    });
+
+    if (!this.audioEnabled) {
+      console.log('🔇 [AudioUtils] Audio disabled globally');
+      return;
+    }
 
     // Stop all other audio
     this.stopAllAudio();
@@ -145,38 +156,60 @@ class AudioManager {
     try {
       // Create URL from blob
       const audioUrl = URL.createObjectURL(audioBlob);
+      console.log('🎙️ [AudioUtils] Created blob URL:', audioUrl);
+
       const audio = new Audio(audioUrl);
+      console.log('🎙️ [AudioUtils] Created Audio element');
 
       this.refereeVoiceRef = audio;
       audio.volume = this.isMuted ? 0 : this.volume;
+      console.log('🎙️ [AudioUtils] Set volume to:', audio.volume);
+
+      audio.onloadstart = () => {
+        console.log('🎙️ [AudioUtils] Audio load started');
+      };
+
+      audio.oncanplay = () => {
+        console.log('🎙️ [AudioUtils] Audio can play');
+      };
 
       audio.onended = () => {
-        console.log('✅ Referee voice playback ended');
+        console.log('✅ [AudioUtils] Referee voice playback ended');
         URL.revokeObjectURL(audioUrl);
         this.refereeVoiceRef = null;
       };
 
       audio.onerror = (e) => {
-        console.error('❌ Referee voice playback error:', e);
+        console.error('❌ [AudioUtils] Referee voice playback error:', e);
+        console.error('❌ [AudioUtils] Error details:', {
+          error: e.target?.error,
+          code: e.target?.error?.code,
+          message: e.target?.error?.message
+        });
         URL.revokeObjectURL(audioUrl);
         this.refereeVoiceRef = null;
       };
 
+      console.log('🎙️ [AudioUtils] Attempting to play audio...');
       const playPromise = audio.play();
       if (playPromise) {
         playPromise
           .then(() => {
-            console.log('✅ Referee voice started playing successfully');
+            console.log('✅ [AudioUtils] Referee voice started playing successfully');
           })
           .catch((error) => {
-            console.error('❌ Failed to play referee voice:', error);
+            console.error('❌ [AudioUtils] Failed to play referee voice:', error);
+            console.error('❌ [AudioUtils] Play error name:', error.name);
+            console.error('❌ [AudioUtils] Play error message:', error.message);
             URL.revokeObjectURL(audioUrl);
             this.refereeVoiceRef = null;
           });
+      } else {
+        console.warn('⚠️ [AudioUtils] audio.play() returned undefined');
       }
 
     } catch (error) {
-      console.error('❌ Error creating referee voice audio:', error);
+      console.error('❌ [AudioUtils] Error creating referee voice audio:', error);
     }
   }
 
