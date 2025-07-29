@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
-import { useAudio } from '../../contexts/AudioContext';
 import PublicAPI from '../../API/apiPublic';
-import socketService from '../../services/socketService';
 
 // Import các component hiển thị
 import PosterTreTrung from '../../pages/Poster-tretrung';
