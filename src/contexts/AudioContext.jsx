@@ -503,7 +503,7 @@ export const AudioProvider = ({ children }) => {
       console.log('📡 Unregistering audio control listener');
       socketService.off('audio_control', handleAudioControl);
     };
-  }, [state.audioEnabled, state.isMuted]);
+  }, []); // Bỏ dependency array để tránh re-register listeners
 
   // Cleanup khi unmount
   useEffect(() => {
