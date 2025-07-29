@@ -6,8 +6,8 @@ const HalftimeBreakPoster = () => {
     // Sử dụng dữ liệu từ PublicMatchContext
     const { matchData: contextMatchData, marqueeData } = usePublicMatch();
 
-    // Sử dụng AudioContext để phát audio
-    const { playAudio } = useAudio();
+    // Audio đã được chuyển sang MatchManagementSection để quản lý tập trung
+    // const { playAudio } = useAudio();
 
     // Kết hợp dữ liệu từ context với dữ liệu mặc định
     const matchData = {
@@ -39,10 +39,10 @@ const HalftimeBreakPoster = () => {
         return () => window.removeEventListener('resize', updateScreenSize);
     }, []);
 
-    // Tự động phát audio poster.mp3 khi component mount - CHỈ 1 LẦN
-    useEffect(() => {
-        playAudio('poster');
-    }, [playAudio]); // Include playAudio dependency
+    // Audio đã được chuyển sang MatchManagementSection để quản lý tập trung
+    // useEffect(() => {
+    //     playAudio('poster');
+    // }, [playAudio]);
 
     // Check if live text contains specific keywords
     const liveTextLower = matchData.liveText.toLowerCase();
