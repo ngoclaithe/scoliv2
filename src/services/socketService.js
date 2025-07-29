@@ -311,7 +311,7 @@ class SocketService {
       'lineup_updated',
       'penalty_updated',
       'sponsors_updated',
-      'audio_control'
+      
     ];
 
     events.forEach(event => {
@@ -321,11 +321,6 @@ class SocketService {
     });
   }
 
-  // Lắng nghe các sự kiện điều khiển audio cụ thể
-  onAudioControl(callback) {
-    console.log('📡 [SocketService] Registering audio_control listener');
-    this.on('audio_control', callback);
-  }
   // Lắng nghe trạng thái room
   onRoomStatus(callback) {
     this.on('room_joined', callback);

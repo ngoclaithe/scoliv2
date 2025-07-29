@@ -28,38 +28,6 @@ const DisplayController = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
 
-  // Xử lý audio từ server
-  useEffect(() => {
-    const handleAudioControl = (data) => {
-      console.log('🔊 [DisplayController] Received audio_control:', data);
-
-      if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
-        const { audioData, mimeType } = data.payload;
-        try {
-          const uint8Array = new Uint8Array(audioData);
-          const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
-          audioUtils.playRefereeVoice(audioBlob);
-        } catch (error) {
-          console.error('❌ Error playing referee voice:', error);
-        }
-      }
-    };
-
-    // Setup socket listeners nếu đã kết nối
-    if (socketService.socket) {
-      socketService.on('audio_control', handleAudioControl);
-    }
-
-    // Cleanup khi component unmount
-    return () => {
-      if (socketService.socket) {
-        socketService.off('audio_control', handleAudioControl);
-      }
-      // Dừng tất cả audio khi unmount
-      audioUtils.stopAllAudio();
-    };
-  }, []);
-
   // Khởi tạo kết nối socket
   useEffect(() => {
     let isCleanedUp = false;
