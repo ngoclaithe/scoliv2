@@ -435,7 +435,7 @@ export const AudioProvider = ({ children }) => {
     }
   }, [state.audioEnabled, stopCurrentAudio]);
 
-  // AUDIO CONTROL - ĐỢI SOCKET KHỞI TẠO
+  // AUDIO CONTROL - SETUP LISTENERS AGGRESSIVELY
   useEffect(() => {
     const handleAudioControl = (data) => {
       console.log('🎙️ [AudioContext] ===== RECEIVED audio_control =====');
@@ -443,7 +443,7 @@ export const AudioProvider = ({ children }) => {
       console.log('🎙️ [AudioContext] Command:', data?.command);
       console.log('🎙️ [AudioContext] Payload:', data?.payload);
 
-      // CHỈ XỬ LÝ REFEREE VOICE
+      // XỬ LÝ TẤT CẢ LỆNH AUDIO
       if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
         console.log('🎙️ [AudioContext] ✅ Processing PLAY_REFEREE_VOICE command');
         const { audioData, mimeType } = data.payload;
@@ -457,8 +457,21 @@ export const AudioProvider = ({ children }) => {
         } catch (error) {
           console.error('❌ [AudioContext] Error processing referee voice data:', error);
         }
+      } else if (data.command === 'PLAY_AUDIO' && data.payload) {
+        console.log('🎙️ [AudioContext] ✅ Processing PLAY_AUDIO command');
+        const { audioFile } = data.payload;
+        playAudio(audioFile);
+      } else if (data.command === 'STOP_AUDIO') {
+        console.log('🎙️ [AudioContext] ✅ Processing STOP_AUDIO command');
+        stopCurrentAudio();
+      } else if (data.command === 'ENABLE_AUDIO') {
+        console.log('🎙️ [AudioContext] ✅ Processing ENABLE_AUDIO command');
+        dispatch({ type: audioActions.SET_AUDIO_ENABLED, payload: true });
+      } else if (data.command === 'DISABLE_AUDIO') {
+        console.log('🎙️ [AudioContext] ✅ Processing DISABLE_AUDIO command');
+        dispatch({ type: audioActions.SET_AUDIO_ENABLED, payload: false });
       } else {
-        console.log('🎙️ [AudioContext] ❌ Command not recognized or missing payload');
+        console.log('🎙️ [AudioContext] ❌ Command not recognized:', data.command);
       }
     };
 
@@ -467,60 +480,70 @@ export const AudioProvider = ({ children }) => {
       console.log(`🔍 [DEBUG] Socket event "${eventName}":`, data);
     };
 
-    // Hàm kiểm tra và đăng ký listeners khi socket sẵn sàng
-    const setupListenersWhenReady = () => {
-      const socketStatus = socketService.getConnectionStatus();
+    // Hàm setup listeners - AGGRESSIVE RETRY
+    const setupListenersAggressively = () => {
+      console.log('📡 [AudioContext] 🚀 Setting up audio listeners aggressively...');
 
-      if (socketStatus.isConnected && socketService.socket) {
-        console.log('📡 [AudioContext] ✅ Socket ready, setting up audio listeners...');
+      // Thử register listeners ngay cả khi socket chưa hoàn toàn sẵn sàng
+      try {
+        if (socketService.socket) {
+          console.log('📡 [AudioContext] Socket exists, registering listeners...');
 
-        // Đăng ký listeners
-        socketService.onAudioControl(handleAudioControl);
-        socketService.on('audio_control', handleAudioControl);
-        socketService.on('audio_control_broadcast', handleAudioControl);
-        socketService.on('voice-chunk-received', debugAllEvents);
-        socketService.on('referee_voice', handleAudioControl);
-        socketService.on('play_referee_voice', handleAudioControl);
+          // Đăng ký TẤT CẢ possible event names
+          socketService.on('audio_control', handleAudioControl);
+          socketService.on('audio_control_broadcast', handleAudioControl);
+          socketService.on('voice-chunk-received', debugAllEvents);
+          socketService.on('referee_voice', handleAudioControl);
+          socketService.on('play_referee_voice', handleAudioControl);
+          socketService.on('audio_command', handleAudioControl);
+          socketService.on('audio_update', handleAudioControl);
 
-        console.log('📡 [AudioContext] ✅ All audio listeners registered successfully');
-        return true;
-      } else {
-        console.log('📡 [AudioContext] ⏳ Socket not ready yet, waiting...', socketStatus);
+          // Thêm listener cho socketService.onAudioControl nếu có
+          if (typeof socketService.onAudioControl === 'function') {
+            socketService.onAudioControl(handleAudioControl);
+          }
+
+          console.log('📡 [AudioContext] ✅ All audio listeners registered aggressively');
+          return true;
+        } else {
+          console.log('📡 [AudioContext] ⏳ Socket not available yet');
+          return false;
+        }
+      } catch (error) {
+        console.error('❌ [AudioContext] Error setting up listeners:', error);
         return false;
       }
     };
 
-    // Thử đăng ký ngay lập tức
-    if (!setupListenersWhenReady()) {
-      // Nếu chưa sẵn sàng, retry sau mỗi 500ms
-      const retryInterval = setInterval(() => {
-        if (setupListenersWhenReady()) {
-          clearInterval(retryInterval);
-        }
-      }, 500);
+    // IMMEDIATE SETUP - không chờ
+    setupListenersAggressively();
 
-      // Cleanup retry sau 10 giây để tránh vòng lặp vô hạn
-      setTimeout(() => {
-        clearInterval(retryInterval);
-        console.log('📡 [AudioContext] ⚠️ Timeout waiting for socket, stopped retrying');
-      }, 10000);
+    // PERSISTENT RETRY - không timeout
+    const retryInterval = setInterval(() => {
+      const socketStatus = socketService.getConnectionStatus();
+      console.log('📡 [AudioContext] Retry setup, socket status:', socketStatus);
 
-      // Cleanup khi component unmount
-      return () => {
-        clearInterval(retryInterval);
-      };
-    }
+      if (socketStatus.isConnected && socketService.socket) {
+        setupListenersAggressively();
+      }
+    }, 1000); // Retry mỗi giây
 
     // Cleanup listeners
     return () => {
       console.log('📡 [AudioContext] Cleaning up all audio listeners');
-      socketService.off('audio_control', handleAudioControl);
-      socketService.off('audio_control_broadcast', handleAudioControl);
-      socketService.off('voice-chunk-received', debugAllEvents);
-      socketService.off('referee_voice', handleAudioControl);
-      socketService.off('play_referee_voice', handleAudioControl);
+      clearInterval(retryInterval);
+
+      if (socketService.socket) {
+        socketService.off('audio_control', handleAudioControl);
+        socketService.off('audio_control_broadcast', handleAudioControl);
+        socketService.off('voice-chunk-received', debugAllEvents);
+        socketService.off('referee_voice', handleAudioControl);
+        socketService.off('play_referee_voice', handleAudioControl);
+        socketService.off('audio_command', handleAudioControl);
+        socketService.off('audio_update', handleAudioControl);
+      }
     };
-  }, [playRefereeVoice]);
+  }, [playRefereeVoice, playAudio, stopCurrentAudio]);
 
   // Cleanup khi unmount
   useEffect(() => {
