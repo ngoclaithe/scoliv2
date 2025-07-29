@@ -164,29 +164,45 @@ const CommentarySection = ({ isActive = true }) => {
 
   const sendVoiceToServer = async (audioBlob) => {
     return new Promise((resolve, reject) => {
+      console.log('📤 [CommentarySection] Preparing to send voice to server...');
+      console.log('📤 [CommentarySection] Socket status:', {
+        hasSocket: !!socketService.socket,
+        isConnected: socketService.socket?.connected,
+        socketId: socketService.socket?.id
+      });
+
       const reader = new FileReader();
       reader.onload = () => {
         const arrayBuffer = reader.result;
         const uint8Array = new Uint8Array(arrayBuffer);
+        console.log('📤 [CommentarySection] Audio data prepared:', uint8Array.length, 'bytes');
 
         if (socketService.socket && socketService.socket.connected) {
           // Gửi voice data qua socketService
           const mimeType = mediaRecorderRef.current?.mimeType || getSupportedMimeType() || 'audio/webm';
+          console.log('📤 [CommentarySection] Sending referee voice with mimeType:', mimeType);
+
           const success = socketService.sendRefereeVoice(
             Array.from(uint8Array),
             mimeType
           );
 
           if (success) {
+            console.log('✅ [CommentarySection] Voice sent successfully');
             resolve();
           } else {
+            console.error('❌ [CommentarySection] Failed to send voice through socket service');
             reject(new Error('Failed to send voice through socket service'));
           }
         } else {
+          console.error('❌ [CommentarySection] Socket not connected - cannot send voice');
           reject(new Error('Socket not connected'));
         }
       };
-      reader.onerror = () => reject(reader.error);
+      reader.onerror = () => {
+        console.error('❌ [CommentarySection] FileReader error:', reader.error);
+        reject(reader.error);
+      };
       reader.readAsArrayBuffer(audioBlob);
     });
   };
