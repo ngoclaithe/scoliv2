@@ -17,9 +17,6 @@ export default function TreTrungMatchIntro() {
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN')
   };
 
-  const [partners, setPartners] = useState([]);
-
-
   const marquee = {
     text: marqueeData.text || '',
     isRunning: marqueeData.mode !== 'none'
