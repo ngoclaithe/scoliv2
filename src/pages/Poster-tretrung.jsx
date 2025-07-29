@@ -1,6 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
-import audioUtils from '../utils/audioUtils';
 
 export default function TreTrungMatchIntro() {
   const { matchData: contextMatchData, marqueeData, logoData } = usePublicMatch();
