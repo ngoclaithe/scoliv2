@@ -130,6 +130,7 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.removeAllListeners('penalty_updated');
     socketService.removeAllListeners('lineup_updated');
     socketService.removeAllListeners('sponsors_updated');
+    socketService.removeAllListeners('logo_data_updated');
     socketService.removeAllListeners('view_updated');
     socketService.removeAllListeners('audio_control');
     socketService.removeAllListeners('disconnect');
