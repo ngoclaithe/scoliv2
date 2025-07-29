@@ -762,7 +762,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1.5">
       <div className="flex items-center justify-between gap-1">
         <span className="text-xs font-medium text-gray-700">Copy poster trận trước:</span>
         <select className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white">
