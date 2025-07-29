@@ -422,7 +422,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 resumeTimer();
                 toast.info('▶️ Đã tiếp tục timer từ server');
               } else {
-                // Pause timer - s�� dụng updateMatchTime với status paused
+                // Pause timer - sử dụng updateMatchTime với status paused
                 updateMatchTime(matchData.matchTime, matchData.period, "paused");
                 toast.info('⏸️ Đã tạm dừng timer');
               }
@@ -951,7 +951,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">🕑</span>
+              <span className="text-sm mr-1">���</span>
               <span className="text-xs font-bold text-center">ĐẾM 30'</span>
             </button>
 
@@ -1043,6 +1043,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               onClick={() => {
                 updateView('scoreboard_below');
                 setSelectedOption("ti-so-duoi");
+                playAudioForAction('rasan');
                 console.log('Chuyển sang scoreboard below');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
