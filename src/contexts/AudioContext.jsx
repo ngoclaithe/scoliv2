@@ -279,7 +279,7 @@ export const AudioProvider = ({ children }) => {
         audioRef.current.currentTime = 0;
         audioRef.current.src = '';
       } catch (error) {
-        console.warn('⚠️ Error stopping AudioContext audio:', error);
+        console.warn('⚠��� Error stopping AudioContext audio:', error);
       }
       audioRef.current = null;
     }
@@ -435,37 +435,62 @@ export const AudioProvider = ({ children }) => {
     }
   }, [state.audioEnabled, stopCurrentAudio]);
 
-  // CHỈ XỬ LÝ REFEREE VOICE, LOẠI BỎ STATIC AUDIO CONTROL
+  // DEBUG AUDIO CONTROL - TẤT CẢ EVENTS
   useEffect(() => {
     const handleAudioControl = (data) => {
-      console.log('📡 [AudioContext] Received audio_control from server:', data);
+      console.log('🎙️ [AudioContext] ===== RECEIVED audio_control =====');
+      console.log('🎙️ [AudioContext] Raw data:', data);
+      console.log('🎙️ [AudioContext] Command:', data?.command);
+      console.log('🎙️ [AudioContext] Payload:', data?.payload);
 
       // CHỈ XỬ LÝ REFEREE VOICE
       if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
-        console.log('📡 [AudioContext] Server command: PLAY_REFEREE_VOICE');
+        console.log('🎙️ [AudioContext] ✅ Processing PLAY_REFEREE_VOICE command');
         const { audioData, mimeType } = data.payload;
 
         try {
           // Chuyển audioData từ array về Uint8Array
           const uint8Array = new Uint8Array(audioData);
           const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
+          console.log('🎙️ [AudioContext] Created audio blob, size:', audioBlob.size);
           playRefereeVoice(audioBlob);
         } catch (error) {
           console.error('❌ [AudioContext] Error processing referee voice data:', error);
         }
+      } else {
+        console.log('🎙️ [AudioContext] ❌ Command not recognized or missing payload');
       }
     };
 
-    // Đăng ký lắng nghe sự kiện điều khiển audio một lần duy nhất
-    console.log('📡 [AudioContext] Registering audio control listener for referee voice only');
+    // DEBUG: Lắng nghe TẤT CẢ events từ socket
+    const debugAllEvents = (eventName, data) => {
+      console.log(`🔍 [DEBUG] Socket event "${eventName}":`, data);
+    };
+
+    console.log('📡 [AudioContext] Setting up audio listeners...');
+
+    // Đăng ký ngay lập tức
     socketService.onAudioControl(handleAudioControl);
+
+    // DEBUG: Listen to ALL possible audio events
+    socketService.on('audio_control', handleAudioControl);
+    socketService.on('audio_control_broadcast', handleAudioControl);
+    socketService.on('voice-chunk-received', debugAllEvents);
+    socketService.on('referee_voice', handleAudioControl);
+    socketService.on('play_referee_voice', handleAudioControl);
+
+    console.log('📡 [AudioContext] ✅ All audio listeners registered');
 
     // Cleanup
     return () => {
-      console.log('📡 [AudioContext] Unregistering audio control listener');
+      console.log('📡 [AudioContext] Cleaning up all audio listeners');
       socketService.off('audio_control', handleAudioControl);
+      socketService.off('audio_control_broadcast', handleAudioControl);
+      socketService.off('voice-chunk-received', debugAllEvents);
+      socketService.off('referee_voice', handleAudioControl);
+      socketService.off('play_referee_voice', handleAudioControl);
     };
-  }, [playRefereeVoice]); // Thêm dependency để tránh stale closure
+  }, [playRefereeVoice]);
 
   // Cleanup khi unmount
   useEffect(() => {
