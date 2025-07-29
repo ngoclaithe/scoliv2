@@ -415,7 +415,7 @@ export const AudioProvider = ({ children }) => {
       return;
     }
 
-    // Sử dụng playAudioFromTime để bắt đầu từ đ���u
+    // Sử dụng playAudioFromTime đ�� bắt đầu từ đ���u
     playAudioFromTime(audioKey, 0);
   }, [state.audioEnabled, state.userInteracted, state.isRefereeVoicePlaying, playAudioFromTime]);
 
@@ -438,11 +438,11 @@ export const AudioProvider = ({ children }) => {
   // CHỈ XỬ LÝ REFEREE VOICE, LOẠI BỎ STATIC AUDIO CONTROL
   useEffect(() => {
     const handleAudioControl = (data) => {
-      console.log('📡 Received audio_control from server:', data);
+      console.log('📡 [AudioContext] Received audio_control from server:', data);
 
       // CHỈ XỬ LÝ REFEREE VOICE
       if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
-        console.log('📡 Server command: PLAY_REFEREE_VOICE');
+        console.log('📡 [AudioContext] Server command: PLAY_REFEREE_VOICE');
         const { audioData, mimeType } = data.payload;
 
         try {
@@ -451,21 +451,21 @@ export const AudioProvider = ({ children }) => {
           const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
           playRefereeVoice(audioBlob);
         } catch (error) {
-          console.error('❌ Error processing referee voice data:', error);
+          console.error('❌ [AudioContext] Error processing referee voice data:', error);
         }
       }
     };
 
     // Đăng ký lắng nghe sự kiện điều khiển audio một lần duy nhất
-    console.log('📡 Registering audio control listener for referee voice only');
+    console.log('📡 [AudioContext] Registering audio control listener for referee voice only');
     socketService.onAudioControl(handleAudioControl);
 
     // Cleanup
     return () => {
-      console.log('📡 Unregistering audio control listener');
+      console.log('📡 [AudioContext] Unregistering audio control listener');
       socketService.off('audio_control', handleAudioControl);
     };
-  }, []); // Loại bỏ dependency để chỉ đăng ký một lần
+  }, [playRefereeVoice]); // Thêm dependency để tránh stale closure
 
   // Cleanup khi unmount
   useEffect(() => {
