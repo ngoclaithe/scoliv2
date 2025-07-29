@@ -255,12 +255,27 @@ export const PublicMatchProvider = ({ children }) => {
       if (data.target === 'display' && data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
         const { audioData, mimeType } = data.payload;
         try {
+          // Validate audio data
+          if (!audioData || !Array.isArray(audioData) || audioData.length === 0) {
+            console.error('❌ Invalid audio data received:', audioData);
+            return;
+          }
+
+          console.log('🎙️ Creating audio blob from data, size:', audioData.length, 'mimeType:', mimeType);
           const uint8Array = new Uint8Array(audioData);
           const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
+
+          // Validate blob
+          if (audioBlob.size === 0) {
+            console.error('❌ Created blob is empty');
+            return;
+          }
+
+          console.log('🎙️ Created audio blob, size:', audioBlob.size, 'bytes');
           audioUtils.playRefereeVoice(audioBlob);
           console.log('✅ [PublicMatchContext] Playing referee voice successfully');
         } catch (error) {
-          console.error('❌ Error processing referee voice in DisplayController:', error);
+          console.error('❌ Error processing referee voice in PublicMatchContext:', error);
         }
       }
     });
@@ -296,7 +311,7 @@ export const PublicMatchProvider = ({ children }) => {
     }
   }, [currentAccessCode, socketConnected, setupSocketListeners]);
 
-  // Ngắt kết nối socket
+  // Ngắt kết n���i socket
   const disconnectSocket = useCallback(() => {
     socketService.disconnect();
     setSocketConnected(false);
