@@ -20,8 +20,8 @@ const ScoreboardBelow = ({
     socketConnected
   } = usePublicMatch();
 
-  // Sử dụng AudioContext để phát audio
-  const { playAudio } = useAudio();
+  // Audio đã được chuyển sang MatchManagementSection để quản lý tập trung
+  // const { playAudio } = useAudio();
 
   // State cho scoreboard data (merge với context data)
   const [scoreboardData, setScoreboardData] = useState({
@@ -88,10 +88,10 @@ const ScoreboardBelow = ({
   // Sử dụng template từ displaySettings context, fallback về prop
   const currentTemplate = displaySettings?.selectedSkin || template;
 
-  // Tự động phát audio rasan.mp3 khi component mount - CHỈ 1 LẦN
-  useEffect(() => {
-    playAudio('rasan');
-  }, []); // Bỏ playAudio khỏi dependency để chỉ phát 1 lần
+  // Audio đã được chuyển sang MatchManagementSection để quản lý tập trung
+  // useEffect(() => {
+  //   playAudio('rasan');
+  // }, []);
 
   // Render the appropriate template based on selectedSkin
   const renderTemplate = () => {
