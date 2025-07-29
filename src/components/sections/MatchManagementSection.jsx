@@ -15,7 +15,7 @@ import MatchTimeDisplay from './MatchTimeDisplay';
 
 
 
-const MatchManagementSection = () => {
+const MatchManagementSection = ({ isActive = true }) => {
   // Sử dụng MatchContext thay vì state local
   const {
     matchData,
@@ -42,7 +42,7 @@ const MatchManagementSection = () => {
   } = useMatch();
 
   // Sử dụng AudioContext cho điều khiển audio
-  const { audioEnabled, toggleAudioEnabled, currentAudio, isPlaying, playAudio } = useAudio();
+  const { audioEnabled, toggleAudioEnabled, currentAudio, isPlaying, playAudio, stopCurrentAudio } = useAudio();
 
   // State cho các tùy chọn điều khiển UI
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
@@ -100,8 +100,9 @@ const MatchManagementSection = () => {
 
   // Lắng nghe currentView từ displaySettings để phát audio tương ứng
   useEffect(() => {
-    if (!audioEnabled) {
-      return; // Không phát audio nếu đã tắt
+    // Chỉ phát audio khi tab MatchManagement đang active
+    if (!isActive || !audioEnabled) {
+      return; // Không phát audio nếu tab không active hoặc đã tắt
     }
 
     const currentView = displaySettings?.currentView;
@@ -124,7 +125,15 @@ const MatchManagementSection = () => {
       console.log('🎵 [MatchManagement] Playing audio:', audioFile, 'for view:', currentView);
       playAudio(audioFile);
     }
-  }, [displaySettings?.currentView, audioEnabled, playAudio]);
+  }, [displaySettings?.currentView, audioEnabled, playAudio, isActive]);
+
+  // Dừng audio khi tab không active nữa
+  useEffect(() => {
+    if (!isActive) {
+      console.log('🔇 [MatchManagement] Tab inactive, stopping audio');
+      stopCurrentAudio();
+    }
+  }, [isActive, stopCurrentAudio]);
 
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
@@ -542,7 +551,7 @@ const MatchManagementSection = () => {
                   disabled={!logoCodeB.trim() || isSearchingLogoB}
                   className="px-2 py-1 text-xs border border-gray-700 bg-gray-700 text-white rounded hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSearchingLogoB ? '⏳' : '����'}
+                  {isSearchingLogoB ? '⏳' : '🔍'}
                 </button>
                 {teamBInfo.logo && (
                   <div className="w-6 h-6 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
@@ -951,7 +960,7 @@ const MatchManagementSection = () => {
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
-                console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
+                console.log('📡 Server sẽ emit timer_tick events với displayTime format t��:', timeString);
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
