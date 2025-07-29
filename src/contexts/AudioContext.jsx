@@ -301,30 +301,16 @@ export const AudioProvider = ({ children }) => {
     }
   }, [state.audioEnabled, state.userInteracted, state.isMuted, state.volume, stopCurrentAudio, audioFiles]);
 
-  // Toggle audio toàn cục
+  // Toggle audio toàn cục - CHỈ LOCAL, KHÔNG GỬI SOCKET
   const toggleAudioEnabled = useCallback(() => {
     const wasEnabled = state.audioEnabled;
     const newState = !wasEnabled;
-    
-    console.log('🎵 Toggling global audio:', { wasEnabled, newState });
+
+    console.log('🎵 Toggling LOCAL audio:', { wasEnabled, newState });
 
     dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
 
-    // Gửi trạng thái mới lên server
-    try {
-      if (socketService.socket && socketService.socket.connected) {
-        if (newState) {
-          console.log('📡 Sending enable audio to display clients');
-          socketService.enableAudioForDisplays();
-        } else {
-          console.log('📡 Sending disable audio to display clients');
-          socketService.disableAudioForDisplays();
-        }
-      }
-    } catch (error) {
-      console.error('❌ Lỗi khi gửi trạng thái audio lên server:', error);
-    }
-
+    // KHÔNG GỬI SOCKET NỮA - CHỈ TÁC ĐỘNG LOCAL
     // Nếu đang từ enabled -> disabled, dừng phát audio hiện tại
     if (wasEnabled && audioRef.current) {
       stopCurrentAudio();
