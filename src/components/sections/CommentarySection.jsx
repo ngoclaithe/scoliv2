@@ -221,8 +221,8 @@ const CommentarySection = () => {
         {!isRecording && !isProcessing && (
           <p className="text-gray-600">Ấn mic để bắt đầu bình luận</p>
         )}
-        {(!isSupported || !isOpusSupported) && (
-          <p className="text-red-600">Trình duyệt không hỗ trợ ghi âm hoặc Opus codec</p>
+        {!isSupported && (
+          <p className="text-red-600">Trình duyệt không hỗ trợ ghi âm</p>
         )}
         {isRecording && (
           <p className="text-orange-600 text-sm mt-2">⚠️ Tất cả audio khác đã bị dừng để ghi voice</p>
