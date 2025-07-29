@@ -26,8 +26,7 @@ const DisplayController = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
 
-  // ❌ REMOVED DUPLICATE AUDIO LISTENER - AudioContext đã xử lý referee voice rồi
-  // Listener này gây xung đột với AudioContext.jsx (dòng 460-468)
+  // Audio handled by MatchManagementSection
 
   // Khởi tạo kết nối socket
   useEffect(() => {
