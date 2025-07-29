@@ -122,7 +122,7 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.removeAllListeners('audio_control_broadcast');
     socketService.removeAllListeners('disconnect');
     socketService.removeAllListeners('connect');
-    // Lắng nghe cập nhật th��ng tin trận đấu
+    // Lắng nghe cập nhật thông tin trận đấu
     socketService.on('match_info_updated', (data) => {
       setMatchData(prev => ({ ...prev, ...data.matchInfo }));
       updateLastTime();
@@ -282,7 +282,7 @@ export const PublicMatchProvider = ({ children }) => {
     }
 
     // Lắng nghe audio control events - để nhận referee voice từ CommentarySection
-    socketService.on('audio_control_broadcast', (data) => {
+    socketService.on('audio_control', (data) => {
       console.log('🎙️ [PublicMatchContext] Received audio_control event:', data);
       console.log('🎙️ [PublicMatchContext] Client type:', socketService.getConnectionStatus().clientType);
       console.log('🎙️ [PublicMatchContext] Target check:', data.target, 'Command:', data.command);
