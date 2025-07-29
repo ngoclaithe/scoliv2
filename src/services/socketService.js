@@ -430,6 +430,7 @@ class SocketService {
 
   // Lắng nghe các sự kiện điều khiển audio cụ thể
   onAudioControl(callback) {
+    console.log('📡 [SocketService] Registering audio_control listener');
     this.on('audio_control', callback);
   }
 
