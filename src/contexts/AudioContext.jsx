@@ -8,6 +8,7 @@ const initialState = {
   volume: 0.7,
   isMuted: false,
   userInteracted: false,
+  isRefereeVoicePlaying: false, // Voice trọng tài đang phát
 };
 
 // Audio Actions - rút gọn
