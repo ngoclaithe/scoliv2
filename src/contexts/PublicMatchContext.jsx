@@ -319,18 +319,24 @@ export const PublicMatchProvider = ({ children }) => {
     try {
       // Tránh khởi tạo socket trùng lặp
       if (currentAccessCode === accessCode && socketConnected) {
+        console.log('🔄 Socket already connected for', accessCode);
         return;
       }
+
+      console.log('🔌 Initializing socket for access code:', accessCode);
 
       // Public route luôn sử dụng clientType 'display'
       await socketService.connect(accessCode, 'display');
       setSocketConnected(true);
       setCurrentAccessCode(accessCode);
-      
-      // Lắng nghe các event từ server
+
+      console.log('✅ Socket connected, setting up listeners...');
+      // Lắng nghe các event từ server - luôn setup lại
       setupSocketListeners();
+
+      console.log('✅ Socket initialization completed');
     } catch (error) {
-      console.error('Failed to initialize public socket:', error);
+      console.error('❌ Failed to initialize public socket:', error);
       setSocketConnected(false);
     }
   }, [currentAccessCode, socketConnected, setupSocketListeners]);
