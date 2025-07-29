@@ -74,6 +74,7 @@ const AudioContext = createContext();
 export const AudioProvider = ({ children }) => {
   const [state, dispatch] = useReducer(audioReducer, initialState);
   const audioRef = useRef(null);
+  const refereeVoiceRef = useRef(null);
 
   // Static audio file mapping
   const audioFiles = {
