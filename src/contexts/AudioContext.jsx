@@ -417,6 +417,12 @@ export const AudioProvider = ({ children }) => {
       console.log('🔊 Updating audio element volume:', newVolume);
       audioRef.current.volume = newVolume;
     }
+
+    if (refereeVoiceRef.current) {
+      const newVolume = state.isMuted ? 0 : state.volume;
+      console.log('🔊 Updating referee voice volume:', newVolume);
+      refereeVoiceRef.current.volume = newVolume;
+    }
   }, [state.volume, state.isMuted]);
 
   const value = {
