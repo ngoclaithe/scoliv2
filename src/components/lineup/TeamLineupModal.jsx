@@ -70,7 +70,7 @@ const TeamLineupModal = ({
       }
     });
 
-    // Sắp xếp: GK đầu tiên, rồi theo số áo
+    // Sắp xếp: GK đầu tiên, r���i theo số áo
     players.sort((a, b) => {
       if (a.number === "GK") return -1;
       if (b.number === "GK") return 1;
@@ -182,15 +182,24 @@ const TeamLineupModal = ({
         </div>
 
         {/* Quick Actions - Bỏ nút xóa hết, thay bằng nút Lưu */}
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-3 gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setBulkMode(!bulkMode)}
             className="h-10 flex flex-col items-center justify-center"
           >
-            <span className="text-lg">📋</span>
+            <span className="text-sm">📋</span>
             <span className="text-xs">Nhập hàng loạt</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => clearTeam(activeTeam)}
+            className="text-red-600 border-red-300 hover:bg-red-50 h-10 flex flex-col items-center justify-center text-xs"
+          >
+            <span className="text-sm">🗑️</span>
+            <span className="text-xs">Xóa đội</span>
           </Button>
           <Button
             variant="primary"
@@ -199,8 +208,8 @@ const TeamLineupModal = ({
             className="h-10 flex flex-col items-center justify-center text-xs"
             disabled={homeCount < 11 || awayCount < 11}
           >
-            <span className="text-lg">💾</span>
-            <span className="text-xs">Lưu ({homeCount + awayCount}/22)</span>
+            <span className="text-sm">💾</span>
+            <span className="text-xs">Lưu</span>
           </Button>
         </div>
 
