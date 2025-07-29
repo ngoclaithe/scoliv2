@@ -294,22 +294,7 @@ const TeamLineupModal = ({
           </div>
         </div>
 
-        {/* Summary */}
-        <div className="hidden sm:block bg-gray-50 rounded-lg p-4">
-          <h4 className="font-medium text-gray-900 mb-3">Tổng quan</h4>
-          <div className="grid grid-cols-2 gap-4 text-center">
-            <div className="bg-blue-50 rounded-lg p-3">
-              <div className="text-2xl mb-1">🏠</div>
-              <div className="font-semibold text-blue-600 text-lg">{homeCount}/11</div>
-              <div className="text-blue-500 text-sm">{matchData.homeTeam?.name || "Đội nhà"}</div>
-            </div>
-            <div className="bg-red-50 rounded-lg p-3">
-              <div className="text-2xl mb-1">✈️</div>
-              <div className="font-semibold text-red-600 text-lg">{awayCount}/11</div>
-              <div className="text-red-500 text-sm">{matchData.awayTeam?.name || "Đội khách"}</div>
-            </div>
-          </div>
-        </div>
+
 
 
       </div>
