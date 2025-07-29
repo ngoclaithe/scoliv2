@@ -188,7 +188,7 @@ const CommentarySection = () => {
       <div className="flex justify-center">
         <button
           onClick={toggleRecording}
-          disabled={isProcessing || !isSupported || !isOpusSupported}
+          disabled={isProcessing || !isSupported}
           className={`
             w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 transform
             ${isRecording 
