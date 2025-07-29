@@ -12,7 +12,7 @@ const TopScoreboard = ({ template = 1, accessCode }) => {
   } = usePublicMatch();
 
   // Sử dụng AudioContext để phát audio
-  const { playAudio, isComponentPlaying } = useAudio();
+  const { playAudio } = useAudio();
 
   // Sample data - sẽ được override bởi context data
   const [scoreboardData, setScoreboardData] = useState({
@@ -153,7 +153,7 @@ const TopScoreboard = ({ template = 1, accessCode }) => {
 
   // Tự động phát audio gialap.mp3 khi component mount - CHỈ 1 LẦN
   useEffect(() => {
-    playAudio('gialap', 'scoreboardAbove');
+    playAudio('gialap');
   }, []); // Bỏ playAudio khỏi dependency để chỉ phát 1 lần
 
   // Adjust font size based on content length
