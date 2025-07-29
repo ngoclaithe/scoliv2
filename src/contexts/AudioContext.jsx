@@ -451,7 +451,7 @@ export const AudioProvider = ({ children }) => {
       console.log('📡 Received audio_control from server:', data);
       
       if (data.command === 'ENABLE_AUDIO') {
-        console.log('📡 Server command: ENABLE_AUDIO');
+        console.log('📡 Server command: ENABLE_AUDIO - Enabling audio state');
         if (!state.audioEnabled) {
           dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
         }
@@ -488,7 +488,7 @@ export const AudioProvider = ({ children }) => {
       }
     };
 
-    // Đăng ký lắng nghe sự kiện điều khiển audio
+    // Đăng ký lắng nghe sự ki���n điều khiển audio
     console.log('📡 Registering audio control listener');
     socketService.onAudioControl(handleAudioControl);
 
