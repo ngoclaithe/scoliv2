@@ -98,34 +98,17 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
   }, [matchData.startTime, matchData.stadium, matchData.matchDate]);
 
-  // Lắng nghe currentView từ displaySettings để phát audio tương ứng
-  useEffect(() => {
+  // HÀM PHÁT AUDIO TRỰC TIẾP - ĐƯỢC GỌI KHI CLICK BUTTON
+  const playAudioForAction = (audioType) => {
     // Chỉ phát audio khi tab MatchManagement đang active
     if (!isActive || !audioEnabled) {
-      return; // Không phát audio nếu tab không active hoặc đã tắt
+      console.log('🔇 [MatchManagement] Audio disabled or tab inactive');
+      return;
     }
 
-    const currentView = displaySettings?.currentView;
-    if (!currentView) return;
-
-    console.log('🎵 [MatchManagement] View changed, playing audio for:', currentView);
-
-    // Phát audio tương ứng theo view
-    let audioFile = null;
-
-    if (['intro', 'halftime', 'poster'].includes(currentView)) {
-      audioFile = 'poster';
-    } else if (currentView === 'scoreboard_below') {
-      audioFile = 'rasan';
-    } else if (currentView?.startsWith('scoreboard')) {
-      audioFile = 'gialap';
-    }
-
-    if (audioFile) {
-      console.log('🎵 [MatchManagement] Playing audio:', audioFile, 'for view:', currentView);
-      playAudio(audioFile);
-    }
-  }, [displaySettings?.currentView, audioEnabled, playAudio, isActive]);
+    console.log('🎵 [MatchManagement] Playing audio for action:', audioType);
+    playAudio(audioType);
+  };
 
   // Dừng audio khi tab không active nữa
   useEffect(() => {
