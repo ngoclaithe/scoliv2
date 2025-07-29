@@ -3,22 +3,6 @@ import Button from "../common/Button";
 import Input from "../common/Input";
 import LogoAPI from "../../API/apiLogo";
 
-const useDebounce = (value, delay) => {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-};
-
 const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose }) => {
   const [selectedPoster, setSelectedPoster] = useState(null);
   const [logoItems, setLogoItems] = useState([]);
@@ -93,9 +77,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       try {
         setLoading(true);
         setError(null);
-        
         setApiLogos([]);
-        
       } catch (err) {
         console.error("Error loading logos:", err);
         setError("Không thể tải danh sách logo. Vui lòng thử lại.");
@@ -259,112 +241,50 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   const LogoItem = React.memo(function LogoItem({ item, onUpdate, onRemove }) {
     const [localCode, setLocalCode] = useState(item.code);
     const [isSearching, setIsSearching] = useState(false);
-    
-    const debouncedCode = useDebounce(localCode, 1500);
-
-    useEffect(() => {
-      let isMounted = true;
-      
-      const searchByCode = async () => {
-        if (debouncedCode && debouncedCode.length >= 3 && debouncedCode !== item.code) {
-          try {
-            setIsSearching(true);
-            const response = await LogoAPI.searchLogosByCode(debouncedCode, true);
-            
-            if (!isMounted) return;
-            
-            if (response?.data?.length > 0) {
-              const foundLogo = response.data[0];
-              // Kiểm tra xem URL có hợp lệ không trước khi cập nhật
-              if (foundLogo.url_logo || foundLogo.file_path) {
-                onUpdate(item.id, {
-                  ...item,
-                  code: debouncedCode, // Cập nhật mã code mới
-                  url: foundLogo.url_logo || foundLogo.file_path,
-                  unitName: foundLogo.name || item.unitName,
-                  displayPositions: [...item.displayPositions] // Tạo mảng mới để trigger re-render
-                });
-              } else {
-                console.warn("Logo tìm thấy nhưng không có URL hợp lệ");
-              }
-            } else {
-              // Nếu không tìm thấy, chỉ cập nhật code mà không thay đổi URL
-              onUpdate(item.id, {
-                ...item,
-                code: debouncedCode
-              });
-            }
-          } catch (error) {
-            console.error("Lỗi khi tìm kiếm logo:", error);
-          } finally {
-            if (isMounted) {
-              setIsSearching(false);
-            }
-          }
-        }
-      };
-
-      searchByCode();
-      
-      return () => {
-        isMounted = false;
-      };
-    }, [debouncedCode, item.id, item, onUpdate]);
-
+  
     const handleCodeChange = (e) => {
       const newCode = e.target.value.toUpperCase();
       setLocalCode(newCode);
     };
-
-    const handleCodeKeyPress = (e) => {
+  
+    // Chỉ tìm kiếm khi nhấn Enter
+    const handleCodeKeyPress = async (e) => {
       if (e.key === 'Enter' && localCode.length >= 3) {
-        const searchByCode = async () => {
-          try {
-            setIsSearching(true);
-            const response = await LogoAPI.searchLogosByCode(localCode, true);
-            
-            if (response?.data?.length > 0) {
-              const foundLogo = response.data[0];
-              if (foundLogo.url_logo || foundLogo.file_path) {
-                onUpdate(item.id, {
-                  ...item,
-                  code: localCode,
-                  url: foundLogo.url_logo || foundLogo.file_path,
-                  unitName: foundLogo.name || item.unitName,
-                  displayPositions: [...item.displayPositions] // Tạo mảng mới
-                });
-              } else {
-                console.warn("Logo tìm thấy nhưng không có URL hợp lệ");
-                // Vẫn cập nhật code nếu muốn
-                onUpdate(item.id, {
-                  ...item,
-                  code: localCode
-                });
-              }
-            } else {
-              // Nếu không tìm thấy, vẫn cập nhật code
+        try {
+          setIsSearching(true);
+          const response = await LogoAPI.searchLogosByCode(localCode, true);
+          
+          if (response?.data?.length > 0) {
+            const foundLogo = response.data[0];
+            if (foundLogo.url_logo || foundLogo.file_path) {
               onUpdate(item.id, {
                 ...item,
-                code: localCode
+                code: localCode,
+                url: foundLogo.url_logo || foundLogo.file_path,
+                unitName: foundLogo.name || item.unitName,
+                displayPositions: [...item.displayPositions]
               });
+            } else {
+              console.warn("Logo tìm thấy nhưng không có URL hợp lệ");
+              onUpdate(item.id, { ...item, code: localCode });
             }
-          } catch (error) {
-            console.error("Lỗi khi tìm kiếm logo:", error);
-          } finally {
-            setIsSearching(false);
+          } else {
+            // Nếu không tìm thấy, vẫn cập nhật code
+            onUpdate(item.id, { ...item, code: localCode });
           }
-        };
-        searchByCode();
+        } catch (error) {
+          console.error("Lỗi khi tìm kiếm logo:", error);
+        } finally {
+          setIsSearching(false);
+        }
       }
     };
-
+  
+    // Cập nhật code khi blur (rời khỏi input)
     const handleCodeBlur = () => {
-      onUpdate(item.id, { 
-        ...item, 
-        code: localCode 
-      });
+      onUpdate(item.id, { ...item, code: localCode });
     };
-
+  
     const getShapeClass = () => {
       switch (logoDisplayOptions.shape) {
         case 'round': return 'rounded-full';
@@ -373,7 +293,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         default: return 'rounded-full';
       }
     };
-
+  
     const handlePositionToggle = (position) => {
       const newPositions = item.displayPositions.includes(position)
         ? item.displayPositions.filter(p => p !== position)
@@ -381,9 +301,9 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       
       onUpdate(item.id, { ...item, displayPositions: newPositions });
     };
-
+  
     return (
-      <div className="bg-white rounded-lg border-2 border-green-400 p-3 shadow-lg relative w-24 flex-shrink-0">
+      <div className="bg-white rounded-lg border-2 border-green-400 p-3 shadow-lg relative w-48 flex-shrink-0">
         {/* X button */}
         <button
           onClick={() => onRemove(item.id)}
@@ -398,57 +318,37 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             {item.type === 'banner' ? '🖼️' : '📁'}
           </div>
           
-          {/* Logo preview with 3D rotation effect */}
+          {/* Logo preview */}
           <div className="flex justify-center mb-2">
-            <div className="relative w-12 h-12" style={{ perspective: '100px' }}>
+            <div className="relative w-12 h-12">
               <div
-                className={`w-full h-full ${getShapeClass()} border-2 border-green-400 overflow-hidden shadow-lg relative animate-spin`}
-                style={{
-                  animationDuration: '3s',
-                  transformStyle: 'preserve-3d'
-                }}
+                className={`w-full h-full ${getShapeClass()} border-2 border-green-400 overflow-hidden shadow-lg relative`}
               >
                 {item.url ? (
                   <img
                     src={item.url}
                     alt={item.code}
                     className="w-full h-full object-contain bg-white"
-                    style={{
-                      backfaceVisibility: 'hidden'
-                    }}
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-100 flex items-center justify-center">
                     <span className="text-gray-400 text-xs">No image</span>
                   </div>
                 )}
-                {/* Back side of the image */}
-                <div 
-                  className="absolute inset-0 bg-gradient-to-br from-green-400 to-blue-400 rounded-full flex items-center justify-center"
-                  style={{
-                    transform: 'rotateY(180deg)',
-                    backfaceVisibility: 'hidden'
-                  }}
-                >
-                  <span className="text-white text-xs font-bold">
-                    {item.type === 'banner' ? '🖼️' : '📁'}
-                  </span>
-                </div>
               </div>
             </div>
           </div>
           
-          {/* Logo code */}
+          {/* Logo code display */}
           <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded p-1 mb-1">
             <div className="text-xs text-green-700 bg-white rounded px-1 py-0.5 font-bold truncate">
               {item.code}
             </div>
           </div>
-          
-          
         </div>
-
+  
         <div className="mt-2">
+          {/* Input tìm kiếm */}
           <input
             type="text"
             value={localCode}
@@ -458,15 +358,16 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             className={`w-full text-xs text-center border rounded px-1 py-1 font-mono transition-colors focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none ${
               isSearching ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
             }`}
-            placeholder="Mã (Enter để tìm)"
+            placeholder="Nhập mã (Enter để tìm)"
           />
-
+  
           {isSearching && (
             <div className="text-xs text-blue-600 text-center mt-1 animate-pulse">
               🔍 Đang tìm kiếm...
             </div>
           )}
-
+  
+          {/* Position toggles */}
           <div className="mt-2">
             <div className="grid grid-cols-3 gap-1">
               {[
@@ -488,7 +389,8 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             </div>
           </div>
         </div>
-
+  
+        {/* File upload cho custom logo */}
         {item.isCustom && (
           <div className="mt-2">
             <input
@@ -518,8 +420,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
   const handlePosterSelect = (poster) => {
     console.log('🎨 [PosterLogoManager] handlePosterSelect called with:', poster);
-    console.log('[PosterLogoManager] Current selectedPoster before update:', selectedPoster);
-
     setSelectedPoster(poster);
   };
 
@@ -600,22 +500,16 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
   const handleSave = () => {
     console.log('💾 [PosterLogoManager] handleSave called');
-    console.log('💾 [PosterLogoManager] selectedPoster:', selectedPoster);
-    console.log('💾 [PosterLogoManager] onPosterUpdate function exists:', !!onPosterUpdate);
-
+    
     if (selectedPoster) {
       console.log('💾 [PosterLogoManager] Calling onPosterUpdate with selectedPoster:', selectedPoster);
       onPosterUpdate?.(selectedPoster);
-    } else {
-      console.log('⚠️ [PosterLogoManager] No selectedPoster to update');
     }
 
     const activeItems = allLogoItems.filter(item =>
       item.category === activeLogoCategory &&
       (item.displayPositions.length > 0 || logoItems.includes(item))
     );
-
-    console.log('💾 [PosterLogoManager] activeItems for logo update:', activeItems);
 
     if (activeItems.length > 0) {
       console.log('💾 [PosterLogoManager] Calling onLogoUpdate');
@@ -625,7 +519,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       });
     }
 
-    console.log('💾 [PosterLogoManager] Calling onClose');
     onClose?.();
   };
 
