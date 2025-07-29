@@ -4,7 +4,6 @@ import { AuthProvider } from '../contexts/AuthContext';
 import { MatchProvider } from '../contexts/MatchContext';
 import { PublicMatchProvider } from '../contexts/PublicMatchContext';
 
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import App from '../App';
 import DisplayController from '../components/display/DisplayController';
