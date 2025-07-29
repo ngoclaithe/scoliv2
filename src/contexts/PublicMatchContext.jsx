@@ -248,31 +248,14 @@ export const PublicMatchProvider = ({ children }) => {
       console.log('🎯 [Audio] View updated to:', data.viewType);
     });
 
-    // DEBUG: Lắng nghe TẤT CẢ events để debug
+    // Minimal audio debug logging
     if (socketService.socket) {
-      const originalEmit = socketService.socket.emit;
-      socketService.socket.emit = function(event, ...args) {
-        if (event.includes('audio')) {
-          console.log('🚀 [DEBUG] Socket EMIT:', event, args);
-        }
-        return originalEmit.apply(this, [event, ...args]);
-      };
-
-      // Lắng nghe tất cả events
       const originalOn = socketService.socket.on;
       socketService.socket.on = function(event, callback) {
         if (event === 'audio_control') {
           console.log('🎯 [DEBUG] Registering listener for:', event);
         }
-
-        const wrappedCallback = function(...args) {
-          if (event.includes('audio') || event === 'audio_control') {
-            console.log('📥 [DEBUG] Socket RECEIVED:', event, args);
-          }
-          return callback.apply(this, args);
-        };
-
-        return originalOn.call(this, event, wrappedCallback);
+        return originalOn.call(this, event, callback);
       };
     }
 
@@ -312,7 +295,7 @@ export const PublicMatchProvider = ({ children }) => {
   // Khởi tạo socket connection cho public route
   const initializeSocket = useCallback(async (accessCode) => {
     try {
-      // Tránh khởi tạo socket trùng lặp
+      // Tránh khởi tạo socket trùng l���p
       if (currentAccessCode === accessCode && socketConnected) {
         return;
       }
