@@ -57,6 +57,11 @@ const audioReducer = (state, action) => {
         ...state,
         userInteracted: action.payload,
       };
+    case audioActions.SET_REFEREE_VOICE_PLAYING:
+      return {
+        ...state,
+        isRefereeVoicePlaying: action.payload,
+      };
     default:
       return state;
   }
