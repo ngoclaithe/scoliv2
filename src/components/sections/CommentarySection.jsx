@@ -435,17 +435,21 @@ const CommentarySection = ({ isActive = true }) => {
       {/* Voice Recording Button */}
       <div className="flex justify-center">
         <button
-          onClick={isContinuousMode ? toggleContinuousMode : toggleRecording}
+          onClick={isContinuousMode ? toggleContinuousMode : (isRealTimeTranmission && !isRecording ? toggleRealTimeRecording : toggleRecording)}
           disabled={isProcessing || !isSupported}
           className={`
             w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 transform
             ${continuousRecording
               ? 'bg-green-500 hover:bg-green-600 animate-pulse scale-110'
-              : isRecording
-                ? 'bg-red-500 hover:bg-red-600 animate-pulse scale-110'
-                : isContinuousMode
-                  ? 'bg-green-500 hover:bg-green-600'
-                  : 'bg-blue-500 hover:bg-blue-600'
+              : isRecording && isRealTimeTranmission
+                ? 'bg-red-500 hover:bg-red-600 animate-pulse scale-110 ring-4 ring-red-300'
+                : isRecording
+                  ? 'bg-red-500 hover:bg-red-600 animate-pulse scale-110'
+                  : isContinuousMode
+                    ? 'bg-green-500 hover:bg-green-600'
+                    : isRealTimeTranmission
+                      ? 'bg-red-500 hover:bg-red-600'
+                      : 'bg-blue-500 hover:bg-blue-600'
             }
             ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}
             text-white shadow-lg hover:shadow-xl
