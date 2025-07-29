@@ -352,12 +352,12 @@ export const AudioProvider = ({ children }) => {
         stopCurrentAudio();
       } else if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
         console.log('📡 Server command: PLAY_REFEREE_VOICE');
-        const { audioData } = data.payload;
+        const { audioData, mimeType } = data.payload;
 
         try {
           // Chuyển audioData từ array về Uint8Array
           const uint8Array = new Uint8Array(audioData);
-          const audioBlob = new Blob([uint8Array], { type: 'audio/ogg; codecs=opus' });
+          const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
           playRefereeVoice(audioBlob);
         } catch (error) {
           console.error('❌ Error processing referee voice data:', error);
