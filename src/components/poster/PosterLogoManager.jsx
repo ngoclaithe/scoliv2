@@ -447,11 +447,14 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
           )}
 
           <div className="mt-2">
-            <div className="grid grid-cols-3 gap-1">
+            <div className="grid grid-cols-6 gap-1">
               {[
                 { key: 'top-left', icon: '↖️', title: 'Trên trái' },
                 { key: 'top', icon: '⬆️', title: 'Trên giữa' },
-                { key: 'top-right', icon: '↗️', title: 'Trên phải' }
+                { key: 'top-right', icon: '↗️', title: 'Trên phải' },
+                { key: 'bottom-left', icon: '↙️', title: 'Dưới trái' },
+                { key: 'bottom', icon: '⬇️', title: 'Dưới giữa' },
+                { key: 'bottom-right', icon: '↘️', title: 'Dưới phải' }
               ].map((pos) => (
                 <button
                   key={pos.key}
@@ -461,7 +464,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
                     : 'border-gray-300 hover:border-gray-400 text-gray-600'}`}
                   title={pos.title}
                 >
-                  <span className="text-base">{pos.icon}</span>
+                  <span className="text-sm">{pos.icon}</span>
                 </button>
               ))}
             </div>
