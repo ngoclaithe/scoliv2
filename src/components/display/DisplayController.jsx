@@ -102,8 +102,7 @@ const DisplayController = () => {
       socketService.off('audio_control', handleAudioControl);
     };
 
-    prevViewRef.current = currentView;
-  }, [currentView, playRefereeVoice]); // Thêm playRefereeVoice vào dependencies
+  }, [playRefereeVoice]); // Chỉ phụ thuộc vào playRefereeVoice
 
   // DisplayController không cần xử lý audio enabled changes nữa
   // Audio sẽ được quản lý từ MatchManagementSection và voice từ CommentarySection
