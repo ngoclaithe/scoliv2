@@ -1,24 +1,50 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useMatch } from "../../contexts/MatchContext";
+import { useAudio } from "../../contexts/AudioContext";
 import { Mic, MicOff } from "lucide-react";
+import socketService from "../../services/socketService";
 
 const CommentarySection = () => {
   const { matchData } = useMatch();
+  const { stopCurrentAudio } = useAudio();
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
+  const streamRef = useRef(null);
 
-  // Check for browser support
-  const isSupported = typeof navigator !== 'undefined' && 
-                     navigator.mediaDevices && 
-                     navigator.mediaDevices.getUserMedia;
+  // Check for browser support and codecs
+  const isSupported = typeof navigator !== 'undefined' &&
+                     navigator.mediaDevices &&
+                     navigator.mediaDevices.getUserMedia &&
+                     typeof MediaRecorder !== 'undefined';
+
+  const getSupportedMimeType = () => {
+    const types = [
+      'audio/webm;codecs=opus',
+      'audio/ogg;codecs=opus',
+      'audio/webm',
+      'audio/mp4',
+      'audio/wav'
+    ];
+
+    for (const type of types) {
+      if (MediaRecorder.isTypeSupported(type)) {
+        console.log('🎙️ Using mime type:', type);
+        return type;
+      }
+    }
+    return null;
+  };
 
   useEffect(() => {
     return () => {
       // Cleanup on unmount
       if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
         mediaRecorderRef.current.stop();
+      }
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
       }
     };
   }, []);
@@ -29,19 +55,36 @@ const CommentarySection = () => {
       return;
     }
 
+    const mimeType = getSupportedMimeType();
+    if (!mimeType) {
+      alert('Trình duyệt không hỗ trợ các codec audio cần thiết');
+      return;
+    }
+
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
+      // Dừng tất cả audio đang phát trước khi bắt đầu ghi
+      stopCurrentAudio();
+
+      const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          sampleRate: 44100
-        } 
+          sampleRate: 44100, // Standard sample rate for compatibility
+          channelCount: 1, // Mono for voice
+          autoGainControl: true
+        }
       });
-      
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/wav'
-      });
-      
+
+      streamRef.current = stream;
+
+      const options = { mimeType };
+      // Add bitrate if supported
+      if (mimeType.includes('opus') || mimeType.includes('webm')) {
+        options.audioBitsPerSecond = 64000;
+      }
+
+      const mediaRecorder = new MediaRecorder(stream, options);
+
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
@@ -52,12 +95,16 @@ const CommentarySection = () => {
       };
 
       mediaRecorder.onstop = () => {
-        stream.getTracks().forEach(track => track.stop());
+        if (streamRef.current) {
+          streamRef.current.getTracks().forEach(track => track.stop());
+          streamRef.current = null;
+        }
         processRecording();
       };
 
       mediaRecorder.start(100); // Collect data every 100ms
       setIsRecording(true);
+      console.log('🎙️ Voice recording started with codec:', mimeType);
     } catch (error) {
       console.error('Lỗi khi bắt đầu ghi âm:', error);
       alert('Không thể truy cập microphone. Vui lòng cho phép quyền truy cập.');
@@ -72,23 +119,57 @@ const CommentarySection = () => {
     }
   };
 
-  const processRecording = () => {
+  const processRecording = async () => {
     if (audioChunksRef.current.length > 0) {
-      const audioBlob = new Blob(audioChunksRef.current, { 
-        type: mediaRecorderRef.current.mimeType 
+      const mimeType = mediaRecorderRef.current?.mimeType || getSupportedMimeType() || 'audio/webm';
+      const audioBlob = new Blob(audioChunksRef.current, {
+        type: mimeType
       });
-      
-      // Here you would typically send the audio to your speech-to-text service
-      console.log('Audio recorded:', audioBlob);
-      
-      // Simulate processing
-      setTimeout(() => {
-        setIsProcessing(false);
-        // You can add the transcribed text to your commentary here
-      }, 1500);
+
+      console.log('🎙️ Voice recorded:', audioBlob.size, 'bytes');
+
+      try {
+        // Gửi voice lên server qua socket
+        await sendVoiceToServer(audioBlob);
+        console.log('✅ Voice sent to server successfully');
+      } catch (error) {
+        console.error('❌ Failed to send voice to server:', error);
+        alert('Không thể gửi voice lên server');
+      }
+
+      setIsProcessing(false);
     } else {
       setIsProcessing(false);
     }
+  };
+
+  const sendVoiceToServer = async (audioBlob) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const arrayBuffer = reader.result;
+        const uint8Array = new Uint8Array(arrayBuffer);
+
+        if (socketService.socket && socketService.socket.connected) {
+          // Gửi voice data qua socketService
+          const mimeType = mediaRecorderRef.current?.mimeType || getSupportedMimeType() || 'audio/webm';
+          const success = socketService.sendRefereeVoice(
+            Array.from(uint8Array),
+            mimeType
+          );
+
+          if (success) {
+            resolve();
+          } else {
+            reject(new Error('Failed to send voice through socket service'));
+          }
+        } else {
+          reject(new Error('Socket not connected'));
+        }
+      };
+      reader.onerror = () => reject(reader.error);
+      reader.readAsArrayBuffer(audioBlob);
+    });
   };
 
   const toggleRecording = () => {
@@ -142,6 +223,9 @@ const CommentarySection = () => {
         )}
         {!isSupported && (
           <p className="text-red-600">Trình duyệt không hỗ trợ ghi âm</p>
+        )}
+        {isRecording && (
+          <p className="text-orange-600 text-sm mt-2">⚠️ Tất cả audio khác đã bị dừng để ghi voice</p>
         )}
       </div>
     </div>

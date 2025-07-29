@@ -352,6 +352,20 @@ class SocketService {
 
   // === AUDIO & COMMENTARY EVENTS ===
 
+  // Gửi voice trọng tài tới display clients
+  sendRefereeVoice(audioData, mimeType = 'audio/ogg; codecs=opus') {
+    console.log('🎙️ [SocketService] Sending referee voice to displays');
+    return this.sendAudioControl({
+      command: 'PLAY_REFEREE_VOICE',
+      payload: {
+        audioData,
+        mimeType,
+        timestamp: Date.now()
+      },
+      target: 'display'
+    });
+  }
+
   // === TIMER REAL-TIME EVENTS ===
 
   // Start timer từ server

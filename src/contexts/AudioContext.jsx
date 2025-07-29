@@ -8,6 +8,7 @@ const initialState = {
   volume: 0.7,
   isMuted: false,
   userInteracted: false,
+  isRefereeVoicePlaying: false, // Voice trọng tài đang phát
 };
 
 // Audio Actions - rút gọn
@@ -18,6 +19,7 @@ const audioActions = {
   TOGGLE_MUTE: 'TOGGLE_MUTE',
   SET_PLAYING: 'SET_PLAYING',
   SET_USER_INTERACTED: 'SET_USER_INTERACTED',
+  SET_REFEREE_VOICE_PLAYING: 'SET_REFEREE_VOICE_PLAYING',
 };
 
 // Audio Reducer - đơn giản hóa
@@ -55,6 +57,11 @@ const audioReducer = (state, action) => {
         ...state,
         userInteracted: action.payload,
       };
+    case audioActions.SET_REFEREE_VOICE_PLAYING:
+      return {
+        ...state,
+        isRefereeVoicePlaying: action.payload,
+      };
     default:
       return state;
   }
@@ -67,6 +74,7 @@ const AudioContext = createContext();
 export const AudioProvider = ({ children }) => {
   const [state, dispatch] = useReducer(audioReducer, initialState);
   const audioRef = useRef(null);
+  const refereeVoiceRef = useRef(null);
 
   // Static audio file mapping
   const audioFiles = {
@@ -74,6 +82,77 @@ export const AudioProvider = ({ children }) => {
     rasan: '/audio/rasan.mp3',
     gialap: '/audio/gialap.mp3',
   };
+
+  // Phát voice trọng tài
+  const playRefereeVoice = useCallback((audioBlob) => {
+    console.log('🎙️ [AudioContext] Playing referee voice');
+
+    // Dừng tất cả audio khác trước
+    stopCurrentAudio();
+
+    try {
+      // Tạo URL từ blob
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+
+      refereeVoiceRef.current = audio;
+      audio.volume = state.isMuted ? 0 : state.volume;
+
+      dispatch({ type: audioActions.SET_REFEREE_VOICE_PLAYING, payload: true });
+
+      audio.onended = () => {
+        console.log('✅ Referee voice playback ended');
+        dispatch({ type: audioActions.SET_REFEREE_VOICE_PLAYING, payload: false });
+        URL.revokeObjectURL(audioUrl);
+        refereeVoiceRef.current = null;
+      };
+
+      audio.onerror = (e) => {
+        console.error('❌ Referee voice playback error:', e);
+        dispatch({ type: audioActions.SET_REFEREE_VOICE_PLAYING, payload: false });
+        URL.revokeObjectURL(audioUrl);
+        refereeVoiceRef.current = null;
+      };
+
+      const playPromise = audio.play();
+      if (playPromise) {
+        playPromise
+          .then(() => {
+            console.log('✅ Referee voice started playing successfully');
+          })
+          .catch((error) => {
+            console.error('❌ Failed to play referee voice:', error);
+            dispatch({ type: audioActions.SET_REFEREE_VOICE_PLAYING, payload: false });
+            URL.revokeObjectURL(audioUrl);
+            refereeVoiceRef.current = null;
+          });
+      }
+
+    } catch (error) {
+      console.error('❌ Error creating referee voice audio:', error);
+      dispatch({ type: audioActions.SET_REFEREE_VOICE_PLAYING, payload: false });
+    }
+  }, [state.isMuted, state.volume]);
+
+  // Dừng voice trọng tài
+  const stopRefereeVoice = useCallback(() => {
+    console.log('🔇 [AudioContext] Stopping referee voice');
+
+    if (refereeVoiceRef.current) {
+      try {
+        refereeVoiceRef.current.pause();
+        refereeVoiceRef.current.currentTime = 0;
+        if (refereeVoiceRef.current.src && refereeVoiceRef.current.src.startsWith('blob:')) {
+          URL.revokeObjectURL(refereeVoiceRef.current.src);
+        }
+      } catch (error) {
+        console.warn('⚠️ Error stopping referee voice:', error);
+      }
+      refereeVoiceRef.current = null;
+    }
+
+    dispatch({ type: audioActions.SET_REFEREE_VOICE_PLAYING, payload: false });
+  }, []);
 
   // Set up user interaction listeners
   useEffect(() => {
@@ -114,6 +193,20 @@ export const AudioProvider = ({ children }) => {
       audioRef.current = null;
     }
 
+    // Dừng voice trọng tài
+    if (refereeVoiceRef.current) {
+      try {
+        refereeVoiceRef.current.pause();
+        refereeVoiceRef.current.currentTime = 0;
+        if (refereeVoiceRef.current.src && refereeVoiceRef.current.src.startsWith('blob:')) {
+          URL.revokeObjectURL(refereeVoiceRef.current.src);
+        }
+      } catch (error) {
+        console.warn('⚠️ Error stopping referee voice:', error);
+      }
+      refereeVoiceRef.current = null;
+    }
+
     // Dừng TẤT CẢ audio elements trên trang - FIX CHÍNH
     try {
       const allAudioElements = document.querySelectorAll('audio');
@@ -140,6 +233,7 @@ export const AudioProvider = ({ children }) => {
     }
 
     dispatch({ type: audioActions.SET_PLAYING, payload: false });
+    dispatch({ type: audioActions.SET_REFEREE_VOICE_PLAYING, payload: false });
   }, []);
 
   // Play audio - đơn giản hóa
@@ -153,6 +247,12 @@ export const AudioProvider = ({ children }) => {
 
     if (!state.userInteracted) {
       console.log('⏳ User hasn\'t interacted yet, skipping audio');
+      return;
+    }
+
+    // Không phát audio khác nếu voice trọng tài đang phát
+    if (state.isRefereeVoicePlaying) {
+      console.log('🎙️ Referee voice is playing, skipping regular audio');
       return;
     }
 
@@ -250,6 +350,18 @@ export const AudioProvider = ({ children }) => {
       } else if (data.command === 'STOP_AUDIO') {
         console.log('📡 Server command: STOP_AUDIO');
         stopCurrentAudio();
+      } else if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
+        console.log('📡 Server command: PLAY_REFEREE_VOICE');
+        const { audioData, mimeType } = data.payload;
+
+        try {
+          // Chuyển audioData từ array về Uint8Array
+          const uint8Array = new Uint8Array(audioData);
+          const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
+          playRefereeVoice(audioBlob);
+        } catch (error) {
+          console.error('❌ Error processing referee voice data:', error);
+        }
       }
     };
 
@@ -280,6 +392,21 @@ export const AudioProvider = ({ children }) => {
         }
         audioRef.current = null;
       }
+
+      // Cleanup referee voice
+      if (refereeVoiceRef.current) {
+        try {
+          refereeVoiceRef.current.pause();
+          refereeVoiceRef.current.onended = null;
+          refereeVoiceRef.current.onerror = null;
+          if (refereeVoiceRef.current.src && refereeVoiceRef.current.src.startsWith('blob:')) {
+            URL.revokeObjectURL(refereeVoiceRef.current.src);
+          }
+        } catch (error) {
+          console.warn('⚠️ Error cleaning up referee voice:', error);
+        }
+        refereeVoiceRef.current = null;
+      }
     };
   }, []);
 
@@ -289,6 +416,12 @@ export const AudioProvider = ({ children }) => {
       const newVolume = state.isMuted ? 0 : state.volume;
       console.log('🔊 Updating audio element volume:', newVolume);
       audioRef.current.volume = newVolume;
+    }
+
+    if (refereeVoiceRef.current) {
+      const newVolume = state.isMuted ? 0 : state.volume;
+      console.log('🔊 Updating referee voice volume:', newVolume);
+      refereeVoiceRef.current.volume = newVolume;
     }
   }, [state.volume, state.isMuted]);
 
@@ -300,6 +433,8 @@ export const AudioProvider = ({ children }) => {
     playAudio,
     stopCurrentAudio,
     toggleAudioEnabled,
+    playRefereeVoice,
+    stopRefereeVoice,
   };
 
   return (
