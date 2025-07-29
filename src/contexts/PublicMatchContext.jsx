@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import socketService from '../services/socketService';
+import audioUtils from '../utils/audioUtils';
 
 const PublicMatchContext = createContext();
 
