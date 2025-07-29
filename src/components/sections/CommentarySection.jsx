@@ -405,6 +405,25 @@ const CommentarySection = ({ isActive = true }) => {
           </button>
         </div>
 
+        {/* Real-time toggle for push-to-talk mode */}
+        {!isContinuousMode && (
+          <div className="flex items-center space-x-2 mt-2">
+            <label className="text-xs text-gray-600">
+              Phát trực tiếp:
+            </label>
+            <button
+              onClick={() => setIsRealTimeTransmission(!isRealTimeTranmission)}
+              className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
+                isRealTimeTranmission
+                  ? 'bg-red-500 text-white'
+                  : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
+              }`}
+            >
+              {isRealTimeTranmission ? 'BẬT' : 'TẮT'}
+            </button>
+          </div>
+        )}
+
         {/* Real-time indicator */}
         {isRealTimeTranmission && (
           <div className="text-xs text-green-600 font-medium animate-pulse">
