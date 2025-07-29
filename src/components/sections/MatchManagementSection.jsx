@@ -377,8 +377,9 @@ const MatchManagementSection = () => {
                 : "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700"
             } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
+              console.log('🎵 [MatchManagement] Audio toggle clicked - current state:', audioEnabled);
               toggleAudioEnabled();
-              toast.info(audioEnabled ? '🔇 Đã tắt tất cả audio tĩnh' : '🔊 Đã bật tất cả audio tĩnh');
+              toast.info(audioEnabled ? '🔇 Đã gửi lệnh TẮT audio tĩnh' : '🔊 Đã gửi lệnh BẬT audio tĩnh');
             }}
             title={audioEnabled ? "Tắt tất cả audio tĩnh" : "Bật tất cả audio tĩnh"}
           >
