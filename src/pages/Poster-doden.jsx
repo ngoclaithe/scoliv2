@@ -5,8 +5,6 @@ export default function DodenMatchIntro() {
   // Sử dụng dữ liệu từ PublicMatchContext
   const { matchData: contextMatchData, marqueeData } = usePublicMatch();
   
-  // Sử dụng AudioContext
-
   // Kết hợp dữ liệu từ context với dữ liệu mặc định
   const matchData = {
     matchTitle: contextMatchData.tournament || 'GIẢI VÔ ĐỊCH QUỐC GIA',
@@ -29,8 +27,7 @@ export default function DodenMatchIntro() {
 
   const marqueeRef = useRef(null);
 
-  // AudioContext đã sẵn sàng, có thể phát audio khi cần
-  // Không tự động phát audio khi mount
+  // Audio managed by MatchManagementSection
 
   // Font size adjustment function
   const adjustFontSize = (element) => {
