@@ -163,7 +163,7 @@ const CommentarySection = ({ isActive = true }) => {
 
     // Start recording với interval thích hợp
     if (isRealTimeTranmission) {
-      // Real-time mode: thu thập data mỗi 200ms và gửi ngay
+      // Real-time mode: thu thập data m���i 200ms và gửi ngay
       mediaRecorder.start(200);
     } else {
       // Normal mode: thu thập data mỗi 100ms
@@ -292,6 +292,7 @@ const CommentarySection = ({ isActive = true }) => {
   const startContinuousRecording = async () => {
     console.log('🎙️ Starting continuous recording mode');
     setContinuousRecording(true);
+    setIsRealTimeTransmission(true); // Bật real-time transmission
     await startRecording();
   };
 
