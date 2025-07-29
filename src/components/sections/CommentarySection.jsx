@@ -212,17 +212,7 @@ const CommentarySection = ({ isActive = true }) => {
     scheduleNextContinuousChunk();
   };
 
-  const scheduleNextContinuousChunk = () => {
-    if (isContinuousMode && continuousRecording && streamRef.current) {
-      console.log('🔄 Scheduling next continuous chunk');
-      // Delay ngắn để tránh gap
-      setTimeout(() => {
-        if (continuousRecording && streamRef.current) {
-          startNextContinuousChunk();
-        }
-      }, 100);
-    }
-  };
+
 
   const sendVoiceToServer = async (audioBlob) => {
     return new Promise((resolve, reject) => {
@@ -394,7 +384,7 @@ const CommentarySection = ({ isActive = true }) => {
           {isContinuousMode ? (
             <p>Chế độ nói liên tục: Audio được gửi mỗi 500ms</p>
           ) : (
-            <p>Chế độ ấn để nói: ��n một lần để bắt đầu, ấn lại để dừng và gửi</p>
+            <p>Chế độ ấn để nói: Ấn một lần để bắt đầu, ấn lại để dừng và gửi</p>
           )}
         </div>
       </div>
