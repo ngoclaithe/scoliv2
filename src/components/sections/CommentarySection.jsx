@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useMatch } from "../../contexts/MatchContext";
-import { useAudio } from "../../contexts/AudioContext";
+import audioUtils from '../../utils/audioUtils';
 import { Mic, MicOff } from "lucide-react";
 import socketService from "../../services/socketService";
 
 const CommentarySection = ({ isActive = true }) => {
   const { matchData } = useMatch();
-  const { stopCurrentAudio, stopRefereeVoice } = useAudio();
+  // Remove dependency on AudioContext
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const mediaRecorderRef = useRef(null);
@@ -52,8 +52,8 @@ const CommentarySection = ({ isActive = true }) => {
   // Dừng voice trọng tài khi tab không active nữa
   useEffect(() => {
     if (!isActive) {
-      console.log('🔇 [CommentarySection] Tab inactive, stopping referee voice');
-      stopRefereeVoice();
+      console.log('🔇 [CommentarySection] Tab inactive, stopping all audio');
+      audioUtils.stopAllAudio();
 
       // Dừng ghi âm nếu đang ghi
       if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
@@ -65,7 +65,7 @@ const CommentarySection = ({ isActive = true }) => {
         streamRef.current = null;
       }
     }
-  }, [isActive, stopRefereeVoice]);
+  }, [isActive]);
 
   const startRecording = async () => {
     if (!isSupported) {
@@ -81,7 +81,7 @@ const CommentarySection = ({ isActive = true }) => {
 
     try {
       // Dừng tất cả audio đang phát trước khi bắt đầu ghi
-      stopCurrentAudio();
+      audioUtils.stopAllAudio();
 
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
@@ -237,7 +237,7 @@ const CommentarySection = ({ isActive = true }) => {
           <p className="text-red-600 font-medium animate-pulse">● Đang ghi âm...</p>
         )}
         {!isRecording && !isProcessing && (
-          <p className="text-gray-600">Ấn mic để bắt đầu bình luận</p>
+          <p className="text-gray-600">��n mic để bắt đầu bình luận</p>
         )}
         {!isSupported && (
           <p className="text-red-600">Trình duyệt không hỗ trợ ghi âm</p>
