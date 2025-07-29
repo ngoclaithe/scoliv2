@@ -27,7 +27,7 @@ const DisplayController = () => {
   } = usePublicMatch();
 
   // Sử dụng AudioContext
-  const { playAudio, audioEnabled, stopCurrentAudio } = useAudio();
+  const { playAudio, audioEnabled, stopCurrentAudio, forceStopAudio } = useAudio();
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
