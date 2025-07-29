@@ -3,11 +3,11 @@ import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { useAudio } from '../../contexts/AudioContext';
 
 const Intro = () => {
-    // Sử dụng dữ liệu từ PublicMatchContext
+    // Sử dụng dữ liệu t��� PublicMatchContext
     const { matchData: contextMatchData, marqueeData } = usePublicMatch();
 
-    // Sử dụng AudioContext để điều khiển audio tập trung
-    const { audioEnabled, playAudio, stopCurrentAudio } = useAudio();
+    // Audio sẽ được phát từ MatchManagementSection, không phát ở đây nữa
+    // const { audioEnabled, playAudio, stopCurrentAudio } = useAudio();
 
     // Kết hợp dữ liệu từ context với dữ liệu mặc định
     const matchData = {
@@ -42,29 +42,8 @@ const Intro = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // Tự động phát audio poster.mp3 qua AudioContext khi component mount
-    useEffect(() => {
-        if (audioEnabled) {
-            console.log('🎵 [Intro] Playing poster audio via AudioContext');
-            playAudio('poster');
-        } else {
-            console.log('🔇 [Intro] Audio disabled, not playing');
-        }
-
-        // Cleanup khi unmount
-        return () => {
-            console.log('🧹 [Intro] Component unmounting, stopping audio');
-            stopCurrentAudio();
-        };
-    }, [audioEnabled]); // eslint-disable-line react-hooks/exhaustive-deps
-
-    // Lắng nghe thay đổi audioEnabled để dừng/phát audio
-    useEffect(() => {
-        if (!audioEnabled) {
-            console.log('🔇 [Intro] Audio disabled, stopping current audio');
-            stopCurrentAudio();
-        }
-    }, [audioEnabled]); // eslint-disable-line react-hooks/exhaustive-deps
+    // Audio đã được chuyển sang MatchManagementSection để quản lý tập trung
+    // Intro component chỉ hiển thị, không phát audio
 
     // Responsive calculations
     const isMobile = windowSize.width < 768;
