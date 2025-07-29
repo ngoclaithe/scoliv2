@@ -112,29 +112,22 @@ export const PublicMatchProvider = ({ children }) => {
 
   // Thiết lập các listener cho socket
   const setupSocketListeners = useCallback(() => {
-    // Clear existing listeners trước khi thêm mới
-    socketService.removeAllListeners('match_info_updated');
-    socketService.removeAllListeners('score_updated');
-    socketService.removeAllListeners('match_stats_updated');
-    socketService.removeAllListeners('template_updated');
-    socketService.removeAllListeners('poster_updated');
-    socketService.removeAllListeners('team_logos_updated');
-    socketService.removeAllListeners('team_names_updated');
-    socketService.removeAllListeners('marquee_updated');
-    socketService.removeAllListeners('match_time_updated');
-    socketService.removeAllListeners('timer_tick');
-    socketService.removeAllListeners('timer_started');
-    socketService.removeAllListeners('timer_paused');
-    socketService.removeAllListeners('timer_resumed');
-    socketService.removeAllListeners('timer_reset');
-    socketService.removeAllListeners('penalty_updated');
-    socketService.removeAllListeners('lineup_updated');
-    socketService.removeAllListeners('sponsors_updated');
-    socketService.removeAllListeners('logo_data_updated');
-    socketService.removeAllListeners('view_updated');
-    socketService.removeAllListeners('audio_control');
-    socketService.removeAllListeners('disconnect');
-    socketService.removeAllListeners('connect');
+    console.log('🔧 [PublicMatchContext] Setting up socket listeners...');
+
+    // Clear existing listeners trước khi thêm mới để tránh duplicate
+    const eventsToClean = [
+      'match_info_updated', 'score_updated', 'match_stats_updated', 'template_updated',
+      'poster_updated', 'team_logos_updated', 'team_names_updated', 'marquee_updated',
+      'match_time_updated', 'timer_tick', 'timer_started', 'timer_paused', 'timer_resumed',
+      'timer_reset', 'penalty_updated', 'lineup_updated', 'sponsors_updated', 'logo_data_updated',
+      'view_updated', 'audio_control', 'disconnect', 'connect'
+    ];
+
+    eventsToClean.forEach(eventName => {
+      socketService.removeAllListeners(eventName);
+    });
+
+    console.log('🧹 [PublicMatchContext] Cleaned up existing listeners');
     // Lắng nghe cập nhật thông tin trận đấu
     socketService.on('match_info_updated', (data) => {
       setMatchData(prev => ({ ...prev, ...data.matchInfo }));
@@ -285,13 +278,24 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật view hiện tại (MỚI) - KHÔNG update time để tránh re-render
     socketService.on('view_updated', (data) => {
-      setCurrentView(data.viewType);
-      console.log('🎯 [Audio] View updated to:', data.viewType);
+      console.log('🎯 [PublicMatchContext] Received view_updated event:', data);
+      if (data.viewType) {
+        setCurrentView(data.viewType);
+        console.log('✅ [PublicMatchContext] View updated to:', data.viewType);
+      } else {
+        console.warn('⚠️ [PublicMatchContext] view_updated event missing viewType:', data);
+      }
     });
 
     // Lắng nghe audio control events - để nhận referee voice từ CommentarySection
     socketService.on('audio_control', (data) => {
       console.log('🎙️ [PublicMatchContext] Received audio_control event:', data);
+      console.log('🎙️ [PublicMatchContext] Event details:', {
+        target: data.target,
+        command: data.command,
+        hasPayload: !!data.payload,
+        timestamp: data.timestamp
+      });
 
       // Chỉ xử lý event dành cho display clients
       if (data.target === 'display' && data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
@@ -300,24 +304,31 @@ export const PublicMatchProvider = ({ children }) => {
         try {
           const uint8Array = new Uint8Array(audioData);
           const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
+          console.log('🎙️ [PublicMatchContext] Created audio blob:', audioBlob.size, 'bytes, type:', audioBlob.type);
           audioUtils.playRefereeVoice(audioBlob);
         } catch (error) {
-          console.error('❌ Error processing referee voice in DisplayController:', error);
+          console.error('❌ [PublicMatchContext] Error processing referee voice:', error);
         }
       } else {
         console.log('⚠️ [PublicMatchContext] Audio control event ignored:');
-        console.log('   - Target match:', data.target === 'display');
+        console.log('   - Target match (display):', data.target === 'display');
+        console.log('   - Command match (PLAY_REFEREE_VOICE):', data.command === 'PLAY_REFEREE_VOICE');
+        console.log('   - Has payload:', !!data.payload);
       }
     });
 
     // Lắng nghe trạng thái kết nối
     socketService.on('disconnect', () => {
+      console.log('🔌 [PublicMatchContext] Socket disconnected');
       setSocketConnected(false);
     });
 
     socketService.on('connect', () => {
+      console.log('✅ [PublicMatchContext] Socket connected');
       setSocketConnected(true);
     });
+
+    console.log('✅ [PublicMatchContext] All socket listeners set up successfully');
   }, [updateLastTime]);
 
   // Khởi tạo socket connection cho public route
