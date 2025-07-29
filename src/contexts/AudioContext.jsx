@@ -435,7 +435,7 @@ export const AudioProvider = ({ children }) => {
     }
   }, [state.audioEnabled, stopCurrentAudio]);
 
-  // DEBUG AUDIO CONTROL - TẤT CẢ EVENTS
+  // AUDIO CONTROL - ĐỢI SOCKET KHỞI TẠO
   useEffect(() => {
     const handleAudioControl = (data) => {
       console.log('🎙️ [AudioContext] ===== RECEIVED audio_control =====');
@@ -467,21 +467,51 @@ export const AudioProvider = ({ children }) => {
       console.log(`🔍 [DEBUG] Socket event "${eventName}":`, data);
     };
 
-    console.log('📡 [AudioContext] Setting up audio listeners...');
+    // Hàm kiểm tra và đăng ký listeners khi socket sẵn sàng
+    const setupListenersWhenReady = () => {
+      const socketStatus = socketService.getConnectionStatus();
 
-    // Đăng ký ngay lập tức
-    socketService.onAudioControl(handleAudioControl);
+      if (socketStatus.isConnected && socketService.socket) {
+        console.log('📡 [AudioContext] ✅ Socket ready, setting up audio listeners...');
 
-    // DEBUG: Listen to ALL possible audio events
-    socketService.on('audio_control', handleAudioControl);
-    socketService.on('audio_control_broadcast', handleAudioControl);
-    socketService.on('voice-chunk-received', debugAllEvents);
-    socketService.on('referee_voice', handleAudioControl);
-    socketService.on('play_referee_voice', handleAudioControl);
+        // Đăng ký listeners
+        socketService.onAudioControl(handleAudioControl);
+        socketService.on('audio_control', handleAudioControl);
+        socketService.on('audio_control_broadcast', handleAudioControl);
+        socketService.on('voice-chunk-received', debugAllEvents);
+        socketService.on('referee_voice', handleAudioControl);
+        socketService.on('play_referee_voice', handleAudioControl);
 
-    console.log('📡 [AudioContext] ✅ All audio listeners registered');
+        console.log('📡 [AudioContext] ✅ All audio listeners registered successfully');
+        return true;
+      } else {
+        console.log('📡 [AudioContext] ⏳ Socket not ready yet, waiting...', socketStatus);
+        return false;
+      }
+    };
 
-    // Cleanup
+    // Thử đăng ký ngay lập tức
+    if (!setupListenersWhenReady()) {
+      // Nếu chưa sẵn sàng, retry sau mỗi 500ms
+      const retryInterval = setInterval(() => {
+        if (setupListenersWhenReady()) {
+          clearInterval(retryInterval);
+        }
+      }, 500);
+
+      // Cleanup retry sau 10 giây để tránh vòng lặp vô hạn
+      setTimeout(() => {
+        clearInterval(retryInterval);
+        console.log('📡 [AudioContext] ⚠️ Timeout waiting for socket, stopped retrying');
+      }, 10000);
+
+      // Cleanup khi component unmount
+      return () => {
+        clearInterval(retryInterval);
+      };
+    }
+
+    // Cleanup listeners
     return () => {
       console.log('📡 [AudioContext] Cleaning up all audio listeners');
       socketService.off('audio_control', handleAudioControl);
