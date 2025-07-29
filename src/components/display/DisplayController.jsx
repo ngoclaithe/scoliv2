@@ -26,8 +26,8 @@ const DisplayController = () => {
     currentView
   } = usePublicMatch();
 
-  // Sử dụng AudioContext - đơn giản hóa
-  const { playAudio, audioEnabled, stopCurrentAudio } = useAudio();
+  // Sử dụng AudioContext - chỉ lấy playRefereeVoice cho DisplayController
+  const { playRefereeVoice } = useAudio();
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
@@ -39,11 +39,36 @@ const DisplayController = () => {
   useEffect(() => {
     console.log('🎮 [DisplayController] Registering audio_control listener for referee voice');
 
-    // Chỉ lắng nghe audio_control events (không tự phát audio theo view nữa)
-    // Audio sẽ được phát từ MatchManagementSection và voice từ CommentarySection
+    const handleAudioControl = (data) => {
+      console.log('🎮 [DisplayController] Received audio_control:', data);
+
+      // Chỉ xử lý voice trọng tài, các audio kh��c đã được chuyển sang MatchManagementSection
+      if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
+        console.log('🎮 [DisplayController] Received referee voice from backend');
+        const { audioData, mimeType } = data.payload;
+
+        try {
+          // Chuyển audioData từ array về Uint8Array
+          const uint8Array = new Uint8Array(audioData);
+          const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
+          playRefereeVoice(audioBlob);
+        } catch (error) {
+          console.error('❌ [DisplayController] Error processing referee voice:', error);
+        }
+      }
+    };
+
+    // Đăng ký lắng nghe audio_control
+    socketService.onAudioControl(handleAudioControl);
+
+    // Cleanup
+    return () => {
+      console.log('🧹 [DisplayController] Unregistering audio_control listener');
+      socketService.off('audio_control', handleAudioControl);
+    };
 
     prevViewRef.current = currentView;
-  }, [currentView]);
+  }, [currentView, playRefereeVoice]); // Thêm playRefereeVoice vào dependencies
 
   // DisplayController không cần xử lý audio enabled changes nữa
   // Audio sẽ được quản lý từ MatchManagementSection và voice từ CommentarySection
@@ -92,7 +117,7 @@ const DisplayController = () => {
         <div className="text-center">
           <div className="animate-spin text-6xl mb-4">⚽</div>
           <h1 className="text-2xl font-bold mb-2">Đang kết nối...</h1>
-          <p className="text-gray-300">Mã truy cập: {accessCode}</p>
+          <p className="text-gray-300">Mã truy c���p: {accessCode}</p>
           <div className="mt-4 w-48 h-2 bg-gray-700 rounded-full overflow-hidden">
             <div className="h-full bg-gradient-to-r from-blue-500 to-purple-500 animate-pulse"></div>
           </div>
