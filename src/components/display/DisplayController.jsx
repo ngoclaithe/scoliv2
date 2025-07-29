@@ -35,6 +35,41 @@ const DisplayController = () => {
   // Sử dụng useRef để lưu trữ previousView
   const prevViewRef = useRef();
 
+  // Lắng nghe currentView để phát audio tương ứng ở DisplayController
+  useEffect(() => {
+    if (!audioEnabled || !currentView) {
+      console.log('🔇 [DisplayController] Audio disabled or no current view');
+      return;
+    }
+
+    const previousView = prevViewRef.current;
+
+    // Chỉ phát audio khi view thực sự thay đổi
+    if (previousView === currentView) {
+      return;
+    }
+
+    console.log('🎵 [DisplayController] View changed, playing audio for:', currentView);
+
+    // Phát audio tương ứng theo view
+    let audioFile = null;
+
+    if (['intro', 'halftime', 'poster'].includes(currentView)) {
+      audioFile = 'poster';
+    } else if (currentView === 'scoreboard_below') {
+      audioFile = 'rasan';
+    } else if (currentView?.startsWith('scoreboard')) {
+      audioFile = 'gialap';
+    }
+
+    if (audioFile) {
+      console.log('🎵 [DisplayController] Playing audio:', audioFile, 'for view:', currentView);
+      playAudio(audioFile);
+    }
+
+    prevViewRef.current = currentView;
+  }, [currentView, audioEnabled, playAudio]);
+
   // Lắng nghe event audio_control từ backend để phát voice trọng tài
   useEffect(() => {
     console.log('🎮 [DisplayController] Registering audio_control listener for referee voice');
