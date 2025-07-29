@@ -206,7 +206,7 @@ const CommentarySection = ({ isActive = true }) => {
           console.log('🔄 Auto-restarting continuous recording');
           mediaRecorderRef.current.stop();
         }
-      }, 2000); // Restart mỗi 2 giây
+      }, 3000); // Restart mỗi 3 giây để giảm tải
     }
   };
 
