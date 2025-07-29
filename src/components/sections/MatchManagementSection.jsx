@@ -44,7 +44,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   // Sử dụng AudioContext cho điều khiển audio
   const { audioEnabled, toggleAudioEnabled, currentAudio, isPlaying, playAudio, stopCurrentAudio } = useAudio();
 
-  // State cho các tùy chọn điều khiển UI
+  // State cho các tùy chọn đi��u khiển UI
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
@@ -609,7 +609,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 logoA: teamAInfo.logo || matchData.teamA.logo,
                 logoB: teamBInfo.logo || matchData.teamB.logo
               });
-              toast.success('✅ Đã cập nhật thông tin trận đấu thành công!');
+              toast.success('✅ Đã cập nh��t thông tin trận đấu thành công!');
             }}
             className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
           >
@@ -935,7 +935,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🕐</span>
-              <span className="text-xs font-bold text-center">ĐẾM 25'</span>
+              <span className="text-xs font-bold text-center">ĐẾM 20'</span>
             </button>
 
             {/* Đếm 30' */}
