@@ -7,8 +7,9 @@ import TeamLineupModal from "../lineup/TeamLineupModal";
 import Modal from "../common/Modal";
 import SimplePenaltyModal from "../common/SimplePenaltyModal";
 import { useMatch } from "../../contexts/MatchContext";
-import { useAudio } from "../../contexts/AudioContext";
 import { toast } from 'react-toastify';
+import audioUtils from '../../utils/audioUtils';
+import socketService from '../../services/socketService';
 import LogoSearch from '../logo/LogoSearch';
 import LogoAPI from '../../API/apiLogo';
 import MatchTimeDisplay from './MatchTimeDisplay';
@@ -41,19 +42,11 @@ const MatchManagementSection = ({ isActive = true }) => {
 
   } = useMatch();
 
-  // Sử dụng AudioContext cho điều khiển audio
-  const {
-    audioEnabled,
-    toggleAudioEnabled,
-    currentAudio,
-    isPlaying,
-    isPaused,
-    currentAudioFile,
-    playAudio,
-    stopCurrentAudio,
-    pauseCurrentAudio,
-    resumeCurrentAudio
-  } = useAudio();
+  // Audio state management
+  const [audioEnabled, setAudioEnabled] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [currentAudioFile, setCurrentAudioFile] = useState(null);
 
   // State cho các tùy chọn đi��u khiển UI
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
@@ -109,6 +102,53 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
   }, [matchData.startTime, matchData.stadium, matchData.matchDate]);
 
+  // Setup socket audio listeners
+  useEffect(() => {
+    const handleAudioControl = (data) => {
+      console.log('🎙️ [MatchManagement] Received audio_control:', data);
+
+      if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
+        const { audioData, mimeType } = data.payload;
+        try {
+          const uint8Array = new Uint8Array(audioData);
+          const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
+          audioUtils.playRefereeVoice(audioBlob);
+        } catch (error) {
+          console.error('❌ Error processing referee voice:', error);
+        }
+      } else if (data.command === 'PLAY_AUDIO' && data.payload) {
+        const { audioFile } = data.payload;
+        audioUtils.playAudio(audioFile);
+        setIsPlaying(true);
+        setCurrentAudioFile(audioFile);
+      } else if (data.command === 'STOP_AUDIO') {
+        audioUtils.stopAllAudio();
+        setIsPlaying(false);
+        setIsPaused(false);
+        setCurrentAudioFile(null);
+      } else if (data.command === 'ENABLE_AUDIO') {
+        audioUtils.setAudioEnabled(true);
+        setAudioEnabled(true);
+      } else if (data.command === 'DISABLE_AUDIO') {
+        audioUtils.setAudioEnabled(false);
+        setAudioEnabled(false);
+      }
+    };
+
+    // Setup socket listeners if connected
+    if (socketService.socket) {
+      socketService.on('audio_control', handleAudioControl);
+      socketService.on('audio_control_broadcast', handleAudioControl);
+    }
+
+    return () => {
+      if (socketService.socket) {
+        socketService.off('audio_control', handleAudioControl);
+        socketService.off('audio_control_broadcast', handleAudioControl);
+      }
+    };
+  }, []);
+
   // HÀM PHÁT AUDIO TRỰC TIẾP - ĐƯỢC GỌI KHI CLICK BUTTON
   const playAudioForAction = (audioType) => {
     // Chỉ phát audio khi tab MatchManagement đang active
@@ -118,7 +158,43 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
 
     console.log('🎵 [MatchManagement] Playing audio for action:', audioType);
-    playAudio(audioType);
+    audioUtils.playAudio(audioType);
+    setIsPlaying(true);
+    setCurrentAudioFile(audioType);
+  };
+
+  // Pause/resume audio functions
+  const pauseCurrentAudio = () => {
+    console.log('⏸️ [MatchManagement] Pausing audio');
+    audioUtils.stopAllAudio(); // For simplicity, stop instead of pause
+    setIsPlaying(false);
+    setIsPaused(true);
+  };
+
+  const resumeCurrentAudio = () => {
+    if (currentAudioFile) {
+      console.log('▶️ [MatchManagement] Resuming audio');
+      audioUtils.playAudio(currentAudioFile);
+      setIsPlaying(true);
+      setIsPaused(false);
+    }
+  };
+
+  const stopCurrentAudio = () => {
+    console.log('🔇 [MatchManagement] Stopping audio');
+    audioUtils.stopAllAudio();
+    setIsPlaying(false);
+    setIsPaused(false);
+    setCurrentAudioFile(null);
+  };
+
+  const toggleAudioEnabled = () => {
+    const newState = !audioEnabled;
+    setAudioEnabled(newState);
+    audioUtils.setAudioEnabled(newState);
+    if (!newState) {
+      stopCurrentAudio();
+    }
   };
 
   // Pause audio khi tab không active nữa (thay vì stop hoàn toàn)
@@ -127,7 +203,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       console.log('⏸️ [MatchManagement] Tab inactive, pausing audio');
       pauseCurrentAudio();
     }
-  }, [isActive, isPlaying, pauseCurrentAudio]);
+  }, [isActive, isPlaying]);
 
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
