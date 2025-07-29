@@ -11,8 +11,8 @@ const TopScoreboard = ({ template = 1, accessCode }) => {
     socketConnected
   } = usePublicMatch();
 
-  // Sử dụng AudioContext để phát audio
-  const { playAudio } = useAudio();
+  // Audio đã được chuyển sang MatchManagementSection để quản lý tập trung
+  // const { playAudio } = useAudio();
 
   // Sample data - sẽ được override bởi context data
   const [scoreboardData, setScoreboardData] = useState({
@@ -151,10 +151,10 @@ const TopScoreboard = ({ template = 1, accessCode }) => {
     return () => window.removeEventListener('resize', adjustScale);
   }, []);
 
-  // Tự động phát audio gialap.mp3 khi component mount - CHỈ 1 LẦN
-  useEffect(() => {
-    playAudio('gialap');
-  }, []); // Bỏ playAudio khỏi dependency để chỉ phát 1 lần
+  // Audio đã được chuyển sang MatchManagementSection để quản lý tập trung
+  // useEffect(() => {
+  //   playAudio('gialap');
+  // }, []);
 
   // Adjust font size based on content length
   const adjustFontSize = (text, minSize = 20, maxSize = 35) => {

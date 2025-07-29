@@ -46,9 +46,9 @@ const NewHomeLayout = () => {
       case "upload-logo":
         return <UploadLogoSection />;
       case "quan-ly-tran":
-        return <MatchManagementSection />;
+        return <MatchManagementSection isActive={activeTab === "quan-ly-tran"} />;
       case "binh-luan":
-        return <CommentarySection />;
+        return <CommentarySection isActive={activeTab === "binh-luan"} />;
       default:
         return <UploadLogoSection />;
     }
