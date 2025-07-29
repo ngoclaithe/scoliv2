@@ -110,10 +110,13 @@ class SocketService {
       return;
     }
 
-    // Debug log cho audio_control event
+    // Debug log cho audio_control và view_updated events
     if (eventName === 'audio_control') {
       console.log('📡 [SocketService] Registering audio_control listener. Socket connected:', this.socket.connected);
       console.log('📡 [SocketService] Current listeners for audio_control:', this.listeners.get('audio_control')?.size || 0);
+    }
+    if (eventName === 'view_updated') {
+      console.log('🎯 [SocketService] Registering view_updated listener. Socket connected:', this.socket.connected);
     }
 
     // Lưu callback để có thể remove sau
@@ -250,6 +253,12 @@ class SocketService {
       target: controlData.target || 'display', // Ưu tiên target được truyền vào, mặc định là 'display'
     };
     console.log('📡 [SocketService] Sending audio control:', payload);
+    console.log('📡 [SocketService] Socket connection status:', {
+      isConnected: this.isConnected,
+      socketId: this.socket?.id,
+      clientType: this.clientType,
+      accessCode: this.currentAccessCode
+    });
     return this.emit('audio_control_broadcast', payload);
   }
 
