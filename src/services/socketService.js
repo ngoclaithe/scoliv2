@@ -310,23 +310,11 @@ class SocketService {
       'match_time_updated',
       'lineup_updated',
       'penalty_updated',
-      'sponsors_updated'
+      'sponsors_updated',
+      'audio_control'
     ];
 
     events.forEach(event => {
-      this.on(event, (data) => {
-        callback(event, data);
-      });
-    });
-  }
-
-  // Lắng nghe các sự kiện audio
-  onAudioEvents(callback) {
-    const audioEvents = [
-      'audio_control',                // Nhận lệnh điều khiển audio từ server
-    ];
-
-    audioEvents.forEach(event => {
       this.on(event, (data) => {
         callback(event, data);
       });

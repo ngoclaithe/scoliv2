@@ -5,35 +5,6 @@ import { Mic, MicOff } from "lucide-react";
 import socketService from "../../services/socketService";
 
 const CommentarySection = ({ isActive = true }) => {
-  // Socket audio listeners setup - CommentarySection cần nhận referee voice từ server
-  useEffect(() => {
-    const handleAudioControl = (data) => {
-      console.log('🎙️ [CommentarySection] Received audio_control:', data);
-
-      if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
-        const { audioData, mimeType } = data.payload;
-        try {
-          const uint8Array = new Uint8Array(audioData);
-          const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
-          audioUtils.playRefereeVoice(audioBlob);
-        } catch (error) {
-          console.error('❌ Error processing referee voice:', error);
-        }
-      }
-    };
-
-    // Setup socket listeners if connected
-    if (socketService.socket) {
-      socketService.on('audio_control', handleAudioControl);
-    }
-
-    return () => {
-      if (socketService.socket) {
-        socketService.off('audio_control', handleAudioControl);
-      }
-    };
-  }, []);
-
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const mediaRecorderRef = useRef(null);
@@ -76,11 +47,10 @@ const CommentarySection = ({ isActive = true }) => {
     };
   }, []);
 
-  // Dừng voice trọng tài khi tab không active nữa
+  // Dừng ghi âm khi tab không active nữa
   useEffect(() => {
     if (!isActive) {
-      console.log('🔇 [CommentarySection] Tab inactive, stopping all audio');
-      audioUtils.stopAllAudio();
+      console.log('🔇 [CommentarySection] Tab inactive, stopping recording');
 
       // Dừng ghi âm nếu đang ghi
       if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
@@ -107,9 +77,6 @@ const CommentarySection = ({ isActive = true }) => {
     }
 
     try {
-      // Dừng tất cả audio đang phát trước khi bắt đầu ghi
-      audioUtils.stopAllAudio();
-
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
@@ -227,8 +194,6 @@ const CommentarySection = ({ isActive = true }) => {
 
   return (
     <div className="p-4 space-y-4">
-
-
       {/* Voice Recording Button */}
       <div className="flex justify-center">
         <button
@@ -268,9 +233,6 @@ const CommentarySection = ({ isActive = true }) => {
         )}
         {!isSupported && (
           <p className="text-red-600">Trình duyệt không hỗ trợ ghi âm</p>
-        )}
-        {isRecording && (
-          <p className="text-orange-600 text-sm mt-2">⚠️ Tất cả audio khác đã bị dừng để ghi voice</p>
         )}
       </div>
     </div>
