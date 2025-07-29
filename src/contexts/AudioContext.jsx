@@ -317,26 +317,13 @@ export const AudioProvider = ({ children }) => {
     }
   }, [state.audioEnabled, stopCurrentAudio]);
 
-  // Lắng nghe thay đổi trạng thái audio từ server
+  // CHỈ XỬ LÝ REFEREE VOICE, LOẠI BỎ STATIC AUDIO CONTROL
   useEffect(() => {
     const handleAudioControl = (data) => {
       console.log('📡 Received audio_control from server:', data);
 
-      if (data.command === 'ENABLE_AUDIO') {
-        console.log('📡 Server command: ENABLE_AUDIO');
-        dispatch({ type: audioActions.SET_AUDIO_ENABLED, payload: true });
-      } else if (data.command === 'DISABLE_AUDIO') {
-        console.log('📡 Server command: DISABLE_AUDIO');
-        stopCurrentAudio();
-        dispatch({ type: audioActions.SET_AUDIO_ENABLED, payload: false });
-      } else if (data.command === 'PLAY_AUDIO' && data.payload) {
-        console.log('📡 Server command: PLAY_AUDIO', data.payload);
-        const { audioFile } = data.payload;
-        playAudio(audioFile);
-      } else if (data.command === 'STOP_AUDIO') {
-        console.log('📡 Server command: STOP_AUDIO');
-        stopCurrentAudio();
-      } else if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
+      // CHỈ XỬ LÝ REFEREE VOICE
+      if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
         console.log('📡 Server command: PLAY_REFEREE_VOICE');
         const { audioData, mimeType } = data.payload;
 
@@ -352,7 +339,7 @@ export const AudioProvider = ({ children }) => {
     };
 
     // Đăng ký lắng nghe sự kiện điều khiển audio một lần duy nhất
-    console.log('📡 Registering audio control listener');
+    console.log('📡 Registering audio control listener for referee voice only');
     socketService.onAudioControl(handleAudioControl);
 
     // Cleanup
