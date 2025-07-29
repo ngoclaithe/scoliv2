@@ -143,9 +143,9 @@ export const AudioProvider = ({ children }) => {
   };
 
   // Play audio - đơn giản hóa
-  const playAudio = (audioKey) => {
+  const playAudio = useCallback((audioKey) => {
     console.log('🎵 Play audio request:', { audioKey, audioEnabled: state.audioEnabled });
-    
+
     if (!state.audioEnabled) {
       console.log('🔇 Audio disabled globally');
       return;
@@ -199,7 +199,7 @@ export const AudioProvider = ({ children }) => {
       console.error('❌ Error creating audio:', error);
       dispatch({ type: audioActions.SET_PLAYING, payload: false });
     }
-  };
+  }, [state.audioEnabled, state.userInteracted, state.isMuted, state.volume]);
 
   // Toggle audio toàn cục
   const toggleAudioEnabled = useCallback(() => {
