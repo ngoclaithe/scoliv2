@@ -42,7 +42,18 @@ const MatchManagementSection = ({ isActive = true }) => {
   } = useMatch();
 
   // Sử dụng AudioContext cho điều khiển audio
-  const { audioEnabled, toggleAudioEnabled, currentAudio, isPlaying, playAudio, stopCurrentAudio } = useAudio();
+  const {
+    audioEnabled,
+    toggleAudioEnabled,
+    currentAudio,
+    isPlaying,
+    isPaused,
+    currentAudioFile,
+    playAudio,
+    stopCurrentAudio,
+    pauseCurrentAudio,
+    resumeCurrentAudio
+  } = useAudio();
 
   // State cho các tùy chọn đi��u khiển UI
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
@@ -110,13 +121,13 @@ const MatchManagementSection = ({ isActive = true }) => {
     playAudio(audioType);
   };
 
-  // Dừng audio khi tab không active nữa
+  // Pause audio khi tab không active nữa (thay vì stop hoàn toàn)
   useEffect(() => {
-    if (!isActive) {
-      console.log('🔇 [MatchManagement] Tab inactive, stopping audio');
-      stopCurrentAudio();
+    if (!isActive && isPlaying) {
+      console.log('⏸️ [MatchManagement] Tab inactive, pausing audio');
+      pauseCurrentAudio();
     }
-  }, [isActive, stopCurrentAudio]);
+  }, [isActive, isPlaying, pauseCurrentAudio]);
 
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
@@ -392,25 +403,49 @@ const MatchManagementSection = ({ isActive = true }) => {
             className={`px-2 py-1 ${
               isPlaying
                 ? "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
+                : isPaused
+                ? "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
                 : "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700"
             } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
-              console.log('🎵 [MatchManagement] Audio pause/play clicked - isPlaying:', isPlaying);
+              console.log('🎵 [MatchManagement] Audio pause/play clicked - isPlaying:', isPlaying, 'isPaused:', isPaused);
+
               if (isPlaying) {
+                // Nếu đang phát -> pause
                 console.log('⏸️ [MatchManagement] Pausing current audio');
-                stopCurrentAudio(); // Dừng audio hiện tại
+                pauseCurrentAudio();
                 toast.info('⏸️ Đã tạm dừng audio');
+              } else if (isPaused && currentAudioFile) {
+                // Nếu đang pause và có audio -> resume
+                console.log('▶️ [MatchManagement] Resuming paused audio');
+                resumeCurrentAudio();
+                toast.info('▶️ Đã tiếp tục phát audio');
               } else {
-                console.log('▶️ [MatchManagement] No audio currently playing, toggling audio enabled state');
-                toggleAudioEnabled(); // Bật/tắt khả năng phát audio
+                // Không có audio nào -> toggle audio enabled
+                console.log('ὐ9 [MatchManagement] No audio to resume, toggling audio enabled state');
+                toggleAudioEnabled();
                 toast.info(audioEnabled ? '🔇 Đã tắt audio tĩnh' : '🔊 Đã bật audio tĩnh');
               }
             }}
-            title={isPlaying ? "Tạm dừng audio đang phát" : audioEnabled ? "Tắt audio tĩnh" : "Bật audio tĩnh"}
+            title={
+              isPlaying
+                ? "Tạm dừng audio đang phát"
+                : isPaused && currentAudioFile
+                ? "Tiếp tục phát audio"
+                : audioEnabled
+                ? "Tắt audio tĩnh"
+                : "Bật audio tĩnh"
+            }
           >
-            <span className="mr-1">{isPlaying ? "⏸️" : audioEnabled ? "🔊" : "🔇"}</span>
-            <span className="hidden sm:inline">{isPlaying ? "PAUSE" : audioEnabled ? "AUDIO" : "OFF"}</span>
-            <span className="sm:hidden">{isPlaying ? "⏸️" : audioEnabled ? "ON" : "OFF"}</span>
+            <span className="mr-1">
+              {isPlaying ? "⏸️" : isPaused && currentAudioFile ? "▶️" : audioEnabled ? "🔊" : "🔇"}
+            </span>
+            <span className="hidden sm:inline">
+              {isPlaying ? "PAUSE" : isPaused && currentAudioFile ? "RESUME" : audioEnabled ? "AUDIO" : "OFF"}
+            </span>
+            <span className="sm:hidden">
+              {isPlaying ? "⏸️" : isPaused && currentAudioFile ? "▶️" : audioEnabled ? "ON" : "OFF"}
+            </span>
           </Button>
 
           <Button
@@ -1026,7 +1061,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               {/* <span className="text-sm mr-1"></span> */}
-              <span className="text-xs font-bold text-center">GIỚI THIỆU</span>
+              <span className="text-xs font-bold text-center">GIỚI THI��U</span>
             </button>
 
             {/* Tỉ số trên */}
