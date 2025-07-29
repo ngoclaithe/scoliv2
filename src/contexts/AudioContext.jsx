@@ -365,7 +365,7 @@ export const AudioProvider = ({ children }) => {
       }
     };
 
-    // Đăng ký lắng nghe sự kiện điều khiển audio m��t lần duy nhất
+    // Đăng ký lắng nghe sự kiện điều khiển audio một lần duy nhất
     console.log('📡 Registering audio control listener');
     socketService.onAudioControl(handleAudioControl);
 
@@ -391,6 +391,21 @@ export const AudioProvider = ({ children }) => {
           console.warn('⚠️ Error cleaning up audio:', error);
         }
         audioRef.current = null;
+      }
+
+      // Cleanup referee voice
+      if (refereeVoiceRef.current) {
+        try {
+          refereeVoiceRef.current.pause();
+          refereeVoiceRef.current.onended = null;
+          refereeVoiceRef.current.onerror = null;
+          if (refereeVoiceRef.current.src && refereeVoiceRef.current.src.startsWith('blob:')) {
+            URL.revokeObjectURL(refereeVoiceRef.current.src);
+          }
+        } catch (error) {
+          console.warn('⚠️ Error cleaning up referee voice:', error);
+        }
+        refereeVoiceRef.current = null;
       }
     };
   }, []);
