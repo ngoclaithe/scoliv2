@@ -383,7 +383,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     };
 
     return (
-      <div className="bg-white rounded-lg border-2 border-green-400 p-3 shadow-lg relative w-24 flex-shrink-0">
+      <div className="bg-white rounded-lg border-2 border-green-400 p-2 shadow-lg relative w-48 flex-shrink-0">
         {/* X button */}
         <button
           onClick={() => onRemove(item.id)}
