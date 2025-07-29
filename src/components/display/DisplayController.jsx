@@ -148,6 +148,16 @@ const DisplayController = () => {
     }
   }, [audioEnabled, forceStopAudio]);
 
+  // Debug: Listen to socket connection status
+  useEffect(() => {
+    console.log('🎮 [DisplayController] Socket connection status changed:', {
+      connected: socketConnected,
+      accessCode,
+      socketId: socketService.socket?.id,
+      clientType: socketService.clientType
+    });
+  }, [socketConnected, accessCode]);
+
   // Khởi tạo kết nối socket
   useEffect(() => {
     let isCleanedUp = false;
