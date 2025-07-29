@@ -7,6 +7,12 @@ class AudioManager {
     this.volume = 0.7;
     this.isMuted = false;
     this.audioEnabled = true;
+
+    // Thêm throttle cho referee voice
+    this.lastRefereeVoiceTime = 0;
+    this.refereeVoiceMinInterval = 200; // 200ms minimum interval
+    this.refereeVoiceQueue = [];
+    this.isProcessingQueue = false;
     
     // Static audio file mapping
     this.audioFiles = {
@@ -127,7 +133,7 @@ class AudioManager {
     }
   }
 
-  // Play referee voice from blob
+  // Play referee voice from blob với throttling
   playRefereeVoice(audioBlob) {
     console.log('🎙️ Playing referee voice');
 
@@ -136,10 +142,74 @@ class AudioManager {
       return;
     }
 
-    // Stop all other audio first, but not referee voice
+    // Throttle: Kiểm tra thời gian từ lần phát gần nhất
+    const now = Date.now();
+    if (now - this.lastRefereeVoiceTime < this.refereeVoiceMinInterval) {
+      console.log('🔄 Throttling referee voice - too frequent, adding to queue');
+      this.addToRefereeVoiceQueue(audioBlob);
+      return;
+    }
+
+    this.lastRefereeVoiceTime = now;
+    this.executePlayRefereeVoice(audioBlob);
+  }
+
+  // Thêm vào queue cho processing
+  addToRefereeVoiceQueue(audioBlob) {
+    // Chỉ giữ lại audio mới nhất, bỏ qua các audio cũ
+    this.refereeVoiceQueue = [audioBlob];
+    this.processRefereeVoiceQueue();
+  }
+
+  // Xử lý queue
+  async processRefereeVoiceQueue() {
+    if (this.isProcessingQueue || this.refereeVoiceQueue.length === 0) {
+      return;
+    }
+
+    this.isProcessingQueue = true;
+
+    while (this.refereeVoiceQueue.length > 0) {
+      const audioBlob = this.refereeVoiceQueue.shift();
+      const now = Date.now();
+
+      if (now - this.lastRefereeVoiceTime >= this.refereeVoiceMinInterval) {
+        this.lastRefereeVoiceTime = now;
+        this.executePlayRefereeVoice(audioBlob);
+
+        // Đợi một chút trước khi xử lý audio tiếp theo
+        await new Promise(resolve => setTimeout(resolve, this.refereeVoiceMinInterval));
+      } else {
+        // Đợi đủ thời gian throttle
+        const waitTime = this.refereeVoiceMinInterval - (now - this.lastRefereeVoiceTime);
+        await new Promise(resolve => setTimeout(resolve, waitTime));
+        this.lastRefereeVoiceTime = Date.now();
+        this.executePlayRefereeVoice(audioBlob);
+      }
+    }
+
+    this.isProcessingQueue = false;
+  }
+
+  // Logic phát audio thực tế
+  executePlayRefereeVoice(audioBlob) {
+    // Stop all other audio first, but not current referee voice
     this.stopRegularAudio();
 
     try {
+      // Dừng referee voice hiện tại trước khi phát mới
+      if (this.refereeVoiceRef) {
+        try {
+          this.refereeVoiceRef.pause();
+          if (this.refereeVoiceRef.src && this.refereeVoiceRef.src.startsWith('blob:')) {
+            URL.revokeObjectURL(this.refereeVoiceRef.src);
+          }
+        } catch (error) {
+          console.warn('⚠️ Error stopping previous referee voice:', error);
+        }
+        this.refereeVoiceRef = null;
+      }
+
       // Create URL from blob
       const audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio();
@@ -155,42 +225,53 @@ class AudioManager {
 
       audio.onended = () => {
         console.log('✅ Referee voice playback ended');
-        URL.revokeObjectURL(audioUrl);
-        this.refereeVoiceRef = null;
+        try {
+          URL.revokeObjectURL(audioUrl);
+        } catch (error) {
+          console.warn('⚠️ Error revoking URL on ended:', error);
+        }
+        if (this.refereeVoiceRef === audio) {
+          this.refereeVoiceRef = null;
+        }
       };
 
       audio.onerror = (e) => {
         console.error('❌ Referee voice playback error:', e);
-        URL.revokeObjectURL(audioUrl);
-        this.refereeVoiceRef = null;
+        try {
+          URL.revokeObjectURL(audioUrl);
+        } catch (error) {
+          console.warn('⚠️ Error revoking URL on error:', error);
+        }
+        if (this.refereeVoiceRef === audio) {
+          this.refereeVoiceRef = null;
+        }
       };
 
       // Set reference before playing
       this.refereeVoiceRef = audio;
       audio.volume = this.isMuted ? 0 : this.volume;
 
-      // Set src and play
+      // Set src and play immediately without delay
       audio.src = audioUrl;
 
-      // Use a small delay to ensure proper loading
-      setTimeout(() => {
-        if (this.refereeVoiceRef === audio) { // Make sure it's still the current audio
-          const playPromise = audio.play();
-          if (playPromise) {
-            playPromise
-              .then(() => {
-                console.log('✅ Referee voice started playing successfully');
-              })
-              .catch((error) => {
-                console.error('❌ Failed to play referee voice:', error);
-                if (this.refereeVoiceRef === audio) {
-                  URL.revokeObjectURL(audioUrl);
-                  this.refereeVoiceRef = null;
-                }
-              });
-          }
-        }
-      }, 50);
+      const playPromise = audio.play();
+      if (playPromise) {
+        playPromise
+          .then(() => {
+            console.log('✅ Referee voice started playing successfully');
+          })
+          .catch((error) => {
+            console.error('❌ Failed to play referee voice:', error);
+            if (this.refereeVoiceRef === audio) {
+              try {
+                URL.revokeObjectURL(audioUrl);
+              } catch (revokeError) {
+                console.warn('⚠️ Error revoking URL on play error:', revokeError);
+              }
+              this.refereeVoiceRef = null;
+            }
+          });
+      }
 
     } catch (error) {
       console.error('❌ Error creating referee voice audio:', error);
@@ -212,13 +293,18 @@ class AudioManager {
       this.audioRef = null;
     }
 
-    // Stop all other audio elements on page (except referee voice)
+    // Stop all other audio elements on page (except current referee voice)
     try {
       const allAudioElements = document.querySelectorAll('audio');
       allAudioElements.forEach((audio, index) => {
         try {
-          // Skip if this is our referee voice element
+          // Skip if this is our current referee voice element
           if (audio === this.refereeVoiceRef) {
+            return;
+          }
+
+          // Skip if audio is already stopped/ended
+          if (audio.ended || audio.readyState === 0) {
             return;
           }
 
@@ -226,6 +312,15 @@ class AudioManager {
             console.log(`🔇 Stopping audio element ${index + 1}`);
             audio.pause();
             audio.currentTime = 0;
+
+            // Revoke blob URL if it exists
+            if (audio.src && audio.src.startsWith('blob:')) {
+              try {
+                URL.revokeObjectURL(audio.src);
+              } catch (revokeError) {
+                console.warn(`⚠️ Error revoking URL for audio element ${index + 1}:`, revokeError);
+              }
+            }
           }
         } catch (error) {
           console.warn(`⚠️ Error stopping audio element ${index + 1}:`, error);
