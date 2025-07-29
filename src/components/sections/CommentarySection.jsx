@@ -1,18 +1,35 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useMatch } from "../../contexts/MatchContext";
+import { useAudio } from "../../contexts/AudioContext";
 import { Mic, MicOff } from "lucide-react";
+import MediaRecorder from "opus-media-recorder";
+import OpusRecorderUrl from "opus-media-recorder/OpusRecorder.umd.js";
+import socketService from "../../services/socketService";
 
 const CommentarySection = () => {
   const { matchData } = useMatch();
+  const { stopCurrentAudio } = useAudio();
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isOpusSupported, setIsOpusSupported] = useState(false);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
+  const streamRef = useRef(null);
 
   // Check for browser support
-  const isSupported = typeof navigator !== 'undefined' && 
-                     navigator.mediaDevices && 
+  const isSupported = typeof navigator !== 'undefined' &&
+                     navigator.mediaDevices &&
                      navigator.mediaDevices.getUserMedia;
+
+  // Initialize opus-media-recorder
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.MediaRecorder = MediaRecorder;
+      MediaRecorder.encoder = OpusRecorderUrl;
+      setIsOpusSupported(true);
+      console.log('🎙️ Opus MediaRecorder initialized');
+    }
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -20,28 +37,39 @@ const CommentarySection = () => {
       if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
         mediaRecorderRef.current.stop();
       }
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
     };
   }, []);
 
   const startRecording = async () => {
-    if (!isSupported) {
-      alert('Trình duyệt không hỗ trợ ghi âm');
+    if (!isSupported || !isOpusSupported) {
+      alert('Trình duyệt không hỗ trợ ghi âm hoặc Opus codec');
       return;
     }
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
+      // Dừng tất cả audio đang phát trước khi bắt đầu ghi
+      stopCurrentAudio();
+
+      const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          sampleRate: 44100
-        } 
+          sampleRate: 48000, // Opus works best with 48kHz
+          channelCount: 1, // Mono for voice
+          autoGainControl: true
+        }
       });
-      
+
+      streamRef.current = stream;
+
       const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/wav'
+        mimeType: 'audio/ogg; codecs=opus',
+        audioBitsPerSecond: 64000 // 64kbps cho voice chất lượng tốt
       });
-      
+
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
@@ -52,12 +80,16 @@ const CommentarySection = () => {
       };
 
       mediaRecorder.onstop = () => {
-        stream.getTracks().forEach(track => track.stop());
+        if (streamRef.current) {
+          streamRef.current.getTracks().forEach(track => track.stop());
+          streamRef.current = null;
+        }
         processRecording();
       };
 
       mediaRecorder.start(100); // Collect data every 100ms
       setIsRecording(true);
+      console.log('🎙️ Voice recording started with Opus codec');
     } catch (error) {
       console.error('Lỗi khi bắt đầu ghi âm:', error);
       alert('Không thể truy cập microphone. Vui lòng cho phép quyền truy cập.');
@@ -72,23 +104,51 @@ const CommentarySection = () => {
     }
   };
 
-  const processRecording = () => {
+  const processRecording = async () => {
     if (audioChunksRef.current.length > 0) {
-      const audioBlob = new Blob(audioChunksRef.current, { 
-        type: mediaRecorderRef.current.mimeType 
+      const audioBlob = new Blob(audioChunksRef.current, {
+        type: 'audio/ogg; codecs=opus'
       });
-      
-      // Here you would typically send the audio to your speech-to-text service
-      console.log('Audio recorded:', audioBlob);
-      
-      // Simulate processing
-      setTimeout(() => {
-        setIsProcessing(false);
-        // You can add the transcribed text to your commentary here
-      }, 1500);
+
+      console.log('🎙️ Voice recorded:', audioBlob.size, 'bytes');
+
+      try {
+        // Gửi voice lên server qua socket
+        await sendVoiceToServer(audioBlob);
+        console.log('✅ Voice sent to server successfully');
+      } catch (error) {
+        console.error('❌ Failed to send voice to server:', error);
+        alert('Không thể gửi voice lên server');
+      }
+
+      setIsProcessing(false);
     } else {
       setIsProcessing(false);
     }
+  };
+
+  const sendVoiceToServer = async (audioBlob) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const arrayBuffer = reader.result;
+        const uint8Array = new Uint8Array(arrayBuffer);
+
+        if (socketService.socket && socketService.socket.connected) {
+          // Gửi voice data qua socket
+          socketService.socket.emit('referee_voice', {
+            audioData: Array.from(uint8Array),
+            mimeType: 'audio/ogg; codecs=opus',
+            timestamp: Date.now()
+          });
+          resolve();
+        } else {
+          reject(new Error('Socket not connected'));
+        }
+      };
+      reader.onerror = () => reject(reader.error);
+      reader.readAsArrayBuffer(audioBlob);
+    });
   };
 
   const toggleRecording = () => {
@@ -107,7 +167,7 @@ const CommentarySection = () => {
       <div className="flex justify-center">
         <button
           onClick={toggleRecording}
-          disabled={isProcessing || !isSupported}
+          disabled={isProcessing || !isSupported || !isOpusSupported}
           className={`
             w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 transform
             ${isRecording 
@@ -116,7 +176,7 @@ const CommentarySection = () => {
             }
             ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}
             text-white shadow-lg hover:shadow-xl
-            ${!isSupported ? 'bg-gray-400 cursor-not-allowed' : ''}
+            ${(!isSupported || !isOpusSupported) ? 'bg-gray-400 cursor-not-allowed' : ''}
           `}
         >
           {isProcessing ? (
@@ -140,8 +200,11 @@ const CommentarySection = () => {
         {!isRecording && !isProcessing && (
           <p className="text-gray-600">Ấn mic để bắt đầu bình luận</p>
         )}
-        {!isSupported && (
-          <p className="text-red-600">Trình duyệt không hỗ trợ ghi âm</p>
+        {(!isSupported || !isOpusSupported) && (
+          <p className="text-red-600">Trình duyệt không hỗ trợ ghi âm hoặc Opus codec</p>
+        )}
+        {isRecording && (
+          <p className="text-orange-600 text-sm mt-2">⚠️ Tất cả audio khác đã bị dừng để ghi voice</p>
         )}
       </div>
     </div>
