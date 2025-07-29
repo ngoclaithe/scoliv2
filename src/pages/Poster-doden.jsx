@@ -4,6 +4,8 @@ import { usePublicMatch } from '../contexts/PublicMatchContext';
 export default function DodenMatchIntro() {
   // Sử dụng dữ liệu từ PublicMatchContext
   const { matchData: contextMatchData, marqueeData } = usePublicMatch();
+  
+  // Sử dụng AudioContext
 
   // Kết hợp dữ liệu từ context với dữ liệu mặc định
   const matchData = {
@@ -26,33 +28,9 @@ export default function DodenMatchIntro() {
   };
 
   const marqueeRef = useRef(null);
-  const audioRef = useRef(null);
 
-  // Tự động phát audio poster.mp3 khi component mount
-  useEffect(() => {
-    const audio = new Audio('/audio/poster.mp3');
-    audio.loop = true;
-    audio.volume = 0.5;
-
-    const playAudio = async () => {
-      try {
-        await audio.play();
-        console.log('🎵 [PosterDoDen] Playing poster.mp3');
-      } catch (error) {
-        console.log('⚠️ [PosterDoDen] Audio autoplay blocked:', error);
-      }
-    };
-
-    playAudio();
-    audioRef.current = audio;
-
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
-  }, []);
+  // AudioContext đã sẵn sàng, có thể phát audio khi cần
+  // Không tự động phát audio khi mount
 
   // Font size adjustment function
   const adjustFontSize = (element) => {
@@ -241,7 +219,6 @@ export default function DodenMatchIntro() {
             />
           ))}
         </div>
-
         {/* CSS Animations */}
         <style jsx>{`
           @keyframes marquee {

@@ -26,33 +26,6 @@ export default function VangXanhMatchIntro() {
   };
 
   const marqueeRef = useRef(null);
-  const audioRef = useRef(null);
-
-  // Tự động phát audio poster.mp3 khi component mount
-  useEffect(() => {
-    const audio = new Audio('/audio/poster.mp3');
-    audio.loop = true;
-    audio.volume = 0.5;
-
-    const playAudio = async () => {
-      try {
-        await audio.play();
-        console.log('🎵 [PosterVangXanh] Playing poster.mp3');
-      } catch (error) {
-        console.log('⚠️ [PosterVangXanh] Audio autoplay blocked:', error);
-      }
-    };
-
-    playAudio();
-    audioRef.current = audio;
-
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
-  }, []);
 
   // Font size adjustment function
   const adjustFontSize = (element) => {

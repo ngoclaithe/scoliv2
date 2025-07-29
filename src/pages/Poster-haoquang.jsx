@@ -4,7 +4,7 @@ import { usePublicMatch } from '../contexts/PublicMatchContext';
 export default function MatchIntroduction() {
   // Sử dụng dữ liệu từ PublicMatchContext
   const { matchData: contextMatchData, marqueeData } = usePublicMatch();
-
+  
   // Kết hợp dữ liệu từ context với dữ liệu mặc định
   const matchData = {
     matchTitle: contextMatchData.tournament || 'TRỰC TIẾP TRẬN BÓNG ĐÁ',
@@ -26,33 +26,6 @@ export default function MatchIntroduction() {
   };
 
   const marqueeRef = useRef(null);
-  const audioRef = useRef(null);
-
-  // Tự động phát audio poster.mp3 khi component mount
-  useEffect(() => {
-    const audio = new Audio('/audio/poster.mp3');
-    audio.loop = true;
-    audio.volume = 0.5;
-
-    const playAudio = async () => {
-      try {
-        await audio.play();
-        console.log('🎵 [PosterHaoQuang] Playing poster.mp3');
-      } catch (error) {
-        console.log('⚠️ [PosterHaoQuang] Audio autoplay blocked:', error);
-      }
-    };
-
-    playAudio();
-    audioRef.current = audio;
-
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
-  }, []);
 
   // Font size adjustment function
   const adjustFontSize = (element) => {

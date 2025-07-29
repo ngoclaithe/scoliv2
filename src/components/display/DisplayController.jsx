@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { useAudio } from '../../contexts/AudioContext';
@@ -27,13 +27,125 @@ const DisplayController = () => {
   } = usePublicMatch();
 
   // Sử dụng AudioContext
-  const { playAudio, audioEnabled } = useAudio();
+  const { playAudio, audioEnabled, stopCurrentAudio } = useAudio();
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
   const [currentAudioFile, setCurrentAudioFile] = useState(null);
 
-  // Khởi tạo kết nối socket và thiết lập audio listeners
+  // Sử dụng useRef để lưu trữ previousView và prevent duplicate calls
+  const prevViewRef = useRef();
+  const lastAudioPlayedRef = useRef();
+  const audioControlledByServerRef = useRef(false);
+
+  // Xử lý phát audio theo view - CHỈ khi không bị server kiểm soát
+  useEffect(() => {
+    console.log('🎮 DisplayController audio effect triggered:', {
+      currentView,
+      audioEnabled,
+      prevView: prevViewRef.current,
+      prevAudioEnabled: prevViewRef.audioEnabled,
+      audioControlledByServer: audioControlledByServerRef.current
+    });
+
+    // Nếu audio đang được server kiểm soát, không tự động phát
+    if (audioControlledByServerRef.current) {
+      console.log('🎮 Audio controlled by server, skipping auto-play');
+      return;
+    }
+
+    // Chỉ xử lý nếu view thay đổi và audio được bật
+    const viewChanged = prevViewRef.current !== currentView;
+    const audioEnabledChanged = prevViewRef.audioEnabled !== audioEnabled;
+    
+    if (!viewChanged && !audioEnabledChanged) {
+      console.log('🎮 No view or audio state change, skipping');
+      return;
+    }
+
+    // Cập nhật previous values
+    prevViewRef.current = currentView;
+    prevViewRef.audioEnabled = audioEnabled;
+
+    if (!audioEnabled) {
+      console.log('🎮 Audio disabled, stopping current audio');
+      stopCurrentAudio();
+      return;
+    }
+
+    if (!currentView) {
+      console.log('🎮 No current view, skipping audio');
+      return;
+    }
+
+    let audioFile = null;
+
+    // Xác định audio key dựa trên view hiện tại
+    if (['intro', 'halftime', 'poster'].includes(currentView)) {
+      audioFile = 'poster';
+    } else if (currentView === 'scoreboard_below') {
+      audioFile = 'rasan';
+    } else if (currentView?.startsWith('scoreboard')) {
+      audioFile = 'gialap';
+    }
+
+    // Chỉ phát nếu có audio file và khác với lần phát trước
+    if (audioFile) {
+      const audioKey = `${audioFile}-${currentView}`;
+      if (lastAudioPlayedRef.current !== audioKey) {
+        console.log('🎮 Playing audio for view change:', { audioFile, currentView });
+        playAudio(audioFile, 'DisplayController');
+        lastAudioPlayedRef.current = audioKey;
+      } else {
+        console.log('🎮 Same audio already played, skipping:', audioKey);
+      }
+    }
+  }, [currentView, audioEnabled, playAudio, stopCurrentAudio]);
+
+  // Lắng nghe server audio control để set flag
+  useEffect(() => {
+    // Reset server control flag sau một khoảng thời gian
+    const resetServerControl = () => {
+      setTimeout(() => {
+        console.log('🎮 Resetting server control flag');
+        audioControlledByServerRef.current = false;
+      }, 1000); // Reset sau 1 giây
+    };
+
+    // Đánh dấu khi server điều khiển audio
+    const markServerControl = () => {
+      console.log('🎮 Marking audio as server-controlled');
+      audioControlledByServerRef.current = true;
+      resetServerControl();
+    };
+
+    // Override console.log tạm thời để catch server commands
+    const originalLog = console.log;
+    console.log = (...args) => {
+      const message = args.join(' ');
+      if (message.includes('📡 Server command:')) {
+        markServerControl();
+      }
+      originalLog.apply(console, args);
+    };
+
+    // Cleanup
+    return () => {
+      console.log = originalLog;
+    };
+  }, []);
+
+  // Reset server control flag khi audio enabled changes from server
+  useEffect(() => {
+    console.log('🎮 Audio enabled changed:', audioEnabled);
+    // Nếu audio bị tắt, reset server control flag
+    if (!audioEnabled) {
+      audioControlledByServerRef.current = false;
+      lastAudioPlayedRef.current = null;
+    }
+  }, [audioEnabled]);
+
+  // Khởi tạo kết nối socket
   useEffect(() => {
     let isCleanedUp = false;
 
@@ -47,7 +159,7 @@ const DisplayController = () => {
           return;
         }
 
-        console.log('Access code verified for display:', accessCode);
+        console.log('🎮 Access code verified for display:', accessCode);
 
         // Khởi tạo socket connection
         await initializeSocket(accessCode);
@@ -57,22 +169,23 @@ const DisplayController = () => {
         }
 
       } catch (err) {
-        console.error('Failed to initialize display:', err);
+        console.error('🎮 Failed to initialize display:', err);
         if (!isCleanedUp) {
           setError('Không thể kết nối đến hệ thống');
         }
       }
     };
 
-
     if (accessCode && !isCleanedUp) {
       initializeDisplay();
-
     }
 
     // Cleanup function
     return () => {
       isCleanedUp = true;
+      // Reset refs on cleanup
+      audioControlledByServerRef.current = false;
+      lastAudioPlayedRef.current = null;
     };
   }, [accessCode]); // Chỉ dependency accessCode
 
@@ -175,8 +288,9 @@ const DisplayController = () => {
       {/* MediaSource Audio Player (when audio is OFF) */}
       <MediaSourceAudio
         audioFile={currentAudioFile}
-        isEnabled={!audioEnabled && currentAudioFile}
+        isEnabled={!audioEnabled && !!currentAudioFile}
         onEnded={() => setCurrentAudioFile(null)}
+        loop={true}
       />
     </div>
   );

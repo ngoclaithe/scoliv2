@@ -233,11 +233,106 @@ class SocketService {
     });
   }
 
+  // === AUDIO CONTROL EVENTS ===
+
+  // Gửi lệnh điều khiển audio đến tất cả client trong room
+  sendAudioControl(controlData) {
+    return this.emit('audio_control_broadcast', {
+      ...controlData,
+      senderType: this.clientType,
+      timestamp: Date.now(),
+      target: 'display',
+    });
+  }
+
+  // Broadcast audio sync để đồng bộ trạng thái audio
+  broadcastAudioSync(syncData) {
+    return this.emit('audio_sync_broadcast', {
+      ...syncData,
+      senderType: this.clientType,
+      timestamp: Date.now()
+    });
+  }
+
+  // Bật audio cho tất cả client
+  enableAudioForAll() {
+    return this.sendAudioControl({
+      command: 'ENABLE_AUDIO',
+      target: 'all' // 'all', 'clients', 'displays', hoặc specific clientId
+    });
+  }
+
+  // Tắt audio cho tất cả client
+  disableAudioForAll() {
+    return this.sendAudioControl({
+      command: 'DISABLE_AUDIO',
+      target: 'all'
+    });
+  }
+
+  // Điều chỉnh volume cho tất cả client
+  setVolumeForAll(volume) {
+    return this.sendAudioControl({
+      command: 'SET_VOLUME',
+      payload: { volume: Math.max(0, Math.min(1, volume)) },
+      target: 'all'
+    });
+  }
+
+  // Mute tất cả client
+  muteAll() {
+    return this.sendAudioControl({
+      command: 'MUTE',
+      target: 'all'
+    });
+  }
+
+  // Unmute tất cả client
+  unmuteAll() {
+    return this.sendAudioControl({
+      command: 'UNMUTE',
+      target: 'all'
+    });
+  }
+
+  // Phát audio trên tất cả client
+  playAudioForAll(audioFile, component = null) {
+    return this.sendAudioControl({
+      command: 'PLAY_AUDIO',
+      payload: { audioFile, component },
+      target: 'all'
+    });
+  }
+
+  // Dừng audio trên tất cả client
+  stopAudioForAll() {
+    return this.sendAudioControl({
+      command: 'STOP_AUDIO',
+      target: 'all'
+    });
+  }
+
+  // Điều khiển audio cho client cụ thể
+  controlClientAudio(clientId, command, payload = {}) {
+    return this.sendAudioControl({
+      command,
+      payload,
+      target: clientId
+    });
+  }
+
+  // Điều khiển audio cho loại client cụ thể (client, admin, display)
+  controlClientTypeAudio(clientType, command, payload = {}) {
+    return this.sendAudioControl({
+      command,
+      payload,
+      target: clientType
+    });
+  }
+
   // === AUDIO & COMMENTARY EVENTS ===
 
   // === TIMER REAL-TIME EVENTS ===
-
-
 
   // Start timer từ server
   startServerTimer(startTime, period, status = "live") {
@@ -303,7 +398,7 @@ class SocketService {
   onAudioEvents(callback) {
     const audioEvents = [
       'voice-chunk-received',          // Nhận voice chunk từ người khác
-      'audio_playback_sync'           // Đồng bộ phát audio giữa các client
+      'audio_control',                // Nhận lệnh điều khiển audio từ server
     ];
 
     audioEvents.forEach(event => {
@@ -311,6 +406,21 @@ class SocketService {
         callback(event, data);
       });
     });
+  }
+
+  // Lắng nghe các sự kiện điều khiển audio cụ thể
+  onAudioControl(callback) {
+    this.on('audio_control', callback);
+  }
+
+  // Lắng nghe các sự kiện đồng bộ audio
+  onAudioSync(callback) {
+    this.on('audio_sync', callback);
+  }
+
+  // Lắng nghe trạng thái audio của các client khác
+  onAudioStatusUpdate(callback) {
+    this.on('audio_status_update', callback);
   }
 
   // Lắng nghe trạng thái room

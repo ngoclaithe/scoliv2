@@ -16,7 +16,7 @@ import MatchTimeDisplay from './MatchTimeDisplay';
 
 
 const MatchManagementSection = () => {
-  // S��� dụng MatchContext thay vì state local
+  // Sử dụng MatchContext thay vì state local
   const {
     matchData,
     matchStats,
@@ -59,8 +59,6 @@ const MatchManagementSection = () => {
   const [tickerColor, setTickerColor] = useState("#ffffff");
   const [tickerFontSize, setTickerFontSize] = useState(16);
 
-  // State cho hiển thị trạng thái ổn định - REMOVED (moved to MatchTimeDisplay component)
-
   // State cho thông tin đội và trận đấu
   const [teamAInfo, setTeamAInfo] = useState({
     name: matchData.teamA.name || "",
@@ -100,10 +98,6 @@ const MatchManagementSection = () => {
     }
   }, [matchData.startTime, matchData.stadium, matchData.matchDate]);
 
-
-
-  // Status management moved to MatchTimeDisplay component
-
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
 
@@ -128,7 +122,7 @@ const MatchManagementSection = () => {
 
 
 
-  // Xử lý tìm ki���m logo cho đội A
+  // Xử lý tìm kiếm logo cho đội A
   const handleSearchLogoA = async () => {
     if (!logoCodeA.trim()) return;
 

@@ -121,7 +121,7 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe c��p nhật template
+    // Lắng nghe cập nhật template
     socketService.on('template_updated', (data) => {
       setDisplaySettings(prev => ({ ...prev, selectedSkin: data.templateId }));
       setLastUpdateTime(Date.now());
