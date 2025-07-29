@@ -4,6 +4,7 @@ import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { useAudio } from '../../contexts/AudioContext';
 import PublicAPI from '../../API/apiPublic';
 import MediaSourceAudio from '../audio/MediaSourceAudio';
+import socketService from '../../services/socketService';
 
 // Import các component hiển thị
 import PosterTreTrung from '../../pages/Poster-tretrung';
@@ -147,6 +148,16 @@ const DisplayController = () => {
     }
   }, [audioEnabled, forceStopAudio]);
 
+  // Debug: Listen to socket connection status
+  useEffect(() => {
+    console.log('🎮 [DisplayController] Socket connection status changed:', {
+      connected: socketConnected,
+      accessCode,
+      socketId: socketService.socket?.id,
+      clientType: socketService.clientType
+    });
+  }, [socketConnected, accessCode]);
+
   // Khởi tạo kết nối socket
   useEffect(() => {
     let isCleanedUp = false;
@@ -165,6 +176,14 @@ const DisplayController = () => {
 
         // Khởi tạo socket connection
         await initializeSocket(accessCode);
+
+        // Debug: Check socket status after initialization
+        console.log('🎮 [DisplayController] Socket status after init:', {
+          connected: socketConnected,
+          accessCode,
+          socketId: socketService.socket?.id,
+          clientType: socketService.clientType
+        });
 
         if (!isCleanedUp) {
           setIsInitialized(true);
