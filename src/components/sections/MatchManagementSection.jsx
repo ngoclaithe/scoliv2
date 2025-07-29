@@ -100,9 +100,14 @@ const MatchManagementSection = ({ isActive = true }) => {
 
   // HÀM PHÁT AUDIO TRỰC TIẾP - ĐƯỢC GỌI KHI CLICK BUTTON
   const playAudioForAction = (audioType) => {
-    // Chỉ phát audio khi tab MatchManagement đang active
-    if (!isActive || !audioEnabled) {
-      console.log('🔇 [MatchManagement] Audio disabled or tab inactive');
+    // Chỉ phát audio khi tab MatchManagement đang active và audio được bật
+    if (!isActive) {
+      console.log('🔇 [MatchManagement] Tab inactive, skipping audio');
+      return;
+    }
+
+    if (!audioEnabled) {
+      console.log('🔇 [MatchManagement] Audio disabled locally, skipping audio');
       return;
     }
 
@@ -587,7 +592,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Cập nhật tên đội
                 updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
 
-              // Luôn cập nhật logo đội (kể cả logo mặc định hoặc logo mới)
+              // Luôn cập nhật logo đ���i (kể cả logo mặc định hoặc logo mới)
               updateTeamLogos(
                 teamAInfo.logo || matchData.teamA.logo || "",
                 teamBInfo.logo || matchData.teamB.logo || ""
@@ -964,7 +969,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                // Phát audio gialap cho đếm giờ
+                // Ph��t audio gialap cho đếm giờ
                 playAudioForAction('gialap');
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 35:00!');
@@ -1035,7 +1040,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">📊</span>
-              <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
+              <span className="text-xs font-bold text-center">TỈ SỐ TR��N</span>
             </button>
 
             {/* Tỉ số dứới */}
