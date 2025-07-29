@@ -180,7 +180,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeB}"`);
       }
     } catch (error) {
-      console.error('Lỗi tìm kiếm logo B:', error);
+      console.error('Lỗi t��m kiếm logo B:', error);
     } finally {
       setIsSearchingLogoB(false);
     }
@@ -587,7 +587,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Cập nhật tên đội
                 updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
 
-              // Luôn cập nhật logo đội (kể cả logo mặc định hoặc logo mới)
+              // Luôn cập nh���t logo đội (kể cả logo mặc định hoặc logo mới)
               updateTeamLogos(
                 teamAInfo.logo || matchData.teamA.logo || "",
                 teamBInfo.logo || matchData.teamB.logo || ""
@@ -869,7 +869,10 @@ const MatchManagementSection = ({ isActive = true }) => {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
             {/* Poster */}
             <button
-              onClick={() => setShowPosterModal(true)}
+              onClick={() => {
+                playAudioForAction('poster');
+                setShowPosterModal(true);
+              }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🎨</span>
@@ -1006,7 +1009,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               onClick={() => {
                 updateView('intro');
                 setSelectedOption("gioi-thieu");
-                console.log('Chuyển sang giới thiệu');
+                console.log('Chuyển sang gi���i thiệu');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
