@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
-import { useAudio } from '../../contexts/AudioContext';
 import PublicAPI from '../../API/apiPublic';
-import socketService from '../../services/socketService';
 
 // Import các component hiển thị
 import PosterTreTrung from '../../pages/Poster-tretrung';
@@ -25,43 +23,11 @@ const DisplayController = () => {
     currentView
   } = usePublicMatch();
 
-  const { playRefereeVoice } = useAudio();
-
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
 
-  // Lắng nghe event audio_control từ backend để phát voice trọng tài
-  useEffect(() => {
-    // Chỉ đăng ký listener khi đã kết nối socket
-    if (!isInitialized) return;
-
-    const handleAudioControl = (data) => {
-      console.log('🚿 [DisplayController] Nhận audio từ socket:', data);
-
-      if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
-        console.log('🎤 [DisplayController] Received referee voice from backend - payload size:', data.payload.audioData?.length || 'unknown');
-        const { audioData } = data.payload;
-
-        try {
-          const uint8Array = new Uint8Array(audioData);
-          const audioBlob = new Blob([uint8Array], { type: 'audio/webm' });
-          console.log('✅ [DisplayController] Audio blob tạo thành công, size:', audioBlob.size, 'bytes');
-          playRefereeVoice(audioBlob);
-        } catch (error) {
-          console.error('❌ [DisplayController] Error processing referee voice:', error);
-        }
-      } else {
-        console.log('⚠️ [DisplayController] Audio command không hợp lệ hoặc thiếu payload:', data);
-      }
-    };
-
-    console.log('📡 [DisplayController] Đăng ký audio listener sau khi socket đã kết nối');
-    socketService.onAudioControl(handleAudioControl);
-
-    return () => {
-      socketService.off('audio_control', handleAudioControl);
-    };
-  }, [playRefereeVoice, isInitialized]);
+  // ❌ REMOVED DUPLICATE AUDIO LISTENER - AudioContext đã xử lý referee voice rồi
+  // Listener này gây xung đột với AudioContext.jsx (dòng 460-468)
 
   // Khởi tạo kết nối socket
   useEffect(() => {
