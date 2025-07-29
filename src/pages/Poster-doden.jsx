@@ -16,9 +16,6 @@ export default function DodenMatchIntro() {
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN')
   };
 
-  const [partners, setPartners] = useState([]);
-
-
   const marquee = {
     text: marqueeData.text || '',
     isRunning: marqueeData.mode !== 'none'
@@ -26,21 +23,16 @@ export default function DodenMatchIntro() {
 
   const marqueeRef = useRef(null);
 
-
-
-
   const adjustFontSize = (element) => {
     if (!element) return;
     let fontSize = parseInt(window.getComputedStyle(element).fontSize);
     const minFontSize = 14;
-    
+
     while (element.scrollWidth > element.offsetWidth && fontSize > minFontSize) {
       fontSize -= 1;
       element.style.fontSize = fontSize + "px";
     }
   };
-
-  const hasPartners = partners.length > 0;
 
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
