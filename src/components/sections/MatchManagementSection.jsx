@@ -951,7 +951,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">���</span>
+              <span className="text-sm mr-1">🕑</span>
               <span className="text-xs font-bold text-center">ĐẾM 30'</span>
             </button>
 
@@ -1058,6 +1058,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 console.log('Chuyển sang nghỉ giữa hiệp');
                 console.log('Current view before update:', matchData.status);
                 updateView('halftime');
+                playAudioForAction('poster');
                 console.log('Updated view to halftime');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
