@@ -488,14 +488,7 @@ export const AudioProvider = ({ children }) => {
         // Lắng nghe TẤT CẢ events có thể
         const allAudioEvents = [
           'audio_control',
-          'audio_control_broadcast',
-          'audio_command',
-          'audio_update',
-          'voice-chunk-received',
-          'referee_voice',
-          'play_referee_voice',
-          'audio_sync',
-          'audio_status_update'
+          'audio_control_broadcast'
         ];
 
         allAudioEvents.forEach(eventName => {
@@ -528,11 +521,6 @@ export const AudioProvider = ({ children }) => {
           // Đăng ký TẤT CẢ possible event names
           socketService.on('audio_control', handleAudioControl);
           socketService.on('audio_control_broadcast', handleAudioControl);
-          socketService.on('voice-chunk-received', debugAllEvents);
-          socketService.on('referee_voice', handleAudioControl);
-          socketService.on('play_referee_voice', handleAudioControl);
-          socketService.on('audio_command', handleAudioControl);
-          socketService.on('audio_update', handleAudioControl);
 
           // Thêm listener cho socketService.onAudioControl nếu có
           if (typeof socketService.onAudioControl === 'function') {
@@ -572,11 +560,6 @@ export const AudioProvider = ({ children }) => {
       if (socketService.socket) {
         socketService.off('audio_control', handleAudioControl);
         socketService.off('audio_control_broadcast', handleAudioControl);
-        socketService.off('voice-chunk-received', debugAllEvents);
-        socketService.off('referee_voice', handleAudioControl);
-        socketService.off('play_referee_voice', handleAudioControl);
-        socketService.off('audio_command', handleAudioControl);
-        socketService.off('audio_update', handleAudioControl);
       }
     };
   }, [playRefereeVoice, playAudio, stopCurrentAudio]);
