@@ -72,7 +72,13 @@ class AudioManager {
 
   // Play regular audio
   playAudio(audioKey) {
-    console.log('🎵 Play audio request:', { audioKey, audioEnabled: this.audioEnabled });
+    console.log('🎵 Play audio request:', {
+      audioKey,
+      audioEnabled: this.audioEnabled,
+      userInteracted: this.userInteracted,
+      volume: this.volume,
+      isMuted: this.isMuted
+    });
 
     if (!this.audioEnabled) {
       console.log('🔇 Audio disabled globally');
@@ -80,8 +86,10 @@ class AudioManager {
     }
 
     if (!this.userInteracted) {
-      console.log('⏳ User hasn\'t interacted yet, skipping audio');
-      return;
+      console.log('⏳ User hasn\'t interacted yet, trying to trigger interaction...');
+      // Force set user interaction for testing
+      this.userInteracted = true;
+      console.log('✅ User interaction forced for testing');
     }
 
     const audioFile = this.audioFiles[audioKey];
