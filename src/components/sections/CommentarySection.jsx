@@ -25,13 +25,11 @@ const CommentarySection = ({ isActive = true }) => {
     // Setup socket listeners if connected
     if (socketService.socket) {
       socketService.on('audio_control', handleAudioControl);
-      socketService.on('audio_control_broadcast', handleAudioControl);
     }
 
     return () => {
       if (socketService.socket) {
         socketService.off('audio_control', handleAudioControl);
-        socketService.off('audio_control_broadcast', handleAudioControl);
       }
     };
   }, []);
