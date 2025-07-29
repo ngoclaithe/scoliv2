@@ -399,7 +399,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               console.log('🎵 [MatchManagement] Audio toggle clicked - current state:', currentState);
               console.log('🎵 [MatchManagement] Will toggle to:', !currentState);
               toggleAudioEnabled();
-              toast.info(!currentState ? '🔊 Đã gửi lệnh BẬT audio tĩnh' : '🔇 Đã gửi lệnh TẮT audio tĩnh');
+              toast.info(!currentState ? '🔊 Đã BẬT audio ở thiết bị này' : '🔇 Đã TẮT audio ở thiết bị này');
             }}
             title={audioEnabled ? "Tắt tất cả audio tĩnh" : "Bật tất cả audio tĩnh"}
           >
@@ -920,7 +920,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             <button
               onClick={() => {
                 const timeString = "25:00";
-                // Set thời gian về 25:00 và bắt đầu đếm tiến từ server timer
+                // Set thời gian về 25:00 và b��t đầu đếm tiến từ server timer
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
