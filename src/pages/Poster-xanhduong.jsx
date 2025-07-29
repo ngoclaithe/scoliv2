@@ -16,7 +16,7 @@ export default function XanhDuongMatchIntro() {
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN')
   };
 
-  const [partners, setPartners] = useState([]);
+
 
 
   const marquee = {
