@@ -88,6 +88,18 @@ export const PublicMatchProvider = ({ children }) => {
     media: []
   });
 
+  // State cho logo và banner
+  const [logoData, setLogoData] = useState({
+    sponsor: [],
+    organizer: [],
+    media: [],
+    tournament: [],
+    displayOptions: {
+      shape: "round",
+      rotateDisplay: false
+    }
+  });
+
   // State cho socket connection
   const [socketConnected, setSocketConnected] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
@@ -118,6 +130,7 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.removeAllListeners('penalty_updated');
     socketService.removeAllListeners('lineup_updated');
     socketService.removeAllListeners('sponsors_updated');
+    socketService.removeAllListeners('logo_data_updated');
     socketService.removeAllListeners('view_updated');
     socketService.removeAllListeners('audio_control');
     socketService.removeAllListeners('disconnect');
@@ -264,6 +277,12 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
+    // Lắng nghe cập nhật logo và banner
+    socketService.on('logo_data_updated', (data) => {
+      setLogoData(prev => ({ ...prev, ...data.logoData }));
+      setLastUpdateTime(Date.now());
+    });
+
     // Lắng nghe cập nhật view hiện tại (MỚI) - KHÔNG update time để tránh re-render
     socketService.on('view_updated', (data) => {
       setCurrentView(data.viewType);
@@ -363,6 +382,7 @@ export const PublicMatchProvider = ({ children }) => {
     displaySettings,
     lineupData,
     sponsors,
+    logoData,
     socketConnected,
     lastUpdateTime,
     currentAccessCode,
