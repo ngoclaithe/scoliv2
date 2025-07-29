@@ -12,7 +12,7 @@ const Intro = () => {
     // Kết hợp dữ liệu từ context với dữ liệu mặc định
     const matchData = {
         matchTitle: contextMatchData.tournament || "GIẢI BÓNG ĐÁ PHONG TRÀO",
-        stadium: contextMatchData.stadium || "Sân vận động Thiên Trường",
+        stadium: contextMatchData.stadium || "S��n vận động Thiên Trường",
         time: contextMatchData.startTime || contextMatchData.time || "19:30",
         date: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
         team1: contextMatchData.teamA.name || "ĐỘI A",
@@ -56,7 +56,7 @@ const Intro = () => {
             console.log('🧹 [Intro] Component unmounting, stopping audio');
             stopCurrentAudio();
         };
-    }, [audioEnabled, playAudio, stopCurrentAudio]);
+    }, [audioEnabled]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Lắng nghe thay đổi audioEnabled để dừng/phát audio
     useEffect(() => {
@@ -64,7 +64,7 @@ const Intro = () => {
             console.log('🔇 [Intro] Audio disabled, stopping current audio');
             stopCurrentAudio();
         }
-    }, [audioEnabled, stopCurrentAudio]);
+    }, [audioEnabled]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Responsive calculations
     const isMobile = windowSize.width < 768;

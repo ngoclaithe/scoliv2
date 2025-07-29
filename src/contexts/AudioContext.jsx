@@ -99,7 +99,7 @@ export const AudioProvider = ({ children }) => {
   }, []);
 
   // Dừng tất cả audio đang phát - sửa lỗi không thể tắt hoàn toàn
-  const stopCurrentAudio = () => {
+  const stopCurrentAudio = useCallback(() => {
     console.log('🔇 [AudioContext] Stopping all audio elements');
 
     // Dừng audio của AudioContext
@@ -140,12 +140,12 @@ export const AudioProvider = ({ children }) => {
     }
 
     dispatch({ type: audioActions.SET_PLAYING, payload: false });
-  };
+  }, []);
 
   // Play audio - đơn giản hóa
-  const playAudio = (audioKey) => {
+  const playAudio = useCallback((audioKey) => {
     console.log('🎵 Play audio request:', { audioKey, audioEnabled: state.audioEnabled });
-    
+
     if (!state.audioEnabled) {
       console.log('🔇 Audio disabled globally');
       return;
@@ -199,7 +199,7 @@ export const AudioProvider = ({ children }) => {
       console.error('❌ Error creating audio:', error);
       dispatch({ type: audioActions.SET_PLAYING, payload: false });
     }
-  };
+  }, [state.audioEnabled, state.userInteracted, state.isMuted, state.volume, stopCurrentAudio, audioFiles]);
 
   // Toggle audio toàn cục
   const toggleAudioEnabled = useCallback(() => {
@@ -229,7 +229,7 @@ export const AudioProvider = ({ children }) => {
     if (wasEnabled && audioRef.current) {
       stopCurrentAudio();
     }
-  }, [state.audioEnabled]);
+  }, [state.audioEnabled, stopCurrentAudio]);
 
   // Lắng nghe thay đổi trạng thái audio từ server
   useEffect(() => {

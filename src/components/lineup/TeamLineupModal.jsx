@@ -70,7 +70,7 @@ const TeamLineupModal = ({
       }
     });
 
-    // Sắp xếp: GK đầu tiên, rồi theo số áo
+    // Sắp xếp: GK đầu tiên, r���i theo số áo
     players.sort((a, b) => {
       if (a.number === "GK") return -1;
       if (b.number === "GK") return 1;
@@ -129,9 +129,9 @@ const TeamLineupModal = ({
       title="📋 Danh sách cầu thủ hai đội"
       size="xl"
       footer={
-        <div className="flex flex-col gap-3 w-full">
+        <div className="flex flex-col gap-2 w-full">
           {/* Mobile progress indicator */}
-          <div className="flex gap-2 sm:hidden">
+          <div className="flex gap-2">
             <div className="flex-1 text-center p-2 bg-blue-50 rounded">
               <div className="font-semibold text-blue-600">{homeCount}/11</div>
               <div className="text-xs text-blue-500">Đội nhà</div>
@@ -141,37 +141,23 @@ const TeamLineupModal = ({
               <div className="text-xs text-red-500">Đội khách</div>
             </div>
           </div>
-          {/* Action buttons */}
-          <div className="flex gap-2 sm:justify-end">
-            <Button variant="outline" onClick={onClose} className="flex-1 sm:flex-none min-h-[2.75rem]">
-              Hủy
-            </Button>
-            <Button
-              variant="primary"
-              onClick={validateAndSave}
-              className="flex-1 sm:flex-none min-h-[2.75rem]"
-              disabled={homeCount < 11 || awayCount < 11}
-            >
-              Lưu danh sách ({homeCount + awayCount}/22)
-            </Button>
-          </div>
         </div>
       }
     >
       <div className="space-y-4 sm:space-y-6">
-        {/* Team Selection */}
+        {/* Team Selection - Thu gọn header */}
         <div className="flex bg-gray-100 rounded-lg p-1 mb-2">
           <button
             onClick={() => setActiveTeam("home")}
-            className={`flex-1 py-2 px-2 rounded-md text-sm font-medium transition-all min-h-[2.5rem] ${
+            className={`flex-1 py-1.5 px-2 rounded-md text-sm font-medium transition-all min-h-[2rem] ${
               activeTeam === "home"
                 ? "bg-white text-blue-600 shadow-sm"
                 : "text-gray-600 hover:bg-gray-200"
             }`}
           >
             <div className="flex flex-col items-center">
-              <span className="text-lg mb-1">🏠</span>
-              <span className="text-xs sm:text-sm font-medium">
+              <span className="text-sm">🏠</span>
+              <span className="text-xs font-medium">
                 {matchData.homeTeam?.name || "Đội nhà"}
               </span>
               <span className="text-xs text-gray-500">({homeCount}/11)</span>
@@ -179,15 +165,15 @@ const TeamLineupModal = ({
           </button>
           <button
             onClick={() => setActiveTeam("away")}
-            className={`flex-1 py-2 px-2 rounded-md text-sm font-medium transition-all min-h-[2.5rem] ${
+            className={`flex-1 py-1.5 px-2 rounded-md text-sm font-medium transition-all min-h-[2rem] ${
               activeTeam === "away"
                 ? "bg-white text-red-600 shadow-sm"
                 : "text-gray-600 hover:bg-gray-200"
             }`}
           >
             <div className="flex flex-col items-center">
-              <span className="text-lg mb-1">✈️</span>
-              <span className="text-xs sm:text-sm font-medium">
+              <span className="text-sm">✈️</span>
+              <span className="text-xs font-medium">
                 {matchData.awayTeam?.name || "Đội khách"}
               </span>
               <span className="text-xs text-gray-500">({awayCount}/11)</span>
@@ -195,25 +181,35 @@ const TeamLineupModal = ({
           </button>
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-2 gap-2">
+        {/* Quick Actions - Bỏ nút xóa hết, thay bằng nút Lưu */}
+        <div className="grid grid-cols-3 gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setBulkMode(!bulkMode)}
-            className="h-12 flex flex-col items-center justify-center"
+            className="h-10 flex flex-col items-center justify-center"
           >
-            <span className="text-lg">📋</span>
+            <span className="text-sm">📋</span>
             <span className="text-xs">Nhập hàng loạt</span>
           </Button>
           <Button
             variant="outline"
             size="sm"
             onClick={() => clearTeam(activeTeam)}
-            className="text-red-600 border-red-300 hover:bg-red-50 h-12 flex flex-col items-center justify-center text-xs"
+            className="text-red-600 border-red-300 hover:bg-red-50 h-10 flex flex-col items-center justify-center text-xs"
           >
-            <span className="text-lg">🗑️</span>
-            <span className="text-xs">Xóa hết</span>
+            <span className="text-sm">🗑️</span>
+            <span className="text-xs">Xóa đội</span>
+          </Button>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={validateAndSave}
+            className="h-10 flex flex-col items-center justify-center text-xs"
+            disabled={homeCount < 11 || awayCount < 11}
+          >
+            <span className="text-sm">💾</span>
+            <span className="text-xs">Lưu</span>
           </Button>
         </div>
 
@@ -267,10 +263,10 @@ const TeamLineupModal = ({
             </div>
           </div>
           
-          <div className="p-3 sm:p-4 space-y-3 max-h-[40vh] sm:max-h-[50vh] lg:max-h-96 overflow-y-auto">
+          <div className="p-3 sm:p-4 space-y-2 max-h-[50vh] sm:max-h-[55vh] lg:max-h-[60vh] overflow-y-auto">
             {currentTeamData.map((player, index) => (
-              <div key={index} className="flex items-center gap-2 sm:gap-3 min-h-[2.5rem] py-1">
-                <div className={`w-10 h-8 sm:w-12 sm:h-10 rounded-lg flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0 ${
+              <div key={index} className="flex items-center gap-2 sm:gap-3 min-h-[2rem] py-0.5">
+                <div className={`w-8 h-7 sm:w-10 sm:h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs flex-shrink-0 ${
                   player.number === "GK" 
                     ? "bg-green-500" 
                     : activeTeam === "home" ? "bg-blue-500" : "bg-red-500"
@@ -293,22 +289,7 @@ const TeamLineupModal = ({
           </div>
         </div>
 
-        {/* Summary */}
-        <div className="hidden sm:block bg-gray-50 rounded-lg p-4">
-          <h4 className="font-medium text-gray-900 mb-3">Tổng quan</h4>
-          <div className="grid grid-cols-2 gap-4 text-center">
-            <div className="bg-blue-50 rounded-lg p-3">
-              <div className="text-2xl mb-1">🏠</div>
-              <div className="font-semibold text-blue-600 text-lg">{homeCount}/11</div>
-              <div className="text-blue-500 text-sm">{matchData.homeTeam?.name || "Đội nhà"}</div>
-            </div>
-            <div className="bg-red-50 rounded-lg p-3">
-              <div className="text-2xl mb-1">✈️</div>
-              <div className="font-semibold text-red-600 text-lg">{awayCount}/11</div>
-              <div className="text-red-500 text-sm">{matchData.awayTeam?.name || "Đội khách"}</div>
-            </div>
-          </div>
-        </div>
+
 
 
       </div>
