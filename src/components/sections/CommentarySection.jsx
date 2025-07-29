@@ -5,7 +5,37 @@ import { Mic, MicOff } from "lucide-react";
 import socketService from "../../services/socketService";
 
 const CommentarySection = ({ isActive = true }) => {
-  // Remove dependency on AudioContext
+  // Socket audio listeners setup - CommentarySection cần nhận referee voice từ server
+  useEffect(() => {
+    const handleAudioControl = (data) => {
+      console.log('🎙️ [CommentarySection] Received audio_control:', data);
+
+      if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
+        const { audioData, mimeType } = data.payload;
+        try {
+          const uint8Array = new Uint8Array(audioData);
+          const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
+          audioUtils.playRefereeVoice(audioBlob);
+        } catch (error) {
+          console.error('❌ Error processing referee voice:', error);
+        }
+      }
+    };
+
+    // Setup socket listeners if connected
+    if (socketService.socket) {
+      socketService.on('audio_control', handleAudioControl);
+      socketService.on('audio_control_broadcast', handleAudioControl);
+    }
+
+    return () => {
+      if (socketService.socket) {
+        socketService.off('audio_control', handleAudioControl);
+        socketService.off('audio_control_broadcast', handleAudioControl);
+      }
+    };
+  }, []);
+
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const mediaRecorderRef = useRef(null);
