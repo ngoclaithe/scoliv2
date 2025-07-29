@@ -245,13 +245,10 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     const handleCodeChange = (e) => {
       const newCode = e.target.value.toUpperCase();
       setLocalCode(newCode);
-      // Không tự động tìm kiếm nữa, chỉ cập nhật state local
     };
 
-    // Chỉ tìm kiếm khi nhấn Enter
-    const handleCodeKeyPress = async (e) => {
-      if (e.key === 'Enter' && localCode.trim().length >= 3) {
-        e.preventDefault(); // Ngăn form submit
+    const handleSearch = async () => {
+      if (localCode.trim().length >= 3) {
         try {
           setIsSearching(true);
           console.log('🔍 [PosterLogoManager] Tìm kiếm logo với code:', localCode);
@@ -274,7 +271,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             }
           } else {
             console.log('❌ [PosterLogoManager] Không tìm thấy logo với code:', localCode);
-            // Chỉ cập nhật code, không clear URL hiện tại
             onUpdate(item.id, { ...item, code: localCode.trim() });
           }
         } catch (error) {
@@ -282,13 +278,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         } finally {
           setIsSearching(false);
         }
-      }
-    };
-
-    // Cập nhật code khi blur (rời khỏi input) - không tìm kiếm
-    const handleCodeBlur = () => {
-      if (localCode.trim() !== item.code) {
-        onUpdate(item.id, { ...item, code: localCode.trim() });
       }
     };
   
