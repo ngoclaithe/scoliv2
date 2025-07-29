@@ -99,7 +99,7 @@ export const AudioProvider = ({ children }) => {
   }, []);
 
   // Dừng tất cả audio đang phát - sửa lỗi không thể tắt hoàn toàn
-  const stopCurrentAudio = () => {
+  const stopCurrentAudio = useCallback(() => {
     console.log('🔇 [AudioContext] Stopping all audio elements');
 
     // Dừng audio của AudioContext
@@ -140,7 +140,7 @@ export const AudioProvider = ({ children }) => {
     }
 
     dispatch({ type: audioActions.SET_PLAYING, payload: false });
-  };
+  }, []);
 
   // Play audio - đơn giản hóa
   const playAudio = useCallback((audioKey) => {
