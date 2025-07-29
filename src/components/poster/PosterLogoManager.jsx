@@ -79,7 +79,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     {
       id: "media",
       name: "TRUYỀN THÔNG",
-      icon: "📺",
+      icon: "��",
     },
     {
       id: "tournament",
@@ -437,7 +437,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             className={`w-full text-xs text-center border rounded px-1 py-1 font-mono transition-colors focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none ${
               isSearching ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
             }`}
-            placeholder="Mã (Enter để tìm)"
+            placeholder="Mã (Enter ��ể tìm)"
           />
 
           {isSearching && (
@@ -640,7 +640,22 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   };
 
   const renderLogoSection = () => {
-    const currentItems = allLogoItems.filter(item => item.category === activeLogoCategory);
+    const currentLogos = allLogoItems.filter(item => item.category === activeLogoCategory && item.type === 'logo');
+    const currentBanners = allLogoItems.filter(item => item.category === activeLogoCategory && item.type === 'banner');
+
+    // Tạo logo mặc định nếu chưa có
+    const defaultLogos = currentLogos.length === 0 ? [{
+      id: 'default-logo-1',
+      unitName: 'Default Logo',
+      code: 'LOGO1',
+      type: 'logo',
+      category: activeLogoCategory,
+      url: '/images/logos/default-logo.png',
+      displayPositions: [],
+      isDefault: true
+    }] : [];
+
+    const allCurrentLogos = [...defaultLogos, ...currentLogos];
 
     return (
       <div className="space-y-1">
@@ -667,38 +682,49 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
           ))}
         </div>
 
-        <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
-          {currentItems.map((item) => (
-            <LogoItem
-              key={item.id}
-              item={item}
-              onUpdate={handleItemUpdate}
-              onRemove={handleItemRemove}
-            />
-          ))}
-
-          <div
-            onClick={handleAddNewLogo}
-            className="flex-none w-24 bg-white border-2 border-dashed border-gray-300 rounded p-2 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 flex flex-col items-center justify-center h-28"
-          >
-            <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center mb-1">
-              <span className="text-xs text-gray-400">+</span>
-            </div>
-            <p className="text-xs text-gray-600 font-medium text-center">
-              Thêm Logo
-            </p>
+        {/* Logo Section */}
+        <div className="space-y-1">
+          <div className="flex items-center justify-between">
+            <h4 className="text-xs font-medium text-gray-800">📁 Logo</h4>
+            <button
+              onClick={handleAddNewLogo}
+              className="text-xs px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+            >
+              + Thêm Logo
+            </button>
           </div>
+          <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
+            {allCurrentLogos.map((item) => (
+              <LogoItem
+                key={item.id}
+                item={item}
+                onUpdate={handleItemUpdate}
+                onRemove={handleItemRemove}
+              />
+            ))}
+          </div>
+        </div>
 
-          <div
-            onClick={handleAddNewBanner}
-            className="flex-none w-24 bg-white border-2 border-dashed border-orange-300 rounded p-2 cursor-pointer hover:border-orange-400 hover:bg-orange-50 transition-all duration-200 flex flex-col items-center justify-center h-28"
-          >
-            <div className="w-6 h-6 bg-orange-100 rounded-full flex items-center justify-center mb-1">
-              <span className="text-xs text-orange-400">+</span>
-            </div>
-            <p className="text-xs text-orange-600 font-medium text-center">
-              Thêm Banner
-            </p>
+        {/* Banner Section */}
+        <div className="space-y-1">
+          <div className="flex items-center justify-between">
+            <h4 className="text-xs font-medium text-gray-800">🖼️ Banner</h4>
+            <button
+              onClick={handleAddNewBanner}
+              className="text-xs px-2 py-1 bg-orange-500 text-white rounded hover:bg-orange-600 transition-colors"
+            >
+              + Thêm Banner
+            </button>
+          </div>
+          <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
+            {currentBanners.map((item) => (
+              <LogoItem
+                key={item.id}
+                item={item}
+                onUpdate={handleItemUpdate}
+                onRemove={handleItemRemove}
+              />
+            ))}
           </div>
         </div>
 
@@ -725,16 +751,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
               </label>
             ))}
           </div>
-
-          <label className="flex items-center gap-0.5 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={logoDisplayOptions.rotateDisplay}
-              onChange={(e) => setLogoDisplayOptions(prev => ({ ...prev, rotateDisplay: e.target.checked }))}
-              className="w-2 h-2"
-            />
-            <span className="text-xs">🔄 Hiển thị luân phiên</span>
-          </label>
         </div>
       </div>
     );
