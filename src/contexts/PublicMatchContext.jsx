@@ -282,7 +282,7 @@ export const PublicMatchProvider = ({ children }) => {
     }
 
     // Lắng nghe audio control events - để nhận referee voice từ CommentarySection
-    socketService.on('audio_control', (data) => {
+    socketService.on('audio_control_broadcast', (data) => {
       console.log('🎙️ [PublicMatchContext] Received audio_control event:', data);
       console.log('🎙️ [PublicMatchContext] Client type:', socketService.getConnectionStatus().clientType);
       console.log('🎙️ [PublicMatchContext] Target check:', data.target, 'Command:', data.command);
