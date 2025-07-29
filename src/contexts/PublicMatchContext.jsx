@@ -100,6 +100,28 @@ export const PublicMatchProvider = ({ children }) => {
 
   // Thiết lập các listener cho socket
   const setupSocketListeners = useCallback(() => {
+    // Clear existing listeners trước khi thêm mới
+    socketService.removeAllListeners('match_info_updated');
+    socketService.removeAllListeners('score_updated');
+    socketService.removeAllListeners('match_stats_updated');
+    socketService.removeAllListeners('template_updated');
+    socketService.removeAllListeners('poster_updated');
+    socketService.removeAllListeners('team_logos_updated');
+    socketService.removeAllListeners('team_names_updated');
+    socketService.removeAllListeners('marquee_updated');
+    socketService.removeAllListeners('match_time_updated');
+    socketService.removeAllListeners('timer_tick');
+    socketService.removeAllListeners('timer_started');
+    socketService.removeAllListeners('timer_paused');
+    socketService.removeAllListeners('timer_resumed');
+    socketService.removeAllListeners('timer_reset');
+    socketService.removeAllListeners('penalty_updated');
+    socketService.removeAllListeners('lineup_updated');
+    socketService.removeAllListeners('sponsors_updated');
+    socketService.removeAllListeners('view_updated');
+    socketService.removeAllListeners('audio_control');
+    socketService.removeAllListeners('disconnect');
+    socketService.removeAllListeners('connect');
     // Lắng nghe cập nhật thông tin trận đấu
     socketService.on('match_info_updated', (data) => {
       setMatchData(prev => ({ ...prev, ...data.matchInfo }));
@@ -295,7 +317,7 @@ export const PublicMatchProvider = ({ children }) => {
   // Khởi tạo socket connection cho public route
   const initializeSocket = useCallback(async (accessCode) => {
     try {
-      // Tránh khởi tạo socket trùng l���p
+      // Tránh khởi tạo socket trùng lặp
       if (currentAccessCode === accessCode && socketConnected) {
         return;
       }
