@@ -274,7 +274,7 @@ export const PublicMatchProvider = ({ children }) => {
     if (socketService.socket) {
       const originalOn = socketService.socket.on;
       socketService.socket.on = function(event, callback) {
-        if (event === 'audio_control_broadcast') {
+        if (event === 'audio_control') {
           console.log('🎯 [DEBUG] Registering listener for:', event);
         }
         return originalOn.call(this, event, callback);
