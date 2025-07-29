@@ -83,6 +83,77 @@ export const AudioProvider = ({ children }) => {
     gialap: '/audio/gialap.mp3',
   };
 
+  // Phát voice trọng tài
+  const playRefereeVoice = useCallback((audioBlob) => {
+    console.log('🎙️ [AudioContext] Playing referee voice');
+
+    // Dừng tất cả audio khác trước
+    stopCurrentAudio();
+
+    try {
+      // Tạo URL từ blob
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+
+      refereeVoiceRef.current = audio;
+      audio.volume = state.isMuted ? 0 : state.volume;
+
+      dispatch({ type: audioActions.SET_REFEREE_VOICE_PLAYING, payload: true });
+
+      audio.onended = () => {
+        console.log('✅ Referee voice playback ended');
+        dispatch({ type: audioActions.SET_REFEREE_VOICE_PLAYING, payload: false });
+        URL.revokeObjectURL(audioUrl);
+        refereeVoiceRef.current = null;
+      };
+
+      audio.onerror = (e) => {
+        console.error('❌ Referee voice playback error:', e);
+        dispatch({ type: audioActions.SET_REFEREE_VOICE_PLAYING, payload: false });
+        URL.revokeObjectURL(audioUrl);
+        refereeVoiceRef.current = null;
+      };
+
+      const playPromise = audio.play();
+      if (playPromise) {
+        playPromise
+          .then(() => {
+            console.log('✅ Referee voice started playing successfully');
+          })
+          .catch((error) => {
+            console.error('❌ Failed to play referee voice:', error);
+            dispatch({ type: audioActions.SET_REFEREE_VOICE_PLAYING, payload: false });
+            URL.revokeObjectURL(audioUrl);
+            refereeVoiceRef.current = null;
+          });
+      }
+
+    } catch (error) {
+      console.error('❌ Error creating referee voice audio:', error);
+      dispatch({ type: audioActions.SET_REFEREE_VOICE_PLAYING, payload: false });
+    }
+  }, [state.isMuted, state.volume]);
+
+  // Dừng voice trọng tài
+  const stopRefereeVoice = useCallback(() => {
+    console.log('🔇 [AudioContext] Stopping referee voice');
+
+    if (refereeVoiceRef.current) {
+      try {
+        refereeVoiceRef.current.pause();
+        refereeVoiceRef.current.currentTime = 0;
+        if (refereeVoiceRef.current.src && refereeVoiceRef.current.src.startsWith('blob:')) {
+          URL.revokeObjectURL(refereeVoiceRef.current.src);
+        }
+      } catch (error) {
+        console.warn('⚠️ Error stopping referee voice:', error);
+      }
+      refereeVoiceRef.current = null;
+    }
+
+    dispatch({ type: audioActions.SET_REFEREE_VOICE_PLAYING, payload: false });
+  }, []);
+
   // Set up user interaction listeners
   useEffect(() => {
     const handleUserInteraction = () => {
