@@ -118,9 +118,12 @@ const CommentarySection = ({ isActive = true }) => {
       };
 
       mediaRecorder.onstop = () => {
-        if (streamRef.current) {
-          streamRef.current.getTracks().forEach(track => track.stop());
-          streamRef.current = null;
+        if (!isContinuousMode) {
+          // Chỉ stop stream trong normal mode
+          if (streamRef.current) {
+            streamRef.current.getTracks().forEach(track => track.stop());
+            streamRef.current = null;
+          }
         }
         processRecording();
       };
@@ -160,7 +163,16 @@ const CommentarySection = ({ isActive = true }) => {
         alert('Không thể gửi voice lên server');
       }
 
+      // Reset audio chunks để chuẩn bị cho lần ghi tiếp theo trong continuous mode
+      audioChunksRef.current = [];
       setIsProcessing(false);
+
+      // Trong continuous mode, tự động bắt đầu ghi lại
+      if (isContinuousMode && continuousRecording && streamRef.current) {
+        setTimeout(() => {
+          startNextContinuousChunk();
+        }, 100); // Delay nhỏ để tránh gap
+      }
     } else {
       setIsProcessing(false);
     }
