@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
-import { useAudio } from '../../contexts/AudioContext';
+// Audio moved to audioUtils
 
 const Intro = () => {
     // Sử dụng dữ liệu t��� PublicMatchContext
