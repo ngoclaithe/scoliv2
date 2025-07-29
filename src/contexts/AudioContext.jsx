@@ -199,7 +199,7 @@ export const AudioProvider = ({ children }) => {
       console.error('❌ Error creating audio:', error);
       dispatch({ type: audioActions.SET_PLAYING, payload: false });
     }
-  }, [state.audioEnabled, state.userInteracted, state.isMuted, state.volume]);
+  }, [state.audioEnabled, state.userInteracted, state.isMuted, state.volume, stopCurrentAudio]);
 
   // Toggle audio toàn cục
   const toggleAudioEnabled = useCallback(() => {
