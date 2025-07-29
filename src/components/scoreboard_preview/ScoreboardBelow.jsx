@@ -21,7 +21,7 @@ const ScoreboardBelow = ({
   } = usePublicMatch();
 
   // Sử dụng AudioContext để phát audio
-  const { playAudio, isComponentPlaying } = useAudio();
+  const { playAudio } = useAudio();
 
   // State cho scoreboard data (merge với context data)
   const [scoreboardData, setScoreboardData] = useState({
@@ -90,7 +90,7 @@ const ScoreboardBelow = ({
 
   // Tự động phát audio rasan.mp3 khi component mount - CHỈ 1 LẦN
   useEffect(() => {
-    playAudio('rasan', 'scoreboardBelow');
+    playAudio('rasan');
   }, []); // Bỏ playAudio khỏi dependency để chỉ phát 1 lần
 
   // Render the appropriate template based on selectedSkin
