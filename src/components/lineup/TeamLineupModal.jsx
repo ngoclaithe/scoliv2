@@ -195,25 +195,26 @@ const TeamLineupModal = ({
           </button>
         </div>
 
-        {/* Quick Actions */}
+        {/* Quick Actions - Bỏ nút xóa hết, thay bằng nút Lưu */}
         <div className="grid grid-cols-2 gap-2">
           <Button
             variant="outline"
             size="sm"
             onClick={() => setBulkMode(!bulkMode)}
-            className="h-12 flex flex-col items-center justify-center"
+            className="h-10 flex flex-col items-center justify-center"
           >
             <span className="text-lg">📋</span>
             <span className="text-xs">Nhập hàng loạt</span>
           </Button>
           <Button
-            variant="outline"
+            variant="primary"
             size="sm"
-            onClick={() => clearTeam(activeTeam)}
-            className="text-red-600 border-red-300 hover:bg-red-50 h-12 flex flex-col items-center justify-center text-xs"
+            onClick={validateAndSave}
+            className="h-10 flex flex-col items-center justify-center text-xs"
+            disabled={homeCount < 11 || awayCount < 11}
           >
-            <span className="text-lg">🗑️</span>
-            <span className="text-xs">Xóa hết</span>
+            <span className="text-lg">💾</span>
+            <span className="text-xs">Lưu ({homeCount + awayCount}/22)</span>
           </Button>
         </div>
 
