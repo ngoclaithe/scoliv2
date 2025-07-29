@@ -328,10 +328,55 @@ export const PublicMatchProvider = ({ children }) => {
       setSocketConnected(true);
     });
 
+    // Lắng nghe response state hiện tại từ server
+    socketService.on('current_state_response', (data) => {
+      console.log('🔄 [PublicMatchContext] Received current_state_response:', data);
+
+      if (data.matchData) {
+        setMatchData(prev => ({ ...prev, ...data.matchData }));
+      }
+
+      if (data.matchStats) {
+        setMatchStats(prev => ({ ...prev, ...data.matchStats }));
+      }
+
+      if (data.displaySettings) {
+        setDisplaySettings(prev => ({ ...prev, ...data.displaySettings }));
+      }
+
+      if (data.marqueeData) {
+        setMarqueeData(prev => ({ ...prev, ...data.marqueeData }));
+      }
+
+      if (data.penaltyData) {
+        setPenaltyData(prev => ({ ...prev, ...data.penaltyData }));
+      }
+
+      if (data.lineupData) {
+        setLineupData(data.lineupData);
+      }
+
+      if (data.sponsors) {
+        setSponsors(prev => ({ ...prev, ...data.sponsors }));
+      }
+
+      if (data.logoData) {
+        setLogoData(prev => ({ ...prev, ...data.logoData }));
+      }
+
+      if (data.currentView) {
+        setCurrentView(data.currentView);
+        console.log('🎯 [PublicMatchContext] Current view set from server:', data.currentView);
+      }
+
+      console.log('✅ [PublicMatchContext] State loaded from server successfully');
+      setLastUpdateTime(Date.now());
+    });
+
     console.log('✅ [PublicMatchContext] All socket listeners set up successfully');
   }, [updateLastTime]);
 
-  // Kh���i tạo socket connection cho public route
+  // Khởi tạo socket connection cho public route
   const initializeSocket = useCallback(async (accessCode) => {
     try {
       // Tránh khởi tạo socket trùng lặp
