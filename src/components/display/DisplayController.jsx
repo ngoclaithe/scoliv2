@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { useAudio } from '../../contexts/AudioContext';
@@ -22,70 +22,24 @@ const DisplayController = () => {
   const {
     initializeSocket,
     displaySettings,
-    socketConnected,
     currentView
   } = usePublicMatch();
 
-  // Sử dụng AudioContext - lấy cả playAudio và playRefereeVoice
-  const { playAudio, playRefereeVoice, audioEnabled } = useAudio();
+  const { playRefereeVoice } = useAudio();
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
 
-  // Sử dụng useRef để lưu trữ previousView
-  const prevViewRef = useRef();
-
-  // Lắng nghe currentView để phát audio tương ứng ở DisplayController
-  useEffect(() => {
-    if (!audioEnabled || !currentView) {
-      console.log('🔇 [DisplayController] Audio disabled or no current view');
-      return;
-    }
-
-    const previousView = prevViewRef.current;
-
-    // Chỉ phát audio khi view thực sự thay đổi
-    if (previousView === currentView) {
-      return;
-    }
-
-    console.log('🎵 [DisplayController] View changed, playing audio for:', currentView);
-
-    // Phát audio tương ứng theo view
-    let audioFile = null;
-
-    if (['intro', 'halftime', 'poster'].includes(currentView)) {
-      audioFile = 'poster';
-    } else if (currentView === 'scoreboard_below') {
-      audioFile = 'rasan';
-    } else if (currentView?.startsWith('scoreboard')) {
-      audioFile = 'gialap';
-    }
-
-    if (audioFile) {
-      console.log('🎵 [DisplayController] Playing audio:', audioFile, 'for view:', currentView);
-      playAudio(audioFile);
-    }
-
-    prevViewRef.current = currentView;
-  }, [currentView, audioEnabled, playAudio]);
-
   // Lắng nghe event audio_control từ backend để phát voice trọng tài
   useEffect(() => {
-    console.log('🎮 [DisplayController] Registering audio_control listener for referee voice');
-
     const handleAudioControl = (data) => {
-      console.log('🎮 [DisplayController] Received audio_control:', data);
-
-      // Chỉ xử lý voice trọng tài, các audio kh��c đã được chuyển sang MatchManagementSection
       if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
-        console.log('🎮 [DisplayController] Received referee voice from backend');
-        const { audioData, mimeType } = data.payload;
+        console.log('🎤 [DisplayController] Received referee voice from backend');
+        const { audioData } = data.payload;
 
         try {
-          // Chuyển audioData từ array về Uint8Array
           const uint8Array = new Uint8Array(audioData);
-          const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
+          const audioBlob = new Blob([uint8Array], { type: 'audio/webm' });
           playRefereeVoice(audioBlob);
         } catch (error) {
           console.error('❌ [DisplayController] Error processing referee voice:', error);
@@ -93,19 +47,12 @@ const DisplayController = () => {
       }
     };
 
-    // Đăng ký lắng nghe audio_control
     socketService.onAudioControl(handleAudioControl);
 
-    // Cleanup
     return () => {
-      console.log('🧹 [DisplayController] Unregistering audio_control listener');
       socketService.off('audio_control', handleAudioControl);
     };
-
-  }, [playRefereeVoice]); // Chỉ phụ thuộc vào playRefereeVoice
-
-  // DisplayController không cần xử lý audio enabled changes nữa
-  // Audio sẽ được quản lý từ MatchManagementSection và voice từ CommentarySection
+  }, [playRefereeVoice]);
 
   // Khởi tạo kết nối socket
   useEffect(() => {
@@ -120,15 +67,13 @@ const DisplayController = () => {
           return;
         }
 
-        console.log('🎮 Access code verified for display:', accessCode);
         await initializeSocket(accessCode);
 
         if (!isCleanedUp) {
           setIsInitialized(true);
         }
-
       } catch (err) {
-        console.error('🎮 Failed to initialize display:', err);
+        console.error('❌ [DisplayController] Failed to initialize display:', err);
         if (!isCleanedUp) {
           setError('Không thể kết nối đến hệ thống');
         }
@@ -144,6 +89,44 @@ const DisplayController = () => {
     };
   }, [accessCode, initializeSocket]);
 
+  // Render poster component theo type
+  const renderPoster = (posterType) => {
+    switch (posterType) {
+      case 'haoquang':
+        return <PosterHaoQuang accessCode={accessCode} />;
+      case 'tretrung':
+        return <PosterTreTrung accessCode={accessCode} />;
+      case 'doden':
+        return <PosterDoDen accessCode={accessCode} />;
+      case 'vangkim':
+        return <PosterVangKim accessCode={accessCode} />;
+      case 'vangxanh':
+        return <PosterVangXanh accessCode={accessCode} />;
+      case 'xanhduong':
+        return <PosterXanhDuong accessCode={accessCode} />;
+      default:
+        return <PosterHaoQuang accessCode={accessCode} />;
+    }
+  };
+
+  // Render component theo currentView
+  const renderCurrentView = () => {
+    switch (currentView) {
+      case 'intro':
+        return <Intro accessCode={accessCode} />;
+      case 'halftime':
+        return <HalfTime accessCode={accessCode} />;
+      case 'scoreboard':
+        return <ScoreboardAbove accessCode={accessCode} />;
+      case 'scoreboard_below':
+        return <ScoreboardBelow accessCode={accessCode} />;
+      case 'poster':
+      default:
+        const posterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;
+        return renderPoster(posterType);
+    }
+  };
+
   // Render loading state
   if (!isInitialized) {
     return (
@@ -151,7 +134,7 @@ const DisplayController = () => {
         <div className="text-center">
           <div className="animate-spin text-6xl mb-4">⚽</div>
           <h1 className="text-2xl font-bold mb-2">Đang kết nối...</h1>
-          <p className="text-gray-300">Mã truy c���p: {accessCode}</p>
+          <p className="text-gray-300">Mã truy cập: {accessCode}</p>
           <div className="mt-4 w-48 h-2 bg-gray-700 rounded-full overflow-hidden">
             <div className="h-full bg-gradient-to-r from-blue-500 to-purple-500 animate-pulse"></div>
           </div>
@@ -179,66 +162,11 @@ const DisplayController = () => {
     );
   }
 
-  // Hàm render component theo currentView từ context
-  const renderCurrentView = () => {
-    switch (currentView) {
-      case 'intro':
-        return <Intro accessCode={accessCode} />;
-      case 'halftime':
-        return <HalfTime accessCode={accessCode} />;
-      case 'scoreboard':
-        return <ScoreboardAbove accessCode={accessCode} />;
-      case 'scoreboard_below':
-        return <ScoreboardBelow accessCode={accessCode} />;
-      case 'poster':
-        const posterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;
-
-        switch (posterType) {
-          case 'haoquang':
-            return <PosterHaoQuang accessCode={accessCode} />;
-          case 'tretrung':
-            return <PosterTreTrung accessCode={accessCode} />;
-          case 'doden':
-            return <PosterDoDen accessCode={accessCode} />;
-          case 'vangkim':
-            return <PosterVangKim accessCode={accessCode} />;
-          case 'vangxanh':
-            return <PosterVangXanh accessCode={accessCode} />;
-          case 'xanhduong':
-            return <PosterXanhDuong accessCode={accessCode} />;
-          default:
-            return <PosterHaoQuang accessCode={accessCode} />;
-        }
-      default:
-        const defaultPosterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;
-
-        switch (defaultPosterType) {
-          case 'haoquang':
-            return <PosterHaoQuang accessCode={accessCode} />;
-          case 'tretrung':
-            return <PosterTreTrung accessCode={accessCode} />;
-          case 'doden':
-            return <PosterDoDen accessCode={accessCode} />;
-          case 'vangkim':
-            return <PosterVangKim accessCode={accessCode} />;
-          case 'vangxanh':
-            return <PosterVangXanh accessCode={accessCode} />;
-          case 'xanhduong':
-            return <PosterXanhDuong accessCode={accessCode} />;
-          default:
-            return <PosterHaoQuang accessCode={accessCode} />;
-        }
-    }
-  };
-
   return (
     <div className="relative min-h-screen bg-white">
-      {/* Current view content */}
       <div className="w-full h-full">
         {renderCurrentView()}
       </div>
-
-
     </div>
   );
 };
