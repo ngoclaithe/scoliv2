@@ -422,7 +422,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 resumeTimer();
                 toast.info('▶️ Đã tiếp tục timer từ server');
               } else {
-                // Pause timer - sử dụng updateMatchTime với status paused
+                // Pause timer - s�� dụng updateMatchTime với status paused
                 updateMatchTime(matchData.matchTime, matchData.period, "paused");
                 toast.info('⏸️ Đã tạm dừng timer');
               }
@@ -1029,6 +1029,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               onClick={() => {
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
+                playAudioForAction('gialap');
                 console.log('Chuyển sang scoreboard trên');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
