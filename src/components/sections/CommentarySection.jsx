@@ -81,15 +81,14 @@ const CommentarySection = ({ isActive = true }) => {
       continuousTimeoutRef.current = null;
     }
 
-    if (realTimeIntervalRef.current) {
-      clearInterval(realTimeIntervalRef.current);
-      realTimeIntervalRef.current = null;
+    if (emitIntervalRef.current) {
+      clearInterval(emitIntervalRef.current);
+      emitIntervalRef.current = null;
     }
 
     // Reset states
     setIsRecording(false);
     setContinuousRecording(false);
-    setIsRealTimeTransmission(false);
     setIsProcessing(false);
   };
 
@@ -139,9 +138,9 @@ const CommentarySection = ({ isActive = true }) => {
     mediaRecorder.ondataavailable = (event) => {
       if (event.data.size > 0) {
         audioChunksRef.current.push(event.data);
-
-        // Nếu là real-time transmission, gửi luôn chunk này
-        if (isRealTimeTranmission && audioChunksRef.current.length > 0) {
+        
+        // Nếu là continuous mode, gửi ngay lập tức
+        if (isContinuousMode && continuousRecording) {
           sendCurrentChunks();
         }
       }
@@ -149,7 +148,7 @@ const CommentarySection = ({ isActive = true }) => {
 
     mediaRecorder.onstop = () => {
       console.log('🎙️ MediaRecorder stopped, processing...');
-      if (!isRealTimeTranmission) {
+      if (!isContinuousMode) {
         processRecording();
       } else {
         // Gửi chunk cuối cùng và reset
@@ -160,26 +159,26 @@ const CommentarySection = ({ isActive = true }) => {
       }
     };
 
-    // Start recording với interval thích hợp
-    if (isRealTimeTranmission) {
-      // Real-time mode: thu thập data mỗi 200ms và gửi ngay
-      mediaRecorder.start(200);
-    } else {
-      // Normal mode: thu thập data mỗi 100ms
-      mediaRecorder.start(100);
-    }
-
+    // Start recording
+    mediaRecorder.start();
     setIsRecording(true);
 
-    // Nếu là continuous mode, tự động stop sau 2 giây (giảm từ 3s để responsive hơn)
+    // Nếu là continuous mode, setup interval để requestData liên tục
     if (isContinuousMode && continuousRecording) {
+      emitIntervalRef.current = setInterval(() => {
+        if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+          mediaRecorderRef.current.requestData();
+        }
+      }, 500); // Emit mỗi 500ms
+      
+      // Tự động stop và restart để tránh memory leak
       continuousTimeoutRef.current = setTimeout(() => {
         if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
           console.log('🎙️ Auto-stopping continuous chunk');
           mediaRecorderRef.current.stop();
           setIsRecording(false);
         }
-      }, 2000); // Giảm xuống 2 giây cho real-time hơn
+      }, 5000); // 5 giây
     }
   };
 
@@ -189,22 +188,15 @@ const CommentarySection = ({ isActive = true }) => {
       continuousTimeoutRef.current = null;
     }
 
-    if (realTimeIntervalRef.current) {
-      clearInterval(realTimeIntervalRef.current);
-      realTimeIntervalRef.current = null;
+    if (emitIntervalRef.current) {
+      clearInterval(emitIntervalRef.current);
+      emitIntervalRef.current = null;
     }
 
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
-      if (!isRealTimeTranmission) {
-        setIsProcessing(true);
-      }
-    }
-
-    // Reset real-time mode khi stop (trừ khi là continuous mode)
-    if (!continuousRecording) {
-      setIsRealTimeTransmission(false);
+      setIsProcessing(true);
     }
   };
 
@@ -278,7 +270,7 @@ const CommentarySection = ({ isActive = true }) => {
     });
   };
 
-  // Hàm gửi current chunks ngay lập tức (cho real-time mode)
+  // Hàm gửi current chunks ngay lập tức (cho continuous mode)
   const sendCurrentChunks = async () => {
     if (audioChunksRef.current.length === 0) {
       return;
@@ -286,14 +278,14 @@ const CommentarySection = ({ isActive = true }) => {
 
     const mimeType = mediaRecorderRef.current?.mimeType || getSupportedMimeType() || 'audio/webm';
     const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
-
-    console.log('🎙️ [Real-time] Sending voice chunk:', audioBlob.size, 'bytes');
+    
+    console.log('🎙️ [Continuous] Sending voice chunk:', audioBlob.size, 'bytes');
 
     try {
       await sendVoiceToServer(audioBlob);
-      console.log('✅ [Real-time] Voice chunk sent successfully');
+      console.log('✅ [Continuous] Voice chunk sent successfully');
     } catch (error) {
-      console.error('❌ [Real-time] Failed to send voice chunk:', error);
+      console.error('❌ [Continuous] Failed to send voice chunk:', error);
     }
 
     // Clear chunks after sending
@@ -303,7 +295,6 @@ const CommentarySection = ({ isActive = true }) => {
   const startContinuousRecording = async () => {
     console.log('🎙️ Starting continuous recording mode');
     setContinuousRecording(true);
-    setIsRealTimeTransmission(true); // Bật real-time transmission
     await startRecording();
   };
 
@@ -321,16 +312,15 @@ const CommentarySection = ({ isActive = true }) => {
   const stopContinuousRecording = () => {
     console.log('🔇 Stopping continuous recording');
     setContinuousRecording(false);
-    setIsRealTimeTransmission(false); // Tắt real-time transmission
 
     if (continuousTimeoutRef.current) {
       clearTimeout(continuousTimeoutRef.current);
       continuousTimeoutRef.current = null;
     }
 
-    if (realTimeIntervalRef.current) {
-      clearInterval(realTimeIntervalRef.current);
-      realTimeIntervalRef.current = null;
+    if (emitIntervalRef.current) {
+      clearInterval(emitIntervalRef.current);
+      emitIntervalRef.current = null;
     }
 
     // Dừng current recording
@@ -354,15 +344,6 @@ const CommentarySection = ({ isActive = true }) => {
     }
   };
 
-  const toggleRealTimeRecording = () => {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      setIsRealTimeTransmission(true);
-      startRecording();
-    }
-  };
-
   const toggleContinuousMode = () => {
     if (continuousRecording) {
       stopContinuousRecording();
@@ -374,81 +355,49 @@ const CommentarySection = ({ isActive = true }) => {
   return (
     <div className="p-4 space-y-4">
       {/* Mode Toggle */}
-      <div className="flex flex-col items-center space-y-2 mb-4">
-        <div className="flex space-x-2">
-          <button
-            onClick={() => {
-              stopAllRecording();
-              setIsContinuousMode(false);
-            }}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              !isContinuousMode
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
-          >
-            Ấn để nói
-          </button>
-          <button
-            onClick={() => {
-              stopAllRecording();
-              setIsContinuousMode(true);
-            }}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              isContinuousMode
-                ? 'bg-green-500 text-white'
-                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-            }`}
-          >
-            Nói liên tục
-          </button>
-        </div>
-
-        {/* Real-time toggle for push-to-talk mode */}
-        {!isContinuousMode && (
-          <div className="flex items-center space-x-2 mt-2">
-            <label className="text-xs text-gray-600">
-              Phát trực tiếp:
-            </label>
-            <button
-              onClick={() => setIsRealTimeTransmission(!isRealTimeTranmission)}
-              className={`px-2 py-1 rounded text-xs font-medium transition-colors ${
-                isRealTimeTranmission
-                  ? 'bg-red-500 text-white'
-                  : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
-              }`}
-            >
-              {isRealTimeTranmission ? 'BẬT' : 'TẮT'}
-            </button>
-          </div>
-        )}
-
-        {/* Real-time indicator */}
-        {isRealTimeTranmission && isRecording && (
-          <div className="text-xs text-red-600 font-medium animate-pulse">
-            🔴 PHÁT TRỰC TIẾP
-          </div>
-        )}
+      <div className="flex justify-center space-x-2 mb-4">
+        <button
+          onClick={() => {
+            stopAllRecording();
+            setIsContinuousMode(false);
+          }}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            !isContinuousMode
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
+          Ấn để nói
+        </button>
+        <button
+          onClick={() => {
+            stopAllRecording();
+            setIsContinuousMode(true);
+          }}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            isContinuousMode
+              ? 'bg-green-500 text-white'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
+          Nói liên tục
+        </button>
       </div>
 
       {/* Voice Recording Button */}
       <div className="flex justify-center">
         <button
-          onClick={isContinuousMode ? toggleContinuousMode : (isRealTimeTranmission && !isRecording ? toggleRealTimeRecording : toggleRecording)}
+          onClick={isContinuousMode ? toggleContinuousMode : toggleRecording}
           disabled={isProcessing || !isSupported}
           className={`
             w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 transform
             ${continuousRecording
               ? 'bg-green-500 hover:bg-green-600 animate-pulse scale-110'
-              : isRecording && isRealTimeTranmission
-                ? 'bg-red-500 hover:bg-red-600 animate-pulse scale-110 ring-4 ring-red-300'
-                : isRecording
-                  ? 'bg-red-500 hover:bg-red-600 animate-pulse scale-110'
-                  : isContinuousMode
-                    ? 'bg-green-500 hover:bg-green-600'
-                    : isRealTimeTranmission
-                      ? 'bg-red-500 hover:bg-red-600'
-                      : 'bg-blue-500 hover:bg-blue-600'
+              : isRecording
+                ? 'bg-red-500 hover:bg-red-600 animate-pulse scale-110'
+                : isContinuousMode
+                  ? 'bg-green-500 hover:bg-green-600'
+                  : 'bg-blue-500 hover:bg-blue-600'
             }
             ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}
             text-white shadow-lg hover:shadow-xl
@@ -474,7 +423,7 @@ const CommentarySection = ({ isActive = true }) => {
         )}
         {continuousRecording && !isProcessing && (
           <p className="text-green-600 font-medium animate-pulse">
-            🟢 {isRecording ? 'Đang ghi...' : 'Đang chuẩn bị chunk tiếp...'}
+            🟢 {isRecording ? 'Đang phát trực tiếp...' : 'Đang chuẩn bị chunk tiếp...'}
           </p>
         )}
         {isRecording && !continuousRecording && !isProcessing && (
@@ -492,25 +441,12 @@ const CommentarySection = ({ isActive = true }) => {
         {/* Mode Description */}
         <div className="mt-2 text-xs text-gray-500">
           {isContinuousMode ? (
-            <p>Chế độ nói liên tục: Audio được gửi realtime mỗi 200ms</p>
-          ) : isRealTimeTranmission ? (
-            <p>Chế độ ấn để nói (REALTIME): Audio được gửi liên tục mỗi 200ms</p>
+            <p>Chế độ nói liên tục: Audio được gửi mỗi 500ms</p>
           ) : (
             <p>Chế độ ấn để nói: Ấn một lần để bắt đầu, ấn lại để dừng và gửi</p>
           )}
         </div>
       </div>
-
-      {/* Debug Info (có thể bỏ trong production) */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="text-xs text-gray-400 mt-4 p-2 bg-gray-100 rounded">
-          <p>isContinuousMode: {isContinuousMode.toString()}</p>
-          <p>continuousRecording: {continuousRecording.toString()}</p>
-          <p>isRealTimeTranmission: {isRealTimeTranmission.toString()}</p>
-          <p>isRecording: {isRecording.toString()}</p>
-          <p>isProcessing: {isProcessing.toString()}</p>
-        </div>
-      )}
     </div>
   );
 };
