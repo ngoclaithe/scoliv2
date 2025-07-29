@@ -33,17 +33,23 @@ const DisplayController = () => {
   // Lắng nghe event audio_control từ backend để phát voice trọng tài
   useEffect(() => {
     const handleAudioControl = (data) => {
+      console.log('📡 [DisplayController] Received audio_control from backend:', data);
+
       if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
-        console.log('🎤 [DisplayController] Received referee voice from backend');
+        console.log('🎤 [DisplayController] Processing PLAY_REFEREE_VOICE command');
+        console.log('🎤 [DisplayController] Audio payload size:', data.payload.audioData?.length || 'N/A');
         const { audioData } = data.payload;
 
         try {
           const uint8Array = new Uint8Array(audioData);
           const audioBlob = new Blob([uint8Array], { type: 'audio/webm' });
+          console.log('🎤 [DisplayController] Successfully created audio blob, playing now...');
           playRefereeVoice(audioBlob);
         } catch (error) {
           console.error('❌ [DisplayController] Error processing referee voice:', error);
         }
+      } else {
+        console.log('📡 [DisplayController] Audio command not recognized or missing payload:', data);
       }
     };
 
