@@ -51,7 +51,7 @@ const audioReducer = (state, action) => {
         currentAudio: null,
         isPlaying: false,
         currentComponent: null,
-        // Không tự động tắt audioEnabled - để logic khác quản lý
+        // Không tự động t��t audioEnabled - để logic khác quản lý
       };
     case audioActions.SET_VOLUME:
       return {
@@ -453,16 +453,17 @@ export const AudioProvider = ({ children }) => {
   useEffect(() => {
     const handleAudioControl = (data) => {
       console.log('📡 Received audio_control from server:', data);
-      
+      const currentState = stateRef.current;
+
       if (data.command === 'ENABLE_AUDIO') {
         console.log('📡 Server command: ENABLE_AUDIO - Enabling audio state');
-        if (!state.audioEnabled) {
+        if (!currentState.audioEnabled) {
           dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
         }
       } else if (data.command === 'DISABLE_AUDIO') {
         console.log('📡 Server command: DISABLE_AUDIO - Updating audio state and stopping audio');
         // Đảm bảo audioEnabled được set về false và dừng audio hiện tại
-        if (state.audioEnabled) {
+        if (currentState.audioEnabled) {
           dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
         }
         // Dừng audio hiện tại nhưng không force change state
@@ -472,12 +473,12 @@ export const AudioProvider = ({ children }) => {
         dispatch({ type: audioActions.SET_VOLUME, payload: data.payload.volume });
       } else if (data.command === 'MUTE') {
         console.log('📡 Server command: MUTE');
-        if (!state.isMuted) {
+        if (!currentState.isMuted) {
           dispatch({ type: audioActions.TOGGLE_MUTE });
         }
       } else if (data.command === 'UNMUTE') {
         console.log('📡 Server command: UNMUTE');
-        if (state.isMuted) {
+        if (currentState.isMuted) {
           dispatch({ type: audioActions.TOGGLE_MUTE });
         }
       } else if (data.command === 'PLAY_AUDIO' && data.payload) {
@@ -507,7 +508,7 @@ export const AudioProvider = ({ children }) => {
       console.log('📡 Unregistering audio control listener');
       socketService.off('audio_control', handleAudioControl);
     };
-  }, []); // Bỏ dependency array để tránh re-register listeners
+  }, []); // Bỏ dependency array để tr��nh re-register listeners
 
   // Cleanup khi unmount
   useEffect(() => {
