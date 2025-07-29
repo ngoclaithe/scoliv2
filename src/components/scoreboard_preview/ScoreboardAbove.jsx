@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
-import { useAudio } from '../../contexts/AudioContext';
+// Audio moved to audioUtils
 
 const TopScoreboard = ({ template = 1, accessCode }) => {
   // Sử dụng PublicMatchContext để nhận dữ liệu real-time
