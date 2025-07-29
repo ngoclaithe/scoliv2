@@ -29,7 +29,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     },
     {
       id: "doden",
-      name: "Đỏ đen",
+      name: "Đ��� đen",
       thumbnail: "/images/posters/poster3.jpg",
     },
     {
@@ -344,19 +344,26 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         </div>
   
         <div className="mt-2">
-          {/* Input tìm kiếm */}
-          <input
-            type="text"
-            value={localCode}
-            onChange={handleCodeChange}
-            onKeyPress={handleCodeKeyPress}
-            onBlur={handleCodeBlur}
-            className={`w-full text-xs text-center border rounded px-1 py-1 font-mono transition-colors focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none ${
-              isSearching ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
-            }`}
-            placeholder="Nhập mã (Enter để tìm)"
-          />
-  
+          {/* Input tìm kiếm với icon */}
+          <div className="relative">
+            <input
+              type="text"
+              value={localCode}
+              onChange={handleCodeChange}
+              className={`w-full text-xs text-center border rounded px-1 py-1 pr-6 font-mono transition-colors focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none ${
+                isSearching ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
+              }`}
+              placeholder="Nhập mã"
+            />
+            <button
+              onClick={handleSearch}
+              disabled={isSearching || localCode.trim().length < 3}
+              className="absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-500 disabled:text-gray-300"
+            >
+              🔍
+            </button>
+          </div>
+
           {isSearching && (
             <div className="text-xs text-blue-600 text-center mt-1 animate-pulse">
               🔍 Đang tìm kiếm...
