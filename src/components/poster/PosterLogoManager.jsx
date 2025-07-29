@@ -29,7 +29,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     },
     {
       id: "doden",
-      name: "Đỏ đen",
+      name: "Đ��� đen",
       thumbnail: "/images/posters/poster3.jpg",
     },
     {
@@ -245,13 +245,10 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     const handleCodeChange = (e) => {
       const newCode = e.target.value.toUpperCase();
       setLocalCode(newCode);
-      // Không tự động tìm kiếm nữa, chỉ cập nhật state local
     };
 
-    // Chỉ tìm kiếm khi nhấn Enter
-    const handleCodeKeyPress = async (e) => {
-      if (e.key === 'Enter' && localCode.trim().length >= 3) {
-        e.preventDefault(); // Ngăn form submit
+    const handleSearch = async () => {
+      if (localCode.trim().length >= 3) {
         try {
           setIsSearching(true);
           console.log('🔍 [PosterLogoManager] Tìm kiếm logo với code:', localCode);
@@ -274,7 +271,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             }
           } else {
             console.log('❌ [PosterLogoManager] Không tìm thấy logo với code:', localCode);
-            // Chỉ cập nhật code, không clear URL hiện tại
             onUpdate(item.id, { ...item, code: localCode.trim() });
           }
         } catch (error) {
@@ -282,13 +278,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         } finally {
           setIsSearching(false);
         }
-      }
-    };
-
-    // Cập nhật code khi blur (rời khỏi input) - không tìm kiếm
-    const handleCodeBlur = () => {
-      if (localCode.trim() !== item.code) {
-        onUpdate(item.id, { ...item, code: localCode.trim() });
       }
     };
   
@@ -355,19 +344,26 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         </div>
   
         <div className="mt-2">
-          {/* Input tìm kiếm */}
-          <input
-            type="text"
-            value={localCode}
-            onChange={handleCodeChange}
-            onKeyPress={handleCodeKeyPress}
-            onBlur={handleCodeBlur}
-            className={`w-full text-xs text-center border rounded px-1 py-1 font-mono transition-colors focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none ${
-              isSearching ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
-            }`}
-            placeholder="Nhập mã (Enter để tìm)"
-          />
-  
+          {/* Input tìm kiếm với icon */}
+          <div className="relative">
+            <input
+              type="text"
+              value={localCode}
+              onChange={handleCodeChange}
+              className={`w-full text-xs text-center border rounded px-1 py-1 pr-6 font-mono transition-colors focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none ${
+                isSearching ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
+              }`}
+              placeholder="Nhập mã"
+            />
+            <button
+              onClick={handleSearch}
+              disabled={isSearching || localCode.trim().length < 3}
+              className="absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-500 disabled:text-gray-300"
+            >
+              🔍
+            </button>
+          </div>
+
           {isSearching && (
             <div className="text-xs text-blue-600 text-center mt-1 animate-pulse">
               🔍 Đang tìm kiếm...
