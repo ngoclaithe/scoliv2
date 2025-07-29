@@ -14,10 +14,15 @@ export default function DodenMatchIntro() {
     logo2: contextMatchData.teamB.logo || '/images/background-poster/default_logoB.png',
     stadium: contextMatchData.stadium || 'SVĐ MỸ ĐÌNH',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '20:00',
-    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN')
+    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
+    // Các biến mới
+    sponsors: contextMatchData.sponsors || [], // Array các URL ảnh nhà tài trợ
+    organizings: contextMatchData.organizings || [], // Array các URL ảnh đơn vị tổ chức
+    mediaPartners: contextMatchData.mediaPartners || [], // Array các URL ảnh đơn vị truyền thông
+    tournamentLogo: contextMatchData.tournamentLogo || null, // URL ảnh giải đấu
+    liveUnit: contextMatchData.liveUnit || null, // URL ảnh đơn vị live
+    logoShape: contextMatchData.logoShape || 'circle' // 'circle', 'square', 'hexagon', 'shield'
   };
-
-  const [partners, setPartners] = useState([]);
 
   // Sử dụng marquee data từ context
   const marquee = {
@@ -26,8 +31,6 @@ export default function DodenMatchIntro() {
   };
 
   const marqueeRef = useRef(null);
-
-  // Audio managed by MatchManagementSection
 
   // Font size adjustment function
   const adjustFontSize = (element) => {
@@ -41,7 +44,58 @@ export default function DodenMatchIntro() {
     }
   };
 
-  const hasPartners = partners.length > 0;
+  // Hàm kiểm tra loại logo từ code
+  const getLogoType = (logoUrl) => {
+    if (typeof logoUrl !== 'string') return 'unknown';
+    const filename = logoUrl.split('/').pop().split('.')[0]; // Lấy tên file không có extension
+    if (filename.startsWith('L')) return 'logo'; // Logo thường - có thể bo tròn/lục giác
+    if (filename.startsWith('B')) return 'badge'; // Badge/Shield - chỉ vuông/chữ nhật
+    return 'unknown';
+  };
+
+  // Hàm lấy class cho shape logo dựa trên type và shape setting
+  const getLogoShapeClass = (logoUrl, shape) => {
+    const logoType = getLogoType(logoUrl);
+    
+    // Nếu là badge (B prefix), luôn dùng vuông/chữ nhật
+    if (logoType === 'badge') {
+      return 'rounded-lg'; // Bo góc nhẹ để giữ hình dạng nguyên bản
+    }
+    
+    // Nếu là logo thường (L prefix), áp dụng shape setting
+    if (logoType === 'logo') {
+      switch (shape) {
+        case 'square':
+          return 'rounded-lg';
+        case 'hexagon':
+          return 'clip-hexagon';
+        case 'shield':
+          return 'clip-shield';
+        case 'circle':
+        default:
+          return 'rounded-full';
+      }
+    }
+    
+    // Unknown type - dùng shape setting
+    switch (shape) {
+      case 'square':
+        return 'rounded-lg';
+      case 'hexagon':
+        return 'clip-hexagon';
+      case 'shield':
+        return 'clip-shield';
+      case 'circle':
+      default:
+        return 'rounded-full';
+    }
+  };
+
+  const hasSponsors = matchData.sponsors.length > 0;
+  const hasOrganizings = matchData.organizings.length > 0;
+  const hasMediaPartners = matchData.mediaPartners.length > 0;
+  const hasTournamentLogo = matchData.tournamentLogo;
+  const hasLiveUnit = matchData.liveUnit;
 
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
@@ -57,6 +111,32 @@ export default function DodenMatchIntro() {
         >
           {/* Overlay */}
         </div>
+
+        {/* Tournament Logo - Top Left Corner */}
+        {hasTournamentLogo && (
+          <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-20">
+            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-1 sm:p-2 border border-white/30">
+              <img
+                src={matchData.tournamentLogo}
+                alt="Tournament Logo"
+                className={`w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 object-contain ${getLogoShapeClass(matchData.tournamentLogo, matchData.logoShape)}`}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Live Unit - Top Right Corner */}
+        {hasLiveUnit && (
+          <div className="absolute top-2 sm:top-4 right-2 sm:right-4 z-20">
+            <div className="bg-red-600/90 backdrop-blur-sm rounded-lg p-1 sm:p-2 border border-white/30">
+              <img
+                src={matchData.liveUnit}
+                alt="Live Unit"
+                className={`w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 object-contain ${getLogoShapeClass(matchData.liveUnit, matchData.logoShape)}`}
+              />
+            </div>
+          </div>
+        )}
 
         {/* Content */}
         <div className="relative z-10 h-full flex flex-col justify-between p-3 sm:p-6">
@@ -95,7 +175,7 @@ export default function DodenMatchIntro() {
                   <img
                     src={matchData.logo1}
                     alt={matchData.team1}
-                    className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300"
+                    className={`relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 ${getLogoShapeClass(matchData.logo1, matchData.logoShape)} object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300`}
                   />
                 </div>
                 <div className="bg-gradient-to-r from-red-600 to-red-800 px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
@@ -137,7 +217,7 @@ export default function DodenMatchIntro() {
                   <img
                     src={matchData.logo2}
                     alt={matchData.team2}
-                    className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300"
+                    className={`relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 ${getLogoShapeClass(matchData.logo2, matchData.logoShape)} object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300`}
                   />
                 </div>
                 <div className="bg-gradient-to-r from-gray-700 to-black px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
@@ -162,20 +242,42 @@ export default function DodenMatchIntro() {
               </div>
             )}
 
-            {/* Partners - Hidden by default, will show when socket updates */}
-            {hasPartners && (
-              <div className="text-center mt-3 sm:mt-4">
-                <h3 className="text-red-400 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3 uppercase tracking-wide">
-                  🤝 Đơn vị đồng hành
+            {/* Sponsors Section */}
+            {hasSponsors && (
+              <div className="text-center mt-2 sm:mt-3">
+                <h3 className="text-yellow-400 text-xs sm:text-sm md:text-base font-bold mb-1 sm:mb-2 uppercase tracking-wide">
+                  💰 Nhà tài trợ
                 </h3>
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-2xl p-2 sm:p-4 border border-white/30 mx-4 sm:mx-8">
-                  <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
-                    {partners.map((partner, index) => (
-                      <div key={index} className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 flex justify-center items-center bg-white rounded-full p-1 shadow-lg">
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/30 mx-4 sm:mx-8">
+                  <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
+                    {matchData.sponsors.map((sponsor, index) => (
+                      <div key={index} className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex justify-center items-center bg-white rounded p-0.5 shadow-lg">
                         <img
-                          src={partner.logo}
-                          alt={partner.name}
-                          className="max-h-full max-w-full object-contain rounded-full"
+                          src={sponsor}
+                          alt={`Sponsor ${index + 1}`}
+                          className={`max-h-full max-w-full object-contain ${getLogoShapeClass(sponsor, matchData.logoShape)}`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* organizings Section */}
+            {hasOrganizings && (
+              <div className="text-center mt-2 sm:mt-3">
+                <h3 className="text-blue-400 text-xs sm:text-sm md:text-base font-bold mb-1 sm:mb-2 uppercase tracking-wide">
+                  🤝 Đơn vị tổ chức
+                </h3>
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/30 mx-4 sm:mx-8">
+                  <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
+                    {matchData.organizings.map((organizing, index) => (
+                      <div key={index} className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex justify-center items-center bg-white rounded p-0.5 shadow-lg">
+                        <img
+                          src={organizing}
+                          alt={`Organizing ${index + 1}`}
+                          className={`max-h-full max-w-full object-contain ${getLogoShapeClass(organizing, matchData.logoShape)}`}
                         />
                       </div>
                     ))}
@@ -184,6 +286,30 @@ export default function DodenMatchIntro() {
               </div>
             )}
           </div>
+
+          {/* Bottom Section - Media Partners */}
+          {hasMediaPartners && (
+            <div className="mt-2 sm:mt-4">
+              <div className="text-center">
+                <h3 className="text-green-400 text-xs sm:text-sm md:text-base font-bold mb-1 sm:mb-2 uppercase tracking-wide">
+                  📺 Đơn vị truyền thông
+                </h3>
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/30 mx-4 sm:mx-8">
+                  <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
+                    {matchData.mediaPartners.map((media, index) => (
+                      <div key={index} className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex justify-center items-center bg-white rounded p-0.5 shadow-lg">
+                        <img
+                          src={media}
+                          alt={`Media ${index + 1}`}
+                          className={`max-h-full max-w-full object-contain ${getLogoShapeClass(media, matchData.logoShape)}`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Marquee - Hidden by default, will show when socket updates */}
@@ -216,6 +342,7 @@ export default function DodenMatchIntro() {
             />
           ))}
         </div>
+
         {/* CSS Animations */}
         <style jsx>{`
           @keyframes marquee {
@@ -231,6 +358,12 @@ export default function DodenMatchIntro() {
               transform: scale(1.5) rotate(180deg);
               opacity: 1;
             }
+          }
+          .clip-hexagon {
+            clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+          }
+          .clip-shield {
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
           }
         `}</style>
       </div>

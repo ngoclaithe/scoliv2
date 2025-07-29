@@ -83,9 +83,29 @@ export const PublicMatchProvider = ({ children }) => {
 
   // State cho nhà tài trợ
   const [sponsors, setSponsors] = useState({
-    main: [],
-    secondary: [],
-    media: []
+    code_logo: [],
+    url_logo: [],
+    position: [],
+    type_display: [],
+  });
+
+  const [organizing, setOrganizings] = useState({
+    code_logo: [],
+    url_logo: [],
+    position: [],
+    type_display: [],
+  });
+
+  const [mediaPartners, setMediaPartners] = useState({
+    code_logo: [],
+    url_logo: [],
+    position: [],
+    type_display: [],
+  });
+
+  const [tournamentLogo, setTournamentLogo] = useState({
+    code_logo: [],
+    url_logo: []
   });
 
   // State cho socket connection
@@ -239,6 +259,24 @@ export const PublicMatchProvider = ({ children }) => {
     // Lắng nghe cập nhật nhà tài trợ
     socketService.on('sponsors_updated', (data) => {
       setSponsors(prev => ({ ...prev, ...data.sponsors }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật đơn vị tổ chức
+    socketService.on('organizing_updated', (data) => {
+      setOrganizings(prev => ({ ...prev, ...data.organizings }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật đơn vị truyền thông
+    socketService.on('media_partners_updated', (data) => {
+      setMediaPartners(prev => ({ ...prev, ...data.mediaPartners }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật logo giải đấu
+    socketService.on('tournament_logo_updated', (data) => {
+      setTournamentLogo(prev => ({ ...prev, ...data.tournamentLogo }));
       setLastUpdateTime(Date.now());
     });
 
