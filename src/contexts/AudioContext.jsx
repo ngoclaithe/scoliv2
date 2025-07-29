@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer, useRef, useEffect, useCallback } from 'react';
 import socketService from '../services/socketService';
 
-// Audio State - đơn giản hóa
+// Audio State - thêm hỗ trợ pause/resume
 const initialState = {
   isPlaying: false,
   audioEnabled: true, // Global audio toggle
@@ -9,9 +9,12 @@ const initialState = {
   isMuted: false,
   userInteracted: false,
   isRefereeVoicePlaying: false, // Voice trọng tài đang phát
+  isPaused: false, // Audio đang bị pause (khác với dừng hoàn toàn)
+  currentAudioFile: null, // File audio hiện tại
+  pausedTime: 0, // Thời gian pause để resume sau
 };
 
-// Audio Actions - rút gọn
+// Audio Actions - thêm pause/resume actions
 const audioActions = {
   TOGGLE_AUDIO_ENABLED: 'TOGGLE_AUDIO_ENABLED',
   SET_AUDIO_ENABLED: 'SET_AUDIO_ENABLED',
@@ -20,6 +23,9 @@ const audioActions = {
   SET_PLAYING: 'SET_PLAYING',
   SET_USER_INTERACTED: 'SET_USER_INTERACTED',
   SET_REFEREE_VOICE_PLAYING: 'SET_REFEREE_VOICE_PLAYING',
+  SET_PAUSED: 'SET_PAUSED',
+  SET_CURRENT_AUDIO_FILE: 'SET_CURRENT_AUDIO_FILE',
+  SET_PAUSED_TIME: 'SET_PAUSED_TIME',
 };
 
 // Audio Reducer - đơn giản hóa
@@ -61,6 +67,21 @@ const audioReducer = (state, action) => {
       return {
         ...state,
         isRefereeVoicePlaying: action.payload,
+      };
+    case audioActions.SET_PAUSED:
+      return {
+        ...state,
+        isPaused: action.payload,
+      };
+    case audioActions.SET_CURRENT_AUDIO_FILE:
+      return {
+        ...state,
+        currentAudioFile: action.payload,
+      };
+    case audioActions.SET_PAUSED_TIME:
+      return {
+        ...state,
+        pausedTime: action.payload,
       };
     default:
       return state;
@@ -177,9 +198,79 @@ export const AudioProvider = ({ children }) => {
     };
   }, []);
 
-  // Dừng tất cả audio đang phát - sửa lỗi không thể tắt hoàn toàn
+  // Pause audio hiện tại (lưu vị trí để resume sau)
+  const pauseCurrentAudio = useCallback(() => {
+    console.log('⏸️ [AudioContext] Pausing current audio');
+
+    if (audioRef.current && !audioRef.current.paused) {
+      try {
+        const currentTime = audioRef.current.currentTime;
+        audioRef.current.pause();
+
+        dispatch({ type: audioActions.SET_PLAYING, payload: false });
+        dispatch({ type: audioActions.SET_PAUSED, payload: true });
+        dispatch({ type: audioActions.SET_PAUSED_TIME, payload: currentTime });
+
+        console.log('⏸️ [AudioContext] Audio paused at time:', currentTime);
+      } catch (error) {
+        console.warn('⚠️ Error pausing audio:', error);
+      }
+    }
+  }, []);
+
+  // Resume audio từ vị trí đã pause
+  const resumeCurrentAudio = useCallback(() => {
+    console.log('▶️ [AudioContext] Resuming current audio');
+
+    if (!state.audioEnabled) {
+      console.log('🔇 Audio disabled globally');
+      return;
+    }
+
+    if (!state.userInteracted) {
+      console.log('⏳ User hasn\'t interacted yet, skipping audio resume');
+      return;
+    }
+
+    if (state.isRefereeVoicePlaying) {
+      console.log('🎙️ Referee voice is playing, skipping audio resume');
+      return;
+    }
+
+    if (audioRef.current && state.isPaused) {
+      try {
+        audioRef.current.currentTime = state.pausedTime;
+        audioRef.current.volume = state.isMuted ? 0 : state.volume;
+
+        const playPromise = audioRef.current.play();
+        if (playPromise) {
+          playPromise
+            .then(() => {
+              console.log('▶️ Audio resumed successfully from time:', state.pausedTime);
+              dispatch({ type: audioActions.SET_PLAYING, payload: true });
+              dispatch({ type: audioActions.SET_PAUSED, payload: false });
+            })
+            .catch((error) => {
+              console.error('❌ Failed to resume audio:', error);
+              dispatch({ type: audioActions.SET_PLAYING, payload: false });
+              dispatch({ type: audioActions.SET_PAUSED, payload: false });
+            });
+        }
+      } catch (error) {
+        console.error('❌ Error resuming audio:', error);
+        dispatch({ type: audioActions.SET_PLAYING, payload: false });
+        dispatch({ type: audioActions.SET_PAUSED, payload: false });
+      }
+    } else if (state.currentAudioFile && state.isPaused) {
+      // Nếu audio element đã bị xóa, tạo lại và phát từ vị trí pause
+      console.log('🔄 Recreating audio element and resuming from:', state.pausedTime);
+      playAudioFromTime(state.currentAudioFile, state.pausedTime);
+    }
+  }, [state.audioEnabled, state.userInteracted, state.isMuted, state.volume, state.isRefereeVoicePlaying, state.isPaused, state.pausedTime, state.currentAudioFile]);
+
+  // Dừng tất cả audio đang phát - dừng hoàn toàn
   const stopCurrentAudio = useCallback(() => {
-    console.log('🔇 [AudioContext] Stopping all audio elements');
+    console.log('🔇 [AudioContext] Stopping all audio elements completely');
 
     // Dừng audio của AudioContext
     if (audioRef.current) {
@@ -207,7 +298,7 @@ export const AudioProvider = ({ children }) => {
       refereeVoiceRef.current = null;
     }
 
-    // Dừng TẤT CẢ audio elements trên trang - FIX CHÍNH
+    // Dừng TẤT CẢ audio elements trên trang
     try {
       const allAudioElements = document.querySelectorAll('audio');
       console.log(`🔇 [AudioContext] Found ${allAudioElements.length} audio elements to stop`);
@@ -233,8 +324,70 @@ export const AudioProvider = ({ children }) => {
     }
 
     dispatch({ type: audioActions.SET_PLAYING, payload: false });
+    dispatch({ type: audioActions.SET_PAUSED, payload: false });
+    dispatch({ type: audioActions.SET_CURRENT_AUDIO_FILE, payload: null });
+    dispatch({ type: audioActions.SET_PAUSED_TIME, payload: 0 });
     dispatch({ type: audioActions.SET_REFEREE_VOICE_PLAYING, payload: false });
   }, []);
+
+  // Play audio từ thời gian cụ thể
+  const playAudioFromTime = useCallback((audioKey, startTime = 0) => {
+    const audioFile = audioFiles[audioKey];
+    if (!audioFile) {
+      console.error('❌ Audio file not found:', audioKey);
+      return;
+    }
+
+    // Stop current audio before playing new one
+    stopCurrentAudio();
+
+    try {
+      console.log('🎵 Creating new audio element:', audioFile, 'starting from:', startTime);
+      const audio = new Audio(audioFile);
+      audioRef.current = audio;
+      audio.volume = state.isMuted ? 0 : state.volume;
+      audio.currentTime = startTime;
+
+      dispatch({ type: audioActions.SET_PLAYING, payload: true });
+      dispatch({ type: audioActions.SET_PAUSED, payload: false });
+      dispatch({ type: audioActions.SET_CURRENT_AUDIO_FILE, payload: audioKey });
+      dispatch({ type: audioActions.SET_PAUSED_TIME, payload: 0 });
+
+      audio.onended = () => {
+        console.log('✅ Audio playback ended');
+        dispatch({ type: audioActions.SET_PLAYING, payload: false });
+        dispatch({ type: audioActions.SET_PAUSED, payload: false });
+        dispatch({ type: audioActions.SET_CURRENT_AUDIO_FILE, payload: null });
+      };
+
+      audio.onerror = (e) => {
+        console.error('❌ Audio playback error:', e);
+        dispatch({ type: audioActions.SET_PLAYING, payload: false });
+        dispatch({ type: audioActions.SET_PAUSED, payload: false });
+        dispatch({ type: audioActions.SET_CURRENT_AUDIO_FILE, payload: null });
+      };
+
+      const playPromise = audio.play();
+      if (playPromise) {
+        playPromise
+          .then(() => {
+            console.log('✅ Audio started playing successfully from time:', startTime);
+          })
+          .catch((error) => {
+            console.error('❌ Failed to play audio:', error);
+            dispatch({ type: audioActions.SET_PLAYING, payload: false });
+            dispatch({ type: audioActions.SET_PAUSED, payload: false });
+            dispatch({ type: audioActions.SET_CURRENT_AUDIO_FILE, payload: null });
+          });
+      }
+
+    } catch (error) {
+      console.error('❌ Error creating audio:', error);
+      dispatch({ type: audioActions.SET_PLAYING, payload: false });
+      dispatch({ type: audioActions.SET_PAUSED, payload: false });
+      dispatch({ type: audioActions.SET_CURRENT_AUDIO_FILE, payload: null });
+    }
+  }, [state.isMuted, state.volume, stopCurrentAudio, audioFiles]);
 
   // Play audio - đơn giản hóa
   const playAudio = useCallback((audioKey) => {
@@ -262,44 +415,9 @@ export const AudioProvider = ({ children }) => {
       return;
     }
 
-    // Stop current audio before playing new one
-    stopCurrentAudio();
-
-    try {
-      console.log('🎵 Creating new audio element:', audioFile);
-      const audio = new Audio(audioFile);
-      audioRef.current = audio;
-      audio.volume = state.isMuted ? 0 : state.volume;
-
-      dispatch({ type: audioActions.SET_PLAYING, payload: true });
-
-      audio.onended = () => {
-        console.log('✅ Audio playback ended');
-        dispatch({ type: audioActions.SET_PLAYING, payload: false });
-      };
-
-      audio.onerror = (e) => {
-        console.error('❌ Audio playback error:', e);
-        dispatch({ type: audioActions.SET_PLAYING, payload: false });
-      };
-
-      const playPromise = audio.play();
-      if (playPromise) {
-        playPromise
-          .then(() => {
-            console.log('✅ Audio started playing successfully');
-          })
-          .catch((error) => {
-            console.error('❌ Failed to play audio:', error);
-            dispatch({ type: audioActions.SET_PLAYING, payload: false });
-          });
-      }
-
-    } catch (error) {
-      console.error('❌ Error creating audio:', error);
-      dispatch({ type: audioActions.SET_PLAYING, payload: false });
-    }
-  }, [state.audioEnabled, state.userInteracted, state.isMuted, state.volume, stopCurrentAudio, audioFiles]);
+    // Sử dụng playAudioFromTime để bắt đầu từ đ���u
+    playAudioFromTime(audioKey, 0);
+  }, [state.audioEnabled, state.userInteracted, state.isRefereeVoicePlaying, playAudioFromTime]);
 
   // Toggle audio toàn cục - CHỈ LOCAL, KHÔNG GỬI SOCKET
   const toggleAudioEnabled = useCallback(() => {
@@ -405,6 +523,8 @@ export const AudioProvider = ({ children }) => {
     // Audio functions
     playAudio,
     stopCurrentAudio,
+    pauseCurrentAudio,
+    resumeCurrentAudio,
     toggleAudioEnabled,
     playRefereeVoice,
     stopRefereeVoice,
