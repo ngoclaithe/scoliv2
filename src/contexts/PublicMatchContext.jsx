@@ -119,7 +119,7 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.removeAllListeners('lineup_updated');
     socketService.removeAllListeners('sponsors_updated');
     socketService.removeAllListeners('view_updated');
-    socketService.removeAllListeners('audio_control_broadcast');
+    socketService.removeAllListeners('audio_control');
     socketService.removeAllListeners('disconnect');
     socketService.removeAllListeners('connect');
     // Lắng nghe cập nhật thông tin trận đấu
