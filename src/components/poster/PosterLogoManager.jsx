@@ -773,11 +773,11 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         </select>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-lg p-2">
+      <div className="bg-white border border-gray-200 rounded-lg p-1.5">
         {renderPosterSection()}
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-lg p-2">
+      <div className="bg-white border border-gray-200 rounded-lg p-1.5">
         {renderLogoSection()}
       </div>
 
