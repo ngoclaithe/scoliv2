@@ -233,21 +233,16 @@ class SocketService {
     });
   }
 
-  // === AUDIO CONTROL EVENTS ===
-
-  // Gửi lệnh điều khiển audio đến tất cả client trong room
   sendAudioControl(controlData) {
     const payload = {
       ...controlData,
       senderType: this.clientType,
       timestamp: Date.now(),
-      target: controlData.target || 'display', // Ưu tiên target được truyền vào, mặc định là 'display'
+      target: controlData.target || 'display', 
     };
     console.log('📡 [SocketService] Sending audio control:', payload);
-    return this.emit('audio_control', payload);
+    return this.emit('audio_control_broadcast', payload);
   }
-
-  // === AUDIO & COMMENTARY EVENTS ===
 
   // Gửi voice trọng tài tới display clients
   sendRefereeVoice(audioData, mimeType = 'audio/ogg; codecs=opus') {
