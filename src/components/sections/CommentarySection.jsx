@@ -7,10 +7,12 @@ const CommentarySection = ({ isActive = true }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isContinuousMode, setIsContinuousMode] = useState(false);
   const [continuousRecording, setContinuousRecording] = useState(false);
+  const [isRealTimeTranmission, setIsRealTimeTransmission] = useState(false);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const streamRef = useRef(null);
   const continuousTimeoutRef = useRef(null);
+  const realTimeIntervalRef = useRef(null);
 
   // Check for browser support and codecs
   const isSupported = typeof navigator !== 'undefined' &&
