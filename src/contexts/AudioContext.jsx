@@ -51,7 +51,7 @@ const audioReducer = (state, action) => {
         currentAudio: null,
         isPlaying: false,
         currentComponent: null,
-        audioEnabled: false, // Tắt luôn audio khi server force stop
+        // Không tự động tắt audioEnabled - để logic khác quản lý
       };
     case audioActions.SET_VOLUME:
       return {
