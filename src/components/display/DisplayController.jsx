@@ -26,8 +26,8 @@ const DisplayController = () => {
     currentView
   } = usePublicMatch();
 
-  // Sử dụng AudioContext - chỉ lấy playRefereeVoice cho DisplayController
-  const { playRefereeVoice } = useAudio();
+  // Sử dụng AudioContext - lấy cả playAudio và playRefereeVoice
+  const { playAudio, playRefereeVoice, audioEnabled } = useAudio();
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
