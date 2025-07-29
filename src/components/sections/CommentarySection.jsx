@@ -207,9 +207,6 @@ const CommentarySection = ({ isActive = true }) => {
     // Reset audio chunks
     audioChunksRef.current = [];
     setIsProcessing(false);
-
-    // Nếu đang trong continuous mode, schedule chunk tiếp theo
-    scheduleNextContinuousChunk();
   };
 
 
