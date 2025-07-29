@@ -928,8 +928,9 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
+                // Phát audio gialap cho đếm giờ
+                playAudioForAction('gialap');
                 console.log('Đã áp dụng: Timer sẽ đếm từ:', timeString);
-                console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
