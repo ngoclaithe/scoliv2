@@ -9,7 +9,7 @@ const initialState = {
   isMuted: false,
   userInteracted: false,
   isRefereeVoicePlaying: false, // Voice trọng tài đang phát
-  isPaused: false, // Audio đang bị pause (khác với dừng hoàn toàn)
+  isPaused: false, // Audio đang bị pause (khác với d���ng hoàn toàn)
   currentAudioFile: null, // File audio hiện tại
   pausedTime: 0, // Thời gian pause để resume sau
 };
@@ -218,7 +218,7 @@ export const AudioProvider = ({ children }) => {
     }
   }, []);
 
-  // Resume audio từ vị trí đã pause
+  // Resume audio từ v�� trí đã pause
   const resumeCurrentAudio = useCallback(() => {
     console.log('▶️ [AudioContext] Resuming current audio');
 
@@ -435,7 +435,7 @@ export const AudioProvider = ({ children }) => {
     }
   }, [state.audioEnabled, stopCurrentAudio]);
 
-  // AUDIO CONTROL - SETUP LISTENERS AGGRESSIVELY
+  // AUDIO CONTROL - SETUP LISTENERS CHỈ KHI CÓ SOCKET
   useEffect(() => {
     const handleAudioControl = (data) => {
       console.log('🎙️ [AudioContext] ===== RECEIVED audio_control =====');
@@ -475,50 +475,17 @@ export const AudioProvider = ({ children }) => {
       }
     };
 
-    // DEBUG: Lắng nghe TẤT CẢ events từ socket
-    const debugAllEvents = (eventName, data) => {
-      console.log(`🔍 [DEBUG] Socket event "${eventName}":`, data);
-    };
+    // Chỉ setup listeners khi có socket và chưa được setup
+    let isListenersSetup = false;
+    const setupListeners = () => {
+      const socketStatus = socketService.getConnectionStatus();
 
-    // DEBUG: Lắng nghe GLOBAL socket events
-    const setupGlobalDebugListeners = () => {
-      if (socketService.socket) {
-        console.log('🔍 [DEBUG] Setting up global socket debug listeners...');
+      // Chỉ setup nếu có socket connected và chưa setup
+      if (socketStatus.isConnected && socketService.socket && !isListenersSetup) {
+        console.log('📡 [AudioContext] Setting up audio listeners once...');
 
-        // Lắng nghe TẤT CẢ events có thể
-        const allAudioEvents = [
-          'audio_control',
-          'audio_control_broadcast'
-        ];
-
-        allAudioEvents.forEach(eventName => {
-          socketService.socket.on(eventName, (data) => {
-            console.log(`🎵 [AUDIO EVENT] "${eventName}":`, data);
-          });
-        });
-
-        // Debug khi có bất kỳ event nào
-        const originalOn = socketService.socket.on;
-        socketService.socket.on = function(eventName, callback) {
-          console.log(`📡 [LISTENER REGISTERED] "${eventName}"`);
-          return originalOn.call(this, eventName, callback);
-        };
-      }
-    };
-
-    // Hàm setup listeners - AGGRESSIVE RETRY
-    const setupListenersAggressively = () => {
-      console.log('📡 [AudioContext] 🚀 Setting up audio listeners aggressively...');
-
-      // Thử register listeners ngay cả khi socket chưa hoàn toàn sẵn sàng
-      try {
-        if (socketService.socket) {
-          console.log('📡 [AudioContext] Socket exists, registering listeners...');
-
-          // Setup debug listeners trước
-          setupGlobalDebugListeners();
-
-          // Đăng ký TẤT CẢ possible event names
+        try {
+          // Đăng ký các audio event listeners
           socketService.on('audio_control', handleAudioControl);
           socketService.on('audio_control_broadcast', handleAudioControl);
 
@@ -527,37 +494,41 @@ export const AudioProvider = ({ children }) => {
             socketService.onAudioControl(handleAudioControl);
           }
 
-          console.log('📡 [AudioContext] ✅ All audio listeners registered aggressively');
-          return true;
-        } else {
-          console.log('📡 [AudioContext] ⏳ Socket not available yet');
-          return false;
+          isListenersSetup = true;
+          console.log('📡 [AudioContext] ✅ Audio listeners registered successfully');
+        } catch (error) {
+          console.error('❌ [AudioContext] Error setting up listeners:', error);
         }
-      } catch (error) {
-        console.error('❌ [AudioContext] Error setting up listeners:', error);
-        return false;
+      } else if (!socketStatus.isConnected) {
+        console.log('📡 [AudioContext] Socket not connected, waiting...');
       }
     };
 
-    // IMMEDIATE SETUP - không chờ
-    setupListenersAggressively();
+    // Thử setup ngay lập tức
+    setupListeners();
 
-    // PERSISTENT RETRY - không timeout
+    // CHỈ retry 3 lần nếu chưa có socket, sau đó dừng để tránh log spam
+    let retryCount = 0;
+    const maxRetries = 3;
     const retryInterval = setInterval(() => {
-      const socketStatus = socketService.getConnectionStatus();
-      console.log('📡 [AudioContext] Retry setup, socket status:', socketStatus);
-
-      if (socketStatus.isConnected && socketService.socket) {
-        setupListenersAggressively();
+      if (!isListenersSetup && retryCount < maxRetries) {
+        console.log(`📡 [AudioContext] Retry setup attempt ${retryCount + 1}/${maxRetries}`);
+        setupListeners();
+        retryCount++;
+      } else if (isListenersSetup || retryCount >= maxRetries) {
+        clearInterval(retryInterval);
+        if (retryCount >= maxRetries && !isListenersSetup) {
+          console.log('📡 [AudioContext] Max retries reached, stopping. This is normal for routes without socket connection.');
+        }
       }
-    }, 1000); // Retry mỗi giây
+    }, 2000); // Retry mỗi 2 giây thay vì 1 giây
 
     // Cleanup listeners
     return () => {
-      console.log('📡 [AudioContext] Cleaning up all audio listeners');
+      console.log('📡 [AudioContext] Cleaning up audio listeners');
       clearInterval(retryInterval);
 
-      if (socketService.socket) {
+      if (socketService.socket && isListenersSetup) {
         socketService.off('audio_control', handleAudioControl);
         socketService.off('audio_control_broadcast', handleAudioControl);
       }
