@@ -76,15 +76,21 @@ const CommentarySection = ({ isActive = true }) => {
       streamRef.current = null;
     }
     
-    // Clear timeout
+    // Clear timeout and interval
     if (continuousTimeoutRef.current) {
       clearTimeout(continuousTimeoutRef.current);
       continuousTimeoutRef.current = null;
     }
-    
+
+    if (realTimeIntervalRef.current) {
+      clearInterval(realTimeIntervalRef.current);
+      realTimeIntervalRef.current = null;
+    }
+
     // Reset states
     setIsRecording(false);
     setContinuousRecording(false);
+    setIsRealTimeTransmission(false);
     setIsProcessing(false);
   };
 
