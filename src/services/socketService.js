@@ -241,7 +241,7 @@ class SocketService {
       ...controlData,
       senderType: this.clientType,
       timestamp: Date.now(),
-      target: 'display',
+      target: controlData.target || 'display', // Ưu tiên target được truyền vào, mặc định là 'display'
     });
   }
 
@@ -267,6 +267,22 @@ class SocketService {
     return this.sendAudioControl({
       command: 'DISABLE_AUDIO',
       target: 'all'
+    });
+  }
+
+  // Bật audio chỉ cho display clients
+  enableAudioForDisplays() {
+    return this.sendAudioControl({
+      command: 'ENABLE_AUDIO',
+      target: 'display'
+    });
+  }
+
+  // Tắt audio chỉ cho display clients
+  disableAudioForDisplays() {
+    return this.sendAudioControl({
+      command: 'DISABLE_AUDIO',
+      target: 'display'
     });
   }
 

@@ -27,7 +27,7 @@ const DisplayController = () => {
   } = usePublicMatch();
 
   // Sử dụng AudioContext
-  const { playAudio, audioEnabled, stopCurrentAudio } = useAudio();
+  const { playAudio, audioEnabled, stopCurrentAudio, forceStopAudio } = useAudio();
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
@@ -68,8 +68,8 @@ const DisplayController = () => {
     prevViewRef.audioEnabled = audioEnabled;
 
     if (!audioEnabled) {
-      console.log('🎮 Audio disabled, stopping current audio');
-      stopCurrentAudio();
+      console.log('🎮 Audio disabled, force stopping current audio');
+      forceStopAudio();
       return;
     }
 
@@ -137,13 +137,15 @@ const DisplayController = () => {
 
   // Reset server control flag khi audio enabled changes from server
   useEffect(() => {
-    console.log('🎮 Audio enabled changed:', audioEnabled);
-    // Nếu audio bị tắt, reset server control flag
+    console.log('🎮 [DisplayController] Audio enabled changed from server:', audioEnabled);
+    // Nếu audio bị tắt, reset server control flag và force stop audio
     if (!audioEnabled) {
+      console.log('🎮 [DisplayController] Audio disabled by server - cleaning up');
       audioControlledByServerRef.current = false;
       lastAudioPlayedRef.current = null;
+      forceStopAudio();
     }
-  }, [audioEnabled]);
+  }, [audioEnabled, forceStopAudio]);
 
   // Khởi tạo kết nối socket
   useEffect(() => {
