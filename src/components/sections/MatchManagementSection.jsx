@@ -947,7 +947,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
-                console.log('📡 Server sẽ emit timer_tick events với displayTime format t��:', timeString);
+                console.log('📡 Server sẽ emit timer_tick events với displayTime format t���:', timeString);
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -982,6 +982,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
+                // Phát audio gialap cho đếm giờ
+                playAudioForAction('gialap');
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -1041,7 +1043,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">📊</span>
+              <span className="text-sm mr-1">��</span>
               <span className="text-xs font-bold text-center">TỈ SỐ DƯỚI</span>
             </button>
 
