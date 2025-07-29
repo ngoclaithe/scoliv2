@@ -343,6 +343,15 @@ const CommentarySection = ({ isActive = true }) => {
     }
   };
 
+  const toggleRealTimeRecording = () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      setIsRealTimeTransmission(true);
+      startRecording();
+    }
+  };
+
   const toggleContinuousMode = () => {
     if (continuousRecording) {
       stopContinuousRecording();
@@ -431,7 +440,7 @@ const CommentarySection = ({ isActive = true }) => {
         )}
         {continuousRecording && !isProcessing && (
           <p className="text-green-600 font-medium animate-pulse">
-            🟢 {isRecording ? 'Đang ghi...' : 'Đang chuẩn bị chunk tiếp...'}
+            ��� {isRecording ? 'Đang ghi...' : 'Đang chuẩn bị chunk tiếp...'}
           </p>
         )}
         {isRecording && !continuousRecording && !isProcessing && (
