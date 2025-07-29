@@ -272,6 +272,7 @@ class SocketService {
 
   // Bật audio chỉ cho display clients
   enableAudioForDisplays() {
+    console.log('📡 [SocketService] Sending enable audio to display clients');
     return this.sendAudioControl({
       command: 'ENABLE_AUDIO',
       target: 'display'
@@ -280,6 +281,7 @@ class SocketService {
 
   // Tắt audio chỉ cho display clients
   disableAudioForDisplays() {
+    console.log('📡 [SocketService] Sending disable audio to display clients');
     return this.sendAudioControl({
       command: 'DISABLE_AUDIO',
       target: 'display'
@@ -424,7 +426,7 @@ class SocketService {
     });
   }
 
-  // Lắng nghe các sự kiện điều khiển audio cụ thể
+  // Lắng nghe các sự ki��n điều khiển audio cụ thể
   onAudioControl(callback) {
     this.on('audio_control', callback);
   }
