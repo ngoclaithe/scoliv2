@@ -267,6 +267,28 @@ const CommentarySection = ({ isActive = true }) => {
     });
   };
 
+  // Hàm gửi current chunks ngay lập tức (cho real-time mode)
+  const sendCurrentChunks = async () => {
+    if (audioChunksRef.current.length === 0) {
+      return;
+    }
+
+    const mimeType = mediaRecorderRef.current?.mimeType || getSupportedMimeType() || 'audio/webm';
+    const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
+
+    console.log('🎙️ [Real-time] Sending voice chunk:', audioBlob.size, 'bytes');
+
+    try {
+      await sendVoiceToServer(audioBlob);
+      console.log('✅ [Real-time] Voice chunk sent successfully');
+    } catch (error) {
+      console.error('❌ [Real-time] Failed to send voice chunk:', error);
+    }
+
+    // Clear chunks after sending
+    audioChunksRef.current = [];
+  };
+
   const startContinuousRecording = async () => {
     console.log('🎙️ Starting continuous recording mode');
     setContinuousRecording(true);
