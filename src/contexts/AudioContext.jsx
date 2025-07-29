@@ -209,11 +209,11 @@ export const AudioProvider = ({ children }) => {
 
       if (data.command === 'ENABLE_AUDIO') {
         console.log('📡 Server command: ENABLE_AUDIO');
-        dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
+        dispatch({ type: audioActions.SET_AUDIO_ENABLED, payload: true });
       } else if (data.command === 'DISABLE_AUDIO') {
         console.log('📡 Server command: DISABLE_AUDIO');
         stopCurrentAudio();
-        dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
+        dispatch({ type: audioActions.SET_AUDIO_ENABLED, payload: false });
       } else if (data.command === 'PLAY_AUDIO' && data.payload) {
         console.log('📡 Server command: PLAY_AUDIO', data.payload);
         const { audioFile } = data.payload;
