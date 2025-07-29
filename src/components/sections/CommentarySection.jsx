@@ -354,33 +354,42 @@ const CommentarySection = ({ isActive = true }) => {
   return (
     <div className="p-4 space-y-4">
       {/* Mode Toggle */}
-      <div className="flex justify-center space-x-2 mb-4">
-        <button
-          onClick={() => {
-            stopAllRecording();
-            setIsContinuousMode(false);
-          }}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            !isContinuousMode
-              ? 'bg-blue-500 text-white'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
-        >
-          Ấn để nói
-        </button>
-        <button
-          onClick={() => {
-            stopAllRecording();
-            setIsContinuousMode(true);
-          }}
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            isContinuousMode
-              ? 'bg-green-500 text-white'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-          }`}
-        >
-          Nói liên tục
-        </button>
+      <div className="flex flex-col items-center space-y-2 mb-4">
+        <div className="flex space-x-2">
+          <button
+            onClick={() => {
+              stopAllRecording();
+              setIsContinuousMode(false);
+            }}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              !isContinuousMode
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            Ấn để nói
+          </button>
+          <button
+            onClick={() => {
+              stopAllRecording();
+              setIsContinuousMode(true);
+            }}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              isContinuousMode
+                ? 'bg-green-500 text-white'
+                : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            Nói liên tục
+          </button>
+        </div>
+
+        {/* Real-time indicator */}
+        {isRealTimeTranmission && (
+          <div className="text-xs text-green-600 font-medium animate-pulse">
+            🔴 PHÁT TRỰC TIẾP
+          </div>
+        )}
       </div>
 
       {/* Voice Recording Button */}
