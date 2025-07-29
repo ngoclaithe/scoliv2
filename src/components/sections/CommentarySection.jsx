@@ -11,6 +11,19 @@ const CommentarySection = ({ isActive = true }) => {
   const audioChunksRef = useRef([]);
   const streamRef = useRef(null);
   const continuousTimeoutRef = useRef(null);
+  
+  // THÊM REF để track real-time
+  const continuousRecordingRef = useRef(false);
+  const isContinuousModeRef = useRef(false);
+
+  // Sync ref với state
+  useEffect(() => {
+    continuousRecordingRef.current = continuousRecording;
+  }, [continuousRecording]);
+
+  useEffect(() => {
+    isContinuousModeRef.current = isContinuousMode;
+  }, [isContinuousMode]);
 
   // Check for browser support and codecs
   const isSupported = typeof navigator !== 'undefined' &&
@@ -96,24 +109,41 @@ const CommentarySection = ({ isActive = true }) => {
     }
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          sampleRate: 44100,
-          channelCount: 1,
-          autoGainControl: true
-        }
-      });
+      // Nếu chưa có stream hoặc stream đã bị dừng, tạo mới
+      if (!streamRef.current || !streamRef.current.active) {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            sampleRate: 44100,
+            channelCount: 1,
+            autoGainControl: true
+          }
+        });
+        streamRef.current = stream;
+      }
 
-      streamRef.current = stream;
-      await createMediaRecorder(stream, mimeType);
+      await createMediaRecorder(streamRef.current, mimeType);
       
       console.log('🎙️ Voice recording started with codec:', mimeType);
     } catch (error) {
       console.error('Lỗi khi bắt đầu ghi âm:', error);
       alert('Không thể truy cập microphone. Vui lòng cho phép quyền truy cập.');
     }
+  };
+
+  const sendVoiceChunk = (audioData, mimeType) => {
+    if (!audioData || audioData.length === 0) return;
+
+    const audioBlob = new Blob(audioData, { type: mimeType });
+    console.log('📡 Sending chunk immediately:', audioBlob.size, 'bytes');
+    
+    // Gửi ngay lập tức, không await
+    sendVoiceToServer(audioBlob).then(() => {
+      console.log('✅ Chunk sent successfully');
+    }).catch(error => {
+      console.error('❌ Failed to send chunk:', error);
+    });
   };
 
   const createMediaRecorder = async (stream, mimeType) => {
@@ -128,28 +158,81 @@ const CommentarySection = ({ isActive = true }) => {
 
     mediaRecorder.ondataavailable = (event) => {
       if (event.data.size > 0) {
-        audioChunksRef.current.push(event.data);
+        // ĐỌC từ REF thay vì state để tránh closure
+        const isContinuous = isContinuousModeRef.current;
+        const isCurrentlyRecording = continuousRecordingRef.current;
+        
+        console.log('📥 Data available:', event.data.size, 'bytes');
+        console.log('🔍 REF check - isContinuous:', isContinuous, 'isCurrentlyRecording:', isCurrentlyRecording);
+        
+        if (isContinuous && isCurrentlyRecording) {
+          // Trong chế độ continuous, gửi NGAY LẬP TỨC
+          console.log('🚀 SENDING CONTINUOUS CHUNK NOW!');
+          sendVoiceChunk([event.data], mimeType);
+        } else {
+          // Chế độ bình thường, tích lũy chunks
+          audioChunksRef.current.push(event.data);
+          console.log('📦 Added to chunks, total:', audioChunksRef.current.length);
+        }
       }
     };
 
     mediaRecorder.onstop = () => {
-      console.log('🎙️ MediaRecorder stopped, processing...');
-      processRecording();
+      const isContinuous = isContinuousModeRef.current;
+      const isCurrentlyRecording = continuousRecordingRef.current;
+      
+      console.log('🎙️ MediaRecorder stopped - isContinuous:', isContinuous, 'isCurrentlyRecording:', isCurrentlyRecording);
+      
+      if (isContinuous && isCurrentlyRecording) {
+        // Trong continuous mode, restart ngay lập tức
+        setIsRecording(false);
+        scheduleNextContinuousChunk();
+      } else {
+        // Chế độ bình thường, xử lý recording
+        processRecording();
+      }
     };
 
-    mediaRecorder.start(100);
+    // Thiết lập timeslice để FORCE tạo data events
+    const timeslice = isContinuousMode ? 300 : undefined; // 300ms cho continuous
+    console.log('🎙️ Starting MediaRecorder - isContinuousMode:', isContinuousMode, 'continuousRecording:', continuousRecording, 'timeslice:', timeslice);
+    mediaRecorder.start(timeslice);
     setIsRecording(true);
 
-    // Nếu là continuous mode, tự động stop sau 2 giây (giảm từ 3s để responsive hơn)
+    // Trong continuous mode, tự động restart sau khoảng thời gian
     if (isContinuousMode && continuousRecording) {
       continuousTimeoutRef.current = setTimeout(() => {
-        if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-          console.log('🎙️ Auto-stopping continuous chunk');
+        if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+          console.log('🔄 Auto-restarting continuous recording');
           mediaRecorderRef.current.stop();
-          setIsRecording(false);
         }
-      }, 2000); // Giảm xuống 2 giây cho real-time hơn
+      }, 2000); // Restart mỗi 2 giây
     }
+  };
+
+  const scheduleNextContinuousChunk = () => {
+    if (!continuousRecording) {
+      console.log('⏹️ Continuous recording stopped, not scheduling next chunk');
+      return;
+    }
+
+    console.log('🔄 Scheduling next continuous chunk');
+    continuousTimeoutRef.current = setTimeout(() => {
+      if (continuousRecording && streamRef.current && streamRef.current.active) {
+        startNextContinuousChunk();
+      }
+    }, 100); // Delay ngắn để tránh gap
+  };
+
+  const startNextContinuousChunk = async () => {
+    if (!streamRef.current || !streamRef.current.active || !continuousRecording) {
+      console.log('⚠️ Cannot start next chunk - stream inactive or recording stopped');
+      return;
+    }
+
+    console.log('🎙️ Starting next continuous chunk');
+    const mimeType = getSupportedMimeType();
+    await createMediaRecorder(streamRef.current, mimeType);
   };
 
   const stopRecording = () => {
@@ -169,7 +252,6 @@ const CommentarySection = ({ isActive = true }) => {
     if (audioChunksRef.current.length === 0) {
       console.log('⚠️ No audio chunks to process');
       setIsProcessing(false);
-      scheduleNextContinuousChunk();
       return;
     }
 
@@ -190,21 +272,6 @@ const CommentarySection = ({ isActive = true }) => {
     // Reset audio chunks
     audioChunksRef.current = [];
     setIsProcessing(false);
-
-    // Nếu đang trong continuous mode, schedule chunk tiếp theo
-    scheduleNextContinuousChunk();
-  };
-
-  const scheduleNextContinuousChunk = () => {
-    if (isContinuousMode && continuousRecording && streamRef.current) {
-      console.log('🔄 Scheduling next continuous chunk');
-      // Delay ngắn để tránh gap
-      setTimeout(() => {
-        if (continuousRecording && streamRef.current) {
-          startNextContinuousChunk();
-        }
-      }, 100);
-    }
   };
 
   const sendVoiceToServer = async (audioBlob) => {
@@ -237,19 +304,13 @@ const CommentarySection = ({ isActive = true }) => {
 
   const startContinuousRecording = async () => {
     console.log('🎙️ Starting continuous recording mode');
+    // SET TRƯỚC KHI tạo MediaRecorder
     setContinuousRecording(true);
-    await startRecording();
-  };
-
-  const startNextContinuousChunk = async () => {
-    if (!streamRef.current || !continuousRecording) {
-      console.log('⚠️ Cannot start next chunk - no stream or not recording');
-      return;
-    }
-
-    console.log('🎙️ Starting next continuous chunk');
-    const mimeType = getSupportedMimeType();
-    await createMediaRecorder(streamRef.current, mimeType);
+    
+    // Wait một chút để state update
+    setTimeout(async () => {
+      await startRecording();
+    }, 10);
   };
 
   const stopContinuousRecording = () => {
@@ -267,11 +328,8 @@ const CommentarySection = ({ isActive = true }) => {
       setIsRecording(false);
     }
 
-    // Stop stream
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
-      streamRef.current = null;
-    }
+    // Không stop stream để có thể tiếp tục sử dụng
+    console.log('🔄 Keeping stream active for potential reuse');
   };
 
   const toggleRecording = () => {
@@ -361,7 +419,7 @@ const CommentarySection = ({ isActive = true }) => {
         )}
         {continuousRecording && !isProcessing && (
           <p className="text-green-600 font-medium animate-pulse">
-            🟢 {isRecording ? 'Đang ghi...' : 'Đang chuẩn bị chunk tiếp...'}
+            🟢 {isRecording ? 'Đang phát trực tiếp...' : 'Đang chuẩn bị chunk tiếp...'}
           </p>
         )}
         {isRecording && !continuousRecording && !isProcessing && (
@@ -379,20 +437,18 @@ const CommentarySection = ({ isActive = true }) => {
         {/* Mode Description */}
         <div className="mt-2 text-xs text-gray-500">
           {isContinuousMode ? (
-            <p>Chế độ nói liên tục: Audio được gửi mỗi 2 giây tự động</p>
+            <p>Chế độ nói liên tục: Audio được gửi real-time mỗi 500ms</p>
           ) : (
             <p>Chế độ ấn để nói: Ấn một lần để bắt đầu, ấn lại để dừng và gửi</p>
           )}
         </div>
       </div>
 
-      {/* Debug Info (có thể bỏ trong production) */}
+      {/* Debug Info */}
       {process.env.NODE_ENV === 'development' && (
-        <div className="text-xs text-gray-400 mt-4 p-2 bg-gray-100 rounded">
-          <p>isContinuousMode: {isContinuousMode.toString()}</p>
-          <p>continuousRecording: {continuousRecording.toString()}</p>
-          <p>isRecording: {isRecording.toString()}</p>
-          <p>isProcessing: {isProcessing.toString()}</p>
+        <div className="mt-4 p-2 bg-gray-100 rounded text-xs">
+          <p>Debug: Continuous: {continuousRecording ? '✅' : '❌'} | Recording: {isRecording ? '✅' : '❌'} | Processing: {isProcessing ? '✅' : '❌'}</p>
+          <p>Stream Active: {streamRef.current?.active ? '✅' : '❌'} | MediaRecorder State: {mediaRecorderRef.current?.state || 'null'}</p>
         </div>
       )}
     </div>
