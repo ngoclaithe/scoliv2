@@ -256,8 +256,8 @@ const TeamLineupModal = ({
           
           <div className="p-3 sm:p-4 space-y-2 max-h-[50vh] sm:max-h-[55vh] lg:max-h-[60vh] overflow-y-auto">
             {currentTeamData.map((player, index) => (
-              <div key={index} className="flex items-center gap-2 sm:gap-3 min-h-[2.5rem] py-1">
-                <div className={`w-10 h-8 sm:w-12 sm:h-10 rounded-lg flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0 ${
+              <div key={index} className="flex items-center gap-2 sm:gap-3 min-h-[2rem] py-0.5">
+                <div className={`w-8 h-7 sm:w-10 sm:h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs flex-shrink-0 ${
                   player.number === "GK" 
                     ? "bg-green-500" 
                     : activeTeam === "home" ? "bg-blue-500" : "bg-red-500"
