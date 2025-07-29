@@ -592,7 +592,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Cập nhật tên đội
                 updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
 
-              // Luôn cập nhật logo đ���i (kể cả logo mặc định hoặc logo mới)
+              // Luôn cập nhật logo đội (kể cả logo mặc định hoặc logo mới)
               updateTeamLogos(
                 teamAInfo.logo || matchData.teamA.logo || "",
                 teamBInfo.logo || matchData.teamB.logo || ""
@@ -969,7 +969,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                // Ph��t audio gialap cho đếm giờ
+                // Phát audio gialap cho đếm giờ
                 playAudioForAction('gialap');
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 35:00!');
@@ -1040,7 +1040,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">📊</span>
-              <span className="text-xs font-bold text-center">TỈ SỐ TR��N</span>
+              <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
             </button>
 
             {/* Tỉ số dứới */}
@@ -1265,7 +1265,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         isOpen={showPosterModal}
         onClose={() => setShowPosterModal(false)}
         title="🎨 Quản Lý Poster & Logo"
-        size="full"
+        size="xl"
       >
         <PosterManager
           matchData={matchData}
