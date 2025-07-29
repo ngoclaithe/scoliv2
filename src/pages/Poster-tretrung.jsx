@@ -45,6 +45,12 @@ export default function TreTrungMatchIntro() {
   // Handle click to enable user interaction for audio
   const handleUserInteraction = () => {
     console.log('🎵 User clicked - audio interaction enabled');
+
+    // Test audio để kiểm tra
+    setTimeout(() => {
+      console.log('🎵 Testing audio playback...');
+      audioUtils.playAudio('poster');
+    }, 100);
   };
 
   return (
