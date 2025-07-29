@@ -190,7 +190,7 @@ const TeamLineupModal = ({
             className="h-10 flex flex-col items-center justify-center"
           >
             <span className="text-lg">📋</span>
-            <span className="text-xs">Nhập h��ng loạt</span>
+            <span className="text-xs">Nhập hàng loạt</span>
           </Button>
           <Button
             variant="primary"
@@ -254,7 +254,7 @@ const TeamLineupModal = ({
             </div>
           </div>
           
-          <div className="p-3 sm:p-4 space-y-3 max-h-[40vh] sm:max-h-[50vh] lg:max-h-96 overflow-y-auto">
+          <div className="p-3 sm:p-4 space-y-2 max-h-[50vh] sm:max-h-[55vh] lg:max-h-[60vh] overflow-y-auto">
             {currentTeamData.map((player, index) => (
               <div key={index} className="flex items-center gap-2 sm:gap-3 min-h-[2.5rem] py-1">
                 <div className={`w-10 h-8 sm:w-12 sm:h-10 rounded-lg flex items-center justify-center text-white font-bold text-xs sm:text-sm flex-shrink-0 ${
