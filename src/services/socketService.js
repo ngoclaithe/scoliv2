@@ -244,7 +244,7 @@ class SocketService {
       target: controlData.target || 'display', // Ưu tiên target được truyền vào, mặc định là 'display'
     };
     console.log('📡 [SocketService] Sending audio control:', payload);
-    return this.emit('audio_control', payload);
+    return this.emit('audio_control_broadcast', payload);
   }
 
   // === AUDIO & COMMENTARY EVENTS ===
