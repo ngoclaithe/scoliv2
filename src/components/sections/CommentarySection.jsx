@@ -190,10 +190,22 @@ const CommentarySection = ({ isActive = true }) => {
       continuousTimeoutRef.current = null;
     }
 
+    if (realTimeIntervalRef.current) {
+      clearInterval(realTimeIntervalRef.current);
+      realTimeIntervalRef.current = null;
+    }
+
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
-      setIsProcessing(true);
+      if (!isRealTimeTranmission) {
+        setIsProcessing(true);
+      }
+    }
+
+    // Reset real-time mode khi stop (trừ khi là continuous mode)
+    if (!continuousRecording) {
+      setIsRealTimeTransmission(false);
     }
   };
 
@@ -440,7 +452,7 @@ const CommentarySection = ({ isActive = true }) => {
         )}
         {continuousRecording && !isProcessing && (
           <p className="text-green-600 font-medium animate-pulse">
-            ��� {isRecording ? 'Đang ghi...' : 'Đang chuẩn bị chunk tiếp...'}
+            🟢 {isRecording ? 'Đang ghi...' : 'Đang chuẩn bị chunk tiếp...'}
           </p>
         )}
         {isRecording && !continuousRecording && !isProcessing && (
