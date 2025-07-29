@@ -94,7 +94,7 @@ const CommentarySection = ({ isActive = true }) => {
 
   const startRecording = async () => {
     if (!isSupported) {
-      alert('Trình duyệt không hỗ trợ ghi âm');
+      alert('Trình duy��t không hỗ trợ ghi âm');
       return;
     }
 
@@ -136,12 +136,13 @@ const CommentarySection = ({ isActive = true }) => {
     audioChunksRef.current = [];
 
     mediaRecorder.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        audioChunksRef.current.push(event.data);
-        
-        // Nếu là continuous mode, gửi ngay lập tức
+      if (event.data && event.data.size > 0) {
+        // Nếu là continuous mode, gửi ngay
         if (isContinuousMode && continuousRecording) {
-          sendCurrentChunks();
+          sendAudioChunk(event.data);
+        } else {
+          // Push-to-talk mode: thu thập chunks
+          audioChunksRef.current.push(event.data);
         }
       }
     };
@@ -150,36 +151,17 @@ const CommentarySection = ({ isActive = true }) => {
       console.log('🎙️ MediaRecorder stopped, processing...');
       if (!isContinuousMode) {
         processRecording();
-      } else {
-        // Gửi chunk cuối cùng và reset
-        sendCurrentChunks();
-        audioChunksRef.current = [];
-        setIsProcessing(false);
-        scheduleNextContinuousChunk();
       }
     };
 
-    // Start recording
-    mediaRecorder.start();
-    setIsRecording(true);
-
-    // Nếu là continuous mode, setup interval để requestData liên tục
+    // Start recording với chunk size phù hợp
     if (isContinuousMode && continuousRecording) {
-      emitIntervalRef.current = setInterval(() => {
-        if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
-          mediaRecorderRef.current.requestData();
-        }
-      }, 500); // Emit mỗi 500ms
-      
-      // Tự động stop và restart để tránh memory leak
-      continuousTimeoutRef.current = setTimeout(() => {
-        if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-          console.log('🎙️ Auto-stopping continuous chunk');
-          mediaRecorderRef.current.stop();
-          setIsRecording(false);
-        }
-      }, 5000); // 5 giây
+      mediaRecorder.start(100); // Chia chunk mỗi 100ms cho continuous mode
+    } else {
+      mediaRecorder.start(); // Push-to-talk mode: ghi liên tục đến khi stop
     }
+
+    setIsRecording(true);
   };
 
   const stopRecording = () => {
