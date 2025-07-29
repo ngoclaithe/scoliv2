@@ -94,7 +94,7 @@ const CommentarySection = ({ isActive = true }) => {
 
   const startRecording = async () => {
     if (!isSupported) {
-      alert('Trình duy��t không hỗ trợ ghi âm');
+      alert('Trình duyệt không hỗ trợ ghi âm');
       return;
     }
 
@@ -252,15 +252,8 @@ const CommentarySection = ({ isActive = true }) => {
     });
   };
 
-  // Hàm gửi current chunks ngay lập tức (cho continuous mode)
-  const sendCurrentChunks = async () => {
-    if (audioChunksRef.current.length === 0) {
-      return;
-    }
-
-    const mimeType = mediaRecorderRef.current?.mimeType || getSupportedMimeType() || 'audio/webm';
-    const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
-    
+  // Hàm gửi single audio chunk ngay lập tức (cho continuous mode)
+  const sendAudioChunk = async (audioBlob) => {
     console.log('🎙️ [Continuous] Sending voice chunk:', audioBlob.size, 'bytes');
 
     try {
@@ -269,9 +262,6 @@ const CommentarySection = ({ isActive = true }) => {
     } catch (error) {
       console.error('❌ [Continuous] Failed to send voice chunk:', error);
     }
-
-    // Clear chunks after sending
-    audioChunksRef.current = [];
   };
 
   const startContinuousRecording = async () => {
