@@ -229,7 +229,7 @@ export const AudioProvider = ({ children }) => {
     if (wasEnabled && audioRef.current) {
       stopCurrentAudio();
     }
-  }, [state.audioEnabled]);
+  }, [state.audioEnabled, stopCurrentAudio]);
 
   // Lắng nghe thay đổi trạng thái audio từ server
   useEffect(() => {
