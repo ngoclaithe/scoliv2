@@ -13,6 +13,7 @@ const initialState = {
 // Audio Actions - rút gọn
 const audioActions = {
   TOGGLE_AUDIO_ENABLED: 'TOGGLE_AUDIO_ENABLED',
+  SET_AUDIO_ENABLED: 'SET_AUDIO_ENABLED',
   SET_VOLUME: 'SET_VOLUME',
   TOGGLE_MUTE: 'TOGGLE_MUTE',
   SET_PLAYING: 'SET_PLAYING',
@@ -201,7 +202,7 @@ export const AudioProvider = ({ children }) => {
       console.log('📡 Received audio_control from server:', data);
 
       if (data.command === 'ENABLE_AUDIO') {
-        console.log('📡 Server command: ENABLE_AUDIO');
+        console.log('���� Server command: ENABLE_AUDIO');
         dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
       } else if (data.command === 'DISABLE_AUDIO') {
         console.log('📡 Server command: DISABLE_AUDIO');
