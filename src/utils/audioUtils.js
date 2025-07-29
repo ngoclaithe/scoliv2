@@ -90,8 +90,8 @@ class AudioManager {
       return;
     }
 
-    // Stop current audio before playing new one
-    this.stopAllAudio();
+    // Stop current regular audio before playing new one (but keep referee voice)
+    this.stopRegularAudio();
 
     try {
       console.log('🎵 Creating new audio element:', audioFile);
@@ -131,16 +131,27 @@ class AudioManager {
   playRefereeVoice(audioBlob) {
     console.log('🎙️ Playing referee voice');
 
-    // Stop all other audio
-    this.stopAllAudio();
+    if (!audioBlob || audioBlob.size === 0) {
+      console.error('❌ Invalid audio blob provided');
+      return;
+    }
+
+    // Stop all other audio first, but not referee voice
+    this.stopRegularAudio();
 
     try {
       // Create URL from blob
       const audioUrl = URL.createObjectURL(audioBlob);
-      const audio = new Audio(audioUrl);
+      const audio = new Audio();
 
-      this.refereeVoiceRef = audio;
-      audio.volume = this.isMuted ? 0 : this.volume;
+      // Set up event handlers before setting src
+      audio.onloadstart = () => {
+        console.log('🎙️ Referee voice loading started');
+      };
+
+      audio.oncanplay = () => {
+        console.log('🎙️ Referee voice can play');
+      };
 
       audio.onended = () => {
         console.log('✅ Referee voice playback ended');
@@ -154,27 +165,41 @@ class AudioManager {
         this.refereeVoiceRef = null;
       };
 
-      const playPromise = audio.play();
-      if (playPromise) {
-        playPromise
-          .then(() => {
-            console.log('✅ Referee voice started playing successfully');
-          })
-          .catch((error) => {
-            console.error('❌ Failed to play referee voice:', error);
-            URL.revokeObjectURL(audioUrl);
-            this.refereeVoiceRef = null;
-          });
-      }
+      // Set reference before playing
+      this.refereeVoiceRef = audio;
+      audio.volume = this.isMuted ? 0 : this.volume;
+
+      // Set src and play
+      audio.src = audioUrl;
+
+      // Use a small delay to ensure proper loading
+      setTimeout(() => {
+        if (this.refereeVoiceRef === audio) { // Make sure it's still the current audio
+          const playPromise = audio.play();
+          if (playPromise) {
+            playPromise
+              .then(() => {
+                console.log('✅ Referee voice started playing successfully');
+              })
+              .catch((error) => {
+                console.error('❌ Failed to play referee voice:', error);
+                if (this.refereeVoiceRef === audio) {
+                  URL.revokeObjectURL(audioUrl);
+                  this.refereeVoiceRef = null;
+                }
+              });
+          }
+        }
+      }, 50);
 
     } catch (error) {
       console.error('❌ Error creating referee voice audio:', error);
     }
   }
 
-  // Stop all audio
-  stopAllAudio() {
-    console.log('🔇 Stopping all audio elements');
+  // Stop regular audio only (not referee voice)
+  stopRegularAudio() {
+    console.log('🔇 Stopping regular audio elements');
 
     // Stop regular audio
     if (this.audioRef) {
@@ -186,6 +211,37 @@ class AudioManager {
       }
       this.audioRef = null;
     }
+
+    // Stop all other audio elements on page (except referee voice)
+    try {
+      const allAudioElements = document.querySelectorAll('audio');
+      allAudioElements.forEach((audio, index) => {
+        try {
+          // Skip if this is our referee voice element
+          if (audio === this.refereeVoiceRef) {
+            return;
+          }
+
+          if (!audio.paused) {
+            console.log(`🔇 Stopping audio element ${index + 1}`);
+            audio.pause();
+            audio.currentTime = 0;
+          }
+        } catch (error) {
+          console.warn(`⚠️ Error stopping audio element ${index + 1}:`, error);
+        }
+      });
+    } catch (error) {
+      console.warn('⚠️ Error finding/stopping page audio elements:', error);
+    }
+  }
+
+  // Stop all audio including referee voice
+  stopAllAudio() {
+    console.log('🔇 Stopping all audio elements');
+
+    // Stop regular audio first
+    this.stopRegularAudio();
 
     // Stop referee voice
     if (this.refereeVoiceRef) {
@@ -199,24 +255,6 @@ class AudioManager {
         console.warn('⚠️ Error stopping referee voice:', error);
       }
       this.refereeVoiceRef = null;
-    }
-
-    // Stop all other audio elements on page
-    try {
-      const allAudioElements = document.querySelectorAll('audio');
-      allAudioElements.forEach((audio, index) => {
-        try {
-          if (!audio.paused) {
-            console.log(`🔇 Stopping audio element ${index + 1}`);
-            audio.pause();
-            audio.currentTime = 0;
-          }
-        } catch (error) {
-          console.warn(`⚠️ Error stopping audio element ${index + 1}:`, error);
-        }
-      });
-    } catch (error) {
-      console.warn('⚠️ Error finding/stopping page audio elements:', error);
     }
   }
 
@@ -234,10 +272,11 @@ export const audioUtils = {
   playAudio: (audioKey) => audioManager.playAudio(audioKey),
   playRefereeVoice: (audioBlob) => audioManager.playRefereeVoice(audioBlob),
   stopAllAudio: () => audioManager.stopAllAudio(),
+  stopRegularAudio: () => audioManager.stopRegularAudio(),
   setAudioEnabled: (enabled) => audioManager.setAudioEnabled(enabled),
   setVolume: (volume) => audioManager.setVolume(volume),
   setMuted: (muted) => audioManager.setMuted(muted),
-  
+
   // Getters
   get audioEnabled() { return audioManager.audioEnabled; },
   get volume() { return audioManager.volume; },
