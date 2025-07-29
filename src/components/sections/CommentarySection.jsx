@@ -360,7 +360,7 @@ const CommentarySection = ({ isActive = true }) => {
         )}
         {continuousRecording && !isProcessing && (
           <p className="text-green-600 font-medium animate-pulse">
-            🟢 {isRecording ? 'Đang phát trực tiếp...' : 'Đang chuẩn bị chunk tiếp...'}
+            🟢 Đang phát trực tiếp...
           </p>
         )}
         {isRecording && !continuousRecording && !isProcessing && (
