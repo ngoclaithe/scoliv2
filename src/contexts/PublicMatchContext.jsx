@@ -122,7 +122,7 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.removeAllListeners('audio_control_broadcast');
     socketService.removeAllListeners('disconnect');
     socketService.removeAllListeners('connect');
-    // Lắng nghe cập nhật thông tin trận đấu
+    // Lắng nghe cập nhật th��ng tin trận đấu
     socketService.on('match_info_updated', (data) => {
       setMatchData(prev => ({ ...prev, ...data.matchInfo }));
       updateLastTime();
@@ -274,7 +274,7 @@ export const PublicMatchProvider = ({ children }) => {
     if (socketService.socket) {
       const originalOn = socketService.socket.on;
       socketService.socket.on = function(event, callback) {
-        if (event === 'audio_control') {
+        if (event === 'audio_control_broadcast') {
           console.log('🎯 [DEBUG] Registering listener for:', event);
         }
         return originalOn.call(this, event, callback);
