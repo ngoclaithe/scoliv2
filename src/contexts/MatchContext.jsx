@@ -558,9 +558,12 @@ export const MatchProvider = ({ children }) => {
 
   // Cập nhật view hiện tại cho route dynamic (MỚI)
   const updateView = useCallback((viewType) => {
+    console.log('🎯 [MatchContext] updateView called with:', viewType, 'socketConnected:', socketConnected);
     if (socketConnected) {
-      socketService.emit('view_update', { viewType });
-      console.log('Sent view update:', viewType);
+      socketService.updateView(viewType);
+      console.log('✅ [MatchContext] Sent view update via socketService:', viewType);
+    } else {
+      console.log('⚠️ [MatchContext] Socket not connected, cannot update view');
     }
   }, [socketConnected]);
 
