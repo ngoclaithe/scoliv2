@@ -140,15 +140,36 @@ const CommentarySection = ({ isActive = true }) => {
     mediaRecorder.ondataavailable = (event) => {
       if (event.data.size > 0) {
         audioChunksRef.current.push(event.data);
+
+        // Nếu là real-time transmission, gửi luôn chunk này
+        if (isRealTimeTranmission && audioChunksRef.current.length > 0) {
+          sendCurrentChunks();
+        }
       }
     };
 
     mediaRecorder.onstop = () => {
       console.log('🎙️ MediaRecorder stopped, processing...');
-      processRecording();
+      if (!isRealTimeTranmission) {
+        processRecording();
+      } else {
+        // Gửi chunk cuối cùng và reset
+        sendCurrentChunks();
+        audioChunksRef.current = [];
+        setIsProcessing(false);
+        scheduleNextContinuousChunk();
+      }
     };
 
-    mediaRecorder.start(100);
+    // Start recording với interval thích hợp
+    if (isRealTimeTranmission) {
+      // Real-time mode: thu thập data mỗi 200ms và gửi ngay
+      mediaRecorder.start(200);
+    } else {
+      // Normal mode: thu thập data mỗi 100ms
+      mediaRecorder.start(100);
+    }
+
     setIsRecording(true);
 
     // Nếu là continuous mode, tự động stop sau 2 giây (giảm từ 3s để responsive hơn)
