@@ -196,7 +196,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateScore(team, increment);
   };
 
-  // Hàm cập nhật thống kê
+  // Hàm cập nh��t thống kê
   const updateStat = (statKey, team, value) => {
     const newStats = {
       ...matchStats,
@@ -733,7 +733,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 onUpdate={(team, value) => updatePossession(team, value)}
               />
 
-              {/* Tổng số cú sút */}
+              {/* T��ng số cú sút */}
               <EditableStatBar
                 label="Tổng số cú sút"
                 statKey="totalShots"
@@ -1118,6 +1118,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                     updateMatchTime(timeString, "Hiệp 1", "live");
                     updateView('scoreboard');
                     setSelectedOption("ti-so-tren");
+                    // Phát audio gialap cho đếm giờ
+                    playAudioForAction('gialap');
                     console.log('🕰️ Đã áp dụng thời gian tùy chỉnh:', timeString);
 
                     toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
