@@ -79,7 +79,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     {
       id: "media",
       name: "TRUYỀN THÔNG",
-      icon: "��",
+      icon: "📺",
     },
     {
       id: "tournament",
@@ -437,7 +437,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             className={`w-full text-xs text-center border rounded px-1 py-1 font-mono transition-colors focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none ${
               isSearching ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
             }`}
-            placeholder="Mã (Enter ��ể tìm)"
+            placeholder="Mã (Enter để tìm)"
           />
 
           {isSearching && (
@@ -776,19 +776,19 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         {renderLogoSection()}
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pt-2 border-t border-gray-200">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1 pt-1.5 border-t border-gray-200">
         <div className="flex gap-1 w-full sm:w-auto">
           <Button
             variant="outline"
             onClick={() => onClose?.()}
-            className="flex-1 sm:flex-none text-xs px-2 py-1"
+            className="flex-1 sm:flex-none text-xs px-2 py-1 h-8"
           >
             Hủy
           </Button>
           <Button
             variant="primary"
             onClick={handleSave}
-            className="flex-1 sm:flex-none text-xs px-2 py-1"
+            className="flex-1 sm:flex-none text-xs px-2 py-1 h-8"
             disabled={!selectedPoster && allLogoItems.filter(item => item.displayPositions.length > 0).length === 0}
           >
             <span className="mr-1">💾</span>
