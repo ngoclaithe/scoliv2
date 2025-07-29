@@ -110,6 +110,12 @@ class SocketService {
       return;
     }
 
+    // Debug log cho audio_control event
+    if (eventName === 'audio_control') {
+      console.log('📡 [SocketService] Registering audio_control listener. Socket connected:', this.socket.connected);
+      console.log('📡 [SocketService] Current listeners for audio_control:', this.listeners.get('audio_control')?.size || 0);
+    }
+
     // Lưu callback để có thể remove sau
     if (!this.listeners.has(eventName)) {
       this.listeners.set(eventName, new Set());

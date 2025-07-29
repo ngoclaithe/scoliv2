@@ -248,12 +248,43 @@ export const PublicMatchProvider = ({ children }) => {
       console.log('🎯 [Audio] View updated to:', data.viewType);
     });
 
+    // DEBUG: Lắng nghe TẤT CẢ events để debug
+    if (socketService.socket) {
+      const originalEmit = socketService.socket.emit;
+      socketService.socket.emit = function(event, ...args) {
+        if (event.includes('audio')) {
+          console.log('🚀 [DEBUG] Socket EMIT:', event, args);
+        }
+        return originalEmit.apply(this, [event, ...args]);
+      };
+
+      // Lắng nghe tất cả events
+      const originalOn = socketService.socket.on;
+      socketService.socket.on = function(event, callback) {
+        if (event === 'audio_control') {
+          console.log('🎯 [DEBUG] Registering listener for:', event);
+        }
+
+        const wrappedCallback = function(...args) {
+          if (event.includes('audio') || event === 'audio_control') {
+            console.log('📥 [DEBUG] Socket RECEIVED:', event, args);
+          }
+          return callback.apply(this, args);
+        };
+
+        return originalOn.call(this, event, wrappedCallback);
+      };
+    }
+
     // Lắng nghe audio control events - để nhận referee voice từ CommentarySection
     socketService.on('audio_control', (data) => {
-      console.log('🎙️ [PublicMatchContext] Received audio_control:', data);
+      console.log('🎙️ [PublicMatchContext] Received audio_control event:', data);
+      console.log('🎙️ [PublicMatchContext] Client type:', socketService.getConnectionStatus().clientType);
+      console.log('🎙️ [PublicMatchContext] Target check:', data.target, 'Command:', data.command);
 
       // Chỉ xử lý event dành cho display clients
       if (data.target === 'display' && data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
+        console.log('✅ [PublicMatchContext] Processing referee voice for display client');
         const { audioData, mimeType } = data.payload;
         try {
           const uint8Array = new Uint8Array(audioData);
@@ -263,6 +294,8 @@ export const PublicMatchProvider = ({ children }) => {
         } catch (error) {
           console.error('❌ Error processing referee voice in DisplayController:', error);
         }
+      } else {
+        console.log('⚠️ [PublicMatchContext] Audio control event ignored - not for this client or wrong command');
       }
     });
 
