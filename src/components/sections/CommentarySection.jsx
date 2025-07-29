@@ -1,71 +1,148 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useMatch } from "../../contexts/MatchContext";
-import { toast } from 'react-toastify';
+import { Mic, MicOff } from "lucide-react";
 
 const CommentarySection = () => {
   const { matchData } = useMatch();
+  const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
 
-  // Simplified commentary section without recording features
-  const handleCommentaryNote = () => {
-    toast.info('📝 Chức năng bình luận đã được đơn giản hóa');
+  // Check for browser support
+  const isSupported = typeof navigator !== 'undefined' && 
+                     navigator.mediaDevices && 
+                     navigator.mediaDevices.getUserMedia;
+
+  useEffect(() => {
+    return () => {
+      // Cleanup on unmount
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+        mediaRecorderRef.current.stop();
+      }
+    };
+  }, []);
+
+  const startRecording = async () => {
+    if (!isSupported) {
+      alert('Trình duyệt không hỗ trợ ghi âm');
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: 44100
+        } 
+      });
+      
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/wav'
+      });
+      
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        stream.getTracks().forEach(track => track.stop());
+        processRecording();
+      };
+
+      mediaRecorder.start(100); // Collect data every 100ms
+      setIsRecording(true);
+    } catch (error) {
+      console.error('Lỗi khi bắt đầu ghi âm:', error);
+      alert('Không thể truy cập microphone. Vui lòng cho phép quyền truy cập.');
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+      setIsProcessing(true);
+    }
+  };
+
+  const processRecording = () => {
+    if (audioChunksRef.current.length > 0) {
+      const audioBlob = new Blob(audioChunksRef.current, { 
+        type: mediaRecorderRef.current.mimeType 
+      });
+      
+      // Here you would typically send the audio to your speech-to-text service
+      console.log('Audio recorded:', audioBlob);
+      
+      // Simulate processing
+      setTimeout(() => {
+        setIsProcessing(false);
+        // You can add the transcribed text to your commentary here
+      }, 1500);
+    } else {
+      setIsProcessing(false);
+    }
+  };
+
+  const toggleRecording = () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
   };
 
   return (
-    <div className="p-2 sm:p-4 space-y-3 sm:space-y-4">
-      {/* Commentary Section */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-3 sm:p-4 border border-blue-200">
-        <h3 className="text-center text-sm sm:text-base font-bold text-blue-800 mb-4 flex items-center justify-center">
-          <span className="mr-1">📝</span>
-          BÌNH LUẬN TRẬN ĐẤU
-          <span className="ml-1">📝</span>
-        </h3>
+    <div className="p-4 space-y-4">
 
-        {/* Match Info Display */}
-        <div className="bg-white rounded-lg p-3 mb-4 border border-gray-200">
-          <div className="text-center space-y-2">
-            <div className="flex justify-between items-center">
-              <span className="font-bold text-red-600">{matchData.teamA?.name || "ĐỘI A"}</span>
-              <div className="flex items-center space-x-2">
-                <span className="bg-red-500 text-white px-3 py-1 rounded font-bold">
-                  {matchData.teamA?.score || 0}
-                </span>
-                <span className="text-gray-500 font-bold">-</span>
-                <span className="bg-gray-800 text-white px-3 py-1 rounded font-bold">
-                  {matchData.teamB?.score || 0}
-                </span>
-              </div>
-              <span className="font-bold text-gray-800">{matchData.teamB?.name || "ĐỘI B"}</span>
-            </div>
-            <div className="text-sm text-gray-600">
-              {matchData.matchTime || "00:00"} - {matchData.period || "Chưa bắt đầu"}
-            </div>
-          </div>
-        </div>
 
-        {/* Simple Commentary Button */}
-        <div className="flex justify-center mb-4">
-          <button
-            onClick={handleCommentaryNote}
-            disabled={isProcessing}
-            className="px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center font-bold"
-          >
-            <span className="mr-2">📝</span>
-            GHI CHÚ BÌNH LUẬN
-          </button>
-        </div>
+      {/* Voice Recording Button */}
+      <div className="flex justify-center">
+        <button
+          onClick={toggleRecording}
+          disabled={isProcessing || !isSupported}
+          className={`
+            w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 transform
+            ${isRecording 
+              ? 'bg-red-500 hover:bg-red-600 animate-pulse scale-110' 
+              : 'bg-blue-500 hover:bg-blue-600'
+            }
+            ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}
+            text-white shadow-lg hover:shadow-xl
+            ${!isSupported ? 'bg-gray-400 cursor-not-allowed' : ''}
+          `}
+        >
+          {isProcessing ? (
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+          ) : isRecording ? (
+            <MicOff size={32} />
+          ) : (
+            <Mic size={32} />
+          )}
+        </button>
+      </div>
 
-        {/* Status Text */}
-        <div className="text-center">
-          <p className="text-xs sm:text-sm text-gray-600">
-            Chức năng bình luận đã được đơn giản hóa để tối ưu hiệu năng
-          </p>
-        </div>
-        
-        {/* Info */}
-        <div className="mt-4 p-2 bg-green-100 border border-green-300 rounded text-xs text-green-800 text-center">
-          ✅ Phiên bản đơn giản hóa - Hiệu năng tối ưu
-        </div>
+      {/* Status Text */}
+      <div className="text-center">
+        {isProcessing && (
+          <p className="text-blue-600 font-medium">Đang xử lý...</p>
+        )}
+        {isRecording && !isProcessing && (
+          <p className="text-red-600 font-medium animate-pulse">● Đang ghi âm...</p>
+        )}
+        {!isRecording && !isProcessing && (
+          <p className="text-gray-600">Ấn mic để bắt đầu bình luận</p>
+        )}
+        {!isSupported && (
+          <p className="text-red-600">Trình duyệt không hỗ trợ ghi âm</p>
+        )}
       </div>
     </div>
   );
