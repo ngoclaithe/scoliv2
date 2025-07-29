@@ -252,17 +252,14 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('audio_control', (data) => {
       console.log('🎙️ [PublicMatchContext] Received audio_control:', data);
 
-      // Gửi event này đến audioUtils hoặc các component cần xử lý audio
-      if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
+      // Chỉ xử lý event dành cho display clients
+      if (data.target === 'display' && data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
         const { audioData, mimeType } = data.payload;
         try {
-          // Import audioUtils để phát audio trực tiếp
-          import('../utils/audioUtils').then(audioUtilsModule => {
-            const audioUtils = audioUtilsModule.default;
-            const uint8Array = new Uint8Array(audioData);
-            const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
-            audioUtils.playRefereeVoice(audioBlob);
-          });
+          const uint8Array = new Uint8Array(audioData);
+          const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
+          audioUtils.playRefereeVoice(audioBlob);
+          console.log('✅ [PublicMatchContext] Playing referee voice successfully');
         } catch (error) {
           console.error('❌ Error processing referee voice in DisplayController:', error);
         }
