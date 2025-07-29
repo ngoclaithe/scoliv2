@@ -26,14 +26,49 @@ const DisplayController = () => {
     currentView
   } = usePublicMatch();
 
-  // Sử dụng AudioContext - chỉ lấy playRefereeVoice cho DisplayController
-  const { playRefereeVoice } = useAudio();
+  // Sử dụng AudioContext - lấy cả playAudio và playRefereeVoice
+  const { playAudio, playRefereeVoice, audioEnabled } = useAudio();
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
 
   // Sử dụng useRef để lưu trữ previousView
   const prevViewRef = useRef();
+
+  // Lắng nghe currentView để phát audio tương ứng ở DisplayController
+  useEffect(() => {
+    if (!audioEnabled || !currentView) {
+      console.log('🔇 [DisplayController] Audio disabled or no current view');
+      return;
+    }
+
+    const previousView = prevViewRef.current;
+
+    // Chỉ phát audio khi view thực sự thay đổi
+    if (previousView === currentView) {
+      return;
+    }
+
+    console.log('🎵 [DisplayController] View changed, playing audio for:', currentView);
+
+    // Phát audio tương ứng theo view
+    let audioFile = null;
+
+    if (['intro', 'halftime', 'poster'].includes(currentView)) {
+      audioFile = 'poster';
+    } else if (currentView === 'scoreboard_below') {
+      audioFile = 'rasan';
+    } else if (currentView?.startsWith('scoreboard')) {
+      audioFile = 'gialap';
+    }
+
+    if (audioFile) {
+      console.log('🎵 [DisplayController] Playing audio:', audioFile, 'for view:', currentView);
+      playAudio(audioFile);
+    }
+
+    prevViewRef.current = currentView;
+  }, [currentView, audioEnabled, playAudio]);
 
   // Lắng nghe event audio_control từ backend để phát voice trọng tài
   useEffect(() => {
@@ -67,8 +102,7 @@ const DisplayController = () => {
       socketService.off('audio_control', handleAudioControl);
     };
 
-    prevViewRef.current = currentView;
-  }, [currentView, playRefereeVoice]); // Thêm playRefereeVoice vào dependencies
+  }, [playRefereeVoice]); // Chỉ phụ thuộc vào playRefereeVoice
 
   // DisplayController không cần xử lý audio enabled changes nữa
   // Audio sẽ được quản lý từ MatchManagementSection và voice từ CommentarySection

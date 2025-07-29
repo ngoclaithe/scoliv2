@@ -301,56 +301,29 @@ export const AudioProvider = ({ children }) => {
     }
   }, [state.audioEnabled, state.userInteracted, state.isMuted, state.volume, stopCurrentAudio, audioFiles]);
 
-  // Toggle audio toàn cục
+  // Toggle audio toàn cục - CHỈ LOCAL, KHÔNG GỬI SOCKET
   const toggleAudioEnabled = useCallback(() => {
     const wasEnabled = state.audioEnabled;
     const newState = !wasEnabled;
-    
-    console.log('🎵 Toggling global audio:', { wasEnabled, newState });
+
+    console.log('🎵 Toggling LOCAL audio:', { wasEnabled, newState });
 
     dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
 
-    // Gửi trạng thái mới lên server
-    try {
-      if (socketService.socket && socketService.socket.connected) {
-        if (newState) {
-          console.log('📡 Sending enable audio to display clients');
-          socketService.enableAudioForDisplays();
-        } else {
-          console.log('📡 Sending disable audio to display clients');
-          socketService.disableAudioForDisplays();
-        }
-      }
-    } catch (error) {
-      console.error('❌ Lỗi khi gửi trạng thái audio lên server:', error);
-    }
-
+    // KHÔNG GỬI SOCKET NỮA - CHỈ TÁC ĐỘNG LOCAL
     // Nếu đang từ enabled -> disabled, dừng phát audio hiện tại
     if (wasEnabled && audioRef.current) {
       stopCurrentAudio();
     }
   }, [state.audioEnabled, stopCurrentAudio]);
 
-  // Lắng nghe thay đổi trạng thái audio từ server
+  // CHỈ XỬ LÝ REFEREE VOICE, LOẠI BỎ STATIC AUDIO CONTROL
   useEffect(() => {
     const handleAudioControl = (data) => {
       console.log('📡 Received audio_control from server:', data);
 
-      if (data.command === 'ENABLE_AUDIO') {
-        console.log('📡 Server command: ENABLE_AUDIO');
-        dispatch({ type: audioActions.SET_AUDIO_ENABLED, payload: true });
-      } else if (data.command === 'DISABLE_AUDIO') {
-        console.log('📡 Server command: DISABLE_AUDIO');
-        stopCurrentAudio();
-        dispatch({ type: audioActions.SET_AUDIO_ENABLED, payload: false });
-      } else if (data.command === 'PLAY_AUDIO' && data.payload) {
-        console.log('📡 Server command: PLAY_AUDIO', data.payload);
-        const { audioFile } = data.payload;
-        playAudio(audioFile);
-      } else if (data.command === 'STOP_AUDIO') {
-        console.log('📡 Server command: STOP_AUDIO');
-        stopCurrentAudio();
-      } else if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
+      // CHỈ XỬ LÝ REFEREE VOICE
+      if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
         console.log('📡 Server command: PLAY_REFEREE_VOICE');
         const { audioData, mimeType } = data.payload;
 
@@ -366,7 +339,7 @@ export const AudioProvider = ({ children }) => {
     };
 
     // Đăng ký lắng nghe sự kiện điều khiển audio một lần duy nhất
-    console.log('📡 Registering audio control listener');
+    console.log('📡 Registering audio control listener for referee voice only');
     socketService.onAudioControl(handleAudioControl);
 
     // Cleanup

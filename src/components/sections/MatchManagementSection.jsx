@@ -44,7 +44,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   // Sử dụng AudioContext cho điều khiển audio
   const { audioEnabled, toggleAudioEnabled, currentAudio, isPlaying, playAudio, stopCurrentAudio } = useAudio();
 
-  // State cho các tùy chọn điều khiển UI
+  // State cho các tùy chọn đi��u khiển UI
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
@@ -98,34 +98,17 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
   }, [matchData.startTime, matchData.stadium, matchData.matchDate]);
 
-  // Lắng nghe currentView từ displaySettings để phát audio tương ứng
-  useEffect(() => {
+  // HÀM PHÁT AUDIO TRỰC TIẾP - ĐƯỢC GỌI KHI CLICK BUTTON
+  const playAudioForAction = (audioType) => {
     // Chỉ phát audio khi tab MatchManagement đang active
     if (!isActive || !audioEnabled) {
-      return; // Không phát audio nếu tab không active hoặc đã tắt
+      console.log('🔇 [MatchManagement] Audio disabled or tab inactive');
+      return;
     }
 
-    const currentView = displaySettings?.currentView;
-    if (!currentView) return;
-
-    console.log('🎵 [MatchManagement] View changed, playing audio for:', currentView);
-
-    // Phát audio tương ứng theo view
-    let audioFile = null;
-
-    if (['intro', 'halftime', 'poster'].includes(currentView)) {
-      audioFile = 'poster';
-    } else if (currentView === 'scoreboard_below') {
-      audioFile = 'rasan';
-    } else if (currentView?.startsWith('scoreboard')) {
-      audioFile = 'gialap';
-    }
-
-    if (audioFile) {
-      console.log('🎵 [MatchManagement] Playing audio:', audioFile, 'for view:', currentView);
-      playAudio(audioFile);
-    }
-  }, [displaySettings?.currentView, audioEnabled, playAudio, isActive]);
+    console.log('🎵 [MatchManagement] Playing audio for action:', audioType);
+    playAudio(audioType);
+  };
 
   // Dừng audio khi tab không active nữa
   useEffect(() => {
@@ -213,7 +196,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateScore(team, increment);
   };
 
-  // Hàm cập nhật thống kê
+  // Hàm cập nh��t thống kê
   const updateStat = (statKey, team, value) => {
     const newStats = {
       ...matchStats,
@@ -416,7 +399,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               console.log('🎵 [MatchManagement] Audio toggle clicked - current state:', currentState);
               console.log('🎵 [MatchManagement] Will toggle to:', !currentState);
               toggleAudioEnabled();
-              toast.info(!currentState ? '🔊 Đã gửi lệnh BẬT audio tĩnh' : '🔇 Đã gửi lệnh TẮT audio tĩnh');
+              toast.info(!currentState ? '🔊 Đã BẬT audio ở thiết bị này' : '🔇 Đã TẮT audio ở thiết bị này');
             }}
             title={audioEnabled ? "Tắt tất cả audio tĩnh" : "Bật tất cả audio tĩnh"}
           >
@@ -626,7 +609,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 logoA: teamAInfo.logo || matchData.teamA.logo,
                 logoB: teamBInfo.logo || matchData.teamB.logo
               });
-              toast.success('✅ Đã cập nhật thông tin trận đấu thành công!');
+              toast.success('✅ Đã cập nh��t thông tin trận đấu thành công!');
             }}
             className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
           >
@@ -750,7 +733,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 onUpdate={(team, value) => updatePossession(team, value)}
               />
 
-              {/* Tổng số cú sút */}
+              {/* T��ng số cú sút */}
               <EditableStatBar
                 label="Tổng số cú sút"
                 statKey="totalShots"
@@ -886,7 +869,10 @@ const MatchManagementSection = ({ isActive = true }) => {
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
             {/* Poster */}
             <button
-              onClick={() => setShowPosterModal(true)}
+              onClick={() => {
+                playAudioForAction('poster');
+                setShowPosterModal(true);
+              }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🎨</span>
@@ -923,8 +909,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                // console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
-                // console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
+                // Phát audio gialap cho đếm giờ
+                playAudioForAction('gialap');
                 toast.success('⏰ Đã bắt đầu timer từ 0:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -936,19 +922,20 @@ const MatchManagementSection = ({ isActive = true }) => {
             {/* Đếm 25' */}
             <button
               onClick={() => {
-                const timeString = "25:00";
-                // Set thời gian về 25:00 và bắt đầu đếm tiến từ server timer
+                const timeString = "20:00";
+                // Set thời gian về 25:00 và b��t đầu đếm ti��n từ server timer
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
+                // Phát audio gialap cho đếm giờ
+                playAudioForAction('gialap');
                 console.log('Đã áp dụng: Timer sẽ đếm từ:', timeString);
-                console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🕐</span>
-              <span className="text-xs font-bold text-center">ĐẾM 25'</span>
+              <span className="text-xs font-bold text-center">ĐẾM 20'</span>
             </button>
 
             {/* Đếm 30' */}
@@ -977,8 +964,9 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
+                // Phát audio gialap cho đếm giờ
+                playAudioForAction('gialap');
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
-                console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 35:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -994,6 +982,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
+                // Phát audio gialap cho đếm giờ
+                playAudioForAction('gialap');
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -1009,6 +999,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
+                // Phát audio gialap cho đếm giờ
+                playAudioForAction('gialap');
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 45:00!');
               }}
@@ -1023,6 +1015,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               onClick={() => {
                 updateView('intro');
                 setSelectedOption("gioi-thieu");
+                playAudioForAction('poster');
                 console.log('Chuyển sang giới thiệu');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -1036,6 +1029,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               onClick={() => {
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
+                playAudioForAction('gialap');
                 console.log('Chuyển sang scoreboard trên');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -1049,6 +1043,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               onClick={() => {
                 updateView('scoreboard_below');
                 setSelectedOption("ti-so-duoi");
+                playAudioForAction('rasan');
                 console.log('Chuyển sang scoreboard below');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -1063,6 +1058,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 console.log('Chuyển sang nghỉ giữa hiệp');
                 console.log('Current view before update:', matchData.status);
                 updateView('halftime');
+                playAudioForAction('poster');
                 console.log('Updated view to halftime');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -1122,6 +1118,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                     updateMatchTime(timeString, "Hiệp 1", "live");
                     updateView('scoreboard');
                     setSelectedOption("ti-so-tren");
+                    // Phát audio gialap cho đếm giờ
+                    playAudioForAction('gialap');
                     console.log('🕰️ Đã áp dụng thời gian tùy chỉnh:', timeString);
 
                     toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
