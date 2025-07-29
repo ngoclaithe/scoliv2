@@ -202,15 +202,11 @@ export const AudioProvider = ({ children }) => {
 
       if (data.command === 'ENABLE_AUDIO') {
         console.log('📡 Server command: ENABLE_AUDIO');
-        if (!state.audioEnabled) {
-          dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
-        }
+        dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
       } else if (data.command === 'DISABLE_AUDIO') {
         console.log('📡 Server command: DISABLE_AUDIO');
         stopCurrentAudio();
-        if (state.audioEnabled) {
-          dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
-        }
+        dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
       } else if (data.command === 'PLAY_AUDIO' && data.payload) {
         console.log('📡 Server command: PLAY_AUDIO', data.payload);
         const { audioFile } = data.payload;
@@ -221,7 +217,7 @@ export const AudioProvider = ({ children }) => {
       }
     };
 
-    // Đăng ký lắng nghe sự kiện điều khiển audio
+    // Đăng ký lắng nghe sự kiện điều khiển audio một lần duy nhất
     console.log('📡 Registering audio control listener');
     socketService.onAudioControl(handleAudioControl);
 
@@ -230,7 +226,7 @@ export const AudioProvider = ({ children }) => {
       console.log('📡 Unregistering audio control listener');
       socketService.off('audio_control', handleAudioControl);
     };
-  }, [state.audioEnabled]);
+  }, []); // Loại bỏ dependency để chỉ đăng ký một lần
 
   // Cleanup khi unmount
   useEffect(() => {
