@@ -159,19 +159,19 @@ const TeamLineupModal = ({
       }
     >
       <div className="space-y-4 sm:space-y-6">
-        {/* Team Selection */}
+        {/* Team Selection - Thu gọn header */}
         <div className="flex bg-gray-100 rounded-lg p-1 mb-2">
           <button
             onClick={() => setActiveTeam("home")}
-            className={`flex-1 py-2 px-2 rounded-md text-sm font-medium transition-all min-h-[2.5rem] ${
+            className={`flex-1 py-1.5 px-2 rounded-md text-sm font-medium transition-all min-h-[2rem] ${
               activeTeam === "home"
                 ? "bg-white text-blue-600 shadow-sm"
                 : "text-gray-600 hover:bg-gray-200"
             }`}
           >
             <div className="flex flex-col items-center">
-              <span className="text-lg mb-1">🏠</span>
-              <span className="text-xs sm:text-sm font-medium">
+              <span className="text-sm">🏠</span>
+              <span className="text-xs font-medium">
                 {matchData.homeTeam?.name || "Đội nhà"}
               </span>
               <span className="text-xs text-gray-500">({homeCount}/11)</span>
@@ -179,15 +179,15 @@ const TeamLineupModal = ({
           </button>
           <button
             onClick={() => setActiveTeam("away")}
-            className={`flex-1 py-2 px-2 rounded-md text-sm font-medium transition-all min-h-[2.5rem] ${
+            className={`flex-1 py-1.5 px-2 rounded-md text-sm font-medium transition-all min-h-[2rem] ${
               activeTeam === "away"
                 ? "bg-white text-red-600 shadow-sm"
                 : "text-gray-600 hover:bg-gray-200"
             }`}
           >
             <div className="flex flex-col items-center">
-              <span className="text-lg mb-1">✈️</span>
-              <span className="text-xs sm:text-sm font-medium">
+              <span className="text-sm">✈️</span>
+              <span className="text-xs font-medium">
                 {matchData.awayTeam?.name || "Đội khách"}
               </span>
               <span className="text-xs text-gray-500">({awayCount}/11)</span>
