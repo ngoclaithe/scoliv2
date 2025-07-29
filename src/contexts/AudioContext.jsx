@@ -233,6 +233,7 @@ export const AudioProvider = ({ children }) => {
     }
 
     dispatch({ type: audioActions.SET_PLAYING, payload: false });
+    dispatch({ type: audioActions.SET_REFEREE_VOICE_PLAYING, payload: false });
   }, []);
 
   // Play audio - đơn giản hóa
