@@ -137,13 +137,15 @@ const DisplayController = () => {
 
   // Reset server control flag khi audio enabled changes from server
   useEffect(() => {
-    console.log('🎮 Audio enabled changed:', audioEnabled);
-    // Nếu audio bị tắt, reset server control flag
+    console.log('🎮 [DisplayController] Audio enabled changed from server:', audioEnabled);
+    // Nếu audio bị tắt, reset server control flag và force stop audio
     if (!audioEnabled) {
+      console.log('🎮 [DisplayController] Audio disabled by server - cleaning up');
       audioControlledByServerRef.current = false;
       lastAudioPlayedRef.current = null;
+      forceStopAudio();
     }
-  }, [audioEnabled]);
+  }, [audioEnabled, forceStopAudio]);
 
   // Khởi tạo kết nối socket
   useEffect(() => {
