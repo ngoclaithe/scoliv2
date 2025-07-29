@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { useMatch } from "../../contexts/MatchContext";
 import { useAudio } from "../../contexts/AudioContext";
 import { Mic, MicOff } from "lucide-react";
-import MediaRecorder from "opus-media-recorder";
-import OpusRecorderUrl from "opus-media-recorder/OpusRecorder.umd.js";
 import socketService from "../../services/socketService";
 
 const CommentarySection = () => {
