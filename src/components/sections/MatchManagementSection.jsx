@@ -385,27 +385,32 @@ const MatchManagementSection = ({ isActive = true }) => {
 
         {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
         <div className="flex justify-center items-center mt-2 space-x-2">
-          {/* Audio Toggle Button */}
+          {/* Audio Pause/Play Button */}
           <Button
             variant="primary"
             size="sm"
             className={`px-2 py-1 ${
-              audioEnabled
+              isPlaying
                 ? "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
                 : "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700"
             } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
-              const currentState = audioEnabled;
-              console.log('🎵 [MatchManagement] Audio toggle clicked - current state:', currentState);
-              console.log('🎵 [MatchManagement] Will toggle to:', !currentState);
-              toggleAudioEnabled();
-              toast.info(!currentState ? '🔊 Đã BẬT audio ở thiết bị này' : '🔇 Đã TẮT audio ở thiết bị này');
+              console.log('🎵 [MatchManagement] Audio pause/play clicked - isPlaying:', isPlaying);
+              if (isPlaying) {
+                console.log('⏸️ [MatchManagement] Pausing current audio');
+                stopCurrentAudio(); // Dừng audio hiện tại
+                toast.info('⏸️ Đã tạm dừng audio');
+              } else {
+                console.log('▶️ [MatchManagement] No audio currently playing, toggling audio enabled state');
+                toggleAudioEnabled(); // Bật/tắt khả năng phát audio
+                toast.info(audioEnabled ? '🔇 Đã tắt audio tĩnh' : '🔊 Đã bật audio tĩnh');
+              }
             }}
-            title={audioEnabled ? "Tắt tất cả audio tĩnh" : "Bật tất cả audio tĩnh"}
+            title={isPlaying ? "Tạm dừng audio đang phát" : audioEnabled ? "Tắt audio tĩnh" : "Bật audio tĩnh"}
           >
-            <span className="mr-1">{audioEnabled ? "🔊" : "🔇"}</span>
-            <span className="hidden sm:inline">{audioEnabled ? "AUDIO" : "OFF"}</span>
-            <span className="sm:hidden">{audioEnabled ? "ON" : "OFF"}</span>
+            <span className="mr-1">{isPlaying ? "⏸️" : audioEnabled ? "🔊" : "🔇"}</span>
+            <span className="hidden sm:inline">{isPlaying ? "PAUSE" : audioEnabled ? "AUDIO" : "OFF"}</span>
+            <span className="sm:hidden">{isPlaying ? "⏸️" : audioEnabled ? "ON" : "OFF"}</span>
           </Button>
 
           <Button
