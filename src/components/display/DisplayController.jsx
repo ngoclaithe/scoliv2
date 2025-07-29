@@ -35,38 +35,15 @@ const DisplayController = () => {
   // Sử dụng useRef để lưu trữ previousView
   const prevViewRef = useRef();
 
-  // Xử lý phát audio theo view - đơn giản hóa
+  // Lắng nghe event audio_control từ backend để phát voice trọng tài
   useEffect(() => {
-    console.log('🎮 DisplayController audio effect:', {
-      currentView,
-      audioEnabled,
-      prevView: prevViewRef.current
-    });
+    console.log('🎮 [DisplayController] Registering audio_control listener for referee voice');
 
-    const viewChanged = prevViewRef.current !== currentView;
-    if (!viewChanged || !audioEnabled || !currentView) {
-      prevViewRef.current = currentView;
-      return;
-    }
+    // Chỉ lắng nghe audio_control events (không tự phát audio theo view nữa)
+    // Audio sẽ được phát từ MatchManagementSection và voice từ CommentarySection
 
     prevViewRef.current = currentView;
-
-    let audioFile = null;
-
-    // Xác định audio key dựa trên view hiện tại
-    if (['intro', 'halftime', 'poster'].includes(currentView)) {
-      audioFile = 'poster';
-    } else if (currentView === 'scoreboard_below') {
-      audioFile = 'rasan';
-    } else if (currentView?.startsWith('scoreboard')) {
-      audioFile = 'gialap';
-    }
-
-    if (audioFile) {
-      console.log('Playing audio for view change:', { audioFile, currentView });
-      playAudio(audioFile);
-    }
-  }, [currentView, audioEnabled, playAudio]);
+  }, [currentView]);
 
   // Effect để xử lý audio enabled changes
   useEffect(() => {
