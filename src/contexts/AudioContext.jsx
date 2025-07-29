@@ -29,6 +29,12 @@ const audioReducer = (state, action) => {
         audioEnabled: !state.audioEnabled,
         isPlaying: state.audioEnabled ? false : state.isPlaying, // Dừng audio nếu tắt
       };
+    case audioActions.SET_AUDIO_ENABLED:
+      return {
+        ...state,
+        audioEnabled: action.payload,
+        isPlaying: action.payload ? state.isPlaying : false, // Dừng audio nếu tắt
+      };
     case audioActions.SET_VOLUME:
       return {
         ...state,
@@ -202,7 +208,7 @@ export const AudioProvider = ({ children }) => {
       console.log('📡 Received audio_control from server:', data);
 
       if (data.command === 'ENABLE_AUDIO') {
-        console.log('���� Server command: ENABLE_AUDIO');
+        console.log('📡 Server command: ENABLE_AUDIO');
         dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
       } else if (data.command === 'DISABLE_AUDIO') {
         console.log('📡 Server command: DISABLE_AUDIO');
