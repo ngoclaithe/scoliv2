@@ -350,10 +350,22 @@ export const AudioProvider = ({ children }) => {
       } else if (data.command === 'STOP_AUDIO') {
         console.log('📡 Server command: STOP_AUDIO');
         stopCurrentAudio();
+      } else if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
+        console.log('📡 Server command: PLAY_REFEREE_VOICE');
+        const { audioData } = data.payload;
+
+        try {
+          // Chuyển audioData từ array về Uint8Array
+          const uint8Array = new Uint8Array(audioData);
+          const audioBlob = new Blob([uint8Array], { type: 'audio/ogg; codecs=opus' });
+          playRefereeVoice(audioBlob);
+        } catch (error) {
+          console.error('❌ Error processing referee voice data:', error);
+        }
       }
     };
 
-    // Đăng ký lắng nghe sự kiện điều khiển audio một lần duy nhất
+    // Đăng ký lắng nghe sự kiện điều khiển audio m��t lần duy nhất
     console.log('📡 Registering audio control listener');
     socketService.onAudioControl(handleAudioControl);
 
