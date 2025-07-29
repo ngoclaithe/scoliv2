@@ -49,8 +49,8 @@ const CommentarySection = ({ isActive = true }) => {
       if (continuousTimeoutRef.current) {
         clearTimeout(continuousTimeoutRef.current);
       }
-      if (realTimeIntervalRef.current) {
-        clearInterval(realTimeIntervalRef.current);
+      if (emitIntervalRef.current) {
+        clearInterval(emitIntervalRef.current);
       }
     };
   }, []);
