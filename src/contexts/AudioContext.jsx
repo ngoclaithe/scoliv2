@@ -435,7 +435,7 @@ export const AudioProvider = ({ children }) => {
     }
   }, [state.audioEnabled, stopCurrentAudio]);
 
-  // CHỈ XỬ LÝ REFEREE VOICE, LOẠI BỎ STATIC AUDIO CONTROL
+  // CHỈ XỬ LÝ REFEREE VOICE - ĐỢI SOCKET KẾT NỐI
   useEffect(() => {
     const handleAudioControl = (data) => {
       console.log('📡 [AudioContext] Received audio_control from server:', data);
@@ -456,14 +456,50 @@ export const AudioProvider = ({ children }) => {
       }
     };
 
-    // Đăng ký lắng nghe sự kiện điều khiển audio một lần duy nhất
-    console.log('📡 [AudioContext] Registering audio control listener for referee voice only');
-    socketService.onAudioControl(handleAudioControl);
+    // Kiểm tra socket connection trước khi đăng ký listener
+    const registerListener = () => {
+      const connectionStatus = socketService.getConnectionStatus();
 
-    // Cleanup
+      if (connectionStatus.isConnected && socketService.socket) {
+        console.log('📡 [AudioContext] Socket connected, registering audio control listener');
+        socketService.onAudioControl(handleAudioControl);
+        return true;
+      } else {
+        console.log('📡 [AudioContext] Socket not ready yet, will retry...');
+        return false;
+      }
+    };
+
+    // Thử đăng ký ngay lập tức
+    if (!registerListener()) {
+      // Nếu socket chưa sẵn sàng, đợi và thử lại
+      const retryInterval = setInterval(() => {
+        if (registerListener()) {
+          clearInterval(retryInterval);
+        }
+      }, 100); // Kiểm tra mỗi 100ms
+
+      // Cleanup interval nếu component unmount trước khi socket ready
+      const timeoutId = setTimeout(() => {
+        clearInterval(retryInterval);
+        console.log('⚠️ [AudioContext] Timeout waiting for socket connection');
+      }, 10000); // Timeout sau 10 giây
+
+      return () => {
+        clearInterval(retryInterval);
+        clearTimeout(timeoutId);
+        if (socketService.socket) {
+          socketService.off('audio_control', handleAudioControl);
+        }
+      };
+    }
+
+    // Cleanup nếu đã đăng ký thành công ngay lập tức
     return () => {
       console.log('📡 [AudioContext] Unregistering audio control listener');
-      socketService.off('audio_control', handleAudioControl);
+      if (socketService.socket) {
+        socketService.off('audio_control', handleAudioControl);
+      }
     };
   }, [playRefereeVoice]); // Thêm dependency để tránh stale closure
 
