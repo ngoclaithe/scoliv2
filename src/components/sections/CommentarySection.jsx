@@ -4,9 +4,9 @@ import { useAudio } from "../../contexts/AudioContext";
 import { Mic, MicOff } from "lucide-react";
 import socketService from "../../services/socketService";
 
-const CommentarySection = () => {
+const CommentarySection = ({ isActive = true }) => {
   const { matchData } = useMatch();
-  const { stopCurrentAudio } = useAudio();
+  const { stopCurrentAudio, stopRefereeVoice } = useAudio();
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const mediaRecorderRef = useRef(null);
@@ -48,6 +48,24 @@ const CommentarySection = () => {
       }
     };
   }, []);
+
+  // Dừng voice trọng tài khi tab không active nữa
+  useEffect(() => {
+    if (!isActive) {
+      console.log('🔇 [CommentarySection] Tab inactive, stopping referee voice');
+      stopRefereeVoice();
+
+      // Dừng ghi âm nếu đang ghi
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+        mediaRecorderRef.current.stop();
+        setIsRecording(false);
+      }
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+        streamRef.current = null;
+      }
+    }
+  }, [isActive, stopRefereeVoice]);
 
   const startRecording = async () => {
     if (!isSupported) {
