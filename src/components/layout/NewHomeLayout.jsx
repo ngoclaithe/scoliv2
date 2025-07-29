@@ -35,7 +35,7 @@ const NewHomeLayout = () => {
     },
   ];
 
-  // Hàm chuy��n tab
+  // Hàm chuyển tab
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
   };

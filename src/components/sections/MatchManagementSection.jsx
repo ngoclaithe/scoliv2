@@ -155,14 +155,12 @@ const MatchManagementSection = () => {
       if (response.success && response.data && response.data.length > 0) {
         const logo = response.data[0];
         setTeamBInfo(prev => ({ ...prev, logo: logo.url }));
-        toast.success(`✅ Đã ch��n logo ${logo.code_logo} cho Đội B!`);
         setLogoCodeB(""); // Clear input sau khi thành công
       } else {
         toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeB}"`);
       }
     } catch (error) {
-      console.error('Lỗi t��m kiếm logo B:', error);
-      toast.error('Lỗi khi tìm kiếm logo. Vui lòng thử l��i.');
+      console.error('Lỗi tìm kiếm logo B:', error);
     } finally {
       setIsSearchingLogoB(false);
     }
@@ -404,7 +402,7 @@ const MatchManagementSection = () => {
                 resumeTimer();
                 toast.info('▶️ Đã tiếp tục timer từ server');
               } else {
-                // Pause timer - sử d���ng updateMatchTime với status paused
+                // Pause timer - sử dụng updateMatchTime với status paused
                 updateMatchTime(matchData.matchTime, matchData.period, "paused");
                 toast.info('⏸️ Đã tạm dừng timer');
               }
@@ -569,7 +567,7 @@ const MatchManagementSection = () => {
                 // Cập nhật tên đội
                 updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
 
-              // Luôn cập nhật logo đ���i (kể cả logo mặc định hoặc logo mới)
+              // Luôn cập nhật logo đội (kể cả logo mặc định hoặc logo mới)
               updateTeamLogos(
                 teamAInfo.logo || matchData.teamA.logo || "",
                 teamBInfo.logo || matchData.teamB.logo || ""
@@ -591,7 +589,7 @@ const MatchManagementSection = () => {
                 logoA: teamAInfo.logo || matchData.teamA.logo,
                 logoB: teamBInfo.logo || matchData.teamB.logo
               });
-              toast.success('✅ Đã cập nhật thông tin trận đ��u thành công!');
+              toast.success('✅ Đã cập nhật thông tin trận đấu thành công!');
             }}
             className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
           >
@@ -715,7 +713,7 @@ const MatchManagementSection = () => {
                 onUpdate={(team, value) => updatePossession(team, value)}
               />
 
-              {/* Tổng số cú s��t */}
+              {/* Tổng số cú sút */}
               <EditableStatBar
                 label="Tổng số cú sút"
                 statKey="totalShots"
@@ -726,7 +724,7 @@ const MatchManagementSection = () => {
 
               {/* Sút trúng đích */}
               <EditableStatBar
-                label="Sút trúng đ��ch"
+                label="Sút trúng đích"
                 statKey="shotsOnTarget"
                 team1Value={matchStats.shotsOnTarget.team1}
                 team2Value={matchStats.shotsOnTarget.team2}
@@ -875,7 +873,7 @@ const MatchManagementSection = () => {
               onClick={() => setShowPenaltyModal(true)}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-gray-600 to-gray-800 hover:from-gray-700 hover:to-gray-900 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">��</span>
+              <span className="text-sm mr-1">⚽</span>
               <span className="text-xs font-bold text-center">PENALTY</span>
             </button>
 
@@ -907,9 +905,8 @@ const MatchManagementSection = () => {
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                console.log('��️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                console.log('Đã áp dụng: Timer sẽ đếm từ:', timeString);
                 console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
-                toast.success('⏰ Đã bắt đầu timer từ 25:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -921,14 +918,12 @@ const MatchManagementSection = () => {
             <button
               onClick={() => {
                 const timeString = "30:00";
-                // Set thời gian về 30:00 và bắt đầu đếm ti���n từ server timer
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
                 console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
-                toast.success('⏰ Đã bắt đầu timer từ 30:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -942,7 +937,7 @@ const MatchManagementSection = () => {
                 const timeString = "35:00";
                 // Set thời gian về 35:00 và bắt đầu đếm tiến từ server timer
                 updateMatchTime(timeString, "Hiệp 1", "live");
-                // Chuy��n sang tỉ số trên
+                // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
@@ -981,7 +976,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
             </button>
 
-            {/* Tỉ số d��ới */}
+            {/* Tỉ số dứới */}
             <button
               onClick={() => {
                 updateView('scoreboard_below');
@@ -1002,7 +997,6 @@ const MatchManagementSection = () => {
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
-                toast.success('⏰ Đã bắt đầu timer t��� 40:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -1026,7 +1020,7 @@ const MatchManagementSection = () => {
               <span className="text-xs font-bold text-center">ĐẾM 45'</span>
             </button>
 
-            {/* Nghỉ giữa hi��p */}
+            {/* Nghỉ giữa hiệp */}
             <button
               onClick={() => {
                 console.log('Chuyển sang nghỉ giữa hiệp');
@@ -1099,7 +1093,7 @@ const MatchManagementSection = () => {
                   }
                 }}
                 disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
-                title="��p dụng"
+                title="Áp dụng"
               >
                 OK
               </button>
@@ -1239,7 +1233,7 @@ const MatchManagementSection = () => {
 
             if (poster) {
               const posterType = poster.id || poster.name;
-              console.log("���� [MatchManagementSection] About to call updatePoster with:", posterType);
+              console.log("[MatchManagementSection] About to call updatePoster with:", posterType);
               updatePoster(posterType);
 
               console.log("🎨 [MatchManagementSection] About to call updateView with: poster");
@@ -1293,7 +1287,7 @@ const MatchManagementSection = () => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đ��u sẽ bắt đầu chạy từ thời điểm này
+              Trận đấu sẽ bắt đầu chạy từ thời điểm này
             </p>
           </div>
 

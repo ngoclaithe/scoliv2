@@ -52,7 +52,7 @@ Theo dõi console log với các pattern:
 
 ### Test 2: Bật audio  
 1. Ở Home, ấn nút Audio để bật (nút chuyển từ 🔇 thành 🔊)
-2. Ở Display, chuyển sang view kh��c có audio
+2. Ở Display, chuyển sang view khác có audio
 3. **Kết quả mong đợi**: Audio ở Display phát bình thường
 
 ### Test 3: Multiple displays

@@ -117,7 +117,7 @@ export const MatchProvider = ({ children }) => {
     };
   }, [matchCode, isAuthenticated]);
 
-  // Hàm helper để chuy���n đổi thời gian
+  // Hàm helper để chuyển đổi thời gian
   const parseTimeToSeconds = (timeString) => {
     if (!timeString || typeof timeString !== 'string') return 0;
     const [minutes, seconds] = timeString.split(':').map(Number);
@@ -411,7 +411,7 @@ export const MatchProvider = ({ children }) => {
   const updateScore = useCallback((team, increment, additionalData = {}) => {
     const newMatchData = { ...matchData };
 
-    // Cập nhật tỉ số nếu c�� increment
+    // Cập nhật tỉ số nếu có increment
     if (increment !== 0) {
       newMatchData[team].score = Math.max(0, newMatchData[team].score + increment);
     }

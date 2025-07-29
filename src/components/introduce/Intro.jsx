@@ -12,7 +12,7 @@ const Intro = () => {
     // Kết hợp dữ liệu từ context với dữ liệu mặc định
     const matchData = {
         matchTitle: contextMatchData.tournament || "GIẢI BÓNG ĐÁ PHONG TRÀO",
-        stadium: contextMatchData.stadium || "S��n vận động Thiên Trường",
+        stadium: contextMatchData.stadium || "Sân vận động Thiên Trường",
         time: contextMatchData.startTime || contextMatchData.time || "19:30",
         date: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
         team1: contextMatchData.teamA.name || "ĐỘI A",

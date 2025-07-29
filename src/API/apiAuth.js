@@ -48,7 +48,7 @@ const AuthAPI = {
   },
 
   /**
-   * Đăng nh��p
+   * Đăng nhập
    * @param {Object} credentials - Thông tin đăng nhập
    * @param {string} credentials.email - Email
    * @param {string} credentials.password - Mật khẩu

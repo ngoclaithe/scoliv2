@@ -163,7 +163,7 @@ const AccessCodeAPI = {
   },
 
   /**
-   * Cập nhật thông tin tr��n đấu của mã truy cập
+   * Cập nhật thông tin trận đấu của mã truy cập
    * @param {string} code - Mã truy cập
    * @param {Object} matchData - Thông tin trận đấu
    * @param {string} [matchData.teamAName] - Tên đội A

@@ -114,7 +114,7 @@ const HalftimeBreakPoster = () => {
                             <div className="font-semibold">{matchData.time} - {matchData.date}</div>
                             {matchData.stadium && matchData.stadium !== 'san' && (
                                 <div className={`text-gray-200 ${isMobile ? 'text-base mt-2' : 'mt-1'}`}>
-                                    �� {matchData.stadium}
+                                    {matchData.stadium}
                                 </div>
                             )}
                         </div>

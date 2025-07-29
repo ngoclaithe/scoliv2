@@ -63,7 +63,7 @@ const DisplayController = () => {
     }
 
     if (audioFile) {
-      console.log('�� Playing audio for view change:', { audioFile, currentView });
+      console.log('Playing audio for view change:', { audioFile, currentView });
       playAudio(audioFile);
     }
   }, [currentView, audioEnabled, playAudio]);
