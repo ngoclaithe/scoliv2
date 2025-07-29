@@ -197,7 +197,7 @@ const CommentarySection = () => {
             }
             ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}
             text-white shadow-lg hover:shadow-xl
-            ${(!isSupported || !isOpusSupported) ? 'bg-gray-400 cursor-not-allowed' : ''}
+            ${!isSupported ? 'bg-gray-400 cursor-not-allowed' : ''}
           `}
         >
           {isProcessing ? (
