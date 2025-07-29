@@ -377,9 +377,11 @@ const MatchManagementSection = () => {
                 : "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700"
             } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
-              console.log('🎵 [MatchManagement] Audio toggle clicked - current state:', audioEnabled);
+              const currentState = audioEnabled;
+              console.log('🎵 [MatchManagement] Audio toggle clicked - current state:', currentState);
+              console.log('🎵 [MatchManagement] Will toggle to:', !currentState);
               toggleAudioEnabled();
-              toast.info(audioEnabled ? '🔇 Đã gửi lệnh TẮT audio tĩnh' : '🔊 Đã gửi lệnh BẬT audio tĩnh');
+              toast.info(!currentState ? '🔊 Đã gửi lệnh BẬT audio tĩnh' : '🔇 Đã gửi lệnh TẮT audio tĩnh');
             }}
             title={audioEnabled ? "Tắt tất cả audio tĩnh" : "Bật tất cả audio tĩnh"}
           >
@@ -724,7 +726,7 @@ const MatchManagementSection = () => {
 
               {/* Sút trúng đích */}
               <EditableStatBar
-                label="Sút trúng đích"
+                label="Sút trúng đ��ch"
                 statKey="shotsOnTarget"
                 team1Value={matchStats.shotsOnTarget.team1}
                 team2Value={matchStats.shotsOnTarget.team2}
