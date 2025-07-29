@@ -13,6 +13,7 @@ const initialState = {
 // Audio Actions - rút gọn
 const audioActions = {
   TOGGLE_AUDIO_ENABLED: 'TOGGLE_AUDIO_ENABLED',
+  SET_AUDIO_ENABLED: 'SET_AUDIO_ENABLED',
   SET_VOLUME: 'SET_VOLUME',
   TOGGLE_MUTE: 'TOGGLE_MUTE',
   SET_PLAYING: 'SET_PLAYING',
@@ -27,6 +28,12 @@ const audioReducer = (state, action) => {
         ...state,
         audioEnabled: !state.audioEnabled,
         isPlaying: state.audioEnabled ? false : state.isPlaying, // Dừng audio nếu tắt
+      };
+    case audioActions.SET_AUDIO_ENABLED:
+      return {
+        ...state,
+        audioEnabled: action.payload,
+        isPlaying: action.payload ? state.isPlaying : false, // Dừng audio nếu tắt
       };
     case audioActions.SET_VOLUME:
       return {
@@ -202,15 +209,11 @@ export const AudioProvider = ({ children }) => {
 
       if (data.command === 'ENABLE_AUDIO') {
         console.log('📡 Server command: ENABLE_AUDIO');
-        if (!state.audioEnabled) {
-          dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
-        }
+        dispatch({ type: audioActions.SET_AUDIO_ENABLED, payload: true });
       } else if (data.command === 'DISABLE_AUDIO') {
         console.log('📡 Server command: DISABLE_AUDIO');
         stopCurrentAudio();
-        if (state.audioEnabled) {
-          dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
-        }
+        dispatch({ type: audioActions.SET_AUDIO_ENABLED, payload: false });
       } else if (data.command === 'PLAY_AUDIO' && data.payload) {
         console.log('📡 Server command: PLAY_AUDIO', data.payload);
         const { audioFile } = data.payload;
@@ -221,7 +224,7 @@ export const AudioProvider = ({ children }) => {
       }
     };
 
-    // Đăng ký lắng nghe sự kiện điều khiển audio
+    // Đăng ký lắng nghe sự kiện điều khiển audio một lần duy nhất
     console.log('📡 Registering audio control listener');
     socketService.onAudioControl(handleAudioControl);
 
@@ -230,7 +233,7 @@ export const AudioProvider = ({ children }) => {
       console.log('📡 Unregistering audio control listener');
       socketService.off('audio_control', handleAudioControl);
     };
-  }, [state.audioEnabled]);
+  }, []); // Loại bỏ dependency để chỉ đăng ký một lần
 
   // Cleanup khi unmount
   useEffect(() => {
