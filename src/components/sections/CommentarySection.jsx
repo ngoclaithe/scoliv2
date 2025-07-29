@@ -186,7 +186,6 @@ const CommentarySection = ({ isActive = true }) => {
     if (audioChunksRef.current.length === 0) {
       console.log('⚠️ No audio chunks to process');
       setIsProcessing(false);
-      scheduleNextContinuousChunk();
       return;
     }
 
