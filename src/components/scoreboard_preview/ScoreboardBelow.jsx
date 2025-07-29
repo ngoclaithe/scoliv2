@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
-import { useAudio } from '../../contexts/AudioContext';
+// Audio moved to audioUtils
 import ScoreboardBelowTemplate1 from './ScoreboardBelowTemplate1';
 import ScoreboardBelowTemplate2 from './ScoreboardBelowTemplate2';
 

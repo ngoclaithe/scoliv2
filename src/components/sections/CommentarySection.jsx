@@ -1,12 +1,41 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useMatch } from "../../contexts/MatchContext";
-import { useAudio } from "../../contexts/AudioContext";
+
+import audioUtils from '../../utils/audioUtils';
 import { Mic, MicOff } from "lucide-react";
 import socketService from "../../services/socketService";
 
 const CommentarySection = ({ isActive = true }) => {
-  const { matchData } = useMatch();
-  const { stopCurrentAudio, stopRefereeVoice } = useAudio();
+  // Socket audio listeners setup - CommentarySection cần nhận referee voice từ server
+  useEffect(() => {
+    const handleAudioControl = (data) => {
+      console.log('🎙️ [CommentarySection] Received audio_control:', data);
+
+      if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
+        const { audioData, mimeType } = data.payload;
+        try {
+          const uint8Array = new Uint8Array(audioData);
+          const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
+          audioUtils.playRefereeVoice(audioBlob);
+        } catch (error) {
+          console.error('❌ Error processing referee voice:', error);
+        }
+      }
+    };
+
+    // Setup socket listeners if connected
+    if (socketService.socket) {
+      socketService.on('audio_control', handleAudioControl);
+      socketService.on('audio_control_broadcast', handleAudioControl);
+    }
+
+    return () => {
+      if (socketService.socket) {
+        socketService.off('audio_control', handleAudioControl);
+        socketService.off('audio_control_broadcast', handleAudioControl);
+      }
+    };
+  }, []);
+
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const mediaRecorderRef = useRef(null);
@@ -52,8 +81,8 @@ const CommentarySection = ({ isActive = true }) => {
   // Dừng voice trọng tài khi tab không active nữa
   useEffect(() => {
     if (!isActive) {
-      console.log('🔇 [CommentarySection] Tab inactive, stopping referee voice');
-      stopRefereeVoice();
+      console.log('🔇 [CommentarySection] Tab inactive, stopping all audio');
+      audioUtils.stopAllAudio();
 
       // Dừng ghi âm nếu đang ghi
       if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
@@ -65,7 +94,7 @@ const CommentarySection = ({ isActive = true }) => {
         streamRef.current = null;
       }
     }
-  }, [isActive, stopRefereeVoice]);
+  }, [isActive]);
 
   const startRecording = async () => {
     if (!isSupported) {
@@ -81,7 +110,7 @@ const CommentarySection = ({ isActive = true }) => {
 
     try {
       // Dừng tất cả audio đang phát trước khi bắt đầu ghi
-      stopCurrentAudio();
+      audioUtils.stopAllAudio();
 
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {

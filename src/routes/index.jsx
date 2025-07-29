@@ -3,8 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '../contexts/AuthContext';
 import { MatchProvider } from '../contexts/MatchContext';
 import { PublicMatchProvider } from '../contexts/PublicMatchContext';
-import { AudioProvider } from '../contexts/AudioContext';
-import { ToastContainer } from 'react-toastify';
+
 import 'react-toastify/dist/ReactToastify.css';
 import App from '../App';
 import DisplayController from '../components/display/DisplayController';
@@ -16,21 +15,17 @@ const AppRoutes = () => {
         {/* Authenticated routes */}
         <Route path="/" element={
           <AuthProvider>
-            <AudioProvider>
-              <MatchProvider>
-                <App />
-              </MatchProvider>
-            </AudioProvider>
+            <MatchProvider>
+              <App />
+            </MatchProvider>
           </AuthProvider>
         } />
 
         {/* Public dynamic routes for access codes - không cần authentication */}
         <Route path="/:accessCode" element={
-          <AudioProvider>
-            <PublicMatchProvider>
-              <DisplayController />
-            </PublicMatchProvider>
-          </AudioProvider>
+          <PublicMatchProvider>
+            <DisplayController />
+          </PublicMatchProvider>
         } />
       </Routes>
 

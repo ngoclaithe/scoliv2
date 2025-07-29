@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import ScoreDisplay from "../scoreboard/ScoreDisplay";
@@ -7,9 +7,9 @@ import TeamLineupModal from "../lineup/TeamLineupModal";
 import Modal from "../common/Modal";
 import SimplePenaltyModal from "../common/SimplePenaltyModal";
 import { useMatch } from "../../contexts/MatchContext";
-import { useAudio } from "../../contexts/AudioContext";
 import { toast } from 'react-toastify';
-import LogoSearch from '../logo/LogoSearch';
+import audioUtils from '../../utils/audioUtils';
+
 import LogoAPI from '../../API/apiLogo';
 import MatchTimeDisplay from './MatchTimeDisplay';
 
@@ -22,9 +22,9 @@ const MatchManagementSection = ({ isActive = true }) => {
     matchStats,
     futsalErrors,
     penaltyData,
-    marqueeData,
+
     displaySettings,
-    socketConnected,
+
     updateScore,
     updateMatchInfo,
     updateMatchTime,
@@ -35,25 +35,17 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateTeamLogos,
     updateFutsalErrors,
     updatePenalty,
-    updateMarquee,
+
     updateView,
     resumeTimer,
 
   } = useMatch();
 
-  // Sử dụng AudioContext cho điều khiển audio
-  const {
-    audioEnabled,
-    toggleAudioEnabled,
-    currentAudio,
-    isPlaying,
-    isPaused,
-    currentAudioFile,
-    playAudio,
-    stopCurrentAudio,
-    pauseCurrentAudio,
-    resumeCurrentAudio
-  } = useAudio();
+  // Audio state management
+  const [audioEnabled, setAudioEnabled] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [currentAudioFile, setCurrentAudioFile] = useState(null);
 
   // State cho các tùy chọn đi��u khiển UI
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
@@ -64,11 +56,8 @@ const MatchManagementSection = ({ isActive = true }) => {
   // State cho custom time
   const [customTime, setCustomTime] = useState("");
   const [customSeconds, setCustomSeconds] = useState("");
-  const [quickCustomTime, setQuickCustomTime] = useState(""); // Cho input trực tiếp
   const [quickCustomMinutes, setQuickCustomMinutes] = useState(""); // Phút
-  const [quickCustomSeconds, setQuickCustomSeconds] = useState(""); // Giây
   const [tickerColor, setTickerColor] = useState("#ffffff");
-  const [tickerFontSize, setTickerFontSize] = useState(16);
 
   // State cho thông tin đội và trận đấu
   const [teamAInfo, setTeamAInfo] = useState({
@@ -109,6 +98,9 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
   }, [matchData.startTime, matchData.stadium, matchData.matchDate]);
 
+  // MatchManagementSection chỉ cần audio LOCAL, không cần socket audio listeners
+  // Socket audio listeners chỉ cần trong CommentarySection
+
   // HÀM PHÁT AUDIO TRỰC TIẾP - ĐƯỢC GỌI KHI CLICK BUTTON
   const playAudioForAction = (audioType) => {
     // Chỉ phát audio khi tab MatchManagement đang active
@@ -118,7 +110,43 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
 
     console.log('🎵 [MatchManagement] Playing audio for action:', audioType);
-    playAudio(audioType);
+    audioUtils.playAudio(audioType);
+    setIsPlaying(true);
+    setCurrentAudioFile(audioType);
+  };
+
+  // Pause/resume audio functions
+  const pauseCurrentAudio = () => {
+    console.log('⏸️ [MatchManagement] Pausing audio');
+    audioUtils.stopAllAudio(); // For simplicity, stop instead of pause
+    setIsPlaying(false);
+    setIsPaused(true);
+  };
+
+  const resumeCurrentAudio = () => {
+    if (currentAudioFile) {
+      console.log('▶️ [MatchManagement] Resuming audio');
+      audioUtils.playAudio(currentAudioFile);
+      setIsPlaying(true);
+      setIsPaused(false);
+    }
+  };
+
+  const stopCurrentAudio = () => {
+    console.log('🔇 [MatchManagement] Stopping audio');
+    audioUtils.stopAllAudio();
+    setIsPlaying(false);
+    setIsPaused(false);
+    setCurrentAudioFile(null);
+  };
+
+  const toggleAudioEnabled = () => {
+    const newState = !audioEnabled;
+    setAudioEnabled(newState);
+    audioUtils.setAudioEnabled(newState);
+    if (!newState) {
+      stopCurrentAudio();
+    }
   };
 
   // Pause audio khi tab không active nữa (thay vì stop hoàn toàn)
@@ -127,7 +155,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       console.log('⏸️ [MatchManagement] Tab inactive, pausing audio');
       pauseCurrentAudio();
     }
-  }, [isActive, isPlaying, pauseCurrentAudio]);
+  }, [isActive, isPlaying]);
 
   // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
@@ -394,7 +422,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           </div>
         </div>
 
-        {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
+        {/* Nút T��M DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
         <div className="flex justify-center items-center mt-2 space-x-2">
           {/* Audio Pause/Play Button */}
           <Button
