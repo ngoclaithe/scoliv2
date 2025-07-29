@@ -398,42 +398,21 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             {item.type === 'banner' ? '🖼️' : '📁'}
           </div>
           
-          {/* Logo preview with 3D rotation effect */}
+          {/* Logo preview */}
           <div className="flex justify-center mb-2">
-            <div className="relative w-12 h-12" style={{ perspective: '100px' }}>
-              <div
-                className={`w-full h-full ${getShapeClass()} border-2 border-green-400 overflow-hidden shadow-lg relative animate-spin`}
-                style={{
-                  animationDuration: '3s',
-                  transformStyle: 'preserve-3d'
-                }}
-              >
+            <div className="relative w-16 h-16">
+              <div className={`w-full h-full ${getShapeClass()} border-2 border-green-400 overflow-hidden shadow-lg relative`}>
                 {item.url ? (
                   <img
                     src={item.url}
                     alt={item.code}
                     className="w-full h-full object-contain bg-white"
-                    style={{
-                      backfaceVisibility: 'hidden'
-                    }}
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-100 flex items-center justify-center">
                     <span className="text-gray-400 text-xs">No image</span>
                   </div>
                 )}
-                {/* Back side of the image */}
-                <div 
-                  className="absolute inset-0 bg-gradient-to-br from-green-400 to-blue-400 rounded-full flex items-center justify-center"
-                  style={{
-                    transform: 'rotateY(180deg)',
-                    backfaceVisibility: 'hidden'
-                  }}
-                >
-                  <span className="text-white text-xs font-bold">
-                    {item.type === 'banner' ? '🖼️' : '📁'}
-                  </span>
-                </div>
               </div>
             </div>
           </div>
