@@ -121,8 +121,9 @@ const CommentarySection = () => {
 
   const processRecording = async () => {
     if (audioChunksRef.current.length > 0) {
+      const mimeType = mediaRecorderRef.current?.mimeType || getSupportedMimeType() || 'audio/webm';
       const audioBlob = new Blob(audioChunksRef.current, {
-        type: 'audio/ogg; codecs=opus'
+        type: mimeType
       });
 
       console.log('🎙️ Voice recorded:', audioBlob.size, 'bytes');
