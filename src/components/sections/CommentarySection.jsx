@@ -193,8 +193,8 @@ const CommentarySection = ({ isActive = true }) => {
       }
     };
 
-    // Thiết lập timeslice để FORCE tạo data events
-    const timeslice = isContinuousMode ? 300 : undefined; // 300ms cho continuous
+    // Thiết lập timeslice để FORCE tạo data events - tăng lên để giảm tải
+    const timeslice = isContinuousMode ? 1000 : undefined; // 1000ms cho continuous
     console.log('🎙️ Starting MediaRecorder - isContinuousMode:', isContinuousMode, 'continuousRecording:', continuousRecording, 'timeslice:', timeslice);
     mediaRecorder.start(timeslice);
     setIsRecording(true);
