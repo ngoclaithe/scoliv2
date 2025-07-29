@@ -461,6 +461,7 @@ const CommentarySection = ({ isActive = true }) => {
         <div className="text-xs text-gray-400 mt-4 p-2 bg-gray-100 rounded">
           <p>isContinuousMode: {isContinuousMode.toString()}</p>
           <p>continuousRecording: {continuousRecording.toString()}</p>
+          <p>isRealTimeTranmission: {isRealTimeTranmission.toString()}</p>
           <p>isRecording: {isRecording.toString()}</p>
           <p>isProcessing: {isProcessing.toString()}</p>
         </div>
