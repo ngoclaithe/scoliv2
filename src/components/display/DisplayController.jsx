@@ -27,11 +27,10 @@ const DisplayController = () => {
   } = usePublicMatch();
 
   // Sử dụng AudioContext - đơn giản hóa
-  const { playAudio, audioEnabled, stopCurrentAudio, toggleAudioEnabled } = useAudio();
+  const { playAudio, audioEnabled, stopCurrentAudio } = useAudio();
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
-  const [showAudioControl, setShowAudioControl] = useState(false);
 
   // Sử dụng useRef để lưu trữ previousView
   const prevViewRef = useRef();
@@ -64,7 +63,7 @@ const DisplayController = () => {
     }
 
     if (audioFile) {
-      console.log('🎮 Playing audio for view change:', { audioFile, currentView });
+      console.log('�� Playing audio for view change:', { audioFile, currentView });
       playAudio(audioFile);
     }
   }, [currentView, audioEnabled, playAudio]);
