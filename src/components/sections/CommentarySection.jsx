@@ -323,16 +323,52 @@ const CommentarySection = ({ isActive = true }) => {
 
   return (
     <div className="p-4 space-y-4">
+      {/* Mode Toggle */}
+      <div className="flex justify-center space-x-2 mb-4">
+        <button
+          onClick={() => {
+            if (continuousRecording) stopContinuousRecording();
+            if (isRecording) stopRecording();
+            setIsContinuousMode(false);
+          }}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            !isContinuousMode
+              ? 'bg-blue-500 text-white'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
+          Ấn để nói
+        </button>
+        <button
+          onClick={() => {
+            if (continuousRecording) stopContinuousRecording();
+            if (isRecording) stopRecording();
+            setIsContinuousMode(true);
+          }}
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+            isContinuousMode
+              ? 'bg-green-500 text-white'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          }`}
+        >
+          Nói liên tục
+        </button>
+      </div>
+
       {/* Voice Recording Button */}
       <div className="flex justify-center">
         <button
-          onClick={toggleRecording}
+          onClick={isContinuousMode ? toggleContinuousMode : toggleRecording}
           disabled={isProcessing || !isSupported}
           className={`
             w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 transform
-            ${isRecording 
-              ? 'bg-red-500 hover:bg-red-600 animate-pulse scale-110' 
-              : 'bg-blue-500 hover:bg-blue-600'
+            ${continuousRecording
+              ? 'bg-green-500 hover:bg-green-600 animate-pulse scale-110'
+              : isRecording
+                ? 'bg-red-500 hover:bg-red-600 animate-pulse scale-110'
+                : isContinuousMode
+                  ? 'bg-green-500 hover:bg-green-600'
+                  : 'bg-blue-500 hover:bg-blue-600'
             }
             ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}
             text-white shadow-lg hover:shadow-xl
@@ -341,6 +377,8 @@ const CommentarySection = ({ isActive = true }) => {
         >
           {isProcessing ? (
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+          ) : isContinuousMode ? (
+            continuousRecording ? <Pause size={32} /> : <Play size={32} />
           ) : isRecording ? (
             <MicOff size={32} />
           ) : (
@@ -354,15 +392,29 @@ const CommentarySection = ({ isActive = true }) => {
         {isProcessing && (
           <p className="text-blue-600 font-medium">Đang xử lý...</p>
         )}
-        {isRecording && !isProcessing && (
+        {continuousRecording && (
+          <p className="text-green-600 font-medium animate-pulse">🟢 Đang bình luận liên tục...</p>
+        )}
+        {isRecording && !continuousRecording && !isProcessing && (
           <p className="text-red-600 font-medium animate-pulse">● Đang ghi âm...</p>
         )}
-        {!isRecording && !isProcessing && (
-          <p className="text-gray-600">Ấn mic để bắt đầu bình luận</p>
+        {!isRecording && !isProcessing && !continuousRecording && (
+          <p className="text-gray-600">
+            {isContinuousMode ? 'Ấn Play để bắt đầu bình luận liên tục' : 'Ấn mic để bắt đầu bình luận'}
+          </p>
         )}
         {!isSupported && (
           <p className="text-red-600">Trình duyệt không hỗ trợ ghi âm</p>
         )}
+
+        {/* Mode Description */}
+        <div className="mt-2 text-xs text-gray-500">
+          {isContinuousMode ? (
+            <p>Chế độ nói liên tục: Audio được gửi mỗi 3 giây tự động</p>
+          ) : (
+            <p>Chế độ ấn để nói: Ấn một lần để bắt đầu, ấn lại để dừng và gửi</p>
+          )}
+        </div>
       </div>
     </div>
   );
