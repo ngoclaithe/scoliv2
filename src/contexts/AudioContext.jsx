@@ -250,6 +250,12 @@ export const AudioProvider = ({ children }) => {
       return;
     }
 
+    // Không phát audio khác nếu voice trọng tài đang phát
+    if (state.isRefereeVoicePlaying) {
+      console.log('🎙️ Referee voice is playing, skipping regular audio');
+      return;
+    }
+
     const audioFile = audioFiles[audioKey];
     if (!audioFile) {
       console.error('❌ Audio file not found:', audioKey);
