@@ -237,12 +237,14 @@ class SocketService {
 
   // Gửi lệnh điều khiển audio đến tất cả client trong room
   sendAudioControl(controlData) {
-    return this.emit('audio_control_broadcast', {
+    const payload = {
       ...controlData,
       senderType: this.clientType,
       timestamp: Date.now(),
       target: controlData.target || 'display', // Ưu tiên target được truyền vào, mặc định là 'display'
-    });
+    };
+    console.log('📡 [SocketService] Sending audio control:', payload);
+    return this.emit('audio_control_broadcast', payload);
   }
 
   // Broadcast audio sync để đồng bộ trạng thái audio
@@ -426,7 +428,7 @@ class SocketService {
     });
   }
 
-  // Lắng nghe các sự ki��n điều khiển audio cụ thể
+  // Lắng nghe các sự kiện điều khiển audio cụ thể
   onAudioControl(callback) {
     this.on('audio_control', callback);
   }
