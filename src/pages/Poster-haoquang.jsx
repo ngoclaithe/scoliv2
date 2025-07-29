@@ -35,7 +35,7 @@ export default function MatchIntroduction() {
     }
   };
 
-  const hasPartners = partners.length > 0;
+
 
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
