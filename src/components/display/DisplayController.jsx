@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { useAudio } from '../../contexts/AudioContext';
 import PublicAPI from '../../API/apiPublic';
-import MediaSourceAudio from '../audio/MediaSourceAudio';
 import socketService from '../../services/socketService';
 
 // Import các component hiển thị
@@ -24,52 +23,34 @@ const DisplayController = () => {
     initializeSocket,
     displaySettings,
     socketConnected,
-    currentView // Thêm state để điều khiển view hiện tại
+    currentView
   } = usePublicMatch();
 
-  // Sử dụng AudioContext
-  const { playAudio, audioEnabled, stopCurrentAudio, forceStopAudio } = useAudio();
+  // Sử dụng AudioContext - đơn giản hóa
+  const { playAudio, audioEnabled, stopCurrentAudio, toggleAudioEnabled } = useAudio();
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
-  const [currentAudioFile, setCurrentAudioFile] = useState(null);
+  const [showAudioControl, setShowAudioControl] = useState(false);
 
-  // Sử dụng useRef để lưu trữ previousView và prevent duplicate calls
+  // Sử dụng useRef để lưu trữ previousView
   const prevViewRef = useRef();
-  const lastAudioPlayedRef = useRef();
 
-  // Xử lý phát audio theo view
+  // Xử lý phát audio theo view - đơn giản hóa
   useEffect(() => {
-    console.log('🎮 DisplayController audio effect triggered:', {
+    console.log('🎮 DisplayController audio effect:', {
       currentView,
       audioEnabled,
-      prevView: prevViewRef.current,
-      prevAudioEnabled: prevViewRef.audioEnabled
+      prevView: prevViewRef.current
     });
 
-    // Chỉ xử lý nếu view thay đổi và audio được bật
     const viewChanged = prevViewRef.current !== currentView;
-    const audioEnabledChanged = prevViewRef.audioEnabled !== audioEnabled;
-
-    if (!viewChanged && !audioEnabledChanged) {
-      console.log('🎮 No view or audio state change, skipping');
+    if (!viewChanged || !audioEnabled || !currentView) {
+      prevViewRef.current = currentView;
       return;
     }
 
-    // Cập nhật previous values
     prevViewRef.current = currentView;
-    prevViewRef.audioEnabled = audioEnabled;
-
-    if (!audioEnabled) {
-      console.log('🎮 Audio disabled, force stopping current audio');
-      forceStopAudio();
-      return;
-    }
-
-    if (!currentView) {
-      console.log('🎮 No current view, skipping audio');
-      return;
-    }
 
     let audioFile = null;
 
@@ -82,40 +63,20 @@ const DisplayController = () => {
       audioFile = 'gialap';
     }
 
-    // Chỉ phát nếu có audio file và khác với lần phát trước
     if (audioFile) {
-      const audioKey = `${audioFile}-${currentView}`;
-      if (lastAudioPlayedRef.current !== audioKey) {
-        console.log('🎮 Playing audio for view change:', { audioFile, currentView });
-        playAudio(audioFile, 'DisplayController');
-        lastAudioPlayedRef.current = audioKey;
-      } else {
-        console.log('🎮 Same audio already played, skipping:', audioKey);
-      }
+      console.log('🎮 Playing audio for view change:', { audioFile, currentView });
+      playAudio(audioFile);
     }
-  }, [currentView, audioEnabled, playAudio, forceStopAudio]);
+  }, [currentView, audioEnabled, playAudio]);
 
-  // Effect để xử lý audio enabled changes ngay lập tức
+  // Effect để xử lý audio enabled changes
   useEffect(() => {
     console.log('🎮 [DisplayController] Audio enabled changed:', audioEnabled);
     if (!audioEnabled) {
-      console.log('🎮 [DisplayController] Audio disabled - force stopping immediately');
-      forceStopAudio();
-      lastAudioPlayedRef.current = null;
+      console.log('🎮 [DisplayController] Audio disabled - stopping');
+      stopCurrentAudio();
     }
-  }, [audioEnabled, forceStopAudio]);
-
-
-
-  // Debug: Listen to socket connection status
-  useEffect(() => {
-    console.log('🎮 [DisplayController] Socket connection status changed:', {
-      connected: socketConnected,
-      accessCode,
-      socketId: socketService.socket?.id,
-      clientType: socketService.clientType
-    });
-  }, [socketConnected, accessCode]);
+  }, [audioEnabled, stopCurrentAudio]);
 
   // Khởi tạo kết nối socket
   useEffect(() => {
@@ -123,7 +84,6 @@ const DisplayController = () => {
 
     const initializeDisplay = async () => {
       try {
-        // Xác thực access code
         const verifyResult = await PublicAPI.verifyAccessCode(accessCode);
 
         if (!verifyResult.success || !verifyResult.isValid) {
@@ -132,17 +92,7 @@ const DisplayController = () => {
         }
 
         console.log('🎮 Access code verified for display:', accessCode);
-
-        // Khởi tạo socket connection
         await initializeSocket(accessCode);
-
-        // Debug: Check socket status after initialization
-        console.log('🎮 [DisplayController] Socket status after init:', {
-          connected: socketConnected,
-          accessCode,
-          socketId: socketService.socket?.id,
-          clientType: socketService.clientType
-        });
 
         if (!isCleanedUp) {
           setIsInitialized(true);
@@ -160,13 +110,10 @@ const DisplayController = () => {
       initializeDisplay();
     }
 
-    // Cleanup function
     return () => {
       isCleanedUp = true;
-      // Reset refs on cleanup
-      lastAudioPlayedRef.current = null;
     };
-  }, [accessCode]); // Chỉ dependency accessCode
+  }, [accessCode]);
 
   // Render loading state
   if (!isInitialized) {
@@ -215,7 +162,6 @@ const DisplayController = () => {
       case 'scoreboard_below':
         return <ScoreboardBelow accessCode={accessCode} />;
       case 'poster':
-        // Render poster theo selectedPoster với id mapping
         const posterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;
 
         switch (posterType) {
@@ -235,7 +181,6 @@ const DisplayController = () => {
             return <PosterHaoQuang accessCode={accessCode} />;
         }
       default:
-        // Mặc định hiển thị poster với id mapping
         const defaultPosterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;
 
         switch (defaultPosterType) {
@@ -264,13 +209,43 @@ const DisplayController = () => {
         {renderCurrentView()}
       </div>
 
-      {/* MediaSource Audio Player (when audio is OFF) */}
-      <MediaSourceAudio
-        audioFile={currentAudioFile}
-        isEnabled={!audioEnabled && !!currentAudioFile}
-        onEnded={() => setCurrentAudioFile(null)}
-        loop={true}
-      />
+      {/* Audio Control Button - Fixed Position */}
+      <div className="fixed top-4 right-4 z-50">
+        {!showAudioControl ? (
+          <button
+            onClick={() => setShowAudioControl(true)}
+            className="bg-black/50 backdrop-blur-sm text-white p-2 rounded-full hover:bg-black/70 transition-all duration-200"
+            title="Điều khiển âm thanh"
+          >
+            🎵
+          </button>
+        ) : (
+          <div className="bg-black/80 backdrop-blur-sm rounded-lg p-3 text-white min-w-[140px]">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-medium">Audio</span>
+              <button
+                onClick={() => setShowAudioControl(false)}
+                className="text-gray-300 hover:text-white text-sm"
+              >
+                ✕
+              </button>
+            </div>
+            <button
+              onClick={toggleAudioEnabled}
+              className={`w-full px-3 py-2 rounded text-sm font-bold transition-all duration-200 ${
+                audioEnabled
+                  ? "bg-green-600 hover:bg-green-700 text-white"
+                  : "bg-red-600 hover:bg-red-700 text-white"
+              }`}
+            >
+              {audioEnabled ? "🔊 BẬT" : "🔇 TẮT"}
+            </button>
+            <div className="text-xs text-gray-300 mt-1 text-center">
+              Code: {accessCode}
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
