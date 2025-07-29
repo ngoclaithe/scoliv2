@@ -48,7 +48,7 @@ const DisplayController = () => {
       audioControlledByServer: audioControlledByServerRef.current
     });
 
-    // Nếu audio đang được server kiểm soát, không tự động phát
+    // Nếu audio đang được server kiểm soát, kh��ng tự động phát
     if (audioControlledByServerRef.current) {
       console.log('🎮 Audio controlled by server, skipping auto-play');
       return;
@@ -165,6 +165,14 @@ const DisplayController = () => {
 
         // Khởi tạo socket connection
         await initializeSocket(accessCode);
+
+        // Debug: Check socket status after initialization
+        console.log('🎮 [DisplayController] Socket status after init:', {
+          connected: socketConnected,
+          accessCode,
+          socketId: socketService.socket?.id,
+          clientType: socketService.clientType
+        });
 
         if (!isCleanedUp) {
           setIsInitialized(true);
