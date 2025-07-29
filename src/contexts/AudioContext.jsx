@@ -193,6 +193,20 @@ export const AudioProvider = ({ children }) => {
       audioRef.current = null;
     }
 
+    // Dừng voice trọng tài
+    if (refereeVoiceRef.current) {
+      try {
+        refereeVoiceRef.current.pause();
+        refereeVoiceRef.current.currentTime = 0;
+        if (refereeVoiceRef.current.src && refereeVoiceRef.current.src.startsWith('blob:')) {
+          URL.revokeObjectURL(refereeVoiceRef.current.src);
+        }
+      } catch (error) {
+        console.warn('⚠️ Error stopping referee voice:', error);
+      }
+      refereeVoiceRef.current = null;
+    }
+
     // Dừng TẤT CẢ audio elements trên trang - FIX CHÍNH
     try {
       const allAudioElements = document.querySelectorAll('audio');
