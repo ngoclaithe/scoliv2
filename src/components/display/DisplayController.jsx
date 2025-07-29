@@ -68,8 +68,8 @@ const DisplayController = () => {
     prevViewRef.audioEnabled = audioEnabled;
 
     if (!audioEnabled) {
-      console.log('🎮 Audio disabled, stopping current audio');
-      stopCurrentAudio();
+      console.log('🎮 Audio disabled, force stopping current audio');
+      forceStopAudio();
       return;
     }
 
