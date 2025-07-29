@@ -9,25 +9,33 @@ const CommentarySection = () => {
   const { stopCurrentAudio } = useAudio();
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isOpusSupported, setIsOpusSupported] = useState(false);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const streamRef = useRef(null);
 
-  // Check for browser support
+  // Check for browser support and codecs
   const isSupported = typeof navigator !== 'undefined' &&
                      navigator.mediaDevices &&
-                     navigator.mediaDevices.getUserMedia;
+                     navigator.mediaDevices.getUserMedia &&
+                     typeof MediaRecorder !== 'undefined';
 
-  // Initialize opus-media-recorder
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      window.MediaRecorder = MediaRecorder;
-      MediaRecorder.encoder = OpusRecorderUrl;
-      setIsOpusSupported(true);
-      console.log('🎙️ Opus MediaRecorder initialized');
+  const getSupportedMimeType = () => {
+    const types = [
+      'audio/webm;codecs=opus',
+      'audio/ogg;codecs=opus',
+      'audio/webm',
+      'audio/mp4',
+      'audio/wav'
+    ];
+
+    for (const type of types) {
+      if (MediaRecorder.isTypeSupported(type)) {
+        console.log('🎙️ Using mime type:', type);
+        return type;
+      }
     }
-  }, []);
+    return null;
+  };
 
   useEffect(() => {
     return () => {
