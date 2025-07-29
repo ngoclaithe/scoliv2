@@ -56,7 +56,7 @@ const Intro = () => {
             console.log('🧹 [Intro] Component unmounting, stopping audio');
             stopCurrentAudio();
         };
-    }, [audioEnabled, playAudio, stopCurrentAudio]);
+    }, [audioEnabled]); // Remove playAudio and stopCurrentAudio from dependencies
 
     // Lắng nghe thay đổi audioEnabled để dừng/phát audio
     useEffect(() => {
@@ -64,7 +64,7 @@ const Intro = () => {
             console.log('🔇 [Intro] Audio disabled, stopping current audio');
             stopCurrentAudio();
         }
-    }, [audioEnabled, stopCurrentAudio]);
+    }, [audioEnabled]); // Remove stopCurrentAudio from dependencies
 
     // Responsive calculations
     const isMobile = windowSize.width < 768;
