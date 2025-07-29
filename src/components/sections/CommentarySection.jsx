@@ -449,7 +449,7 @@ const CommentarySection = ({ isActive = true }) => {
         {/* Mode Description */}
         <div className="mt-2 text-xs text-gray-500">
           {isContinuousMode ? (
-            <p>Chế độ nói liên tục: Audio được gửi mỗi 2 giây tự động</p>
+            <p>Chế độ nói liên tục: Audio được gửi realtime mỗi 200ms</p>
           ) : (
             <p>Chế độ ấn để nói: Ấn một lần để bắt đầu, ấn lại để dừng và gửi</p>
           )}
