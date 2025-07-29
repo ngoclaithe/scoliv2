@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import audioUtils from '../../utils/audioUtils';
-import { Mic, MicOff } from "lucide-react";
+import { Mic, MicOff, Play, Pause } from "lucide-react";
 import socketService from "../../services/socketService";
 
 const CommentarySection = ({ isActive = true }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isContinuousMode, setIsContinuousMode] = useState(false);
+  const [continuousRecording, setContinuousRecording] = useState(false);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const streamRef = useRef(null);
+  const continuousIntervalRef = useRef(null);
 
   // Check for browser support and codecs
   const isSupported = typeof navigator !== 'undefined' &&
@@ -44,6 +47,9 @@ const CommentarySection = ({ isActive = true }) => {
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop());
       }
+      if (continuousIntervalRef.current) {
+        clearInterval(continuousIntervalRef.current);
+      }
     };
   }, []);
 
@@ -60,6 +66,11 @@ const CommentarySection = ({ isActive = true }) => {
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop());
         streamRef.current = null;
+      }
+      // Dừng continuous mode
+      setContinuousRecording(false);
+      if (continuousIntervalRef.current) {
+        clearInterval(continuousIntervalRef.current);
       }
     }
   }, [isActive]);
