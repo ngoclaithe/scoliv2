@@ -332,13 +332,13 @@ export const AudioProvider = ({ children }) => {
     try {
       if (socketService.socket && socketService.socket.connected) {
         if (newState) {
-          // Bật audio cho tất cả
-          console.log('📡 Sending enable audio to server');
-          socketService.enableAudioForAll();
+          // Bật audio cho display clients
+          console.log('📡 Sending enable audio to display clients');
+          socketService.enableAudioForDisplays();
         } else {
-          // Tắt audio cho tất cả
-          console.log('📡 Sending disable audio to server');
-          socketService.disableAudioForAll();
+          // Tắt audio cho display clients
+          console.log('📡 Sending disable audio to display clients');
+          socketService.disableAudioForDisplays();
         }
 
         // Đồng thời cập nhật volume nếu cần
@@ -457,7 +457,7 @@ export const AudioProvider = ({ children }) => {
         }
       } else if (data.command === 'DISABLE_AUDIO') {
         console.log('📡 Server command: DISABLE_AUDIO - Force stopping all audio');
-        // Force stop ngay lập tức khi server gửi lệnh DISABLE_AUDIO
+        // Force stop ngay l��p tức khi server gửi lệnh DISABLE_AUDIO
         forceStopAudio();
       } else if (data.command === 'SET_VOLUME' && data.payload) {
         console.log('📡 Server command: SET_VOLUME', data.payload.volume);
