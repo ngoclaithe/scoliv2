@@ -480,6 +480,39 @@ export const AudioProvider = ({ children }) => {
       console.log(`🔍 [DEBUG] Socket event "${eventName}":`, data);
     };
 
+    // DEBUG: Lắng nghe GLOBAL socket events
+    const setupGlobalDebugListeners = () => {
+      if (socketService.socket) {
+        console.log('🔍 [DEBUG] Setting up global socket debug listeners...');
+
+        // Lắng nghe TẤT CẢ events có thể
+        const allAudioEvents = [
+          'audio_control',
+          'audio_control_broadcast',
+          'audio_command',
+          'audio_update',
+          'voice-chunk-received',
+          'referee_voice',
+          'play_referee_voice',
+          'audio_sync',
+          'audio_status_update'
+        ];
+
+        allAudioEvents.forEach(eventName => {
+          socketService.socket.on(eventName, (data) => {
+            console.log(`🎵 [AUDIO EVENT] "${eventName}":`, data);
+          });
+        });
+
+        // Debug khi có bất kỳ event nào
+        const originalOn = socketService.socket.on;
+        socketService.socket.on = function(eventName, callback) {
+          console.log(`📡 [LISTENER REGISTERED] "${eventName}"`);
+          return originalOn.call(this, eventName, callback);
+        };
+      }
+    };
+
     // Hàm setup listeners - AGGRESSIVE RETRY
     const setupListenersAggressively = () => {
       console.log('📡 [AudioContext] 🚀 Setting up audio listeners aggressively...');
