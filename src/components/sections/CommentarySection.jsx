@@ -5,34 +5,8 @@ import { Mic, MicOff } from "lucide-react";
 import socketService from "../../services/socketService";
 
 const CommentarySection = ({ isActive = true }) => {
-  // Socket audio listeners setup - CommentarySection cần nhận referee voice từ server
-  useEffect(() => {
-    const handleAudioControl = (data) => {
-      console.log('🎙️ [CommentarySection] Received audio_control:', data);
-
-      if (data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
-        const { audioData, mimeType } = data.payload;
-        try {
-          const uint8Array = new Uint8Array(audioData);
-          const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
-          audioUtils.playRefereeVoice(audioBlob);
-        } catch (error) {
-          console.error('❌ Error processing referee voice:', error);
-        }
-      }
-    };
-
-    // Setup socket listeners if connected
-    if (socketService.socket) {
-      socketService.on('audio_control', handleAudioControl);
-    }
-
-    return () => {
-      if (socketService.socket) {
-        socketService.off('audio_control', handleAudioControl);
-      }
-    };
-  }, []);
+  // CommentarySection chỉ gửi audio, không cần lắng nghe audio_control
+  // Audio_control listener đã được xử lý trong PublicMatchContext
 
   const [isRecording, setIsRecording] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -178,7 +152,7 @@ const CommentarySection = ({ isActive = true }) => {
         await sendVoiceToServer(audioBlob);
         console.log('✅ Voice sent to server successfully');
       } catch (error) {
-        console.error('❌ Failed to send voice to server:', error);
+        console.error('��� Failed to send voice to server:', error);
         alert('Không thể gửi voice lên server');
       }
 

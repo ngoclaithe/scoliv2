@@ -221,7 +221,7 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật penalty
+    // L���ng nghe cập nhật penalty
     socketService.on('penalty_updated', (data) => {
       setPenaltyData(prev => ({ ...prev, ...data.penaltyData }));
       setLastUpdateTime(Date.now());
@@ -250,10 +250,13 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe audio control events - để nhận referee voice từ CommentarySection
     socketService.on('audio_control', (data) => {
-      console.log('🎙️ [PublicMatchContext] Received audio_control:', data);
+      console.log('🎙️ [PublicMatchContext] Received audio_control event:', data);
+      console.log('🎙️ [PublicMatchContext] Client type:', socketService.getConnectionStatus().clientType);
+      console.log('🎙️ [PublicMatchContext] Target check:', data.target, 'Command:', data.command);
 
       // Chỉ xử lý event dành cho display clients
       if (data.target === 'display' && data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
+        console.log('✅ [PublicMatchContext] Processing referee voice for display client');
         const { audioData, mimeType } = data.payload;
         try {
           const uint8Array = new Uint8Array(audioData);
@@ -263,6 +266,8 @@ export const PublicMatchProvider = ({ children }) => {
         } catch (error) {
           console.error('❌ Error processing referee voice in DisplayController:', error);
         }
+      } else {
+        console.log('⚠️ [PublicMatchContext] Audio control event ignored - not for this client or wrong command');
       }
     });
 
@@ -279,7 +284,7 @@ export const PublicMatchProvider = ({ children }) => {
   // Khởi tạo socket connection cho public route
   const initializeSocket = useCallback(async (accessCode) => {
     try {
-      // Tránh khởi tạo socket trùng lặp
+      // Tránh khởi tạo socket trùng l���p
       if (currentAccessCode === accessCode && socketConnected) {
         return;
       }
