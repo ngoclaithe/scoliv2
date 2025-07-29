@@ -18,7 +18,7 @@ const initialState = {
 const audioActions = {
   PLAY_AUDIO: 'PLAY_AUDIO',
   STOP_AUDIO: 'STOP_AUDIO',
-  FORCE_STOP_AUDIO: 'FORCE_STOP_AUDIO', // Dừng âm thanh ngay lập tức từ server
+  FORCE_STOP_AUDIO: 'FORCE_STOP_AUDIO', // D���ng âm thanh ngay lập tức từ server
   SET_VOLUME: 'SET_VOLUME',
   TOGGLE_MUTE: 'TOGGLE_MUTE',
   TOGGLE_AUDIO_ENABLED: 'TOGGLE_AUDIO_ENABLED',
@@ -177,7 +177,7 @@ export const AudioProvider = ({ children }) => {
 
   // Force dừng audio từ server
   const forceStopAudio = () => {
-    console.log('🚫 Force stopping audio from server');
+    console.log('🚫 Force stopping audio immediately');
 
     // Cancel pending audio request nếu có
     if (pendingAudioRef.current) {
@@ -188,13 +188,17 @@ export const AudioProvider = ({ children }) => {
     // Clear pending queue
     pendingAudioQueue.current = [];
 
+    // DỪNG NGAY LẬP TỨC mà không cần kiểm tra gì
     if (audioRef.current) {
       try {
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
+        audioRef.current.src = ''; // Xóa source để chắc chắn dừng
         // Xóa event listeners để tránh memory leak
         audioRef.current.onended = null;
         audioRef.current.onerror = null;
+        audioRef.current.onloadstart = null;
+        audioRef.current.oncanplay = null;
       } catch (error) {
         console.warn('⚠️ Error force stopping audio:', error);
       }
@@ -243,8 +247,15 @@ export const AudioProvider = ({ children }) => {
     // Stop current audio before playing new one
     stopCurrentAudio();
 
-    // Delay to ensure audio cleanup is complete
+    // Delay to ensure audio cleanup is complete - giảm delay xuống chỉ 10ms
     pendingAudioRef.current = setTimeout(() => {
+      // Kiểm tra lại audioEnabled trước khi phát
+      if (!state.audioEnabled) {
+        console.log('🔇 Audio disabled before playing, cancelling');
+        pendingAudioRef.current = null;
+        return;
+      }
+
       if (pendingAudioRef.current === null) {
         console.log('⏹️ Audio request cancelled during delay');
         return;
@@ -281,14 +292,14 @@ export const AudioProvider = ({ children }) => {
             })
             .catch((error) => {
               console.error('❌ Failed to play audio:', error);
-              
+
               // If it's an autoplay error, queue for later
               if (error.name === 'NotAllowedError') {
                 console.log('⏳ Autoplay blocked, queuing for user interaction');
                 pendingAudioQueue.current.push({ audioKey, component });
                 dispatch({ type: audioActions.SET_USER_INTERACTED, payload: false });
               }
-              
+
               dispatch({ type: audioActions.STOP_AUDIO });
               lastAudioRequestRef.current = null;
             });
@@ -301,7 +312,7 @@ export const AudioProvider = ({ children }) => {
       }
 
       pendingAudioRef.current = null;
-    }, 50);
+    }, 10);
   };
 
   // Điều chỉnh volume
@@ -461,13 +472,13 @@ export const AudioProvider = ({ children }) => {
           dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
         }
       } else if (data.command === 'DISABLE_AUDIO') {
-        console.log('📡 Server command: DISABLE_AUDIO - Updating audio state and stopping audio');
-        // Đảm bảo audioEnabled được set về false và dừng audio hiện tại
+        console.log('📡 Server command: DISABLE_AUDIO - Force stopping audio immediately');
+        // DỪNG NGAY LẬP TỨC
+        forceStopAudio();
+        // Đảm bảo audioEnabled được set về false
         if (currentState.audioEnabled) {
           dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
         }
-        // Dừng audio hiện tại nhưng không force change state
-        stopCurrentAudio();
       } else if (data.command === 'SET_VOLUME' && data.payload) {
         console.log('📡 Server command: SET_VOLUME', data.payload.volume);
         dispatch({ type: audioActions.SET_VOLUME, payload: data.payload.volume });
