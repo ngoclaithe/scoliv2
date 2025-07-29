@@ -45,14 +45,8 @@ const DisplayController = () => {
     prevViewRef.current = currentView;
   }, [currentView]);
 
-  // Effect để xử lý audio enabled changes
-  useEffect(() => {
-    console.log('🎮 [DisplayController] Audio enabled changed:', audioEnabled);
-    if (!audioEnabled) {
-      console.log('🎮 [DisplayController] Audio disabled - stopping');
-      stopCurrentAudio();
-    }
-  }, [audioEnabled, stopCurrentAudio]);
+  // DisplayController không cần xử lý audio enabled changes nữa
+  // Audio sẽ được quản lý từ MatchManagementSection và voice từ CommentarySection
 
   // Khởi tạo kết nối socket
   useEffect(() => {
