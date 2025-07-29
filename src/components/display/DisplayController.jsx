@@ -32,6 +32,9 @@ const DisplayController = () => {
 
   // Lắng nghe event audio_control từ backend để phát voice trọng tài
   useEffect(() => {
+    // Chỉ đăng ký listener khi đã kết nối socket
+    if (!isInitialized) return;
+
     const handleAudioControl = (data) => {
       console.log('🚿 [DisplayController] Nhận audio từ socket:', data);
 
@@ -52,12 +55,13 @@ const DisplayController = () => {
       }
     };
 
+    console.log('📡 [DisplayController] Đăng ký audio listener sau khi socket đã kết nối');
     socketService.onAudioControl(handleAudioControl);
 
     return () => {
       socketService.off('audio_control', handleAudioControl);
     };
-  }, [playRefereeVoice]);
+  }, [playRefereeVoice, isInitialized]);
 
   // Khởi tạo kết nối socket
   useEffect(() => {
