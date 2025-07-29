@@ -36,7 +36,7 @@ export default function TreTrungMatchIntro() {
     }
   };
 
-  const hasPartners = partners.length > 0;
+
 
 
   const handleUserInteraction = () => {
