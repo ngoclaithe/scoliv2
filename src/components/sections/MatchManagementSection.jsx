@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import ScoreDisplay from "../scoreboard/ScoreDisplay";
@@ -10,7 +10,7 @@ import { useMatch } from "../../contexts/MatchContext";
 import { toast } from 'react-toastify';
 import audioUtils from '../../utils/audioUtils';
 import socketService from '../../services/socketService';
-import LogoSearch from '../logo/LogoSearch';
+
 import LogoAPI from '../../API/apiLogo';
 import MatchTimeDisplay from './MatchTimeDisplay';
 
@@ -23,9 +23,9 @@ const MatchManagementSection = ({ isActive = true }) => {
     matchStats,
     futsalErrors,
     penaltyData,
-    marqueeData,
+
     displaySettings,
-    socketConnected,
+
     updateScore,
     updateMatchInfo,
     updateMatchTime,
@@ -36,7 +36,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateTeamLogos,
     updateFutsalErrors,
     updatePenalty,
-    updateMarquee,
+
     updateView,
     resumeTimer,
 
@@ -57,11 +57,8 @@ const MatchManagementSection = ({ isActive = true }) => {
   // State cho custom time
   const [customTime, setCustomTime] = useState("");
   const [customSeconds, setCustomSeconds] = useState("");
-  const [quickCustomTime, setQuickCustomTime] = useState(""); // Cho input trực tiếp
   const [quickCustomMinutes, setQuickCustomMinutes] = useState(""); // Phút
-  const [quickCustomSeconds, setQuickCustomSeconds] = useState(""); // Giây
   const [tickerColor, setTickerColor] = useState("#ffffff");
-  const [tickerFontSize, setTickerFontSize] = useState(16);
 
   // State cho thông tin đội và trận đấu
   const [teamAInfo, setTeamAInfo] = useState({
@@ -470,7 +467,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           </div>
         </div>
 
-        {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
+        {/* Nút T��M DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
         <div className="flex justify-center items-center mt-2 space-x-2">
           {/* Audio Pause/Play Button */}
           <Button
