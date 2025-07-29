@@ -922,7 +922,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             {/* Đếm 25' */}
             <button
               onClick={() => {
-                const timeString = "25:00";
+                const timeString = "20:00";
                 // Set thời gian về 25:00 và b��t đầu đếm ti��n từ server timer
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
