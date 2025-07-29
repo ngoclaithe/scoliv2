@@ -270,6 +270,22 @@ class SocketService {
     });
   }
 
+  // Bật audio chỉ cho display clients
+  enableAudioForDisplays() {
+    return this.sendAudioControl({
+      command: 'ENABLE_AUDIO',
+      target: 'display'
+    });
+  }
+
+  // Tắt audio chỉ cho display clients
+  disableAudioForDisplays() {
+    return this.sendAudioControl({
+      command: 'DISABLE_AUDIO',
+      target: 'display'
+    });
+  }
+
   // Điều chỉnh volume cho tất cả client
   setVolumeForAll(volume) {
     return this.sendAudioControl({
