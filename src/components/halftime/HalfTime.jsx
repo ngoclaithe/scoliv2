@@ -7,7 +7,7 @@ const HalftimeBreakPoster = () => {
     const { matchData: contextMatchData, marqueeData } = usePublicMatch();
 
     // Sử dụng AudioContext để phát audio
-    const { playAudio, isComponentPlaying } = useAudio();
+    const { playAudio } = useAudio();
 
     // Kết hợp dữ liệu từ context với dữ liệu mặc định
     const matchData = {
@@ -41,7 +41,7 @@ const HalftimeBreakPoster = () => {
 
     // Tự động phát audio poster.mp3 khi component mount - CHỈ 1 LẦN
     useEffect(() => {
-        playAudio('poster', 'halftime');
+        playAudio('poster');
     }, []); // Bỏ playAudio khỏi dependency để chỉ phát 1 lần
 
     // Check if live text contains specific keywords
@@ -114,7 +114,7 @@ const HalftimeBreakPoster = () => {
                             <div className="font-semibold">{matchData.time} - {matchData.date}</div>
                             {matchData.stadium && matchData.stadium !== 'san' && (
                                 <div className={`text-gray-200 ${isMobile ? 'text-base mt-2' : 'mt-1'}`}>
-                                    📍 {matchData.stadium}
+                                    �� {matchData.stadium}
                                 </div>
                             )}
                         </div>
