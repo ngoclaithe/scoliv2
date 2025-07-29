@@ -382,6 +382,7 @@ export const PublicMatchProvider = ({ children }) => {
     displaySettings,
     lineupData,
     sponsors,
+    logoData,
     socketConnected,
     lastUpdateTime,
     currentAccessCode,
