@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
+import audioUtils from '../utils/audioUtils';
 
 export default function TreTrungMatchIntro() {
   // Sử dụng dữ liệu từ PublicMatchContext
@@ -41,8 +42,16 @@ export default function TreTrungMatchIntro() {
 
   const hasPartners = partners.length > 0;
 
+  // Handle click to enable user interaction for audio
+  const handleUserInteraction = () => {
+    console.log('🎵 User clicked - audio interaction enabled');
+  };
+
   return (
-    <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
+    <div
+      className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4 cursor-pointer"
+      onClick={handleUserInteraction}
+    >
       {/* Main container with fixed aspect ratio */}
       <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
         
@@ -218,7 +227,7 @@ export default function TreTrungMatchIntro() {
         </div>
 
         {/* CSS Animations */}
-        <style jsx>{`
+        <style>{`
           @keyframes marquee {
             0% { transform: translateX(100%) translateY(-50%); }
             100% { transform: translateX(-100%) translateY(-50%); }
