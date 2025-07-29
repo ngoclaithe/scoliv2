@@ -50,8 +50,14 @@ const CommentarySection = () => {
   }, []);
 
   const startRecording = async () => {
-    if (!isSupported || !isOpusSupported) {
-      alert('Trình duyệt không hỗ trợ ghi âm hoặc Opus codec');
+    if (!isSupported) {
+      alert('Trình duyệt không hỗ trợ ghi âm');
+      return;
+    }
+
+    const mimeType = getSupportedMimeType();
+    if (!mimeType) {
+      alert('Trình duyệt không hỗ trợ các codec audio cần thiết');
       return;
     }
 
@@ -63,7 +69,7 @@ const CommentarySection = () => {
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          sampleRate: 48000, // Opus works best with 48kHz
+          sampleRate: 44100, // Standard sample rate for compatibility
           channelCount: 1, // Mono for voice
           autoGainControl: true
         }
@@ -71,10 +77,13 @@ const CommentarySection = () => {
 
       streamRef.current = stream;
 
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/ogg; codecs=opus',
-        audioBitsPerSecond: 64000 // 64kbps cho voice chất lượng tốt
-      });
+      const options = { mimeType };
+      // Add bitrate if supported
+      if (mimeType.includes('opus') || mimeType.includes('webm')) {
+        options.audioBitsPerSecond = 64000;
+      }
+
+      const mediaRecorder = new MediaRecorder(stream, options);
 
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
@@ -95,7 +104,7 @@ const CommentarySection = () => {
 
       mediaRecorder.start(100); // Collect data every 100ms
       setIsRecording(true);
-      console.log('🎙️ Voice recording started with Opus codec');
+      console.log('🎙️ Voice recording started with codec:', mimeType);
     } catch (error) {
       console.error('Lỗi khi bắt đầu ghi âm:', error);
       alert('Không thể truy cập microphone. Vui lòng cho phép quyền truy cập.');
