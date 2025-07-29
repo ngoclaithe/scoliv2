@@ -433,6 +433,8 @@ export const AudioProvider = ({ children }) => {
     playAudio,
     stopCurrentAudio,
     toggleAudioEnabled,
+    playRefereeVoice,
+    stopRefereeVoice,
   };
 
   return (
