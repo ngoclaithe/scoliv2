@@ -425,8 +425,8 @@ const CommentarySection = ({ isActive = true }) => {
         )}
 
         {/* Real-time indicator */}
-        {isRealTimeTranmission && (
-          <div className="text-xs text-green-600 font-medium animate-pulse">
+        {isRealTimeTranmission && isRecording && (
+          <div className="text-xs text-red-600 font-medium animate-pulse">
             🔴 PHÁT TRỰC TIẾP
           </div>
         )}
