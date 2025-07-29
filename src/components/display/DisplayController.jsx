@@ -26,7 +26,6 @@ const DisplayController = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
 
-  // Audio handled by MatchManagementSection
 
   // Khởi tạo kết nối socket
   useEffect(() => {

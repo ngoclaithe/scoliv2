@@ -289,43 +289,24 @@ export const PublicMatchProvider = ({ children }) => {
       console.log('🎯 [Audio] View updated to:', data.viewType);
     });
 
-    // Minimal audio debug logging
-    if (socketService.socket) {
-      const originalOn = socketService.socket.on;
-      socketService.socket.on = function(event, callback) {
-        if (event === 'audio_control') {
-          console.log('🎯 [DEBUG] Registering listener for:', event);
-        }
-        return originalOn.call(this, event, callback);
-      };
-    }
-
     // Lắng nghe audio control events - để nhận referee voice từ CommentarySection
     socketService.on('audio_control', (data) => {
       console.log('🎙️ [PublicMatchContext] Received audio_control event:', data);
-      console.log('🎙️ [PublicMatchContext] Client type:', socketService.getConnectionStatus().clientType);
-      console.log('🎙️ [PublicMatchContext] Target check:', data.target, 'Command:', data.command);
-      console.log('🎙️ [PublicMatchContext] Has payload:', !!data.payload);
 
       // Chỉ xử lý event dành cho display clients
       if (data.target === 'display' && data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
         console.log('✅ [PublicMatchContext] Processing referee voice for display client');
-        console.log('🎙️ [PublicMatchContext] Audio data size:', data.payload.audioData?.length);
         const { audioData, mimeType } = data.payload;
         try {
           const uint8Array = new Uint8Array(audioData);
           const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
-          console.log('🎙️ [PublicMatchContext] Created blob, size:', audioBlob.size, 'type:', audioBlob.type);
           audioUtils.playRefereeVoice(audioBlob);
-          console.log('✅ [PublicMatchContext] Called audioUtils.playRefereeVoice');
         } catch (error) {
           console.error('❌ Error processing referee voice in DisplayController:', error);
         }
       } else {
         console.log('⚠️ [PublicMatchContext] Audio control event ignored:');
         console.log('   - Target match:', data.target === 'display');
-        console.log('   - Command match:', data.command === 'PLAY_REFEREE_VOICE');
-        console.log('   - Has payload:', !!data.payload);
       }
     });
 
