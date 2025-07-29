@@ -98,18 +98,47 @@ export const AudioProvider = ({ children }) => {
     };
   }, []);
 
-  // Dừng audio hiện tại - đơn giản hóa
+  // Dừng tất cả audio đang phát - sửa lỗi không thể tắt hoàn toàn
   const stopCurrentAudio = () => {
+    console.log('🔇 [AudioContext] Stopping all audio elements');
+
+    // Dừng audio của AudioContext
     if (audioRef.current) {
       try {
         audioRef.current.pause();
         audioRef.current.currentTime = 0;
         audioRef.current.src = '';
       } catch (error) {
-        console.warn('⚠️ Error stopping audio:', error);
+        console.warn('⚠️ Error stopping AudioContext audio:', error);
       }
       audioRef.current = null;
     }
+
+    // Dừng TẤT CẢ audio elements trên trang - FIX CHÍNH
+    try {
+      const allAudioElements = document.querySelectorAll('audio');
+      console.log(`🔇 [AudioContext] Found ${allAudioElements.length} audio elements to stop`);
+
+      allAudioElements.forEach((audio, index) => {
+        try {
+          if (!audio.paused) {
+            console.log(`🔇 [AudioContext] Stopping audio element ${index + 1}`);
+            audio.pause();
+            audio.currentTime = 0;
+            audio.src = '';
+            // Xóa audio element khỏi DOM để tránh rò rỉ bộ nhớ
+            if (audio.parentNode) {
+              audio.parentNode.removeChild(audio);
+            }
+          }
+        } catch (error) {
+          console.warn(`⚠️ Error stopping audio element ${index + 1}:`, error);
+        }
+      });
+    } catch (error) {
+      console.warn('⚠️ Error finding/stopping page audio elements:', error);
+    }
+
     dispatch({ type: audioActions.SET_PLAYING, payload: false });
   };
 
