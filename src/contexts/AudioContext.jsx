@@ -456,9 +456,13 @@ export const AudioProvider = ({ children }) => {
           dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
         }
       } else if (data.command === 'DISABLE_AUDIO') {
-        console.log('📡 Server command: DISABLE_AUDIO - Force stopping all audio');
-        // Force stop ngay l��p tức khi server gửi lệnh DISABLE_AUDIO
-        forceStopAudio();
+        console.log('📡 Server command: DISABLE_AUDIO - Updating audio state and stopping audio');
+        // Đảm bảo audioEnabled được set về false và dừng audio hiện tại
+        if (state.audioEnabled) {
+          dispatch({ type: audioActions.TOGGLE_AUDIO_ENABLED });
+        }
+        // Dừng audio hiện tại nhưng không force change state
+        stopCurrentAudio();
       } else if (data.command === 'SET_VOLUME' && data.payload) {
         console.log('📡 Server command: SET_VOLUME', data.payload.volume);
         dispatch({ type: audioActions.SET_VOLUME, payload: data.payload.volume });
