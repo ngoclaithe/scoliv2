@@ -76,7 +76,7 @@ const DisplayController = () => {
       console.log('🎮 [DisplayController] Audio disabled - stopping');
       stopCurrentAudio();
     }
-  }, [audioEnabled, stopCurrentAudio]);
+  }, [audioEnabled]);
 
   // Khởi tạo kết nối socket
   useEffect(() => {
