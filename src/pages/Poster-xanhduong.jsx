@@ -3,7 +3,17 @@ import { usePublicMatch } from '../contexts/PublicMatchContext';
 
 export default function XanhDuongMatchIntro() {
   // Sử dụng dữ liệu từ PublicMatchContext
-  const { matchData: contextMatchData, marqueeData } = usePublicMatch();
+  const {
+    matchData: contextMatchData,
+    marqueeData,
+    sponsors,
+    organizing,
+    mediaPartners,
+    tournamentLogo,
+    liveUnit,
+    displaySettings,
+    posterSettings
+  } = usePublicMatch();
 
   // Kết hợp dữ liệu từ context với dữ liệu mặc định
   const matchData = {
@@ -14,10 +24,31 @@ export default function XanhDuongMatchIntro() {
     logo2: contextMatchData.teamB.logo || '/images/background-poster/default_logoB.png',
     stadium: contextMatchData.stadium || 'SVĐ QUẬN 1',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '16:00',
-    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN')
+    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
+    // Các biến mới từ context - thêm kiểm tra undefined
+    sponsors: sponsors?.url_logo || [],
+    organizing: organizing?.url_logo || [],
+    mediaPartners: mediaPartners?.url_logo || [],
+    tournamentLogo: tournamentLogo?.url_logo?.[0] || null,
+    liveUnit: liveUnit?.url_logo?.[0] || null,
+    logoShape: displaySettings?.logoShape || 'circle',
+    showTournamentLogo: displaySettings?.showTournamentLogo !== false,
+    showSponsors: displaySettings?.showSponsors !== false,
+    showOrganizing: displaySettings?.showOrganizing !== false,
+    showMediaPartners: displaySettings?.showMediaPartners !== false,
+    showTimer: posterSettings?.showTimer !== false,
+    showDate: posterSettings?.showDate !== false,
+    showStadium: posterSettings?.showStadium !== false,
+    showLiveIndicator: posterSettings?.showLiveIndicator !== false,
+    accentColor: posterSettings?.accentColor || '#3b82f6'
   };
 
-  const [partners, setPartners] = useState([]);
+  // Gộp tất cả partners lại thành một mảng
+  const allPartners = [
+    ...(matchData.showSponsors ? matchData.sponsors.map(url => ({ logo: url, name: 'Sponsor', type: 'sponsor' })) : []),
+    ...(matchData.showOrganizing ? matchData.organizing.map(url => ({ logo: url, name: 'Organizing', type: 'organizing' })) : []),
+    ...(matchData.showMediaPartners ? matchData.mediaPartners.map(url => ({ logo: url, name: 'Media', type: 'media' })) : [])
+  ];
 
   // Sử dụng marquee data từ context
   const marquee = {
