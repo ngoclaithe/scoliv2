@@ -214,7 +214,7 @@ export default function MatchIntroduction() {
                 </h3>
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-2xl p-2 sm:p-4 border border-white/30 mx-4 sm:mx-8">
                   <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
-                    {partners.map((partner, index) => (
+                    {allPartners.map((partner, index) => (
                       <div key={index} className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 flex justify-center items-center bg-white rounded-full p-1 shadow-lg">
                         <img
                           src={partner.logo}
