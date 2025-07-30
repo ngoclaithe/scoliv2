@@ -1,25 +1,8 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 
-const ScoreboardBelow = ({
-    teamAName = "Arsenal",
-    teamBName = "Chelsea",
-    teamALogo = "/images/teams/arsenal.png",
-    teamBLogo = "/images/teams/chelsea.png",
-    teamAScore = 2,
-    teamBScore = 1,
-    matchTime = "45'",
-    teamAKitColor = "#FF0000",
-    teamBKitColor = "#0000FF",
-    leagueLogo = "/images/leagues/premier.png",
-    scrollTextColor = "#FFFFFF",
-    scrollTextBg = "#FF0000",
-    scrollText = "TRỰC TIẾP: Arsenal vs Chelsea - Trận đấu đỉnh cao tại Emirates Stadium",
-    scrollRepeat = 3,
-    penaltyPosition = null,
-    type = 1,
-    showMatchTime = false
+const ScoreboardBelowNew = ({
+    type = 1
 }) => {
     const {
         matchData,
@@ -30,80 +13,40 @@ const ScoreboardBelow = ({
     } = usePublicMatch();
     
     const [currentType, setCurrentType] = useState(type);
-    const [debugValues, setDebugValues] = useState({
-        teamAName: "Arsenal",
-        teamBName: "Chelsea",
-        teamAScore: 2,
-        teamBScore: 1,
-        matchTime: "75'",
-        teamAKitColor: "#FF0000",
+
+    // Get real data from context with fallbacks
+    const currentData = {
+        teamAName: matchData?.teamA?.name || "ĐỘI A",
+        teamBName: matchData?.teamB?.name || "ĐỘI B",
+        teamALogo: matchData?.teamA?.logo || "/api/placeholder/90/90",
+        teamBLogo: matchData?.teamB?.logo || "/api/placeholder/90/90",
+        teamAScore: matchData?.teamA?.score || 0,
+        teamBScore: matchData?.teamB?.score || 0,
+        matchTime: matchData?.matchTime || "00:00",
+        period: matchData?.period || "Chưa bắt đầu",
+        status: matchData?.status || "waiting",
+        teamAKitColor: "#FF0000", // Default colors - these could be added to context later
         teamBKitColor: "#0000FF",
-        showMatchTime: false,
-        scrollText: "TRỰC TIẾP: Arsenal vs Chelsea - Trận đấu đỉnh cao tại Emirates Stadium",
-        scrollTextColor: "#FFFFFF",
-        scrollTextBg: "#FF0000",
-        scrollRepeat: 3
-    });
+        leagueLogo: "/api/placeholder/40/40"
+    };
 
-    const [showDebug, setShowDebug] = useState(false);
+    // Get marquee data
+    const scrollData = {
+        text: marqueeData?.text || "TRỰC TIẾP BÓNG ĐÁ",
+        color: marqueeData?.color || "#FFFFFF",
+        bgColor: "#FF0000",
+        repeat: 3
+    };
 
-    // Test data cho 4 loại
-    const testData = [
-        {
-            type: 1,
-            teamAName: debugValues.teamAName,
-            teamBName: debugValues.teamBName,
-            teamALogo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6mx4Lqvs5CEYiOSKn8NpwZkAPkodeXauLdw&s",
-            teamBLogo: "/images/teams/chelsea.png",
-            teamAScore: debugValues.teamAScore,
-            teamBScore: debugValues.teamBScore,
-            matchTime: debugValues.matchTime,
-            teamAKitColor: debugValues.teamAKitColor,
-            teamBKitColor: debugValues.teamBKitColor,
-            leagueLogo: "/images/leagues/premier.png"
-        },
-        {
-            type: 2,
-            teamAName: debugValues.teamAName,
-            teamBName: debugValues.teamBName,
-            teamALogo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6mx4Lqvs5CEYiOSKn8NpwZkAPkodeXauLdw&s",
-            teamBLogo: "/images/teams/real.png",
-            teamAScore: debugValues.teamAScore,
-            teamBScore: debugValues.teamBScore,
-            matchTime: debugValues.matchTime,
-            teamAKitColor: debugValues.teamAKitColor,
-            teamBKitColor: debugValues.teamBKitColor,
-            leagueLogo: "/images/leagues/laliga.png"
-        },
-        {
-            type: 3,
-            teamAName: debugValues.teamAName,
-            teamBName: debugValues.teamBName,
-            teamALogo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6mx4Lqvs5CEYiOSKn8NpwZkAPkodeXauLdw&s",
-            teamBLogo: "/images/teams/liverpool.png",
-            teamAScore: debugValues.teamAScore,
-            teamBScore: debugValues.teamBScore,
-            matchTime: debugValues.matchTime,
-            teamAKitColor: debugValues.teamAKitColor,
-            teamBKitColor: debugValues.teamBKitColor,
-            leagueLogo: "/images/leagues/premier.png"
-        },
-        {
-            type: 4,
-            teamAName: debugValues.teamAName,
-            teamBName: debugValues.teamBName,
-            teamALogo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6mx4Lqvs5CEYiOSKn8NpwZkAPkodeXauLdw&s",
-            teamBLogo: "/images/teams/monaco.png",
-            teamAScore: debugValues.teamAScore,
-            teamBScore: debugValues.teamBScore,
-            matchTime: debugValues.matchTime,
-            teamAKitColor: debugValues.teamAKitColor,
-            teamBKitColor: debugValues.teamBKitColor,
-            leagueLogo: "https://logos-world.net/wp-content/uploads/2020/06/Premier-League-Logo.png"
+    // Determine if we should show match time based on status
+    const showMatchTime = currentData.status === 'live' || currentData.status === 'pause';
+
+    // Update current type based on display settings
+    useEffect(() => {
+        if (displaySettings?.selectedSkin) {
+            setCurrentType(displaySettings.selectedSkin);
         }
-    ];
-
-    const currentData = testData[currentType - 1];
+    }, [displaySettings?.selectedSkin]);
 
     // Hàm tính độ sáng của màu để chọn màu chữ phù hợp
     const getTextColor = (backgroundColor) => {
@@ -157,7 +100,7 @@ const ScoreboardBelow = ({
                 </div>
 
                 {/* Thời gian trận đấu (nếu có) */}
-                {debugValues.showMatchTime && (
+                {showMatchTime && (
                     <div className="bg-black text-white px-2 py-1 text-sm font-bold whitespace-nowrap">
                         {currentData.matchTime}
                     </div>
@@ -185,7 +128,7 @@ const ScoreboardBelow = ({
             </div>
 
             {/* Live Match Label cho Type 1 */}
-            {!debugValues.showMatchTime && (
+            {!showMatchTime && (
                 <div className="text-center mt-2">
                     <span className="bg-green-600 text-white px-4 py-1 text-sm font-bold rounded animate-pulse">
                         ● TRỰC TIẾP
@@ -198,13 +141,13 @@ const ScoreboardBelow = ({
     const renderScoreboardType2 = () => (
         <div className="flex flex-col items-center">
             <div className="relative w-full flex justify-center items-center m-0 p-0">
-                {/* Scoreboard chính - Thu hẹp width */}
+                {/* Scoreboard chính */}
                 <div
                     className="flex items-center justify-center relative z-10 h-8 rounded-md m-0 p-0 gap-0"
                     style={{
                         background: `linear-gradient(to right, ${currentData.teamAKitColor}, ${currentData.teamBKitColor})`,
                         overflow: 'hidden',
-                        width: debugValues.showMatchTime ? '285px' : '265px', // Thu hẹp width cố định
+                        width: showMatchTime ? '285px' : '265px',
                     }}
                 >
                     {/* Team A Name */}
@@ -215,7 +158,7 @@ const ScoreboardBelow = ({
                             height: '100%',
                             fontSize: 'clamp(10px, 4vw, 16px)',
                             color: getTextColor(currentData.teamAKitColor),
-                            textShadow: '1px 1px 2px rgba(0,0,0,0.8)', // Đổ bóng để dễ nhìn hơn
+                            textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
                         }}
                     >
                         {currentData.teamAName}
@@ -236,7 +179,7 @@ const ScoreboardBelow = ({
                     </div>
 
                     {/* Nếu có thời gian thì hiển thị */}
-                    {debugValues.showMatchTime && (
+                    {showMatchTime && (
                         <div className="bg-yellow-400 text-black text-xs font-bold rounded m-0"
                             style={{
                                 padding: '0 4px',
@@ -271,7 +214,7 @@ const ScoreboardBelow = ({
                             height: '100%',
                             fontSize: 'clamp(10px, 4vw, 16px)',
                             color: getTextColor(currentData.teamBKitColor),
-                            textShadow: '1px 1px 2px rgba(0,0,0,0.8)', // Đổ bóng để dễ nhìn hơn
+                            textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
                         }}
                     >
                         {currentData.teamBName}
@@ -282,7 +225,7 @@ const ScoreboardBelow = ({
                 <div
                     className="absolute z-20"
                     style={{
-                        left: `calc(50% - ${debugValues.showMatchTime ? '168px' : '158px'})`, // Điều chỉnh lại cho phù hợp với width mới
+                        left: `calc(50% - ${showMatchTime ? '168px' : '158px'})`,
                         top: '50%',
                         transform: 'translateY(-50%)',
                     }}
@@ -305,7 +248,7 @@ const ScoreboardBelow = ({
                 <div
                     className="absolute z-20"
                     style={{
-                        right: `calc(50% - ${debugValues.showMatchTime ? '168px' : '158px'})`, // Điều chỉnh lại cho phù hợp với width mới
+                        right: `calc(50% - ${showMatchTime ? '168px' : '158px'})`,
                         top: '50%',
                         transform: 'translateY(-50%)',
                     }}
@@ -326,7 +269,7 @@ const ScoreboardBelow = ({
             </div>
 
             {/* Live Match Label cho Type 2 */}
-            {!debugValues.showMatchTime && (
+            {!showMatchTime && (
                 <div className="text-center mt-2">
                     <span className="bg-green-600 text-white px-4 py-1 text-sm font-bold rounded animate-pulse">
                         ● TRỰC TIẾP
@@ -359,12 +302,12 @@ const ScoreboardBelow = ({
                         <span className="mx-2 text-gray-400 font-light">:</span>
                         <span className="font-bold text-xl text-gray-900">{currentData.teamBScore}</span>
                     </div>
-                    {debugValues.showMatchTime && (
+                    {showMatchTime && (
                         <div className="bg-red-600 text-white px-2 py-0.5 text-xs font-medium rounded-sm mt-1">
                             {currentData.matchTime}
                         </div>
                     )}
-                    {!debugValues.showMatchTime && (
+                    {!showMatchTime && (
                         <div className="bg-green-600 text-white px-2 py-0.5 text-xs font-medium rounded-sm mt-1 animate-pulse">
                             ● TRỰC TIẾP
                         </div>
@@ -440,8 +383,8 @@ const ScoreboardBelow = ({
                             {currentData.teamBScore}
                         </div>
                     </div>
-                    <div className={`text-white text-xs font-bold px-2 py-0.5 ${debugValues.showMatchTime ? 'bg-red-600' : 'bg-green-600'}`}>
-                        {debugValues.showMatchTime ? currentData.matchTime : '● TRỰC TIẾP'}
+                    <div className={`text-white text-xs font-bold px-2 py-0.5 ${showMatchTime ? 'bg-red-600' : 'bg-green-600'}`}>
+                        {showMatchTime ? currentData.matchTime : '● TRỰC TIẾP'}
                     </div>
                 </div>
 
@@ -481,214 +424,43 @@ const ScoreboardBelow = ({
         }
     };
 
-    const handleDebugChange = (key, value) => {
-        setDebugValues(prev => ({
-            ...prev,
-            [key]: value
-        }));
-    };
-
     return (
-        <div className="w-full min-h-screen bg-gray-900 relative overflow-x-auto">
-            {/* Debug Panel */}
-            <div className="absolute top-4 right-4 z-50">
-                <button
-                    onClick={() => setShowDebug(!showDebug)}
-                    className="px-4 py-2 bg-blue-600 text-white rounded mb-2 hover:bg-blue-700"
-                >
-                    {showDebug ? 'Hide Debug' : 'Show Debug'}
-                </button>
-
-                {showDebug && (
-                    <div className="bg-white rounded-lg p-4 shadow-lg max-w-md max-h-96 overflow-y-auto">
-                        <h3 className="font-bold mb-3 text-black">Debug Panel</h3>
-
-                        {/* Scoreboard Type */}
-                        <div className="mb-3">
-                            <label className="block text-sm font-medium text-black mb-1">Scoreboard Type</label>
-                            <div className="flex space-x-2">
-                                {[1, 2, 3, 4].map(type => (
-                                    <button
-                                        key={type}
-                                        onClick={() => setCurrentType(type)}
-                                        className={`px-3 py-1 text-sm font-bold rounded ${currentType === type
-                                            ? 'bg-blue-600 text-white'
-                                            : 'bg-gray-200 text-black hover:bg-gray-300'
-                                            }`}
-                                    >
-                                        {type}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Team Names */}
-                        <div className="mb-3">
-                            <label className="block text-sm font-medium text-black mb-1">Team A Name</label>
-                            <input
-                                type="text"
-                                value={debugValues.teamAName}
-                                onChange={(e) => handleDebugChange('teamAName', e.target.value)}
-                                className="w-full px-2 py-1 border rounded text-black"
-                            />
-                        </div>
-
-                        <div className="mb-3">
-                            <label className="block text-sm font-medium text-black mb-1">Team B Name</label>
-                            <input
-                                type="text"
-                                value={debugValues.teamBName}
-                                onChange={(e) => handleDebugChange('teamBName', e.target.value)}
-                                className="w-full px-2 py-1 border rounded text-black"
-                            />
-                        </div>
-
-                        {/* Scores */}
-                        <div className="mb-3 flex space-x-2">
-                            <div className="flex-1">
-                                <label className="block text-sm font-medium text-black mb-1">Score A</label>
-                                <input
-                                    type="number"
-                                    value={debugValues.teamAScore}
-                                    onChange={(e) => handleDebugChange('teamAScore', parseInt(e.target.value) || 0)}
-                                    className="w-full px-2 py-1 border rounded text-black"
-                                />
-                            </div>
-                            <div className="flex-1">
-                                <label className="block text-sm font-medium text-black mb-1">Score B</label>
-                                <input
-                                    type="number"
-                                    value={debugValues.teamBScore}
-                                    onChange={(e) => handleDebugChange('teamBScore', parseInt(e.target.value) || 0)}
-                                    className="w-full px-2 py-1 border rounded text-black"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Match Time */}
-                        <div className="mb-3">
-                            <label className="block text-sm font-medium text-black mb-1">Match Time</label>
-                            <input
-                                type="text"
-                                value={debugValues.matchTime}
-                                onChange={(e) => handleDebugChange('matchTime', e.target.value)}
-                                className="w-full px-2 py-1 border rounded text-black"
-                            />
-                        </div>
-
-                        {/* Show Match Time Toggle */}
-                        <div className="mb-3">
-                            <label className="flex items-center text-black">
-                                <input
-                                    type="checkbox"
-                                    checked={debugValues.showMatchTime}
-                                    onChange={(e) => handleDebugChange('showMatchTime', e.target.checked)}
-                                    className="mr-2"
-                                />
-                                Show Match Time
-                            </label>
-                        </div>
-
-                        {/* Team Colors */}
-                        <div className="mb-3 flex space-x-2">
-                            <div className="flex-1">
-                                <label className="block text-sm font-medium text-black mb-1">Team A Color</label>
-                                <input
-                                    type="color"
-                                    value={debugValues.teamAKitColor}
-                                    onChange={(e) => handleDebugChange('teamAKitColor', e.target.value)}
-                                    className="w-full h-8 border rounded"
-                                />
-                            </div>
-                            <div className="flex-1">
-                                <label className="block text-sm font-medium text-black mb-1">Team B Color</label>
-                                <input
-                                    type="color"
-                                    value={debugValues.teamBKitColor}
-                                    onChange={(e) => handleDebugChange('teamBKitColor', e.target.value)}
-                                    className="w-full h-8 border rounded"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Scroll Text */}
-                        <div className="mb-3">
-                            <label className="block text-sm font-medium text-black mb-1">Scroll Text</label>
-                            <input
-                                type="text"
-                                value={debugValues.scrollText}
-                                onChange={(e) => handleDebugChange('scrollText', e.target.value)}
-                                className="w-full px-2 py-1 border rounded text-black"
-                            />
-                        </div>
-
-                        {/* Scroll Text Colors */}
-                        <div className="mb-3 flex space-x-2">
-                            <div className="flex-1">
-                                <label className="block text-sm font-medium text-black mb-1">Scroll Text Color</label>
-                                <input
-                                    type="color"
-                                    value={debugValues.scrollTextColor}
-                                    onChange={(e) => handleDebugChange('scrollTextColor', e.target.value)}
-                                    className="w-full h-8 border rounded"
-                                />
-                            </div>
-                            <div className="flex-1">
-                                <label className="block text-sm font-medium text-black mb-1">Scroll Background</label>
-                                <input
-                                    type="color"
-                                    value={debugValues.scrollTextBg}
-                                    onChange={(e) => handleDebugChange('scrollTextBg', e.target.value)}
-                                    className="w-full h-8 border rounded"
-                                />
-                            </div>
-                        </div>
-
-                        {/* Scroll Repeat */}
-                        <div className="mb-3">
-                            <label className="block text-sm font-medium text-black mb-1">Scroll Repeat</label>
-                            <input
-                                type="number"
-                                value={debugValues.scrollRepeat}
-                                onChange={(e) => handleDebugChange('scrollRepeat', parseInt(e.target.value) || 1)}
-                                className="w-full px-2 py-1 border rounded text-black"
-                                min="1"
-                                max="10"
-                            />
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            {/* ScoLiv Logo - Responsive cho desktop và mobile */}
-            <div className="absolute bottom-4 left-4 sm:left-16 z-40">
-                <img
-                    src="/images/basic/ScoLivLogo.png"
-                    alt="ScoLiv"
-                    className="w-24 h-24 sm:w-36 sm:h-36 object-contain"
-                    onError={(e) => {
-                        e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" rx="8" fill="%23007acc"/><text x="32" y="38" text-anchor="middle" font-size="12" fill="white" font-weight="bold">ScoLiv</text></svg>`;
-                    }}
-                />
-            </div>
-
-            {/* Main Scoreboard */}
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
-                <div className="scoreboard-main bg-transparent rounded-lg shadow-2xl min-w-[400px] py-3">
-                    {renderScoreboard()}
+        <div className="w-full h-screen relative overflow-hidden">
+            {/* Container that scales for mobile while maintaining proportions */}
+            <div className="w-full h-full relative bg-gray-900" style={{
+                transform: 'scale(var(--scale-factor, 1))',
+                transformOrigin: 'center center'
+            }}>
+                {/* ScoLiv Logo - Responsive cho desktop và mobile */}
+                <div className="absolute bottom-4 left-4 sm:left-16 z-40">
+                    <img
+                        src="/images/basic/ScoLivLogo.png"
+                        alt="ScoLiv"
+                        className="w-24 h-24 sm:w-36 sm:h-36 object-contain"
+                        onError={(e) => {
+                            e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" rx="8" fill="%23007acc"/><text x="32" y="38" text-anchor="middle" font-size="12" fill="white" font-weight="bold">ScoLiv</text></svg>`;
+                        }}
+                    />
                 </div>
-            </div>
 
-            {/* Scrolling Text */}
-            <div className="absolute bottom-0 left-0 w-full z-20 overflow-hidden" style={{ backgroundColor: debugValues.scrollTextBg }}>
-                <div
-                    className="animate-scroll whitespace-nowrap py-2 text-sm font-semibold"
-                    style={{
-                        color: debugValues.scrollTextColor,
-                        animation: 'scroll 30s linear infinite'
-                    }}
-                >
-                    {Array(debugValues.scrollRepeat).fill(debugValues.scrollText).join(' • ')}
+                {/* Main Scoreboard */}
+                <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
+                    <div className="scoreboard-main bg-transparent rounded-lg shadow-2xl min-w-[400px] py-3">
+                        {renderScoreboard()}
+                    </div>
+                </div>
+
+                {/* Scrolling Text */}
+                <div className="absolute bottom-0 left-0 w-full z-20 overflow-hidden" style={{ backgroundColor: scrollData.bgColor }}>
+                    <div
+                        className="animate-scroll whitespace-nowrap py-2 text-sm font-semibold"
+                        style={{
+                            color: scrollData.color,
+                            animation: 'scroll 30s linear infinite'
+                        }}
+                    >
+                        {Array(scrollData.repeat).fill(scrollData.text).join(' • ')}
+                    </div>
                 </div>
             </div>
 
@@ -701,8 +473,12 @@ const ScoreboardBelow = ({
                     animation: scroll 30s linear infinite;
                 }
                 
-                /* Ensure horizontal layout on mobile */
+                /* Mobile scaling for proportional zoom */
                 @media (max-width: 768px) {
+                    :root {
+                        --scale-factor: 0.85;
+                    }
+                    
                     .scoreboard-main {
                         min-width: 350px;
                         max-width: 95vw;
@@ -711,6 +487,12 @@ const ScoreboardBelow = ({
                     .container-name-color-left,
                     .container-name-color-right {
                         min-width: 60px;
+                    }
+                }
+                
+                @media (max-width: 480px) {
+                    :root {
+                        --scale-factor: 0.75;
                     }
                 }
                 
@@ -726,4 +508,4 @@ const ScoreboardBelow = ({
     );
 };
 
-export default ScoreboardBelow;
+export default ScoreboardBelowNew;
