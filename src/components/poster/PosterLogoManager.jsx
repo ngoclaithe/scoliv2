@@ -509,10 +509,16 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       onPosterUpdate?.(selectedPoster);
     }
 
+    console.log('[PosterLogoManager] activeLogoCategory:', activeLogoCategory);
+    console.log('[PosterLogoManager] allLogoItems:', allLogoItems);
+    console.log('[PosterLogoManager] logoItems:', logoItems);
+
     const activeItems = allLogoItems.filter(item =>
       item.category === activeLogoCategory &&
       (item.displayPositions.length > 0 || logoItems.includes(item))
     );
+
+    console.log('[PosterLogoManager] activeItems:', activeItems);
 
     if (activeItems.length > 0) {
       console.log('[PosterLogoManager] Calling onLogoUpdate with activeItems:', activeItems);
