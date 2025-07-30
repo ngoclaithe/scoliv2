@@ -43,7 +43,12 @@ export default function MatchIntroduction() {
     accentColor: posterSettings?.accentColor || '#3b82f6'
   };
 
-  const [partners, setPartners] = useState([]);
+  // Gộp tất cả partners lại thành một mảng
+  const allPartners = [
+    ...(matchData.showSponsors ? matchData.sponsors.map(url => ({ logo: url, name: 'Sponsor', type: 'sponsor' })) : []),
+    ...(matchData.showOrganizing ? matchData.organizing.map(url => ({ logo: url, name: 'Organizing', type: 'organizing' })) : []),
+    ...(matchData.showMediaPartners ? matchData.mediaPartners.map(url => ({ logo: url, name: 'Media', type: 'media' })) : [])
+  ];
 
   // Sử dụng marquee data từ context
   const marquee = {
