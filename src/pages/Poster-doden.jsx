@@ -294,9 +294,9 @@ export default function DodenMatchIntro() {
                     {matchData.organizing.map((organizingItem, index) => (
                       <div key={index} className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex justify-center items-center bg-white rounded p-0.5 shadow-lg">
                         <img
-                          src={organizing}
+                          src={organizingItem}
                           alt={`Organizing ${index + 1}`}
-                          className={`max-h-full max-w-full object-contain ${getLogoShapeClass(organizing, matchData.logoShape)}`}
+                          className={`max-h-full max-w-full object-contain ${getLogoShapeClass(organizingItem, matchData.logoShape)}`}
                         />
                       </div>
                     ))}
