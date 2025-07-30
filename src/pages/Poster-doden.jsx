@@ -25,9 +25,9 @@ export default function DodenMatchIntro() {
     stadium: contextMatchData.stadium || 'SVĐ MỸ ĐÌNH',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '20:00',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
-    // Các biến mới từ context (cập nhật) - thêm kiểm tra undefined
+    
     sponsors: sponsors?.url_logo || [],
-    organizing: organizing?.url_logo || [], // Sửa từ organizings -> organizing
+    organizing: organizing?.url_logo || [], 
     mediaPartners: mediaPartners?.url_logo || [],
     tournamentLogo: tournamentLogo?.url_logo?.[0] || null,
     liveUnit: liveUnit?.url_logo?.[0] || null,
