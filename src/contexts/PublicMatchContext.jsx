@@ -353,7 +353,7 @@ export const PublicMatchProvider = ({ children }) => {
 
           console.log('🎙️ Created audio blob, size:', audioBlob.size, 'bytes');
           audioUtils.playRefereeVoice(audioBlob);
-          console.log('✅ [PublicMatchContext] Playing referee voice successfully');
+          console.log('�� [PublicMatchContext] Playing referee voice successfully');
         } catch (error) {
           console.error('❌ Error processing referee voice in PublicMatchContext:', error);
         }
@@ -413,6 +413,7 @@ export const PublicMatchProvider = ({ children }) => {
     currentView,
     organizing: organizing || { code_logo: [], url_logo: [], position: [], type_display: [] },
     mediaPartners: mediaPartners || { code_logo: [], url_logo: [], position: [], type_display: [] },
+    tournamentLogo: tournamentLogo || { code_logo: [], url_logo: [] },
     liveUnit: liveUnit || { code_logo: [], url_logo: [], name: 'LIVE STREAMING', position: 'top-right' },
     posterSettings: posterSettings || { showTimer: true, showDate: true, showStadium: true, showLiveIndicator: true, backgroundOpacity: 0.8, textColor: '#ffffff', accentColor: '#3b82f6' },
 
