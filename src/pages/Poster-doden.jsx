@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 
 export default function DodenMatchIntro() {
-  // Sử dụng dữ liệu t�� PublicMatchContext
+  // Sử dụng dữ liệu từ PublicMatchContext
   const {
     matchData: contextMatchData,
     marqueeData,
@@ -25,22 +25,22 @@ export default function DodenMatchIntro() {
     stadium: contextMatchData.stadium || 'SVĐ MỸ ĐÌNH',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '20:00',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
-    // Các biến mới từ context (cập nhật)
-    sponsors: sponsors.url_logo || [],
-    organizing: organizing.url_logo || [], // Sửa từ organizings -> organizing
-    mediaPartners: mediaPartners.url_logo || [],
-    tournamentLogo: tournamentLogo.url_logo?.[0] || null,
-    liveUnit: liveUnit.url_logo?.[0] || null,
-    logoShape: displaySettings.logoShape || 'circle',
-    showTournamentLogo: displaySettings.showTournamentLogo,
-    showSponsors: displaySettings.showSponsors,
-    showOrganizing: displaySettings.showOrganizing,
-    showMediaPartners: displaySettings.showMediaPartners,
-    showTimer: posterSettings.showTimer,
-    showDate: posterSettings.showDate,
-    showStadium: posterSettings.showStadium,
-    showLiveIndicator: posterSettings.showLiveIndicator,
-    accentColor: posterSettings.accentColor || '#ef4444'
+    // Các biến mới từ context (cập nhật) - thêm kiểm tra undefined
+    sponsors: sponsors?.url_logo || [],
+    organizing: organizing?.url_logo || [], // Sửa từ organizings -> organizing
+    mediaPartners: mediaPartners?.url_logo || [],
+    tournamentLogo: tournamentLogo?.url_logo?.[0] || null,
+    liveUnit: liveUnit?.url_logo?.[0] || null,
+    logoShape: displaySettings?.logoShape || 'circle',
+    showTournamentLogo: displaySettings?.showTournamentLogo !== false,
+    showSponsors: displaySettings?.showSponsors !== false,
+    showOrganizing: displaySettings?.showOrganizing !== false,
+    showMediaPartners: displaySettings?.showMediaPartners !== false,
+    showTimer: posterSettings?.showTimer !== false,
+    showDate: posterSettings?.showDate !== false,
+    showStadium: posterSettings?.showStadium !== false,
+    showLiveIndicator: posterSettings?.showLiveIndicator !== false,
+    accentColor: posterSettings?.accentColor || '#ef4444'
   };
 
   // Sử dụng marquee data từ context
