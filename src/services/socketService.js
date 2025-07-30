@@ -220,6 +220,36 @@ class SocketService {
     return this.emit('sponsors_update', { sponsors });
   }
 
+  // Cập nhật đơn vị tổ chức
+  updateOrganizing(organizing) {
+    return this.emit('organizing_update', { organizing });
+  }
+
+  // Cập nhật đơn vị truyền thông
+  updateMediaPartners(mediaPartners) {
+    return this.emit('media_partners_update', { mediaPartners });
+  }
+
+  // Cập nhật logo giải đấu
+  updateTournamentLogo(tournamentLogo) {
+    return this.emit('tournament_logo_update', { tournamentLogo });
+  }
+
+  // Cập nhật đơn vị live
+  updateLiveUnit(liveUnit) {
+    return this.emit('live_unit_update', { liveUnit });
+  }
+
+  // Cập nhật cài đặt poster
+  updatePosterSettings(posterSettings) {
+    return this.emit('poster_settings_update', { posterSettings });
+  }
+
+  // Cập nhật display settings
+  updateDisplaySettings(displaySettings) {
+    return this.emit('display_settings_update', { displaySettings });
+  }
+
   // Cập nhật view hiện tại cho route dynamic (MỚI)
   updateView(viewType) {
     return this.emit('view_update', { viewType });
