@@ -25,17 +25,26 @@ const ScoreboardBelowNew = ({
         matchTime: matchData?.matchTime || "00:00",
         period: matchData?.period || "Chưa bắt đầu",
         status: matchData?.status || "waiting",
-        teamAKitColor: "#FF0000", // Default colors - these could be added to context later
-        teamBKitColor: "#0000FF",
+        teamAKitColor: matchData?.teamAKitColor || "#FF0000", // Get from match data
+        teamBKitColor: matchData?.teamBKitColor || "#0000FF", // Get from match data
         leagueLogo: "/api/placeholder/40/40"
     };
 
-    // Get marquee data
+    // Get marquee data from context (updated via Clock Settings)
     const scrollData = {
-        text: marqueeData?.text || "TRỰC TIẾP BÓNG ĐÁ",
-        color: marqueeData?.color || "#FFFFFF",
-        bgColor: "#FF0000",
-        repeat: 3
+        text: marqueeData?.text || "TRỰC TI��P BÓNG ĐÁ",
+        color: marqueeData?.color === 'white-black' ? '#FFFFFF' :
+               marqueeData?.color === 'black-white' ? '#000000' :
+               marqueeData?.color === 'white-blue' ? '#FFFFFF' :
+               marqueeData?.color === 'white-red' ? '#FFFFFF' :
+               marqueeData?.color === 'white-green' ? '#FFFFFF' : "#FFFFFF",
+        bgColor: marqueeData?.color === 'white-black' ? '#000000' :
+                 marqueeData?.color === 'black-white' ? '#FFFFFF' :
+                 marqueeData?.color === 'white-blue' ? '#2563eb' :
+                 marqueeData?.color === 'white-red' ? '#dc2626' :
+                 marqueeData?.color === 'white-green' ? '#16a34a' : "#FF0000",
+        repeat: 3,
+        mode: marqueeData?.mode || 'none'
     };
 
     // Determine if we should show match time based on status
