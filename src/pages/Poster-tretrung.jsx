@@ -138,7 +138,7 @@ export default function TreTrungMatchIntro() {
                   <img
                     src={matchData.logo1}
                     alt={matchData.team1}
-                    className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300"
+                    className={getLogoShapeClass("relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300")}
                   />
                 </div>
                 <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
