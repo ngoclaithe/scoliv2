@@ -24,7 +24,23 @@ export default function TreTrungMatchIntro() {
     logo2: contextMatchData.teamB.logo || '/images/background-poster/default_logoB.png',
     stadium: contextMatchData.stadium || 'SVĐ THỐNG NHẤT',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '15:30',
-    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN')
+    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
+    // Các biến mới từ context
+    sponsors: sponsors.url_logo || [],
+    organizing: organizing.url_logo || [],
+    mediaPartners: mediaPartners.url_logo || [],
+    tournamentLogo: tournamentLogo.url_logo?.[0] || null,
+    liveUnit: liveUnit.url_logo?.[0] || null,
+    logoShape: displaySettings.logoShape || 'circle',
+    showTournamentLogo: displaySettings.showTournamentLogo,
+    showSponsors: displaySettings.showSponsors,
+    showOrganizing: displaySettings.showOrganizing,
+    showMediaPartners: displaySettings.showMediaPartners,
+    showTimer: posterSettings.showTimer,
+    showDate: posterSettings.showDate,
+    showStadium: posterSettings.showStadium,
+    showLiveIndicator: posterSettings.showLiveIndicator,
+    accentColor: posterSettings.accentColor || '#10b981'
   };
 
   const [partners, setPartners] = useState([]);
