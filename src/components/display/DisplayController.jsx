@@ -93,7 +93,10 @@ const DisplayController = () => {
       case 'scoreboard':
         return <ScoreboardAbove accessCode={accessCode} />;
       case 'scoreboard_below':
-        return <ScoreboardBelow accessCode={accessCode} />;
+        return <ScoreboardBelowNew
+          accessCode={accessCode}
+          type={displaySettings.selectedSkin || 1}
+        />;
       case 'poster':
       default:
         const posterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;
