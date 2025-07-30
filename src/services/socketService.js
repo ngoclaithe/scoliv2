@@ -222,31 +222,37 @@ class SocketService {
 
   // Cập nhật đơn vị tổ chức
   updateOrganizing(organizing) {
+    console.log('[Socket] organizing_update:', organizing);
     return this.emit('organizing_update', { organizing });
   }
 
   // Cập nhật đơn vị truyền thông
   updateMediaPartners(mediaPartners) {
+    console.log('[Socket] media_partners_update:', mediaPartners);
     return this.emit('media_partners_update', { mediaPartners });
   }
 
   // Cập nhật logo giải đấu
   updateTournamentLogo(tournamentLogo) {
+    console.log('[Socket] tournament_logo_update:', tournamentLogo);
     return this.emit('tournament_logo_update', { tournamentLogo });
   }
 
   // Cập nhật đơn vị live
   updateLiveUnit(liveUnit) {
+    console.log('[Socket] live_unit_update:', liveUnit);
     return this.emit('live_unit_update', { liveUnit });
   }
 
   // Cập nhật cài đặt poster
   updatePosterSettings(posterSettings) {
+    console.log('[Socket] poster_settings_update:', posterSettings);
     return this.emit('poster_settings_update', { posterSettings });
   }
 
   // Cập nhật display settings
   updateDisplaySettings(displaySettings) {
+    console.log('[Socket] display_settings_update:', displaySettings);
     return this.emit('display_settings_update', { displaySettings });
   }
 
@@ -255,7 +261,7 @@ class SocketService {
     return this.emit('view_update', { viewType });
   }
 
-  // Request toàn bộ state hiện tại từ server
+  // Request toàn bộ state hi���n tại từ server
   requestCurrentState() {
     return this.emit('request_current_state', {
       timestamp: Date.now(),
