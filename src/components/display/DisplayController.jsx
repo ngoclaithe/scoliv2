@@ -15,7 +15,7 @@ import PosterXanhDuong from '../../pages/Poster-xanhduong';
 import Intro from '../introduce/Intro';
 import HalfTime from '../halftime/HalfTime';
 import ScoreboardAbove from '../scoreboard_preview/ScoreboardAbove';
-import ScoreboardBelow from '../scoreboard_preview/ScoreboardBelow';
+import ScoreboardBelowNew from '../scoreboard_preview/ScoreboardBelowNew';
 
 const DisplayController = () => {
   const { accessCode } = useParams();
