@@ -3,7 +3,17 @@ import { usePublicMatch } from '../contexts/PublicMatchContext';
 
 export default function MatchIntroduction() {
   // Sử dụng dữ liệu từ PublicMatchContext
-  const { matchData: contextMatchData, marqueeData } = usePublicMatch();
+  const {
+    matchData: contextMatchData,
+    marqueeData,
+    sponsors,
+    organizing,
+    mediaPartners,
+    tournamentLogo,
+    liveUnit,
+    displaySettings,
+    posterSettings
+  } = usePublicMatch();
   
   // Kết hợp dữ liệu từ context với dữ liệu mặc định
   const matchData = {
