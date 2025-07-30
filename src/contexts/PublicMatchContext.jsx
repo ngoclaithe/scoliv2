@@ -292,7 +292,7 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật đơn vị truyền thông
+    // Lắng nghe cập nhật đơn v�� truyền thông
     socketService.on('media_partners_updated', (data) => {
       setMediaPartners(prev => ({ ...prev, ...data.mediaPartners }));
       setLastUpdateTime(Date.now());
@@ -325,7 +325,7 @@ export const PublicMatchProvider = ({ children }) => {
     // Lắng nghe cập nhật view hiện tại (MỚI) - KHÔNG update time để tránh re-render
     socketService.on('view_updated', (data) => {
       setCurrentView(data.viewType);
-      console.log('🎯 [Audio] View updated to:', data.viewType);
+      console.log('��� [Audio] View updated to:', data.viewType);
     });
 
     // Lắng nghe audio control events - để nhận referee voice từ CommentarySection
@@ -411,10 +411,10 @@ export const PublicMatchProvider = ({ children }) => {
     lastUpdateTime,
     currentAccessCode,
     currentView,
-    organizing,
-    mediaPartners,
-    liveUnit,
-    posterSettings,
+    organizing: organizing || { code_logo: [], url_logo: [], position: [], type_display: [] },
+    mediaPartners: mediaPartners || { code_logo: [], url_logo: [], position: [], type_display: [] },
+    liveUnit: liveUnit || { code_logo: [], url_logo: [], name: 'LIVE STREAMING', position: 'top-right' },
+    posterSettings: posterSettings || { showTimer: true, showDate: true, showStadium: true, showLiveIndicator: true, backgroundOpacity: 0.8, textColor: '#ffffff', accentColor: '#3b82f6' },
 
     // Actions
     initializeSocket,
