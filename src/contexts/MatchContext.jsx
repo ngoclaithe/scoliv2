@@ -504,9 +504,72 @@ export const MatchProvider = ({ children }) => {
   // Cập nhật chữ chạy
   const updateMarquee = useCallback((newMarqueeData) => {
     setMarqueeData(prev => ({ ...prev, ...newMarqueeData }));
-    
+
     if (socketConnected) {
       socketService.updateMarquee(newMarqueeData);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật nhà tài trợ
+  const updateSponsors = useCallback((newSponsors) => {
+    setSponsors(prev => ({ ...prev, ...newSponsors }));
+
+    if (socketConnected) {
+      socketService.updateSponsors(newSponsors);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật đơn vị tổ chức
+  const updateOrganizing = useCallback((newOrganizing) => {
+    setOrganizings(prev => ({ ...prev, ...newOrganizing }));
+
+    if (socketConnected) {
+      socketService.updateOrganizing(newOrganizing);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật đơn vị truyền thông
+  const updateMediaPartners = useCallback((newMediaPartners) => {
+    setMediaPartners(prev => ({ ...prev, ...newMediaPartners }));
+
+    if (socketConnected) {
+      socketService.updateMediaPartners(newMediaPartners);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật logo giải đấu
+  const updateTournamentLogo = useCallback((newTournamentLogo) => {
+    setTournamentLogo(prev => ({ ...prev, ...newTournamentLogo }));
+
+    if (socketConnected) {
+      socketService.updateTournamentLogo(newTournamentLogo);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật đơn vị live
+  const updateLiveUnit = useCallback((newLiveUnit) => {
+    setLiveUnit(prev => ({ ...prev, ...newLiveUnit }));
+
+    if (socketConnected) {
+      socketService.updateLiveUnit(newLiveUnit);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật cài đặt poster
+  const updatePosterSettings = useCallback((newPosterSettings) => {
+    setPosterSettings(prev => ({ ...prev, ...newPosterSettings }));
+
+    if (socketConnected) {
+      socketService.updatePosterSettings(newPosterSettings);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật display settings
+  const updateDisplaySettings = useCallback((newDisplaySettings) => {
+    setDisplaySettings(prev => ({ ...prev, ...newDisplaySettings }));
+
+    if (socketConnected) {
+      socketService.updateDisplaySettings(newDisplaySettings);
     }
   }, [socketConnected]);
 
