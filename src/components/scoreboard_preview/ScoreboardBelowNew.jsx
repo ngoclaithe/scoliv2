@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { usePublicMatch } from '../../contexts/PublicMatchContext';
 
 const ScoreboardBelow = ({
     teamAName = "Arsenal",
@@ -20,7 +21,14 @@ const ScoreboardBelow = ({
     type = 1,
     showMatchTime = false
 }) => {
-
+    const {
+        matchData,
+        displaySettings,
+        marqueeData,
+        penaltyData,
+        socketConnected
+    } = usePublicMatch();
+    
     const [currentType, setCurrentType] = useState(type);
     const [debugValues, setDebugValues] = useState({
         teamAName: "Arsenal",
@@ -378,12 +386,12 @@ const ScoreboardBelow = ({
             <LogoImage src={currentData.teamBLogo} alt={currentData.teamBName} className="w-12 h-12" />
         </div>
     );
-    
+
     const renderScoreboardType4 = () => (
         <div className="flex flex-col items-center">
             <div className="flex items-center justify-between w-full">
                 <LogoImage src={currentData.teamALogo} alt={currentData.teamAName} className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0" />
-    
+
                 <div className="flex items-center z-20">
                     {/* Hình thang cân xuôi cho tên đội A */}
                     <div
@@ -404,7 +412,7 @@ const ScoreboardBelow = ({
                         }}
                     />
                 </div>
-    
+
                 {/* Hình thang cân xuôi cho phần tỉ số */}
                 <div className="flex flex-col items-center -mr-12 -ml-12">
                     <div
@@ -418,16 +426,16 @@ const ScoreboardBelow = ({
                         <div className="text-white font-bold text-lg sm:text-xl min-w-[1.5rem] sm:min-w-[2rem] text-center">
                             {currentData.teamAScore}
                         </div>
-                        
+
                         {/* Logo League - đặt vào container riêng để không bị cắt */}
                         <div className="mx-2 sm:mx-3 relative" style={{ top: '-6px' }}>
-                            <LogoImage 
-                                src={currentData.leagueLogo} 
-                                alt="League" 
-                                className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 flex-shrink-0" 
+                            <LogoImage
+                                src={currentData.leagueLogo}
+                                alt="League"
+                                className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 flex-shrink-0"
                             />
                         </div>
-                        
+
                         <div className="text-white font-bold text-lg sm:text-xl min-w-[1.5rem] sm:min-w-[2rem] text-center">
                             {currentData.teamBScore}
                         </div>
@@ -436,7 +444,7 @@ const ScoreboardBelow = ({
                         {debugValues.showMatchTime ? currentData.matchTime : '● TRỰC TIẾP'}
                     </div>
                 </div>
-    
+
                 <div className="flex items-center z-20">
                     {/* Màu áo đội B - hình bình hành khít vào hình thang xuôi */}
                     <div
@@ -457,12 +465,12 @@ const ScoreboardBelow = ({
                         <span className="truncate text-center">{currentData.teamBName}</span>
                     </div>
                 </div>
-    
+
                 <LogoImage src={currentData.teamBLogo} alt={currentData.teamBName} className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0" />
             </div>
         </div>
     );
-    
+
     const renderScoreboard = () => {
         switch (currentType) {
             case 1: return renderScoreboardType1();
