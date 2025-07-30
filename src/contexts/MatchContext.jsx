@@ -688,6 +688,15 @@ export const MatchProvider = ({ children }) => {
     updateView,
     resetMatch,
 
+    // Logo update functions
+    updateSponsors,
+    updateOrganizing,
+    updateMediaPartners,
+    updateTournamentLogo,
+    updateLiveUnit,
+    updatePosterSettings,
+    updateDisplaySettings,
+
     // Timer functions
     resumeTimer,
 
