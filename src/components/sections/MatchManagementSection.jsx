@@ -55,7 +55,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   const [isPaused, setIsPaused] = useState(false);
   const [currentAudioFile, setCurrentAudioFile] = useState(null);
 
-  // State cho các tùy chọn đi��u khiển UI
+  // State cho các tùy chọn điều khiển UI
   const [selectedOption, setSelectedOption] = useState("gioi-thieu");
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
@@ -106,8 +106,6 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
   }, [matchData.startTime, matchData.stadium, matchData.matchDate]);
 
-  // MatchManagementSection chỉ cần audio LOCAL, không cần socket audio listeners
-  // Socket audio listeners chỉ cần trong CommentarySection
 
   // HÀM PHÁT AUDIO TRỰC TIẾP - ĐƯỢC GỌI KHI CLICK BUTTON
   const playAudioForAction = (audioType) => {
@@ -243,7 +241,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateScore(team, increment);
   };
 
-  // Hàm cập nh��t thống kê
+  // Hàm cập nhật thống kê
   const updateStat = (statKey, team, value) => {
     const newStats = {
       ...matchStats,
@@ -430,7 +428,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           </div>
         </div>
 
-        {/* Nút T��M DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
+        {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
         <div className="flex justify-center items-center mt-2 space-x-2">
           {/* Audio Pause/Play Button */}
           <Button
@@ -685,7 +683,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 logoA: teamAInfo.logo || matchData.teamA.logo,
                 logoB: teamBInfo.logo || matchData.teamB.logo
               });
-              toast.success('✅ Đã cập nh��t thông tin trận đấu thành công!');
+              toast.success('✅ Đã cập nhật thông tin trận đấu thành công!');
             }}
             className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
           >
@@ -809,7 +807,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 onUpdate={(team, value) => updatePossession(team, value)}
               />
 
-              {/* T��ng số cú sút */}
+              {/* Tổng số cú sút */}
               <EditableStatBar
                 label="Tổng số cú sút"
                 statKey="totalShots"
@@ -991,7 +989,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">���</span>
+              <span className="text-sm mr-1"></span>
               <span className="text-xs font-bold text-center">ĐẾM 0</span>
             </button>
 
@@ -999,7 +997,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             <button
               onClick={() => {
                 const timeString = "20:00";
-                // Set thời gian về 25:00 và b��t đầu đếm ti��n từ server timer
+                // Set thời gian về 25:00 và bắt đầu đếm tiến từ server timer
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
@@ -1023,7 +1021,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
-                console.log('📡 Server sẽ emit timer_tick events với displayTime format t��:', timeString);
+                console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -1077,7 +1075,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 setSelectedOption("ti-so-tren");
                 // Phát audio gialap cho đếm giờ
                 playAudioForAction('gialap');
-                console.log('🕰️ Đã áp d��ng: Timer sẽ đếm từ:', timeString);
+                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 45:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -1097,7 +1095,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               {/* <span className="text-sm mr-1"></span> */}
-              <span className="text-xs font-bold text-center">GIỚI THI��U</span>
+              <span className="text-xs font-bold text-center">GIỚI THIỆU</span>
             </button>
 
             {/* Tỉ số trên */}

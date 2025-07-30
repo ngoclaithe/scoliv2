@@ -292,7 +292,7 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật đơn v�� truyền thông
+    // Lắng nghe cập nhật đơn vị truyền thông
     socketService.on('media_partners_updated', (data) => {
       setMediaPartners(prev => ({ ...prev, ...data.mediaPartners }));
       setLastUpdateTime(Date.now());
@@ -325,7 +325,7 @@ export const PublicMatchProvider = ({ children }) => {
     // Lắng nghe cập nhật view hiện tại (MỚI) - KHÔNG update time để tránh re-render
     socketService.on('view_updated', (data) => {
       setCurrentView(data.viewType);
-      console.log('��� [Audio] View updated to:', data.viewType);
+      console.log('[Audio] View updated to:', data.viewType);
     });
 
     // Lắng nghe audio control events - để nhận referee voice từ CommentarySection
@@ -353,7 +353,7 @@ export const PublicMatchProvider = ({ children }) => {
 
           console.log('🎙️ Created audio blob, size:', audioBlob.size, 'bytes');
           audioUtils.playRefereeVoice(audioBlob);
-          console.log('�� [PublicMatchContext] Playing referee voice successfully');
+          console.log('[PublicMatchContext] Playing referee voice successfully');
         } catch (error) {
           console.error('❌ Error processing referee voice in PublicMatchContext:', error);
         }
@@ -391,7 +391,6 @@ export const PublicMatchProvider = ({ children }) => {
     }
   }, [currentAccessCode, socketConnected, setupSocketListeners]);
 
-  // Ngắt kết n���i socket
   const disconnectSocket = useCallback(() => {
     socketService.disconnect();
     setSocketConnected(false);

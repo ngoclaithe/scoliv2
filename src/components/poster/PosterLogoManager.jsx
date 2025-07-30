@@ -29,7 +29,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
     },
     {
       id: "doden",
-      name: "Đ��� đen",
+      name: "Đỏ đen",
       thumbnail: "/images/posters/poster3.jpg",
     },
     {
@@ -174,7 +174,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       } catch (error) {
         console.error("Lỗi khi tải lên:", error);
         
-        // C���p nh��t trạng thái lỗi
+        // Cập nhật trạng thái lỗi
         setLogoItems(prev => prev.map(logo => 
           logo.id === item.id 
             ? { ...logo, uploadStatus: 'error' }
@@ -251,7 +251,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       if (localCode.trim().length >= 3) {
         try {
           setIsSearching(true);
-          console.log('🔍 [PosterLogoManager] Tìm kiếm logo v��i code:', localCode);
+          console.log('🔍 [PosterLogoManager] Tìm kiếm logo với code:', localCode);
           const response = await LogoAPI.searchLogosByCode(localCode.trim(), true);
 
           if (response?.data?.length > 0) {

@@ -3,11 +3,7 @@ import { usePublicMatch } from '../../contexts/PublicMatchContext';
 // Audio moved to audioUtils
 
 const Intro = () => {
-    // Sử dụng dữ liệu t��� PublicMatchContext
     const { matchData: contextMatchData, marqueeData } = usePublicMatch();
-
-    // Audio sẽ được phát từ MatchManagementSection, không phát ở đây nữa
-    // const { audioEnabled, playAudio, stopCurrentAudio } = useAudio();
 
     // Kết hợp dữ liệu từ context với dữ liệu mặc định
     const matchData = {

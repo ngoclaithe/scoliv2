@@ -262,7 +262,7 @@ class SocketService {
     return this.emit('view_update', { viewType });
   }
 
-  // Request toàn bộ state hi���n tại từ server
+  // Request toàn bộ state hiện tại từ server
   requestCurrentState() {
     return this.emit('request_current_state', {
       timestamp: Date.now(),

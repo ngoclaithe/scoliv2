@@ -569,7 +569,7 @@ export const MatchProvider = ({ children }) => {
 
   // Cập nhật thời gian trận đấu - Sử dụng server timer
   const updateMatchTime = useCallback((matchTime, period, status) => {
-    // Cập nh���t local state trước khi gửi đến server
+    // Cập nhật local state trước khi gửi đến server
     setMatchData(prev => ({ ...prev, matchTime, period, status }));
 
     if (socketConnected) {
