@@ -614,9 +614,8 @@ const MatchManagementSection = ({ isActive = true }) => {
             </div>
           </div>
 
-          {/* Màu áo và quần - 2 hàng compact */}
-                    {/* Màu áo và quần - 1 hàng compact */}
-                    <div className="grid grid-cols-2 gap-1">
+          {/* Màu áo - 1 hàng compact */}
+          <div className="grid grid-cols-2 gap-1">
             {/* Đội A */}
             <div className="flex items-center gap-1 min-w-0">
               <span className="text-xs text-red-600 flex-shrink-0">A:</span>
@@ -628,14 +627,6 @@ const MatchManagementSection = ({ isActive = true }) => {
                 title="Áo A"
               />
               <span className="text-xs text-gray-500 flex-shrink-0">Áo</span>
-              <input
-                type="color"
-                value={teamAInfo.pantsColor || '#ff0000'}
-                onChange={(e) => setTeamAInfo(prev => ({ ...prev, pantsColor: e.target.value }))}
-                className="w-5 h-5 border border-gray-300 rounded cursor-pointer flex-shrink-0"
-                title="Quần A"
-              />
-              <span className="text-xs text-gray-500 flex-shrink-0">Quần</span>
             </div>
             {/* Đội B */}
             <div className="flex items-center gap-1 min-w-0">
@@ -648,14 +639,6 @@ const MatchManagementSection = ({ isActive = true }) => {
                 title="Áo B"
               />
               <span className="text-xs text-gray-500 flex-shrink-0">Áo</span>
-              <input
-                type="color"
-                value={teamBInfo.pantsColor || '#000000'}
-                onChange={(e) => setTeamBInfo(prev => ({ ...prev, pantsColor: e.target.value }))}
-                className="w-5 h-5 border border-gray-300 rounded cursor-pointer flex-shrink-0"
-                title="Quần B"
-              />
-              <span className="text-xs text-gray-500 flex-shrink-0">Quần</span>
             </div>
           </div>
 
