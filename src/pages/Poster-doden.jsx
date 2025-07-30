@@ -284,7 +284,7 @@ export default function DodenMatchIntro() {
             )}
 
             {/* organizings Section */}
-            {hasOrganizings && (
+            {hasOrganizing && (
               <div className="text-center mt-2 sm:mt-3">
                 <h3 className="text-blue-400 text-xs sm:text-sm md:text-base font-bold mb-1 sm:mb-2 uppercase tracking-wide">
                   🤝 Đơn vị tổ chức
