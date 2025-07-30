@@ -70,7 +70,22 @@ export default function MatchIntroduction() {
     }
   };
 
-  const hasPartners = partners.length > 0;
+  const hasPartners = allPartners.length > 0;
+
+  // Helper function để lấy class cho logo shape
+  const getLogoShapeClass = (baseClass) => {
+    switch (matchData.logoShape) {
+      case 'square':
+        return `${baseClass} rounded-lg`;
+      case 'hexagon':
+        return `${baseClass} rounded-full`; // Tạm thời dùng rounded-full
+      case 'shield':
+        return `${baseClass} rounded-lg`;
+      case 'circle':
+      default:
+        return `${baseClass} rounded-full`;
+    }
+  };
 
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
