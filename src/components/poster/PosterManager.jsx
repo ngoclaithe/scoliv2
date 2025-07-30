@@ -84,8 +84,13 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose }) => 
   };
 
   const handleLogoUpdateFromManager = (logoData) => {
+    console.log('[PosterManager] handleLogoUpdateFromManager called with:', logoData);
     if (logoData && logoData.selectedLogo) {
       setSelectedLogo(logoData.selectedLogo);
+      onLogoUpdate?.(logoData);
+    } else {
+      // Pass through directly to onLogoUpdate
+      console.log('[PosterManager] Passing logoData through to onLogoUpdate');
       onLogoUpdate?.(logoData);
     }
   };
