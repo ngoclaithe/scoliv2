@@ -811,7 +811,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
               {/* T��ng số cú sút */}
               <EditableStatBar
-                label="Tổng số cú s��t"
+                label="Tổng số cú sút"
                 statKey="totalShots"
                 team1Value={matchStats.totalShots.team1}
                 team2Value={matchStats.totalShots.team2}
@@ -1077,7 +1077,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 setSelectedOption("ti-so-tren");
                 // Phát audio gialap cho đếm giờ
                 playAudioForAction('gialap');
-                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                console.log('🕰️ Đã áp d��ng: Timer sẽ đếm từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 45:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -1431,7 +1431,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
             // Cập nhật display options nếu có
             if (logoData && logoData.displayOptions) {
-              console.log("⚙️ [MatchManagementSection] Updating display settings:", logoData.displayOptions);
+              console.log("[MatchManagementSection] Calling updateDisplaySettings");
               updateDisplaySettings({
                 logoShape: logoData.displayOptions.shape || 'circle',
                 rotateDisplay: logoData.displayOptions.rotateDisplay || false
