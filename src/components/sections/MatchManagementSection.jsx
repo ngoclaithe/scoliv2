@@ -45,7 +45,6 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateMediaPartners,
     updateTournamentLogo,
     updateLiveUnit,
-    updatePosterSettings,
     updateDisplaySettings,
 
   } = useMatch();
@@ -655,7 +654,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             </div>
           </div>
 
-          {/* Nút áp dụng */}
+          {/* Nút ��p dụng */}
           <div className="flex justify-center pt-2 border-t border-blue-200">
             <Button
               variant="primary"
@@ -1267,7 +1266,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
           {/* Text content */}
           <Input
-            placeholder="N���i dung chữ chạy..."
+            placeholder="Nội dung chữ chạy..."
             value={clockText}
             onChange={(e) => setClockText(e.target.value)}
             maxLength={100}
