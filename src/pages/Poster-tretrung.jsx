@@ -246,6 +246,21 @@ export default function TreTrungMatchIntro() {
           </div>
         </div>
 
+        {/* Live Unit - Top right corner */}
+        {matchData.liveUnit && (
+          <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+            <div className="bg-red-600 text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2">
+              <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+              <img
+                src={matchData.liveUnit}
+                alt="Live Unit"
+                className="h-4 sm:h-5 object-contain"
+              />
+              <span className="text-xs sm:text-sm font-bold">LIVE</span>
+            </div>
+          </div>
+        )}
+
         {/* Marquee - Hidden by default, will show when socket updates */}
         {marquee.isRunning && marquee.text && (
           <div className="absolute bottom-0 left-0 w-full h-8 sm:h-12 bg-gradient-to-r from-green-900 via-emerald-900 to-green-900 border-t-2 border-green-400 overflow-hidden">
