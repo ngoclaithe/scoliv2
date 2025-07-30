@@ -43,7 +43,12 @@ export default function TreTrungMatchIntro() {
     accentColor: posterSettings.accentColor || '#10b981'
   };
 
-  const [partners, setPartners] = useState([]);
+  // Gộp tất cả partners lại thành một mảng
+  const allPartners = [
+    ...(matchData.showSponsors ? matchData.sponsors.map(url => ({ logo: url, name: 'Sponsor', type: 'sponsor' })) : []),
+    ...(matchData.showOrganizing ? matchData.organizing.map(url => ({ logo: url, name: 'Organizing', type: 'organizing' })) : []),
+    ...(matchData.showMediaPartners ? matchData.mediaPartners.map(url => ({ logo: url, name: 'Media', type: 'media' })) : [])
+  ];
 
   // Sử dụng marquee data từ context
   const marquee = {
@@ -58,14 +63,29 @@ export default function TreTrungMatchIntro() {
     if (!element) return;
     let fontSize = parseInt(window.getComputedStyle(element).fontSize);
     const minFontSize = 14;
-    
+
     while (element.scrollWidth > element.offsetWidth && fontSize > minFontSize) {
       fontSize -= 1;
       element.style.fontSize = fontSize + "px";
     }
   };
 
-  const hasPartners = partners.length > 0;
+  const hasPartners = allPartners.length > 0;
+
+  // Helper function để lấy class cho logo shape
+  const getLogoShapeClass = (baseClass) => {
+    switch (matchData.logoShape) {
+      case 'square':
+        return `${baseClass} rounded-lg`;
+      case 'hexagon':
+        return `${baseClass} rounded-full`; // Tạm thời dùng rounded-full
+      case 'shield':
+        return `${baseClass} rounded-lg`;
+      case 'circle':
+      default:
+        return `${baseClass} rounded-full`;
+    }
+  };
 
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
