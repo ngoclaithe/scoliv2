@@ -1267,7 +1267,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
           {/* Text content */}
           <Input
-            placeholder="Nội dung chữ chạy..."
+            placeholder="N���i dung chữ chạy..."
             value={clockText}
             onChange={(e) => setClockText(e.target.value)}
             maxLength={100}
@@ -1360,7 +1360,83 @@ const MatchManagementSection = ({ isActive = true }) => {
               console.log("⚠ [MatchManagementSection] No poster provided to onPosterUpdate");
             }
           }}
-          onLogoUpdate={(logoData) => console.log("Updated logo:", logoData)}
+          onLogoUpdate={(logoData) => {
+            console.log("📡 [MatchManagementSection] onLogoUpdate received:", logoData);
+
+            if (logoData && logoData.logoItems) {
+              // Phân loại logo items theo category
+              const logosByCategory = logoData.logoItems.reduce((acc, item) => {
+                if (!acc[item.category]) {
+                  acc[item.category] = [];
+                }
+                acc[item.category].push({
+                  code_logo: item.code,
+                  url_logo: item.url,
+                  position: item.displayPositions || [],
+                  type_display: item.type || 'default'
+                });
+                return acc;
+              }, {});
+
+              // Emit socket events cho từng category
+              if (logosByCategory.sponsor) {
+                console.log("🏷️ [MatchManagementSection] Updating sponsors:", logosByCategory.sponsor);
+                updateSponsors({
+                  code_logo: logosByCategory.sponsor.map(s => s.code_logo),
+                  url_logo: logosByCategory.sponsor.map(s => s.url_logo),
+                  position: logosByCategory.sponsor.map(s => s.position),
+                  type_display: logosByCategory.sponsor.map(s => s.type_display)
+                });
+              }
+
+              if (logosByCategory.organizing) {
+                console.log("🏛️ [MatchManagementSection] Updating organizing:", logosByCategory.organizing);
+                updateOrganizing({
+                  code_logo: logosByCategory.organizing.map(o => o.code_logo),
+                  url_logo: logosByCategory.organizing.map(o => o.url_logo),
+                  position: logosByCategory.organizing.map(o => o.position),
+                  type_display: logosByCategory.organizing.map(o => o.type_display)
+                });
+              }
+
+              if (logosByCategory.media) {
+                console.log("📺 [MatchManagementSection] Updating media partners:", logosByCategory.media);
+                updateMediaPartners({
+                  code_logo: logosByCategory.media.map(m => m.code_logo),
+                  url_logo: logosByCategory.media.map(m => m.url_logo),
+                  position: logosByCategory.media.map(m => m.position),
+                  type_display: logosByCategory.media.map(m => m.type_display)
+                });
+              }
+
+              if (logosByCategory.tournament) {
+                console.log("🏆 [MatchManagementSection] Updating tournament logo:", logosByCategory.tournament);
+                updateTournamentLogo({
+                  code_logo: logosByCategory.tournament.map(t => t.code_logo),
+                  url_logo: logosByCategory.tournament.map(t => t.url_logo)
+                });
+              }
+
+              if (logosByCategory.live) {
+                console.log("📡 [MatchManagementSection] Updating live unit:", logosByCategory.live);
+                updateLiveUnit({
+                  code_logo: logosByCategory.live.map(l => l.code_logo),
+                  url_logo: logosByCategory.live.map(l => l.url_logo),
+                  name: 'LIVE STREAMING',
+                  position: 'top-right'
+                });
+              }
+            }
+
+            // Cập nhật display options nếu có
+            if (logoData && logoData.displayOptions) {
+              console.log("⚙️ [MatchManagementSection] Updating display settings:", logoData.displayOptions);
+              updateDisplaySettings({
+                logoShape: logoData.displayOptions.shape || 'circle',
+                rotateDisplay: logoData.displayOptions.rotateDisplay || false
+              });
+            }
+          }}
           onClose={() => setShowPosterModal(false)}
         />
       </Modal>
@@ -1396,7 +1472,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             <h4 className="text-lg font-bold text-yellow-800 flex items-center justify-center">
               <span className="mr-2">🕰️</span>
               THIẾT LẬP ĐẾM T
-              <span className="ml-2">��️</span>
+              <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
               Trận đấu sẽ bắt đầu chạy từ thời điểm này
