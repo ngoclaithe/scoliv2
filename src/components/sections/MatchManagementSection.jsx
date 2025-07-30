@@ -654,7 +654,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             </div>
           </div>
 
-          {/* Nút ��p dụng */}
+          {/* Nút áp dụng */}
           <div className="flex justify-center pt-2 border-t border-blue-200">
             <Button
               variant="primary"
@@ -991,7 +991,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">🕐</span>
+              <span className="text-sm mr-1">���</span>
               <span className="text-xs font-bold text-center">ĐẾM 0</span>
             </button>
 
@@ -1360,7 +1360,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             }
           }}
           onLogoUpdate={(logoData) => {
-            console.log("📡 [MatchManagementSection] onLogoUpdate received:", logoData);
+            console.log("[MatchManagementSection] onLogoUpdate called with:", logoData);
 
             if (logoData && logoData.logoItems) {
               // Phân loại logo items theo category
