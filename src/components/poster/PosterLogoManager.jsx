@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Button from "../common/Button";
-import Input from "../common/Input";
 import LogoAPI from "../../API/apiLogo";
 
 const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose }) => {
@@ -56,7 +55,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       icon: "💰",
     },
     {
-      id: "organizer",
+      id: "organizing",
       name: "TỔ CHỨC",
       icon: "🏛️",
     },
@@ -89,18 +88,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
     loadLogos();
   }, []);
-
-  const getCategoryFromType = (type) => {
-    const typeMapping = {
-      'banner': 'sponsor',
-      'logo': 'sponsor',
-      'organizer': 'organizer',
-      'media': 'media',
-      'tournament': 'tournament',
-      'other': 'sponsor'
-    };
-    return typeMapping[type] || 'sponsor';
-  };
 
   const handleFileUpload = async (event, item) => {
     const file = event.target.files[0];
@@ -256,7 +243,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
           if (response?.data?.length > 0) {
             const foundLogo = response.data[0];
-            console.log('✅ [PosterLogoManager] Tìm thấy logo:', foundLogo);
             if (foundLogo.url_logo || foundLogo.file_path) {
               onUpdate(item.id, {
                 ...item,
@@ -266,11 +252,9 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
                 displayPositions: [...item.displayPositions]
               });
             } else {
-              console.warn("Logo tìm thấy nhưng không có URL hợp lệ");
               onUpdate(item.id, { ...item, code: localCode.trim() });
             }
           } else {
-            console.log('❌ [PosterLogoManager] Không tìm thấy logo với code:', localCode);
             onUpdate(item.id, { ...item, code: localCode.trim() });
           }
         } catch (error) {

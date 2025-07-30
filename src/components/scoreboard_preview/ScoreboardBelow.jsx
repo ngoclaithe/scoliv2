@@ -20,9 +20,6 @@ const ScoreboardBelow = ({
     socketConnected
   } = usePublicMatch();
 
-  // Audio đã được chuyển sang MatchManagementSection để quản lý tập trung
-  // const { playAudio } = useAudio();
-
   // State cho scoreboard data (merge với context data)
   const [scoreboardData, setScoreboardData] = useState({
     team1: "ĐỘI A",

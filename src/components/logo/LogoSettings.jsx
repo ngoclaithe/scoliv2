@@ -15,7 +15,7 @@ const LogoSettings = ({ isOpen, onClose, onLogoUpdate, matchData }) => {
   const [logoPositions, setLogoPositions] = useState({
     "top-left": { logo: null, type: "sponsor" },
     "bottom-left": { logo: null, type: "media" },
-    "bottom-right": { logo: null, type: "organizer" },
+    "bottom-right": { logo: null, type: "organizing" },
     "top-right": { logo: null, type: "tournament" },
   });
 
@@ -86,7 +86,7 @@ const LogoSettings = ({ isOpen, onClose, onLogoUpdate, matchData }) => {
       defaultPosition: "bottom-left"
     },
     {
-      id: "organizer",
+      id: "organizing",
       name: "Ban Tổ Chức",
       icon: "🏛️",
       color: "bg-blue-100 text-blue-800",

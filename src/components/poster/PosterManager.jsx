@@ -9,7 +9,6 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose }) => 
   const [selectedLogo, setSelectedLogo] = useState(null);
   const [showPosterSelector, setShowPosterSelector] = useState(false);
   const [showCustomForm, setShowCustomForm] = useState(false);
-  const [showPosterLogoManager, setShowPosterLogoManager] = useState(false);
   const [loading] = useState(false);
 
   // Posters từ thư mục public/images/posters

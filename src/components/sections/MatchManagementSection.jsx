@@ -342,36 +342,36 @@ const MatchManagementSection = ({ isActive = true }) => {
   return (
     <div className="p-2 sm:p-4 space-y-3 sm:space-y-4">
       {/* Scoreboard */}
-      <div className="bg-gradient-to-r from-gray-800 via-gray-900 to-black rounded-lg p-2 sm:p-3 border-2 border-yellow-400 shadow-xl">
-  {displaySettings.selectedSkin && skinData[displaySettings.selectedSkin] ? (
-    <div className="w-full h-16 sm:h-20 bg-gray-100 rounded-lg overflow-hidden">
-      <img
-        src={skinData[displaySettings.selectedSkin].image}
-        alt={skinData[displaySettings.selectedSkin].name}
-        className="w-full h-full object-contain"
-        onError={(e) => {
-          e.target.style.display = 'none';
-          e.target.nextSibling.style.display = 'flex';
-        }}
-      />
-      <div className="w-full h-full bg-gray-200 items-center justify-center hidden">
-        <span className="text-gray-600 font-medium">
-          {skinData[displaySettings.selectedSkin].name}
-        </span>
+      <div className="sm:p-3 shadow-xl h-auto">
+        {displaySettings.selectedSkin && skinData[displaySettings.selectedSkin] ? (
+          <div className="w-full h-16 sm:h-20 bg-gray-100 rounded-lg overflow-hidden">
+            <img
+              src={skinData[displaySettings.selectedSkin].image}
+              alt={skinData[displaySettings.selectedSkin].name}
+              className="w-full h-full object-contain"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'flex';
+              }}
+            />
+            <div className="w-full h-full bg-gray-200 items-center justify-center hidden">
+              <span className="text-gray-600 font-medium">
+                {skinData[displaySettings.selectedSkin].name}
+              </span>
+            </div>
+          </div>
+        ) : (
+          <ScoreDisplay
+            teamA={matchData.teamA}
+            teamB={matchData.teamB}
+            matchTime={matchData.matchTime}
+            period={matchData.period}
+            status={matchData.status}
+            backgroundColor="bg-transparent"
+            size="md"
+          />
+        )}
       </div>
-    </div>
-  ) : (
-    <ScoreDisplay
-      teamA={matchData.teamA}
-      teamB={matchData.teamB}
-      matchTime={matchData.matchTime}
-      period={matchData.period}
-      status={matchData.status}
-      backgroundColor="bg-transparent"
-      size="md"
-    />
-  )}
-</div>
 
       {/* Score Controls */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
@@ -434,13 +434,12 @@ const MatchManagementSection = ({ isActive = true }) => {
           <Button
             variant="primary"
             size="sm"
-            className={`px-2 py-1 ${
-              isPlaying
+            className={`px-2 py-1 ${isPlaying
                 ? "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
                 : isPaused
-                ? "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
-                : "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700"
-            } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
+                  ? "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                  : "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700"
+              } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
               console.log('🎵 [MatchManagement] Audio pause/play clicked - isPlaying:', isPlaying, 'isPaused:', isPaused);
 
@@ -465,10 +464,10 @@ const MatchManagementSection = ({ isActive = true }) => {
               isPlaying
                 ? "Tạm dừng audio đang phát"
                 : isPaused && currentAudioFile
-                ? "Tiếp tục phát audio"
-                : audioEnabled
-                ? "Tắt audio tĩnh"
-                : "Bật audio tĩnh"
+                  ? "Tiếp tục phát audio"
+                  : audioEnabled
+                    ? "Tắt audio tĩnh"
+                    : "Bật audio tĩnh"
             }
           >
             <span className="mr-1">
@@ -485,11 +484,10 @@ const MatchManagementSection = ({ isActive = true }) => {
           <Button
             variant="primary"
             size="sm"
-            className={`px-2 py-1 ${
-              matchData.status === "paused"
+            className={`px-2 py-1 ${matchData.status === "paused"
                 ? "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
                 : "bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700"
-            } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
+              } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
               if (matchData.status === "paused") {
                 // Resume timer từ server
@@ -661,37 +659,37 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Cập nhật tên đội
                 updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
 
-              // Luôn cập nhật logo đội (kể cả logo mặc định hoặc logo mới)
-              updateTeamLogos(
-                teamAInfo.logo || matchData.teamA.logo || "",
-                teamBInfo.logo || matchData.teamB.logo || ""
-              );
+                // Luôn cập nhật logo đội (kể cả logo mặc định hoặc logo mới)
+                updateTeamLogos(
+                  teamAInfo.logo || matchData.teamA.logo || "",
+                  teamBInfo.logo || matchData.teamB.logo || ""
+                );
 
-              // Cập nhật thông tin trận đấu (thời gian, địa điểm, tên trận)
-              updateMatchInfo({
-                startTime: matchInfo.startTime,
-                stadium: matchInfo.location,
-                matchDate: matchInfo.matchDate || new Date().toISOString().split('T')[0],
-                title: matchTitle,
-                time: matchInfo.startTime // Giữ key là time cho emit
-              });
+                // Cập nhật thông tin trận đấu (thời gian, địa điểm, tên trận)
+                updateMatchInfo({
+                  startTime: matchInfo.startTime,
+                  stadium: matchInfo.location,
+                  matchDate: matchInfo.matchDate || new Date().toISOString().split('T')[0],
+                  title: matchTitle,
+                  time: matchInfo.startTime // Giữ key là time cho emit
+                });
 
-              console.log('Đã cập nhật thông tin trận đấu:', {
-                teamAInfo,
-                teamBInfo,
-                matchInfo,
-                logoA: teamAInfo.logo || matchData.teamA.logo,
-                logoB: teamBInfo.logo || matchData.teamB.logo
-              });
-              toast.success('✅ Đã cập nhật thông tin trận đấu thành công!');
-            }}
-            className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
-          >
-            <span className="mr-1">✅</span>
-            ÁP DỤNG
-          </Button>
+                console.log('Đã cập nhật thông tin trận đấu:', {
+                  teamAInfo,
+                  teamBInfo,
+                  matchInfo,
+                  logoA: teamAInfo.logo || matchData.teamA.logo,
+                  logoB: teamBInfo.logo || matchData.teamB.logo
+                });
+                toast.success('✅ Đã cập nhật thông tin trận đấu thành công!');
+              }}
+              className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="mr-1">✅</span>
+              ÁP DỤNG
+            </Button>
+          </div>
         </div>
-      </div>
       )}
 
       {/* Tab Controls */}
@@ -700,8 +698,8 @@ const MatchManagementSection = ({ isActive = true }) => {
           <button
             onClick={() => setSelectedOption("thong-so")}
             className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "thong-so"
-                ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-xl"
-                : "bg-gradient-to-r from-green-100 to-green-200 text-green-700 hover:from-green-200 hover:to-green-300"
+              ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-xl"
+              : "bg-gradient-to-r from-green-100 to-green-200 text-green-700 hover:from-green-200 hover:to-green-300"
               }`}
           >
             <span className="mr-0.5 text-xs">📊</span>
@@ -711,8 +709,8 @@ const MatchManagementSection = ({ isActive = true }) => {
           <button
             onClick={() => setSelectedOption("dieu-khien")}
             className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "dieu-khien"
-                ? "bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-xl"
-                : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
+              ? "bg-gradient-to-r from-gray-600 to-gray-700 text-white shadow-xl"
+              : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
               }`}
           >
             <span className="mr-0.5 text-xs">🎮</span>
@@ -724,8 +722,8 @@ const MatchManagementSection = ({ isActive = true }) => {
               setSelectedOption(selectedOption === "chon-skin" ? "dieu-khien" : "chon-skin");
             }}
             className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "chon-skin"
-                ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
-                : "bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 hover:from-blue-200 hover:to-blue-300"
+              ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
+              : "bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 hover:from-blue-200 hover:to-blue-300"
               }`}
           >
             <span className="mr-0.5 text-xs">🎨</span>
@@ -747,8 +745,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                   console.log('Template selected:', skinNumber);
                 }}
                 className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedSkin === skinNumber
-                    ? "border-blue-500 ring-2 ring-blue-200"
-                    : "border-gray-200 hover:border-blue-300"
+                  ? "border-blue-500 ring-2 ring-blue-200"
+                  : "border-gray-200 hover:border-blue-300"
                   }`}
               >
                 <img
@@ -1211,8 +1209,8 @@ const MatchManagementSection = ({ isActive = true }) => {
         </div>
       )}
 
-{/* Clock Settings */}
-<div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-3 border border-orange-200">
+      {/* Clock Settings */}
+      <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-3 border border-orange-200">
         <div className="space-y-3">
           {/* Radio buttons */}
           <div className="flex justify-center space-x-4">
@@ -1276,41 +1274,36 @@ const MatchManagementSection = ({ isActive = true }) => {
             <div className="flex gap-1 flex-wrap justify-center">
               <button
                 onClick={() => setTickerColor("white-black")}
-                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-black text-white ${
-                  tickerColor === "white-black" ? "border-orange-600" : "border-gray-300"
-                }`}
+                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-black text-white ${tickerColor === "white-black" ? "border-orange-600" : "border-gray-300"
+                  }`}
               >
                 Chữ
               </button>
               <button
                 onClick={() => setTickerColor("black-white")}
-                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-white text-black ${
-                  tickerColor === "black-white" ? "border-orange-600" : "border-gray-300"
-                }`}
+                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-white text-black ${tickerColor === "black-white" ? "border-orange-600" : "border-gray-300"
+                  }`}
               >
                 Chữ
               </button>
               <button
                 onClick={() => setTickerColor("white-blue")}
-                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-blue-600 text-white ${
-                  tickerColor === "white-blue" ? "border-orange-600" : "border-gray-300"
-                }`}
+                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-blue-600 text-white ${tickerColor === "white-blue" ? "border-orange-600" : "border-gray-300"
+                  }`}
               >
                 Chữ
               </button>
               <button
                 onClick={() => setTickerColor("white-red")}
-                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-red-600 text-white ${
-                  tickerColor === "white-red" ? "border-orange-600" : "border-gray-300"
-                }`}
+                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-red-600 text-white ${tickerColor === "white-red" ? "border-orange-600" : "border-gray-300"
+                  }`}
               >
                 Chữ
               </button>
               <button
                 onClick={() => setTickerColor("white-green")}
-                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-green-600 text-white ${
-                  tickerColor === "white-green" ? "border-orange-600" : "border-gray-300"
-                }`}
+                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-green-600 text-white ${tickerColor === "white-green" ? "border-orange-600" : "border-gray-300"
+                  }`}
               >
                 Chữ
               </button>
@@ -1358,7 +1351,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             }
           }}
           onLogoUpdate={(logoData) => {
-            console.log("[MatchManagementSection] onLogoUpdate called with:", logoData);
+
 
             if (logoData && logoData.logoItems) {
               // Phân loại logo items theo category

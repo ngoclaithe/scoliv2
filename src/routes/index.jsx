@@ -7,7 +7,7 @@ import { PublicMatchProvider } from '../contexts/PublicMatchContext';
 import 'react-toastify/dist/ReactToastify.css';
 import App from '../App';
 import DisplayController from '../components/display/DisplayController';
-
+import ScoreboardBelow from '../components/scoreboard_preview/ScoreboardBelowNew';
 const AppRoutes = () => {
   return (
     <>
@@ -26,6 +26,10 @@ const AppRoutes = () => {
           <PublicMatchProvider>
             <DisplayController />
           </PublicMatchProvider>
+        } />
+
+        <Route path="/demotest" element={
+              <ScoreboardBelow />
         } />
       </Routes>
 
