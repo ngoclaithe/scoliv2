@@ -162,14 +162,18 @@ export default function TreTrungMatchIntro() {
                 </div>
 
                 <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  <div className="flex items-center space-x-2 sm:space-x-3">
-                    <div className="bg-green-600 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-xs sm:text-sm font-bold animate-pulse shadow-lg text-white">
-                      LIVE
+                  {matchData.showLiveIndicator && (
+                    <div className="flex items-center space-x-2 sm:space-x-3">
+                      <div className="bg-green-600 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-xs sm:text-sm font-bold animate-pulse shadow-lg text-white">
+                        LIVE
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-xs sm:text-sm font-semibold bg-black/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center">
-                    {matchData.roundedTime} - {matchData.currentDate}
-                  </div>
+                  )}
+                  {(matchData.showTimer || matchData.showDate) && (
+                    <div className="text-xs sm:text-sm font-semibold bg-black/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center">
+                      {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
+                    </div>
+                  )}
                 </div>
               </div>
 
