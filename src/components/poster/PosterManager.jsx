@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import PosterSelector from "./PosterSelector";
-import PosterPreview from "./PosterPreview";
 import CustomPosterForm from "./CustomPosterForm";
 import PosterLogoManager from "./PosterLogoManager";
-import Button from "../common/Button";
 import Modal from "../common/Modal";
 
 const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose }) => {
@@ -49,8 +47,6 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose }) => 
   ];
 
   const handlePosterSelect = (poster) => {
-    console.log('🎯 [PosterManager] handlePosterSelect called with:', poster);
-    console.log('🎯 [PosterManager] onPosterUpdate function exists:', !!onPosterUpdate);
 
     setSelectedPoster(poster);
 
