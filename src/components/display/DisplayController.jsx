@@ -15,7 +15,7 @@ import PosterXanhDuong from '../../pages/Poster-xanhduong';
 import Intro from '../introduce/Intro';
 import HalfTime from '../halftime/HalfTime';
 import ScoreboardAbove from '../scoreboard_preview/ScoreboardAbove';
-import ScoreboardBelow from '../scoreboard_preview/ScoreboardBelow';
+import ScoreboardBelowNew from '../scoreboard_preview/ScoreboardBelowNew';
 
 const DisplayController = () => {
   const { accessCode } = useParams();
@@ -93,7 +93,10 @@ const DisplayController = () => {
       case 'scoreboard':
         return <ScoreboardAbove accessCode={accessCode} />;
       case 'scoreboard_below':
-        return <ScoreboardBelow accessCode={accessCode} />;
+        return <ScoreboardBelowNew
+          accessCode={accessCode}
+          type={displaySettings.selectedSkin || 1}
+        />;
       case 'poster':
       default:
         const posterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;
