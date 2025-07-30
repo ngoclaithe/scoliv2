@@ -89,7 +89,7 @@ class SocketService {
   // Emit event đến server
   async emit(eventName, data) {
     if (!this.socket || !this.isConnected) {
-      console.warn('Socket not connected, cannot emit:', eventName);
+      console.warn('[Socket] Socket not connected, cannot emit:', eventName);
       return false;
     }
 
@@ -99,6 +99,7 @@ class SocketService {
       ...data
     };
 
+    console.log(`[Socket] Emitting ${eventName}:`, payload);
     this.socket.emit(eventName, payload);
     return true;
   }
