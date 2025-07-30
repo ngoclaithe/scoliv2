@@ -199,12 +199,25 @@ export default function TreTrungMatchIntro() {
             </div>
 
             {/* Stadium */}
-            {matchData.stadium && (
+            {matchData.showStadium && matchData.stadium && (
               <div className="text-center mt-3 sm:mt-4">
                 <div className="inline-block bg-black/50 backdrop-blur-sm px-3 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl border border-white/30">
                   <span className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-white">
                     📍 {matchData.stadium}
                   </span>
+                </div>
+              </div>
+            )}
+
+            {/* Tournament Logo */}
+            {matchData.showTournamentLogo && matchData.tournamentLogo && (
+              <div className="text-center mt-3 sm:mt-4">
+                <div className="inline-flex items-center justify-center">
+                  <img
+                    src={matchData.tournamentLogo}
+                    alt="Tournament Logo"
+                    className="h-8 sm:h-12 md:h-16 max-w-32 sm:max-w-40 object-contain"
+                  />
                 </div>
               </div>
             )}
