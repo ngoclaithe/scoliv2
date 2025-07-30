@@ -39,6 +39,15 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateView,
     resumeTimer,
 
+    // Logo update functions
+    updateSponsors,
+    updateOrganizing,
+    updateMediaPartners,
+    updateTournamentLogo,
+    updateLiveUnit,
+    updatePosterSettings,
+    updateDisplaySettings,
+
   } = useMatch();
 
   // Audio state management
@@ -1387,7 +1396,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             <h4 className="text-lg font-bold text-yellow-800 flex items-center justify-center">
               <span className="mr-2">🕰️</span>
               THIẾT LẬP ĐẾM T
-              <span className="ml-2">🕰️</span>
+              <span className="ml-2">��️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
               Trận đấu sẽ bắt đầu chạy từ thời điểm này
