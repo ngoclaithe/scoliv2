@@ -25,22 +25,22 @@ export default function VangKimMatchIntro() {
     stadium: contextMatchData.stadium || 'SVĐ HÀNG ĐÀY',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '15:00',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
-    // Các biến mới từ context
-    sponsors: sponsors.url_logo || [],
-    organizing: organizing.url_logo || [],
-    mediaPartners: mediaPartners.url_logo || [],
-    tournamentLogo: tournamentLogo.url_logo?.[0] || null,
-    liveUnit: liveUnit.url_logo?.[0] || null,
-    logoShape: displaySettings.logoShape || 'circle',
-    showTournamentLogo: displaySettings.showTournamentLogo,
-    showSponsors: displaySettings.showSponsors,
-    showOrganizing: displaySettings.showOrganizing,
-    showMediaPartners: displaySettings.showMediaPartners,
-    showTimer: posterSettings.showTimer,
-    showDate: posterSettings.showDate,
-    showStadium: posterSettings.showStadium,
-    showLiveIndicator: posterSettings.showLiveIndicator,
-    accentColor: posterSettings.accentColor || '#f59e0b'
+    // Các biến mới từ context - thêm kiểm tra undefined
+    sponsors: sponsors?.url_logo || [],
+    organizing: organizing?.url_logo || [],
+    mediaPartners: mediaPartners?.url_logo || [],
+    tournamentLogo: tournamentLogo?.url_logo?.[0] || null,
+    liveUnit: liveUnit?.url_logo?.[0] || null,
+    logoShape: displaySettings?.logoShape || 'circle',
+    showTournamentLogo: displaySettings?.showTournamentLogo !== false,
+    showSponsors: displaySettings?.showSponsors !== false,
+    showOrganizing: displaySettings?.showOrganizing !== false,
+    showMediaPartners: displaySettings?.showMediaPartners !== false,
+    showTimer: posterSettings?.showTimer !== false,
+    showDate: posterSettings?.showDate !== false,
+    showStadium: posterSettings?.showStadium !== false,
+    showLiveIndicator: posterSettings?.showLiveIndicator !== false,
+    accentColor: posterSettings?.accentColor || '#f59e0b'
   };
 
   // Gộp tất cả partners lại thành một mảng
