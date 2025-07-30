@@ -1,23 +1,54 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 
 export default function VangXanhMatchIntro() {
   // Sử dụng dữ liệu từ PublicMatchContext
-  const { matchData: contextMatchData, marqueeData } = usePublicMatch();
+  const {
+    matchData: contextMatchData,
+    marqueeData,
+    sponsors,
+    organizing,
+    mediaPartners,
+    tournamentLogo,
+    liveUnit,
+    displaySettings,
+    posterSettings
+  } = usePublicMatch();
 
   // Kết hợp dữ liệu từ context với dữ liệu mặc định
   const matchData = {
-    matchTitle: contextMatchData.tournament || 'TRỰC TIẾP TRẬN BÓNG ĐÁ',
+    matchTitle: contextMatchData.tournament || 'GIẢI BÓNG ĐÁ VÀNG XANH',
     team1: contextMatchData.teamA.name || 'TEAM ALPHA',
     team2: contextMatchData.teamB.name || 'TEAM BETA',
     logo1: contextMatchData.teamA.logo || '/images/background-poster/default_logoA.png',
     logo2: contextMatchData.teamB.logo || '/images/background-poster/default_logoB.png',
     stadium: contextMatchData.stadium || 'SVĐ THỐNG NHẤT',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '15:30',
-    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN')
+    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
+    // Các biến mới từ context - thêm kiểm tra undefined
+    sponsors: sponsors?.url_logo || [],
+    organizing: organizing?.url_logo || [],
+    mediaPartners: mediaPartners?.url_logo || [],
+    tournamentLogo: tournamentLogo?.url_logo?.[0] || null,
+    liveUnit: liveUnit?.url_logo?.[0] || null,
+    logoShape: displaySettings?.logoShape || 'circle',
+    showTournamentLogo: displaySettings?.showTournamentLogo !== false,
+    showSponsors: displaySettings?.showSponsors !== false,
+    showOrganizing: displaySettings?.showOrganizing !== false,
+    showMediaPartners: displaySettings?.showMediaPartners !== false,
+    showTimer: posterSettings?.showTimer !== false,
+    showDate: posterSettings?.showDate !== false,
+    showStadium: posterSettings?.showStadium !== false,
+    showLiveIndicator: posterSettings?.showLiveIndicator !== false,
+    accentColor: posterSettings?.accentColor || '#10b981'
   };
 
-  const [partners, setPartners] = useState([]);
+  // Gộp tất cả partners lại thành một mảng
+  const allPartners = [
+    ...(matchData.showSponsors ? matchData.sponsors.map(url => ({ logo: url, name: 'Sponsor', type: 'sponsor' })) : []),
+    ...(matchData.showOrganizing ? matchData.organizing.map(url => ({ logo: url, name: 'Organizing', type: 'organizing' })) : []),
+    ...(matchData.showMediaPartners ? matchData.mediaPartners.map(url => ({ logo: url, name: 'Media', type: 'media' })) : [])
+  ];
 
   // Sử dụng marquee data từ context
   const marquee = {
@@ -39,7 +70,7 @@ export default function VangXanhMatchIntro() {
     }
   };
 
-  const hasPartners = partners.length > 0;
+  const hasPartners = allPartners.length > 0;
 
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
@@ -167,7 +198,7 @@ export default function VangXanhMatchIntro() {
                 </h3>
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-2xl p-2 sm:p-4 border border-white/30 mx-4 sm:mx-8">
                   <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
-                    {partners.map((partner, index) => (
+                    {allPartners.map((partner, index) => (
                       <div key={index} className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 flex justify-center items-center bg-white rounded-full p-1 shadow-lg">
                         <img
                           src={partner.logo}

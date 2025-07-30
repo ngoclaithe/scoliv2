@@ -69,7 +69,12 @@ export const PublicMatchProvider = ({ children }) => {
     selectedPoster: 'tretrung',
     showStats: false,
     showPenalty: false,
-    showLineup: false
+    showLineup: false,
+    logoShape: 'circle', // 'circle', 'square', 'hexagon', 'shield'
+    showTournamentLogo: true,
+    showSponsors: true,
+    showOrganizing: true,
+    showMediaPartners: true
   });
 
   // State cho view hiện tại trên route dynamic
@@ -106,6 +111,25 @@ export const PublicMatchProvider = ({ children }) => {
   const [tournamentLogo, setTournamentLogo] = useState({
     code_logo: [],
     url_logo: []
+  });
+
+  // State cho đơn vị live/sản xuất
+  const [liveUnit, setLiveUnit] = useState({
+    code_logo: [],
+    url_logo: [],
+    name: 'LIVE STREAMING',
+    position: 'top-right'
+  });
+
+  // State cho cài đặt hiển thị poster
+  const [posterSettings, setPosterSettings] = useState({
+    showTimer: true,
+    showDate: true,
+    showStadium: true,
+    showLiveIndicator: true,
+    backgroundOpacity: 0.8,
+    textColor: '#ffffff',
+    accentColor: '#3b82f6'
   });
 
   // State cho socket connection
@@ -268,7 +292,7 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật đơn vị truyền thông
+    // Lắng nghe cập nhật đơn v�� truyền thông
     socketService.on('media_partners_updated', (data) => {
       setMediaPartners(prev => ({ ...prev, ...data.mediaPartners }));
       setLastUpdateTime(Date.now());
@@ -280,10 +304,28 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
+    // Lắng nghe cập nhật đơn vị live
+    socketService.on('live_unit_updated', (data) => {
+      setLiveUnit(prev => ({ ...prev, ...data.liveUnit }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật cài đặt poster
+    socketService.on('poster_settings_updated', (data) => {
+      setPosterSettings(prev => ({ ...prev, ...data.posterSettings }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật display settings
+    socketService.on('display_settings_updated', (data) => {
+      setDisplaySettings(prev => ({ ...prev, ...data.displaySettings }));
+      setLastUpdateTime(Date.now());
+    });
+
     // Lắng nghe cập nhật view hiện tại (MỚI) - KHÔNG update time để tránh re-render
     socketService.on('view_updated', (data) => {
       setCurrentView(data.viewType);
-      console.log('🎯 [Audio] View updated to:', data.viewType);
+      console.log('��� [Audio] View updated to:', data.viewType);
     });
 
     // Lắng nghe audio control events - để nhận referee voice từ CommentarySection
@@ -311,7 +353,7 @@ export const PublicMatchProvider = ({ children }) => {
 
           console.log('🎙️ Created audio blob, size:', audioBlob.size, 'bytes');
           audioUtils.playRefereeVoice(audioBlob);
-          console.log('✅ [PublicMatchContext] Playing referee voice successfully');
+          console.log('�� [PublicMatchContext] Playing referee voice successfully');
         } catch (error) {
           console.error('❌ Error processing referee voice in PublicMatchContext:', error);
         }
@@ -369,10 +411,20 @@ export const PublicMatchProvider = ({ children }) => {
     lastUpdateTime,
     currentAccessCode,
     currentView,
+    organizing: organizing || { code_logo: [], url_logo: [], position: [], type_display: [] },
+    mediaPartners: mediaPartners || { code_logo: [], url_logo: [], position: [], type_display: [] },
+    tournamentLogo: tournamentLogo || { code_logo: [], url_logo: [] },
+    liveUnit: liveUnit || { code_logo: [], url_logo: [], name: 'LIVE STREAMING', position: 'top-right' },
+    posterSettings: posterSettings || { showTimer: true, showDate: true, showStadium: true, showLiveIndicator: true, backgroundOpacity: 0.8, textColor: '#ffffff', accentColor: '#3b82f6' },
 
     // Actions
     initializeSocket,
-    disconnectSocket
+    disconnectSocket,
+
+    // Setters for new states
+    setLiveUnit,
+    setPosterSettings,
+    setDisplaySettings
   };
 
   return (

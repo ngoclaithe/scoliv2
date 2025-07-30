@@ -174,7 +174,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       } catch (error) {
         console.error("Lỗi khi tải lên:", error);
         
-        // C���p nhật trạng thái lỗi
+        // C���p nh��t trạng thái lỗi
         setLogoItems(prev => prev.map(logo => 
           logo.id === item.id 
             ? { ...logo, uploadStatus: 'error' }
@@ -251,7 +251,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       if (localCode.trim().length >= 3) {
         try {
           setIsSearching(true);
-          console.log('🔍 [PosterLogoManager] Tìm kiếm logo với code:', localCode);
+          console.log('🔍 [PosterLogoManager] Tìm kiếm logo v��i code:', localCode);
           const response = await LogoAPI.searchLogosByCode(localCode.trim(), true);
 
           if (response?.data?.length > 0) {
@@ -509,17 +509,25 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       onPosterUpdate?.(selectedPoster);
     }
 
+    console.log('[PosterLogoManager] activeLogoCategory:', activeLogoCategory);
+    console.log('[PosterLogoManager] allLogoItems:', allLogoItems);
+    console.log('[PosterLogoManager] logoItems:', logoItems);
+
     const activeItems = allLogoItems.filter(item =>
       item.category === activeLogoCategory &&
       (item.displayPositions.length > 0 || logoItems.includes(item))
     );
 
+    console.log('[PosterLogoManager] activeItems:', activeItems);
+
     if (activeItems.length > 0) {
-      console.log('💾 [PosterLogoManager] Calling onLogoUpdate');
+      console.log('[PosterLogoManager] Calling onLogoUpdate with activeItems:', activeItems);
       onLogoUpdate?.({
         logoItems: activeItems,
         displayOptions: logoDisplayOptions
       });
+    } else {
+      console.log('[PosterLogoManager] No activeItems, not calling onLogoUpdate');
     }
 
     onClose?.();

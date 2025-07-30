@@ -39,6 +39,14 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateView,
     resumeTimer,
 
+    // Logo update functions
+    updateSponsors,
+    updateOrganizing,
+    updateMediaPartners,
+    updateTournamentLogo,
+    updateLiveUnit,
+    updateDisplaySettings,
+
   } = useMatch();
 
   // Audio state management
@@ -983,7 +991,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">🕐</span>
+              <span className="text-sm mr-1">���</span>
               <span className="text-xs font-bold text-center">ĐẾM 0</span>
             </button>
 
@@ -1069,7 +1077,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 setSelectedOption("ti-so-tren");
                 // Phát audio gialap cho đếm giờ
                 playAudioForAction('gialap');
-                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                console.log('🕰️ Đã áp d��ng: Timer sẽ đếm từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 45:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -1351,7 +1359,85 @@ const MatchManagementSection = ({ isActive = true }) => {
               console.log("⚠ [MatchManagementSection] No poster provided to onPosterUpdate");
             }
           }}
-          onLogoUpdate={(logoData) => console.log("Updated logo:", logoData)}
+          onLogoUpdate={(logoData) => {
+            console.log("[MatchManagementSection] onLogoUpdate called with:", logoData);
+
+            if (logoData && logoData.logoItems) {
+              // Phân loại logo items theo category
+              const logosByCategory = logoData.logoItems.reduce((acc, item) => {
+                if (!acc[item.category]) {
+                  acc[item.category] = [];
+                }
+                acc[item.category].push({
+                  code_logo: item.code,
+                  url_logo: item.url,
+                  position: item.displayPositions || [],
+                  type_display: item.type || 'default'
+                });
+                return acc;
+              }, {});
+
+              console.log("[MatchManagementSection] logosByCategory:", logosByCategory);
+
+              // Emit socket events cho từng category
+              if (logosByCategory.sponsor) {
+                console.log("[MatchManagementSection] Calling updateSponsors");
+                updateSponsors({
+                  code_logo: logosByCategory.sponsor.map(s => s.code_logo),
+                  url_logo: logosByCategory.sponsor.map(s => s.url_logo),
+                  position: logosByCategory.sponsor.map(s => s.position),
+                  type_display: logosByCategory.sponsor.map(s => s.type_display)
+                });
+              }
+
+              if (logosByCategory.organizing) {
+                console.log("[MatchManagementSection] Calling updateOrganizing");
+                updateOrganizing({
+                  code_logo: logosByCategory.organizing.map(o => o.code_logo),
+                  url_logo: logosByCategory.organizing.map(o => o.url_logo),
+                  position: logosByCategory.organizing.map(o => o.position),
+                  type_display: logosByCategory.organizing.map(o => o.type_display)
+                });
+              }
+
+              if (logosByCategory.media) {
+                console.log("[MatchManagementSection] Calling updateMediaPartners");
+                updateMediaPartners({
+                  code_logo: logosByCategory.media.map(m => m.code_logo),
+                  url_logo: logosByCategory.media.map(m => m.url_logo),
+                  position: logosByCategory.media.map(m => m.position),
+                  type_display: logosByCategory.media.map(m => m.type_display)
+                });
+              }
+
+              if (logosByCategory.tournament) {
+                console.log("[MatchManagementSection] Calling updateTournamentLogo");
+                updateTournamentLogo({
+                  code_logo: logosByCategory.tournament.map(t => t.code_logo),
+                  url_logo: logosByCategory.tournament.map(t => t.url_logo)
+                });
+              }
+
+              if (logosByCategory.live) {
+                console.log("[MatchManagementSection] Calling updateLiveUnit");
+                updateLiveUnit({
+                  code_logo: logosByCategory.live.map(l => l.code_logo),
+                  url_logo: logosByCategory.live.map(l => l.url_logo),
+                  name: 'LIVE STREAMING',
+                  position: 'top-right'
+                });
+              }
+            }
+
+            // Cập nhật display options nếu có
+            if (logoData && logoData.displayOptions) {
+              console.log("[MatchManagementSection] Calling updateDisplaySettings");
+              updateDisplaySettings({
+                logoShape: logoData.displayOptions.shape || 'circle',
+                rotateDisplay: logoData.displayOptions.rotateDisplay || false
+              });
+            }
+          }}
           onClose={() => setShowPosterModal(false)}
         />
       </Modal>

@@ -504,15 +504,72 @@ export const MatchProvider = ({ children }) => {
   // Cập nhật chữ chạy
   const updateMarquee = useCallback((newMarqueeData) => {
     setMarqueeData(prev => ({ ...prev, ...newMarqueeData }));
-    
+
     if (socketConnected) {
       socketService.updateMarquee(newMarqueeData);
     }
   }, [socketConnected]);
 
+  // Cập nhật nhà tài trợ
+  const updateSponsors = useCallback((newSponsors) => {
+    setSponsors(prev => ({ ...prev, ...newSponsors }));
+
+    if (socketConnected) {
+      socketService.updateSponsors(newSponsors);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật đơn vị tổ chức
+  const updateOrganizing = useCallback((newOrganizing) => {
+    console.log('[MatchContext] updateOrganizing called:', newOrganizing, 'socketConnected:', socketConnected);
+    if (socketConnected) {
+      socketService.updateOrganizing(newOrganizing);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật đơn vị truyền thông
+  const updateMediaPartners = useCallback((newMediaPartners) => {
+    console.log('[MatchContext] updateMediaPartners called:', newMediaPartners, 'socketConnected:', socketConnected);
+    if (socketConnected) {
+      socketService.updateMediaPartners(newMediaPartners);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật logo giải đấu
+  const updateTournamentLogo = useCallback((newTournamentLogo) => {
+    console.log('[MatchContext] updateTournamentLogo called:', newTournamentLogo, 'socketConnected:', socketConnected);
+    if (socketConnected) {
+      socketService.updateTournamentLogo(newTournamentLogo);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật đơn vị live
+  const updateLiveUnit = useCallback((newLiveUnit) => {
+    console.log('[MatchContext] updateLiveUnit called:', newLiveUnit, 'socketConnected:', socketConnected);
+    if (socketConnected) {
+      socketService.updateLiveUnit(newLiveUnit);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật cài đặt poster
+  const updatePosterSettings = useCallback((newPosterSettings) => {
+    console.log('[MatchContext] updatePosterSettings called:', newPosterSettings, 'socketConnected:', socketConnected);
+    if (socketConnected) {
+      socketService.updatePosterSettings(newPosterSettings);
+    }
+  }, [socketConnected]);
+
+  // Cập nhật display settings
+  const updateDisplaySettings = useCallback((newDisplaySettings) => {
+    console.log('[MatchContext] updateDisplaySettings called:', newDisplaySettings, 'socketConnected:', socketConnected);
+    if (socketConnected) {
+      socketService.updateDisplaySettings(newDisplaySettings);
+    }
+  }, [socketConnected]);
+
   // Cập nhật thời gian trận đấu - Sử dụng server timer
   const updateMatchTime = useCallback((matchTime, period, status) => {
-    // Cập nhật local state trước khi gửi đến server
+    // Cập nh���t local state trước khi gửi đến server
     setMatchData(prev => ({ ...prev, matchTime, period, status }));
 
     if (socketConnected) {
@@ -636,6 +693,15 @@ export const MatchProvider = ({ children }) => {
     updateFutsalErrors,
     updateView,
     resetMatch,
+
+    // Logo update functions
+    updateSponsors,
+    updateOrganizing,
+    updateMediaPartners,
+    updateTournamentLogo,
+    updateLiveUnit,
+    updatePosterSettings,
+    updateDisplaySettings,
 
     // Timer functions
     resumeTimer,

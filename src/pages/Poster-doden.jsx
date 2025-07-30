@@ -1,9 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 
 export default function DodenMatchIntro() {
   // Sử dụng dữ liệu từ PublicMatchContext
-  const { matchData: contextMatchData, marqueeData } = usePublicMatch();
+  const {
+    matchData: contextMatchData,
+    marqueeData,
+    sponsors,
+    organizing,
+    mediaPartners,
+    tournamentLogo,
+    liveUnit,
+    displaySettings,
+    posterSettings
+  } = usePublicMatch();
   
   // Kết hợp dữ liệu từ context với dữ liệu mặc định
   const matchData = {
@@ -15,13 +25,22 @@ export default function DodenMatchIntro() {
     stadium: contextMatchData.stadium || 'SVĐ MỸ ĐÌNH',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '20:00',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
-    // Các biến mới
-    sponsors: contextMatchData.sponsors || [], // Array các URL ảnh nhà tài trợ
-    organizings: contextMatchData.organizings || [], // Array các URL ảnh đơn vị tổ chức
-    mediaPartners: contextMatchData.mediaPartners || [], // Array các URL ảnh đơn vị truyền thông
-    tournamentLogo: contextMatchData.tournamentLogo || null, // URL ảnh giải đấu
-    liveUnit: contextMatchData.liveUnit || null, // URL ảnh đơn vị live
-    logoShape: contextMatchData.logoShape || 'circle' // 'circle', 'square', 'hexagon', 'shield'
+    // Các biến mới từ context (cập nhật) - thêm kiểm tra undefined
+    sponsors: sponsors?.url_logo || [],
+    organizing: organizing?.url_logo || [], // Sửa từ organizings -> organizing
+    mediaPartners: mediaPartners?.url_logo || [],
+    tournamentLogo: tournamentLogo?.url_logo?.[0] || null,
+    liveUnit: liveUnit?.url_logo?.[0] || null,
+    logoShape: displaySettings?.logoShape || 'circle',
+    showTournamentLogo: displaySettings?.showTournamentLogo !== false,
+    showSponsors: displaySettings?.showSponsors !== false,
+    showOrganizing: displaySettings?.showOrganizing !== false,
+    showMediaPartners: displaySettings?.showMediaPartners !== false,
+    showTimer: posterSettings?.showTimer !== false,
+    showDate: posterSettings?.showDate !== false,
+    showStadium: posterSettings?.showStadium !== false,
+    showLiveIndicator: posterSettings?.showLiveIndicator !== false,
+    accentColor: posterSettings?.accentColor || '#ef4444'
   };
 
   // Sử dụng marquee data từ context
@@ -92,7 +111,7 @@ export default function DodenMatchIntro() {
   };
 
   const hasSponsors = matchData.sponsors.length > 0;
-  const hasOrganizings = matchData.organizings.length > 0;
+  const hasOrganizing = matchData.organizing.length > 0;
   const hasMediaPartners = matchData.mediaPartners.length > 0;
   const hasTournamentLogo = matchData.tournamentLogo;
   const hasLiveUnit = matchData.liveUnit;
@@ -265,19 +284,19 @@ export default function DodenMatchIntro() {
             )}
 
             {/* organizings Section */}
-            {hasOrganizings && (
+            {hasOrganizing && (
               <div className="text-center mt-2 sm:mt-3">
                 <h3 className="text-blue-400 text-xs sm:text-sm md:text-base font-bold mb-1 sm:mb-2 uppercase tracking-wide">
                   🤝 Đơn vị tổ chức
                 </h3>
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/30 mx-4 sm:mx-8">
                   <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
-                    {matchData.organizings.map((organizing, index) => (
+                    {matchData.organizing.map((organizingItem, index) => (
                       <div key={index} className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex justify-center items-center bg-white rounded p-0.5 shadow-lg">
                         <img
-                          src={organizing}
+                          src={organizingItem}
                           alt={`Organizing ${index + 1}`}
-                          className={`max-h-full max-w-full object-contain ${getLogoShapeClass(organizing, matchData.logoShape)}`}
+                          className={`max-h-full max-w-full object-contain ${getLogoShapeClass(organizingItem, matchData.logoShape)}`}
                         />
                       </div>
                     ))}

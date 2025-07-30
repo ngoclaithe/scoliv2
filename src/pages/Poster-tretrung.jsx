@@ -1,9 +1,19 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 
 export default function TreTrungMatchIntro() {
   // Sử dụng dữ liệu từ PublicMatchContext
-  const { matchData: contextMatchData, marqueeData } = usePublicMatch();
+  const {
+    matchData: contextMatchData,
+    marqueeData,
+    sponsors,
+    organizing,
+    mediaPartners,
+    tournamentLogo,
+    liveUnit,
+    displaySettings,
+    posterSettings
+  } = usePublicMatch();
 
   // Kết hợp dữ liệu từ context với dữ liệu mặc định
   const matchData = {
@@ -14,10 +24,31 @@ export default function TreTrungMatchIntro() {
     logo2: contextMatchData.teamB.logo || '/images/background-poster/default_logoB.png',
     stadium: contextMatchData.stadium || 'SVĐ THỐNG NHẤT',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '15:30',
-    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN')
+    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
+    // Các biến mới từ context - thêm kiểm tra undefined
+    sponsors: sponsors?.url_logo || [],
+    organizing: organizing?.url_logo || [],
+    mediaPartners: mediaPartners?.url_logo || [],
+    tournamentLogo: tournamentLogo?.url_logo?.[0] || null,
+    liveUnit: liveUnit?.url_logo?.[0] || null,
+    logoShape: displaySettings?.logoShape || 'circle',
+    showTournamentLogo: displaySettings?.showTournamentLogo !== false,
+    showSponsors: displaySettings?.showSponsors !== false,
+    showOrganizing: displaySettings?.showOrganizing !== false,
+    showMediaPartners: displaySettings?.showMediaPartners !== false,
+    showTimer: posterSettings?.showTimer !== false,
+    showDate: posterSettings?.showDate !== false,
+    showStadium: posterSettings?.showStadium !== false,
+    showLiveIndicator: posterSettings?.showLiveIndicator !== false,
+    accentColor: posterSettings?.accentColor || '#10b981'
   };
 
-  const [partners, setPartners] = useState([]);
+  // Gộp tất cả partners lại thành một mảng
+  const allPartners = [
+    ...(matchData.showSponsors ? matchData.sponsors.map(url => ({ logo: url, name: 'Sponsor', type: 'sponsor' })) : []),
+    ...(matchData.showOrganizing ? matchData.organizing.map(url => ({ logo: url, name: 'Organizing', type: 'organizing' })) : []),
+    ...(matchData.showMediaPartners ? matchData.mediaPartners.map(url => ({ logo: url, name: 'Media', type: 'media' })) : [])
+  ];
 
   // Sử dụng marquee data từ context
   const marquee = {
@@ -32,14 +63,29 @@ export default function TreTrungMatchIntro() {
     if (!element) return;
     let fontSize = parseInt(window.getComputedStyle(element).fontSize);
     const minFontSize = 14;
-    
+
     while (element.scrollWidth > element.offsetWidth && fontSize > minFontSize) {
       fontSize -= 1;
       element.style.fontSize = fontSize + "px";
     }
   };
 
-  const hasPartners = partners.length > 0;
+  const hasPartners = allPartners.length > 0;
+
+  // Helper function để lấy class cho logo shape
+  const getLogoShapeClass = (baseClass) => {
+    switch (matchData.logoShape) {
+      case 'square':
+        return `${baseClass} rounded-lg`;
+      case 'hexagon':
+        return `${baseClass} rounded-full`; // Tạm thời dùng rounded-full
+      case 'shield':
+        return `${baseClass} rounded-lg`;
+      case 'circle':
+      default:
+        return `${baseClass} rounded-full`;
+    }
+  };
 
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
@@ -92,7 +138,7 @@ export default function TreTrungMatchIntro() {
                   <img
                     src={matchData.logo1}
                     alt={matchData.team1}
-                    className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300"
+                    className={getLogoShapeClass("relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300")}
                   />
                 </div>
                 <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
@@ -116,14 +162,18 @@ export default function TreTrungMatchIntro() {
                 </div>
 
                 <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  <div className="flex items-center space-x-2 sm:space-x-3">
-                    <div className="bg-green-600 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-xs sm:text-sm font-bold animate-pulse shadow-lg text-white">
-                      LIVE
+                  {matchData.showLiveIndicator && (
+                    <div className="flex items-center space-x-2 sm:space-x-3">
+                      <div className="bg-green-600 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-xs sm:text-sm font-bold animate-pulse shadow-lg text-white">
+                        LIVE
+                      </div>
                     </div>
-                  </div>
-                  <div className="text-xs sm:text-sm font-semibold bg-black/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center">
-                    {matchData.roundedTime} - {matchData.currentDate}
-                  </div>
+                  )}
+                  {(matchData.showTimer || matchData.showDate) && (
+                    <div className="text-xs sm:text-sm font-semibold bg-black/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center">
+                      {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -134,7 +184,7 @@ export default function TreTrungMatchIntro() {
                   <img
                     src={matchData.logo2}
                     alt={matchData.team2}
-                    className="relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300"
+                    className={getLogoShapeClass("relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300")}
                   />
                 </div>
                 <div className="bg-gradient-to-r from-yellow-500 to-orange-600 px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
@@ -149,7 +199,7 @@ export default function TreTrungMatchIntro() {
             </div>
 
             {/* Stadium */}
-            {matchData.stadium && (
+            {matchData.showStadium && matchData.stadium && (
               <div className="text-center mt-3 sm:mt-4">
                 <div className="inline-block bg-black/50 backdrop-blur-sm px-3 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl border border-white/30">
                   <span className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-white">
@@ -159,7 +209,20 @@ export default function TreTrungMatchIntro() {
               </div>
             )}
 
-            {/* Partners - Hidden by default, will show when socket updates */}
+            {/* Tournament Logo */}
+            {matchData.showTournamentLogo && matchData.tournamentLogo && (
+              <div className="text-center mt-3 sm:mt-4">
+                <div className="inline-flex items-center justify-center">
+                  <img
+                    src={matchData.tournamentLogo}
+                    alt="Tournament Logo"
+                    className="h-8 sm:h-12 md:h-16 max-w-32 sm:max-w-40 object-contain"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Partners - Hiển thị khi có dữ liệu từ socket */}
             {hasPartners && (
               <div className="text-center mt-3 sm:mt-4">
                 <h3 className="text-green-400 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3 uppercase tracking-wide">
@@ -167,12 +230,12 @@ export default function TreTrungMatchIntro() {
                 </h3>
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-2xl p-2 sm:p-4 border border-white/30 mx-4 sm:mx-8">
                   <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
-                    {partners.map((partner, index) => (
-                      <div key={index} className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 flex justify-center items-center bg-white rounded-full p-1 shadow-lg">
+                    {allPartners.map((partner, index) => (
+                      <div key={index} className={getLogoShapeClass("w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 flex justify-center items-center bg-white p-1 shadow-lg")}>
                         <img
                           src={partner.logo}
                           alt={partner.name}
-                          className="max-h-full max-w-full object-contain rounded-full"
+                          className={getLogoShapeClass("max-h-full max-w-full object-contain")}
                         />
                       </div>
                     ))}
@@ -182,6 +245,21 @@ export default function TreTrungMatchIntro() {
             )}
           </div>
         </div>
+
+        {/* Live Unit - Top right corner */}
+        {matchData.liveUnit && (
+          <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+            <div className="bg-red-600 text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2">
+              <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+              <img
+                src={matchData.liveUnit}
+                alt="Live Unit"
+                className="h-4 sm:h-5 object-contain"
+              />
+              <span className="text-xs sm:text-sm font-bold">LIVE</span>
+            </div>
+          </div>
+        )}
 
         {/* Marquee - Hidden by default, will show when socket updates */}
         {marquee.isRunning && marquee.text && (
