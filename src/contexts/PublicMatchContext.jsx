@@ -69,7 +69,12 @@ export const PublicMatchProvider = ({ children }) => {
     selectedPoster: 'tretrung',
     showStats: false,
     showPenalty: false,
-    showLineup: false
+    showLineup: false,
+    logoShape: 'circle', // 'circle', 'square', 'hexagon', 'shield'
+    showTournamentLogo: true,
+    showSponsors: true,
+    showOrganizing: true,
+    showMediaPartners: true
   });
 
   // State cho view hiện tại trên route dynamic
@@ -106,6 +111,25 @@ export const PublicMatchProvider = ({ children }) => {
   const [tournamentLogo, setTournamentLogo] = useState({
     code_logo: [],
     url_logo: []
+  });
+
+  // State cho đơn vị live/sản xuất
+  const [liveUnit, setLiveUnit] = useState({
+    code_logo: [],
+    url_logo: [],
+    name: 'LIVE STREAMING',
+    position: 'top-right'
+  });
+
+  // State cho cài đặt hiển thị poster
+  const [posterSettings, setPosterSettings] = useState({
+    showTimer: true,
+    showDate: true,
+    showStadium: true,
+    showLiveIndicator: true,
+    backgroundOpacity: 0.8,
+    textColor: '#ffffff',
+    accentColor: '#3b82f6'
   });
 
   // State cho socket connection
@@ -280,6 +304,24 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
+    // Lắng nghe cập nhật đơn vị live
+    socketService.on('live_unit_updated', (data) => {
+      setLiveUnit(prev => ({ ...prev, ...data.liveUnit }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật cài đặt poster
+    socketService.on('poster_settings_updated', (data) => {
+      setPosterSettings(prev => ({ ...prev, ...data.posterSettings }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật display settings
+    socketService.on('display_settings_updated', (data) => {
+      setDisplaySettings(prev => ({ ...prev, ...data.displaySettings }));
+      setLastUpdateTime(Date.now());
+    });
+
     // Lắng nghe cập nhật view hiện tại (MỚI) - KHÔNG update time để tránh re-render
     socketService.on('view_updated', (data) => {
       setCurrentView(data.viewType);
@@ -369,10 +411,19 @@ export const PublicMatchProvider = ({ children }) => {
     lastUpdateTime,
     currentAccessCode,
     currentView,
+    organizing,
+    mediaPartners,
+    liveUnit,
+    posterSettings,
 
     // Actions
     initializeSocket,
-    disconnectSocket
+    disconnectSocket,
+
+    // Setters for new states
+    setLiveUnit,
+    setPosterSettings,
+    setDisplaySettings
   };
 
   return (
