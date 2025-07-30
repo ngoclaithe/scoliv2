@@ -811,7 +811,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
               {/* T��ng số cú sút */}
               <EditableStatBar
-                label="Tổng số cú sút"
+                label="Tổng số cú s��t"
                 statKey="totalShots"
                 team1Value={matchStats.totalShots.team1}
                 team2Value={matchStats.totalShots.team2}
@@ -1377,9 +1377,11 @@ const MatchManagementSection = ({ isActive = true }) => {
                 return acc;
               }, {});
 
+              console.log("[MatchManagementSection] logosByCategory:", logosByCategory);
+
               // Emit socket events cho từng category
               if (logosByCategory.sponsor) {
-                console.log("🏷️ [MatchManagementSection] Updating sponsors:", logosByCategory.sponsor);
+                console.log("[MatchManagementSection] Calling updateSponsors");
                 updateSponsors({
                   code_logo: logosByCategory.sponsor.map(s => s.code_logo),
                   url_logo: logosByCategory.sponsor.map(s => s.url_logo),
@@ -1389,7 +1391,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }
 
               if (logosByCategory.organizing) {
-                console.log("🏛️ [MatchManagementSection] Updating organizing:", logosByCategory.organizing);
+                console.log("[MatchManagementSection] Calling updateOrganizing");
                 updateOrganizing({
                   code_logo: logosByCategory.organizing.map(o => o.code_logo),
                   url_logo: logosByCategory.organizing.map(o => o.url_logo),
@@ -1399,7 +1401,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }
 
               if (logosByCategory.media) {
-                console.log("📺 [MatchManagementSection] Updating media partners:", logosByCategory.media);
+                console.log("[MatchManagementSection] Calling updateMediaPartners");
                 updateMediaPartners({
                   code_logo: logosByCategory.media.map(m => m.code_logo),
                   url_logo: logosByCategory.media.map(m => m.url_logo),
@@ -1409,7 +1411,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }
 
               if (logosByCategory.tournament) {
-                console.log("🏆 [MatchManagementSection] Updating tournament logo:", logosByCategory.tournament);
+                console.log("[MatchManagementSection] Calling updateTournamentLogo");
                 updateTournamentLogo({
                   code_logo: logosByCategory.tournament.map(t => t.code_logo),
                   url_logo: logosByCategory.tournament.map(t => t.url_logo)
@@ -1417,7 +1419,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }
 
               if (logosByCategory.live) {
-                console.log("📡 [MatchManagementSection] Updating live unit:", logosByCategory.live);
+                console.log("[MatchManagementSection] Calling updateLiveUnit");
                 updateLiveUnit({
                   code_logo: logosByCategory.live.map(l => l.code_logo),
                   url_logo: logosByCategory.live.map(l => l.url_logo),
