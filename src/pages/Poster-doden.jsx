@@ -111,7 +111,7 @@ export default function DodenMatchIntro() {
   };
 
   const hasSponsors = matchData.sponsors.length > 0;
-  const hasOrganizings = matchData.organizings.length > 0;
+  const hasOrganizing = matchData.organizing.length > 0;
   const hasMediaPartners = matchData.mediaPartners.length > 0;
   const hasTournamentLogo = matchData.tournamentLogo;
   const hasLiveUnit = matchData.liveUnit;
