@@ -38,6 +38,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
     updateView,
     resumeTimer,
+    updateMarquee,
 
     // Logo update functions
     updateSponsors,
@@ -684,25 +685,34 @@ const MatchManagementSection = ({ isActive = true }) => {
                   title: matchTitle,
                   time: matchInfo.startTime
                 });
-                // Console log màu áo quần để debug
-                console.log('Màu áo quần:', {
-                  teamA: {
-                    shirtColor: teamAInfo.shirtColor || '#ff0000',
-                    pantsColor: teamAInfo.pantsColor || '#ff0000'
-                  },
-                  teamB: {
-                    shirtColor: teamBInfo.shirtColor || '#000000',
-                    pantsColor: teamBInfo.pantsColor || '#000000'
-                  }
+                              // Emit team kit colors via socket
+                const teamColorsData = {
+                  teamAKitColor: teamAInfo.shirtColor || '#ff0000',
+                  teamBKitColor: teamBInfo.shirtColor || '#000000'
+                };
+
+                // Update team kit colors in MatchContext
+                updateMatchInfo({
+                  ...teamColorsData,
+                  startTime: matchInfo.startTime,
+                  stadium: matchInfo.location,
+                  matchDate: matchInfo.matchDate || new Date().toISOString().split('T')[0],
+                  title: matchTitle,
+                  time: matchInfo.startTime,
+                  liveUnit: liveUnit
                 });
-                console.log('Đã cập nhật thông tin trận đấu:', {
+
+                // Console log để debug
+                console.log('🎨 [DEBUG] Team kit colors updated:', teamColorsData);
+                console.log('📡 [DEBUG] Emitted match_info_update với data:', {
                   teamAInfo,
                   teamBInfo,
                   matchInfo,
+                  teamColors: teamColorsData,
                   logoA: teamAInfo.logo || matchData.teamA.logo,
                   logoB: teamBInfo.logo || matchData.teamB.logo
                 });
-                toast.success('✅ Đã cập nhật thông tin trận đấu thành công!');
+                toast.success('✅ Đã cập nhật thông tin trận đấu và màu áo thành công!');
               }}
               className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded shadow transform hover:scale-105 transition-all duration-200"
             >
@@ -1336,6 +1346,29 @@ const MatchManagementSection = ({ isActive = true }) => {
             <Button
               variant="primary"
               size="sm"
+              onClick={() => {
+                // Tạo marquee data từ clock settings
+                const marqueeSettings = {
+                  text: clockText || "TRỰC TIẾP BÓNG ĐÁ",
+                  mode: clockSetting,
+                  color: tickerColor,
+                  interval: clockSetting === 'moi-2' ? 2 : clockSetting === 'moi-5' ? 5 : 0
+                };
+
+                // Update marquee qua MatchContext
+                updateMarquee(marqueeSettings);
+
+                // Console log để debug
+                console.log('🎬 [DEBUG] Clock Settings applied:', {
+                  clockSetting,
+                  clockText,
+                  tickerColor,
+                  marqueeSettings
+                });
+                console.log('📡 [DEBUG] Emitted marquee_update với data:', marqueeSettings);
+
+                toast.success('✅ Đã áp dụng cài đặt chữ chạy!');
+              }}
               className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               ÁP DỤNG
