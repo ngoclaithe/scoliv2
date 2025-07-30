@@ -291,7 +291,7 @@ export default function DodenMatchIntro() {
                 </h3>
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/30 mx-4 sm:mx-8">
                   <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
-                    {matchData.organizings.map((organizing, index) => (
+                    {matchData.organizing.map((organizingItem, index) => (
                       <div key={index} className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex justify-center items-center bg-white rounded p-0.5 shadow-lg">
                         <img
                           src={organizing}
