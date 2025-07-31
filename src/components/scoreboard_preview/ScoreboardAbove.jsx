@@ -52,6 +52,26 @@ const ScoreboardAbove = ({
         console.log('   TournamentLogo:', tournamentLogo);
     }, [organizing, sponsors, mediaPartners, tournamentLogo]);
 
+    // Helper function to get position value from possibly nested array
+    const getPosition = (pos) => {
+        if (Array.isArray(pos)) {
+            return Array.isArray(pos[0]) ? pos[0][0] : pos[0];
+        }
+        return pos;
+    };
+
+    // Helper function to filter logos by position
+    const filterLogosByPosition = (logoData, targetPosition) => {
+        if (!logoData?.url_logo || !logoData?.position) return [];
+
+        return logoData.url_logo.filter((_, index) => {
+            const position = logoData.position[index];
+            const normalizedPosition = getPosition(position);
+            console.log(`🔍 Checking position for index ${index}:`, position, '-> normalized:', normalizedPosition, '-> target:', targetPosition);
+            return normalizedPosition === targetPosition;
+        });
+    };
+
     const [showScrollingText, setShowScrollingText] = useState(false);
 
     const scrollData = {
