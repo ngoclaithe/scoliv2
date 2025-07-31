@@ -528,8 +528,8 @@ const ScoreboardAbove = ({
                 )}
 
                 {/* Main Scoreboard - Top Right */}
-                <div className="absolute top-8 right-8 z-30">
-                    <div className="scoreboard-main bg-transparent rounded-lg shadow-2xl min-w-[400px] py-3">
+                <div className="absolute top-4 right-4 z-30 transform-gpu origin-top-right">
+                    <div className="scoreboard-main bg-transparent rounded-lg shadow-2xl">
                         {renderScoreboard()}
                     </div>
                 </div>
