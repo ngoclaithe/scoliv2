@@ -268,7 +268,6 @@ const ManageAccessCode = ({ onNavigate }) => {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-white">Quản lý mã truy cập</h1>
-                <p className="text-purple-100 text-sm">Tạo mã để chia sẻ và quản lý trận đấu</p>
               </div>
             </div>
 
