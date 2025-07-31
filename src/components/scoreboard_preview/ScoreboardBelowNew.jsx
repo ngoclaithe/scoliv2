@@ -63,6 +63,35 @@ const ScoreboardBelowNew = ({
         }
     }, [displaySettings?.selectedSkin]);
 
+    // Handle scrolling text visibility based on mode and timing
+    useEffect(() => {
+        let timer;
+
+        if (scrollData.mode === 'khong') {
+            // Hide scrolling text for 'KHÔNG' mode
+            setShowScrollingText(false);
+        } else if (scrollData.mode === 'lien-tuc') {
+            // Show every 30 seconds for 'LIÊN TỤC' mode
+            setShowScrollingText(true);
+            timer = setInterval(() => {
+                setShowScrollingText(false);
+                setTimeout(() => setShowScrollingText(true), 2000); // Hide for 2 seconds then show again
+            }, scrollData.interval);
+        } else if (scrollData.mode === 'moi-2' || scrollData.mode === 'moi-5') {
+            // Show at specified intervals for 'MỖI 2\'' and 'MỖI 5\'' modes
+            timer = setInterval(() => {
+                setShowScrollingText(true);
+                setTimeout(() => setShowScrollingText(false), 5000); // Show for 5 seconds
+            }, scrollData.interval);
+        }
+
+        return () => {
+            if (timer) {
+                clearInterval(timer);
+            }
+        };
+    }, [scrollData.mode, scrollData.interval]);
+
     // Hàm tính độ sáng của màu để chọn màu chữ phù hợp
     const getTextColor = (backgroundColor) => {
         const hex = backgroundColor.replace('#', '');
