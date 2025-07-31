@@ -320,7 +320,7 @@ const ScoreboardAbove = ({
             {!showMatchTime && (
                 <div className="text-center mt-2">
                     <span className="bg-green-600 text-white px-4 py-1 text-sm font-bold rounded animate-pulse">
-                        ● TR���C TIẾP
+                        ● TRỰC TIẾP
                     </span>
                 </div>
             )}
@@ -525,7 +525,7 @@ const ScoreboardAbove = ({
                 )}
 
                 {/* Main Scoreboard - Top Right */}
-                <div className="absolute top-4 right-4 z-30 transform-gpu origin-top-right">
+                <div className="absolute top-4 right-4 z-30">
                     <div className="scoreboard-main bg-transparent rounded-lg shadow-2xl">
                         {renderScoreboard()}
                     </div>
