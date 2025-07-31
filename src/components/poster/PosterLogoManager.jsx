@@ -280,7 +280,14 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         ? item.displayPositions.filter(p => p !== position)
         : [...item.displayPositions, position];
 
-      onUpdate(item.id, { ...item, displayPositions: newPositions });
+      const updatedItem = { ...item, displayPositions: newPositions };
+      onUpdate(item.id, updatedItem);
+
+      // Emit immediately for real-time update
+      if (onPositionChange) {
+        console.log('📍 [PosterLogoManager] Position changed for item:', updatedItem);
+        onPositionChange(updatedItem);
+      }
     };
 
     return (
