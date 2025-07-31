@@ -536,30 +536,30 @@ const ScoreboardBelowNew = ({
                 .animate-scroll {
                     animation: scroll 30s linear infinite;
                 }
-                
-                /* Mobile scaling for proportional zoom */
+
+                /* Uniform scaling for mobile - like image zoom while staying centered bottom */
+                .scoreboard-main {
+                    transform-origin: bottom center;
+                }
+
                 @media (max-width: 768px) {
-                    :root {
-                        --scale-factor: 0.85;
-                    }
-                    
                     .scoreboard-main {
-                        min-width: 350px;
-                        max-width: 95vw;
-                    }
-                    
-                    .container-name-color-left,
-                    .container-name-color-right {
-                        min-width: 60px;
+                        transform: scale(0.75);
                     }
                 }
-                
+
                 @media (max-width: 480px) {
-                    :root {
-                        --scale-factor: 0.75;
+                    .scoreboard-main {
+                        transform: scale(0.6);
                     }
                 }
-                
+
+                @media (max-width: 360px) {
+                    .scoreboard-main {
+                        transform: scale(0.5);
+                    }
+                }
+
                 /* Logo styling to prevent corner cutting */
                 .logo-container {
                     border-radius: 50%;
