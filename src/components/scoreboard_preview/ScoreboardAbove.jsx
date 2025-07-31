@@ -34,11 +34,13 @@ const ScoreboardAbove = ({
         leagueLogo: "/api/placeholder/40/40"
     };
 
-    const logoShape = displaySettings?.logoShape || "round";
+    const rawLogoShape = displaySettings?.logoShape || "round";
+    // Convert shape names to match DisplayLogo expectations
+    const logoShape = rawLogoShape === 'round' ? 'circle' : rawLogoShape;
 
     // Debug log
     console.log('🔧 [ScoreboardAbove] Current displaySettings:', displaySettings);
-    console.log('🔧 [ScoreboardAbove] Current logoShape:', logoShape);
+    console.log('🔧 [ScoreboardAbove] Raw logoShape:', rawLogoShape, '-> mapped to:', logoShape);
     console.log('🔧 [ScoreboardAbove] Sponsors data:', sponsors);
     console.log('🔧 [ScoreboardAbove] Organizing data:', organizing);
     console.log('🔧 [ScoreboardAbove] MediaPartners data:', mediaPartners);
