@@ -36,6 +36,13 @@ const ScoreboardAbove = ({
 
     const logoShape = displaySettings?.logoShape || "square";
 
+    // Debug log
+    console.log('🔧 [ScoreboardAbove] Current displaySettings:', displaySettings);
+    console.log('🔧 [ScoreboardAbove] Current logoShape:', logoShape);
+    console.log('🔧 [ScoreboardAbove] Sponsors data:', sponsors);
+    console.log('🔧 [ScoreboardAbove] Organizing data:', organizing);
+    console.log('🔧 [ScoreboardAbove] MediaPartners data:', mediaPartners);
+
     const [showScrollingText, setShowScrollingText] = useState(false);
 
     const scrollData = {
