@@ -101,6 +101,7 @@ const DisplayController = () => {
         />;
       case 'penalty_scoreboard':
         return <PenaltyScoreboard
+          accessCode={accessCode}
           type={displaySettings.selectedSkin || 1}
         />;
       case 'player_list':
