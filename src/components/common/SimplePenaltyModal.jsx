@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Modal from "./Modal";
 import { useMatch } from "../../contexts/MatchContext";
 
-
 const SimplePenaltyModal = ({ isOpen, onClose }) => {
-  const { penaltyData, updatePenalty, updateView } = useMatch();
+  const { updatePenalty, updateView } = useMatch();
+  
   // State for penalty table: 10 columns for rounds, 4 rows for teams
   const [penaltyTable, setPenaltyTable] = useState({
     teamA_goals: Array(10).fill(false),    // Team A goals
@@ -12,41 +12,6 @@ const SimplePenaltyModal = ({ isOpen, onClose }) => {
     teamB_goals: Array(10).fill(false),    // Team B goals
     teamB_misses: Array(10).fill(false)    // Team B misses
   });
-
-  // Load penalty data when modal opens
-  useEffect(() => {
-    if (isOpen && penaltyData) {
-      const newTable = {
-        teamA_goals: Array(10).fill(false),
-        teamA_misses: Array(10).fill(false),
-        teamB_goals: Array(10).fill(false),
-        teamB_misses: Array(10).fill(false)
-      };
-
-      // Process shootHistory to populate table
-      if (penaltyData.shootHistory && Array.isArray(penaltyData.shootHistory)) {
-        penaltyData.shootHistory.forEach((shoot, index) => {
-          if (index < 10) { // Only process first 10 rounds
-            if (shoot.team === 'teamA' || shoot.team === 'home') {
-              if (shoot.result === 'goal') {
-                newTable.teamA_goals[index] = true;
-              } else {
-                newTable.teamA_misses[index] = true;
-              }
-            } else if (shoot.team === 'teamB' || shoot.team === 'away') {
-              if (shoot.result === 'goal') {
-                newTable.teamB_goals[index] = true;
-              } else {
-                newTable.teamB_misses[index] = true;
-              }
-            }
-          }
-        });
-      }
-
-      setPenaltyTable(newTable);
-    }
-  }, [isOpen, penaltyData]);
 
   // Handle checkbox click and emit socket update
   const handleCheckboxChange = (team, type, roundIndex) => {

@@ -113,7 +113,7 @@ const PenaltyScoreboard = () => {
                                 </div>
 
                                 {/* Penalty indicator */}
-                                <div className="bg-red-600 text-white px-2 py-1 font-bold whitespace-nowrap text-xs sm:text-sm md:text-base">
+                                <div className="bg-black text-white px-2 py-1 font-bold whitespace-nowrap text-xs sm:text-sm md:text-base">
                                     PENALTY
                                 </div>
 
