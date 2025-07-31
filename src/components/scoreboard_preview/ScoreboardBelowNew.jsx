@@ -108,23 +108,8 @@ const ScoreboardBelowNew = ({
         return brightness > 128 ? '#000000' : '#FFFFFF';
     };
 
-    const LogoImage = ({ src, alt, className = "" }) => (
-        <div className={`relative ${className} rounded-full overflow-hidden p-1`}
-            style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}>
-            <img
-                src={src}
-                alt={alt}
-                className="w-full h-full object-contain rounded-full"
-                style={{
-                    filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
-                    backgroundColor: 'transparent'
-                }}
-                onError={(e) => {
-                    e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${alt.charAt(0)}</text></svg>`;
-                }}
-            />
-        </div>
-    );
+    // Get logo shape from display settings, default to square to preserve original logo shape
+    const logoShape = displaySettings?.logoShape || "square";
 
     const renderScoreboardType1 = () => (
         <div className="flex flex-col items-center">
