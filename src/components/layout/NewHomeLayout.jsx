@@ -81,12 +81,13 @@ const NewHomeLayout = () => {
             </div>
 
             {/* Center - Access Code Info */}
-            <div className="flex items-center bg-white/10 rounded-full px-4 py-2 backdrop-blur-sm">
-              <span className="text-white text-xs mr-2">🔑</span>
-              <span className="text-white text-sm font-mono font-bold">
-                {matchCode || 'NO-CODE'}
-              </span>
-            </div>
+            <button
+              onClick={() => setShowAccessCodeModal(true)}
+              className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
+              title="Xem mã truy cập"
+            >
+              <span className="text-white text-sm">🔑</span>
+            </button>
 
             {/* Right - User Actions */}
             <div className="flex items-center space-x-2">
