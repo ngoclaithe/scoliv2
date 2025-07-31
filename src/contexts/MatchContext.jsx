@@ -527,7 +527,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Cập nhật đơn vị truyền thông
+  // Cập nhật đơn vị truyền th��ng
   const updateMediaPartners = useCallback((newMediaPartners) => {
     console.log('[MatchContext] updateMediaPartners called:', newMediaPartners, 'socketConnected:', socketConnected);
     if (socketConnected) {
@@ -562,6 +562,10 @@ export const MatchProvider = ({ children }) => {
   // Cập nhật display settings
   const updateDisplaySettings = useCallback((newDisplaySettings) => {
     console.log('[MatchContext] updateDisplaySettings called:', newDisplaySettings, 'socketConnected:', socketConnected);
+
+    // Cập nhật local state
+    setDisplaySettings(prev => ({ ...prev, ...newDisplaySettings }));
+
     if (socketConnected) {
       socketService.updateDisplaySettings(newDisplaySettings);
     }
