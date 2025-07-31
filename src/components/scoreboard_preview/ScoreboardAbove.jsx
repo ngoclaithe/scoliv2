@@ -274,8 +274,10 @@ const TopScoreboard = ({ template = 1, accessCode }) => {
       <div className="fixed top-8 left-8 z-40 flex gap-2 pointer-events-auto">
         {scoreboardData.partnerPositions.leftUp.map((partner, index) => (
           <div key={index} className="flex items-center gap-1 text-white text-2xl">
-            <img src={partner.image} alt={partner.name} className="w-12 h-12 rounded-full" style={{ height: '4vw', width: 'auto' }} />
-            <span>{partner.name}</span>
+            {partner.url_logo && (
+              <img src={partner.url_logo} alt={partner.name || 'Sponsor'} className="w-12 h-12 rounded-full object-cover" style={{ height: '4vw', width: 'auto' }} />
+            )}
+            {partner.name && <span>{partner.name}</span>}
           </div>
         ))}
       </div>
