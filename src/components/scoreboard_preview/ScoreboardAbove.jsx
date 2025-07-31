@@ -19,7 +19,6 @@ const ScoreboardAbove = ({
     
     const [currentType, setCurrentType] = useState(type);
 
-    // Get real data from context with fallbacks
     const currentData = {
         teamAName: matchData?.teamA?.name || "ĐỘI A",
         teamBName: matchData?.teamB?.name || "ĐỘI B",
@@ -35,13 +34,10 @@ const ScoreboardAbove = ({
         leagueLogo: "/api/placeholder/40/40"
     };
 
-    // Get logo shape from display settings, default to square to preserve original logo shape
     const logoShape = displaySettings?.logoShape || "square";
 
-    // State for scrolling text visibility control
     const [showScrollingText, setShowScrollingText] = useState(false);
 
-    // Get marquee data from context (updated via Clock Settings)
     const scrollData = {
         text: marqueeData?.text || "TRỰC TIẾP BÓNG ĐÁ",
         color: marqueeData?.color === 'white-black' ? '#FFFFFF' :
@@ -61,35 +57,29 @@ const ScoreboardAbove = ({
                   marqueeData?.mode === 'lien-tuc' ? 30000 : 0 // liên tục = 30 seconds
     };
 
-    // Determine if we should show match time based on status
     const showMatchTime = currentData.status === 'live' || currentData.status === 'pause';
 
-    // Update current type based on display settings
     useEffect(() => {
         if (displaySettings?.selectedSkin) {
             setCurrentType(displaySettings.selectedSkin);
         }
     }, [displaySettings?.selectedSkin]);
 
-    // Handle scrolling text visibility based on mode and timing
     useEffect(() => {
         let timer;
 
         if (scrollData.mode === 'khong') {
-            // Hide scrolling text for 'KHÔNG' mode
             setShowScrollingText(false);
         } else if (scrollData.mode === 'lien-tuc') {
-            // Show every 30 seconds for 'LIÊN TỤC' mode
             setShowScrollingText(true);
             timer = setInterval(() => {
                 setShowScrollingText(false);
-                setTimeout(() => setShowScrollingText(true), 2000); // Hide for 2 seconds then show again
+                setTimeout(() => setShowScrollingText(true), 2000);
             }, scrollData.interval);
         } else if (scrollData.mode === 'moi-2' || scrollData.mode === 'moi-5') {
-            // Show at specified intervals for 'MỖI 2\'' and 'MỖI 5\'' modes
             timer = setInterval(() => {
                 setShowScrollingText(true);
-                setTimeout(() => setShowScrollingText(false), 5000); // Show for 5 seconds
+                setTimeout(() => setShowScrollingText(false), 5000); 
             }, scrollData.interval);
         }
 
@@ -100,7 +90,6 @@ const ScoreboardAbove = ({
         };
     }, [scrollData.mode, scrollData.interval]);
 
-    // Hàm tính độ sáng của màu để chọn màu chữ phù hợp
     const getTextColor = (backgroundColor) => {
         const hex = backgroundColor.replace('#', '');
         const r = parseInt(hex.substr(0, 2), 16);
