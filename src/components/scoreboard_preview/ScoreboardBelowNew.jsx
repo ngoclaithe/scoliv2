@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
+import DisplayLogo from '../common/DisplayLogo';
 
 const ScoreboardBelowNew = ({
     type = 1
@@ -25,8 +26,8 @@ const ScoreboardBelowNew = ({
         matchTime: matchData?.matchTime || "00:00",
         period: matchData?.period || "Chưa bắt đầu",
         status: matchData?.status || "waiting",
-        teamAKitColor: matchData?.teamAKitColor || "#FF0000", 
-        teamBKitColor: matchData?.teamBKitColor || "#0000FF", 
+        teamAKitColor: matchData?.teamAKitColor || "#FF0000",
+        teamBKitColor: matchData?.teamBKitColor || "#0000FF",
         leagueLogo: "/api/placeholder/40/40"
     };
 
@@ -102,29 +103,19 @@ const ScoreboardBelowNew = ({
         return brightness > 128 ? '#000000' : '#FFFFFF';
     };
 
-    const LogoImage = ({ src, alt, className = "" }) => (
-        <div className={`relative ${className} rounded-full overflow-hidden p-1`}
-            style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}>
-            <img
-                src={src}
-                alt={alt}
-                className="w-full h-full object-contain rounded-full"
-                style={{
-                    filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
-                    backgroundColor: 'transparent'
-                }}
-                onError={(e) => {
-                    e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${alt.charAt(0)}</text></svg>`;
-                }}
-            />
-        </div>
-    );
+    // Get logo shape from display settings, default to square to preserve original logo shape
+    const logoShape = displaySettings?.logoShape || "square";
 
     const renderScoreboardType1 = () => (
         <div className="flex flex-col items-center">
             <div className="flex items-center justify-center w-full px-2 gap-0">
                 {/* Logo team A */}
-                <LogoImage src={currentData.teamALogo} alt={currentData.teamAName} className="w-14 h-14 object-contain" style={{ borderRadius: '0 !important' }} />
+                <DisplayLogo
+                    logos={[currentData.teamALogo]}
+                    alt={currentData.teamAName}
+                    className="w-14 h-14"
+                    type_play={logoShape}
+                />
 
                 {/* Score + team A name */}
                 <div className="flex items-center gap-0">
@@ -168,7 +159,12 @@ const ScoreboardBelowNew = ({
                 </div>
 
                 {/* Logo team B */}
-                <LogoImage src={currentData.teamBLogo} alt={currentData.teamBName} className="w-14 h-14 object-contain" style={{ borderRadius: '0 !important' }} />
+                <DisplayLogo
+                    logos={[currentData.teamBLogo]}
+                    alt={currentData.teamBName}
+                    className="w-14 h-14"
+                    type_play={logoShape}
+                />
             </div>
 
             {/* Live Match Label cho Type 1 */}
@@ -275,15 +271,17 @@ const ScoreboardBelowNew = ({
                     }}
                 >
                     <div
-                        className="w-12 h-12 rounded-full border-2 overflow-hidden"
+                        className="w-12 h-12 border-2"
                         style={{
                             borderColor: currentData.teamAKitColor,
+                            borderRadius: logoShape === 'circle' ? '50%' : logoShape === 'hexagon' ? '0' : '8px'
                         }}
                     >
-                        <LogoImage
-                            src={currentData.teamALogo}
+                        <DisplayLogo
+                            logos={[currentData.teamALogo]}
                             alt={currentData.teamAName}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full"
+                            type_play={logoShape}
                         />
                     </div>
                 </div>
@@ -298,15 +296,17 @@ const ScoreboardBelowNew = ({
                     }}
                 >
                     <div
-                        className="w-12 h-12 rounded-full border-2 overflow-hidden"
+                        className="w-12 h-12 border-2"
                         style={{
                             borderColor: currentData.teamBKitColor,
+                            borderRadius: logoShape === 'circle' ? '50%' : logoShape === 'hexagon' ? '0' : '8px'
                         }}
                     >
-                        <LogoImage
-                            src={currentData.teamBLogo}
+                        <DisplayLogo
+                            logos={[currentData.teamBLogo]}
                             alt={currentData.teamBName}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full"
+                            type_play={logoShape}
                         />
                     </div>
                 </div>
@@ -325,7 +325,12 @@ const ScoreboardBelowNew = ({
 
     const renderScoreboardType3 = () => (
         <div className="flex items-center justify-between w-full px-2">
-            <LogoImage src={currentData.teamALogo} alt={currentData.teamAName} className="w-12 h-12" />
+            <DisplayLogo
+                logos={[currentData.teamALogo]}
+                alt={currentData.teamAName}
+                className="w-12 h-12"
+                type_play={logoShape}
+            />
 
             <div className="flex items-center bg-black/20 backdrop-blur-sm rounded-lg p-1 shadow-xl">
                 {/* Team A */}
@@ -370,14 +375,24 @@ const ScoreboardBelowNew = ({
                 </div>
             </div>
 
-            <LogoImage src={currentData.teamBLogo} alt={currentData.teamBName} className="w-12 h-12" />
+            <DisplayLogo
+                logos={[currentData.teamBLogo]}
+                alt={currentData.teamBName}
+                className="w-12 h-12"
+                type_play={logoShape}
+            />
         </div>
     );
 
     const renderScoreboardType4 = () => (
         <div className="flex flex-col items-center">
             <div className="flex items-center justify-between w-full">
-                <LogoImage src={currentData.teamALogo} alt={currentData.teamAName} className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0" />
+                <DisplayLogo
+                    logos={[currentData.teamALogo]}
+                    alt={currentData.teamAName}
+                    className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0"
+                    type_play={logoShape}
+                />
 
                 <div className="flex items-center z-20">
                     {/* Hình thang cân xuôi cho tên đội A */}
@@ -416,10 +431,11 @@ const ScoreboardBelowNew = ({
 
                         {/* Logo League - đặt vào container riêng để không bị cắt */}
                         <div className="mx-2 sm:mx-3 relative" style={{ top: '-6px' }}>
-                            <LogoImage
-                                src={currentData.leagueLogo}
+                            <DisplayLogo
+                                logos={[currentData.leagueLogo]}
                                 alt="League"
                                 className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 flex-shrink-0"
+                                type_play={logoShape}
                             />
                         </div>
 
@@ -453,7 +469,12 @@ const ScoreboardBelowNew = ({
                     </div>
                 </div>
 
-                <LogoImage src={currentData.teamBLogo} alt={currentData.teamBName} className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0" />
+                <DisplayLogo
+                    logos={[currentData.teamBLogo]}
+                    alt={currentData.teamBName}
+                    className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0"
+                    type_play={logoShape}
+                />
             </div>
         </div>
     );
