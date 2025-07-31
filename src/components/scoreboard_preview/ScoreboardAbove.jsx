@@ -34,7 +34,7 @@ const ScoreboardAbove = ({
         leagueLogo: "/api/placeholder/40/40"
     };
 
-    const logoShape = displaySettings?.logoShape || "square";
+    const logoShape = displaySettings?.logoShape || "round";
 
     // Debug log
     console.log('🔧 [ScoreboardAbove] Current displaySettings:', displaySettings);
