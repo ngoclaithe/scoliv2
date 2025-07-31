@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
-import { usePublicMatch } from "../../contexts/PublicMatchContext";
+import { useMatch } from "../../contexts/MatchContext";
 import socketService from "../../services/socketService";
 
 const SimplePenaltyModal = ({ isOpen, onClose }) => {
