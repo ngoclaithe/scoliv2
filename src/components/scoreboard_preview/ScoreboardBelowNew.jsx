@@ -494,18 +494,20 @@ const ScoreboardBelowNew = ({
                     </div>
                 </div>
 
-                {/* Scrolling Text */}
-                <div className="absolute bottom-0 left-0 w-full z-20 overflow-hidden" style={{ backgroundColor: scrollData.bgColor }}>
-                    <div
-                        className="animate-scroll whitespace-nowrap py-2 text-sm font-semibold"
-                        style={{
-                            color: scrollData.color,
-                            animation: 'scroll 30s linear infinite'
-                        }}
-                    >
-                        {Array(scrollData.repeat).fill(scrollData.text).join(' • ')}
+                {/* Scrolling Text - only show if mode is not 'khong' and visibility is true */}
+                {scrollData.mode !== 'khong' && showScrollingText && (
+                    <div className="absolute bottom-0 left-0 w-full z-20 overflow-hidden" style={{ backgroundColor: scrollData.bgColor }}>
+                        <div
+                            className="animate-scroll whitespace-nowrap py-2 text-sm font-semibold"
+                            style={{
+                                color: scrollData.color,
+                                animation: 'scroll 30s linear infinite'
+                            }}
+                        >
+                            {Array(scrollData.repeat).fill(scrollData.text).join(' • ')}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
 
             <style jsx>{`
