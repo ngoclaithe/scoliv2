@@ -9,7 +9,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   const [activeLogoCategory, setActiveLogoCategory] = useState("sponsor");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   const [logoDisplayOptions, setLogoDisplayOptions] = useState({
     shape: "round",
     rotateDisplay: false
@@ -108,35 +108,36 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
     // Tạo preview ảnh
     const reader = new FileReader();
-    
+
     reader.onload = async (e) => {
       const previewUrl = e.target.result;
-      
+
       // Cập nhật UI với preview ảnh
-      setLogoItems(prev => prev.map(logo => 
-        logo.id === item.id 
-          ? { ...logo, 
-              url: previewUrl, 
-              file, 
-              uploadStatus: 'uploading',
-              uploadProgress: 0 
-            } 
+      setLogoItems(prev => prev.map(logo =>
+        logo.id === item.id
+          ? {
+            ...logo,
+            url: previewUrl,
+            file,
+            uploadStatus: 'uploading',
+            uploadProgress: 0
+          }
           : logo
       ));
 
       try {
         // Upload ảnh lên server
-        const response = await LogoAPI.uploadLogo(file, item.type, item.unitName, 
+        const response = await LogoAPI.uploadLogo(file, item.type, item.unitName,
           (progressEvent) => {
             const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            setLogoItems(prev => prev.map(logo => 
-              logo.id === item.id 
+            setLogoItems(prev => prev.map(logo =>
+              logo.id === item.id
                 ? { ...logo, uploadProgress: progress }
                 : logo
             ));
           }
         );
-        
+
         if (response && response.data) {
           const apiLogo = {
             id: response.data.id,
@@ -149,30 +150,30 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             uploadStatus: 'completed',
             uploadProgress: 100
           };
-          
+
           // Xóa preview URL và cập nhật danh sách logo
           URL.revokeObjectURL(previewUrl);
           setLogoItems(prev => prev.filter(logo => logo.id !== item.id));
           setApiLogos(prev => [apiLogo, ...prev]);
-          
+
           // Thông báo thành công
           alert(`Tải lên ${item.type} thành công!`);
         }
       } catch (error) {
         console.error("Lỗi khi tải lên:", error);
-        
+
         // Cập nhật trạng thái lỗi
-        setLogoItems(prev => prev.map(logo => 
-          logo.id === item.id 
+        setLogoItems(prev => prev.map(logo =>
+          logo.id === item.id
             ? { ...logo, uploadStatus: 'error' }
             : logo
         ));
-        
+
         // Thông báo lỗi
         alert(`Lỗi khi tải lên: ${error.message || 'Đã xảy ra lỗi'}`);
       }
     };
-    
+
     // Bắt đầu đọc file
     reader.readAsDataURL(file);
   };
@@ -264,7 +265,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         }
       }
     };
-  
+
     const getShapeClass = () => {
       switch (logoDisplayOptions.shape) {
         case 'round': return 'rounded-full';
@@ -273,15 +274,15 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         default: return 'rounded-full';
       }
     };
-  
+
     const handlePositionToggle = (position) => {
       const newPositions = item.displayPositions.includes(position)
         ? item.displayPositions.filter(p => p !== position)
         : [...item.displayPositions, position];
-      
+
       onUpdate(item.id, { ...item, displayPositions: newPositions });
     };
-  
+
     return (
       <div className="bg-white rounded-lg border-2 border-green-400 p-3 shadow-lg relative w-48 flex-shrink-0">
         {/* X button */}
@@ -292,12 +293,12 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         >
           ×
         </button>
-        
+
         <div className="text-center">
           <div className="text-xs font-bold text-green-600 mb-1">
             {item.type === 'banner' ? '🖼️' : '📁'}
           </div>
-          
+
           {/* Logo preview */}
           <div className="flex justify-center mb-2">
             <div className="relative w-12 h-12">
@@ -318,7 +319,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
               </div>
             </div>
           </div>
-          
+
           {/* Logo code display */}
           <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded p-1 mb-1">
             <div className="text-xs text-green-700 bg-white rounded px-1 py-0.5 font-bold truncate">
@@ -326,7 +327,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             </div>
           </div>
         </div>
-  
+
         <div className="mt-2">
           {/* Input tìm kiếm với icon */}
           <div className="relative">
@@ -334,9 +335,8 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
               type="text"
               value={localCode}
               onChange={handleCodeChange}
-              className={`w-full text-xs text-center border rounded px-1 py-1 pr-6 font-mono transition-colors focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none ${
-                isSearching ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
-              }`}
+              className={`w-full text-xs text-center border rounded px-1 py-1 pr-6 font-mono transition-colors focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none ${isSearching ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
+                }`}
               placeholder="Nhập mã"
             />
             <button
@@ -353,7 +353,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
               🔍 Đang tìm kiếm...
             </div>
           )}
-  
+
           {/* Position toggles */}
           <div className="mt-2">
             <div className="grid grid-cols-3 gap-1">
@@ -376,7 +376,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             </div>
           </div>
         </div>
-  
+
         {/* File upload cho custom logo */}
         {item.isCustom && (
           <div className="mt-2">
@@ -389,15 +389,14 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             />
             <label
               htmlFor={`file-${item.id}`}
-              className={`block w-full text-xs text-center border rounded px-1 py-1 cursor-pointer transition-colors ${
-                item.uploadStatus === 'preview' ? 'bg-yellow-50 border-yellow-300 text-yellow-700' :
-                item.uploadStatus === 'error' ? 'bg-red-50 border-red-300 text-red-700' :
-                'bg-blue-50 border-blue-300 hover:bg-blue-100'
-              }`}
+              className={`block w-full text-xs text-center border rounded px-1 py-1 cursor-pointer transition-colors ${item.uploadStatus === 'preview' ? 'bg-yellow-50 border-yellow-300 text-yellow-700' :
+                  item.uploadStatus === 'error' ? 'bg-red-50 border-red-300 text-red-700' :
+                    'bg-blue-50 border-blue-300 hover:bg-blue-100'
+                }`}
             >
               {item.uploadStatus === 'preview' ? '⏳ Đang tải...' :
-               item.uploadStatus === 'error' ? '❌ Thử lại' :
-               '📁 Chọn file'}
+                item.uploadStatus === 'error' ? '❌ Thử lại' :
+                  '📁 Chọn file'}
             </label>
           </div>
         )}
@@ -412,20 +411,20 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
   const handleItemUpdate = async (itemId, updatedItem) => {
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);
-    
+
     if (isFromAPI) {
       try {
-        setApiLogos(prev => prev.map(item => 
+        setApiLogos(prev => prev.map(item =>
           item.id === itemId ? updatedItem : item
         ));
       } catch (error) {
         console.error("Error updating API logo:", error);
-        setApiLogos(prev => prev.map(item => 
+        setApiLogos(prev => prev.map(item =>
           item.id === itemId ? updatedItem : item
         ));
       }
     } else {
-      setLogoItems(prev => prev.map(item => 
+      setLogoItems(prev => prev.map(item =>
         item.id === itemId ? updatedItem : item
       ));
     }
@@ -434,19 +433,19 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
   const handleItemRemove = async (itemId) => {
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);
     const item = logoItems.find(logo => logo.id === itemId);
-    
+
     if (item && item.url && item.url.startsWith('blob:')) {
       URL.revokeObjectURL(item.url);
     }
-    
+
     if (isFromAPI) {
       try {
-        setApiLogos(prev => prev.map(item => 
+        setApiLogos(prev => prev.map(item =>
           item.id === itemId ? { ...item, displayPositions: [] } : item
         ));
       } catch (error) {
         console.error("Error resetting API logo:", error);
-        setApiLogos(prev => prev.map(item => 
+        setApiLogos(prev => prev.map(item =>
           item.id === itemId ? { ...item, displayPositions: [] } : item
         ));
       }
@@ -466,7 +465,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       displayPositions: [],
       isCustom: true
     };
-    
+
     setLogoItems(prev => [...prev, newLogo]);
   };
 
@@ -481,13 +480,13 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       displayPositions: [],
       isCustom: true
     };
-    
+
     setLogoItems(prev => [...prev, newBanner]);
   };
 
   const handleSave = () => {
     console.log('💾 [PosterLogoManager] handleSave called');
-    
+
     if (selectedPoster) {
       console.log('💾 [PosterLogoManager] Calling onPosterUpdate with selectedPoster:', selectedPoster);
       onPosterUpdate?.(selectedPoster);
@@ -565,11 +564,10 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             <button
               key={type.id}
               onClick={() => setActiveLogoCategory(type.id)}
-              className={`px-1 py-0.5 rounded text-xs font-medium transition-colors ${
-                activeLogoCategory === type.id
+              className={`px-1 py-0.5 rounded text-xs font-medium transition-colors ${activeLogoCategory === type.id
                   ? 'bg-blue-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+                }`}
             >
               {type.name}
             </button>
@@ -577,39 +575,39 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         </div>
 
         <div className="grid grid-cols-2 gap-2 max-w-32">
-  {currentItems.map((item) => (
-    <LogoItem
-      key={item.id}
-      item={item}
-      onUpdate={handleItemUpdate}
-      onRemove={handleItemRemove}
-    />
-  ))}
+          {currentItems.map((item) => (
+            <LogoItem
+              key={item.id}
+              item={item}
+              onUpdate={handleItemUpdate}
+              onRemove={handleItemRemove}
+            />
+          ))}
 
-  <div
-    onClick={handleAddNewLogo}
-    className="w-12 h-12 bg-white border-2 border-dashed border-gray-300 rounded p-1 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 flex flex-col items-center justify-center"
-  >
-    <div className="w-3 h-3 bg-gray-100 rounded-full flex items-center justify-center mb-0.5">
-      <span className="text-xs text-gray-400">+</span>
-    </div>
-    <p className="text-xs text-gray-600 font-medium text-center leading-tight">
-      Thêm
-    </p>
-  </div>
+          <div
+            onClick={handleAddNewLogo}
+            className="w-12 h-12 bg-white border-2 border-dashed border-gray-300 rounded p-1 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 flex flex-col items-center justify-center"
+          >
+            <div className="w-3 h-3 bg-gray-100 rounded-full flex items-center justify-center mb-0.5">
+              <span className="text-xs text-gray-400">+</span>
+            </div>
+            <p className="text-xs text-gray-600 font-medium text-center leading-tight">
+              Thêm
+            </p>
+          </div>
 
-  <div
-    onClick={handleAddNewBanner}
-    className="col-span-2 w-20 h-12 bg-white border-2 border-dashed border-orange-300 rounded p-1 cursor-pointer hover:border-orange-400 hover:bg-orange-50 transition-all duration-200 flex flex-col items-center justify-center"
-  >
-    <div className="w-3 h-3 bg-orange-100 rounded-full flex items-center justify-center mb-0.5">
-      <span className="text-xs text-orange-400">+</span>
-    </div>
-    <p className="text-xs text-orange-600 font-medium text-center">
-      Thêm Banner
-    </p>
-  </div>
-</div>
+          <div
+            onClick={handleAddNewBanner}
+            className="col-span-2 w-12 h-12 bg-white border-2 border-dashed border-orange-300 rounded p-1 cursor-pointer hover:border-orange-400 hover:bg-orange-50 transition-all duration-200 flex flex-col items-center justify-center"
+          >
+            <div className="w-3 h-3 bg-orange-100 rounded-full flex items-center justify-center mb-0.5">
+              <span className="text-xs text-orange-400">+</span>
+            </div>
+            <p className="text-xs text-orange-600 font-medium text-center">
+              Thêm Banner
+            </p>
+          </div>
+        </div>
         <div className="border-t border-gray-200 pt-1 space-y-1">
           <div className="text-xs font-medium text-gray-700">Tùy chọn hiển thị:</div>
 
