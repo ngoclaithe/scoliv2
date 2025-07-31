@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
+import Modal from "../common/Modal";
 
 // Import các section components
 import UploadLogoSection from "../sections/UploadLogoSection";
