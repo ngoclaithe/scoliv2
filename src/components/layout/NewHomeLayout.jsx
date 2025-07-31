@@ -10,6 +10,8 @@ import CommentarySection from "../sections/CommentarySection";
 const NewHomeLayout = () => {
   const { user, logout, authType, hasAccountAccess, codeOnly, matchCode, clearMatchCode } = useAuth();
   const [activeTab, setActiveTab] = useState("quan-ly-tran");
+  const [showAccessCodeModal, setShowAccessCodeModal] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
 
   // Định nghĩa các tab theo yêu cầu
   const tabs = [
