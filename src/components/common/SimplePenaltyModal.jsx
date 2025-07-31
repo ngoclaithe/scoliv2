@@ -4,7 +4,7 @@ import { useMatch } from "../../contexts/MatchContext";
 import socketService from "../../services/socketService";
 
 const SimplePenaltyModal = ({ isOpen, onClose }) => {
-  const { penaltyData } = usePublicMatch();
+  const { penaltyData } = useMatch();
   
   // State for penalty table: 10 columns for rounds, 4 rows for teams
   const [penaltyTable, setPenaltyTable] = useState({
