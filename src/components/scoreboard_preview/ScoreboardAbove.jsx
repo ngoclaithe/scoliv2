@@ -8,6 +8,7 @@ const TopScoreboard = ({ template = 1, accessCode }) => {
     matchData,
     displaySettings,
     marqueeData,
+    sponsors,
     socketConnected
   } = usePublicMatch();
 
