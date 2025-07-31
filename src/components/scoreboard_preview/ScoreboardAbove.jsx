@@ -320,7 +320,7 @@ const ScoreboardAbove = ({
             {!showMatchTime && (
                 <div className="text-center mt-2">
                     <span className="bg-green-600 text-white px-4 py-1 text-sm font-bold rounded animate-pulse">
-                        ● TRỰC TIẾP
+                        ● TR���C TIẾP
                     </span>
                 </div>
             )}
@@ -495,11 +495,8 @@ const ScoreboardAbove = ({
 
     return (
         <div className="w-full h-screen relative overflow-hidden">
-            {/* Container that scales for mobile while maintaining proportions */}
-            <div className="w-full h-full relative bg-transparent" style={{
-                transform: 'scale(var(--scale-factor, 1))',
-                transformOrigin: 'center center'
-            }}>
+            {/* Container for all elements */}
+            <div className="w-full h-full relative bg-transparent">
                 {/* Sponsors - Top Left */}
                 <div className="absolute top-4 left-4 z-40">
                     {sponsors?.url_logo && sponsors.url_logo.length > 0 && (
