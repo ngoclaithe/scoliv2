@@ -359,8 +359,8 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             <div className="grid grid-cols-3 gap-1">
               {[
                 { key: 'top-left', icon: '↖️', title: 'Trên trái' },
-                { key: 'top', icon: '⬆️', title: 'Trên giữa' },
-                { key: 'top-right', icon: '↗️', title: 'Trên phải' }
+                { key: 'bottom-left', icon: '↙️', title: 'Dưới trái' },
+                { key: 'bottom-right', icon: '↘️', title: 'Dưới phải' }
               ].map((pos) => (
                 <button
                   key={pos.key}
