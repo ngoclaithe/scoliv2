@@ -1476,10 +1476,12 @@ const MatchManagementSection = ({ isActive = true }) => {
             // Cập nhật display options nếu có
             if (logoData && logoData.displayOptions) {
               console.log("[MatchManagementSection] Calling updateDisplaySettings");
-              updateDisplaySettings({
-                logoShape: logoData.displayOptions.shape || 'circle',
+              const displayOptions = {
+                logoShape: logoData.displayOptions.shape || 'round',
                 rotateDisplay: logoData.displayOptions.rotateDisplay || false
-              });
+              };
+              console.log('[MatchManagementSection] Display options to update:', displayOptions);
+              updateDisplaySettings(displayOptions);
             }
           }}
           onClose={() => setShowPosterModal(false)}
