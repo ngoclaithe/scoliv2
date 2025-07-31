@@ -77,7 +77,9 @@ export const MatchProvider = ({ children }) => {
     selectedPoster: 'tretrung', // tretrung, haoquang
     showStats: false,
     showPenalty: false,
-    showLineup: false
+    showLineup: false,
+    logoShape: 'round', // 'round', 'square', 'hexagon'
+    rotateDisplay: false // thêm rotateDisplay
   });
 
   // State cho danh sách cầu thủ
@@ -501,7 +503,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Cập nhật chữ chạy
+  // Cập nh���t chữ chạy
   const updateMarquee = useCallback((newMarqueeData) => {
     setMarqueeData(prev => ({ ...prev, ...newMarqueeData }));
 
@@ -527,7 +529,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Cập nhật đơn vị truyền th��ng
+  // Cập nhật đơn vị truyền thông
   const updateMediaPartners = useCallback((newMediaPartners) => {
     console.log('[MatchContext] updateMediaPartners called:', newMediaPartners, 'socketConnected:', socketConnected);
     if (socketConnected) {
