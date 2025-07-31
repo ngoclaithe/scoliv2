@@ -1,379 +1,244 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
-import Button from "./Button";
+import { usePublicMatch } from "../../contexts/PublicMatchContext";
+import socketService from "../../services/socketService";
 
-const SimplePenaltyModal = ({ isOpen, onClose, onPenaltyChange, matchData, penaltyData }) => {
-  // State đơn giản - chỉ cần tỉ số cơ bản cho backend
-  const [homeScore, setHomeScore] = useState(0);
-  const [awayScore, setAwayScore] = useState(0);
-  const [currentTurn, setCurrentTurn] = useState('home');
-  const [isLoading, setIsLoading] = useState(false);
+const SimplePenaltyModal = ({ isOpen, onClose }) => {
+  const { penaltyData } = usePublicMatch();
+  
+  // State for penalty table: 10 columns for rounds, 4 rows for teams
+  const [penaltyTable, setPenaltyTable] = useState({
+    teamA_goals: Array(10).fill(false),    // Team A goals
+    teamA_misses: Array(10).fill(false),   // Team A misses  
+    teamB_goals: Array(10).fill(false),    // Team B goals
+    teamB_misses: Array(10).fill(false)    // Team B misses
+  });
 
-  // State theo dõi từng lượt sút (có thể chỉnh sửa)
-  const [shootHistory, setShootHistory] = useState([]);
-
-  // Load tỉ số penalty từ props
+  // Load penalty data when modal opens
   useEffect(() => {
     if (isOpen && penaltyData) {
-      setHomeScore(penaltyData.homeGoals || 0);
-      setAwayScore(penaltyData.awayGoals || 0);
-      setCurrentTurn(penaltyData.currentTurn || 'home');
-      setShootHistory(penaltyData.shootHistory || []);
-    } else if (isOpen) {
-      // Reset khi mở modal mới
-      setHomeScore(0);
-      setAwayScore(0);
-      setCurrentTurn('home');
-      setShootHistory([]);
+      const newTable = {
+        teamA_goals: Array(10).fill(false),
+        teamA_misses: Array(10).fill(false),
+        teamB_goals: Array(10).fill(false),
+        teamB_misses: Array(10).fill(false)
+      };
+
+      // Process shootHistory to populate table
+      if (penaltyData.shootHistory && Array.isArray(penaltyData.shootHistory)) {
+        penaltyData.shootHistory.forEach((shoot, index) => {
+          if (index < 10) { // Only process first 10 rounds
+            if (shoot.team === 'teamA' || shoot.team === 'home') {
+              if (shoot.result === 'goal') {
+                newTable.teamA_goals[index] = true;
+              } else {
+                newTable.teamA_misses[index] = true;
+              }
+            } else if (shoot.team === 'teamB' || shoot.team === 'away') {
+              if (shoot.result === 'goal') {
+                newTable.teamB_goals[index] = true;
+              } else {
+                newTable.teamB_misses[index] = true;
+              }
+            }
+          }
+        });
+      }
+
+      setPenaltyTable(newTable);
     }
   }, [isOpen, penaltyData]);
 
-  // Hàm gửi cập nhật lên parent/backend
-  const updatePenaltyScore = useCallback(async (newHomeScore, newAwayScore, newTurn, newShootHistory = null) => {
-    setIsLoading(true);
+  // Handle checkbox click and emit socket update
+  const handleCheckboxChange = (team, type, roundIndex) => {
+    const newTable = { ...penaltyTable };
+    
+    // Toggle the clicked checkbox
+    newTable[`${team}_${type}`][roundIndex] = !newTable[`${team}_${type}`][roundIndex];
+    
+    // If checking a goal, uncheck the corresponding miss and vice versa
+    if (newTable[`${team}_${type}`][roundIndex]) {
+      const oppositeType = type === 'goals' ? 'misses' : 'goals';
+      newTable[`${team}_${oppositeType}`][roundIndex] = false;
+    }
+    
+    setPenaltyTable(newTable);
+    
+    // Convert table back to shootHistory format for socket
+    const shootHistory = [];
+    for (let i = 0; i < 10; i++) {
+      // Check team A
+      if (newTable.teamA_goals[i]) {
+        shootHistory.push({
+          id: `teamA_${i}`,
+          team: 'teamA',
+          result: 'goal',
+          round: i + 1,
+          timestamp: new Date().toISOString()
+        });
+      } else if (newTable.teamA_misses[i]) {
+        shootHistory.push({
+          id: `teamA_${i}`,
+          team: 'teamA',
+          result: 'miss',
+          round: i + 1,
+          timestamp: new Date().toISOString()
+        });
+      }
+      
+      // Check team B
+      if (newTable.teamB_goals[i]) {
+        shootHistory.push({
+          id: `teamB_${i}`,
+          team: 'teamB',
+          result: 'goal',
+          round: i + 1,
+          timestamp: new Date().toISOString()
+        });
+      } else if (newTable.teamB_misses[i]) {
+        shootHistory.push({
+          id: `teamB_${i}`,
+          team: 'teamB',
+          result: 'miss',
+          round: i + 1,
+          timestamp: new Date().toISOString()
+        });
+      }
+    }
 
+    // Calculate scores
+    const teamAGoals = newTable.teamA_goals.filter(Boolean).length;
+    const teamBGoals = newTable.teamB_goals.filter(Boolean).length;
+
+    // Emit socket update immediately
     const penaltyUpdate = {
-      homeGoals: newHomeScore,
-      awayGoals: newAwayScore,
-      currentTurn: newTurn,
-      shootHistory: newShootHistory || shootHistory,
-      // Đơn giản hóa - chỉ gửi data cần thiết cho backend
+      teamAGoals,
+      teamBGoals,
+      shootHistory,
       status: 'ongoing',
       lastUpdated: new Date().toISOString()
     };
 
-    try {
-      // TODO: Khi có backend, thay thế onPenaltyChange bằng API call
-      // await api.updatePenaltyScore(matchId, penaltyUpdate);
-
-      if (onPenaltyChange) {
-        onPenaltyChange(penaltyUpdate);
-      }
-    } catch (error) {
-      console.error('Lỗi cập nhật penalty score:', error);
-      // TODO: Hiển thị toast error
-    } finally {
-      setIsLoading(false);
-    }
-  }, [onPenaltyChange, shootHistory]);
-
-  // Xử lý khi ghi bàn
-  const handleGoal = () => {
-    const newHomeScore = currentTurn === 'home' ? homeScore + 1 : homeScore;
-    const newAwayScore = currentTurn === 'away' ? awayScore + 1 : awayScore;
-    const newTurn = currentTurn === 'home' ? 'away' : 'home';
-
-    // Thêm vào lịch sử sút
-    const newShoot = {
-      id: Date.now(),
-      team: currentTurn,
-      result: 'goal',
-      timestamp: new Date().toISOString(),
-      round: Math.ceil((shootHistory.length + 1) / 2)
-    };
-    const newShootHistory = [...shootHistory, newShoot];
-
-    setHomeScore(newHomeScore);
-    setAwayScore(newAwayScore);
-    setCurrentTurn(newTurn);
-    setShootHistory(newShootHistory);
-
-    updatePenaltyScore(newHomeScore, newAwayScore, newTurn, newShootHistory);
-  };
-
-  // Xử lý khi miss
-  const handleMiss = () => {
-    const newTurn = currentTurn === 'home' ? 'away' : 'home';
-
-    // Thêm vào lịch sử sút
-    const newShoot = {
-      id: Date.now(),
-      team: currentTurn,
-      result: 'miss',
-      timestamp: new Date().toISOString(),
-      round: Math.ceil((shootHistory.length + 1) / 2)
-    };
-    const newShootHistory = [...shootHistory, newShoot];
-
-    setCurrentTurn(newTurn);
-    setShootHistory(newShootHistory);
-    updatePenaltyScore(homeScore, awayScore, newTurn, newShootHistory);
-  };
-
-  // Reset penalty shootout
-  const handleReset = () => {
-    setHomeScore(0);
-    setAwayScore(0);
-    setCurrentTurn('home');
-    setShootHistory([]);
-    updatePenaltyScore(0, 0, 'home', []);
-  };
-
-  // Điều chỉnh tỉ số thủ công (cho admin)
-  const adjustScore = (team, increment) => {
-    if (team === 'home') {
-      const newScore = Math.max(0, homeScore + increment);
-      setHomeScore(newScore);
-      updatePenaltyScore(newScore, awayScore, currentTurn);
-    } else {
-      const newScore = Math.max(0, awayScore + increment);
-      setAwayScore(newScore);
-      updatePenaltyScore(homeScore, newScore, currentTurn);
-    }
-  };
-
-  // Chỉnh sửa kết quả từng lượt sút
-  const editShootResult = (shootId, newResult) => {
-    const newShootHistory = shootHistory.map(shoot =>
-      shoot.id === shootId ? { ...shoot, result: newResult } : shoot
-    );
-
-    // Tính lại tỉ số từ lịch sử
-    const newHomeScore = newShootHistory.filter(s => s.team === 'home' && s.result === 'goal').length;
-    const newAwayScore = newShootHistory.filter(s => s.team === 'away' && s.result === 'goal').length;
-
-    setShootHistory(newShootHistory);
-    setHomeScore(newHomeScore);
-    setAwayScore(newAwayScore);
-    updatePenaltyScore(newHomeScore, newAwayScore, currentTurn, newShootHistory);
-  };
-
-  // Xóa lượt sút cuối
-  const removeLastShoot = () => {
-    if (shootHistory.length === 0) return;
-
-    const newShootHistory = shootHistory.slice(0, -1);
-    const lastShoot = shootHistory[shootHistory.length - 1];
-
-    // Tính lại tỉ số
-    const newHomeScore = newShootHistory.filter(s => s.team === 'home' && s.result === 'goal').length;
-    const newAwayScore = newShootHistory.filter(s => s.team === 'away' && s.result === 'goal').length;
-
-    // Đặt lại lượt về team của shoot vừa xóa
-    const newTurn = lastShoot.team;
-
-    setShootHistory(newShootHistory);
-    setHomeScore(newHomeScore);
-    setAwayScore(newAwayScore);
-    setCurrentTurn(newTurn);
-    updatePenaltyScore(newHomeScore, newAwayScore, newTurn, newShootHistory);
+    socketService.emit('penalty_update', {
+      penaltyData: penaltyUpdate
+    });
   };
 
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="🥅 Penalty"
-      size="sm"
-      footer={
-        <div className="flex justify-between w-full">
-          <Button
-            variant="secondary"
-            onClick={handleReset}
-            className="text-red-600 hover:bg-red-50 text-xs py-1 px-2"
-            disabled={isLoading}
-          >
-            🔄 Reset
-          </Button>
-          <Button
-            variant="primary"
-            onClick={onClose}
-            disabled={isLoading}
-            className="text-xs py-1 px-3"
-          >
-            Đóng
-          </Button>
-        </div>
-      }
+      title="🥅 Penalty Shootout"
+      size="lg"
     >
-      <div className="space-y-2">
-        {/* Thông báo backend ready */}
-        <div className="bg-blue-50 border border-blue-200 rounded p-1 text-center">
-          <span className="text-blue-700 text-xs">
-            ⚡ Sẵn sàng đồng bộ backend
-          </span>
-        </div>
-
-        {/* Tỉ số hiện tại */}
-        <div className="bg-gradient-to-r from-blue-50 to-red-50 rounded p-2 border">
-          <div className="flex items-center justify-center space-x-4">
-            <div className="text-center">
-              <div className="text-xs font-semibold text-blue-700 mb-1">
-                ĐỘI A
-              </div>
-              <div className="text-2xl font-bold text-blue-800 mb-1">{homeScore}</div>
-
-              {/* Điều chỉnh tỉ số */}
-              <div className="flex items-center justify-center space-x-1">
-                <button
-                  onClick={() => adjustScore('home', -1)}
-                  className="w-4 h-4 rounded-full bg-blue-200 text-blue-700 text-xs hover:bg-blue-300 disabled:opacity-50"
-                  disabled={isLoading || homeScore === 0}
-                >
-                  -
-                </button>
-                <button
-                  onClick={() => adjustScore('home', 1)}
-                  className="w-4 h-4 rounded-full bg-blue-200 text-blue-700 text-xs hover:bg-blue-300 disabled:opacity-50"
-                  disabled={isLoading}
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            <div className="text-xl font-bold text-gray-400">-</div>
-
-            <div className="text-center">
-              <div className="text-xs font-semibold text-red-700 mb-1">
-                ĐỘI B
-              </div>
-              <div className="text-2xl font-bold text-red-800 mb-1">{awayScore}</div>
-
-              {/* Điều chỉnh tỉ số */}
-              <div className="flex items-center justify-center space-x-1">
-                <button
-                  onClick={() => adjustScore('away', -1)}
-                  className="w-4 h-4 rounded-full bg-red-200 text-red-700 text-xs hover:bg-red-300 disabled:opacity-50"
-                  disabled={isLoading || awayScore === 0}
-                >
-                  -
-                </button>
-                <button
-                  onClick={() => adjustScore('away', 1)}
-                  className="w-4 h-4 rounded-full bg-red-200 text-red-700 text-xs hover:bg-red-300 disabled:opacity-50"
-                  disabled={isLoading}
-                >
-                  +
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Lịch sử các lượt sút */}
-        {shootHistory.length > 0 && (
-          <div className="bg-gray-50 rounded p-2 border">
-            <div className="flex justify-between items-center mb-1">
-              <h4 className="font-medium text-gray-800 text-xs">📝 Lịch sử:</h4>
-              <button
-                onClick={removeLastShoot}
-                className="px-1 py-1 text-xs bg-red-100 text-red-600 rounded hover:bg-red-200 disabled:opacity-50"
-                disabled={isLoading || shootHistory.length === 0}
-              >
-                🗑️
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 gap-1 max-h-16 overflow-y-auto">
-              {shootHistory.map((shoot, index) => (
-                <div key={shoot.id} className="flex items-center justify-between bg-white rounded p-1 border">
-                  <div className="flex items-center space-x-1">
-                    <span className="text-xs font-mono bg-gray-100 px-1 rounded">
-                      #{index + 1}
-                    </span>
-                    <span className={`text-xs ${
-                      shoot.team === 'home' ? 'text-blue-600' : 'text-red-600'
-                    }`}>
-                      {shoot.team === 'home' ? 'A' : 'B'}
-                    </span>
-                    <span className={`text-xs px-1 rounded ${
-                      shoot.result === 'goal'
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-red-100 text-red-700'
-                    }`}>
-                      {shoot.result === 'goal' ? '⚽' : '❌'}
-                    </span>
-                  </div>
-
-                  <button
-                    onClick={() => editShootResult(shoot.id, shoot.result === 'goal' ? 'miss' : 'goal')}
-                    className="px-1 py-1 text-xs bg-blue-100 text-blue-600 rounded hover:bg-blue-200 disabled:opacity-50"
-                    disabled={isLoading}
-                  >
-                    🔄
-                  </button>
-                </div>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="border border-gray-300 px-3 py-2 text-sm font-bold">ĐỘI</th>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
+                <th key={num} className="border border-gray-300 px-3 py-2 text-sm font-bold">
+                  {num}
+                </th>
               ))}
-            </div>
-          </div>
-        )}
+            </tr>
+          </thead>
+          <tbody>
+            {/* Team A - Goals */}
+            <tr className="bg-blue-50">
+              <td className="border border-gray-300 px-3 py-2 text-sm font-bold text-blue-700">
+                A
+              </td>
+              {penaltyTable.teamA_goals.map((checked, index) => (
+                <td key={index} className="border border-gray-300 px-3 py-2 text-center">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => handleCheckboxChange('teamA', 'goals', index)}
+                    className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
+                    title="Đá trúng"
+                  />
+                  <div className="text-xs text-green-600 mt-1">Trúng</div>
+                </td>
+              ))}
+            </tr>
+            
+            {/* Team A - Misses */}
+            <tr className="bg-blue-25">
+              <td className="border border-gray-300 px-3 py-2 text-sm font-bold text-blue-700">
+                A
+              </td>
+              {penaltyTable.teamA_misses.map((checked, index) => (
+                <td key={index} className="border border-gray-300 px-3 py-2 text-center">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => handleCheckboxChange('teamA', 'misses', index)}
+                    className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500 focus:ring-2"
+                    title="Đá trượt"
+                  />
+                  <div className="text-xs text-red-600 mt-1">Trượt</div>
+                </td>
+              ))}
+            </tr>
 
-        {/* Lượt hiện tại */}
-        <div className={`p-2 rounded border-2 ${
-          currentTurn === 'home'
-            ? 'bg-blue-50 border-blue-300'
-            : 'bg-red-50 border-red-300'
-        }`}>
-          <div className="text-center">
-            <h3 className={`text-sm font-bold mb-2 ${
-              currentTurn === 'home' ? 'text-blue-800' : 'text-red-800'
-            }`}>
-              #{shootHistory.length + 1}: {
-                currentTurn === 'home' ? "ĐỘI A" : "ĐỘI B"
-              }
-            </h3>
+            {/* Team B - Goals */}
+            <tr className="bg-red-50">
+              <td className="border border-gray-300 px-3 py-2 text-sm font-bold text-red-700">
+                B
+              </td>
+              {penaltyTable.teamB_goals.map((checked, index) => (
+                <td key={index} className="border border-gray-300 px-3 py-2 text-center">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => handleCheckboxChange('teamB', 'goals', index)}
+                    className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded focus:ring-green-500 focus:ring-2"
+                    title="Đá trúng"
+                  />
+                  <div className="text-xs text-green-600 mt-1">Trúng</div>
+                </td>
+              ))}
+            </tr>
 
-            <div className="flex justify-center space-x-2">
-              <button
-                onClick={handleGoal}
-                className="px-3 py-2 rounded text-xs font-bold text-white bg-green-500 hover:bg-green-600 disabled:opacity-50"
-                disabled={isLoading}
-              >
-                {isLoading ? "..." : "✅ GHI BÀN"}
-              </button>
-
-              <button
-                onClick={handleMiss}
-                className="px-3 py-2 rounded text-xs font-bold text-white bg-red-500 hover:bg-red-600 disabled:opacity-50"
-                disabled={isLoading}
-              >
-                {isLoading ? "..." : "❌ MISS"}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Preview cho livestream */}
-        <div className="bg-gray-50 rounded p-2 border">
-          <h4 className="font-medium text-gray-800 mb-1 text-xs text-center">
-            📺 Preview:
-          </h4>
-          <div className="bg-white rounded border p-2">
+            {/* Team B - Misses */}
+            <tr className="bg-red-25">
+              <td className="border border-gray-300 px-3 py-2 text-sm font-bold text-red-700">
+                B
+              </td>
+              {penaltyTable.teamB_misses.map((checked, index) => (
+                <td key={index} className="border border-gray-300 px-3 py-2 text-center">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={() => handleCheckboxChange('teamB', 'misses', index)}
+                    className="w-4 h-4 text-red-600 bg-gray-100 border-gray-300 rounded focus:ring-red-500 focus:ring-2"
+                    title="Đá trượt"
+                  />
+                  <div className="text-xs text-red-600 mt-1">Trượt</div>
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
+        
+        {/* Score Summary */}
+        <div className="mt-4 p-3 bg-gray-100 rounded">
+          <div className="flex justify-center items-center space-x-6">
             <div className="text-center">
-              <div className="text-xs text-gray-600 mb-1">🥅 PENALTY</div>
-              <div className="flex items-center justify-center space-x-2">
-                <div className="text-center">
-                  <div className="text-blue-600 font-bold text-xs">ĐỘI A</div>
-                  <div className="text-lg font-bold text-blue-800">{homeScore}</div>
-                </div>
-                <div className="text-gray-400 text-sm">-</div>
-                <div className="text-center">
-                  <div className="text-red-600 font-bold text-xs">ĐỘI B</div>
-                  <div className="text-lg font-bold text-red-800">{awayScore}</div>
-                </div>
+              <div className="text-sm font-bold text-blue-700">Đội A</div>
+              <div className="text-2xl font-bold text-blue-800">
+                {penaltyTable.teamA_goals.filter(Boolean).length}
               </div>
-              <div className="text-xs text-gray-500 mt-1">
-                Lượt: {currentTurn === 'home' ? 'A' : 'B'}
+            </div>
+            <div className="text-xl font-bold text-gray-400">-</div>
+            <div className="text-center">
+              <div className="text-sm font-bold text-red-700">Đội B</div>
+              <div className="text-2xl font-bold text-red-800">
+                {penaltyTable.teamB_goals.filter(Boolean).length}
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Data structure info for backend */}
-        <div className="bg-gray-100 rounded p-2 text-xs text-gray-600">
-          <details>
-            <summary className="cursor-pointer font-medium text-xs">📋 Backend data</summary>
-            <pre className="mt-1 text-xs max-h-16 overflow-y-auto">
-{JSON.stringify({
-  homeGoals: homeScore,
-  awayGoals: awayScore,
-  currentTurn: currentTurn,
-  shootHistory: shootHistory,
-  status: 'ongoing'
-}, null, 1)}
-            </pre>
-          </details>
         </div>
       </div>
     </Modal>
