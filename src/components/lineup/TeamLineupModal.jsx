@@ -16,7 +16,7 @@ const TeamLineupModal = ({
   
   // Khởi tạo với số áo thực tế, GK đầu tiên
   const defaultPlayers = [
-    { number: "GK", name: "" }, // Thủ môn
+    { number: "1", name: "" }, // Thủ môn
     { number: "2", name: "" },
     { number: "3", name: "" },
     { number: "4", name: "" },
@@ -37,11 +37,11 @@ const TeamLineupModal = ({
   const [bulkMode, setBulkMode] = useState(false);
   const [bulkText, setBulkText] = useState("");
 
-  const handlePlayerChange = (team, index, value) => {
+  const handlePlayerChange = (team, index, field, value) => {
     setLineups(prev => ({
       ...prev,
       [team]: prev[team].map((player, i) =>
-        i === index ? { ...player, name: value } : player
+        i === index ? { ...player, [field]: value } : player
       ),
     }));
   };
@@ -55,7 +55,7 @@ const TeamLineupModal = ({
       if (trimmedLine.startsWith('GK ')) {
         // Thủ môn
         players.push({
-          number: "GK",
+          number: "1",
           name: trimmedLine.substring(3).trim()
         });
       } else {
@@ -70,12 +70,8 @@ const TeamLineupModal = ({
       }
     });
 
-    // Sắp xếp: GK đầu tiên, rồi theo số áo
-    players.sort((a, b) => {
-      if (a.number === "GK") return -1;
-      if (b.number === "GK") return 1;
-      return parseInt(a.number) - parseInt(b.number);
-    });
+    // Sắp xếp theo số áo
+    players.sort((a, b) => parseInt(a.number) - parseInt(b.number));
 
     // Cập nhật lineup
     setLineups(prev => ({
@@ -140,7 +136,7 @@ const TeamLineupModal = ({
             <div className="flex flex-col items-center">
               <span className="text-sm">🏠</span>
               <span className="text-xs font-medium">
-                {matchData.homeTeam?.name || "Đội nhà"}
+                {matchData.homeTeam?.name || "Đội A"}
               </span>
             </div>
           </button>
@@ -155,7 +151,7 @@ const TeamLineupModal = ({
             <div className="flex flex-col items-center">
               <span className="text-sm">✈️</span>
               <span className="text-xs font-medium">
-                {matchData.awayTeam?.name || "Đội khách"}
+                {matchData.awayTeam?.name || "Đội B"}
               </span>
             </div>
           </button>
@@ -178,7 +174,7 @@ const TeamLineupModal = ({
             size="sm"
             onClick={validateAndSave}
             className="h-10 flex flex-col items-center justify-center text-xs"
-disabled={homeCount === 0 && awayCount === 0}
+            disabled={homeCount === 0 && awayCount === 0}
           >
             <span className="text-sm">💾</span>
             <span className="text-xs">Lưu</span>
@@ -194,12 +190,11 @@ disabled={homeCount === 0 && awayCount === 0}
             <textarea
               value={bulkText}
               onChange={(e) => setBulkText(e.target.value)}
-              placeholder="Nhập theo format số áo + tên:&#10;GK Mai Đức Anh&#10;12 Hoàng Hải&#10;13 Đức Long&#10;10 Nam Hải&#10;7 Messi&#10;..."
+              placeholder="Nhập theo format số áo + tên:&#10;1 Mai Đức Anh&#10;12 Hoàng Hải&#10;13 Đức Long&#10;10 Nam Hải&#10;7 Messi&#10;..."
               className="w-full h-40 p-3 border border-yellow-300 rounded-lg resize-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent text-sm"
               rows={8}
             />
             <div className="flex justify-between items-center mt-3">
-
               <div className="flex gap-2">
                 <Button 
                   variant="outline" 
@@ -236,21 +231,32 @@ disabled={homeCount === 0 && awayCount === 0}
           <div className="p-3 sm:p-4 space-y-2 max-h-[50vh] sm:max-h-[55vh] lg:max-h-[60vh] overflow-y-auto">
             {currentTeamData.map((player, index) => (
               <div key={index} className="flex items-center gap-2 sm:gap-3 min-h-[2rem] py-0.5">
-                <div className={`w-8 h-7 sm:w-10 sm:h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs flex-shrink-0 ${
-                  player.number === "GK" 
-                    ? "bg-green-500" 
-                    : activeTeam === "home" ? "bg-blue-500" : "bg-red-500"
-                }`}>
-                  {player.number}
+                {/* Số thứ tự */}
+                <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-medium text-xs flex-shrink-0">
+                  {index + 1}
                 </div>
+                
+                {/* Số áo có thể chỉnh sửa */}
+                <div className="w-12 sm:w-14">
+                  <Input
+                    value={player.number}
+                    onChange={(e) => handlePlayerChange(activeTeam, index, 'number', e.target.value)}
+                    className="text-center text-xs sm:text-sm font-bold h-7 sm:h-8"
+                    maxLength={3}
+                  />
+                </div>
+                
+                {/* Tên cầu thủ */}
                 <div className="flex-1 min-w-0">
                   <Input
                     value={player.name}
-                    onChange={(e) => handlePlayerChange(activeTeam, index, e.target.value)}
-                    placeholder={player.number === "GK" ? "Tên thủ môn..." : `Tên cầu thủ số ${player.number}...`}
+                    onChange={(e) => handlePlayerChange(activeTeam, index, 'name', e.target.value)}
+                    placeholder={`Tên cầu thủ số ${player.number}...`}
                     className="text-sm sm:text-base w-full"
                   />
                 </div>
+                
+                {/* Icon xác nhận */}
                 {player.name.trim() && (
                   <span className="text-green-500 flex-shrink-0">✓</span>
                 )}
@@ -258,10 +264,6 @@ disabled={homeCount === 0 && awayCount === 0}
             ))}
           </div>
         </div>
-
-
-
-
       </div>
     </Modal>
   );
