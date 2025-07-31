@@ -631,60 +631,45 @@ const ScoreboardAbove = ({
 
                 {/* Bottom Right Position */}
                 <div className="absolute bottom-4 right-4 z-40">
-                    {/* Sponsors with bottom-right position */}
-                    {sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position &&
-                     sponsors.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-right') && (
-                        <DisplayLogo
-                            logos={sponsors.url_logo.filter((_, index) => (Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index]) === 'bottom-right')}
-                            alt="Sponsors"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                    {(() => {
+                        const sponsorsBottomRight = filterLogosByPosition(sponsors, 'bottom-right');
+                        const organizingBottomRight = filterLogosByPosition(organizing, 'bottom-right');
+                        const mediaPartnersBottomRight = filterLogosByPosition(mediaPartners, 'bottom-right');
 
-                    {/* Organizing with bottom-right position */}
-                    {organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position &&
-                     organizing.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-right') && (
-                        <DisplayLogo
-                            logos={organizing.url_logo.filter((_, index) => (Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index]) === 'bottom-right')}
-                            alt="Organizing"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                        // Combine all bottom-right logos
+                        const allBottomRightLogos = [...sponsorsBottomRight, ...organizingBottomRight, ...mediaPartnersBottomRight];
 
-                    {/* Media Partners with bottom-right position */}
-                    {mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position &&
-                     mediaPartners.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-right') && (
-                        <DisplayLogo
-                            logos={mediaPartners.url_logo.filter((_, index) => (Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index]) === 'bottom-right')}
-                            alt="Media Partners"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                        if (allBottomRightLogos.length > 0) {
+                            return (
+                                <DisplayLogo
+                                    logos={allBottomRightLogos}
+                                    alt="Bottom Right Logos"
+                                    className="w-16 h-16"
+                                    type_play={logoShape}
+                                    slideMode={displaySettings?.rotateDisplay || false}
+                                    maxVisible={3}
+                                    slideInterval={5000}
+                                />
+                            );
+                        }
 
-                    {/* Fallback for media partners without position specified */}
-                    {mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && (!mediaPartners?.position || mediaPartners.position.length === 0) && (
-                        <DisplayLogo
-                            logos={mediaPartners.url_logo}
-                            alt="Media Partners"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                        // Fallback for media partners without position specified
+                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && (!mediaPartners?.position || mediaPartners.position.length === 0)) {
+                            return (
+                                <DisplayLogo
+                                    logos={mediaPartners.url_logo}
+                                    alt="Media Partners"
+                                    className="w-16 h-16"
+                                    type_play={logoShape}
+                                    slideMode={displaySettings?.rotateDisplay || false}
+                                    maxVisible={3}
+                                    slideInterval={5000}
+                                />
+                            );
+                        }
+
+                        return null;
+                    })()}
                 </div>
 
                 {/* Scrolling Text - only show if mode is not 'khong' and visibility is true */}
