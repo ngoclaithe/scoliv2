@@ -73,7 +73,7 @@ const NewHomeLayout = () => {
               </div>
               <div className="flex flex-col">
                 <h1 className="text-sm font-bold text-white">SCOLIV</h1>
-                <span className="text-xs text-gray-200">Livestream Control</span>
+                {/* <span className="text-xs text-gray-200">Livestream Control</span> */}
               </div>
             </div>
 

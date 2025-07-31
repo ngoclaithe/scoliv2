@@ -25,8 +25,8 @@ const ScoreboardBelowNew = ({
         matchTime: matchData?.matchTime || "00:00",
         period: matchData?.period || "Chưa bắt đầu",
         status: matchData?.status || "waiting",
-        teamAKitColor: matchData?.teamAKitColor || "#FF0000", // Get from match data
-        teamBKitColor: matchData?.teamBKitColor || "#0000FF", // Get from match data
+        teamAKitColor: matchData?.teamAKitColor || "#FF0000", 
+        teamBKitColor: matchData?.teamBKitColor || "#0000FF", 
         leagueLogo: "/api/placeholder/40/40"
     };
 

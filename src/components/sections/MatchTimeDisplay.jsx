@@ -48,11 +48,11 @@ const MatchTimeDisplay = React.memo(({ matchTime, period, status }) => {
     <div className="bg-gradient-to-r from-green-400 to-blue-500 rounded-lg p-2 mb-3 border-2 border-white shadow-lg">
       <div className="text-center">
         <div className="text-white font-bold text-lg sm:text-xl">
-          ⚽ THỜI GIAN TRẬN ĐẤU: {matchTime}
+          ⚽ {matchTime}
         </div>
-        <div className="text-green-100 text-sm">
+        {/* <div className="text-green-100 text-sm">
           {period} • {displayStatus}
-        </div>
+        </div> */}
       </div>
     </div>
   );
