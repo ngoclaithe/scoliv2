@@ -576,7 +576,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
           ))}
         </div>
 
-        <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
+        <div className="grid grid-cols-2 gap-2 max-w-32">
           {currentItems.map((item) => (
             <LogoItem
               key={item.id}
@@ -588,13 +588,13 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
 
           <div
             onClick={handleAddNewLogo}
-            className="flex-none w-24 bg-white border-2 border-dashed border-gray-300 rounded p-2 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 flex flex-col items-center justify-center h-28"
+            className="w-14 h-14 bg-white border-2 border-dashed border-gray-300 rounded p-1 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 flex flex-col items-center justify-center"
           >
-            <div className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center mb-1">
+            <div className="w-4 h-4 bg-gray-100 rounded-full flex items-center justify-center mb-0.5">
               <span className="text-xs text-gray-400">+</span>
             </div>
-            <p className="text-xs text-gray-600 font-medium text-center">
-              Thêm Logo
+            <p className="text-xs text-gray-600 font-medium text-center leading-tight">
+              Thêm
             </p>
           </div>
 
