@@ -285,19 +285,22 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật nhà tài trợ
     socketService.on('sponsors_updated', (data) => {
-      setSponsors(prev => ({ ...prev, ...data.sponsors }));
+      console.log('📝 [PublicMatchContext] sponsors_updated received:', data);
+      setSponsors(prev => ({ ...prev, ...data }));
       setLastUpdateTime(Date.now());
     });
 
     // Lắng nghe cập nhật đơn vị tổ chức
     socketService.on('organizing_updated', (data) => {
-      setOrganizings(prev => ({ ...prev, ...data.organizings }));
+      console.log('📝 [PublicMatchContext] organizing_updated received:', data);
+      setOrganizings(prev => ({ ...prev, ...data }));
       setLastUpdateTime(Date.now());
     });
 
     // Lắng nghe cập nhật đơn vị truyền thông
     socketService.on('media_partners_updated', (data) => {
-      setMediaPartners(prev => ({ ...prev, ...data.mediaPartners }));
+      console.log('📝 [PublicMatchContext] media_partners_updated received:', data);
+      setMediaPartners(prev => ({ ...prev, ...data }));
       setLastUpdateTime(Date.now());
     });
 
@@ -321,7 +324,8 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật display settings
     socketService.on('display_settings_updated', (data) => {
-      setDisplaySettings(prev => ({ ...prev, ...data.displaySettings }));
+      console.log('📝 [PublicMatchContext] display_settings_updated received:', data);
+      setDisplaySettings(prev => ({ ...prev, ...data }));
       setLastUpdateTime(Date.now());
     });
 
