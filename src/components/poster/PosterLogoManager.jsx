@@ -619,7 +619,11 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
                   name="logoShape"
                   value={shape.value}
                   checked={logoDisplayOptions.shape === shape.value}
-                  onChange={(e) => setLogoDisplayOptions(prev => ({ ...prev, shape: e.target.value }))}
+                  onChange={(e) => {
+                    const newShape = e.target.value;
+                    setLogoDisplayOptions(prev => ({ ...prev, shape: newShape }));
+                    console.log('🎨 [PosterLogoManager] Logo shape changed to:', newShape);
+                  }}
                   className="w-2 h-2"
                 />
                 <span className="text-xs">{shape.icon}</span>
