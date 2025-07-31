@@ -30,9 +30,12 @@ const ScoreboardBelowNew = ({
         leagueLogo: "/api/placeholder/40/40"
     };
 
+    // State for scrolling text visibility control
+    const [showScrollingText, setShowScrollingText] = useState(false);
+
     // Get marquee data from context (updated via Clock Settings)
     const scrollData = {
-        text: marqueeData?.text || "TRỰC TI��P BÓNG ĐÁ",
+        text: marqueeData?.text || "TRỰC TIẾP BÓNG ĐÁ",
         color: marqueeData?.color === 'white-black' ? '#FFFFFF' :
                marqueeData?.color === 'black-white' ? '#000000' :
                marqueeData?.color === 'white-blue' ? '#FFFFFF' :
@@ -44,7 +47,10 @@ const ScoreboardBelowNew = ({
                  marqueeData?.color === 'white-red' ? '#dc2626' :
                  marqueeData?.color === 'white-green' ? '#16a34a' : "#FF0000",
         repeat: 3,
-        mode: marqueeData?.mode || 'none'
+        mode: marqueeData?.mode || 'khong',
+        interval: marqueeData?.mode === 'moi-2' ? 120000 : // 2 minutes = 120 seconds
+                  marqueeData?.mode === 'moi-5' ? 300000 : // 5 minutes = 300 seconds
+                  marqueeData?.mode === 'lien-tuc' ? 30000 : 0 // liên tục = 30 seconds
     };
 
     // Determine if we should show match time based on status
@@ -56,6 +62,35 @@ const ScoreboardBelowNew = ({
             setCurrentType(displaySettings.selectedSkin);
         }
     }, [displaySettings?.selectedSkin]);
+
+    // Handle scrolling text visibility based on mode and timing
+    useEffect(() => {
+        let timer;
+
+        if (scrollData.mode === 'khong') {
+            // Hide scrolling text for 'KHÔNG' mode
+            setShowScrollingText(false);
+        } else if (scrollData.mode === 'lien-tuc') {
+            // Show every 30 seconds for 'LIÊN TỤC' mode
+            setShowScrollingText(true);
+            timer = setInterval(() => {
+                setShowScrollingText(false);
+                setTimeout(() => setShowScrollingText(true), 2000); // Hide for 2 seconds then show again
+            }, scrollData.interval);
+        } else if (scrollData.mode === 'moi-2' || scrollData.mode === 'moi-5') {
+            // Show at specified intervals for 'MỖI 2\'' and 'MỖI 5\'' modes
+            timer = setInterval(() => {
+                setShowScrollingText(true);
+                setTimeout(() => setShowScrollingText(false), 5000); // Show for 5 seconds
+            }, scrollData.interval);
+        }
+
+        return () => {
+            if (timer) {
+                clearInterval(timer);
+            }
+        };
+    }, [scrollData.mode, scrollData.interval]);
 
     // Hàm tính độ sáng của màu để chọn màu chữ phù hợp
     const getTextColor = (backgroundColor) => {
@@ -459,18 +494,20 @@ const ScoreboardBelowNew = ({
                     </div>
                 </div>
 
-                {/* Scrolling Text */}
-                <div className="absolute bottom-0 left-0 w-full z-20 overflow-hidden" style={{ backgroundColor: scrollData.bgColor }}>
-                    <div
-                        className="animate-scroll whitespace-nowrap py-2 text-sm font-semibold"
-                        style={{
-                            color: scrollData.color,
-                            animation: 'scroll 30s linear infinite'
-                        }}
-                    >
-                        {Array(scrollData.repeat).fill(scrollData.text).join(' • ')}
+                {/* Scrolling Text - only show if mode is not 'khong' and visibility is true */}
+                {scrollData.mode !== 'khong' && showScrollingText && (
+                    <div className="absolute bottom-0 left-0 w-full z-20 overflow-hidden" style={{ backgroundColor: scrollData.bgColor }}>
+                        <div
+                            className="animate-scroll whitespace-nowrap py-2 text-sm font-semibold"
+                            style={{
+                                color: scrollData.color,
+                                animation: 'scroll 30s linear infinite'
+                            }}
+                        >
+                            {Array(scrollData.repeat).fill(scrollData.text).join(' • ')}
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
 
             <style jsx>{`

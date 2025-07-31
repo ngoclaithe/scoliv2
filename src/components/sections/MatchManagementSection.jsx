@@ -689,7 +689,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                   teamBKitColor: teamBInfo.shirtColor || '#000000'
                 };
 
-                // Update team kit colors in MatchContext
+                // Update team kit colors in MatchContext with logo URLs
                 updateMatchInfo({
                   ...teamColorsData,
                   startTime: matchInfo.startTime,
@@ -697,7 +697,9 @@ const MatchManagementSection = ({ isActive = true }) => {
                   matchDate: matchInfo.matchDate || new Date().toISOString().split('T')[0],
                   title: matchTitle,
                   time: matchInfo.startTime,
-                  liveUnit: liveUnit
+                  liveUnit: liveUnit,
+                  logoTeamA: teamAInfo.logo || matchData.teamA.logo || "",
+                  logoTeamB: teamBInfo.logo || matchData.teamB.logo || ""
                 });
 
                 // Console log để debug

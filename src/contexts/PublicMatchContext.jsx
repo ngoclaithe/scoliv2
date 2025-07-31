@@ -31,7 +31,9 @@ export const PublicMatchProvider = ({ children }) => {
     tournament: "",
     stadium: "",
     matchDate: "",
-    liveText: ""
+    liveText: "",
+    teamAKitColor: "#FF0000", // Default team A kit color
+    teamBKitColor: "#0000FF"  // Default team B kit color
   });
 
   // State cho thống kê trận đấu
