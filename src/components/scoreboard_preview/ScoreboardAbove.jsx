@@ -586,31 +586,26 @@ const ScoreboardAbove = ({
                     animation: scroll 30s linear infinite;
                 }
 
-                /* Mobile scaling - keep scoreboard in top-right with proportional scaling */
+                /* Uniform scaling for mobile - like image zoom while staying top-right */
                 .scoreboard-main {
                     transform-origin: top right;
                 }
 
                 @media (max-width: 768px) {
                     .scoreboard-main {
-                        transform: scale(0.8);
-                    }
-
-                    .container-name-color-left,
-                    .container-name-color-right {
-                        min-width: 60px;
+                        transform: scale(0.75);
                     }
                 }
 
                 @media (max-width: 480px) {
                     .scoreboard-main {
-                        transform: scale(0.65);
+                        transform: scale(0.6);
                     }
                 }
 
                 @media (max-width: 360px) {
                     .scoreboard-main {
-                        transform: scale(0.55);
+                        transform: scale(0.5);
                     }
                 }
             `}</style>
