@@ -357,7 +357,7 @@ const ScoreboardBelowNew = ({
                         </div>
                     )}
                     {!showMatchTime && (
-                        <div className="bg-green-600 text-white px-2 py-0.5 text-xs font-medium rounded-sm mt-1 animate-pulse">
+                        <div className="bg-green-600 text-white px-2 py-0.5 text-[10px] font-medium rounded-sm mt-1 animate-pulse whitespace-nowrap">
                             ● TRỰC TIẾP
                         </div>
                     )}
