@@ -380,7 +380,12 @@ const ScoreboardBelowNew = ({
                 </div>
             </div>
 
-            <LogoImage src={currentData.teamBLogo} alt={currentData.teamBName} className="w-12 h-12" />
+            <DisplayLogo
+                logos={[currentData.teamBLogo]}
+                alt={currentData.teamBName}
+                className="w-12 h-12"
+                type_play={logoShape}
+            />
         </div>
     );
 
