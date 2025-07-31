@@ -43,6 +43,15 @@ const ScoreboardAbove = ({
         console.log('🔧 [ScoreboardAbove] Logo shape changed to:', rawLogoShape, '-> mapped to:', logoShape);
     }
 
+    // Debug logs for logo data
+    useEffect(() => {
+        console.log('🔍 [ScoreboardAbove] Debug Data:');
+        console.log('   Organizing:', organizing);
+        console.log('   Sponsors:', sponsors);
+        console.log('   MediaPartners:', mediaPartners);
+        console.log('   TournamentLogo:', tournamentLogo);
+    }, [organizing, sponsors, mediaPartners, tournamentLogo]);
+
     const [showScrollingText, setShowScrollingText] = useState(false);
 
     const scrollData = {
