@@ -59,6 +59,20 @@ const TopScoreboard = ({ template = 1, accessCode }) => {
     }
   }, [marqueeData]);
 
+  // Cập nhật sponsors data từ context
+  useEffect(() => {
+    if (sponsors) {
+      setScoreboardData(prev => ({
+        ...prev,
+        partnerPositions: {
+          leftUp: sponsors.main || [],
+          leftDown: sponsors.secondary || [],
+          rightDown: sponsors.media || []
+        }
+      }));
+    }
+  }, [sponsors]);
+
   const [scoreboardScale, setScoreboardScale] = useState(1);
 
   // Template styles based on provided images
