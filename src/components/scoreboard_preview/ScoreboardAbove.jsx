@@ -38,12 +38,10 @@ const ScoreboardAbove = ({
     // Convert shape names to match DisplayLogo expectations
     const logoShape = rawLogoShape === 'round' ? 'circle' : rawLogoShape;
 
-    // Debug log
-    console.log('🔧 [ScoreboardAbove] Current displaySettings:', displaySettings);
-    console.log('🔧 [ScoreboardAbove] Raw logoShape:', rawLogoShape, '-> mapped to:', logoShape);
-    console.log('🔧 [ScoreboardAbove] Sponsors data:', sponsors);
-    console.log('🔧 [ScoreboardAbove] Organizing data:', organizing);
-    console.log('🔧 [ScoreboardAbove] MediaPartners data:', mediaPartners);
+    // Debug log - only when displaySettings change
+    if (displaySettings?.logoShape !== 'round') {
+        console.log('🔧 [ScoreboardAbove] Logo shape changed to:', rawLogoShape, '-> mapped to:', logoShape);
+    }
 
     const [showScrollingText, setShowScrollingText] = useState(false);
 
