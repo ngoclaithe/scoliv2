@@ -120,6 +120,7 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate, onPositionChan
           matchData={matchData}
           onPosterUpdate={handlePosterLogoUpdate}
           onLogoUpdate={handleLogoUpdateFromManager}
+          onPositionChange={onPositionChange}
           onClose={onClose}
         />
       </div>
