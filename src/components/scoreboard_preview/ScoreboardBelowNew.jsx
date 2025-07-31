@@ -30,9 +30,12 @@ const ScoreboardBelowNew = ({
         leagueLogo: "/api/placeholder/40/40"
     };
 
+    // State for scrolling text visibility control
+    const [showScrollingText, setShowScrollingText] = useState(false);
+
     // Get marquee data from context (updated via Clock Settings)
     const scrollData = {
-        text: marqueeData?.text || "TRỰC TI��P BÓNG ĐÁ",
+        text: marqueeData?.text || "TRỰC TIẾP BÓNG ĐÁ",
         color: marqueeData?.color === 'white-black' ? '#FFFFFF' :
                marqueeData?.color === 'black-white' ? '#000000' :
                marqueeData?.color === 'white-blue' ? '#FFFFFF' :
@@ -44,7 +47,10 @@ const ScoreboardBelowNew = ({
                  marqueeData?.color === 'white-red' ? '#dc2626' :
                  marqueeData?.color === 'white-green' ? '#16a34a' : "#FF0000",
         repeat: 3,
-        mode: marqueeData?.mode || 'none'
+        mode: marqueeData?.mode || 'khong',
+        interval: marqueeData?.mode === 'moi-2' ? 120000 : // 2 minutes = 120 seconds
+                  marqueeData?.mode === 'moi-5' ? 300000 : // 5 minutes = 300 seconds
+                  marqueeData?.mode === 'lien-tuc' ? 30000 : 0 // liên tục = 30 seconds
     };
 
     // Determine if we should show match time based on status
