@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Button from "../common/Button";
 import LogoAPI from "../../API/apiLogo";
 
-const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose }) => {
+const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, onPositionChange }) => {
   const [selectedPoster, setSelectedPoster] = useState(null);
   const [logoItems, setLogoItems] = useState([]);
   const [apiLogos, setApiLogos] = useState([]);
