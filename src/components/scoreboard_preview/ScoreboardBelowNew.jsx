@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
+import DisplayLogo from '../common/DisplayLogo';
 
 const ScoreboardBelowNew = ({
     type = 1
