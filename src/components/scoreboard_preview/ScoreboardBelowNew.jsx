@@ -491,11 +491,8 @@ const ScoreboardBelowNew = ({
 
     return (
         <div className="w-full h-screen relative overflow-hidden">
-            {/* Container that scales for mobile while maintaining proportions */}
-            <div className="w-full h-full relative bg-transparent" style={{
-                transform: 'scale(var(--scale-factor, 1))',
-                transformOrigin: 'center center'
-            }}>
+            {/* Container for all elements */}
+            <div className="w-full h-full relative bg-transparent">
                 {/* ScoLiv Logo - Responsive cho desktop và mobile */}
                 <div className="absolute bottom-4 left-4 sm:left-16 z-40">
                     <img
