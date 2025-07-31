@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
 import Input from "../common/Input";
-import socketService from "../../services/socketService";
+import { useMatch } from "../../contexts/MatchContext";
 
 const TeamLineupModal = ({
   isOpen,
@@ -11,6 +11,7 @@ const TeamLineupModal = ({
   matchData = {},
   className = "",
 }) => {
+  const { updateLineup, updateView } = useMatch();
   const [activeTeam, setActiveTeam] = useState("home");
   
   // Khởi tạo với số áo thực tế, GK đầu tiên
@@ -44,8 +45,6 @@ const TeamLineupModal = ({
       ),
     }));
   };
-
-
 
   const handleBulkInput = () => {
     const lines = bulkText.trim().split('\n').filter(line => line.trim());
@@ -109,16 +108,8 @@ const TeamLineupModal = ({
       teamB: lineups.away.filter(p => p.name.trim()),
     };
 
-    // Emit lineup update qua socket
-    socketService.emit('lineup_update', {
-      lineupData
-    });
-
-    // Emit view update để chuyển sang PlayerList
-    socketService.emit('view_update', {
-      currentView: 'player_list'
-    });
-
+    updateLineup(lineupData.teamA, lineupData.teamB);
+    updateView('player_list');
     onSave(lineupData);
     onClose();
   };

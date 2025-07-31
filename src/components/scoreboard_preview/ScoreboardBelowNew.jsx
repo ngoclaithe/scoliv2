@@ -19,8 +19,8 @@ const ScoreboardBelowNew = ({
     const currentData = {
         teamAName: matchData?.teamA?.name || "ĐỘI A",
         teamBName: matchData?.teamB?.name || "ĐỘI B",
-        teamALogo: matchData?.teamA?.logo || "/api/placeholder/90/90",
-        teamBLogo: matchData?.teamB?.logo || "/api/placeholder/90/90",
+        teamALogo: matchData?.teamA?.logo || "https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/1200px-FC_Barcelona_logo.svg.png",
+        teamBLogo: matchData?.teamB?.logo || "https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/1200px-FC_Barcelona_logo.svg.png",
         teamAScore: matchData?.teamA?.score || 0,
         teamBScore: matchData?.teamB?.score || 0,
         matchTime: matchData?.matchTime || "00:00",
@@ -28,7 +28,7 @@ const ScoreboardBelowNew = ({
         status: matchData?.status || "waiting",
         teamAKitColor: matchData?.teamAKitColor || "#FF0000",
         teamBKitColor: matchData?.teamBKitColor || "#0000FF",
-        leagueLogo: "/api/placeholder/40/40"
+        leagueLogo: "https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/1200px-FC_Barcelona_logo.svg.png"
     };
 
     // State for scrolling text visibility control

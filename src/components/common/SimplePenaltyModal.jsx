@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Modal from "./Modal";
 import { useMatch } from "../../contexts/MatchContext";
-import socketService from "../../services/socketService";
+
 
 const SimplePenaltyModal = ({ isOpen, onClose }) => {
-  const { penaltyData } = useMatch();
+  const { penaltyData, updatePenalty, updateView } = useMatch();
   
   // State for penalty table: 10 columns for rounds, 4 rows for teams
   const [penaltyTable, setPenaltyTable] = useState({
@@ -119,14 +119,8 @@ const SimplePenaltyModal = ({ isOpen, onClose }) => {
       lastUpdated: new Date().toISOString()
     };
 
-    socketService.emit('penalty_update', {
-      penaltyData: penaltyUpdate
-    });
-
-    // Emit view update to switch to penalty scoreboard
-    socketService.emit('view_update', {
-      currentView: 'penalty_scoreboard'
-    });
+    updatePenalty(penaltyUpdate);
+    updateView('penalty_scoreboard');
   };
 
   return (

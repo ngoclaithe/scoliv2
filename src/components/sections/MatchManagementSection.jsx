@@ -437,10 +437,10 @@ const MatchManagementSection = ({ isActive = true }) => {
             variant="primary"
             size="sm"
             className={`px-2 py-1 ${isPlaying
-                ? "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
-                : isPaused
-                  ? "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
-                  : "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700"
+              ? "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
+              : isPaused
+                ? "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                : "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700"
               } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
               console.log('🎵 [MatchManagement] Audio pause/play clicked - isPlaying:', isPlaying, 'isPaused:', isPaused);
@@ -487,8 +487,8 @@ const MatchManagementSection = ({ isActive = true }) => {
             variant="primary"
             size="sm"
             className={`px-2 py-1 ${matchData.status === "paused"
-                ? "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
-                : "bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700"
+              ? "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
+              : "bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700"
               } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
               if (matchData.status === "paused") {
@@ -685,7 +685,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                   title: matchTitle,
                   time: matchInfo.startTime
                 });
-                              // Emit team kit colors via socket
+                // Emit team kit colors via socket
                 const teamColorsData = {
                   teamAKitColor: teamAInfo.shirtColor || '#ff0000',
                   teamBKitColor: teamBInfo.shirtColor || '#000000'
@@ -1178,8 +1178,8 @@ const MatchManagementSection = ({ isActive = true }) => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => {
-                  const currentValue = parseInt(quickCustomMinutes) || 0;
-                  if (currentValue > 0) {
+                  const currentValue = parseInt(quickCustomMinutes) || 25;
+                  if (currentValue > 1) {
                     setQuickCustomMinutes((currentValue - 1).toString());
                   }
                 }}
@@ -1190,7 +1190,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
               <input
                 type="number"
-                min="0"
+                min="1"
                 max="120"
                 value={quickCustomMinutes}
                 onChange={(e) => setQuickCustomMinutes(e.target.value)}
@@ -1200,7 +1200,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
               <button
                 onClick={() => {
-                  const currentValue = parseInt(quickCustomMinutes) || 0;
+                  const currentValue = parseInt(quickCustomMinutes) || 25;
                   if (currentValue < 120) {
                     setQuickCustomMinutes((currentValue + 1).toString());
                   }
@@ -1210,13 +1210,10 @@ const MatchManagementSection = ({ isActive = true }) => {
                 +
               </button>
 
-
-
               <button
                 className="px-3 py-1 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-sm font-bold h-8"
                 onClick={() => {
-                  const minutes = parseInt(quickCustomMinutes) || 0;
-
+                  const minutes = parseInt(quickCustomMinutes) || 25;
 
                   if (minutes > 0) {
                     const timeString = `${minutes.toString().padStart(2, '0')}:00`;
