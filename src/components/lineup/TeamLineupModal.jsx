@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
 import Input from "../common/Input";
+import socketService from "../../services/socketService";
 
 const TeamLineupModal = ({
   isOpen,
@@ -103,18 +104,22 @@ const TeamLineupModal = ({
   };
 
   const validateAndSave = () => {
-    const homeValid = lineups.home.filter(p => p.name.trim()).length >= 11;
-    const awayValid = lineups.away.filter(p => p.name.trim()).length >= 11;
+    const lineupData = {
+      teamA: lineups.home.filter(p => p.name.trim()),
+      teamB: lineups.away.filter(p => p.name.trim()),
+    };
 
-    if (!homeValid || !awayValid) {
-      alert("Vui lòng điền đầy đủ tên cầu thủ cho cả hai đội (11 cầu thủ mỗi đội)");
-      return;
-    }
-
-    onSave({
-      home: lineups.home.filter(p => p.name.trim()),
-      away: lineups.away.filter(p => p.name.trim()),
+    // Emit lineup update qua socket
+    socketService.emit('lineup_update', {
+      lineupData
     });
+
+    // Emit view update để chuyển sang PlayerList
+    socketService.emit('view_update', {
+      currentView: 'player_list'
+    });
+
+    onSave(lineupData);
     onClose();
   };
 
@@ -181,7 +186,7 @@ const TeamLineupModal = ({
             size="sm"
             onClick={validateAndSave}
             className="h-10 flex flex-col items-center justify-center text-xs"
-            disabled={homeCount < 11 || awayCount < 11}
+disabled={homeCount === 0 && awayCount === 0}
           >
             <span className="text-sm">💾</span>
             <span className="text-xs">Lưu</span>
