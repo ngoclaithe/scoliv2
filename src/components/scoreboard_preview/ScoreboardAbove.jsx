@@ -588,27 +588,32 @@ const ScoreboardAbove = ({
                 .animate-scroll {
                     animation: scroll 30s linear infinite;
                 }
-                
-                /* Mobile scaling for proportional zoom */
+
+                /* Mobile scaling - keep scoreboard in top-right with proportional scaling */
+                .scoreboard-main {
+                    transform-origin: top right;
+                }
+
                 @media (max-width: 768px) {
-                    :root {
-                        --scale-factor: 0.85;
-                    }
-                    
                     .scoreboard-main {
-                        min-width: 350px;
-                        max-width: 95vw;
+                        transform: scale(0.8);
                     }
-                    
+
                     .container-name-color-left,
                     .container-name-color-right {
                         min-width: 60px;
                     }
                 }
-                
+
                 @media (max-width: 480px) {
-                    :root {
-                        --scale-factor: 0.75;
+                    .scoreboard-main {
+                        transform: scale(0.65);
+                    }
+                }
+
+                @media (max-width: 360px) {
+                    .scoreboard-main {
+                        transform: scale(0.55);
                     }
                 }
             `}</style>
