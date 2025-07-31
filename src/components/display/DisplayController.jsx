@@ -16,6 +16,8 @@ import Intro from '../introduce/Intro';
 import HalfTime from '../halftime/HalfTime';
 import ScoreboardAbove from '../scoreboard_preview/ScoreboardAbove';
 import ScoreboardBelowNew from '../scoreboard_preview/ScoreboardBelowNew';
+import PenaltyScoreboard from '../scoreboard_preview/PenaltyScoreboard';
+import PlayerList from '../lineup/PlayerList';
 
 const DisplayController = () => {
   const { accessCode } = useParams();
@@ -97,6 +99,12 @@ const DisplayController = () => {
           accessCode={accessCode}
           type={displaySettings.selectedSkin || 1}
         />;
+      case 'penalty_scoreboard':
+        return <PenaltyScoreboard
+          type={displaySettings.selectedSkin || 1}
+        />;
+      case 'player_list':
+        return <PlayerList />;
       case 'poster':
       default:
         const posterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;
