@@ -579,8 +579,42 @@ const ScoreboardAbove = ({
                     </div>
                 )}
 
+                {/* Top Right Position - Logos first, then scoreboard below */}
+                <div className="absolute top-4 right-4 z-40">
+                    {(() => {
+                        const sponsorsTopRight = filterLogosByPosition(sponsors, 'top-right');
+                        const organizingTopRight = filterLogosByPosition(organizing, 'top-right');
+                        const mediaPartnersTopRight = filterLogosByPosition(mediaPartners, 'top-right');
+
+                        // Combine all top-right logos
+                        const allTopRightLogos = [...sponsorsTopRight, ...organizingTopRight, ...mediaPartnersTopRight];
+
+                        if (allTopRightLogos.length > 0) {
+                            return (
+                                <DisplayLogo
+                                    logos={allTopRightLogos}
+                                    alt="Top Right Logos"
+                                    className="w-16 h-16 mb-2"
+                                    type_play={logoShape}
+                                    slideMode={displaySettings?.rotateDisplay || false}
+                                    maxVisible={3}
+                                    slideInterval={5000}
+                                />
+                            );
+                        }
+
+                        return null;
+                    })()}
+                </div>
+
                 {/* Main Scoreboard - Top Right */}
-                <div className="absolute top-4 right-4 z-30">
+                <div className="absolute top-4 right-4 z-30" style={{ marginTop: (() => {
+                    const sponsorsTopRight = filterLogosByPosition(sponsors, 'top-right');
+                    const organizingTopRight = filterLogosByPosition(organizing, 'top-right');
+                    const mediaPartnersTopRight = filterLogosByPosition(mediaPartners, 'top-right');
+                    const allTopRightLogos = [...sponsorsTopRight, ...organizingTopRight, ...mediaPartnersTopRight];
+                    return allTopRightLogos.length > 0 ? '80px' : '0px';
+                })() }}>
                     <div className="scoreboard-main bg-transparent rounded-lg shadow-2xl">
                         {renderScoreboard()}
                     </div>
