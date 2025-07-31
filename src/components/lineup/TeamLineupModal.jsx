@@ -107,6 +107,7 @@ const TeamLineupModal = ({
       teamA: lineups.home.filter(p => p.name.trim()),
       teamB: lineups.away.filter(p => p.name.trim()),
     };
+    console.log("Giá trị của lineupData là:", lineupData);
 
     updateLineup(lineupData.teamA, lineupData.teamB);
     updateView('player_list');

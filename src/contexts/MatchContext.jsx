@@ -341,8 +341,8 @@ export const MatchProvider = ({ children }) => {
     // Lắng nghe cập nhật danh sách
     socketService.on('lineup_updated', (data) => {
       setLineupData({
-        teamA: data.lineup.teamA,
-        teamB: data.lineup.teamB
+        teamA: data.lineupData.teamA,
+        teamB: data.lineupData.teamB
       });
       setLastUpdateTime(Date.now());
     });
