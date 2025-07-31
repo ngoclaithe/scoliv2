@@ -91,12 +91,13 @@ const NewHomeLayout = () => {
 
             {/* Right - User Actions */}
             <div className="flex items-center space-x-2">
-              <div className="flex items-center bg-white/10 rounded-full px-3 py-1">
-                <span className="text-white text-xs mr-1">{codeOnly ? '🔑' : '👤'}</span>
-                <span className="text-white text-xs font-medium">
-                  {codeOnly ? 'CODE ACCESS' : (user?.name || 'User')}
-                </span>
-              </div>
+              <button
+                onClick={() => setShowUserModal(true)}
+                className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
+                title="Thông tin người dùng"
+              >
+                <span className="text-white text-sm">{codeOnly ? '🔑' : '👤'}</span>
+              </button>
 
               {/* Logout Button */}
               <button
