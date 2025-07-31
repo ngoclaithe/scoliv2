@@ -499,9 +499,9 @@ const ScoreboardAbove = ({
                 <div className="absolute top-4 left-4 z-40">
                     {/* Sponsors with top-left position */}
                     {sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position &&
-                     sponsors.position.some(pos => pos === 'top-left') && (
+                     sponsors.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'top-left') && (
                         <DisplayLogo
-                            logos={sponsors.url_logo.filter((_, index) => sponsors.position[index] === 'top-left')}
+                            logos={sponsors.url_logo.filter((_, index) => (Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index]) === 'top-left')}
                             alt="Sponsors"
                             className="w-16 h-16"
                             type_play={logoShape}
@@ -513,9 +513,9 @@ const ScoreboardAbove = ({
 
                     {/* Organizing with top-left position */}
                     {organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position &&
-                     organizing.position.some(pos => pos === 'top-left') && (
+                     organizing.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'top-left') && (
                         <DisplayLogo
-                            logos={organizing.url_logo.filter((_, index) => organizing.position[index] === 'top-left')}
+                            logos={organizing.url_logo.filter((_, index) => (Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index]) === 'top-left')}
                             alt="Organizing"
                             className="w-16 h-16"
                             type_play={logoShape}
@@ -527,9 +527,9 @@ const ScoreboardAbove = ({
 
                     {/* Media Partners with top-left position */}
                     {mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position &&
-                     mediaPartners.position.some(pos => pos === 'top-left') && (
+                     mediaPartners.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'top-left') && (
                         <DisplayLogo
-                            logos={mediaPartners.url_logo.filter((_, index) => mediaPartners.position[index] === 'top-left')}
+                            logos={mediaPartners.url_logo.filter((_, index) => (Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index]) === 'top-left')}
                             alt="Media Partners"
                             className="w-16 h-16"
                             type_play={logoShape}
@@ -576,9 +576,9 @@ const ScoreboardAbove = ({
                 <div className="absolute bottom-4 left-4 z-40">
                     {/* Sponsors with bottom-left position */}
                     {sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position &&
-                     sponsors.position.some(pos => pos === 'bottom-left') && (
+                     sponsors.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-left') && (
                         <DisplayLogo
-                            logos={sponsors.url_logo.filter((_, index) => sponsors.position[index] === 'bottom-left')}
+                            logos={sponsors.url_logo.filter((_, index) => (Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index]) === 'bottom-left')}
                             alt="Sponsors"
                             className="w-16 h-16"
                             type_play={logoShape}
@@ -590,9 +590,9 @@ const ScoreboardAbove = ({
 
                     {/* Organizing with bottom-left position */}
                     {organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position &&
-                     organizing.position.some(pos => pos === 'bottom-left') && (
+                     organizing.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-left') && (
                         <DisplayLogo
-                            logos={organizing.url_logo.filter((_, index) => organizing.position[index] === 'bottom-left')}
+                            logos={organizing.url_logo.filter((_, index) => (Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index]) === 'bottom-left')}
                             alt="Organizing"
                             className="w-16 h-16"
                             type_play={logoShape}
@@ -604,9 +604,9 @@ const ScoreboardAbove = ({
 
                     {/* Media Partners with bottom-left position */}
                     {mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position &&
-                     mediaPartners.position.some(pos => pos === 'bottom-left') && (
+                     mediaPartners.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-left') && (
                         <DisplayLogo
-                            logos={mediaPartners.url_logo.filter((_, index) => mediaPartners.position[index] === 'bottom-left')}
+                            logos={mediaPartners.url_logo.filter((_, index) => (Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index]) === 'bottom-left')}
                             alt="Media Partners"
                             className="w-16 h-16"
                             type_play={logoShape}
@@ -634,9 +634,9 @@ const ScoreboardAbove = ({
                 <div className="absolute bottom-4 right-4 z-40">
                     {/* Sponsors with bottom-right position */}
                     {sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position &&
-                     sponsors.position.some(pos => pos === 'bottom-right') && (
+                     sponsors.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-right') && (
                         <DisplayLogo
-                            logos={sponsors.url_logo.filter((_, index) => sponsors.position[index] === 'bottom-right')}
+                            logos={sponsors.url_logo.filter((_, index) => (Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index]) === 'bottom-right')}
                             alt="Sponsors"
                             className="w-16 h-16"
                             type_play={logoShape}
@@ -648,9 +648,9 @@ const ScoreboardAbove = ({
 
                     {/* Organizing with bottom-right position */}
                     {organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position &&
-                     organizing.position.some(pos => pos === 'bottom-right') && (
+                     organizing.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-right') && (
                         <DisplayLogo
-                            logos={organizing.url_logo.filter((_, index) => organizing.position[index] === 'bottom-right')}
+                            logos={organizing.url_logo.filter((_, index) => (Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index]) === 'bottom-right')}
                             alt="Organizing"
                             className="w-16 h-16"
                             type_play={logoShape}
@@ -662,9 +662,9 @@ const ScoreboardAbove = ({
 
                     {/* Media Partners with bottom-right position */}
                     {mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position &&
-                     mediaPartners.position.some(pos => pos === 'bottom-right') && (
+                     mediaPartners.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-right') && (
                         <DisplayLogo
-                            logos={mediaPartners.url_logo.filter((_, index) => mediaPartners.position[index] === 'bottom-right')}
+                            logos={mediaPartners.url_logo.filter((_, index) => (Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index]) === 'bottom-right')}
                             alt="Media Partners"
                             className="w-16 h-16"
                             type_play={logoShape}
