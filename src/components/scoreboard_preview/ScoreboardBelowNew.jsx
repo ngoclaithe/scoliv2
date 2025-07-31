@@ -474,7 +474,12 @@ const ScoreboardBelowNew = ({
                     </div>
                 </div>
 
-                <LogoImage src={currentData.teamBLogo} alt={currentData.teamBName} className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0" />
+                <DisplayLogo
+                    logos={[currentData.teamBLogo]}
+                    alt={currentData.teamBName}
+                    className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0"
+                    type_play={logoShape}
+                />
             </div>
         </div>
     );
