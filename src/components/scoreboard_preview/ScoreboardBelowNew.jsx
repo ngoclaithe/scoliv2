@@ -25,10 +25,15 @@ const ScoreboardBelowNew = ({
         matchTime: matchData?.matchTime || "00:00",
         period: matchData?.period || "Chưa bắt đầu",
         status: matchData?.status || "waiting",
-        teamAKitColor: matchData?.teamAKitColor || "#FF0000", 
-        teamBKitColor: matchData?.teamBKitColor || "#0000FF", 
+        teamAKitColor: matchData?.teamAKitColor || "#FF0000",
+        teamBKitColor: matchData?.teamBKitColor || "#0000FF",
         leagueLogo: "/api/placeholder/40/40"
     };
+
+    // Debug log để check dữ liệu từ context
+    console.log('🎨 [ScoreboardBelowNew] matchData:', matchData);
+    console.log('🎨 [ScoreboardBelowNew] teamAKitColor:', matchData?.teamAKitColor);
+    console.log('🎨 [ScoreboardBelowNew] teamBKitColor:', matchData?.teamBKitColor);
 
     // State for scrolling text visibility control
     const [showScrollingText, setShowScrollingText] = useState(false);
