@@ -5,7 +5,6 @@ import { useMatch } from "../../contexts/MatchContext";
 
 const SimplePenaltyModal = ({ isOpen, onClose }) => {
   const { penaltyData, updatePenalty, updateView } = useMatch();
-  
   // State for penalty table: 10 columns for rounds, 4 rows for teams
   const [penaltyTable, setPenaltyTable] = useState({
     teamA_goals: Array(10).fill(false),    // Team A goals
