@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
+import Modal from "../common/Modal";
 
 // Import các section components
 import UploadLogoSection from "../sections/UploadLogoSection";
@@ -9,6 +10,8 @@ import CommentarySection from "../sections/CommentarySection";
 const NewHomeLayout = () => {
   const { user, logout, authType, hasAccountAccess, codeOnly, matchCode, clearMatchCode } = useAuth();
   const [activeTab, setActiveTab] = useState("quan-ly-tran");
+  const [showAccessCodeModal, setShowAccessCodeModal] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
 
   // Định nghĩa các tab theo yêu cầu
   const tabs = [
@@ -78,21 +81,23 @@ const NewHomeLayout = () => {
             </div>
 
             {/* Center - Access Code Info */}
-            <div className="flex items-center bg-white/10 rounded-full px-4 py-2 backdrop-blur-sm">
-              <span className="text-white text-xs mr-2">🔑</span>
-              <span className="text-white text-sm font-mono font-bold">
-                {matchCode || 'NO-CODE'}
-              </span>
-            </div>
+            <button
+              onClick={() => setShowAccessCodeModal(true)}
+              className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
+              title="Xem mã truy cập"
+            >
+              <span className="text-white text-sm">🔑</span>
+            </button>
 
             {/* Right - User Actions */}
             <div className="flex items-center space-x-2">
-              <div className="flex items-center bg-white/10 rounded-full px-3 py-1">
-                <span className="text-white text-xs mr-1">{codeOnly ? '🔑' : '👤'}</span>
-                <span className="text-white text-xs font-medium">
-                  {codeOnly ? 'CODE ACCESS' : (user?.name || 'User')}
-                </span>
-              </div>
+              <button
+                onClick={() => setShowUserModal(true)}
+                className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
+                title="Thông tin người dùng"
+              >
+                <span className="text-white text-sm">{codeOnly ? '🔑' : '👤'}</span>
+              </button>
 
               {/* Logout Button */}
               <button
@@ -184,6 +189,98 @@ const NewHomeLayout = () => {
           </div>
         </div>
       </footer>
+
+      {/* Access Code Modal */}
+      <Modal
+        isOpen={showAccessCodeModal}
+        onClose={() => setShowAccessCodeModal(false)}
+        title="🔑 Mã Truy Cập"
+        size="md"
+      >
+        <div className="space-y-4">
+          <div className="text-center">
+            <div className="bg-gray-100 rounded-lg p-4 mb-4">
+              <div className="text-sm text-gray-600 mb-2">Mã truy cập hiện tại:</div>
+              <div className="text-2xl font-mono font-bold text-blue-600">
+                {matchCode || 'NO-CODE'}
+              </div>
+            </div>
+
+            <div className="bg-blue-50 rounded-lg p-3 mb-4">
+              <div className="text-sm text-blue-800">
+                <div className="font-semibold mb-1">🌐 Route Dynamic:</div>
+                <div className="font-mono bg-blue-100 px-2 py-1 rounded text-blue-900">
+                  /{matchCode || 'your-access-code'}
+                </div>
+              </div>
+            </div>
+
+            <div className="text-xs text-gray-500">
+              Chia sẻ link này với đội ngũ để họ có thể xem trực tiếp
+            </div>
+          </div>
+        </div>
+      </Modal>
+
+      {/* User Info Modal */}
+      <Modal
+        isOpen={showUserModal}
+        onClose={() => setShowUserModal(false)}
+        title="👤 Thông Tin Người Dùng"
+        size="md"
+      >
+        <div className="space-y-4">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-white text-2xl">{codeOnly ? '🔑' : '👤'}</span>
+            </div>
+
+            <div className="space-y-3">
+              <div className="bg-gray-100 rounded-lg p-3">
+                <div className="text-sm text-gray-600">Loại truy cập:</div>
+                <div className="font-semibold text-gray-800">
+                  {codeOnly ? 'Truy cập bằng mã' : 'Tài khoản người dùng'}
+                </div>
+              </div>
+
+              {!codeOnly && (
+                <div className="bg-gray-100 rounded-lg p-3">
+                  <div className="text-sm text-gray-600">Tên người dùng:</div>
+                  <div className="font-semibold text-gray-800">
+                    {user?.name || 'Chưa có tên'}
+                  </div>
+                </div>
+              )}
+
+              {user?.email && (
+                <div className="bg-gray-100 rounded-lg p-3">
+                  <div className="text-sm text-gray-600">Email:</div>
+                  <div className="font-semibold text-gray-800">
+                    {user.email}
+                  </div>
+                </div>
+              )}
+
+              <div className="bg-gray-100 rounded-lg p-3">
+                <div className="text-sm text-gray-600">Quyền hạn:</div>
+                <div className="font-semibold text-gray-800">
+                  {hasAccountAccess ? 'Quản trị viên' : 'Người dùng cơ bản'}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-gray-200">
+              <button
+                onClick={logout}
+                className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2"
+              >
+                <span>🚪</span>
+                <span>Đăng xuất</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

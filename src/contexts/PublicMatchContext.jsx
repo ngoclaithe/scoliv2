@@ -72,7 +72,8 @@ export const PublicMatchProvider = ({ children }) => {
     showStats: false,
     showPenalty: false,
     showLineup: false,
-    logoShape: 'circle', // 'circle', 'square', 'hexagon', 'shield'
+    logoShape: 'round', // 'round', 'square', 'hexagon'
+    rotateDisplay: false, // thêm rotateDisplay
     showTournamentLogo: true,
     showSponsors: true,
     showOrganizing: true,

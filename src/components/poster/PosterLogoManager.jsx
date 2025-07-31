@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Button from "../common/Button";
 import LogoAPI from "../../API/apiLogo";
 
-const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose }) => {
+const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, onPositionChange }) => {
   const [selectedPoster, setSelectedPoster] = useState(null);
   const [logoItems, setLogoItems] = useState([]);
   const [apiLogos, setApiLogos] = useState([]);
@@ -280,7 +280,14 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
         ? item.displayPositions.filter(p => p !== position)
         : [...item.displayPositions, position];
 
-      onUpdate(item.id, { ...item, displayPositions: newPositions });
+      const updatedItem = { ...item, displayPositions: newPositions };
+      onUpdate(item.id, updatedItem);
+
+      // Emit immediately for real-time update
+      if (onPositionChange) {
+        console.log('📍 [PosterLogoManager] Position changed for item:', updatedItem);
+        onPositionChange(updatedItem);
+      }
     };
 
     return (
@@ -513,6 +520,13 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       console.log('[PosterLogoManager] No activeItems, not calling onLogoUpdate');
     }
 
+    // Luôn emit display settings (shape và rotateDisplay) bất kể có logo hay không
+    console.log('🎨 [PosterLogoManager] Emitting display settings:', logoDisplayOptions);
+    onLogoUpdate?.({
+      logoItems: activeItems,
+      displayOptions: logoDisplayOptions
+    });
+
     onClose?.();
   };
 
@@ -619,7 +633,11 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
                   name="logoShape"
                   value={shape.value}
                   checked={logoDisplayOptions.shape === shape.value}
-                  onChange={(e) => setLogoDisplayOptions(prev => ({ ...prev, shape: e.target.value }))}
+                  onChange={(e) => {
+                    const newShape = e.target.value;
+                    setLogoDisplayOptions(prev => ({ ...prev, shape: newShape }));
+                    console.log('🎨 [PosterLogoManager] Logo shape changed to:', newShape);
+                  }}
                   className="w-2 h-2"
                 />
                 <span className="text-xs">{shape.icon}</span>
@@ -632,7 +650,11 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             <input
               type="checkbox"
               checked={logoDisplayOptions.rotateDisplay}
-              onChange={(e) => setLogoDisplayOptions(prev => ({ ...prev, rotateDisplay: e.target.checked }))}
+              onChange={(e) => {
+                const isRotate = e.target.checked;
+                setLogoDisplayOptions(prev => ({ ...prev, rotateDisplay: isRotate }));
+                console.log('🔄 [PosterLogoManager] Rotate display changed to:', isRotate);
+              }}
               className="w-2 h-2"
             />
             <span className="text-xs">🔄 Hiển thị luân phiên</span>

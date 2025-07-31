@@ -34,7 +34,14 @@ const ScoreboardAbove = ({
         leagueLogo: "/api/placeholder/40/40"
     };
 
-    const logoShape = displaySettings?.logoShape || "square";
+    const rawLogoShape = displaySettings?.logoShape || "round";
+    // Convert shape names to match DisplayLogo expectations
+    const logoShape = rawLogoShape === 'round' ? 'circle' : rawLogoShape;
+
+    // Debug log - only when displaySettings change
+    if (displaySettings?.logoShape !== 'round') {
+        console.log('🔧 [ScoreboardAbove] Logo shape changed to:', rawLogoShape, '-> mapped to:', logoShape);
+    }
 
     const [showScrollingText, setShowScrollingText] = useState(false);
 
@@ -486,15 +493,60 @@ const ScoreboardAbove = ({
         <div className="w-full h-screen relative overflow-hidden">
             {/* Container for all elements */}
             <div className="w-full h-full relative bg-transparent">
-                {/* Sponsors - Top Left */}
+                {/* Sponsors, Organizing, Media Partners at their assigned positions */}
+
+                {/* Top Left Position */}
                 <div className="absolute top-4 left-4 z-40">
-                    {sponsors?.url_logo && sponsors.url_logo.length > 0 && (
+                    {/* Sponsors with top-left position */}
+                    {sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position &&
+                     sponsors.position.some(pos => pos === 'top-left') && (
+                        <DisplayLogo
+                            logos={sponsors.url_logo.filter((_, index) => sponsors.position[index] === 'top-left')}
+                            alt="Sponsors"
+                            className="w-16 h-16"
+                            type_play={logoShape}
+                            slideMode={displaySettings?.rotateDisplay || false}
+                            maxVisible={3}
+                            slideInterval={5000}
+                        />
+                    )}
+
+                    {/* Organizing with top-left position */}
+                    {organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position &&
+                     organizing.position.some(pos => pos === 'top-left') && (
+                        <DisplayLogo
+                            logos={organizing.url_logo.filter((_, index) => organizing.position[index] === 'top-left')}
+                            alt="Organizing"
+                            className="w-16 h-16"
+                            type_play={logoShape}
+                            slideMode={displaySettings?.rotateDisplay || false}
+                            maxVisible={3}
+                            slideInterval={5000}
+                        />
+                    )}
+
+                    {/* Media Partners with top-left position */}
+                    {mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position &&
+                     mediaPartners.position.some(pos => pos === 'top-left') && (
+                        <DisplayLogo
+                            logos={mediaPartners.url_logo.filter((_, index) => mediaPartners.position[index] === 'top-left')}
+                            alt="Media Partners"
+                            className="w-16 h-16"
+                            type_play={logoShape}
+                            slideMode={displaySettings?.rotateDisplay || false}
+                            maxVisible={3}
+                            slideInterval={5000}
+                        />
+                    )}
+
+                    {/* Fallback for sponsors without position specified */}
+                    {sponsors?.url_logo && sponsors.url_logo.length > 0 && (!sponsors?.position || sponsors.position.length === 0) && (
                         <DisplayLogo
                             logos={sponsors.url_logo}
                             alt="Sponsors"
                             className="w-16 h-16"
                             type_play={logoShape}
-                            slideMode={sponsors.url_logo.length > 3}
+                            slideMode={displaySettings?.rotateDisplay || false}
                             maxVisible={3}
                             slideInterval={5000}
                         />
@@ -520,30 +572,116 @@ const ScoreboardAbove = ({
                     </div>
                 </div>
 
-                {/* Organizing - Bottom Left */}
+                {/* Bottom Left Position */}
                 <div className="absolute bottom-4 left-4 z-40">
-                    {organizing?.url_logo && organizing.url_logo.length > 0 && (
+                    {/* Sponsors with bottom-left position */}
+                    {sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position &&
+                     sponsors.position.some(pos => pos === 'bottom-left') && (
+                        <DisplayLogo
+                            logos={sponsors.url_logo.filter((_, index) => sponsors.position[index] === 'bottom-left')}
+                            alt="Sponsors"
+                            className="w-16 h-16"
+                            type_play={logoShape}
+                            slideMode={displaySettings?.rotateDisplay || false}
+                            maxVisible={3}
+                            slideInterval={5000}
+                        />
+                    )}
+
+                    {/* Organizing with bottom-left position */}
+                    {organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position &&
+                     organizing.position.some(pos => pos === 'bottom-left') && (
+                        <DisplayLogo
+                            logos={organizing.url_logo.filter((_, index) => organizing.position[index] === 'bottom-left')}
+                            alt="Organizing"
+                            className="w-16 h-16"
+                            type_play={logoShape}
+                            slideMode={displaySettings?.rotateDisplay || false}
+                            maxVisible={3}
+                            slideInterval={5000}
+                        />
+                    )}
+
+                    {/* Media Partners with bottom-left position */}
+                    {mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position &&
+                     mediaPartners.position.some(pos => pos === 'bottom-left') && (
+                        <DisplayLogo
+                            logos={mediaPartners.url_logo.filter((_, index) => mediaPartners.position[index] === 'bottom-left')}
+                            alt="Media Partners"
+                            className="w-16 h-16"
+                            type_play={logoShape}
+                            slideMode={displaySettings?.rotateDisplay || false}
+                            maxVisible={3}
+                            slideInterval={5000}
+                        />
+                    )}
+
+                    {/* Fallback for organizing without position specified */}
+                    {organizing?.url_logo && organizing.url_logo.length > 0 && (!organizing?.position || organizing.position.length === 0) && (
                         <DisplayLogo
                             logos={organizing.url_logo}
                             alt="Organizing"
                             className="w-16 h-16"
                             type_play={logoShape}
-                            slideMode={organizing.url_logo.length > 3}
+                            slideMode={displaySettings?.rotateDisplay || false}
                             maxVisible={3}
                             slideInterval={5000}
                         />
                     )}
                 </div>
 
-                {/* Media Partners - Bottom Right */}
+                {/* Bottom Right Position */}
                 <div className="absolute bottom-4 right-4 z-40">
-                    {mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && (
+                    {/* Sponsors with bottom-right position */}
+                    {sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position &&
+                     sponsors.position.some(pos => pos === 'bottom-right') && (
+                        <DisplayLogo
+                            logos={sponsors.url_logo.filter((_, index) => sponsors.position[index] === 'bottom-right')}
+                            alt="Sponsors"
+                            className="w-16 h-16"
+                            type_play={logoShape}
+                            slideMode={displaySettings?.rotateDisplay || false}
+                            maxVisible={3}
+                            slideInterval={5000}
+                        />
+                    )}
+
+                    {/* Organizing with bottom-right position */}
+                    {organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position &&
+                     organizing.position.some(pos => pos === 'bottom-right') && (
+                        <DisplayLogo
+                            logos={organizing.url_logo.filter((_, index) => organizing.position[index] === 'bottom-right')}
+                            alt="Organizing"
+                            className="w-16 h-16"
+                            type_play={logoShape}
+                            slideMode={displaySettings?.rotateDisplay || false}
+                            maxVisible={3}
+                            slideInterval={5000}
+                        />
+                    )}
+
+                    {/* Media Partners with bottom-right position */}
+                    {mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position &&
+                     mediaPartners.position.some(pos => pos === 'bottom-right') && (
+                        <DisplayLogo
+                            logos={mediaPartners.url_logo.filter((_, index) => mediaPartners.position[index] === 'bottom-right')}
+                            alt="Media Partners"
+                            className="w-16 h-16"
+                            type_play={logoShape}
+                            slideMode={displaySettings?.rotateDisplay || false}
+                            maxVisible={3}
+                            slideInterval={5000}
+                        />
+                    )}
+
+                    {/* Fallback for media partners without position specified */}
+                    {mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && (!mediaPartners?.position || mediaPartners.position.length === 0) && (
                         <DisplayLogo
                             logos={mediaPartners.url_logo}
                             alt="Media Partners"
                             className="w-16 h-16"
                             type_play={logoShape}
-                            slideMode={mediaPartners.url_logo.length > 3}
+                            slideMode={displaySettings?.rotateDisplay || false}
                             maxVisible={3}
                             slideInterval={5000}
                         />
