@@ -492,7 +492,7 @@ const ScoreboardBelowNew = ({
     return (
         <div className="w-full h-screen relative overflow-hidden">
             {/* Container that scales for mobile while maintaining proportions */}
-            <div className="w-full h-full relative bg-gray-900" style={{
+            <div className="w-full h-full relative bg-transparent" style={{
                 transform: 'scale(var(--scale-factor, 1))',
                 transformOrigin: 'center center'
             }}>
