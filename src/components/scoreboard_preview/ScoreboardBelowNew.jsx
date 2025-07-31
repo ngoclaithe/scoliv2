@@ -330,7 +330,12 @@ const ScoreboardBelowNew = ({
 
     const renderScoreboardType3 = () => (
         <div className="flex items-center justify-between w-full px-2">
-            <LogoImage src={currentData.teamALogo} alt={currentData.teamAName} className="w-12 h-12" />
+            <DisplayLogo
+                logos={[currentData.teamALogo]}
+                alt={currentData.teamAName}
+                className="w-12 h-12"
+                type_play={logoShape}
+            />
 
             <div className="flex items-center bg-black/20 backdrop-blur-sm rounded-lg p-1 shadow-xl">
                 {/* Team A */}
