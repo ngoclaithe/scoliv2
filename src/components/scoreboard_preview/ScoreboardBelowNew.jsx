@@ -115,7 +115,12 @@ const ScoreboardBelowNew = ({
         <div className="flex flex-col items-center">
             <div className="flex items-center justify-center w-full px-2 gap-0">
                 {/* Logo team A */}
-                <LogoImage src={currentData.teamALogo} alt={currentData.teamAName} className="w-14 h-14 object-contain" style={{ borderRadius: '0 !important' }} />
+                <DisplayLogo
+                    logos={[currentData.teamALogo]}
+                    alt={currentData.teamAName}
+                    className="w-14 h-14"
+                    type_play={logoShape}
+                />
 
                 {/* Score + team A name */}
                 <div className="flex items-center gap-0">
