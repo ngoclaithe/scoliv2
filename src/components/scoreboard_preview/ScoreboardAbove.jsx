@@ -588,60 +588,45 @@ const ScoreboardAbove = ({
 
                 {/* Bottom Left Position */}
                 <div className="absolute bottom-4 left-4 z-40">
-                    {/* Sponsors with bottom-left position */}
-                    {sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position &&
-                     sponsors.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-left') && (
-                        <DisplayLogo
-                            logos={sponsors.url_logo.filter((_, index) => (Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index]) === 'bottom-left')}
-                            alt="Sponsors"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                    {(() => {
+                        const sponsorsBottomLeft = filterLogosByPosition(sponsors, 'bottom-left');
+                        const organizingBottomLeft = filterLogosByPosition(organizing, 'bottom-left');
+                        const mediaPartnersBottomLeft = filterLogosByPosition(mediaPartners, 'bottom-left');
 
-                    {/* Organizing with bottom-left position */}
-                    {organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position &&
-                     organizing.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-left') && (
-                        <DisplayLogo
-                            logos={organizing.url_logo.filter((_, index) => (Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index]) === 'bottom-left')}
-                            alt="Organizing"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                        // Combine all bottom-left logos
+                        const allBottomLeftLogos = [...sponsorsBottomLeft, ...organizingBottomLeft, ...mediaPartnersBottomLeft];
 
-                    {/* Media Partners with bottom-left position */}
-                    {mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position &&
-                     mediaPartners.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-left') && (
-                        <DisplayLogo
-                            logos={mediaPartners.url_logo.filter((_, index) => (Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index]) === 'bottom-left')}
-                            alt="Media Partners"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                        if (allBottomLeftLogos.length > 0) {
+                            return (
+                                <DisplayLogo
+                                    logos={allBottomLeftLogos}
+                                    alt="Bottom Left Logos"
+                                    className="w-16 h-16"
+                                    type_play={logoShape}
+                                    slideMode={displaySettings?.rotateDisplay || false}
+                                    maxVisible={3}
+                                    slideInterval={5000}
+                                />
+                            );
+                        }
 
-                    {/* Fallback for organizing without position specified */}
-                    {organizing?.url_logo && organizing.url_logo.length > 0 && (!organizing?.position || organizing.position.length === 0) && (
-                        <DisplayLogo
-                            logos={organizing.url_logo}
-                            alt="Organizing"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                        // Fallback for organizing without position specified
+                        if (organizing?.url_logo && organizing.url_logo.length > 0 && (!organizing?.position || organizing.position.length === 0)) {
+                            return (
+                                <DisplayLogo
+                                    logos={organizing.url_logo}
+                                    alt="Organizing"
+                                    className="w-16 h-16"
+                                    type_play={logoShape}
+                                    slideMode={displaySettings?.rotateDisplay || false}
+                                    maxVisible={3}
+                                    slideInterval={5000}
+                                />
+                            );
+                        }
+
+                        return null;
+                    })()}
                 </div>
 
                 {/* Bottom Right Position */}
