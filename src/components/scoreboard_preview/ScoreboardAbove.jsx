@@ -526,60 +526,45 @@ const ScoreboardAbove = ({
 
                 {/* Top Left Position */}
                 <div className="absolute top-4 left-4 z-40">
-                    {/* Sponsors with top-left position */}
-                    {sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position &&
-                     sponsors.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'top-left') && (
-                        <DisplayLogo
-                            logos={sponsors.url_logo.filter((_, index) => (Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index]) === 'top-left')}
-                            alt="Sponsors"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                    {(() => {
+                        const sponsorsTopLeft = filterLogosByPosition(sponsors, 'top-left');
+                        const organizingTopLeft = filterLogosByPosition(organizing, 'top-left');
+                        const mediaPartnersTopLeft = filterLogosByPosition(mediaPartners, 'top-left');
 
-                    {/* Organizing with top-left position */}
-                    {organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position &&
-                     organizing.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'top-left') && (
-                        <DisplayLogo
-                            logos={organizing.url_logo.filter((_, index) => (Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index]) === 'top-left')}
-                            alt="Organizing"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                        // Combine all top-left logos
+                        const allTopLeftLogos = [...sponsorsTopLeft, ...organizingTopLeft, ...mediaPartnersTopLeft];
 
-                    {/* Media Partners with top-left position */}
-                    {mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position &&
-                     mediaPartners.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'top-left') && (
-                        <DisplayLogo
-                            logos={mediaPartners.url_logo.filter((_, index) => (Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index]) === 'top-left')}
-                            alt="Media Partners"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                        if (allTopLeftLogos.length > 0) {
+                            return (
+                                <DisplayLogo
+                                    logos={allTopLeftLogos}
+                                    alt="Top Left Logos"
+                                    className="w-16 h-16"
+                                    type_play={logoShape}
+                                    slideMode={displaySettings?.rotateDisplay || false}
+                                    maxVisible={3}
+                                    slideInterval={5000}
+                                />
+                            );
+                        }
 
-                    {/* Fallback for sponsors without position specified */}
-                    {sponsors?.url_logo && sponsors.url_logo.length > 0 && (!sponsors?.position || sponsors.position.length === 0) && (
-                        <DisplayLogo
-                            logos={sponsors.url_logo}
-                            alt="Sponsors"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                        // Fallback for sponsors without position specified
+                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && (!sponsors?.position || sponsors.position.length === 0)) {
+                            return (
+                                <DisplayLogo
+                                    logos={sponsors.url_logo}
+                                    alt="Sponsors"
+                                    className="w-16 h-16"
+                                    type_play={logoShape}
+                                    slideMode={displaySettings?.rotateDisplay || false}
+                                    maxVisible={3}
+                                    slideInterval={5000}
+                                />
+                            );
+                        }
+
+                        return null;
+                    })()}
                 </div>
 
                 {/* Tournament Logo - Top Left (if no sponsors) */}
