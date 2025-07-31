@@ -611,7 +611,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             {[
               { value: 'round', label: 'Tròn', icon: '⭕' },
               { value: 'square', label: 'Vuông', icon: '⬜' },
-              { value: 'hexagon', label: 'Lục giác', icon: '⬡' }
+              { value: 'hexagon', label: 'Lục giác', icon: '��' }
             ].map((shape) => (
               <label key={shape.value} className="flex items-center gap-0.5 cursor-pointer">
                 <input
@@ -636,7 +636,11 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             <input
               type="checkbox"
               checked={logoDisplayOptions.rotateDisplay}
-              onChange={(e) => setLogoDisplayOptions(prev => ({ ...prev, rotateDisplay: e.target.checked }))}
+              onChange={(e) => {
+                const isRotate = e.target.checked;
+                setLogoDisplayOptions(prev => ({ ...prev, rotateDisplay: isRotate }));
+                console.log('🔄 [PosterLogoManager] Rotate display changed to:', isRotate);
+              }}
               className="w-2 h-2"
             />
             <span className="text-xs">🔄 Hiển thị luân phiên</span>
