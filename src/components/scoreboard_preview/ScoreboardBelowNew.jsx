@@ -507,7 +507,7 @@ const ScoreboardBelowNew = ({
 
                 {/* Main Scoreboard */}
                 <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
-                    <div className="scoreboard-main bg-transparent rounded-lg shadow-2xl min-w-[400px] py-3">
+                    <div className="scoreboard-main bg-transparent rounded-lg shadow-2xl">
                         {renderScoreboard()}
                     </div>
                 </div>
