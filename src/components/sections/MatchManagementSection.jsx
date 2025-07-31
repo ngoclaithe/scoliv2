@@ -187,8 +187,6 @@ const MatchManagementSection = ({ isActive = true }) => {
   const [isSearchingLogoA, setIsSearchingLogoA] = useState(false);
   const [isSearchingLogoB, setIsSearchingLogoB] = useState(false);
 
-
-
   // Xử lý tìm kiếm logo cho đội A
   const handleSearchLogoA = async () => {
     if (!logoCodeA.trim()) return;
@@ -199,14 +197,14 @@ const MatchManagementSection = ({ isActive = true }) => {
       if (response.success && response.data && response.data.length > 0) {
         const logo = response.data[0];
         setTeamAInfo(prev => ({ ...prev, logo: logo.url }));
-        toast.success(`✅ Đã chọn logo ${logo.code_logo} cho Đội A!`);
+        console.log(`Đã chọn logo ${logo.code_logo} cho Đội A!`);
+        console.log('Đã chọn infoTeamA.logo là:', teamAInfo.logo);
         setLogoCodeA(""); // Clear input sau khi thành công
       } else {
-        toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeA}"`);
+        console.error(`Không tìm thấy logo với code "${logoCodeA}"`);
       }
     } catch (error) {
       console.error('Lỗi tìm kiếm logo A:', error);
-      toast.error('Lỗi khi tìm kiếm logo. Vui lòng thử lại.');
     } finally {
       setIsSearchingLogoA(false);
     }
@@ -574,7 +572,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 placeholder="Code"
                 value={logoCodeA}
                 onChange={(e) => setLogoCodeA(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearchLogoA()}
+                onKeyUp={(e) => e.key === 'Enter' && handleSearchLogoA()}
                 className="w-16 min-w-0 px-1 py-1 text-xs border border-gray-300 rounded focus:border-red-500 text-center bg-white flex-shrink-0"
               />
               <button
@@ -597,7 +595,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 placeholder="Code"
                 value={logoCodeB}
                 onChange={(e) => setLogoCodeB(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearchLogoB()}
+                onKeyUp={(e) => e.key === 'Enter' && handleSearchLogoB()}
                 className="w-16 min-w-0 px-1 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 text-center bg-white flex-shrink-0"
               />
               <button
