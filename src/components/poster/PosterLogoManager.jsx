@@ -513,6 +513,13 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
       console.log('[PosterLogoManager] No activeItems, not calling onLogoUpdate');
     }
 
+    // Luôn emit display settings (shape và rotateDisplay) bất kể có logo hay không
+    console.log('🎨 [PosterLogoManager] Emitting display settings:', logoDisplayOptions);
+    onLogoUpdate?.({
+      logoItems: activeItems,
+      displayOptions: logoDisplayOptions
+    });
+
     onClose?.();
   };
 
@@ -611,7 +618,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
             {[
               { value: 'round', label: 'Tròn', icon: '⭕' },
               { value: 'square', label: 'Vuông', icon: '⬜' },
-              { value: 'hexagon', label: 'Lục giác', icon: '��' }
+              { value: 'hexagon', label: 'Lục giác', icon: '⬡' }
             ].map((shape) => (
               <label key={shape.value} className="flex items-center gap-0.5 cursor-pointer">
                 <input
