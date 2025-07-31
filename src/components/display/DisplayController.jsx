@@ -101,10 +101,11 @@ const DisplayController = () => {
         />;
       case 'penalty_scoreboard':
         return <PenaltyScoreboard
+          accessCode={accessCode}
           type={displaySettings.selectedSkin || 1}
         />;
       case 'player_list':
-        return <PlayerList />;
+        return <PlayerList accessCode={accessCode} />;
       case 'poster':
       default:
         const posterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;
