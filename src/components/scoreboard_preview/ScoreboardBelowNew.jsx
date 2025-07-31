@@ -276,15 +276,17 @@ const ScoreboardBelowNew = ({
                     }}
                 >
                     <div
-                        className="w-12 h-12 rounded-full border-2 overflow-hidden"
+                        className="w-12 h-12 border-2"
                         style={{
                             borderColor: currentData.teamAKitColor,
+                            borderRadius: logoShape === 'circle' ? '50%' : logoShape === 'hexagon' ? '0' : '8px'
                         }}
                     >
-                        <LogoImage
-                            src={currentData.teamALogo}
+                        <DisplayLogo
+                            logos={[currentData.teamALogo]}
                             alt={currentData.teamAName}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full"
+                            type_play={logoShape}
                         />
                     </div>
                 </div>
