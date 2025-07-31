@@ -337,7 +337,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
               onChange={handleCodeChange}
               className={`w-full text-xs text-center border rounded px-1 py-1 pr-6 font-mono transition-colors focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none ${isSearching ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
                 }`}
-              placeholder="Nhập mã"
+              placeholder="Nhập m��"
             />
             <button
               onClick={handleSearch}
@@ -574,7 +574,8 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
           ))}
         </div>
 
-        <div className="grid grid-cols-2 gap-2 max-w-32">
+        {/* Logo items display */}
+        <div className="flex flex-wrap gap-2">
           {currentItems.map((item) => (
             <LogoItem
               key={item.id}
@@ -583,7 +584,10 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
               onRemove={handleItemRemove}
             />
           ))}
+        </div>
 
+        {/* Add buttons */}
+        <div className="flex gap-2">
           <div
             onClick={handleAddNewLogo}
             className="w-12 h-12 bg-white border-2 border-dashed border-gray-300 rounded p-1 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all duration-200 flex flex-col items-center justify-center"
@@ -592,19 +596,19 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose })
               <span className="text-xs text-gray-400">+</span>
             </div>
             <p className="text-xs text-gray-600 font-medium text-center leading-tight">
-              Thêm
+              Thêm logo
             </p>
           </div>
 
           <div
             onClick={handleAddNewBanner}
-            className="col-span-2 w-12 h-12 bg-white border-2 border-dashed border-orange-300 rounded p-1 cursor-pointer hover:border-orange-400 hover:bg-orange-50 transition-all duration-200 flex flex-col items-center justify-center"
+            className="w-12 h-12 bg-white border-2 border-dashed border-orange-300 rounded p-1 cursor-pointer hover:border-orange-400 hover:bg-orange-50 transition-all duration-200 flex flex-col items-center justify-center"
           >
             <div className="w-3 h-3 bg-orange-100 rounded-full flex items-center justify-center mb-0.5">
               <span className="text-xs text-orange-400">+</span>
             </div>
             <p className="text-xs text-orange-600 font-medium text-center">
-              Thêm Banner
+              Thêm banner
             </p>
           </div>
         </div>
