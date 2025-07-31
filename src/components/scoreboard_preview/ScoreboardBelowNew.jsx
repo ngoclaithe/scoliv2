@@ -357,7 +357,7 @@ const ScoreboardBelowNew = ({
                         </div>
                     )}
                     {!showMatchTime && (
-                        <div className="bg-green-600 text-white px-2 py-0.5 text-xs font-medium rounded-sm mt-1 animate-pulse">
+                        <div className="bg-green-600 text-white px-2 py-0.5 text-[10px] font-medium rounded-sm mt-1 animate-pulse whitespace-nowrap">
                             ● TRỰC TIẾP
                         </div>
                     )}
@@ -491,11 +491,8 @@ const ScoreboardBelowNew = ({
 
     return (
         <div className="w-full h-screen relative overflow-hidden">
-            {/* Container that scales for mobile while maintaining proportions */}
-            <div className="w-full h-full relative bg-transparent" style={{
-                transform: 'scale(var(--scale-factor, 1))',
-                transformOrigin: 'center center'
-            }}>
+            {/* Container for all elements */}
+            <div className="w-full h-full relative bg-transparent">
                 {/* ScoLiv Logo - Responsive cho desktop và mobile */}
                 <div className="absolute bottom-4 left-4 sm:left-16 z-40">
                     <img
@@ -510,7 +507,7 @@ const ScoreboardBelowNew = ({
 
                 {/* Main Scoreboard */}
                 <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
-                    <div className="scoreboard-main bg-transparent rounded-lg shadow-2xl min-w-[400px] py-3">
+                    <div className="scoreboard-main bg-transparent rounded-lg shadow-2xl">
                         {renderScoreboard()}
                     </div>
                 </div>
@@ -539,30 +536,30 @@ const ScoreboardBelowNew = ({
                 .animate-scroll {
                     animation: scroll 30s linear infinite;
                 }
-                
-                /* Mobile scaling for proportional zoom */
+
+                /* Uniform scaling for mobile - like image zoom while staying centered bottom */
+                .scoreboard-main {
+                    transform-origin: bottom center;
+                }
+
                 @media (max-width: 768px) {
-                    :root {
-                        --scale-factor: 0.85;
-                    }
-                    
                     .scoreboard-main {
-                        min-width: 350px;
-                        max-width: 95vw;
-                    }
-                    
-                    .container-name-color-left,
-                    .container-name-color-right {
-                        min-width: 60px;
+                        transform: scale(0.75);
                     }
                 }
-                
+
                 @media (max-width: 480px) {
-                    :root {
-                        --scale-factor: 0.75;
+                    .scoreboard-main {
+                        transform: scale(0.6);
                     }
                 }
-                
+
+                @media (max-width: 360px) {
+                    .scoreboard-main {
+                        transform: scale(0.5);
+                    }
+                }
+
                 /* Logo styling to prevent corner cutting */
                 .logo-container {
                     border-radius: 50%;
