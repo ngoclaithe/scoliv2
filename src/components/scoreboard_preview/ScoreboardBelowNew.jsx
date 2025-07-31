@@ -164,7 +164,12 @@ const ScoreboardBelowNew = ({
                 </div>
 
                 {/* Logo team B */}
-                <LogoImage src={currentData.teamBLogo} alt={currentData.teamBName} className="w-14 h-14 object-contain" style={{ borderRadius: '0 !important' }} />
+                <DisplayLogo
+                    logos={[currentData.teamBLogo]}
+                    alt={currentData.teamBName}
+                    className="w-14 h-14"
+                    type_play={logoShape}
+                />
             </div>
 
             {/* Live Match Label cho Type 1 */}
