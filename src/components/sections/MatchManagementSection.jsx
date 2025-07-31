@@ -196,7 +196,9 @@ const MatchManagementSection = ({ isActive = true }) => {
       const response = await LogoAPI.searchLogosByCode(logoCodeA.trim(), true);
       if (response.success && response.data && response.data.length > 0) {
         const logo = response.data[0];
-        setTeamAInfo(prev => ({ ...prev, logo: logo.url }));
+        console.log("Giá trị logo A1 hiện tại là", logo);
+
+        setTeamAInfo(prev => ({ ...prev, logo: logo.url_logo }));
         console.log(`Đã chọn logo ${logo.code_logo} cho Đội A!`);
         console.log('Đã chọn infoTeamA.logo là:', teamAInfo.logo);
         setLogoCodeA(""); // Clear input sau khi thành công
@@ -219,7 +221,8 @@ const MatchManagementSection = ({ isActive = true }) => {
       const response = await LogoAPI.searchLogosByCode(logoCodeB.trim(), true);
       if (response.success && response.data && response.data.length > 0) {
         const logo = response.data[0];
-        setTeamBInfo(prev => ({ ...prev, logo: logo.url }));
+        console.log("Giá trị logoB 1 hiện tại là", logo);
+        setTeamBInfo(prev => ({ ...prev, logo: logo.url_logo }));
         setLogoCodeB(""); // Clear input sau khi thành công
       } else {
         toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeB}"`);
