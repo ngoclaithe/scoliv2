@@ -975,7 +975,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       )}
 
       {/* Options - Các action buttons điều khiển */}
-      {selectedOption !== "chon-skin" && selectedOption !== "thong-so" && (
+      {selectedOption === "dieu-khien" && (
         <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-2 sm:p-3 border border-indigo-200">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
             {/* Poster */}
@@ -1041,7 +1041,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 setSelectedOption("ti-so-tren");
                 // Phát audio gialap cho đếm giờ
                 playAudioForAction('gialap');
-                console.log('Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                console.log('Đã áp dụng: Timer s�� đếm từ:', timeString);
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -1334,7 +1334,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 className={`px-2 py-1 text-xs font-medium rounded border-2 bg-red-600 text-white ${tickerColor === "white-red" ? "border-orange-600" : "border-gray-300"
                   }`}
               >
-                Chữ
+                Ch���
               </button>
               <button
                 onClick={() => setTickerColor("white-green")}
