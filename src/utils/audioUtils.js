@@ -8,7 +8,7 @@ class AudioManager {
     this.audioEnabled = true;
 
     this.lastRefereeVoiceTime = 0;
-    this.refereeVoiceMinInterval = 50; 
+    this.refereeVoiceMinInterval = 30; // Giảm từ 50ms xuống 30ms
     this.refereeVoiceQueue = [];
     this.isProcessingQueue = false;
     
@@ -39,19 +39,19 @@ class AudioManager {
       mpeg: audio.canPlayType('audio/mpeg')
     };
 
-    console.log('🔍 Browser audio format support:', formats);
+    console.log('�� Browser audio format support:', formats);
     return formats;
   }
 
   getBestPlaybackFormat() {
     const formatPriority = [
       'audio/webm; codecs="opus"',
-      'audio/ogg; codecs="opus"', 
+      'audio/ogg; codecs="opus"',
       'audio/webm',
       'audio/ogg',
+      'audio/mpeg', // Di chuyển mpeg lên trên wav
       'audio/wav',
-      'audio/mp4',
-      'audio/mpeg'
+      'audio/mp4'
     ];
 
     for (const format of formatPriority) {
@@ -64,7 +64,7 @@ class AudioManager {
     }
 
     console.warn('⚠️ No optimal audio format found, using fallback');
-    return 'audio/wav'; 
+    return 'audio/mpeg'; // Thay đổi fallback từ wav sang mpeg
   }
 
   setupUserInteractionListeners() {
@@ -189,8 +189,9 @@ class AudioManager {
       
       // If no MIME type or unsupported, try to detect or use fallback
       if (!mimeType || !this.canPlayType(mimeType)) {
+        const originalType = mimeType;
         mimeType = this.getBestPlaybackFormat();
-        console.log('🔄 Using fallback MIME type:', mimeType);
+        console.log('🔄 Format fallback:', originalType, '->', mimeType);
       }
 
       // Create blob with the determined MIME type
@@ -386,9 +387,9 @@ class AudioManager {
     this.executePlayRefereeVoice(audioBlob);
   }
 
-  // Queue management
+  // Queue management - Chỉ giữ lại audio mới nhất
   addToRefereeVoiceQueue(audioBlob) {
-    // Keep only the latest audio to minimize latency
+    // Clear queue và chỉ gi�� audio mới nhất để latency thấp nhất
     this.refereeVoiceQueue = [audioBlob];
     this.processRefereeVoiceQueue();
   }
@@ -481,7 +482,7 @@ class AudioManager {
       if (audio.error) {
         const errorMessages = {
           1: 'MEDIA_ERR_ABORTED - playback aborted',
-          2: 'MEDIA_ERR_NETWORK - network error', 
+          2: 'MEDIA_ERR_NETWORK - network error',
           3: 'MEDIA_ERR_DECODE - decode error',
           4: 'MEDIA_ERR_SRC_NOT_SUPPORTED - source not supported'
         };
@@ -493,11 +494,9 @@ class AudioManager {
         this.refereeVoiceRef = null;
       }
 
-      // Try fallback approach if format not supported
-      if (audio.error && audio.error.code === 4) {
-        console.log('🔄 Attempting format fallback...');
-        this.attemptFallbackPlayback(audioBlob);
-      }
+      // Luôn thử fallback khi có lỗi
+      console.log('🔄 Attempting format fallback...');
+      this.attemptFallbackPlayback(audioBlob);
     };
 
     // Set reference and properties
@@ -508,7 +507,7 @@ class AudioManager {
     try {
       audio.src = audioUrl;
       
-      // Attempt to play with enhanced error handling
+      // Attempt to play ngay lập tức để giảm latency
       setTimeout(() => {
         if (this.refereeVoiceRef === audio) {
           const playPromise = audio.play();
@@ -525,18 +524,18 @@ class AudioManager {
                   readyState: audio.readyState,
                   networkState: audio.networkState
                 });
-                
+
                 if (this.refereeVoiceRef === audio) {
                   this.revokeBlobUrl(audioUrl);
                   this.refereeVoiceRef = null;
-                  
+
                   // Try fallback
                   this.attemptFallbackPlayback(audioBlob);
                 }
               });
           }
         }
-      }, 10);
+      }, 5); // Giảm từ 10ms xuống 5ms
 
     } catch (error) {
       console.error('❌ Error setting up referee voice audio:', error);
@@ -547,38 +546,59 @@ class AudioManager {
     }
   }
 
-  // Fallback playback with different format
+  // Fallback playback với nhiều format
   attemptFallbackPlayback(originalBlob) {
-    console.log('🔄 Attempting fallback playback with WAV format');
-    
-    try {
-      // Try creating a new blob with WAV MIME type as fallback
-      const fallbackBlob = new Blob([originalBlob], { type: 'audio/wav' });
-      
-      // Don't call executePlayRefereeVoice again to avoid infinite loop
-      // Instead, create a simple audio element for fallback
-      const audioUrl = this.createSafeBlobUrl(fallbackBlob);
-      if (!audioUrl) return;
-      
-      const fallbackAudio = new Audio(audioUrl);
-      fallbackAudio.volume = this.isMuted ? 0 : this.volume;
-      
-      fallbackAudio.onended = () => {
-        this.revokeBlobUrl(audioUrl);
-      };
-      
-      fallbackAudio.onerror = () => {
-        console.error('❌ Fallback playback also failed');
-        this.revokeBlobUrl(audioUrl);
-      };
-      
-      fallbackAudio.play()
-        .then(() => console.log('✅ Fallback playback successful'))
-        .catch(() => console.error('❌ Fallback playback failed'));
-        
-    } catch (error) {
-      console.error('❌ Fallback attempt failed:', error);
-    }
+    console.log('🔄 Attempting fallback playback with alternative formats');
+
+    const fallbackFormats = ['audio/mpeg', 'audio/wav', 'audio/ogg'];
+
+    const tryFormat = (formatIndex) => {
+      if (formatIndex >= fallbackFormats.length) {
+        console.error('❌ All fallback formats failed');
+        return;
+      }
+
+      const format = fallbackFormats[formatIndex];
+      console.log('🔄 Trying fallback format:', format);
+
+      try {
+        const fallbackBlob = new Blob([originalBlob], { type: format });
+        const audioUrl = this.createSafeBlobUrl(fallbackBlob);
+        if (!audioUrl) {
+          tryFormat(formatIndex + 1);
+          return;
+        }
+
+        const fallbackAudio = new Audio(audioUrl);
+        fallbackAudio.volume = this.isMuted ? 0 : this.volume;
+
+        fallbackAudio.onended = () => {
+          this.revokeBlobUrl(audioUrl);
+        };
+
+        fallbackAudio.onerror = () => {
+          console.warn('⚠️ Fallback format failed:', format);
+          this.revokeBlobUrl(audioUrl);
+          tryFormat(formatIndex + 1);
+        };
+
+        fallbackAudio.play()
+          .then(() => {
+            console.log('✅ Fallback playback successful with:', format);
+          })
+          .catch(() => {
+            console.warn('⚠️ Fallback play() failed for:', format);
+            this.revokeBlobUrl(audioUrl);
+            tryFormat(formatIndex + 1);
+          });
+
+      } catch (error) {
+        console.warn('⚠️ Fallback attempt error for', format, ':', error);
+        tryFormat(formatIndex + 1);
+      }
+    };
+
+    tryFormat(0);
   }
 
   // Stop regular audio only (not referee voice)
