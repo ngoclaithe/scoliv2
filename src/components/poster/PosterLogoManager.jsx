@@ -8,7 +8,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
   const [apiLogos, setApiLogos] = useState([]);
   const [activeLogoCategory, setActiveLogoCategory] = useState("sponsor");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [selectedLogosCount, setSelectedLogosCount] = useState({ sponsor: 0, organizing: 0, media: 0, tournament: 0 });
 
   const [logoDisplayOptions, setLogoDisplayOptions] = useState({
