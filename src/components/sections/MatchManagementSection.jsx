@@ -166,7 +166,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
   }, [isActive, isPlaying]);
 
-  // State cho chế đ�� chỉnh sửa thống kê
+  // State cho chế độ chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
 
   // Skin data configuration
@@ -1387,6 +1387,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       >
         <PosterManager
           matchData={matchData}
+          accessCode={matchCode}
           initialData={{
             selectedPoster: displaySettings.selectedPoster ? { id: displaySettings.selectedPoster, name: displaySettings.selectedPoster } : null,
             displayOptions: {
