@@ -18,8 +18,6 @@ const ScoreboardAbove = ({
     } = usePublicMatch();
     
     const [currentType, setCurrentType] = useState(type);
-    // console.log('[ScoreboardAbove] sponsors.url_logo', sponsors.sponsors.url_logo);
-    // console.log('[ScoreboardAbove] sponsors.position', sponsors.sponsors.position);
 
     const currentData = {
         teamAName: matchData?.teamA?.name || "ĐỘI A",
@@ -39,11 +37,6 @@ const ScoreboardAbove = ({
     const rawLogoShape = displaySettings?.logoShape || "round";
     // Convert shape names to match DisplayLogo expectations
     const logoShape = rawLogoShape === 'round' ? 'circle' : rawLogoShape;
-
-    // Debug log - only when displaySettings change
-    if (displaySettings?.logoShape !== 'round') {
-        console.log('🔧 [ScoreboardAbove] Logo shape changed to:', rawLogoShape, '-> mapped to:', logoShape);
-    }
 
     const [showScrollingText, setShowScrollingText] = useState(false);
 
@@ -106,6 +99,115 @@ const ScoreboardAbove = ({
         const b = parseInt(hex.substr(4, 2), 16);
         const brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
         return brightness > 128 ? '#000000' : '#FFFFFF';
+    };
+
+    // Helper function to collect logos by position
+    const collectLogosByPosition = (targetPosition) => {
+        const allLogos = [];
+
+        // Collect sponsors
+        if (sponsors?.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && 
+            sponsors.sponsors?.position && (!sponsors.sponsors.behavior || sponsors.sponsors.behavior === 'add')) {
+            sponsors.sponsors.url_logo.forEach((logo, index) => {
+                const position = Array.isArray(sponsors.sponsors.position[index]) ? 
+                    sponsors.sponsors.position[index][0] : sponsors.sponsors.position[index];
+                if (position === targetPosition) {
+                    allLogos.push({ 
+                        url: logo, 
+                        alt: 'Sponsor', 
+                        type: 'sponsor', 
+                        id: `sponsor-${index}` 
+                    });
+                }
+            });
+        }
+
+        // Collect organizing
+        if (organizing?.url_logo && organizing.url_logo.length > 0 && 
+            organizing?.position && (!organizing.behavior || organizing.behavior === 'add')) {
+            organizing.url_logo.forEach((logo, index) => {
+                const position = Array.isArray(organizing.position[index]) ? 
+                    organizing.position[index][0] : organizing.position[index];
+                if (position === targetPosition) {
+                    allLogos.push({ 
+                        url: logo, 
+                        alt: 'Organizing', 
+                        type: 'organizing', 
+                        id: `organizing-${index}` 
+                    });
+                }
+            });
+        }
+
+        // Collect media partners
+        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && 
+            mediaPartners?.position && (!mediaPartners.behavior || mediaPartners.behavior === 'add')) {
+            mediaPartners.url_logo.forEach((logo, index) => {
+                const position = Array.isArray(mediaPartners.position[index]) ? 
+                    mediaPartners.position[index][0] : mediaPartners.position[index];
+                if (position === targetPosition) {
+                    allLogos.push({ 
+                        url: logo, 
+                        alt: 'Media Partner', 
+                        type: 'media', 
+                        id: `media-${index}` 
+                    });
+                }
+            });
+        }
+
+        // Fallback logic for sponsors without position specified
+        if (targetPosition === 'top-left' && allLogos.length === 0) {
+            if (sponsors?.url_logo && sponsors.url_logo.length > 0 && (!sponsors?.position || sponsors.position.length === 0)) {
+                sponsors.url_logo.forEach((logo, index) => {
+                    allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor', id: `sponsor-fallback-${index}` });
+                });
+            }
+        }
+
+        return allLogos;
+    };
+
+    // Render logos for a position
+    const renderLogosForPosition = (position) => {
+        const allLogos = collectLogosByPosition(position);
+
+        if (allLogos.length === 0) return null;
+
+        if (displaySettings?.rotateDisplay && allLogos.length > 1) {
+            // Slide mode for multiple logos
+            return (
+                <DisplayLogo
+                    logos={allLogos.map(logo => logo.url)}
+                    alt="Sponsors & Partners"
+                    className="w-16 h-16"
+                    type_play={logoShape}
+                    slideMode={true}
+                    maxVisible={1}
+                    slideInterval={5000}
+                />
+            );
+        } else {
+            // Horizontal layout for multiple logos
+            const maxItems = 6;
+            const displayItems = allLogos.slice(0, maxItems);
+
+            return (
+                <div className="flex gap-1 flex-wrap">
+                    {displayItems.map((logo, index) => (
+                        <div key={logo.id || index} className="flex-shrink-0">
+                            <DisplayLogo
+                                logos={[logo.url]}
+                                alt={logo.alt}
+                                className="w-12 h-12"
+                                type_play={logoShape}
+                                slideMode={false}
+                            />
+                        </div>
+                    ))}
+                </div>
+            );
+        }
     };
 
     const renderScoreboardType1 = () => (
@@ -495,115 +597,13 @@ const ScoreboardAbove = ({
         <div className="w-full h-screen relative overflow-hidden">
             {/* Container for all elements */}
             <div className="w-full h-full relative bg-transparent">
-                {/* Sponsors, Organizing, Media Partners at their assigned positions */}
-
                 {/* Top Left Position */}
                 <div className="absolute top-4 left-4 z-40">
-                    {(() => {
-                        const allLogos = [];
-
-<<<<<<< HEAD
-                        // Collect sponsors with top-left position (check behavior)
-                        if (sponsors.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && sponsors.sponsors?.position) {
-=======
-                        // Collect sponsors with top-left position (check for non-empty arrays)
-                        if (sponsors.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && sponsors.sponsors?.position && sponsors.sponsors.position.length > 0) {
->>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
-                            sponsors.sponsors.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(sponsors.sponsors.position[index]) ? sponsors.sponsors.position[index][0] : sponsors.sponsors.position[index];
-                                const behavior = sponsors.sponsors?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'top-left' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
-                                }
-                            });
-                        }
-
-<<<<<<< HEAD
-                        // Collect organizing with top-left position (check behavior)
-                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
-=======
-                        // Collect organizing with top-left position (check for non-empty arrays)
-                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position && organizing.position.length > 0) {
->>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
-                            organizing.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
-                                const behavior = organizing?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'top-left' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
-                                }
-                            });
-                        }
-
-<<<<<<< HEAD
-                        // Collect media partners with top-left position (check behavior)
-                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
-=======
-                        // Collect media partners with top-left position (check for non-empty arrays)
-                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position && mediaPartners.position.length > 0) {
->>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
-                            mediaPartners.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
-                                const behavior = mediaPartners?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'top-left' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
-                                }
-                            });
-                        }
-
-                        // Fallback for sponsors without position specified
-                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && (!sponsors?.position || sponsors.position.length === 0)) {
-                            sponsors.url_logo.forEach(logo => {
-                                allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
-                            });
-                        }
-
-                        if (allLogos.length === 0) return null;
-
-                        if (displaySettings?.rotateDisplay && allLogos.length > 1) {
-                            // Slide mode for multiple logos
-                            return (
-                                <DisplayLogo
-                                    logos={allLogos.map(logo => logo.url)}
-                                    alt="Sponsors & Partners"
-                                    className="w-16 h-16"
-                                    type_play={logoShape}
-                                    slideMode={true}
-                                    maxVisible={1}
-                                    slideInterval={5000}
-                                />
-                            );
-                        } else {
-                            // Horizontal layout for multiple logos
-                            const maxItems = 6;
-                            const displayItems = allLogos.slice(0, maxItems);
-
-                            return (
-                                <div className="flex gap-1 flex-wrap">
-                                    {displayItems.map((logo, index) => (
-                                        <div key={index} className="flex-shrink-0">
-                                            <DisplayLogo
-                                                logos={[logo.url]}
-                                                alt={logo.alt}
-                                                className="w-12 h-12"
-                                                type_play={logoShape}
-                                                slideMode={false}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            );
-                        }
-                    })()}
+                    {renderLogosForPosition('top-left')}
                 </div>
 
                 {/* Tournament Logo - Top Left (if no sponsors) */}
-                {(!sponsors?.url_logo || sponsors.url_logo.length === 0) && tournamentLogo?.url_logo && tournamentLogo.url_logo.length > 0 && (
+                {!collectLogosByPosition('top-left').length && tournamentLogo?.url_logo && tournamentLogo.url_logo.length > 0 && (
                     <div className="absolute top-4 left-4 z-40">
                         <DisplayLogo
                             logos={tournamentLogo.url_logo}
@@ -623,212 +623,12 @@ const ScoreboardAbove = ({
 
                 {/* Bottom Left Position */}
                 <div className="absolute bottom-4 left-4 z-40">
-                    {(() => {
-                        const allLogos = [];
-
-<<<<<<< HEAD
-                        // Collect sponsors with bottom-left position (check behavior)
-                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position) {
-=======
-                        // Collect sponsors with bottom-left position
-                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position && sponsors.position.length > 0) {
->>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
-                            sponsors.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index];
-                                const behavior = sponsors?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'bottom-left' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
-                                }
-                            });
-                        }
-
-<<<<<<< HEAD
-                        // Collect organizing with bottom-left position (check behavior)
-                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
-=======
-                        // Collect organizing with bottom-left position
-                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position && organizing.position.length > 0) {
->>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
-                            organizing.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
-                                const behavior = organizing?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'bottom-left' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
-                                }
-                            });
-                        }
-
-<<<<<<< HEAD
-                        // Collect media partners with bottom-left position (check behavior)
-                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
-=======
-                        // Collect media partners with bottom-left position
-                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position && mediaPartners.position.length > 0) {
->>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
-                            mediaPartners.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
-                                const behavior = mediaPartners?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'bottom-left' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
-                                }
-                            });
-                        }
-
-                        // Fallback for organizing without position specified
-                        if (organizing?.url_logo && organizing.url_logo.length > 0 && (!organizing?.position || organizing.position.length === 0)) {
-                            organizing.url_logo.forEach(logo => {
-                                allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
-                            });
-                        }
-
-                        if (allLogos.length === 0) return null;
-
-                        if (displaySettings?.rotateDisplay && allLogos.length > 1) {
-                            // Slide mode for multiple logos
-                            return (
-                                <DisplayLogo
-                                    logos={allLogos.map(logo => logo.url)}
-                                    alt="Sponsors & Partners"
-                                    className="w-16 h-16"
-                                    type_play={logoShape}
-                                    slideMode={true}
-                                    maxVisible={1}
-                                    slideInterval={5000}
-                                />
-                            );
-                        } else {
-                            // Horizontal layout for multiple logos
-                            const maxItems = 6;
-                            const displayItems = allLogos.slice(0, maxItems);
-
-                            return (
-                                <div className="flex gap-1 flex-wrap">
-                                    {displayItems.map((logo, index) => (
-                                        <div key={index} className="flex-shrink-0">
-                                            <DisplayLogo
-                                                logos={[logo.url]}
-                                                alt={logo.alt}
-                                                className="w-12 h-12"
-                                                type_play={logoShape}
-                                                slideMode={false}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            );
-                        }
-                    })()}
+                    {renderLogosForPosition('bottom-left')}
                 </div>
 
                 {/* Bottom Right Position */}
                 <div className="absolute bottom-4 right-4 z-40">
-                    {(() => {
-                        const allLogos = [];
-
-<<<<<<< HEAD
-                        // Collect sponsors with bottom-right position (check behavior)
-                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position) {
-=======
-                        // Collect sponsors with bottom-right position
-                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position && sponsors.position.length > 0) {
->>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
-                            sponsors.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index];
-                                const behavior = sponsors?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'bottom-right' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
-                                }
-                            });
-                        }
-
-<<<<<<< HEAD
-                        // Collect organizing with bottom-right position (check behavior)
-                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
-=======
-                        // Collect organizing with bottom-right position
-                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position && organizing.position.length > 0) {
->>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
-                            organizing.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
-                                const behavior = organizing?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'bottom-right' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
-                                }
-                            });
-                        }
-
-<<<<<<< HEAD
-                        // Collect media partners with bottom-right position (check behavior)
-                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
-=======
-                        // Collect media partners with bottom-right position
-                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position && mediaPartners.position.length > 0) {
->>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
-                            mediaPartners.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
-                                const behavior = mediaPartners?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'bottom-right' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
-                                }
-                            });
-                        }
-
-                        // Fallback for media partners without position specified
-                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && (!mediaPartners?.position || mediaPartners.position.length === 0)) {
-                            mediaPartners.url_logo.forEach(logo => {
-                                allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
-                            });
-                        }
-
-                        if (allLogos.length === 0) return null;
-
-                        if (displaySettings?.rotateDisplay && allLogos.length > 1) {
-                            // Slide mode for multiple logos
-                            return (
-                                <DisplayLogo
-                                    logos={allLogos.map(logo => logo.url)}
-                                    alt="Sponsors & Partners"
-                                    className="w-16 h-16"
-                                    type_play={logoShape}
-                                    slideMode={true}
-                                    maxVisible={1}
-                                    slideInterval={5000}
-                                />
-                            );
-                        } else {
-                            // Horizontal layout for multiple logos
-                            const maxItems = 6;
-                            const displayItems = allLogos.slice(0, maxItems);
-
-                            return (
-                                <div className="flex gap-1 flex-wrap">
-                                    {displayItems.map((logo, index) => (
-                                        <div key={index} className="flex-shrink-0">
-                                            <DisplayLogo
-                                                logos={[logo.url]}
-                                                alt={logo.alt}
-                                                className="w-12 h-12"
-                                                type_play={logoShape}
-                                                slideMode={false}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            );
-                        }
-                    })()}
+                    {renderLogosForPosition('bottom-right')}
                 </div>
 
                 {/* Scrolling Text - only show if mode is not 'khong' and visibility is true */}
