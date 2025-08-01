@@ -246,6 +246,33 @@ const ManageAccessCode = ({ onNavigate }) => {
     }
   };
 
+  // Xử lý nhanh vào trận với code cụ thể
+  const handleQuickEnter = async (code) => {
+    const result = await enterMatchCode(code);
+    if (result.success) {
+      toast.success('Vào trận thành công!', {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      if (onNavigate) {
+        onNavigate('home');
+      }
+    } else {
+      toast.error(result.error, {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+  };
+
   if (loading && codes.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -340,13 +367,13 @@ const ManageAccessCode = ({ onNavigate }) => {
                 <table className="min-w-full divide-y divide-gray-200">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Mã / Tên
                       </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
                         Trạng thái
                       </th>
-                      <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      <th className="px-2 sm:px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Thao tác
                       </th>
                     </tr>
@@ -354,42 +381,61 @@ const ManageAccessCode = ({ onNavigate }) => {
                   <tbody className="bg-white divide-y divide-gray-200">
                     {codes.map((code) => (
                       <tr key={code.id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
                           <div>
                             <div className="text-sm font-medium text-gray-900 font-mono bg-gray-100 px-2 py-1 rounded inline-block">
                               {code.code}
                             </div>
-                            <div className="text-sm text-gray-600 mt-1">{code.name}</div>
+                            <div className="text-xs text-gray-600 mt-1">{code.name}</div>
+                            {/* Show status on mobile */}
+                            <div className="sm:hidden mt-1">
+                              <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(code.status)}`}>
+                                {getStatusText(code.status)}
+                              </span>
+                            </div>
                           </div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        {/* Hide status column on mobile */}
+                        <td className="px-2 sm:px-4 py-3 whitespace-nowrap hidden sm:table-cell">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(code.status)}`}>
                             {getStatusText(code.status)}
                           </span>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                          <button
-                            onClick={() => {
-                              setSelectedCode(code);
-                              setShowDetailModal(true);
-                            }}
-                            className="text-blue-600 hover:text-blue-900"
-                          >
-                            👁️ Xem
-                          </button>
-                          <button
-                            onClick={() => handleToggleStatus(code.id, code.status)}
-                            className={`${code.status === 'active' ? 'text-orange-600 hover:text-orange-900' : 'text-green-600 hover:text-green-900'}`}
-                            disabled={code.status === 'expired'}
-                          >
-                            {code.status === 'active' ? '⏸️ Tạm dừng' : '▶️ Kích hoạt'}
-                          </button>
-                          <button
-                            onClick={() => handleDeleteCode(code.id)}
-                            className="text-red-600 hover:text-red-900"
-                          >
-                            🗑️ Xóa
-                          </button>
+                        <td className="px-2 sm:px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                          <div className="flex flex-col sm:flex-row gap-1 sm:gap-2 justify-end">
+                            {/* Quick Enter Button */}
+                            {onNavigate && code.status === 'active' && (
+                              <button
+                                onClick={() => handleQuickEnter(code.code)}
+                                className="text-purple-600 hover:text-purple-900 bg-purple-50 hover:bg-purple-100 px-2 py-1 rounded text-xs transition-colors"
+                                title="Vào trận nhanh với mã này"
+                              >
+                                🚀 Vào trận
+                              </button>
+                            )}
+                            <button
+                              onClick={() => {
+                                setSelectedCode(code);
+                                setShowDetailModal(true);
+                              }}
+                              className="text-blue-600 hover:text-blue-900 hover:bg-blue-50 px-2 py-1 rounded text-xs transition-colors"
+                            >
+                              👁️ Xem
+                            </button>
+                            <button
+                              onClick={() => handleToggleStatus(code.id, code.status)}
+                              className={`${code.status === 'active' ? 'text-orange-600 hover:text-orange-900 hover:bg-orange-50' : 'text-green-600 hover:text-green-900 hover:bg-green-50'} px-2 py-1 rounded text-xs transition-colors`}
+                              disabled={code.status === 'expired'}
+                            >
+                              {code.status === 'active' ? '⏸️' : '▶️'}
+                            </button>
+                            <button
+                              onClick={() => handleDeleteCode(code.id)}
+                              className="text-red-600 hover:text-red-900 hover:bg-red-50 px-2 py-1 rounded text-xs transition-colors"
+                            >
+                              🗑️
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
