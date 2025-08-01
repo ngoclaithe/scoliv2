@@ -1246,7 +1246,8 @@ const MatchManagementSection = ({ isActive = true }) => {
       )}
 
       {/* Clock Settings */}
-      <div className="bg-gradient-to-r from-orange-50 to-red-50 rounded-xl p-3 border border-orange-200">
+      {selectedOption === "dieu-khien" && (
+        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-2 sm:p-3 border border-indigo-200">
         <div className="space-y-3">
           {/* Radio buttons */}
           <div className="flex justify-center space-x-4">
@@ -1347,7 +1348,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           </div>
 
           {/* Apply Button */}
-          <div className="flex justify-center pt-2 border-t border-orange-200">
+          <div className="flex justify-center pt-2 border-t border-indigo-200">
             <Button
               variant="primary"
               size="sm"
@@ -1381,6 +1382,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           </div>
         </div>
       </div>
+      )}
       {/* Modals */}
       <Modal
         isOpen={showPosterModal}
@@ -1698,7 +1700,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                   setSelectedOption("ti-so-tren");
 
                   console.log('🕰️ Áp dụng thời gian tùy chỉnh từ modal - Timer sẽ đếm từ:', timeString);
-                  console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
+                  console.log('���� Server sẽ emit timer_tick events với displayTime format từ:', timeString);
 
                   toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                 } else {
