@@ -214,7 +214,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeB}"`);
       }
     } catch (error) {
-      console.error('Lỗi tìm kiếm logo B:', error);
+      toast.error('❌ Lỗi tìm kiếm logo B');
     } finally {
       setIsSearchingLogoB(false);
     }
@@ -486,7 +486,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               if (matchData.status === "paused") {
                 // Resume timer từ server
                 resumeTimer();
-                toast.info('▶️ Đã tiếp t���c timer từ server');
+                toast.info('▶️ Đã tiếp tục timer từ server');
               } else {
                 // Pause timer - sử dụng updateMatchTime với status paused
                 updateMatchTime(matchData.matchTime, matchData.period, "paused");
@@ -1002,7 +1002,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 const timeString = "00:00";
                 // Set thời gian về 0 và bắt đầu đếm tiến từ server timer
                 updateMatchTime(timeString, "Hiệp 1", "live");
-                // Chuyển sang tỉ số trên
+                // Chuyển sang tỉ số tr��n
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
                 // Phát audio gialap cho đếm giờ
@@ -1051,7 +1051,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-xs font-bold text-center">ĐẾM 30'</span>
             </button>
 
-            {/* Đếm 35' */}
+            {/* Đ��m 35' */}
             <button
               onClick={() => {
                 const timeString = "35:00";
@@ -1098,7 +1098,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Phát audio gialap cho đếm giờ
                 playAudioForAction('gialap');
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
-                toast.success('⏰ Đã bắt ��ầu timer từ 45:00!');
+                toast.success('⏰ Đã bắt đ���u timer từ 45:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -1144,7 +1144,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">📊</span>
+              <span className="text-sm mr-1">���</span>
               <span className="text-xs font-bold text-center">TỈ SỐ DƯỚI</span>
             </button>
 
@@ -1513,7 +1513,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }
             }
 
-            // Cập nhật display options n��u có
+            // Cập nhật display options nếu có
             if (logoData && logoData.displayOptions) {
               console.log("[MatchManagementSection] Calling updateDisplaySettings");
               const displayOptions = {
@@ -1611,7 +1611,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           <div className="text-center mb-4">
             <h4 className="text-lg font-bold text-yellow-800 flex items-center justify-center">
               <span className="mr-2">🕰️</span>
-              THIẾT LẬP ĐẾM T
+              THIẾT L��P ĐẾM T
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
