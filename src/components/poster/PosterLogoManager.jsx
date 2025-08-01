@@ -231,10 +231,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         if (isMounted) {
           setApiLogos([]);
         }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
       }
     };
 
