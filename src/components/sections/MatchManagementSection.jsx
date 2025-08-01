@@ -193,7 +193,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeA}"`);
       }
     } catch (error) {
-      console.error('Lỗi tìm kiếm logo A:', error);
+      toast.error('❌ Lỗi tìm kiếm logo A');
     } finally {
       setIsSearchingLogoA(false);
     }
@@ -486,7 +486,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               if (matchData.status === "paused") {
                 // Resume timer từ server
                 resumeTimer();
-                toast.info('▶️ Đã tiếp tục timer từ server');
+                toast.info('▶️ Đã tiếp t���c timer từ server');
               } else {
                 // Pause timer - sử dụng updateMatchTime với status paused
                 updateMatchTime(matchData.matchTime, matchData.period, "paused");
@@ -1098,7 +1098,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Phát audio gialap cho đếm giờ
                 playAudioForAction('gialap');
                 console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
-                toast.success('⏰ Đã bắt đầu timer từ 45:00!');
+                toast.success('⏰ Đã bắt ��ầu timer từ 45:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -1513,7 +1513,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }
             }
 
-            // Cập nhật display options nếu có
+            // Cập nhật display options n��u có
             if (logoData && logoData.displayOptions) {
               console.log("[MatchManagementSection] Calling updateDisplaySettings");
               const displayOptions = {
