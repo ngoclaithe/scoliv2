@@ -555,13 +555,12 @@ const ScoreboardAbove = ({
                                 />
                             );
                         } else {
-                            // Grid layout for multiple logos
-                            const itemsPerRow = 2;
-                            const maxItems = 4;
+                            // Horizontal layout for multiple logos
+                            const maxItems = 6;
                             const displayItems = allLogos.slice(0, maxItems);
 
                             return (
-                                <div className={`grid gap-1 ${displayItems.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                                <div className="flex gap-1 flex-wrap">
                                     {displayItems.map((logo, index) => (
                                         <div key={index} className="flex-shrink-0">
                                             <DisplayLogo
