@@ -502,11 +502,14 @@ const ScoreboardAbove = ({
                     {(() => {
                         const allLogos = [];
 
-                        // Collect sponsors with top-left position
+                        // Collect sponsors with top-left position (check behavior)
                         if (sponsors.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && sponsors.sponsors?.position) {
                             sponsors.sponsors.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(sponsors.sponsors.position[index]) ? sponsors.sponsors.position[index][0] : sponsors.sponsors.position[index];
-                                if (position === 'top-left') {
+                                const behavior = sponsors.sponsors?.behavior;
+
+                                // Only add if behavior is 'add' or undefined (default behavior)
+                                if (position === 'top-left' && (!behavior || behavior === 'add')) {
                                     allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
                                 }
                             });
