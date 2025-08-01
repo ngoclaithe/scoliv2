@@ -99,6 +99,7 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate, onPositionChan
           onPositionChange={onPositionChange}
           onClose={onClose}
           initialData={initialData}
+          accessCode={accessCode}
         />
       </div>
 
