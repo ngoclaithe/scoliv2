@@ -101,28 +101,127 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
           }
         }
 
-        // Load all logos from API
-        try {
-          console.log('🔍 [PosterLogoManager] Loading logos from API');
-          const response = await LogoAPI.getLogos();
+        // Load display settings from API
+        if (accessCode) {
+          try {
+            console.log('🔍 [PosterLogoManager] Loading display settings from API for:', accessCode);
+            const response = await DisplaySettingsAPI.getDisplaySettings(accessCode);
 
-          if (response?.data && Array.isArray(response.data)) {
-            const loadedLogos = response.data.map((logo, index) => ({
-              id: `api-${logo.id || index}`,
-              unitName: logo.name || `Logo ${index + 1}`,
-              code: logo.code_logo || logo.code || `LOGO${index + 1}`,
-              type: logo.type || 'logo',
-              category: 'sponsor', // Default category, có thể customize sau
-              url: logo.url_logo || logo.file_path,
-              displayPositions: [] // Sẽ được set khi user chọn position
-            }));
+            if (response?.success && response?.data) {
+              const loadedLogos = [];
 
-            setApiLogos(loadedLogos);
-            console.log(`✅ [PosterLogoManager] Loaded ${loadedLogos.length} logos from API`);
+              // Process sponsors
+              if (response.data.sponsors && Array.isArray(response.data.sponsors)) {
+                response.data.sponsors.forEach((item) => {
+                  // Parse position từ string "{bottom-left}" thành array
+                  let positions = [];
+                  if (item.position) {
+                    try {
+                      const cleanPosition = item.position.replace(/[{}]/g, '');
+                      positions = [cleanPosition];
+                    } catch (e) {
+                      console.warn('Failed to parse position:', item.position);
+                      positions = [];
+                    }
+                  }
+
+                  loadedLogos.push({
+                    id: `sponsor-${item.id}`,
+                    unitName: item.code_logo || `Sponsor ${item.id}`,
+                    code: item.code_logo || `SP${item.id}`,
+                    type: item.type_display || 'logo',
+                    category: 'sponsor',
+                    url: item.url_logo,
+                    displayPositions: positions
+                  });
+                });
+              }
+
+              // Process organizing (nếu có trong response)
+              if (response.data.organizing && Array.isArray(response.data.organizing)) {
+                response.data.organizing.forEach((item) => {
+                  let positions = [];
+                  if (item.position) {
+                    try {
+                      const cleanPosition = item.position.replace(/[{}]/g, '');
+                      positions = [cleanPosition];
+                    } catch (e) {
+                      console.warn('Failed to parse position:', item.position);
+                      positions = [];
+                    }
+                  }
+
+                  loadedLogos.push({
+                    id: `organizing-${item.id}`,
+                    unitName: item.code_logo || `Organizing ${item.id}`,
+                    code: item.code_logo || `ORG${item.id}`,
+                    type: item.type_display || 'logo',
+                    category: 'organizing',
+                    url: item.url_logo,
+                    displayPositions: positions
+                  });
+                });
+              }
+
+              // Process media (nếu có trong response)
+              if (response.data.media && Array.isArray(response.data.media)) {
+                response.data.media.forEach((item) => {
+                  let positions = [];
+                  if (item.position) {
+                    try {
+                      const cleanPosition = item.position.replace(/[{}]/g, '');
+                      positions = [cleanPosition];
+                    } catch (e) {
+                      console.warn('Failed to parse position:', item.position);
+                      positions = [];
+                    }
+                  }
+
+                  loadedLogos.push({
+                    id: `media-${item.id}`,
+                    unitName: item.code_logo || `Media ${item.id}`,
+                    code: item.code_logo || `MED${item.id}`,
+                    type: item.type_display || 'logo',
+                    category: 'media',
+                    url: item.url_logo,
+                    displayPositions: positions
+                  });
+                });
+              }
+
+              // Process tournament (nếu có trong response)
+              if (response.data.tournament && Array.isArray(response.data.tournament)) {
+                response.data.tournament.forEach((item) => {
+                  let positions = [];
+                  if (item.position) {
+                    try {
+                      const cleanPosition = item.position.replace(/[{}]/g, '');
+                      positions = [cleanPosition];
+                    } catch (e) {
+                      console.warn('Failed to parse position:', item.position);
+                      positions = [];
+                    }
+                  }
+
+                  loadedLogos.push({
+                    id: `tournament-${item.id}`,
+                    unitName: item.code_logo || `Tournament ${item.id}`,
+                    code: item.code_logo || `TOUR${item.id}`,
+                    type: item.type_display || 'logo',
+                    category: 'tournament',
+                    url: item.url_logo,
+                    displayPositions: positions
+                  });
+                });
+              }
+
+              setApiLogos(loadedLogos);
+              console.log(`✅ [PosterLogoManager] Loaded ${loadedLogos.length} display settings from API`);
+            }
+          } catch (err) {
+            console.warn('⚠️ [PosterLogoManager] Failed to load display settings from API:', err);
+            setApiLogos([]);
           }
-        } catch (err) {
-          console.warn('⚠️ [PosterLogoManager] Failed to load logos from API:', err);
-          setApiLogos([]);
         }
 
       } catch (err) {
