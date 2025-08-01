@@ -156,7 +156,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
   }, [isActive, isPlaying]);
 
-  // State cho chế độ chỉnh sửa thống kê
+  // State cho chế độ ch���nh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
 
   // Skin data configuration
@@ -528,7 +528,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             />
             <input
               type="text"
-              placeholder="Đơn vị live"
+              placeholder="Đơn v�� live"
               value={liveUnit}
               onChange={(e) => setLiveUnit(e.target.value)}
               className="w-full min-w-0 px-2 py-1 text-xs font-medium text-center text-blue-700 bg-white border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-300"
@@ -1061,10 +1061,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                 const timeString = "40:00";
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 updateView('scoreboard');
-                setSelectedOption("ti-so-tren");
-                // Phát audio gialap cho đếm giờ
                 playAudioForAction('gialap');
-                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                toast.success('⏰ Đã bắt đầu timer từ 40:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -1668,7 +1666,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                   updateView('scoreboard');
                   setSelectedOption("ti-so-tren");
 
-                  console.log('🕰️ Áp dụng thời gian tùy chỉnh từ modal - Timer sẽ đếm từ:', timeString);
+                  console.log('🕰�� Áp dụng thời gian tùy chỉnh từ modal - Timer sẽ đếm từ:', timeString);
                   console.log('���� Server sẽ emit timer_tick events với displayTime format từ:', timeString);
 
                   toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
