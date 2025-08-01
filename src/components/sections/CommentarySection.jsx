@@ -9,16 +9,12 @@ const CommentarySection = ({ isActive = true }) => {
   const streamRef = useRef(null);
   const continuousTimeoutRef = useRef(null);
   const audioChunksRef = useRef([]);
-  
-  // REF để track real-time state
   const isRecordingRef = useRef(false);
 
-  // Sync ref với state
   useEffect(() => {
     isRecordingRef.current = isRecording;
   }, [isRecording]);
 
-  // Check for browser support and codecs
   const isSupported = typeof navigator !== 'undefined' &&
                      navigator.mediaDevices &&
                      navigator.mediaDevices.getUserMedia &&
@@ -42,7 +38,6 @@ const CommentarySection = ({ isActive = true }) => {
     return null;
   };
 
-  // Test if browser can play the recorded format
   const canPlayFormat = (mimeType) => {
     const audio = document.createElement('audio');
     return audio.canPlayType(mimeType) !== '';
@@ -50,12 +45,10 @@ const CommentarySection = ({ isActive = true }) => {
 
   useEffect(() => {
     return () => {
-      // Cleanup on unmount
       stopAllRecording();
     };
   }, []);
 
-  // Dừng ghi âm khi tab không active nữa
   useEffect(() => {
     if (!isActive) {
       console.log('🔇 [CommentarySection] Tab inactive, stopping recording');
@@ -64,24 +57,20 @@ const CommentarySection = ({ isActive = true }) => {
   }, [isActive]);
 
   const stopAllRecording = () => {
-    // Dừng ghi âm hiện tại
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       mediaRecorderRef.current.stop();
     }
     
-    // Dừng stream
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
     }
     
-    // Clear timeout
     if (continuousTimeoutRef.current) {
       clearTimeout(continuousTimeoutRef.current);
       continuousTimeoutRef.current = null;
     }
     
-    // Reset states
     setIsRecording(false);
     setIsProcessing(false);
     audioChunksRef.current = [];
@@ -102,16 +91,12 @@ const CommentarySection = ({ isActive = true }) => {
       mimeType: mimeType
     });
 
-    // Kiểm tra nếu blob quá nhỏ
-    if (audioBlob.size < 1000) { // < 1KB
+    if (audioBlob.size < 1000) { 
       console.warn('⚠️ Audio blob too small, might be invalid:', audioBlob.size, 'bytes');
-      // Vẫn thử gửi, nhưng cảnh báo
     }
 
-    // Reset chunks array ngay sau khi tạo blob
     audioChunksRef.current = [];
     
-    // Gửi ngay lập tức
     sendVoiceToServer(audioBlob).then(() => {
       console.log('✅ Accumulated chunks sent successfully');
     }).catch(error => {
@@ -122,7 +107,7 @@ const CommentarySection = ({ isActive = true }) => {
   const createMediaRecorder = async (stream, mimeType) => {
     const options = { 
       mimeType,
-      audioBitsPerSecond: 128000 // Tăng bitrate để đảm bảo chất lượng
+      audioBitsPerSecond: 128000 
     };
 
     const mediaRecorder = new MediaRecorder(stream, options);
@@ -131,7 +116,6 @@ const CommentarySection = ({ isActive = true }) => {
     mediaRecorder.ondataavailable = (event) => {
       if (event.data.size > 0) {
         console.log('📥 Data chunk received:', event.data.size, 'bytes');
-        // Tích lũy chunks thay vì gửi ngay
         audioChunksRef.current.push(event.data);
         console.log('📦 Total chunks accumulated:', audioChunksRef.current.length);
       }
@@ -139,33 +123,28 @@ const CommentarySection = ({ isActive = true }) => {
 
     mediaRecorder.onstop = () => {
       console.log('🎙️ MediaRecorder stopped');
-      
-      // Gửi tất cả chunks đã tích lũy
-      if (audioChunksRef.current.length > 0) {
+            if (audioChunksRef.current.length > 0) {
         sendAccumulatedChunks();
       }
       
       if (isRecordingRef.current) {
-        // Nếu vẫn đang trong chế độ recording, restart ngay lập tức
         scheduleNextChunk();
       }
     };
 
     mediaRecorder.onstart = () => {
       console.log('🎙️ MediaRecorder started');
-      audioChunksRef.current = []; // Reset chunks khi bắt đầu
+      audioChunksRef.current = []; 
     };
 
-    // Bắt đầu ghi với timeslice 500ms (tăng từ 100ms)
     console.log('🎙️ Starting MediaRecorder with 500ms chunks');
-    mediaRecorder.start(500); // 500ms chunks để đảm bảo đủ data
+    mediaRecorder.start(500);
     setIsRecording(true);
 
-    // Tự động restart sau 2 giây
     continuousTimeoutRef.current = setTimeout(() => {
       if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
         console.log('🔄 Auto-restarting recording (500ms -> send)');
-        mediaRecorderRef.current.stop(); // Này sẽ trigger onstop -> gửi chunks
+        mediaRecorderRef.current.stop(); 
       }
     }, 2000);
   };
@@ -181,7 +160,7 @@ const CommentarySection = ({ isActive = true }) => {
       if (isRecordingRef.current && streamRef.current && streamRef.current.active) {
         startNextChunk();
       }
-    }, 100); // Delay ngắn để tránh gap
+    }, 100); 
   };
 
   const startNextChunk = async () => {
@@ -207,7 +186,6 @@ const CommentarySection = ({ isActive = true }) => {
       return;
     }
 
-    // Test if browser can play this format
     if (!canPlayFormat(mimeType)) {
       console.warn('⚠️ Browser may not be able to play recorded format:', mimeType);
     }
@@ -215,12 +193,11 @@ const CommentarySection = ({ isActive = true }) => {
     try {
       setIsProcessing(true);
       
-      // Tạo stream mới
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          sampleRate: 48000, // Tăng sample rate
+          sampleRate: 48000, 
           channelCount: 1,
           autoGainControl: true
         }
@@ -247,12 +224,10 @@ const CommentarySection = ({ isActive = true }) => {
       continuousTimeoutRef.current = null;
     }
 
-    // Dừng current recording và gửi chunks cuối cùng
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-      mediaRecorderRef.current.stop(); // Này sẽ trigger gửi chunks cuối
+      mediaRecorderRef.current.stop(); 
     }
 
-    // Dừng stream
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
