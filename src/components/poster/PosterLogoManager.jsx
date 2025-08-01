@@ -88,7 +88,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
 
     const loadLogos = async () => {
       try {
-        setLoading(true);
 
         // Load initial data if provided (for display options only)
         if (initialData) {
@@ -276,7 +275,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
     // Kiểm tra định dạng file
     const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!validTypes.includes(file.type)) {
-      alert("Chỉ chấp nhận file ���nh (JPEG, PNG, GIF, WebP)");
+      alert("Chỉ ch���p nhận file ���nh (JPEG, PNG, GIF, WebP)");
       return;
     }
 
