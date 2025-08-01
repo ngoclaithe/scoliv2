@@ -439,7 +439,7 @@ class AudioManager {
     });
 
     if (!this.audioEnabled) {
-      console.log('���� Audio disabled globally');
+      console.log('🔇 Audio disabled globally');
       return;
     }
 
@@ -759,6 +759,63 @@ class AudioManager {
     };
 
     tryFormat(0);
+  }
+
+  // Thử Data URL approach như fallback cuối cùng
+  async attemptDataUrlPlayback(data) {
+    console.log('🔄 Attempting Data URL playback');
+
+    try {
+      let arrayBuffer;
+      if (data instanceof ArrayBuffer) {
+        arrayBuffer = data;
+      } else if (data instanceof Blob) {
+        arrayBuffer = await data.arrayBuffer();
+      } else {
+        console.error('❌ Unsupported data type for Data URL approach');
+        console.error('❌ Final diagnosis: Audio data appears to be completely corrupted');
+        console.error('❌ Check microphone recording and network transmission');
+        return false;
+      }
+
+      // Tạo base64 string từ ArrayBuffer
+      const uint8Array = new Uint8Array(arrayBuffer);
+      const binaryString = uint8Array.reduce((str, byte) => str + String.fromCharCode(byte), '');
+      const base64String = btoa(binaryString);
+
+      // Thử với các MIME type khác nhau
+      const mimeTypes = ['audio/mpeg', 'audio/wav', 'audio/ogg'];
+
+      for (const mimeType of mimeTypes) {
+        console.log('🔄 Trying Data URL with MIME type:', mimeType);
+
+        const dataUrl = `data:${mimeType};base64,${base64String}`;
+
+        const audio = new Audio(dataUrl);
+        audio.volume = this.isMuted ? 0 : this.volume;
+
+        try {
+          await audio.play();
+          console.log('✅ Data URL playback successful with:', mimeType);
+          return true;
+        } catch (error) {
+          console.warn('⚠️ Data URL failed for MIME type:', mimeType, error.message);
+        }
+      }
+
+      console.error('❌ ALL AUDIO PLAYBACK METHODS FAILED');
+      console.error('❌ Issues could be:');
+      console.error('   1. Recording produces invalid audio data');
+      console.error('   2. Browser autoplay policy blocking');
+      console.error('   3. Audio codec completely unsupported');
+      console.error('   4. Network corruption during transmission');
+      console.error('   5. MediaRecorder producing empty/invalid chunks');
+      return false;
+
+    } catch (error) {
+      console.error('❌ Data URL approach failed:', error);
+      return false;
+    }
   }
 
   // Stop regular audio only (not referee voice)
