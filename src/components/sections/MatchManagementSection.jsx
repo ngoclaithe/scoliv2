@@ -49,6 +49,15 @@ const MatchManagementSection = ({ isActive = true }) => {
 
   } = useMatch();
 
+  // Lấy logo state hiện tại từ PublicMatchContext
+  const publicMatchContext = usePublicMatch();
+  const {
+    sponsors: currentSponsors,
+    organizing: currentOrganizing,
+    mediaPartners: currentMediaPartners,
+    tournamentLogo: currentTournamentLogo
+  } = publicMatchContext || {};
+
   // Audio state management
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -1265,7 +1274,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 onChange={(e) => setClockSetting(e.target.value)}
                 className="scale-75"
               />
-              <label className="text-xs">LIÊN TỤC</label>
+              <label className="text-xs">LIÊN T��C</label>
             </div>
             <div className="flex items-center space-x-1">
               <input
@@ -1645,7 +1654,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                   // Format thời gian (phút:giây)
                   const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
-                  // Set thời gian và bắt đầu đếm tiến từ server timer
+                  // Set thời gian và bắt đầu đếm tiến t��� server timer
                   updateMatchTime(timeString, "Hiệp 1", "live");
 
                   // Chuyển sang tỉ số trên
