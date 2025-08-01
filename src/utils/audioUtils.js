@@ -235,6 +235,40 @@ class AudioManager {
 
       // Kiểm tra magic bytes của các format phổ biến
       const str = String.fromCharCode(...view.slice(0, 4));
+      console.log('��� Magic bytes as string:', str);
+
+      if (str === 'RIFF') {
+        console.log('✅ Detected WAV format');
+      } else if (str === 'OggS') {
+        console.log('✅ Detected OGG format');
+      } else if (view[0] === 0x1A && view[1] === 0x45 && view[2] === 0xDF && view[3] === 0xA3) {
+        console.log('✅ Detected WebM format');
+      } else {
+        console.warn('⚠️ Unknown audio format, raw bytes:', Array.from(view));
+      }
+    }
+  }
+
+  // Debug audio data để tìm vấn đề
+  debugAudioData(audioData, mimeType) {
+    console.log('🔍 [DEBUG] Audio data analysis:', {
+      type: typeof audioData,
+      isArrayBuffer: audioData instanceof ArrayBuffer,
+      isUint8Array: audioData instanceof Uint8Array,
+      isBlob: audioData instanceof Blob,
+      length: audioData?.length,
+      byteLength: audioData?.byteLength,
+      size: audioData?.size,
+      mimeType
+    });
+
+    // Kiểm tra 10 bytes đầu để xem có phải audio data không
+    if (audioData instanceof ArrayBuffer) {
+      const view = new Uint8Array(audioData.slice(0, 10));
+      console.log('🔍 First 10 bytes:', Array.from(view).map(b => b.toString(16).padStart(2, '0')).join(' '));
+
+      // Kiểm tra magic bytes của các format phổ biến
+      const str = String.fromCharCode(...view.slice(0, 4));
       console.log('🔍 Magic bytes as string:', str);
 
       if (str === 'RIFF') {
@@ -246,6 +280,34 @@ class AudioManager {
       } else {
         console.warn('⚠️ Unknown audio format, raw bytes:', Array.from(view));
       }
+    }
+  }
+
+  // Thử Web Audio API như một fallback cuối cùng
+  async attemptWebAudioPlayback(arrayBuffer) {
+    console.log('🔄 Attempting Web Audio API playback');
+
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer.slice());
+
+      const source = audioContext.createBufferSource();
+      const gainNode = audioContext.createGain();
+
+      source.buffer = audioBuffer;
+      gainNode.gain.value = this.isMuted ? 0 : this.volume;
+
+      source.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      source.start();
+
+      console.log('✅ Web Audio API playback successful');
+      return true;
+
+    } catch (error) {
+      console.error('❌ Web Audio API playback failed:', error);
+      return false;
     }
   }
 
