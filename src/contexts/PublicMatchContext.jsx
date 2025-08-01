@@ -151,8 +151,22 @@ export const PublicMatchProvider = ({ children }) => {
 
   // Thiết lập các listener cho socket
   const setupSocketListeners = useCallback(() => {
-    // Cleanup các listeners cũ trước khi đăng ký mới
-    socketService.removeAllListeners();
+    console.log('🔧 [PublicMatchContext] Setting up socket listeners...');
+
+    // Cleanup tất cả listeners cũ trước khi đăng ký mới
+    const eventsToCleanup = [
+      'match_info_updated', 'score_updated', 'match_stats_updated', 'template_updated',
+      'poster_updated', 'team_logos_updated', 'team_names_updated', 'marquee_updated',
+      'match_time_updated', 'timer_tick', 'timer_started', 'timer_paused', 'timer_resumed',
+      'timer_reset', 'penalty_updated', 'lineup_updated', 'sponsors_updated',
+      'organizing_updated', 'media_partners_updated', 'tournament_logo_updated',
+      'live_unit_updated', 'poster_settings_updated', 'display_settings_updated',
+      'view_updated', 'audio_control', 'disconnect', 'connect'
+    ];
+
+    eventsToCleanup.forEach(event => {
+      socketService.removeAllListeners(event);
+    });
     // Lắng nghe cập nhật thông tin trận đấu
     socketService.on('match_info_updated', (data) => {
       setMatchData(prev => ({ ...prev, ...data.matchInfo }));
