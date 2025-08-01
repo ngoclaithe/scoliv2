@@ -733,7 +733,18 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
   };
 
   const renderLogoSection = () => {
-    const currentItems = allLogoItems.filter(item => item.category === activeLogoCategory);
+    // Filter để chỉ hiển thị:
+    // 1. Custom logos (từ logoItems) - luôn hiển thị
+    // 2. API logos có displayPositions.length > 0
+    const currentItems = allLogoItems.filter(item => {
+      if (item.category !== activeLogoCategory) return false;
+
+      // Nếu là custom logo (từ logoItems), luôn hiển thị
+      if (logoItems.find(logo => logo.id === item.id)) return true;
+
+      // Nếu là API logo, chỉ hiển thị khi có position
+      return item.displayPositions && item.displayPositions.length > 0;
+    });
 
     return (
       <div className="space-y-1">
