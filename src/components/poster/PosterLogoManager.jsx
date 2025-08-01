@@ -554,44 +554,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
     setLogoItems(prev => [...prev, newBanner]);
   };
 
-  const handleSave = () => {
-    console.log('💾 [PosterLogoManager] handleSave called');
 
-    if (selectedPoster) {
-      console.log('💾 [PosterLogoManager] Calling onPosterUpdate with selectedPoster:', selectedPoster);
-      onPosterUpdate?.(selectedPoster);
-    }
-
-    console.log('[PosterLogoManager] activeLogoCategory:', activeLogoCategory);
-    console.log('[PosterLogoManager] allLogoItems:', allLogoItems);
-    console.log('[PosterLogoManager] logoItems:', logoItems);
-
-    const activeItems = allLogoItems.filter(item =>
-      item.category === activeLogoCategory &&
-      (item.displayPositions.length > 0 || logoItems.includes(item))
-    );
-
-    console.log('[PosterLogoManager] activeItems:', activeItems);
-
-    if (activeItems.length > 0) {
-      console.log('[PosterLogoManager] Calling onLogoUpdate with activeItems:', activeItems);
-      onLogoUpdate?.({
-        logoItems: activeItems,
-        displayOptions: logoDisplayOptions
-      });
-    } else {
-      console.log('[PosterLogoManager] No activeItems, not calling onLogoUpdate');
-    }
-
-    // Luôn emit display settings (shape và rotateDisplay) bất kể có logo hay không
-    console.log('🎨 [PosterLogoManager] Emitting display settings:', logoDisplayOptions);
-    onLogoUpdate?.({
-      logoItems: activeItems,
-      displayOptions: logoDisplayOptions
-    });
-
-    onClose?.();
-  };
 
   const renderPosterSection = () => {
     return (
@@ -618,7 +581,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
       <div className="space-y-1">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
-            <span className="text-xs">����️</span>
+            <span className="text-xs">🏷️</span>
             <h3 className="text-xs font-semibold text-gray-900">Logo & Banner</h3>
             <span className="text-xs text-gray-500">({Object.values(selectedLogosCount).reduce((a, b) => a + b, 0)} đã chọn)</span>
           </div>
