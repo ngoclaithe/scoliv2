@@ -409,51 +409,64 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe audio control events - để nhận referee voice từ CommentarySection
     socketService.on('audio_control', (data) => {
-      console.log('🎙️ [PublicMatchContext] Received audio_control:', data);
-    
+      console.log('🎙️ [PublicMatchContext] Received audio_control:', {
+        command: data.command,
+        target: data.target,
+        dataSize: data.payload?.audioData?.byteLength || data.payload?.audioData?.length || 'unknown',
+        mimeType: data.payload?.mimeType
+      });
+
       if (data.target === 'display' && data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
         const { audioData, mimeType } = data.payload;
         try {
-          // ✅ FIXED: Support both ArrayBuffer and Array
-          let isValidData = false;
-          let audioBlob = null;
-    
+          // Kiểm tra nhanh data type và size
+          if (!audioData) {
+            console.error('❌ No audio data provided');
+            return;
+          }
+
+          let processedData = null;
+
           if (audioData instanceof ArrayBuffer && audioData.byteLength > 0) {
-            // Handle ArrayBuffer (new format)
-            console.log('🎙️ Processing ArrayBuffer, size:', audioData.byteLength, 'bytes, mimeType:', mimeType);
-            audioBlob = new Blob([audioData], { type: mimeType || 'audio/webm' });
-            isValidData = true;
+            console.log('🎙️ Processing ArrayBuffer, size:', audioData.byteLength, 'bytes');
+            processedData = audioData;
           } else if (Array.isArray(audioData) && audioData.length > 0) {
-            // Handle Array (legacy format)
-            console.log('🎙️ Processing Array, size:', audioData.length, 'bytes, mimeType:', mimeType);
+            console.log('🎙️ Processing Array, converting to ArrayBuffer, size:', audioData.length, 'bytes');
             const uint8Array = new Uint8Array(audioData);
-            audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
-            isValidData = true;
+            processedData = uint8Array.buffer;
+          } else if (audioData instanceof Uint8Array && audioData.length > 0) {
+            console.log('🎙️ Processing Uint8Array, converting to ArrayBuffer, size:', audioData.length, 'bytes');
+            processedData = audioData.buffer.slice(audioData.byteOffset, audioData.byteOffset + audioData.byteLength);
           } else {
-            console.error('❌ Invalid audio data type or empty:', {
+            console.error('❌ Unsupported audio data format:', {
               type: typeof audioData,
               isArrayBuffer: audioData instanceof ArrayBuffer,
               isArray: Array.isArray(audioData),
+              isUint8Array: audioData instanceof Uint8Array,
               size: audioData?.byteLength || audioData?.length || 'unknown'
             });
             return;
           }
-    
-          // Validate the created blob
-          if (!audioBlob || audioBlob.size === 0) {
-            console.error('❌ Created blob is empty or invalid');
+
+          // Validate processed data
+          if (!processedData || processedData.byteLength === 0) {
+            console.error('❌ Processed data is empty or invalid');
             return;
           }
-    
-          console.log('✅ Created audio blob successfully:', {
-            blobSize: audioBlob.size,
-            mimeType: audioBlob.type
+
+          // Sử dụng mimeType từ payload hoặc fallback
+          const finalMimeType = mimeType || 'audio/webm;codecs=opus';
+
+          console.log('✅ Audio data processed successfully:', {
+            originalSize: audioData?.byteLength || audioData?.length || 'unknown',
+            processedSize: processedData.byteLength,
+            mimeType: finalMimeType
           });
-    
-          // Play the audio - pass both blob and mimeType
-          audioUtils.playRefereeVoice(audioBlob, mimeType);
-          console.log('✅ [PublicMatchContext] Playing referee voice successfully');
-    
+
+          // Truyền trực tiếp ArrayBuffer và mimeType cho audioUtils
+          audioUtils.playRefereeVoice(processedData, finalMimeType);
+          console.log('✅ [PublicMatchContext] Referee voice sent to audioUtils');
+
         } catch (error) {
           console.error('❌ Error processing referee voice in PublicMatchContext:', {
             error: error.message,
