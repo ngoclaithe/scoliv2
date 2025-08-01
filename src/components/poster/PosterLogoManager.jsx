@@ -470,10 +470,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         logoItem.displayPositions && logoItem.displayPositions.length > 0
       );
 
-      // Determine behavior:
-      // - Nếu từ có position -> không có position: remove
-      // - Nếu từ không có position -> có position: add
-      // - Nếu từ có position -> có position khác: update
       let behavior;
       if (item.displayPositions.length === 0 && newPositions.length > 0) {
         behavior = 'add';

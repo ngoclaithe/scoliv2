@@ -83,8 +83,6 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate, onPositionChan
 
   const handleLogoUpdateFromManager = (logoData) => {
     console.log('[PosterManager] handleLogoUpdateFromManager called with:', logoData);
-    // Pass through directly to onLogoUpdate
-    console.log('[PosterManager] Passing logoData through to onLogoUpdate');
     onLogoUpdate?.(logoData);
   };
 

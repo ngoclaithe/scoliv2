@@ -1432,7 +1432,8 @@ const MatchManagementSection = ({ isActive = true }) => {
               // Emit to specific category with behavior
               switch (item.category) {
                 case 'sponsor':
-                  console.log("[MatchManagementSection] Calling updateSponsors with behavior:", behavior);
+                  console.log("[MatchManagementSection] Calling updateSponsors with logoUpdateData:", logoUpdateData);
+                  
                   updateSponsors(logoUpdateData);
                   break;
                 case 'organizing':
@@ -1543,7 +1544,6 @@ const MatchManagementSection = ({ isActive = true }) => {
               displayOptions: displaySettings
             };
 
-            // Call the same logic as onLogoUpdate but for immediate update
             if (logoData && logoData.logoItems) {
               const logosByCategory = logoData.logoItems.reduce((acc, item) => {
                 if (!acc[item.category]) {
