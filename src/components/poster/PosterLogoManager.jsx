@@ -100,35 +100,29 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
           }
         }
 
-        // Load logos from API for each category
-        const logoCategories = ['sponsor', 'organizing', 'media', 'tournament'];
-        const loadedLogos = [];
+        // Load all logos from API
+        try {
+          console.log('🔍 [PosterLogoManager] Loading logos from API');
+          const response = await LogoAPI.getLogos();
 
-        for (const category of logoCategories) {
-          try {
-            console.log(`🔍 [PosterLogoManager] Loading ${category} logos from API`);
-            const response = await LogoAPI.getLogosByCategory(category);
+          if (response?.data && Array.isArray(response.data)) {
+            const loadedLogos = response.data.map((logo, index) => ({
+              id: `api-${logo.id || index}`,
+              unitName: logo.name || `Logo ${index + 1}`,
+              code: logo.code_logo || logo.code || `LOGO${index + 1}`,
+              type: logo.type || 'logo',
+              category: 'sponsor', // Default category, có thể customize sau
+              url: logo.url_logo || logo.file_path,
+              displayPositions: [] // Sẽ được set khi user chọn position
+            }));
 
-            if (response?.data && Array.isArray(response.data)) {
-              response.data.forEach((logo, index) => {
-                loadedLogos.push({
-                  id: `${category}-${logo.id || index}`,
-                  unitName: logo.name || logo.unitName || `${category} ${index + 1}`,
-                  code: logo.code_logo || logo.code || `${category.toUpperCase()}${index + 1}`,
-                  type: logo.type || 'logo',
-                  category: category,
-                  url: logo.url_logo || logo.url,
-                  displayPositions: logo.displayPositions || []
-                });
-              });
-            }
-          } catch (err) {
-            console.warn(`⚠️ [PosterLogoManager] Failed to load ${category} logos:`, err);
+            setApiLogos(loadedLogos);
+            console.log(`✅ [PosterLogoManager] Loaded ${loadedLogos.length} logos from API`);
           }
+        } catch (err) {
+          console.warn('⚠️ [PosterLogoManager] Failed to load logos from API:', err);
+          setApiLogos([]);
         }
-
-        setApiLogos(loadedLogos);
-        console.log(`✅ [PosterLogoManager] Loaded ${loadedLogos.length} logos from API`);
 
       } catch (err) {
         console.error("Error loading logos:", err);
@@ -150,7 +144,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
     const file = event.target.files[0];
     if (!file) return;
 
-    // Kiểm tra kích thước file (tối đa 5MB)
+    // Kiểm tra kích thư���c file (tối đa 5MB)
     if (file.size > 5 * 1024 * 1024) {
       alert("Kích thước file tối đa là 5MB");
       return;
