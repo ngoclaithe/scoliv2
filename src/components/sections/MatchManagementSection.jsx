@@ -1014,14 +1014,10 @@ const MatchManagementSection = ({ isActive = true }) => {
             <button
               onClick={() => {
                 const timeString = "20:00";
-                // Set thời gian về 25:00 và bắt đầu đếm tiến từ server timer
                 updateMatchTime(timeString, "Hiệp 1", "live");
-                // Chuyển sang tỉ số trên
                 updateView('scoreboard');
-                setSelectedOption("ti-so-tren");
-                // Phát audio gialap cho đếm giờ
                 playAudioForAction('gialap');
-                console.log('Đã áp dụng: Timer s�� đếm từ:', timeString);
+                toast.success('⏰ Đã bắt đầu timer từ 20:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
