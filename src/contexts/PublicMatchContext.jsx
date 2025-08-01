@@ -91,12 +91,29 @@ export const PublicMatchProvider = ({ children }) => {
 
   // State cho nhà tài trợ
   const [sponsors, setSponsors] = useState({
+    sponsors: {
+      code_logo: [],
+      url_logo: [],
+      position: [],
+      type_display: [],
+      behavior: 'add'
+    }
   });
 
-  const [organizing, setOrganizings] = useState({
+  const [organizing, setOrganizing] = useState({
+    code_logo: [],
+    url_logo: [],
+    position: [],
+    type_display: [],
+    behavior: 'add'
   });
 
   const [mediaPartners, setMediaPartners] = useState({
+    code_logo: [],
+    url_logo: [],
+    position: [],
+    type_display: [],
+    behavior: 'add'
   });
 
   const [tournamentLogo, setTournamentLogo] = useState({
@@ -280,7 +297,7 @@ export const PublicMatchProvider = ({ children }) => {
     // Lắng nghe cập nhật đơn vị tổ chức
     socketService.on('organizing_updated', (data) => {
       // console.log('📝 [PublicMatchContext] organizing_updated received:', data);
-      setOrganizings(prev => ({ ...prev, ...data }));
+      setOrganizing(prev => ({ ...prev, ...data }));
       setLastUpdateTime(Date.now());
     });
 
