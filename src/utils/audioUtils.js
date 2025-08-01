@@ -666,74 +666,90 @@ class AudioManager {
     try {
       arrayBuffer = await originalBlob.arrayBuffer();
       console.log('🔍 Got ArrayBuffer from blob, size:', arrayBuffer.byteLength);
+
+      // THÊM: Thử Web Audio API TRƯỚC khi thử HTML Audio
+      console.log('🔄 Trying Web Audio API first...');
+      const webAudioSuccess = await this.attemptWebAudioPlayback(arrayBuffer);
+      if (webAudioSuccess) {
+        console.log('✅ Web Audio API succeeded, skipping HTML Audio fallbacks');
+        return;
+      }
+
     } catch (error) {
       console.warn('⚠️ Could not get ArrayBuffer from blob:', error);
     }
 
+    // Nếu Web Audio API fail, thử HTML Audio với các format khác nhau
     const fallbackFormats = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp3'];
 
     const tryFormat = async (formatIndex) => {
       if (formatIndex >= fallbackFormats.length) {
-        console.log('🔄 HTML Audio failed, trying Web Audio API...');
-
-        if (arrayBuffer) {
-          const success = await this.attemptWebAudioPlayback(arrayBuffer);
-          if (success) return;
-        }
-
-        console.error('❌ All fallback formats and Web Audio API failed');
+        console.error('❌ All fallback methods failed');
         console.error('❌ Possible issues:');
         console.error('   - Audio data is corrupted or invalid');
         console.error('   - Browser security restrictions');
         console.error('   - Unsupported audio codec');
         console.error('   - Missing user interaction for audio autoplay');
+        console.error('   - Network issues affecting blob data');
         return;
       }
 
       const format = fallbackFormats[formatIndex];
-      console.log('🔄 Trying fallback format:', format);
+      console.log('🔄 Trying HTML Audio fallback format:', format);
 
       try {
+        // Tạo blob mới với format khác
         const fallbackBlob = new Blob([originalBlob], { type: format });
         const audioUrl = this.createSafeBlobUrl(fallbackBlob);
         if (!audioUrl) {
+          console.warn('⚠️ Failed to create URL for format:', format);
           tryFormat(formatIndex + 1);
           return;
         }
 
         const fallbackAudio = new Audio(audioUrl);
         fallbackAudio.volume = this.isMuted ? 0 : this.volume;
+        fallbackAudio.preload = 'auto';
 
         // Set timeout để avoid infinite wait
         const timeout = setTimeout(() => {
           console.warn('⚠️ Fallback format timeout:', format);
           this.revokeBlobUrl(audioUrl);
           tryFormat(formatIndex + 1);
-        }, 3000);
+        }, 2000); // Giảm timeout xuống 2s
+
+        fallbackAudio.onloadeddata = () => {
+          console.log('✅ Fallback audio data loaded for:', format);
+        };
 
         fallbackAudio.onended = () => {
           clearTimeout(timeout);
           this.revokeBlobUrl(audioUrl);
+          console.log('✅ Fallback audio ended successfully');
         };
 
-        fallbackAudio.onerror = () => {
+        fallbackAudio.onerror = (e) => {
           clearTimeout(timeout);
-          console.warn('⚠️ Fallback format failed:', format);
+          console.warn('⚠️ Fallback format failed:', format, e);
           this.revokeBlobUrl(audioUrl);
           tryFormat(formatIndex + 1);
         };
 
-        fallbackAudio.play()
-          .then(() => {
-            clearTimeout(timeout);
-            console.log('✅ Fallback playback successful with:', format);
-          })
-          .catch(() => {
-            clearTimeout(timeout);
-            console.warn('⚠️ Fallback play() failed for:', format);
-            this.revokeBlobUrl(audioUrl);
-            tryFormat(formatIndex + 1);
-          });
+        // Thử play ngay
+        const playPromise = fallbackAudio.play();
+        if (playPromise) {
+          playPromise
+            .then(() => {
+              clearTimeout(timeout);
+              console.log('✅ Fallback playback successful with:', format);
+            })
+            .catch((error) => {
+              clearTimeout(timeout);
+              console.warn('⚠️ Fallback play() failed for:', format, error.message);
+              this.revokeBlobUrl(audioUrl);
+              tryFormat(formatIndex + 1);
+            });
+        }
 
       } catch (error) {
         console.warn('⚠️ Fallback attempt error for', format, ':', error);
