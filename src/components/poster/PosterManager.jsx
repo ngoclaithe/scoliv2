@@ -6,7 +6,6 @@ import Modal from "../common/Modal";
 
 const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate, onPositionChange, onClose, initialData }) => {
   const [selectedPoster, setSelectedPoster] = useState(null);
-  const [selectedLogo, setSelectedLogo] = useState(null);
   const [showPosterSelector, setShowPosterSelector] = useState(false);
   const [showCustomForm, setShowCustomForm] = useState(false);
   const [loading] = useState(false);
