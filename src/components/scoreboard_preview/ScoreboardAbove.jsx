@@ -603,7 +603,7 @@ const ScoreboardAbove = ({
                         const allLogos = [];
 
                         // Collect sponsors with bottom-left position
-                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position) {
+                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position && sponsors.position.length > 0) {
                             sponsors.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index];
                                 if (position === 'bottom-left') {
@@ -613,7 +613,7 @@ const ScoreboardAbove = ({
                         }
 
                         // Collect organizing with bottom-left position
-                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
+                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position && organizing.position.length > 0) {
                             organizing.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
                                 if (position === 'bottom-left') {
@@ -623,7 +623,7 @@ const ScoreboardAbove = ({
                         }
 
                         // Collect media partners with bottom-left position
-                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
+                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position && mediaPartners.position.length > 0) {
                             mediaPartners.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
                                 if (position === 'bottom-left') {
@@ -684,7 +684,7 @@ const ScoreboardAbove = ({
                         const allLogos = [];
 
                         // Collect sponsors with bottom-right position
-                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position) {
+                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position && sponsors.position.length > 0) {
                             sponsors.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index];
                                 if (position === 'bottom-right') {
@@ -694,7 +694,7 @@ const ScoreboardAbove = ({
                         }
 
                         // Collect organizing with bottom-right position
-                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
+                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position && organizing.position.length > 0) {
                             organizing.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
                                 if (position === 'bottom-right') {
@@ -704,7 +704,7 @@ const ScoreboardAbove = ({
                         }
 
                         // Collect media partners with bottom-right position
-                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
+                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position && mediaPartners.position.length > 0) {
                             mediaPartners.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
                                 if (position === 'bottom-right') {
