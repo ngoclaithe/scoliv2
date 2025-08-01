@@ -1267,7 +1267,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 onChange={(e) => setClockSetting(e.target.value)}
                 className="scale-75"
               />
-              <label className="text-xs">LIÊN TỤC</label>
+              <label className="text-xs">LI��N TỤC</label>
             </div>
             <div className="flex items-center space-x-1">
               <input
@@ -1472,42 +1472,52 @@ const MatchManagementSection = ({ isActive = true }) => {
 
               console.log("[MatchManagementSection] logosByCategory:", logosByCategory);
 
-              // Emit socket events cho từng category
+              // Get behavior from logoData
+              const behavior = logoData.behavior || 'add';
+              const changedItem = logoData.changedItem;
+
+              console.log('[MatchManagementSection] Logo update with behavior:', behavior, 'changedItem:', changedItem);
+
+              // Emit socket events cho từng category với behavior
               if (logosByCategory.sponsor) {
-                console.log("[MatchManagementSection] Calling updateSponsors");
+                console.log("[MatchManagementSection] Calling updateSponsors with behavior:", behavior);
                 updateSponsors({
                   code_logo: logosByCategory.sponsor.map(s => s.code_logo),
                   url_logo: logosByCategory.sponsor.map(s => s.url_logo),
                   position: logosByCategory.sponsor.map(s => s.position),
-                  type_display: logosByCategory.sponsor.map(s => s.type_display)
+                  type_display: logosByCategory.sponsor.map(s => s.type_display),
+                  behavior: behavior
                 });
               }
 
               if (logosByCategory.organizing) {
-                console.log("[MatchManagementSection] Calling updateOrganizing");
+                console.log("[MatchManagementSection] Calling updateOrganizing with behavior:", behavior);
                 updateOrganizing({
                   code_logo: logosByCategory.organizing.map(o => o.code_logo),
                   url_logo: logosByCategory.organizing.map(o => o.url_logo),
                   position: logosByCategory.organizing.map(o => o.position),
-                  type_display: logosByCategory.organizing.map(o => o.type_display)
+                  type_display: logosByCategory.organizing.map(o => o.type_display),
+                  behavior: behavior
                 });
               }
 
               if (logosByCategory.media) {
-                console.log("[MatchManagementSection] Calling updateMediaPartners");
+                console.log("[MatchManagementSection] Calling updateMediaPartners with behavior:", behavior);
                 updateMediaPartners({
                   code_logo: logosByCategory.media.map(m => m.code_logo),
                   url_logo: logosByCategory.media.map(m => m.url_logo),
                   position: logosByCategory.media.map(m => m.position),
-                  type_display: logosByCategory.media.map(m => m.type_display)
+                  type_display: logosByCategory.media.map(m => m.type_display),
+                  behavior: behavior
                 });
               }
 
               if (logosByCategory.tournament) {
-                console.log("[MatchManagementSection] Calling updateTournamentLogo");
+                console.log("[MatchManagementSection] Calling updateTournamentLogo with behavior:", behavior);
                 updateTournamentLogo({
                   code_logo: logosByCategory.tournament.map(t => t.code_logo),
-                  url_logo: logosByCategory.tournament.map(t => t.url_logo)
+                  url_logo: logosByCategory.tournament.map(t => t.url_logo),
+                  behavior: behavior
                 });
               }
 

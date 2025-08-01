@@ -278,7 +278,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
     // Kiểm tra định dạng file
     const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!validTypes.includes(file.type)) {
-      alert("Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WebP)");
+      alert("Chỉ chấp nhận file ���nh (JPEG, PNG, GIF, WebP)");
       return;
     }
 
@@ -482,8 +482,13 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         onLogoUpdate({
           logoItems: activeItems,
           displayOptions: logoDisplayOptions,
+<<<<<<< HEAD
           changedItem: updatedItem,
           behavior: behavior
+=======
+          behavior: behavior,
+          changedItem: updatedItem
+>>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
         });
       }
     };
@@ -679,6 +684,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
       logoItem.displayPositions && logoItem.displayPositions.length > 0
     );
 
+<<<<<<< HEAD
     // Find the removed item to pass as changedItem
     const removedItem = (isFromAPI ? apiLogos : logoItems).find(logo => logo.id === itemId);
 
@@ -688,6 +694,17 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         displayOptions: logoDisplayOptions,
         changedItem: { ...removedItem, displayPositions: [] },
         behavior: 'remove'
+=======
+    // Find the removed item for behavior context
+    const removedItem = [...apiLogos, ...logoItems].find(logo => logo.id === itemId);
+
+    if (onLogoUpdate) {
+      onLogoUpdate({
+        logoItems: activeItems,
+        displayOptions: logoDisplayOptions,
+        behavior: 'remove',
+        changedItem: removedItem
+>>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
       });
     }
   };

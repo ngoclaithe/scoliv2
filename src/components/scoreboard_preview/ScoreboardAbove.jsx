@@ -502,8 +502,13 @@ const ScoreboardAbove = ({
                     {(() => {
                         const allLogos = [];
 
+<<<<<<< HEAD
                         // Collect sponsors with top-left position (check behavior)
                         if (sponsors.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && sponsors.sponsors?.position) {
+=======
+                        // Collect sponsors with top-left position (check for non-empty arrays)
+                        if (sponsors.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && sponsors.sponsors?.position && sponsors.sponsors.position.length > 0) {
+>>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
                             sponsors.sponsors.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(sponsors.sponsors.position[index]) ? sponsors.sponsors.position[index][0] : sponsors.sponsors.position[index];
                                 const behavior = sponsors.sponsors?.behavior;
@@ -515,8 +520,13 @@ const ScoreboardAbove = ({
                             });
                         }
 
+<<<<<<< HEAD
                         // Collect organizing with top-left position (check behavior)
                         if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
+=======
+                        // Collect organizing with top-left position (check for non-empty arrays)
+                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position && organizing.position.length > 0) {
+>>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
                             organizing.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
                                 const behavior = organizing?.behavior;
@@ -528,8 +538,13 @@ const ScoreboardAbove = ({
                             });
                         }
 
+<<<<<<< HEAD
                         // Collect media partners with top-left position (check behavior)
                         if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
+=======
+                        // Collect media partners with top-left position (check for non-empty arrays)
+                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position && mediaPartners.position.length > 0) {
+>>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
                             mediaPartners.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
                                 const behavior = mediaPartners?.behavior;
@@ -611,8 +626,13 @@ const ScoreboardAbove = ({
                     {(() => {
                         const allLogos = [];
 
+<<<<<<< HEAD
                         // Collect sponsors with bottom-left position (check behavior)
                         if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position) {
+=======
+                        // Collect sponsors with bottom-left position
+                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position && sponsors.position.length > 0) {
+>>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
                             sponsors.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index];
                                 const behavior = sponsors?.behavior;
@@ -624,8 +644,13 @@ const ScoreboardAbove = ({
                             });
                         }
 
+<<<<<<< HEAD
                         // Collect organizing with bottom-left position (check behavior)
                         if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
+=======
+                        // Collect organizing with bottom-left position
+                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position && organizing.position.length > 0) {
+>>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
                             organizing.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
                                 const behavior = organizing?.behavior;
@@ -637,8 +662,13 @@ const ScoreboardAbove = ({
                             });
                         }
 
+<<<<<<< HEAD
                         // Collect media partners with bottom-left position (check behavior)
                         if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
+=======
+                        // Collect media partners with bottom-left position
+                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position && mediaPartners.position.length > 0) {
+>>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
                             mediaPartners.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
                                 const behavior = mediaPartners?.behavior;
@@ -701,8 +731,13 @@ const ScoreboardAbove = ({
                     {(() => {
                         const allLogos = [];
 
+<<<<<<< HEAD
                         // Collect sponsors with bottom-right position (check behavior)
                         if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position) {
+=======
+                        // Collect sponsors with bottom-right position
+                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position && sponsors.position.length > 0) {
+>>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
                             sponsors.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index];
                                 const behavior = sponsors?.behavior;
@@ -714,8 +749,13 @@ const ScoreboardAbove = ({
                             });
                         }
 
+<<<<<<< HEAD
                         // Collect organizing with bottom-right position (check behavior)
                         if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
+=======
+                        // Collect organizing with bottom-right position
+                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position && organizing.position.length > 0) {
+>>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
                             organizing.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
                                 const behavior = organizing?.behavior;
@@ -727,8 +767,13 @@ const ScoreboardAbove = ({
                             });
                         }
 
+<<<<<<< HEAD
                         // Collect media partners with bottom-right position (check behavior)
                         if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
+=======
+                        // Collect media partners with bottom-right position
+                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position && mediaPartners.position.length > 0) {
+>>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
                             mediaPartners.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
                                 const behavior = mediaPartners?.behavior;
