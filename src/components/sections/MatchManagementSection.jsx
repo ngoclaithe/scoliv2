@@ -743,7 +743,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           >
             <span className="mr-0.5 text-xs">📊</span>
             <span className="hidden sm:inline">THÔNG SỐ</span>
-            <span className="sm:hidden">TK</span>
+            <span className="sm:hidden">TS</span>
           </button>
           <button
             onClick={() => setSelectedOption("dieu-khien")}
@@ -766,8 +766,8 @@ const MatchManagementSection = ({ isActive = true }) => {
               }`}
           >
             <span className="mr-0.5 text-xs">🎨</span>
-            <span className="hidden sm:inline">TEMPLATE</span>
-            <span className="sm:hidden">TL</span>
+            <span className="hidden sm:inline">Skin</span>
+            <span className="sm:hidden">Skin</span>
           </button>
         </div>
       </div>
