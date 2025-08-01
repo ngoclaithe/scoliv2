@@ -830,7 +830,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             <div className="space-y-3">
               {/* Kiểm soát bóng */}
               <EditableStatBar
-                label="Kiểm soát bóng"
+                label="Ki��m soát bóng"
                 statKey="possession"
                 team1Value={matchStats.possession.team1}
                 team2Value={matchStats.possession.team2}
@@ -1384,6 +1384,15 @@ const MatchManagementSection = ({ isActive = true }) => {
       >
         <PosterManager
           matchData={matchData}
+          initialData={{
+            selectedPoster: displaySettings.selectedPoster ? { id: displaySettings.selectedPoster, name: displaySettings.selectedPoster } : null,
+            logoItems: [],
+            apiLogos: [],
+            displayOptions: {
+              shape: displaySettings.logoShape || 'round',
+              rotateDisplay: displaySettings.rotateDisplay || false
+            }
+          }}
           onPosterUpdate={(poster) => {
 
             if (poster) {
@@ -1396,9 +1405,6 @@ const MatchManagementSection = ({ isActive = true }) => {
 
               console.log("🎨 [MatchManagementSection] Setting selectedOption to: chon-poster");
               setSelectedOption("chon-poster");
-
-              console.log("🎨 [MatchManagementSection] Closing poster modal");
-              setShowPosterModal(false);
             } else {
               console.log("⚠ [MatchManagementSection] No poster provided to onPosterUpdate");
             }
