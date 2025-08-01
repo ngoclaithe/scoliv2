@@ -1451,6 +1451,9 @@ const MatchManagementSection = ({ isActive = true }) => {
                     behavior: behavior
                   });
                   break;
+                default:
+                  console.log("[MatchManagementSection] Unknown category:", item.category);
+                  break;
               }
             }
 
