@@ -342,7 +342,7 @@ export const PublicMatchProvider = ({ children }) => {
       setOrganizing(prev => ({
         ...prev,
         ...data,
-        // Append vào arrays thay vì replace
+        // Append v��o arrays thay vì replace
         url_logo: data.url_logo ?
           [...(prev.url_logo || []), ...data.url_logo] :
           (prev.url_logo || []),
@@ -485,7 +485,7 @@ export const PublicMatchProvider = ({ children }) => {
       console.error('❌ Failed to initialize public socket:', error);
       setSocketConnected(false);
     }
-  }, [currentAccessCode, socketConnected, setupSocketListeners]);
+  }, [currentAccessCode, socketConnected, setupSocketListeners, listenersSetup]);
 
   const disconnectSocket = useCallback(() => {
     socketService.disconnect();
