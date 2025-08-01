@@ -397,7 +397,7 @@ const ScoreboardAbove = ({
                 />
 
                 <div className="flex items-center z-20">
-                    {/* Hình thang cân xuôi cho tên đội A */}
+                    {/* Hình thang cân xu��i cho tên đội A */}
                     <div
                         className="text-white text-sm font-semibold relative flex items-center justify-center w-24 h-8 sm:w-32 md:w-40 z-10 -mr-6"
                         style={{
@@ -542,8 +542,8 @@ const ScoreboardAbove = ({
                         }
 
                         // Fallback for sponsors without position specified
-                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && (!sponsors?.position || sponsors.position.length === 0)) {
-                            sponsors.url_logo.forEach(logo => {
+                        if (sponsors?.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && (!sponsors.sponsors?.position || sponsors.sponsors.position.length === 0)) {
+                            sponsors.sponsors.url_logo.forEach(logo => {
                                 allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
                             });
                         }
@@ -588,7 +588,7 @@ const ScoreboardAbove = ({
                 </div>
 
                 {/* Tournament Logo - Top Left (if no sponsors) */}
-                {(!sponsors?.url_logo || sponsors.url_logo.length === 0) && tournamentLogo?.url_logo && tournamentLogo.url_logo.length > 0 && (
+                {(!sponsors?.sponsors?.url_logo || sponsors.sponsors.url_logo.length === 0) && tournamentLogo?.url_logo && tournamentLogo.url_logo.length > 0 && (
                     <div className="absolute top-4 left-4 z-40">
                         <DisplayLogo
                             logos={tournamentLogo.url_logo}
@@ -612,10 +612,10 @@ const ScoreboardAbove = ({
                         const allLogos = [];
 
                         // Collect sponsors with bottom-left position (check behavior)
-                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position) {
-                            sponsors.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index];
-                                const behavior = sponsors?.behavior;
+                        if (sponsors?.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && sponsors.sponsors?.position) {
+                            sponsors.sponsors.url_logo.forEach((logo, index) => {
+                                const position = Array.isArray(sponsors.sponsors.position[index]) ? sponsors.sponsors.position[index][0] : sponsors.sponsors.position[index];
+                                const behavior = sponsors.sponsors?.behavior;
 
                                 // Only add if behavior is 'add' or undefined (default behavior)
                                 if (position === 'bottom-left' && (!behavior || behavior === 'add')) {
@@ -702,10 +702,10 @@ const ScoreboardAbove = ({
                         const allLogos = [];
 
                         // Collect sponsors with bottom-right position (check behavior)
-                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position) {
-                            sponsors.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index];
-                                const behavior = sponsors?.behavior;
+                        if (sponsors?.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && sponsors.sponsors?.position) {
+                            sponsors.sponsors.url_logo.forEach((logo, index) => {
+                                const position = Array.isArray(sponsors.sponsors.position[index]) ? sponsors.sponsors.position[index][0] : sponsors.sponsors.position[index];
+                                const behavior = sponsors.sponsors?.behavior;
 
                                 // Only add if behavior is 'add' or undefined (default behavior)
                                 if (position === 'bottom-right' && (!behavior || behavior === 'add')) {
