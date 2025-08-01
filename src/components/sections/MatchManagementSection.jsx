@@ -7,7 +7,6 @@ import TeamLineupModal from "../lineup/TeamLineupModal";
 import Modal from "../common/Modal";
 import SimplePenaltyModal from "../common/SimplePenaltyModal";
 import { useMatch } from "../../contexts/MatchContext";
-import { usePublicMatch } from "../../contexts/PublicMatchContext";
 import { toast } from 'react-toastify';
 import audioUtils from '../../utils/audioUtils';
 
@@ -1236,7 +1235,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
                     toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                   } else {
-                    toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
+                    toast.warning('⚠��� Vui lòng nhập thời gian hợp lệ!');
                   }
                 }}
                 disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
