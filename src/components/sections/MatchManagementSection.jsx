@@ -208,9 +208,8 @@ const MatchManagementSection = ({ isActive = true }) => {
       const response = await LogoAPI.searchLogosByCode(logoCodeB.trim(), true);
       if (response.success && response.data && response.data.length > 0) {
         const logo = response.data[0];
-        console.log("Giá trị logoB 1 hiện tại là", logo);
         setTeamBInfo(prev => ({ ...prev, logo: logo.url_logo }));
-        setLogoCodeB(""); // Clear input sau khi thành công
+        setLogoCodeB("");
       } else {
         toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeB}"`);
       }
@@ -260,7 +259,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateStats(newStats);
   };
 
-  // Component để hiển th��/chỉnh sửa thống kê
+  // Component để hiển thị/chỉnh sửa thống kê
   const EditableStatBar = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => {
     if (!isEditingStats) {
       // Chế độ hiển thị
