@@ -277,7 +277,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   // Component để hiển thị/chỉnh sửa thống kê
   const EditableStatBar = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => {
     if (!isEditingStats) {
-      // Chế độ hiển thị
+      // Chế độ hiển th��
       return (
         <div className="space-y-1">
           <div className="flex justify-between items-center text-sm">
@@ -1534,57 +1534,32 @@ const MatchManagementSection = ({ isActive = true }) => {
             }
           }}
           onPositionChange={(updatedItem) => {
-            // Handle real-time position changes
+            // Handle real-time position changes - CHỈ GỌI KHI CẦN THIẾT
             console.log('📍 [MatchManagementSection] Position changed for item:', updatedItem);
 
-            // Create immediate update with just this item
-            const logoData = {
-              logoItems: [updatedItem],
-              displayOptions: displaySettings
+            // Tránh gọi trùng lặp với onLogoUpdate bằng cách sử dụng behavior
+            const logoUpdateData = {
+              code_logo: [updatedItem.code],
+              url_logo: [updatedItem.url],
+              position: updatedItem.displayPositions,
+              type_display: [updatedItem.type || 'default'],
+              behavior: 'position_update' // Đánh dấu đây là update position
             };
 
-            // Call the same logic as onLogoUpdate but for immediate update
-            if (logoData && logoData.logoItems) {
-              const logosByCategory = logoData.logoItems.reduce((acc, item) => {
-                if (!acc[item.category]) {
-                  acc[item.category] = [];
-                }
-                acc[item.category].push({
-                  code_logo: item.code,
-                  url_logo: item.url,
-                  position: item.displayPositions || [],
-                  type_display: item.type || 'default'
-                });
-                return acc;
-              }, {});
-
-              // Emit immediate updates for the specific category
-              if (logosByCategory.sponsor) {
-                updateSponsors({
-                  code_logo: logosByCategory.sponsor.map(s => s.code_logo),
-                  url_logo: logosByCategory.sponsor.map(s => s.url_logo),
-                  position: logosByCategory.sponsor.map(s => s.position),
-                  type_display: logosByCategory.sponsor.map(s => s.type_display)
-                });
-              }
-
-              if (logosByCategory.organizing) {
-                updateOrganizing({
-                  code_logo: logosByCategory.organizing.map(o => o.code_logo),
-                  url_logo: logosByCategory.organizing.map(o => o.url_logo),
-                  position: logosByCategory.organizing.map(o => o.position),
-                  type_display: logosByCategory.organizing.map(o => o.type_display)
-                });
-              }
-
-              if (logosByCategory.media) {
-                updateMediaPartners({
-                  code_logo: logosByCategory.media.map(m => m.code_logo),
-                  url_logo: logosByCategory.media.map(m => m.url_logo),
-                  position: logosByCategory.media.map(m => m.position),
-                  type_display: logosByCategory.media.map(m => m.type_display)
-                });
-              }
+            // Chỉ gọi update cho category cụ thể với behavior để tránh duplicate
+            switch (updatedItem.category) {
+              case 'sponsor':
+                console.log("[MatchManagementSection] Position update for sponsors:", logoUpdateData);
+                updateSponsors(logoUpdateData);
+                break;
+              case 'organizing':
+                console.log("[MatchManagementSection] Position update for organizing:", logoUpdateData);
+                updateOrganizing(logoUpdateData);
+                break;
+              case 'media':
+                console.log("[MatchManagementSection] Position update for media:", logoUpdateData);
+                updateMediaPartners(logoUpdateData);
+                break;
             }
           }}
           onClose={() => setShowPosterModal(false)}
