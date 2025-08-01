@@ -338,7 +338,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
       } catch (error) {
         console.error("Lỗi khi tải lên:", error);
 
-        // Cập nhật trạng thái lỗi
+        // C���p nhật trạng thái lỗi
         setLogoItems(prev => prev.map(logo =>
           logo.id === item.id
             ? { ...logo, uploadStatus: 'error' }
@@ -415,7 +415,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
       if (localCode.trim().length >= 3) {
         try {
           setIsSearching(true);
-          console.log('🔍 [PosterLogoManager] Tìm kiếm logo với code:', localCode);
+          console.log('🔍 [PosterLogoManager] Tìm kiếm logo v��i code:', localCode);
           const response = await LogoAPI.searchLogosByCode(localCode.trim(), true);
 
           if (response?.data?.length > 0) {
@@ -452,18 +452,13 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
     };
 
     const handlePositionToggle = (position) => {
+      // Logic: Mỗi logo chỉ được chọn 1 position duy nhất
       const newPositions = item.displayPositions.includes(position)
-        ? item.displayPositions.filter(p => p !== position)
-        : [...item.displayPositions, position];
+        ? [] // Nếu đang chọn position này thì bỏ chọn (xóa hết)
+        : [position]; // Nếu chưa chọn thì chọn position này (thay thế position cũ)
 
       const updatedItem = { ...item, displayPositions: newPositions };
       onUpdate(item.id, updatedItem);
-
-      // Emit immediately for real-time update
-      // if (onPositionChange) {
-      //   console.log('📍 [PosterLogoManager] Position changed for item:', updatedItem);
-      //   onPositionChange(updatedItem);
-      // }
 
       // Also trigger immediate logo update with behavior
       const allCurrentItems = [...apiLogos, ...logoItems].map(logoItem =>
@@ -475,8 +470,20 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         logoItem.displayPositions && logoItem.displayPositions.length > 0
       );
 
-      // Determine behavior based on position change
-      const behavior = updatedItem.displayPositions.length > item.displayPositions.length ? 'add' : 'remove';
+      // Determine behavior:
+      // - Nếu từ có position -> không có position: remove
+      // - Nếu từ không có position -> có position: add
+      // - Nếu từ có position -> có position khác: update
+      let behavior;
+      if (item.displayPositions.length === 0 && newPositions.length > 0) {
+        behavior = 'add';
+      } else if (item.displayPositions.length > 0 && newPositions.length === 0) {
+        behavior = 'remove';
+      } else if (item.displayPositions.length > 0 && newPositions.length > 0) {
+        behavior = 'update';
+      } else {
+        behavior = 'add'; // fallback
+      }
 
       if (onLogoUpdate) {
         onLogoUpdate({
