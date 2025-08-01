@@ -740,23 +740,14 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         {renderLogoSection()}
       </div>
 
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pt-2 border-t border-gray-200">
-        <div className="text-xs text-gray-600">
-          {selectedPoster && (
-            <div>Poster: <span className="font-medium text-blue-600">{selectedPoster.name}</span></div>
-          )}
-          <div>Logo đã chọn: <span className="font-medium text-green-600">{Object.values(selectedLogosCount).reduce((a, b) => a + b, 0)}</span></div>
-        </div>
-        <div className="flex gap-1 w-full sm:w-auto">
-          <Button
-            variant="primary"
-            onClick={() => onClose?.()}
-            className="flex-1 sm:flex-none text-xs px-2 py-1"
-          >
-            <span className="mr-1">✅</span>
-            ĐÓNG
-          </Button>
-        </div>
+      <div className="flex justify-end pt-2 border-t border-gray-200">
+        <Button
+          variant="primary"
+          onClick={() => onClose?.()}
+          className="text-xs px-3 py-1"
+        >
+          ĐÓNG
+        </Button>
       </div>
     </div>
   );
