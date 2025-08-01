@@ -49,6 +49,8 @@ const MatchManagementSection = ({ isActive = true }) => {
 
   } = useMatch();
 
+  const { matchCode } = useAuth();
+
   // Audio state management
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -164,7 +166,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
   }, [isActive, isPlaying]);
 
-  // State cho chế độ chỉnh sửa thống kê
+  // State cho chế đ�� chỉnh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
 
   // Skin data configuration
