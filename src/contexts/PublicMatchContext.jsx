@@ -151,6 +151,8 @@ export const PublicMatchProvider = ({ children }) => {
 
   // Thiết lập các listener cho socket
   const setupSocketListeners = useCallback(() => {
+    // Cleanup các listeners cũ trước khi đăng ký mới
+    socketService.removeAllListeners();
     // Lắng nghe cập nhật thông tin trận đấu
     socketService.on('match_info_updated', (data) => {
       setMatchData(prev => ({ ...prev, ...data.matchInfo }));
@@ -443,18 +445,23 @@ export const PublicMatchProvider = ({ children }) => {
     try {
       // Tránh khởi tạo socket trùng lặp
       if (currentAccessCode === accessCode && socketConnected) {
+        console.log('🔄 [PublicMatchContext] Socket already connected, skipping...');
         return;
       }
+
+      console.log('🔌 [PublicMatchContext] Initializing socket for accessCode:', accessCode);
 
       // Public route luôn sử dụng clientType 'display'
       await socketService.connect(accessCode, 'display');
       setSocketConnected(true);
       setCurrentAccessCode(accessCode);
-      
-      // Lắng nghe các event từ server
+
+      // Lắng nghe các event từ server - chỉ setup 1 lần
       setupSocketListeners();
+
+      console.log('✅ [PublicMatchContext] Socket initialized successfully');
     } catch (error) {
-      console.error('Failed to initialize public socket:', error);
+      console.error('❌ Failed to initialize public socket:', error);
       setSocketConnected(false);
     }
   }, [currentAccessCode, socketConnected, setupSocketListeners]);
