@@ -465,7 +465,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         onPositionChange(updatedItem);
       }
 
-      // Also trigger immediate logo update
+      // Also trigger immediate logo update with behavior
       const allCurrentItems = [...apiLogos, ...logoItems].map(logoItem =>
         logoItem.id === item.id ? updatedItem : logoItem
       );
@@ -475,10 +475,15 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         logoItem.displayPositions && logoItem.displayPositions.length > 0
       );
 
+      // Determine behavior based on position change
+      const behavior = updatedItem.displayPositions.length > item.displayPositions.length ? 'add' : 'remove';
+
       if (onLogoUpdate) {
         onLogoUpdate({
           logoItems: activeItems,
-          displayOptions: logoDisplayOptions
+          displayOptions: logoDisplayOptions,
+          changedItem: updatedItem,
+          behavior: behavior
         });
       }
     };
