@@ -669,7 +669,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
       console.log('🗑️ [PosterLogoManager] Removed custom logo:', itemId);
     }
 
-    // Trigger immediate update to reflect changes
+    // Trigger immediate update to reflect changes with remove behavior
     const allCurrentItems = [...apiLogos, ...logoItems].map(logoItem =>
       logoItem.id === itemId ? { ...logoItem, displayPositions: [] } : logoItem
     );
@@ -679,10 +679,15 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
       logoItem.displayPositions && logoItem.displayPositions.length > 0
     );
 
-    if (onLogoUpdate) {
+    // Find the removed item to pass as changedItem
+    const removedItem = (isFromAPI ? apiLogos : logoItems).find(logo => logo.id === itemId);
+
+    if (onLogoUpdate && removedItem) {
       onLogoUpdate({
         logoItems: activeItems,
-        displayOptions: logoDisplayOptions
+        displayOptions: logoDisplayOptions,
+        changedItem: { ...removedItem, displayPositions: [] },
+        behavior: 'remove'
       });
     }
   };
