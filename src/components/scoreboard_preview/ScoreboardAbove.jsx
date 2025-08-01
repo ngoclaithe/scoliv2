@@ -318,7 +318,7 @@ const ScoreboardAbove = ({
             {!showMatchTime && (
                 <div className="text-center mt-2">
                     <span className="bg-green-600 text-white px-4 py-1 text-sm font-bold rounded animate-pulse">
-                        ● TRỰC TIẾP
+                        ● TR���C TIẾP
                     </span>
                 </div>
             )}
@@ -502,8 +502,8 @@ const ScoreboardAbove = ({
                     {(() => {
                         const allLogos = [];
 
-                        // Collect sponsors with top-left position
-                        if (sponsors.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && sponsors.sponsors?.position) {
+                        // Collect sponsors with top-left position (check for non-empty arrays)
+                        if (sponsors.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && sponsors.sponsors?.position && sponsors.sponsors.position.length > 0) {
                             sponsors.sponsors.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(sponsors.sponsors.position[index]) ? sponsors.sponsors.position[index][0] : sponsors.sponsors.position[index];
                                 if (position === 'top-left') {
