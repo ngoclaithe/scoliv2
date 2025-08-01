@@ -475,10 +475,15 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         logoItem.displayPositions && logoItem.displayPositions.length > 0
       );
 
+      // Determine behavior based on position change
+      const behavior = updatedItem.displayPositions.length > item.displayPositions.length ? 'add' : 'remove';
+
       if (onLogoUpdate) {
         onLogoUpdate({
           logoItems: activeItems,
-          displayOptions: logoDisplayOptions
+          displayOptions: logoDisplayOptions,
+          behavior: behavior,
+          changedItem: updatedItem
         });
       }
     };
