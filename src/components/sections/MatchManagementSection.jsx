@@ -394,7 +394,8 @@ const MatchManagementSection = ({ isActive = true }) => {
               <Button
                 variant="primary"
                 size="sm"
-                className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
+                className="bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
+                style={{flex: 2}}
                 onClick={() => handleScoreChange("teamA", 1)}
               >
                 <span className="text-sm sm:text-lg">+</span>
@@ -402,7 +403,8 @@ const MatchManagementSection = ({ isActive = true }) => {
               <Button
                 variant="primary"
                 size="sm"
-                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
+                className="bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
+                style={{flex: 1}}
                 onClick={() => handleScoreChange("teamA", -1)}
               >
                 <span className="text-sm sm:text-lg">-</span>
@@ -416,7 +418,8 @@ const MatchManagementSection = ({ isActive = true }) => {
               <Button
                 variant="primary"
                 size="sm"
-                className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
+                className="bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
+                style={{flex: 2}}
                 onClick={() => handleScoreChange("teamB", 1)}
               >
                 <span className="text-sm sm:text-lg">+</span>
@@ -424,7 +427,8 @@ const MatchManagementSection = ({ isActive = true }) => {
               <Button
                 variant="primary"
                 size="sm"
-                className="flex-1 bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
+                className="bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
+                style={{flex: 1}}
                 onClick={() => handleScoreChange("teamB", -1)}
               >
                 <span className="text-sm sm:text-lg">-</span>
