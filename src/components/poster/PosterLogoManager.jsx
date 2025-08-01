@@ -889,15 +889,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         {renderLogoSection()}
       </div>
 
-      <div className="flex justify-end pt-2 border-t border-gray-200">
-        <Button
-          variant="primary"
-          onClick={() => onClose?.()}
-          className="text-xs px-3 py-1"
-        >
-          ĐÓNG
-        </Button>
-      </div>
+
     </div>
   );
 };
