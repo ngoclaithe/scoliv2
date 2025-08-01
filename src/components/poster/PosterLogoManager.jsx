@@ -525,7 +525,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
               onChange={handleCodeChange}
               className={`w-full text-xs text-center border rounded px-1 py-1 pr-6 font-mono transition-colors focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none ${isSearching ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
                 }`}
-              placeholder="Nh��p mã"
+              placeholder="Nhập mã"
             />
             <button
               onClick={handleSearch}
@@ -630,26 +630,43 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
   };
 
   const handleItemRemove = async (itemId) => {
+    console.log('🗑️ [PosterLogoManager] Removing item:', itemId);
+
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);
     const item = logoItems.find(logo => logo.id === itemId);
 
+    // Clean up blob URLs
     if (item && item.url && item.url.startsWith('blob:')) {
       URL.revokeObjectURL(item.url);
     }
 
     if (isFromAPI) {
-      try {
-        setApiLogos(prev => prev.map(item =>
-          item.id === itemId ? { ...item, displayPositions: [] } : item
-        ));
-      } catch (error) {
-        console.error("Error resetting API logo:", error);
-        setApiLogos(prev => prev.map(item =>
-          item.id === itemId ? { ...item, displayPositions: [] } : item
-        ));
-      }
+      // Clear display positions for API logos (don't remove from list)
+      setApiLogos(prev => prev.map(logo =>
+        logo.id === itemId ? { ...logo, displayPositions: [] } : logo
+      ));
+      console.log('🗑️ [PosterLogoManager] Cleared positions for API logo:', itemId);
     } else {
-      setLogoItems(prev => prev.filter(item => item.id !== itemId));
+      // Remove custom logos completely
+      setLogoItems(prev => prev.filter(logo => logo.id !== itemId));
+      console.log('🗑️ [PosterLogoManager] Removed custom logo:', itemId);
+    }
+
+    // Trigger immediate update to reflect changes
+    const allCurrentItems = [...apiLogos, ...logoItems].map(logoItem =>
+      logoItem.id === itemId ? { ...logoItem, displayPositions: [] } : logoItem
+    );
+
+    const activeItems = allCurrentItems.filter(logoItem =>
+      logoItem.category === activeLogoCategory &&
+      logoItem.displayPositions && logoItem.displayPositions.length > 0
+    );
+
+    if (onLogoUpdate) {
+      onLogoUpdate({
+        logoItems: activeItems,
+        displayOptions: logoDisplayOptions
+      });
     }
   };
 
