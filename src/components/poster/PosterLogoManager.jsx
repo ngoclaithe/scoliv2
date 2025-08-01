@@ -86,10 +86,11 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
   }, [apiLogos, logoItems]);
 
   useEffect(() => {
+    let isMounted = true;
+
     const loadLogos = async () => {
       try {
         setLoading(true);
-        setApiLogos([]);
 
         // Load initial data if provided (for display options only)
         if (initialData) {
@@ -101,13 +102,13 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
           }
         }
 
-        // Load display settings from API
-        if (accessCode) {
+        // Load display settings from API only once
+        if (accessCode && isMounted) {
           try {
             console.log('🔍 [PosterLogoManager] Loading display settings from API for:', accessCode);
             const response = await DisplaySettingsAPI.getDisplaySettings(accessCode);
 
-            if (response?.success && response?.data) {
+            if (response?.success && response?.data && isMounted) {
               const loadedLogos = [];
 
               // Process sponsors
@@ -215,25 +216,37 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
                 });
               }
 
-              setApiLogos(loadedLogos);
-              console.log(`✅ [PosterLogoManager] Loaded ${loadedLogos.length} display settings from API`);
+              if (isMounted) {
+                setApiLogos(loadedLogos);
+                console.log(`✅ [PosterLogoManager] Loaded ${loadedLogos.length} display settings from API`);
+              }
             }
           } catch (err) {
             console.warn('⚠️ [PosterLogoManager] Failed to load display settings from API:', err);
-            setApiLogos([]);
+            if (isMounted) {
+              setApiLogos([]);
+            }
           }
         }
 
       } catch (err) {
         console.error("Error loading logos:", err);
-        setApiLogos([]);
+        if (isMounted) {
+          setApiLogos([]);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     loadLogos();
-  }, [initialData]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [accessCode]); // Chỉ depend vào accessCode thôi, không depend vào initialData
 
   // Update count whenever logo data changes
   useEffect(() => {
@@ -512,7 +525,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
               onChange={handleCodeChange}
               className={`w-full text-xs text-center border rounded px-1 py-1 pr-6 font-mono transition-colors focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none ${isSearching ? 'border-blue-400 bg-blue-50' : 'border-gray-300 hover:border-gray-400'
                 }`}
-              placeholder="Nhập mã"
+              placeholder="Nh��p mã"
             />
             <button
               onClick={handleSearch}
