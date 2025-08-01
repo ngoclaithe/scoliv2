@@ -611,31 +611,40 @@ const ScoreboardAbove = ({
                     {(() => {
                         const allLogos = [];
 
-                        // Collect sponsors with bottom-left position
+                        // Collect sponsors with bottom-left position (check behavior)
                         if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position) {
                             sponsors.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index];
-                                if (position === 'bottom-left') {
+                                const behavior = sponsors?.behavior;
+
+                                // Only add if behavior is 'add' or undefined (default behavior)
+                                if (position === 'bottom-left' && (!behavior || behavior === 'add')) {
                                     allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
                                 }
                             });
                         }
 
-                        // Collect organizing with bottom-left position
+                        // Collect organizing with bottom-left position (check behavior)
                         if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
                             organizing.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
-                                if (position === 'bottom-left') {
+                                const behavior = organizing?.behavior;
+
+                                // Only add if behavior is 'add' or undefined (default behavior)
+                                if (position === 'bottom-left' && (!behavior || behavior === 'add')) {
                                     allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
                                 }
                             });
                         }
 
-                        // Collect media partners with bottom-left position
+                        // Collect media partners with bottom-left position (check behavior)
                         if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
                             mediaPartners.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
-                                if (position === 'bottom-left') {
+                                const behavior = mediaPartners?.behavior;
+
+                                // Only add if behavior is 'add' or undefined (default behavior)
+                                if (position === 'bottom-left' && (!behavior || behavior === 'add')) {
                                     allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
                                 }
                             });
@@ -692,31 +701,40 @@ const ScoreboardAbove = ({
                     {(() => {
                         const allLogos = [];
 
-                        // Collect sponsors with bottom-right position
+                        // Collect sponsors with bottom-right position (check behavior)
                         if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position) {
                             sponsors.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index];
-                                if (position === 'bottom-right') {
+                                const behavior = sponsors?.behavior;
+
+                                // Only add if behavior is 'add' or undefined (default behavior)
+                                if (position === 'bottom-right' && (!behavior || behavior === 'add')) {
                                     allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
                                 }
                             });
                         }
 
-                        // Collect organizing with bottom-right position
+                        // Collect organizing with bottom-right position (check behavior)
                         if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
                             organizing.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
-                                if (position === 'bottom-right') {
+                                const behavior = organizing?.behavior;
+
+                                // Only add if behavior is 'add' or undefined (default behavior)
+                                if (position === 'bottom-right' && (!behavior || behavior === 'add')) {
                                     allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
                                 }
                             });
                         }
 
-                        // Collect media partners with bottom-right position
+                        // Collect media partners with bottom-right position (check behavior)
                         if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
                             mediaPartners.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
-                                if (position === 'bottom-right') {
+                                const behavior = mediaPartners?.behavior;
+
+                                // Only add if behavior is 'add' or undefined (default behavior)
+                                if (position === 'bottom-right' && (!behavior || behavior === 'add')) {
                                     allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
                                 }
                             });
