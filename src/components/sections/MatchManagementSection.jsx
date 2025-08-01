@@ -48,15 +48,6 @@ const MatchManagementSection = ({ isActive = true }) => {
 
   } = useMatch();
 
-  // Lấy logo state hiện tại từ PublicMatchContext
-  const publicMatchContext = usePublicMatch();
-  const {
-    sponsors: currentSponsors,
-    organizing: currentOrganizing,
-    mediaPartners: currentMediaPartners,
-    tournamentLogo: currentTournamentLogo
-  } = publicMatchContext || {};
-
   // Audio state management
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -1235,7 +1226,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
                     toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                   } else {
-                    toast.warning('⚠��� Vui lòng nhập thời gian hợp lệ!');
+                    toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
                   }
                 }}
                 disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
