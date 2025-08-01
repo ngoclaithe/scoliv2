@@ -635,7 +635,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             </div>
           </div>
 
-          {/* Thời gian & Địa điểm - 1 hàng */}
+          {/* Thời gian & Địa điểm - 1 h��ng */}
           <div className="grid grid-cols-3 gap-1">
             <input
               type="date"
@@ -1076,10 +1076,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 const timeString = "45:00";
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 updateView('scoreboard');
-                setSelectedOption("ti-so-tren");
-                // Phát audio gialap cho đếm giờ
                 playAudioForAction('gialap');
-                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
                 toast.success('⏰ Đã bắt đầu timer từ 45:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
