@@ -7,6 +7,10 @@ const CommentarySection = ({ isActive = true }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const mediaRecorderRef = useRef(null);
   const streamRef = useRef(null);
+  const continuousTimeoutRef = useRef(null);
+  const audioChunksRef = useRef([]);
+  
+  // REF để track real-time state
   const isRecordingRef = useRef(false);
 
   // Sync ref với state
@@ -14,7 +18,7 @@ const CommentarySection = ({ isActive = true }) => {
     isRecordingRef.current = isRecording;
   }, [isRecording]);
 
-  // Check browser support
+  // Check for browser support and codecs
   const isSupported = typeof navigator !== 'undefined' &&
                      navigator.mediaDevices &&
                      navigator.mediaDevices.getUserMedia &&
@@ -22,7 +26,7 @@ const CommentarySection = ({ isActive = true }) => {
 
   const getSupportedMimeType = () => {
     const types = [
-      'audio/webm;codecs=opus', // Opus codec có latency thấp nhất
+      'audio/webm;codecs=opus',
       'audio/ogg;codecs=opus',
       'audio/webm',
       'audio/mp4',
@@ -31,67 +35,164 @@ const CommentarySection = ({ isActive = true }) => {
 
     for (const type of types) {
       if (MediaRecorder.isTypeSupported(type)) {
+        console.log('🎙️ Using mime type:', type);
         return type;
       }
     }
     return null;
   };
 
+  // Test if browser can play the recorded format
+  const canPlayFormat = (mimeType) => {
+    const audio = document.createElement('audio');
+    return audio.canPlayType(mimeType) !== '';
+  };
+
   useEffect(() => {
     return () => {
+      // Cleanup on unmount
       stopAllRecording();
     };
   }, []);
 
+  // Dừng ghi âm khi tab không active nữa
   useEffect(() => {
     if (!isActive) {
-      console.log('🔇 Tab inactive, stopping recording');
+      console.log('🔇 [CommentarySection] Tab inactive, stopping recording');
       stopAllRecording();
     }
   }, [isActive]);
 
   const stopAllRecording = () => {
+    // Dừng ghi âm hiện tại
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       mediaRecorderRef.current.stop();
     }
     
+    // Dừng stream
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
     }
     
+    // Clear timeout
+    if (continuousTimeoutRef.current) {
+      clearTimeout(continuousTimeoutRef.current);
+      continuousTimeoutRef.current = null;
+    }
+    
+    // Reset states
     setIsRecording(false);
     setIsProcessing(false);
+    audioChunksRef.current = [];
   };
 
-  const sendVoiceToServer = async (audioBlob) => {
-    try {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const arrayBuffer = reader.result;
-        
-        if (socketService.socket && socketService.socket.connected) {
-          const mimeType = mediaRecorderRef.current?.mimeType || getSupportedMimeType() || 'audio/webm';
-          
-          console.log('📡 Sending audio data:', {
-            size: arrayBuffer.byteLength,
-            mimeType: mimeType
-          });
-          
-          // ✅ GỬI TRỰC TIẾP ARRAYBUFFER - không convert sang Array
-          socketService.sendRefereeVoice(arrayBuffer, mimeType);
-        }
-      };
-      
-      reader.onerror = () => {
-        console.error('❌ FileReader error:', reader.error);
-      };
-      
-      reader.readAsArrayBuffer(audioBlob);
-      
-    } catch (error) {
-      console.error('❌ Error sending voice to server:', error);
+  const sendAccumulatedChunks = () => {
+    if (audioChunksRef.current.length === 0) {
+      console.log('⚠️ No chunks to send');
+      return;
     }
+
+    const mimeType = mediaRecorderRef.current?.mimeType || getSupportedMimeType() || 'audio/webm';
+    const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
+
+    console.log('📡 Sending accumulated chunks:', {
+      chunksCount: audioChunksRef.current.length,
+      totalSize: audioBlob.size,
+      mimeType: mimeType
+    });
+
+    // Kiểm tra nếu blob quá nhỏ
+    if (audioBlob.size < 1000) { // < 1KB
+      console.warn('⚠️ Audio blob too small, might be invalid:', audioBlob.size, 'bytes');
+      // Vẫn thử gửi, nhưng cảnh báo
+    }
+
+    // Reset chunks array ngay sau khi tạo blob
+    audioChunksRef.current = [];
+    
+    // Gửi ngay lập tức
+    sendVoiceToServer(audioBlob).then(() => {
+      console.log('✅ Accumulated chunks sent successfully');
+    }).catch(error => {
+      console.error('❌ Failed to send accumulated chunks:', error);
+    });
+  };
+
+  const createMediaRecorder = async (stream, mimeType) => {
+    const options = { 
+      mimeType,
+      audioBitsPerSecond: 128000 // Tăng bitrate để đảm bảo chất lượng
+    };
+
+    const mediaRecorder = new MediaRecorder(stream, options);
+    mediaRecorderRef.current = mediaRecorder;
+
+    mediaRecorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        console.log('📥 Data chunk received:', event.data.size, 'bytes');
+        // Tích lũy chunks thay vì gửi ngay
+        audioChunksRef.current.push(event.data);
+        console.log('📦 Total chunks accumulated:', audioChunksRef.current.length);
+      }
+    };
+
+    mediaRecorder.onstop = () => {
+      console.log('🎙️ MediaRecorder stopped');
+      
+      // Gửi tất cả chunks đã tích lũy
+      if (audioChunksRef.current.length > 0) {
+        sendAccumulatedChunks();
+      }
+      
+      if (isRecordingRef.current) {
+        // Nếu vẫn đang trong chế độ recording, restart ngay lập tức
+        scheduleNextChunk();
+      }
+    };
+
+    mediaRecorder.onstart = () => {
+      console.log('🎙️ MediaRecorder started');
+      audioChunksRef.current = []; // Reset chunks khi bắt đầu
+    };
+
+    // Bắt đầu ghi với timeslice 500ms (tăng từ 100ms)
+    console.log('🎙️ Starting MediaRecorder with 500ms chunks');
+    mediaRecorder.start(500); // 500ms chunks để đảm bảo đủ data
+    setIsRecording(true);
+
+    // Tự động restart sau 2 giây
+    continuousTimeoutRef.current = setTimeout(() => {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+        console.log('🔄 Auto-restarting recording (500ms -> send)');
+        mediaRecorderRef.current.stop(); // Này sẽ trigger onstop -> gửi chunks
+      }
+    }, 2000);
+  };
+
+  const scheduleNextChunk = () => {
+    if (!isRecordingRef.current) {
+      console.log('⏹️ Recording stopped, not scheduling next chunk');
+      return;
+    }
+
+    console.log('🔄 Scheduling next chunk');
+    continuousTimeoutRef.current = setTimeout(() => {
+      if (isRecordingRef.current && streamRef.current && streamRef.current.active) {
+        startNextChunk();
+      }
+    }, 100); // Delay ngắn để tránh gap
+  };
+
+  const startNextChunk = async () => {
+    if (!streamRef.current || !streamRef.current.active || !isRecordingRef.current) {
+      console.log('⚠️ Cannot start next chunk - stream inactive or recording stopped');
+      return;
+    }
+
+    console.log('🎙️ Starting next chunk');
+    const mimeType = getSupportedMimeType();
+    await createMediaRecorder(streamRef.current, mimeType);
   };
 
   const startRecording = async () => {
@@ -106,60 +207,30 @@ const CommentarySection = ({ isActive = true }) => {
       return;
     }
 
+    // Test if browser can play this format
+    if (!canPlayFormat(mimeType)) {
+      console.warn('⚠️ Browser may not be able to play recorded format:', mimeType);
+    }
+
     try {
       setIsProcessing(true);
       
-      // Tối ưu stream settings cho low latency
+      // Tạo stream mới
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          autoGainControl: true,
-          sampleRate: 16000, // Giảm xuống 16kHz cho low latency
+          sampleRate: 48000, // Tăng sample rate
           channelCount: 1,
-          // Thêm constraints cho low latency
-          latency: 0.01, // 10ms target latency
-          volume: 1.0
+          autoGainControl: true
         }
       });
-      
       streamRef.current = stream;
 
-      // Tối ưu MediaRecorder settings
-      const options = { 
-        mimeType,
-        audioBitsPerSecond: 64000 // Giảm bitrate để giảm data size
-      };
-
-      const mediaRecorder = new MediaRecorder(stream, options);
-      mediaRecorderRef.current = mediaRecorder;
-
-      // GỬI NGAY KHI CÓ DATA - không tích lũy
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          console.log('📡 Sending chunk immediately:', event.data.size, 'bytes');
-          // Gửi ngay lập tức từng chunk riêng lẻ
-          sendVoiceToServer(event.data);
-        }
-      };
-
-      mediaRecorder.onstop = () => {
-        console.log('🎙️ MediaRecorder stopped');
-      };
-
-      mediaRecorder.onstart = () => {
-        console.log('🎙️ MediaRecorder started with ultra-low latency mode');
-      };
-
-      // SIÊU QUAN TRỌNG: Giảm timeslice xuống tối đa
-      // 100ms = delay tối đa 100ms thay vì 2000ms
-      mediaRecorder.start(100); // 100ms chunks cho ultra-low latency
+      await createMediaRecorder(stream, mimeType);
       
-      setIsRecording(true);
       setIsProcessing(false);
-      
-      console.log('🚀 Ultra-low latency recording started:', mimeType);
-      
+      console.log('🎙️ Continuous recording started with format:', mimeType);
     } catch (error) {
       console.error('Lỗi khi bắt đầu ghi âm:', error);
       alert('Không thể truy cập microphone. Vui lòng cho phép quyền truy cập.');
@@ -168,17 +239,52 @@ const CommentarySection = ({ isActive = true }) => {
   };
 
   const stopRecording = () => {
-    console.log('🔇 Stopping recording');
+    console.log('🔇 Stopping continuous recording');
     setIsRecording(false);
-
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-      mediaRecorderRef.current.stop();
+    
+    if (continuousTimeoutRef.current) {
+      clearTimeout(continuousTimeoutRef.current);
+      continuousTimeoutRef.current = null;
     }
 
+    // Dừng current recording và gửi chunks cuối cùng
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop(); // Này sẽ trigger gửi chunks cuối
+    }
+
+    // Dừng stream
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
     }
+  };
+
+  const sendVoiceToServer = async (audioBlob) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const arrayBuffer = reader.result;
+        const uint8Array = new Uint8Array(arrayBuffer);
+
+        if (socketService.socket && socketService.socket.connected) {
+          const mimeType = mediaRecorderRef.current?.mimeType || getSupportedMimeType() || 'audio/webm';
+          const success = socketService.sendRefereeVoice(
+            Array.from(uint8Array),
+            mimeType
+          );
+
+          if (success) {
+            resolve();
+          } else {
+            reject(new Error('Failed to send voice through socket service'));
+          }
+        } else {
+          reject(new Error('Socket not connected'));
+        }
+      };
+      reader.onerror = () => reject(reader.error);
+      reader.readAsArrayBuffer(audioBlob);
+    });
   };
 
   const toggleRecording = () => {
@@ -200,7 +306,7 @@ const CommentarySection = ({ isActive = true }) => {
             w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 transform
             ${isRecording
               ? 'bg-red-500 hover:bg-red-600 animate-pulse scale-110'
-              : 'bg-green-500 hover:bg-green-600'
+              : 'bg-blue-500 hover:bg-blue-600'
             }
             ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}
             text-white shadow-lg hover:shadow-xl
@@ -224,19 +330,19 @@ const CommentarySection = ({ isActive = true }) => {
         )}
         {isRecording && !isProcessing && (
           <p className="text-red-600 font-medium animate-pulse">
-            🔴 LIVE - Delay chỉ ~100ms
+            🔴 Đang thu âm
           </p>
         )}
         {!isRecording && !isProcessing && (
           <p className="text-gray-600">
-            Ấn mic để bắt đầu phát trực tiếp
+            Ấn mic để bắt đầu bình luận liên tục
           </p>
         )}
         {!isSupported && (
           <p className="text-red-600">Trình duyệt không hỗ trợ ghi âm</p>
         )}
-
       </div>
+
     </div>
   );
 };
