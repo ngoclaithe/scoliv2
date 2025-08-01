@@ -1274,7 +1274,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 onChange={(e) => setClockSetting(e.target.value)}
                 className="scale-75"
               />
-              <label className="text-xs">LIÊN T��C</label>
+              <label className="text-xs">LIÊN TỤC</label>
             </div>
             <div className="flex items-center space-x-1">
               <input
@@ -1397,7 +1397,71 @@ const MatchManagementSection = ({ isActive = true }) => {
           initialData={{
             selectedPoster: displaySettings.selectedPoster ? { id: displaySettings.selectedPoster, name: displaySettings.selectedPoster } : null,
             logoItems: [],
-            apiLogos: [],
+            apiLogos: (() => {
+              const logos = [];
+
+              // Convert sponsors to logo format
+              if (currentSponsors?.url_logo) {
+                currentSponsors.url_logo.forEach((url, index) => {
+                  logos.push({
+                    id: `sponsor-${index}`,
+                    unitName: currentSponsors.code_logo?.[index] || `Sponsor ${index + 1}`,
+                    code: currentSponsors.code_logo?.[index] || `SP${index + 1}`,
+                    type: "logo",
+                    category: "sponsor",
+                    url: url,
+                    displayPositions: Array.isArray(currentSponsors.position?.[index]) ? currentSponsors.position[index] : [currentSponsors.position?.[index] || 'top-left']
+                  });
+                });
+              }
+
+              // Convert organizing to logo format
+              if (currentOrganizing?.url_logo) {
+                currentOrganizing.url_logo.forEach((url, index) => {
+                  logos.push({
+                    id: `organizing-${index}`,
+                    unitName: currentOrganizing.code_logo?.[index] || `Organizing ${index + 1}`,
+                    code: currentOrganizing.code_logo?.[index] || `ORG${index + 1}`,
+                    type: "logo",
+                    category: "organizing",
+                    url: url,
+                    displayPositions: Array.isArray(currentOrganizing.position?.[index]) ? currentOrganizing.position[index] : [currentOrganizing.position?.[index] || 'bottom-left']
+                  });
+                });
+              }
+
+              // Convert media partners to logo format
+              if (currentMediaPartners?.url_logo) {
+                currentMediaPartners.url_logo.forEach((url, index) => {
+                  logos.push({
+                    id: `media-${index}`,
+                    unitName: currentMediaPartners.code_logo?.[index] || `Media ${index + 1}`,
+                    code: currentMediaPartners.code_logo?.[index] || `MED${index + 1}`,
+                    type: "logo",
+                    category: "media",
+                    url: url,
+                    displayPositions: Array.isArray(currentMediaPartners.position?.[index]) ? currentMediaPartners.position[index] : [currentMediaPartners.position?.[index] || 'bottom-right']
+                  });
+                });
+              }
+
+              // Convert tournament logo to logo format
+              if (currentTournamentLogo?.url_logo) {
+                currentTournamentLogo.url_logo.forEach((url, index) => {
+                  logos.push({
+                    id: `tournament-${index}`,
+                    unitName: currentTournamentLogo.code_logo?.[index] || `Tournament ${index + 1}`,
+                    code: currentTournamentLogo.code_logo?.[index] || `TOUR${index + 1}`,
+                    type: "logo",
+                    category: "tournament",
+                    url: url,
+                    displayPositions: ['top-left']
+                  });
+                });
+              }
+
+              return logos;
+            })(),
             displayOptions: {
               shape: displaySettings.logoShape || 'round',
               rotateDisplay: displaySettings.rotateDisplay || false
@@ -1654,7 +1718,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                   // Format thời gian (phút:giây)
                   const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
-                  // Set thời gian và bắt đầu đếm tiến t��� server timer
+                  // Set thời gian và bắt đầu đếm tiến từ server timer
                   updateMatchTime(timeString, "Hiệp 1", "live");
 
                   // Chuyển sang tỉ số trên
