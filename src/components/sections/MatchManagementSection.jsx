@@ -7,6 +7,7 @@ import TeamLineupModal from "../lineup/TeamLineupModal";
 import Modal from "../common/Modal";
 import SimplePenaltyModal from "../common/SimplePenaltyModal";
 import { useMatch } from "../../contexts/MatchContext";
+import { usePublicMatch } from "../../contexts/PublicMatchContext";
 import { toast } from 'react-toastify';
 import audioUtils from '../../utils/audioUtils';
 
