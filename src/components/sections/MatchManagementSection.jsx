@@ -737,7 +737,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
               }`}
           >
-            <span className="mr-0.5 text-xs">🎮</span>
+            <span className="mr-0.5 text-xs">����</span>
             <span className="hidden sm:inline">ĐIỀU KHIỂN</span>
             <span className="sm:hidden">DK</span>
           </button>
@@ -1030,11 +1030,9 @@ const MatchManagementSection = ({ isActive = true }) => {
               onClick={() => {
                 const timeString = "30:00";
                 updateMatchTime(timeString, "Hiệp 1", "live");
-                // Chuyển sang tỉ số trên
                 updateView('scoreboard');
-                setSelectedOption("ti-so-tren");
-                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
-                console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
+                playAudioForAction('gialap');
+                toast.success('⏰ Đã bắt đầu timer từ 30:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
