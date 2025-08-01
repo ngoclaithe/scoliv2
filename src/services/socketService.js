@@ -282,14 +282,29 @@ class SocketService {
   }
 
   // Gửi voice trọng tài tới display clients
-  sendRefereeVoice(audioData, mimeType = 'audio/ogg; codecs=opus') {
-    console.log('🎙️ [SocketService] Sending referee voice to displays');
+  sendRefereeVoice(audioData, mimeType = 'audio/webm;codecs=opus') {
+    console.log('🎙️ [SocketService] Sending referee voice to displays:', {
+      dataType: typeof audioData,
+      isArrayBuffer: audioData instanceof ArrayBuffer,
+      dataSize: audioData?.byteLength || audioData?.length || 'unknown',
+      mimeType
+    });
+
+    // Đảm bảo gửi ArrayBuffer để giảm latency
+    let processedData = audioData;
+    if (Array.isArray(audioData)) {
+      console.log('🔄 Converting Array to ArrayBuffer for transmission');
+      const uint8Array = new Uint8Array(audioData);
+      processedData = uint8Array.buffer;
+    }
+
     return this.sendAudioControl({
       command: 'PLAY_REFEREE_VOICE',
       payload: {
-        audioData,
+        audioData: processedData,
         mimeType,
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        size: processedData?.byteLength || 'unknown'
       },
       target: 'display'
     });
