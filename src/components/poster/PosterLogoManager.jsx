@@ -460,10 +460,10 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
       onUpdate(item.id, updatedItem);
 
       // Emit immediately for real-time update
-      if (onPositionChange) {
-        console.log('📍 [PosterLogoManager] Position changed for item:', updatedItem);
-        onPositionChange(updatedItem);
-      }
+      // if (onPositionChange) {
+      //   console.log('📍 [PosterLogoManager] Position changed for item:', updatedItem);
+      //   onPositionChange(updatedItem);
+      // }
 
       // Also trigger immediate logo update with behavior
       const allCurrentItems = [...apiLogos, ...logoItems].map(logoItem =>

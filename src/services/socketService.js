@@ -348,7 +348,13 @@ class SocketService {
       'lineup_updated',
       'penalty_updated',
       'sponsors_updated',
-      
+      'organizing_updated',
+      'media_partners_updated',
+      'tournament_logo_updated',
+      'live_unit_updated',
+      'poster_settings_updated',
+      'display_settings_updated',
+      'view_updated',      
     ];
 
     events.forEach(event => {

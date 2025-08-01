@@ -321,7 +321,7 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật đơn vị tổ chức
     socketService.on('organizing_updated', (data) => {
-      console.log('📝 [PublicMatchContext] organizing_updated received:', data);
+      // console.log('📝 [PublicMatchContext] organizing_updated received:', data);
       setOrganizing(prev => ({
         ...prev,
         ...data,
@@ -344,7 +344,7 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật đơn vị truyền thông
     socketService.on('media_partners_updated', (data) => {
-      console.log('📝 [PublicMatchContext] media_partners_updated received:', data);
+      // console.log('📝 [PublicMatchContext] media_partners_updated received:', data);
       setMediaPartners(prev => ({
         ...prev,
         ...data,
@@ -393,7 +393,7 @@ export const PublicMatchProvider = ({ children }) => {
     // Lắng nghe cập nhật view hiện tại (MỚI) - KHÔNG update time để tránh re-render
     socketService.on('view_updated', (data) => {
       setCurrentView(data.viewType);
-      console.log('[Audio] View updated to:', data.viewType);
+      // console.log('[Audio] View updated to:', data.viewType);
     });
 
     // Lắng nghe audio control events - để nhận referee voice từ CommentarySection
