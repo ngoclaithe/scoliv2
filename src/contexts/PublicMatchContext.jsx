@@ -289,22 +289,79 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật nhà tài trợ
     socketService.on('sponsors_updated', (data) => {
-      // console.log('📝 [PublicMatchContext] sponsors_updated received:', data);
-      setSponsors(prev => ({ ...prev, ...data }));
+      console.log('📝 [PublicMatchContext] sponsors_updated received:', data);
+      setSponsors(prev => {
+        const newSponsors = { ...prev };
+
+        if (data.sponsors) {
+          // Nếu có data.sponsors, merge với sponsors hiện tại
+          newSponsors.sponsors = {
+            ...prev.sponsors,
+            ...data.sponsors,
+            // Append vào arrays thay vì replace
+            url_logo: data.sponsors.url_logo ?
+              [...(prev.sponsors?.url_logo || []), ...data.sponsors.url_logo] :
+              (prev.sponsors?.url_logo || []),
+            code_logo: data.sponsors.code_logo ?
+              [...(prev.sponsors?.code_logo || []), ...data.sponsors.code_logo] :
+              (prev.sponsors?.code_logo || []),
+            position: data.sponsors.position ?
+              [...(prev.sponsors?.position || []), ...data.sponsors.position] :
+              (prev.sponsors?.position || []),
+            type_display: data.sponsors.type_display ?
+              [...(prev.sponsors?.type_display || []), ...data.sponsors.type_display] :
+              (prev.sponsors?.type_display || [])
+          };
+        }
+
+        return newSponsors;
+      });
       setLastUpdateTime(Date.now());
     });
 
     // Lắng nghe cập nhật đơn vị tổ chức
     socketService.on('organizing_updated', (data) => {
-      // console.log('📝 [PublicMatchContext] organizing_updated received:', data);
-      setOrganizing(prev => ({ ...prev, ...data }));
+      console.log('📝 [PublicMatchContext] organizing_updated received:', data);
+      setOrganizing(prev => ({
+        ...prev,
+        ...data,
+        // Append vào arrays thay vì replace
+        url_logo: data.url_logo ?
+          [...(prev.url_logo || []), ...data.url_logo] :
+          (prev.url_logo || []),
+        code_logo: data.code_logo ?
+          [...(prev.code_logo || []), ...data.code_logo] :
+          (prev.code_logo || []),
+        position: data.position ?
+          [...(prev.position || []), ...data.position] :
+          (prev.position || []),
+        type_display: data.type_display ?
+          [...(prev.type_display || []), ...data.type_display] :
+          (prev.type_display || [])
+      }));
       setLastUpdateTime(Date.now());
     });
 
     // Lắng nghe cập nhật đơn vị truyền thông
     socketService.on('media_partners_updated', (data) => {
-      // console.log('📝 [PublicMatchContext] media_partners_updated received:', data);
-      setMediaPartners(prev => ({ ...prev, ...data }));
+      console.log('📝 [PublicMatchContext] media_partners_updated received:', data);
+      setMediaPartners(prev => ({
+        ...prev,
+        ...data,
+        // Append vào arrays thay vì replace
+        url_logo: data.url_logo ?
+          [...(prev.url_logo || []), ...data.url_logo] :
+          (prev.url_logo || []),
+        code_logo: data.code_logo ?
+          [...(prev.code_logo || []), ...data.code_logo] :
+          (prev.code_logo || []),
+        position: data.position ?
+          [...(prev.position || []), ...data.position] :
+          (prev.position || []),
+        type_display: data.type_display ?
+          [...(prev.type_display || []), ...data.type_display] :
+          (prev.type_display || [])
+      }));
       setLastUpdateTime(Date.now());
     });
 
