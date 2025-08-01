@@ -861,7 +861,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
               {/* Phạt góc */}
               <EditableStatBar
-                label="Phạt góc"
+                label="Ph��t góc"
                 statKey="corners"
                 team1Value={matchStats.corners.team1}
                 team2Value={matchStats.corners.team2}
@@ -1413,8 +1413,49 @@ const MatchManagementSection = ({ isActive = true }) => {
           }}
           onLogoUpdate={(logoData) => {
 
+            // Handle individual item change with behavior
+            if (logoData.changedItem && logoData.behavior) {
+              const item = logoData.changedItem;
+              const behavior = logoData.behavior;
 
-            if (logoData && logoData.logoItems) {
+              console.log(`[MatchManagementSection] ${behavior} logo:`, item);
+
+              // Prepare data with behavior
+              const logoUpdateData = {
+                code_logo: [item.code],
+                url_logo: [item.url],
+                position: item.displayPositions,
+                type_display: [item.type || 'default'],
+                behavior: behavior
+              };
+
+              // Emit to specific category with behavior
+              switch (item.category) {
+                case 'sponsor':
+                  console.log("[MatchManagementSection] Calling updateSponsors with behavior:", behavior);
+                  updateSponsors(logoUpdateData);
+                  break;
+                case 'organizing':
+                  console.log("[MatchManagementSection] Calling updateOrganizing with behavior:", behavior);
+                  updateOrganizing(logoUpdateData);
+                  break;
+                case 'media':
+                  console.log("[MatchManagementSection] Calling updateMediaPartners with behavior:", behavior);
+                  updateMediaPartners(logoUpdateData);
+                  break;
+                case 'tournament':
+                  console.log("[MatchManagementSection] Calling updateTournamentLogo with behavior:", behavior);
+                  updateTournamentLogo({
+                    code_logo: [item.code],
+                    url_logo: [item.url],
+                    behavior: behavior
+                  });
+                  break;
+              }
+            }
+
+            // Handle bulk update (fallback cho compatibility)
+            if (logoData && logoData.logoItems && !logoData.changedItem) {
               // Phân loại logo items theo category
               const logosByCategory = logoData.logoItems.reduce((acc, item) => {
                 if (!acc[item.category]) {
