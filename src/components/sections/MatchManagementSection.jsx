@@ -434,7 +434,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         </div>
 
         {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
-        <div className="flex justify-center items-center mt-2 space-x-2">
+        <div className={`flex justify-center items-center mt-2 space-x-2 ${showMatchInfo ? 'border-2 border-blue-400 rounded-lg p-2 -mb-2' : ''}`}>
           {/* Audio Pause/Play Button */}
           <Button
             variant="primary"
@@ -513,15 +513,12 @@ const MatchManagementSection = ({ isActive = true }) => {
           <Button
             variant="primary"
             size="sm"
-            className={`px-2 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 ${showMatchInfo ? 'relative' : ''}`}
+            className="px-2 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
             onClick={() => setShowMatchInfo(!showMatchInfo)}
           >
             <span className="mr-1">ℹ️</span>
             <span className="hidden sm:inline">THÔNG TIN</span>
             <span className="sm:hidden">INFO</span>
-            {showMatchInfo && (
-              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-px h-2 bg-blue-500"></div>
-            )}
           </Button>
 
 
@@ -529,8 +526,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       </div>
 
       {showMatchInfo && (
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 border border-blue-200 space-y-2 relative">
-          <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-px h-2 bg-blue-500"></div>
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-b-lg p-2 border-l-2 border-r-2 border-b-2 border-blue-400 space-y-2 -mt-1 shadow-lg">
           {/* Tên trận đấu & Đơn vị live - 1 hàng */}
           <div className="grid grid-cols-2 gap-1">
             <input
@@ -1036,7 +1032,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 const timeString = "20:00";
                 // Set thời gian về 25:00 và bắt đầu đếm tiến từ server timer
                 updateMatchTime(timeString, "Hiệp 1", "live");
-                // Chuy���n sang tỉ số trên
+                // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
                 // Phát audio gialap cho đếm giờ
@@ -1617,7 +1613,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       <Modal
         isOpen={showTimerModal}
         onClose={() => setShowTimerModal(false)}
-        title="🕰️ Thiết L��p Thời Gian Tùy Chỉnh"
+        title="🕰️ Thiết Lập Thời Gian Tùy Chỉnh"
         size="md"
       >
         <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-4">
