@@ -187,14 +187,10 @@ const MatchManagementSection = ({ isActive = true }) => {
       const response = await LogoAPI.searchLogosByCode(logoCodeA.trim(), true);
       if (response.success && response.data && response.data.length > 0) {
         const logo = response.data[0];
-        console.log("Giá trị logo A1 hiện tại là", logo);
-
         setTeamAInfo(prev => ({ ...prev, logo: logo.url_logo }));
-        console.log(`Đã chọn logo ${logo.code_logo} cho Đội A!`);
-        console.log('Đã chọn infoTeamA.logo là:', teamAInfo.logo);
-        setLogoCodeA(""); // Clear input sau khi thành công
+        setLogoCodeA("");
       } else {
-        console.error(`Không tìm thấy logo với code "${logoCodeA}"`);
+        toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeA}"`);
       }
     } catch (error) {
       console.error('Lỗi tìm kiếm logo A:', error);
@@ -264,7 +260,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateStats(newStats);
   };
 
-  // Component để hiển thị/chỉnh sửa thống kê
+  // Component để hiển th��/chỉnh sửa thống kê
   const EditableStatBar = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => {
     if (!isEditingStats) {
       // Chế độ hiển thị
@@ -453,7 +449,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 resumeCurrentAudio();
                 toast.info('▶️ Đã tiếp tục phát audio');
               } else {
-                // Kh��ng có audio nào -> toggle audio enabled
+                // Không có audio nào -> toggle audio enabled
                 console.log('ὐ9 [MatchManagement] No audio to resume, toggling audio enabled state');
                 toggleAudioEnabled();
                 toast.info(audioEnabled ? '🔇 Đã tắt audio tĩnh' : '🔊 Đã bật audio tĩnh');
@@ -533,7 +529,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             />
             <input
               type="text"
-              placeholder="Đ��n vị live"
+              placeholder="Đơn vị live"
               value={liveUnit}
               onChange={(e) => setLiveUnit(e.target.value)}
               className="w-full min-w-0 px-2 py-1 text-xs font-medium text-center text-blue-700 bg-white border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-300"
