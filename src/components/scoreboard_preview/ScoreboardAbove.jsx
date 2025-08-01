@@ -528,11 +528,14 @@ const ScoreboardAbove = ({
                             });
                         }
 
-                        // Collect media partners with top-left position
+                        // Collect media partners with top-left position (check behavior)
                         if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
                             mediaPartners.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
-                                if (position === 'top-left') {
+                                const behavior = mediaPartners?.behavior;
+
+                                // Only add if behavior is 'add' or undefined (default behavior)
+                                if (position === 'top-left' && (!behavior || behavior === 'add')) {
                                     allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
                                 }
                             });
