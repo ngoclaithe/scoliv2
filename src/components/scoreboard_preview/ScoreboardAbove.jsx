@@ -263,7 +263,7 @@ const ScoreboardAbove = ({
                     </div>
                 </div>
 
-                {/* Logo Team A – đè l��n phía ngoài teamAName */}
+                {/* Logo Team A – đè lên phía ngoài teamAName */}
                 <div
                     className="absolute z-20"
                     style={{
@@ -522,8 +522,8 @@ const ScoreboardAbove = ({
                             });
                         }
 
-                        // Collect media partners with top-left position
-                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
+                        // Collect media partners with top-left position (check for non-empty arrays)
+                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position && mediaPartners.position.length > 0) {
                             mediaPartners.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
                                 if (position === 'top-left') {
