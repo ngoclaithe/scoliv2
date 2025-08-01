@@ -551,15 +551,15 @@ const ScoreboardAbove = ({
 
     return (
         <div className="w-full h-screen relative overflow-hidden">
-            <div className="w-full h-full relative bg-transparent">
+            <div className="w-full h-full relative bg-transparent scoreboard-container">
                 {/* Top Left Position */}
-                <div className="absolute top-4 left-4 z-40">
+                <div className="absolute top-4 left-4 z-40 corner-logo top-left">
                     {renderLogos(collectLogosForPosition('top-left'))}
                 </div>
 
                 {/* Tournament Logo - Top Left (if no sponsors) */}
                 {collectLogosForPosition('top-left').length === 0 && tournamentLogo?.url_logo && tournamentLogo.url_logo.length > 0 && (
-                    <div className="absolute top-4 left-4 z-40">
+                    <div className="absolute top-4 left-4 z-40 corner-logo top-left">
                         <DisplayLogo
                             logos={tournamentLogo.url_logo}
                             alt="Tournament"
@@ -570,19 +570,19 @@ const ScoreboardAbove = ({
                 )}
 
                 {/* Main Scoreboard - Top Right */}
-                <div className="absolute top-4 right-4 z-30">
+                <div className="absolute top-4 right-4 z-30 scoreboard-position">
                     <div className="scoreboard-main bg-transparent rounded-lg shadow-2xl">
                         {renderScoreboard()}
                     </div>
                 </div>
 
                 {/* Bottom Left Position */}
-                <div className="absolute bottom-4 left-4 z-40">
+                <div className="absolute bottom-4 left-4 z-40 corner-logo bottom-left">
                     {renderLogos(collectLogosForPosition('bottom-left'))}
                 </div>
 
                 {/* Bottom Right Position */}
-                <div className="absolute bottom-4 right-4 z-40">
+                <div className="absolute bottom-4 right-4 z-40 corner-logo bottom-right">
                     {renderLogos(collectLogosForPosition('bottom-right'))}
                 </div>
 
@@ -615,21 +615,89 @@ const ScoreboardAbove = ({
                     transform-origin: top right;
                 }
 
+                .corner-logo {
+                    transform-origin: center;
+                }
+
+                .scoreboard-position {
+                    transform-origin: top right;
+                }
+
+                /* Tablet */
                 @media (max-width: 768px) {
                     .scoreboard-main {
                         transform: scale(0.75);
                     }
+                    .corner-logo {
+                        transform: scale(0.75);
+                    }
+                    .corner-logo.top-left {
+                        top: 12px;
+                        left: 12px;
+                    }
+                    .corner-logo.bottom-left {
+                        bottom: 12px;
+                        left: 12px;
+                    }
+                    .corner-logo.bottom-right {
+                        bottom: 12px;
+                        right: 12px;
+                    }
+                    .scoreboard-position {
+                        top: 12px;
+                        right: 12px;
+                    }
                 }
 
+                /* Mobile */
                 @media (max-width: 480px) {
                     .scoreboard-main {
                         transform: scale(0.6);
                     }
+                    .corner-logo {
+                        transform: scale(0.6);
+                    }
+                    .corner-logo.top-left {
+                        top: 8px;
+                        left: 8px;
+                    }
+                    .corner-logo.bottom-left {
+                        bottom: 8px;
+                        left: 8px;
+                    }
+                    .corner-logo.bottom-right {
+                        bottom: 8px;
+                        right: 8px;
+                    }
+                    .scoreboard-position {
+                        top: 8px;
+                        right: 8px;
+                    }
                 }
 
+                /* Small Mobile */
                 @media (max-width: 360px) {
                     .scoreboard-main {
                         transform: scale(0.5);
+                    }
+                    .corner-logo {
+                        transform: scale(0.5);
+                    }
+                    .corner-logo.top-left {
+                        top: 6px;
+                        left: 6px;
+                    }
+                    .corner-logo.bottom-left {
+                        bottom: 6px;
+                        left: 6px;
+                    }
+                    .corner-logo.bottom-right {
+                        bottom: 6px;
+                        right: 6px;
+                    }
+                    .scoreboard-position {
+                        top: 6px;
+                        right: 6px;
                     }
                 }
             `}</style>
