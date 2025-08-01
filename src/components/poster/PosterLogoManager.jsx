@@ -88,7 +88,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
     const loadLogos = async () => {
       try {
         setLoading(true);
-        setError(null);
         setApiLogos([]);
 
         // Load initial data if provided
@@ -108,7 +107,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         }
       } catch (err) {
         console.error("Error loading logos:", err);
-        setError("Không thể tải danh sách logo. Vui lòng thử lại.");
         setApiLogos([]);
       } finally {
         setLoading(false);
