@@ -338,7 +338,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
       } catch (error) {
         console.error("Lỗi khi tải lên:", error);
 
-        // C���p nhật trạng thái lỗi
+        // Cập nhật trạng thái lỗi
         setLogoItems(prev => prev.map(logo =>
           logo.id === item.id
             ? { ...logo, uploadStatus: 'error' }
@@ -415,7 +415,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
       if (localCode.trim().length >= 3) {
         try {
           setIsSearching(true);
-          console.log('🔍 [PosterLogoManager] Tìm kiếm logo v��i code:', localCode);
           const response = await LogoAPI.searchLogosByCode(localCode.trim(), true);
 
           if (response?.data?.length > 0) {

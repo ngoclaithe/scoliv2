@@ -721,7 +721,6 @@ const MatchManagementSection = ({ isActive = true }) => {
               }}
               className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded shadow transform hover:scale-105 transition-all duration-200"
             >
-              <span className="mr-1">���</span>
               ÁP DỤNG
             </Button>
           </div>
@@ -833,7 +832,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             <div className="space-y-3">
               {/* Kiểm soát bóng */}
               <EditableStatBar
-                label="Ki��m soát bóng"
+                label="Kiểm soát bóng"
                 statKey="possession"
                 team1Value={matchStats.possession.team1}
                 team2Value={matchStats.possession.team2}
@@ -861,7 +860,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
               {/* Phạt góc */}
               <EditableStatBar
-                label="Ph��t góc"
+                label="Phạt góc"
                 statKey="corners"
                 team1Value={matchStats.corners.team1}
                 team2Value={matchStats.corners.team2}
