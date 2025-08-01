@@ -95,25 +95,7 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate, onPositionChan
   };
 
     return (
-    <div className="max-w-6xl mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
-      {/* Header với status display */}
-      {(selectedPoster || selectedLogo) && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-          <div className="text-sm">
-            {selectedPoster && (
-              <p className="text-blue-800 font-medium">
-                ✅ Poster: {selectedPoster.name}
-              </p>
-            )}
-            {selectedLogo && (
-              <p className="text-blue-800 font-medium">
-                ✅ Logo: {selectedLogo.name}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
-
+    <div className="max-w-6xl mx-auto p-4 sm:p-6">
       {/* Main Content - Hiển thị trực tiếp PosterLogoManager */}
       <div className="w-full">
         <PosterLogoManager
