@@ -10,7 +10,7 @@ class AudioManager {
 
     // Thêm throttle cho referee voice
     this.lastRefereeVoiceTime = 0;
-    this.refereeVoiceMinInterval = 200; // 200ms minimum interval
+    this.refereeVoiceMinInterval = 100; // 100ms minimum interval cho 600ms target
     this.refereeVoiceQueue = [];
     this.isProcessingQueue = false;
     
