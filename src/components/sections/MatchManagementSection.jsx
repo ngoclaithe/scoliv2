@@ -718,7 +718,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }}
               className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded shadow transform hover:scale-105 transition-all duration-200"
             >
-              <span className="mr-1">✅</span>
+              <span className="mr-1">���</span>
               ÁP DỤNG
             </Button>
           </div>
@@ -1112,7 +1112,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🕔</span>
-              <span className="text-xs font-bold text-center">ĐẾM 45'</span>
+              <span className="text-xs font-bold text-center">Đ���M 45'</span>
             </button>
 
             {/* Giới thiệu */}
@@ -1386,72 +1386,6 @@ const MatchManagementSection = ({ isActive = true }) => {
           matchData={matchData}
           initialData={{
             selectedPoster: displaySettings.selectedPoster ? { id: displaySettings.selectedPoster, name: displaySettings.selectedPoster } : null,
-            logoItems: [],
-            apiLogos: (() => {
-              const logos = [];
-
-              // Convert sponsors to logo format
-              if (currentSponsors?.url_logo) {
-                currentSponsors.url_logo.forEach((url, index) => {
-                  logos.push({
-                    id: `sponsor-${index}`,
-                    unitName: currentSponsors.code_logo?.[index] || `Sponsor ${index + 1}`,
-                    code: currentSponsors.code_logo?.[index] || `SP${index + 1}`,
-                    type: "logo",
-                    category: "sponsor",
-                    url: url,
-                    displayPositions: Array.isArray(currentSponsors.position?.[index]) ? currentSponsors.position[index] : [currentSponsors.position?.[index] || 'top-left']
-                  });
-                });
-              }
-
-              // Convert organizing to logo format
-              if (currentOrganizing?.url_logo) {
-                currentOrganizing.url_logo.forEach((url, index) => {
-                  logos.push({
-                    id: `organizing-${index}`,
-                    unitName: currentOrganizing.code_logo?.[index] || `Organizing ${index + 1}`,
-                    code: currentOrganizing.code_logo?.[index] || `ORG${index + 1}`,
-                    type: "logo",
-                    category: "organizing",
-                    url: url,
-                    displayPositions: Array.isArray(currentOrganizing.position?.[index]) ? currentOrganizing.position[index] : [currentOrganizing.position?.[index] || 'bottom-left']
-                  });
-                });
-              }
-
-              // Convert media partners to logo format
-              if (currentMediaPartners?.url_logo) {
-                currentMediaPartners.url_logo.forEach((url, index) => {
-                  logos.push({
-                    id: `media-${index}`,
-                    unitName: currentMediaPartners.code_logo?.[index] || `Media ${index + 1}`,
-                    code: currentMediaPartners.code_logo?.[index] || `MED${index + 1}`,
-                    type: "logo",
-                    category: "media",
-                    url: url,
-                    displayPositions: Array.isArray(currentMediaPartners.position?.[index]) ? currentMediaPartners.position[index] : [currentMediaPartners.position?.[index] || 'bottom-right']
-                  });
-                });
-              }
-
-              // Convert tournament logo to logo format
-              if (currentTournamentLogo?.url_logo) {
-                currentTournamentLogo.url_logo.forEach((url, index) => {
-                  logos.push({
-                    id: `tournament-${index}`,
-                    unitName: currentTournamentLogo.code_logo?.[index] || `Tournament ${index + 1}`,
-                    code: currentTournamentLogo.code_logo?.[index] || `TOUR${index + 1}`,
-                    type: "logo",
-                    category: "tournament",
-                    url: url,
-                    displayPositions: ['top-left']
-                  });
-                });
-              }
-
-              return logos;
-            })(),
             displayOptions: {
               shape: displaySettings.logoShape || 'round',
               rotateDisplay: displaySettings.rotateDisplay || false
