@@ -162,7 +162,7 @@ const CommentarySection = ({ isActive = true }) => {
       console.log('🚀 Ultra-low latency recording started (50ms chunks):', mimeType);
       
     } catch (error) {
-      console.error('Lỗi khi bắt đầu ghi âm:', error);
+      console.error('Lỗi khi bắt đ��u ghi âm:', error);
       alert('Không thể truy cập microphone. Vui lòng cho phép quyền truy cập.');
       setIsProcessing(false);
     }
@@ -192,6 +192,23 @@ const CommentarySection = ({ isActive = true }) => {
 
   return (
     <div className="p-4 space-y-4">
+      {/* Test Audio Button */}
+      <div className="flex justify-center mb-4">
+        <button
+          onClick={() => {
+            // Test audio để enable user interaction
+            const testAudio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
+            testAudio.volume = 0.1;
+            testAudio.play().then(() => {
+              console.log('✅ Audio test successful - user interaction enabled');
+            }).catch(e => console.log('Test audio:', e.message));
+          }}
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm"
+        >
+          🔊 Kiểm tra âm thanh
+        </button>
+      </div>
+
       {/* Voice Recording Button */}
       <div className="flex justify-center">
         <button
