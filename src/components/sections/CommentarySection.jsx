@@ -26,15 +26,18 @@ const CommentarySection = ({ isActive = true }) => {
       'audio/ogg;codecs=opus',
       'audio/webm',
       'audio/mp4',
+      'audio/mpeg',
       'audio/wav'
     ];
 
     for (const type of types) {
       if (MediaRecorder.isTypeSupported(type)) {
+        console.log('✅ Using MIME type:', type);
         return type;
       }
     }
-    return null;
+    console.warn('⚠️ No supported MIME type found, fallback to wav');
+    return 'audio/wav';
   };
 
   useEffect(() => {
@@ -109,26 +112,25 @@ const CommentarySection = ({ isActive = true }) => {
     try {
       setIsProcessing(true);
       
-      // Tối ưu stream settings cho low latency
+      // Tối ưu stream settings cho latency thấp nhất
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-          sampleRate: 16000, // Giảm xuống 16kHz cho low latency
+          echoCancellation: false, // Tắt để giảm processing delay
+          noiseSuppression: false, // Tắt để giảm processing delay
+          autoGainControl: false,  // Tắt để giảm processing delay
+          sampleRate: 22050, // Tăng lên để chất lượng tốt hơn
           channelCount: 1,
-          // Thêm constraints cho low latency
-          latency: 0.01, // 10ms target latency
+          latency: 0.005, // 5ms target latency
           volume: 1.0
         }
       });
       
       streamRef.current = stream;
 
-      // Tối ưu MediaRecorder settings
-      const options = { 
+      // Tối ưu MediaRecorder settings cho low latency
+      const options = {
         mimeType,
-        audioBitsPerSecond: 64000 // Giảm bitrate để giảm data size
+        audioBitsPerSecond: 32000 // Giảm bitrate để giảm data size và latency
       };
 
       const mediaRecorder = new MediaRecorder(stream, options);
@@ -151,14 +153,13 @@ const CommentarySection = ({ isActive = true }) => {
         console.log('🎙️ MediaRecorder started with ultra-low latency mode');
       };
 
-      // SIÊU QUAN TRỌNG: Giảm timeslice xuống tối đa
-      // 100ms = delay tối đa 100ms thay vì 2000ms
-      mediaRecorder.start(100); // 100ms chunks cho ultra-low latency
+      // ULTRA LOW LATENCY: 50ms chunks cho delay ~600ms tổng
+      mediaRecorder.start(50); // 50ms chunks cho delay thấp nhất
       
       setIsRecording(true);
       setIsProcessing(false);
       
-      console.log('🚀 Ultra-low latency recording started:', mimeType);
+      console.log('🚀 Ultra-low latency recording started (50ms chunks):', mimeType);
       
     } catch (error) {
       console.error('Lỗi khi bắt đầu ghi âm:', error);
@@ -224,12 +225,12 @@ const CommentarySection = ({ isActive = true }) => {
         )}
         {isRecording && !isProcessing && (
           <p className="text-red-600 font-medium animate-pulse">
-            🔴 LIVE - Delay chỉ ~100ms
+            🔴 LIVE - Delay ~600ms
           </p>
         )}
         {!isRecording && !isProcessing && (
           <p className="text-gray-600">
-            Ấn mic để bắt đầu phát trực tiếp
+            Ấn mic để bắt đầu phát (delay ~600ms)
           </p>
         )}
         {!isSupported && (
