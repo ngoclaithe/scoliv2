@@ -397,7 +397,7 @@ class AudioManager {
     this.stopRegularAudio();
 
     try {
-      console.log('🎵 Creating new audio element:', audioFile);
+      console.log('���� Creating new audio element:', audioFile);
       const audio = new Audio(audioFile);
       this.audioRef = audio;
       audio.volume = this.isMuted ? 0 : this.volume;
@@ -430,9 +430,9 @@ class AudioManager {
     }
   }
 
-  // Enhanced referee voice playback with multiple format attempts
+  // Đơn giản hóa referee voice playback
   playRefereeVoice(audioData, originalMimeType = null) {
-    console.log('🎙️ Playing referee voice request', {
+    console.log('🎙️ Simple referee voice playback', {
       dataType: typeof audioData,
       originalMimeType,
       dataSize: audioData?.size || audioData?.length || audioData?.byteLength || 'unknown'
@@ -443,37 +443,50 @@ class AudioManager {
       return;
     }
 
-    // Kiểm tra user interaction
+    // Force user interaction if needed
     if (!this.userInteracted) {
-      console.warn('⚠️ User has not interacted yet, audio may be blocked by autoplay policy');
-      // Vẫn thử play nhưng log warning
-    }
-
-    // Debug: Kiểm tra raw data
-    this.debugAudioData(audioData, originalMimeType);
-
-    // Create optimized blob
-    const audioBlob = this.createOptimizedBlob(audioData, originalMimeType);
-    if (!audioBlob) {
-      console.error('❌ Failed to create audio blob');
+      console.warn('⚠️ Forcing user interaction for audio autoplay');
+      document.addEventListener('click', () => {
+        this.userInteracted = true;
+        console.log('✅ User interaction detected, retrying audio');
+        this.playRefereeVoice(audioData, originalMimeType);
+      }, { once: true });
       return;
     }
 
-    // Validate the blob
-    if (!this.validateAudioBlob(audioBlob, originalMimeType)) {
-      return;
-    }
+    // Đơn giản: Chỉ tạo blob và play ngay
+    try {
+      let blob;
+      if (audioData instanceof Blob) {
+        blob = audioData;
+      } else if (audioData instanceof ArrayBuffer) {
+        blob = new Blob([audioData], { type: originalMimeType || 'audio/webm' });
+      } else if (Array.isArray(audioData)) {
+        const uint8Array = new Uint8Array(audioData);
+        blob = new Blob([uint8Array], { type: originalMimeType || 'audio/webm' });
+      } else {
+        console.error('❌ Unsupported audio data type');
+        return;
+      }
 
-    // Throttle check
-    const now = Date.now();
-    if (now - this.lastRefereeVoiceTime < this.refereeVoiceMinInterval) {
-      console.log('🔄 Throttling referee voice - adding to queue');
-      this.addToRefereeVoiceQueue(audioBlob);
-      return;
-    }
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      audio.volume = this.isMuted ? 0 : this.volume;
 
-    this.lastRefereeVoiceTime = now;
-    this.executePlayRefereeVoice(audioBlob);
+      audio.onended = () => URL.revokeObjectURL(url);
+      audio.onerror = () => {
+        console.error('❌ Simple audio playback failed');
+        URL.revokeObjectURL(url);
+      };
+
+      // Play ngay không cần timeout
+      audio.play()
+        .then(() => console.log('✅ Simple audio playback success'))
+        .catch(error => console.error('❌ Audio play failed:', error.message));
+
+    } catch (error) {
+      console.error('❌ Simple audio setup failed:', error);
+    }
   }
 
   // Queue management - Chỉ giữ lại audio mới nhất
@@ -703,7 +716,7 @@ class AudioManager {
         const fallbackBlob = new Blob([originalBlob], { type: format });
         const audioUrl = this.createSafeBlobUrl(fallbackBlob);
         if (!audioUrl) {
-          console.warn('⚠️ Failed to create URL for format:', format);
+          console.warn('���️ Failed to create URL for format:', format);
           tryFormat(formatIndex + 1);
           return;
         }
