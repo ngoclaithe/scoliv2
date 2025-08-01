@@ -443,6 +443,12 @@ class AudioManager {
       return;
     }
 
+    // Kiểm tra user interaction
+    if (!this.userInteracted) {
+      console.warn('⚠️ User has not interacted yet, audio may be blocked by autoplay policy');
+      // Vẫn thử play nhưng log warning
+    }
+
     // Debug: Kiểm tra raw data
     this.debugAudioData(audioData, originalMimeType);
 
