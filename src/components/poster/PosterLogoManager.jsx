@@ -278,7 +278,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
     // Kiểm tra định dạng file
     const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!validTypes.includes(file.type)) {
-      alert("Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WebP)");
+      alert("Chỉ chấp nhận file ���nh (JPEG, PNG, GIF, WebP)");
       return;
     }
 
@@ -679,10 +679,15 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
       logoItem.displayPositions && logoItem.displayPositions.length > 0
     );
 
+    // Find the removed item for behavior context
+    const removedItem = [...apiLogos, ...logoItems].find(logo => logo.id === itemId);
+
     if (onLogoUpdate) {
       onLogoUpdate({
         logoItems: activeItems,
-        displayOptions: logoDisplayOptions
+        displayOptions: logoDisplayOptions,
+        behavior: 'remove',
+        changedItem: removedItem
       });
     }
   };
