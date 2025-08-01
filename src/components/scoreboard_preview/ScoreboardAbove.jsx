@@ -18,8 +18,6 @@ const ScoreboardAbove = ({
     } = usePublicMatch();
     
     const [currentType, setCurrentType] = useState(type);
-    // console.log('[ScoreboardAbove] sponsors.url_logo', sponsors.sponsors.url_logo);
-    // console.log('[ScoreboardAbove] sponsors.position', sponsors.sponsors.position);
 
     const currentData = {
         teamAName: matchData?.teamA?.name || "ĐỘI A",
@@ -37,10 +35,8 @@ const ScoreboardAbove = ({
     };
 
     const rawLogoShape = displaySettings?.logoShape || "round";
-    // Convert shape names to match DisplayLogo expectations
     const logoShape = rawLogoShape === 'round' ? 'circle' : rawLogoShape;
 
-    // Debug log - only when displaySettings change
     if (displaySettings?.logoShape !== 'round') {
         console.log('🔧 [ScoreboardAbove] Logo shape changed to:', rawLogoShape, '-> mapped to:', logoShape);
     }
@@ -61,9 +57,9 @@ const ScoreboardAbove = ({
                  marqueeData?.color === 'white-green' ? '#16a34a' : "#FF0000",
         repeat: 3,
         mode: marqueeData?.mode || 'khong',
-        interval: marqueeData?.mode === 'moi-2' ? 120000 : // 2 minutes = 120 seconds
-                  marqueeData?.mode === 'moi-5' ? 300000 : // 5 minutes = 300 seconds
-                  marqueeData?.mode === 'lien-tuc' ? 30000 : 0 // liên tục = 30 seconds
+        interval: marqueeData?.mode === 'moi-2' ? 120000 : 
+                  marqueeData?.mode === 'moi-5' ? 300000 : 
+                  marqueeData?.mode === 'lien-tuc' ? 30000 : 0 
     };
 
     const showMatchTime = currentData.status === 'live' || currentData.status === 'pause';
@@ -108,10 +104,95 @@ const ScoreboardAbove = ({
         return brightness > 128 ? '#000000' : '#FFFFFF';
     };
 
+    // Function để collect logos theo position
+    const collectLogosForPosition = (targetPosition) => {
+        const allLogos = [];
+
+        // Collect sponsors
+        if (sponsors?.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0) {
+            sponsors.sponsors.url_logo.forEach((logo, index) => {
+                const position = sponsors.sponsors?.position && sponsors.sponsors.position[index] 
+                    ? (Array.isArray(sponsors.sponsors.position[index]) ? sponsors.sponsors.position[index][0] : sponsors.sponsors.position[index])
+                    : 'top-left'; // default position
+                const behavior = sponsors.sponsors?.behavior;
+
+                if (position === targetPosition && (!behavior || behavior === 'add')) {
+                    allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
+                }
+            });
+        }
+
+        // Collect organizing
+        if (organizing?.url_logo && organizing.url_logo.length > 0) {
+            organizing.url_logo.forEach((logo, index) => {
+                const position = organizing?.position && organizing.position[index] 
+                    ? (Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index])
+                    : 'bottom-left'; // default position
+                const behavior = organizing?.behavior;
+
+                if (position === targetPosition && (!behavior || behavior === 'add')) {
+                    allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
+                }
+            });
+        }
+
+        // Collect media partners
+        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0) {
+            mediaPartners.url_logo.forEach((logo, index) => {
+                const position = mediaPartners?.position && mediaPartners.position[index] 
+                    ? (Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index])
+                    : 'bottom-right'; // default position
+                const behavior = mediaPartners?.behavior;
+
+                if (position === targetPosition && (!behavior || behavior === 'add')) {
+                    allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
+                }
+            });
+        }
+
+        return allLogos;
+    };
+
+    // Function render logos
+    const renderLogos = (allLogos) => {
+        if (allLogos.length === 0) return null;
+
+        if (displaySettings?.rotateDisplay && allLogos.length > 1) {
+            // Slide mode - quay từng logo một
+            return (
+                <DisplayLogo
+                    logos={allLogos.map(logo => logo.url)}
+                    alt="Sponsors & Partners"
+                    className="w-16 h-16"
+                    type_play={logoShape}
+                    slideMode={true}
+                    maxVisible={1}
+                    slideInterval={3000}
+                />
+            );
+        } else {
+            // Hiển thị tất cả logos cùng lúc
+            return (
+                <div className="flex gap-2 flex-wrap max-w-sm">
+                    {allLogos.map((logo, index) => (
+                        <div key={index} className="flex-shrink-0">
+                            <DisplayLogo
+                                logos={[logo.url]}
+                                alt={logo.alt}
+                                className="w-14 h-14"
+                                type_play={logoShape}
+                                slideMode={false}
+                            />
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+    };
+
     const renderScoreboardType1 = () => (
         <div className="flex flex-col items-center">
             <div className="flex items-center justify-center w-full px-2 gap-0">
-                {/* Logo team A */}
                 <DisplayLogo 
                     logos={[currentData.teamALogo]} 
                     alt={currentData.teamAName} 
@@ -119,7 +200,6 @@ const ScoreboardAbove = ({
                     type_play={logoShape}
                 />
 
-                {/* Score + team A name */}
                 <div className="flex items-center gap-0">
                     <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 min-w-[2.2rem] text-center"
                         style={{ clipPath: 'polygon(12px 0%, 100% 0%, 100% 100%, 12px 100%, 0% 50%)' }}>
@@ -136,14 +216,12 @@ const ScoreboardAbove = ({
                     </div>
                 </div>
 
-                {/* Thời gian trận đấu (nếu có) */}
                 {showMatchTime && (
                     <div className="bg-black text-white px-2 py-1 text-sm font-bold whitespace-nowrap">
                         {currentData.matchTime}
                     </div>
                 )}
 
-                {/* Score + team B name */}
                 <div className="flex items-center gap-0">
                     <div className="container-name-color-right flex flex-col items-center w-[90px]">
                         <div className="w-full bg-blue-600 text-white px-2 py-0.5 text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]">
@@ -160,7 +238,6 @@ const ScoreboardAbove = ({
                     </div>
                 </div>
 
-                {/* Logo team B */}
                 <DisplayLogo 
                     logos={[currentData.teamBLogo]} 
                     alt={currentData.teamBName} 
@@ -169,7 +246,6 @@ const ScoreboardAbove = ({
                 />
             </div>
 
-            {/* Live Match Label cho Type 1 */}
             {!showMatchTime && (
                 <div className="text-center mt-2">
                     <span className="bg-green-600 text-white px-4 py-1 text-sm font-bold rounded animate-pulse">
@@ -183,7 +259,6 @@ const ScoreboardAbove = ({
     const renderScoreboardType2 = () => (
         <div className="flex flex-col items-center">
             <div className="relative w-full flex justify-center items-center m-0 p-0">
-                {/* Scoreboard chính */}
                 <div
                     className="flex items-center justify-center relative z-10 h-8 rounded-md m-0 p-0 gap-0"
                     style={{
@@ -192,7 +267,6 @@ const ScoreboardAbove = ({
                         width: showMatchTime ? '285px' : '265px',
                     }}
                 >
-                    {/* Team A Name */}
                     <div
                         className="text-sm font-semibold flex items-center justify-center truncate m-0 p-0 relative"
                         style={{
@@ -206,7 +280,6 @@ const ScoreboardAbove = ({
                         {currentData.teamAName}
                     </div>
 
-                    {/* Score A */}
                     <div
                         className="text-white font-extrabold text-2xl text-center m-0 p-0"
                         style={{
@@ -220,7 +293,6 @@ const ScoreboardAbove = ({
                         {currentData.teamAScore}
                     </div>
 
-                    {/* Nếu có thời gian thì hiển thị */}
                     {showMatchTime && (
                         <div className="bg-yellow-400 text-black text-xs font-bold rounded m-0"
                             style={{
@@ -234,7 +306,6 @@ const ScoreboardAbove = ({
                         </div>
                     )}
 
-                    {/* Score B */}
                     <div
                         className="text-white font-extrabold text-2xl text-center m-0 p-0"
                         style={{
@@ -248,7 +319,6 @@ const ScoreboardAbove = ({
                         {currentData.teamBScore}
                     </div>
 
-                    {/* Team B Name */}
                     <div
                         className="text-sm font-semibold flex items-center justify-center truncate m-0 p-0 relative"
                         style={{
@@ -263,7 +333,6 @@ const ScoreboardAbove = ({
                     </div>
                 </div>
 
-                {/* Logo Team A – đè lên phía ngoài teamAName */}
                 <div
                     className="absolute z-20"
                     style={{
@@ -288,7 +357,6 @@ const ScoreboardAbove = ({
                     </div>
                 </div>
 
-                {/* Logo Team B – đè lên phía ngoài teamBName */}
                 <div
                     className="absolute z-20"
                     style={{
@@ -314,7 +382,6 @@ const ScoreboardAbove = ({
                 </div>
             </div>
 
-            {/* Live Match Label cho Type 2 */}
             {!showMatchTime && (
                 <div className="text-center mt-2">
                     <span className="bg-green-600 text-white px-4 py-1 text-sm font-bold rounded animate-pulse">
@@ -335,7 +402,6 @@ const ScoreboardAbove = ({
             />
 
             <div className="flex items-center bg-black/20 backdrop-blur-sm rounded-lg p-1 shadow-xl">
-                {/* Team A */}
                 <div className="flex items-center">
                     <div className="text-white px-3 py-2 text-sm font-medium bg-gray-800/80 rounded-md w-[120px] truncate">
                         {currentData.teamAName}
@@ -346,7 +412,6 @@ const ScoreboardAbove = ({
                     />
                 </div>
 
-                {/* Score */}
                 <div className="mx-4 flex flex-col items-center">
                     <div className="flex items-center bg-white/95 px-4 py-1 rounded-md shadow-sm">
                         <span className="font-bold text-xl text-gray-900">{currentData.teamAScore}</span>
@@ -365,7 +430,6 @@ const ScoreboardAbove = ({
                     )}
                 </div>
 
-                {/* Team B */}
                 <div className="flex items-center">
                     <div
                         className="w-1 h-6 mr-1 rounded-full"
@@ -397,7 +461,6 @@ const ScoreboardAbove = ({
                 />
 
                 <div className="flex items-center z-20">
-                    {/* Hình thang cân xu��i cho tên đội A */}
                     <div
                         className="text-white text-sm font-semibold relative flex items-center justify-center w-24 h-8 sm:w-32 md:w-40 z-10 -mr-6"
                         style={{
@@ -407,7 +470,6 @@ const ScoreboardAbove = ({
                     >
                         <span className="truncate text-center">{currentData.teamAName}</span>
                     </div>
-                    {/* Màu áo đội A - hình bình hành khít vào hình thang xuôi */}
                     <div
                         className="w-12 h-8 -ml-3 z-0 mr-2.5"
                         style={{
@@ -417,7 +479,6 @@ const ScoreboardAbove = ({
                     />
                 </div>
 
-                {/* Hình thang cân xuôi cho phần tỉ số */}
                 <div className="flex flex-col items-center -mr-12 -ml-12">
                     <div
                         className="hex-logo flex items-center justify-center sm:px-3 md:px-4 relative py-1"
@@ -431,7 +492,6 @@ const ScoreboardAbove = ({
                             {currentData.teamAScore}
                         </div>
 
-                        {/* Logo League - đặt vào container riêng để không bị cắt */}
                         <div className="mx-2 sm:mx-3 relative" style={{ top: '-6px' }}>
                             <DisplayLogo
                                 logos={[currentData.leagueLogo]}
@@ -451,7 +511,6 @@ const ScoreboardAbove = ({
                 </div>
 
                 <div className="flex items-center z-20">
-                    {/* Màu áo đội B - hình bình hành khít vào hình thang xuôi */}
                     <div
                         className="w-12 h-8 -mr-3 z-0 ml-2.5"
                         style={{
@@ -459,7 +518,6 @@ const ScoreboardAbove = ({
                             clipPath: 'polygon(45% 0%, 100% 0%, 55% 100%, 0% 100%)'
                         }}
                     />
-                    {/* Hình thang cân xuôi cho tên đội B */}
                     <div
                         className="text-white text-sm font-semibold relative flex items-center justify-center w-24 h-8 sm:w-32 md:w-40 z-10 -ml-6"
                         style={{
@@ -493,102 +551,14 @@ const ScoreboardAbove = ({
 
     return (
         <div className="w-full h-screen relative overflow-hidden">
-            {/* Container for all elements */}
             <div className="w-full h-full relative bg-transparent">
-                {/* Sponsors, Organizing, Media Partners at their assigned positions */}
-
                 {/* Top Left Position */}
                 <div className="absolute top-4 left-4 z-40">
-                    {(() => {
-                        const allLogos = [];
-
-                        // Collect sponsors with top-left position (check behavior)
-                        if (sponsors.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && sponsors.sponsors?.position) {
-                            sponsors.sponsors.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(sponsors.sponsors.position[index]) ? sponsors.sponsors.position[index][0] : sponsors.sponsors.position[index];
-                                const behavior = sponsors.sponsors?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'top-left' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
-                                }
-                            });
-                        }
-
-                        // Collect organizing with top-left position (check behavior)
-                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
-                            organizing.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
-                                const behavior = organizing?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'top-left' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
-                                }
-                            });
-                        }
-
-                        // Collect media partners with top-left position (check behavior)
-                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
-                            mediaPartners.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
-                                const behavior = mediaPartners?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'top-left' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
-                                }
-                            });
-                        }
-
-                        // Fallback for sponsors without position specified
-                        if (sponsors?.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && (!sponsors.sponsors?.position || sponsors.sponsors.position.length === 0)) {
-                            sponsors.sponsors.url_logo.forEach(logo => {
-                                allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
-                            });
-                        }
-
-                        if (allLogos.length === 0) return null;
-
-                        if (displaySettings?.rotateDisplay && allLogos.length > 1) {
-                            // Slide mode for multiple logos
-                            return (
-                                <DisplayLogo
-                                    logos={allLogos.map(logo => logo.url)}
-                                    alt="Sponsors & Partners"
-                                    className="w-16 h-16"
-                                    type_play={logoShape}
-                                    slideMode={true}
-                                    maxVisible={1}
-                                    slideInterval={5000}
-                                />
-                            );
-                        } else {
-                            // Horizontal layout for multiple logos
-                            const maxItems = 6;
-                            const displayItems = allLogos.slice(0, maxItems);
-
-                            return (
-                                <div className="flex gap-1 flex-wrap">
-                                    {displayItems.map((logo, index) => (
-                                        <div key={index} className="flex-shrink-0">
-                                            <DisplayLogo
-                                                logos={[logo.url]}
-                                                alt={logo.alt}
-                                                className="w-12 h-12"
-                                                type_play={logoShape}
-                                                slideMode={false}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            );
-                        }
-                    })()}
+                    {renderLogos(collectLogosForPosition('top-left'))}
                 </div>
 
                 {/* Tournament Logo - Top Left (if no sponsors) */}
-                {(!sponsors?.sponsors?.url_logo || sponsors.sponsors.url_logo.length === 0) && tournamentLogo?.url_logo && tournamentLogo.url_logo.length > 0 && (
+                {collectLogosForPosition('top-left').length === 0 && tournamentLogo?.url_logo && tournamentLogo.url_logo.length > 0 && (
                     <div className="absolute top-4 left-4 z-40">
                         <DisplayLogo
                             logos={tournamentLogo.url_logo}
@@ -608,185 +578,15 @@ const ScoreboardAbove = ({
 
                 {/* Bottom Left Position */}
                 <div className="absolute bottom-4 left-4 z-40">
-                    {(() => {
-                        const allLogos = [];
-
-                        // Collect sponsors with bottom-left position (check behavior)
-                        if (sponsors?.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && sponsors.sponsors?.position) {
-                            sponsors.sponsors.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(sponsors.sponsors.position[index]) ? sponsors.sponsors.position[index][0] : sponsors.sponsors.position[index];
-                                const behavior = sponsors.sponsors?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'bottom-left' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
-                                }
-                            });
-                        }
-
-                        // Collect organizing with bottom-left position (check behavior)
-                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
-                            organizing.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
-                                const behavior = organizing?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'bottom-left' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
-                                }
-                            });
-                        }
-
-                        // Collect media partners with bottom-left position (check behavior)
-                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
-                            mediaPartners.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
-                                const behavior = mediaPartners?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'bottom-left' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
-                                }
-                            });
-                        }
-
-                        // Fallback for organizing without position specified
-                        if (organizing?.url_logo && organizing.url_logo.length > 0 && (!organizing?.position || organizing.position.length === 0)) {
-                            organizing.url_logo.forEach(logo => {
-                                allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
-                            });
-                        }
-
-                        if (allLogos.length === 0) return null;
-
-                        if (displaySettings?.rotateDisplay && allLogos.length > 1) {
-                            // Slide mode for multiple logos
-                            return (
-                                <DisplayLogo
-                                    logos={allLogos.map(logo => logo.url)}
-                                    alt="Sponsors & Partners"
-                                    className="w-16 h-16"
-                                    type_play={logoShape}
-                                    slideMode={true}
-                                    maxVisible={1}
-                                    slideInterval={5000}
-                                />
-                            );
-                        } else {
-                            // Horizontal layout for multiple logos
-                            const maxItems = 6;
-                            const displayItems = allLogos.slice(0, maxItems);
-
-                            return (
-                                <div className="flex gap-1 flex-wrap">
-                                    {displayItems.map((logo, index) => (
-                                        <div key={index} className="flex-shrink-0">
-                                            <DisplayLogo
-                                                logos={[logo.url]}
-                                                alt={logo.alt}
-                                                className="w-12 h-12"
-                                                type_play={logoShape}
-                                                slideMode={false}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            );
-                        }
-                    })()}
+                    {renderLogos(collectLogosForPosition('bottom-left'))}
                 </div>
 
                 {/* Bottom Right Position */}
                 <div className="absolute bottom-4 right-4 z-40">
-                    {(() => {
-                        const allLogos = [];
-
-                        // Collect sponsors with bottom-right position (check behavior)
-                        if (sponsors?.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && sponsors.sponsors?.position) {
-                            sponsors.sponsors.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(sponsors.sponsors.position[index]) ? sponsors.sponsors.position[index][0] : sponsors.sponsors.position[index];
-                                const behavior = sponsors.sponsors?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'bottom-right' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
-                                }
-                            });
-                        }
-
-                        // Collect organizing with bottom-right position (check behavior)
-                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
-                            organizing.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
-                                const behavior = organizing?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'bottom-right' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
-                                }
-                            });
-                        }
-
-                        // Collect media partners with bottom-right position (check behavior)
-                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
-                            mediaPartners.url_logo.forEach((logo, index) => {
-                                const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
-                                const behavior = mediaPartners?.behavior;
-
-                                // Only add if behavior is 'add' or undefined (default behavior)
-                                if (position === 'bottom-right' && (!behavior || behavior === 'add')) {
-                                    allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
-                                }
-                            });
-                        }
-
-                        // Fallback for media partners without position specified
-                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && (!mediaPartners?.position || mediaPartners.position.length === 0)) {
-                            mediaPartners.url_logo.forEach(logo => {
-                                allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
-                            });
-                        }
-
-                        if (allLogos.length === 0) return null;
-
-                        if (displaySettings?.rotateDisplay && allLogos.length > 1) {
-                            // Slide mode for multiple logos
-                            return (
-                                <DisplayLogo
-                                    logos={allLogos.map(logo => logo.url)}
-                                    alt="Sponsors & Partners"
-                                    className="w-16 h-16"
-                                    type_play={logoShape}
-                                    slideMode={true}
-                                    maxVisible={1}
-                                    slideInterval={5000}
-                                />
-                            );
-                        } else {
-                            // Horizontal layout for multiple logos
-                            const maxItems = 6;
-                            const displayItems = allLogos.slice(0, maxItems);
-
-                            return (
-                                <div className="flex gap-1 flex-wrap">
-                                    {displayItems.map((logo, index) => (
-                                        <div key={index} className="flex-shrink-0">
-                                            <DisplayLogo
-                                                logos={[logo.url]}
-                                                alt={logo.alt}
-                                                className="w-12 h-12"
-                                                type_play={logoShape}
-                                                slideMode={false}
-                                            />
-                                        </div>
-                                    ))}
-                                </div>
-                            );
-                        }
-                    })()}
+                    {renderLogos(collectLogosForPosition('bottom-right'))}
                 </div>
 
-                {/* Scrolling Text - only show if mode is not 'khong' and visibility is true */}
+                {/* Scrolling Text */}
                 {scrollData.mode !== 'khong' && showScrollingText && (
                     <div className="absolute bottom-0 left-0 w-full z-20 overflow-hidden" style={{ backgroundColor: scrollData.bgColor }}>
                         <div
@@ -811,7 +611,6 @@ const ScoreboardAbove = ({
                     animation: scroll 30s linear infinite;
                 }
 
-                /* Uniform scaling for mobile - like image zoom while staying top-right */
                 .scoreboard-main {
                     transform-origin: top right;
                 }
