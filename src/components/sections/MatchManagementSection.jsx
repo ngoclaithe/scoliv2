@@ -434,7 +434,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         </div>
 
         {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
-        <div className={`flex justify-center items-center mt-2 space-x-2 ${showMatchInfo ? 'border-2 border-blue-400 rounded-lg p-2 -mb-2' : ''}`}>
+        <div className="flex justify-center items-center mt-2 space-x-2">
           {/* Audio Pause/Play Button */}
           <Button
             variant="primary"
@@ -462,7 +462,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Không có audio nào -> toggle audio enabled
                 console.log('ὐ9 [MatchManagement] No audio to resume, toggling audio enabled state');
                 toggleAudioEnabled();
-                toast.info(audioEnabled ? '🔇 Đã tắt audio tĩnh' : '🔊 Đã bật audio tĩnh');
+                toast.info(audioEnabled ? '🔇 Đã tắt audio t��nh' : '🔊 Đã bật audio tĩnh');
               }
             }}
             title={
@@ -510,23 +510,25 @@ const MatchManagementSection = ({ isActive = true }) => {
             <span className="sm:hidden">{matchData.status === "paused" ? "TIẾP" : "DỪNG"}</span>
           </Button>
 
-          <Button
-            variant="primary"
-            size="sm"
-            className="px-2 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
-            onClick={() => setShowMatchInfo(!showMatchInfo)}
-          >
-            <span className="mr-1">ℹ️</span>
-            <span className="hidden sm:inline">THÔNG TIN</span>
-            <span className="sm:hidden">INFO</span>
-          </Button>
+          <div className={showMatchInfo ? 'border-2 border-blue-400 rounded-t-lg' : ''}>
+            <Button
+              variant="primary"
+              size="sm"
+              className={`px-2 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-xs shadow-lg transform hover:scale-105 transition-all duration-200 ${showMatchInfo ? 'rounded-t-lg' : 'rounded-lg'}`}
+              onClick={() => setShowMatchInfo(!showMatchInfo)}
+            >
+              <span className="mr-1">ℹ️</span>
+              <span className="hidden sm:inline">THÔNG TIN</span>
+              <span className="sm:hidden">INFO</span>
+            </Button>
+          </div>
 
 
         </div>
       </div>
 
       {showMatchInfo && (
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-b-lg p-2 border-l-2 border-r-2 border-b-2 border-blue-400 space-y-2 -mt-1 shadow-lg">
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-b-lg p-2 border-l-2 border-r-2 border-b-2 border-blue-400 space-y-2 -mt-px shadow-lg">
           {/* Tên trận đấu & Đơn vị live - 1 hàng */}
           <div className="grid grid-cols-2 gap-1">
             <input
@@ -1053,7 +1055,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Chuyển sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
-                console.log('🕰️ Đã áp dụng: Timer sẽ đếm từ:', timeString);
+                console.log('🕰️ Đã áp dụng: Timer s�� đếm từ:', timeString);
                 console.log('📡 Server sẽ emit timer_tick events với displayTime format từ:', timeString);
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -1145,7 +1147,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
             </button>
 
-            {/* Tỉ số dứới */}
+            {/* Tỉ số d���ới */}
             <button
               onClick={() => {
                 updateView('scoreboard_below');
@@ -1624,7 +1626,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ bắt đầu chạy từ thời điểm này
+              Trận đấu s�� bắt đầu chạy từ thời điểm này
             </p>
           </div>
 
