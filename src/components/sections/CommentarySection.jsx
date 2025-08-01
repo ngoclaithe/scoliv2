@@ -193,8 +193,8 @@ const CommentarySection = ({ isActive = true }) => {
       }
     };
 
-    // Thiết lập timeslice để FORCE tạo data events - tăng lên để giảm tải
-    const timeslice = isContinuousMode ? 1000 : undefined; // 1000ms cho continuous
+    // Thiết lập timeslice để FORCE tạo data events - 600ms cho target delay
+    const timeslice = isContinuousMode ? 600 : undefined; // 600ms cho continuous
     console.log('🎙️ Starting MediaRecorder - isContinuousMode:', isContinuousMode, 'continuousRecording:', continuousRecording, 'timeslice:', timeslice);
     mediaRecorder.start(timeslice);
     setIsRecording(true);
@@ -206,7 +206,7 @@ const CommentarySection = ({ isActive = true }) => {
           console.log('🔄 Auto-restarting continuous recording');
           mediaRecorderRef.current.stop();
         }
-      }, 3000); // Restart mỗi 3 giây để giảm tải
+      }, 600); // Restart mỗi 600ms để đạt target delay
     }
   };
 
@@ -221,7 +221,7 @@ const CommentarySection = ({ isActive = true }) => {
       if (continuousRecording && streamRef.current && streamRef.current.active) {
         startNextContinuousChunk();
       }
-    }, 100); // Delay ngắn để tránh gap
+    }, 50); // Delay 50ms để tránh gap và giảm latency
   };
 
   const startNextContinuousChunk = async () => {
@@ -437,7 +437,7 @@ const CommentarySection = ({ isActive = true }) => {
         {/* Mode Description */}
         <div className="mt-2 text-xs text-gray-500">
           {isContinuousMode ? (
-            <p>Chế độ nói liên tục: Audio được gửi real-time mỗi 1000ms</p>
+            <p>Chế độ nói liên tục: Audio được gửi real-time mỗi 600ms</p>
           ) : (
             <p>Chế độ ấn để nói: Ấn một lần để bắt đầu, ấn lại để dừng và gửi</p>
           )}
