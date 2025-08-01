@@ -342,7 +342,7 @@ export const PublicMatchProvider = ({ children }) => {
       setOrganizing(prev => ({
         ...prev,
         ...data,
-        // Append v��o arrays thay vì replace
+        // Append vào arrays thay vì replace
         url_logo: data.url_logo ?
           [...(prev.url_logo || []), ...data.url_logo] :
           (prev.url_logo || []),
@@ -491,6 +491,7 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.disconnect();
     setSocketConnected(false);
     setCurrentAccessCode(null);
+    setListenersSetup(false); // Reset listeners setup flag
   }, []);
 
   const value = {
