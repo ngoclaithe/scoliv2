@@ -410,35 +410,60 @@ export const PublicMatchProvider = ({ children }) => {
     // Lắng nghe audio control events - để nhận referee voice từ CommentarySection
     socketService.on('audio_control', (data) => {
       console.log('🎙️ [PublicMatchContext] Received audio_control:', data);
-
+    
       if (data.target === 'display' && data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
         const { audioData, mimeType } = data.payload;
         try {
-          // Validate audio data
-          if (!audioData || !Array.isArray(audioData) || audioData.length === 0) {
-            console.error('❌ Invalid audio data received:', audioData);
+          // ✅ FIXED: Support both ArrayBuffer and Array
+          let isValidData = false;
+          let audioBlob = null;
+    
+          if (audioData instanceof ArrayBuffer && audioData.byteLength > 0) {
+            // Handle ArrayBuffer (new format)
+            console.log('🎙️ Processing ArrayBuffer, size:', audioData.byteLength, 'bytes, mimeType:', mimeType);
+            audioBlob = new Blob([audioData], { type: mimeType || 'audio/webm' });
+            isValidData = true;
+          } else if (Array.isArray(audioData) && audioData.length > 0) {
+            // Handle Array (legacy format)
+            console.log('🎙️ Processing Array, size:', audioData.length, 'bytes, mimeType:', mimeType);
+            const uint8Array = new Uint8Array(audioData);
+            audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
+            isValidData = true;
+          } else {
+            console.error('❌ Invalid audio data type or empty:', {
+              type: typeof audioData,
+              isArrayBuffer: audioData instanceof ArrayBuffer,
+              isArray: Array.isArray(audioData),
+              size: audioData?.byteLength || audioData?.length || 'unknown'
+            });
             return;
           }
-
-          console.log('🎙️ Creating audio blob from data, size:', audioData.length, 'mimeType:', mimeType);
-          const uint8Array = new Uint8Array(audioData);
-          const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
-
-          // Validate blob
-          if (audioBlob.size === 0) {
-            console.error('❌ Created blob is empty');
+    
+          // Validate the created blob
+          if (!audioBlob || audioBlob.size === 0) {
+            console.error('❌ Created blob is empty or invalid');
             return;
           }
-
-          console.log('🎙️ Created audio blob, size:', audioBlob.size, 'bytes');
-          audioUtils.playRefereeVoice(audioBlob);
-          console.log('[PublicMatchContext] Playing referee voice successfully');
+    
+          console.log('✅ Created audio blob successfully:', {
+            blobSize: audioBlob.size,
+            mimeType: audioBlob.type
+          });
+    
+          // Play the audio - pass both blob and mimeType
+          audioUtils.playRefereeVoice(audioBlob, mimeType);
+          console.log('✅ [PublicMatchContext] Playing referee voice successfully');
+    
         } catch (error) {
-          console.error('❌ Error processing referee voice in PublicMatchContext:', error);
+          console.error('❌ Error processing referee voice in PublicMatchContext:', {
+            error: error.message,
+            stack: error.stack,
+            audioDataType: typeof audioData,
+            mimeType
+          });
         }
       }
     });
-
     // Lắng nghe trạng thái kết nối
     socketService.on('disconnect', () => {
       setSocketConnected(false);

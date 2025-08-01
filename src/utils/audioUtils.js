@@ -1,4 +1,3 @@
-// Audio utility functions - thay thế AudioContext
 class AudioManager {
   constructor() {
     this.audioRef = null;
@@ -8,30 +7,71 @@ class AudioManager {
     this.isMuted = false;
     this.audioEnabled = true;
 
-    // Thêm throttle cho referee voice
     this.lastRefereeVoiceTime = 0;
-    this.refereeVoiceMinInterval = 200; // 200ms minimum interval
+    this.refereeVoiceMinInterval = 50; 
     this.refereeVoiceQueue = [];
     this.isProcessingQueue = false;
     
-    // Static audio file mapping
+    this.activeBlobUrls = new Set();
+    
+    this.supportedFormats = this.detectSupportedFormats();
+    
     this.audioFiles = {
       poster: '/audio/poster.mp3',
       rasan: '/audio/rasan.mp3',
       gialap: '/audio/gialap.mp3',
     };
 
-    // Setup user interaction listeners
     this.setupUserInteractionListeners();
+    
+    console.log('🎵 AudioManager initialized with supported formats:', this.supportedFormats);
   }
 
-  // Setup user interaction detection
+  detectSupportedFormats() {
+    const audio = document.createElement('audio');
+    const formats = {
+      webm_opus: audio.canPlayType('audio/webm; codecs="opus"'),
+      webm: audio.canPlayType('audio/webm'),
+      ogg_opus: audio.canPlayType('audio/ogg; codecs="opus"'),
+      ogg: audio.canPlayType('audio/ogg'),
+      mp4: audio.canPlayType('audio/mp4'),
+      wav: audio.canPlayType('audio/wav'),
+      mpeg: audio.canPlayType('audio/mpeg')
+    };
+
+    console.log('🔍 Browser audio format support:', formats);
+    return formats;
+  }
+
+  getBestPlaybackFormat() {
+    const formatPriority = [
+      'audio/webm; codecs="opus"',
+      'audio/ogg; codecs="opus"', 
+      'audio/webm',
+      'audio/ogg',
+      'audio/wav',
+      'audio/mp4',
+      'audio/mpeg'
+    ];
+
+    for (const format of formatPriority) {
+      const audio = document.createElement('audio');
+      const support = audio.canPlayType(format);
+      if (support === 'probably' || support === 'maybe') {
+        console.log('🎯 Best playback format:', format, '(support:', support + ')');
+        return format;
+      }
+    }
+
+    console.warn('⚠️ No optimal audio format found, using fallback');
+    return 'audio/wav'; 
+  }
+
   setupUserInteractionListeners() {
     const handleUserInteraction = () => {
       console.log('🎵 User interaction detected');
       this.userInteracted = true;
       
-      // Remove listeners after first interaction
       document.removeEventListener('click', handleUserInteraction);
       document.removeEventListener('keydown', handleUserInteraction);
       document.removeEventListener('touchstart', handleUserInteraction);
@@ -40,6 +80,182 @@ class AudioManager {
     document.addEventListener('click', handleUserInteraction);
     document.addEventListener('keydown', handleUserInteraction);
     document.addEventListener('touchstart', handleUserInteraction);
+  }
+
+  validateAudioBlob(audioBlob, expectedMimeType = null) {
+    if (!audioBlob) {
+      console.error('❌ Audio blob is null or undefined');
+      return false;
+    }
+
+    if (!(audioBlob instanceof Blob)) {
+      console.error('❌ Provided data is not a Blob:', typeof audioBlob);
+      return false;
+    }
+
+    if (audioBlob.size === 0) {
+      console.error('❌ Audio blob is empty (0 bytes)');
+      return false;
+    }
+
+    if (audioBlob.size < 100) { 
+      console.warn('⚠️ Audio blob very small:', audioBlob.size, 'bytes - might be corrupted');
+    }
+
+    if (audioBlob.size > 10 * 1024 * 1024) { 
+      console.error('❌ Audio blob too large:', audioBlob.size, 'bytes');
+      return false;
+    }
+
+    const blobType = audioBlob.type || expectedMimeType;
+    if (!blobType) {
+      console.warn('⚠️ Audio blob has no MIME type, will attempt playback anyway');
+    } else if (!blobType.startsWith('audio/')) {
+      console.warn('⚠️ Audio blob MIME type suspicious:', blobType);
+    } else {
+      // Check if browser can play this format
+      const audio = document.createElement('audio');
+      const canPlay = audio.canPlayType(blobType);
+      if (!canPlay || canPlay === 'no') {
+        console.warn('⚠️ Browser may not support format:', blobType, '- support:', canPlay);
+        return false;
+      }
+      console.log('✅ Format support check passed:', blobType, '- support:', canPlay);
+    }
+
+    console.log('✅ Audio blob validation passed:', {
+      size: audioBlob.size,
+      type: blobType || 'unknown'
+    });
+
+    return true;
+  }
+
+  createOptimizedBlob(audioData, originalMimeType) {
+    try {
+      console.log('🔧 Creating blob from:', {
+        dataType: typeof audioData,
+        isArrayBuffer: audioData instanceof ArrayBuffer,
+        isArray: Array.isArray(audioData),
+        isUint8Array: audioData instanceof Uint8Array,
+        isBlob: audioData instanceof Blob,
+        size: audioData?.byteLength || audioData?.length || audioData?.size || 'unknown'
+      });
+
+      // If audioData is already a Blob
+      if (audioData instanceof Blob) {
+        console.log('✅ Data is already a Blob');
+        return audioData;
+      }
+
+      // Handle different input types
+      let arrayBuffer;
+      
+      if (audioData instanceof ArrayBuffer) {
+        console.log('✅ Data is ArrayBuffer');
+        arrayBuffer = audioData;
+      } else if (audioData instanceof Uint8Array) {
+        console.log('✅ Data is Uint8Array');
+        arrayBuffer = audioData.buffer.slice(audioData.byteOffset, audioData.byteOffset + audioData.byteLength);
+      } else if (Array.isArray(audioData)) {
+        console.log('✅ Data is Array, converting to Uint8Array');
+        // Kiểm tra xem array có phải là valid byte array không
+        const isValidByteArray = audioData.every(item => 
+          typeof item === 'number' && item >= 0 && item <= 255
+        );
+        
+        if (!isValidByteArray) {
+          throw new Error('Array contains invalid byte values');
+        }
+        
+        const uint8Array = new Uint8Array(audioData);
+        arrayBuffer = uint8Array.buffer;
+      } else {
+        throw new Error('Unsupported audio data type: ' + typeof audioData);
+      }
+
+      // Validate that we have actual audio data
+      if (!arrayBuffer || arrayBuffer.byteLength === 0) {
+        throw new Error('Empty or invalid audio data');
+      }
+
+      console.log('📊 ArrayBuffer info:', {
+        byteLength: arrayBuffer.byteLength,
+        constructor: arrayBuffer.constructor.name
+      });
+
+      // Try to use the original MIME type first
+      let mimeType = originalMimeType;
+      
+      // If no MIME type or unsupported, try to detect or use fallback
+      if (!mimeType || !this.canPlayType(mimeType)) {
+        mimeType = this.getBestPlaybackFormat();
+        console.log('🔄 Using fallback MIME type:', mimeType);
+      }
+
+      // Create blob with the determined MIME type
+      const blob = new Blob([arrayBuffer], { type: mimeType });
+      
+      console.log('✅ Created optimized blob:', {
+        originalType: originalMimeType,
+        finalType: mimeType,
+        inputSize: arrayBuffer.byteLength,
+        blobSize: blob.size,
+        sizesMatch: arrayBuffer.byteLength === blob.size
+      });
+
+      // Validate the created blob
+      if (blob.size === 0) {
+        throw new Error('Created blob is empty');
+      }
+
+      return blob;
+
+    } catch (error) {
+      console.error('❌ Failed to create optimized blob:', {
+        error: error.message,
+        audioData: typeof audioData,
+        originalMimeType
+      });
+      
+      return null;
+    }
+  }
+
+  // Check if browser can play type
+  canPlayType(mimeType) {
+    if (!mimeType) return false;
+    const audio = document.createElement('audio');
+    const support = audio.canPlayType(mimeType);
+    return support === 'probably' || support === 'maybe';
+  }
+
+  // Safe blob URL creation
+  createSafeBlobUrl(blob) {
+    try {
+      const url = URL.createObjectURL(blob);
+      this.activeBlobUrls.add(url);
+      console.log('🔗 Created blob URL:', url.substring(0, 50) + '...');
+      return url;
+    } catch (error) {
+      console.error('❌ Failed to create blob URL:', error);
+      return null;
+    }
+  }
+
+  // Safe blob URL cleanup
+  revokeBlobUrl(url) {
+    if (!url || !url.startsWith('blob:')) {
+      return;
+    }
+
+    try {
+      URL.revokeObjectURL(url);
+      this.activeBlobUrls.delete(url);
+      console.log('🗑️ Revoked blob URL:', url.substring(0, 50) + '...');
+    } catch (error) {
+      console.warn('⚠️ Error revoking blob URL:', error);
+    }
   }
 
   // Set audio enabled/disabled
@@ -133,19 +349,35 @@ class AudioManager {
     }
   }
 
-  // Play referee voice from blob với throttling
-  playRefereeVoice(audioBlob) {
-    console.log('🎙️ Playing referee voice');
+  // Enhanced referee voice playback with multiple format attempts
+  playRefereeVoice(audioData, originalMimeType = null) {
+    console.log('🎙️ Playing referee voice request', {
+      dataType: typeof audioData,
+      originalMimeType,
+      dataSize: audioData?.size || audioData?.length || audioData?.byteLength || 'unknown'
+    });
 
-    if (!audioBlob || audioBlob.size === 0) {
-      console.error('❌ Invalid audio blob provided');
+    if (!this.audioEnabled) {
+      console.log('🔇 Audio disabled globally');
       return;
     }
 
-    // Throttle: Kiểm tra thời gian từ lần phát gần nhất
+    // Create optimized blob
+    const audioBlob = this.createOptimizedBlob(audioData, originalMimeType);
+    if (!audioBlob) {
+      console.error('❌ Failed to create audio blob');
+      return;
+    }
+
+    // Validate the blob
+    if (!this.validateAudioBlob(audioBlob, originalMimeType)) {
+      return;
+    }
+
+    // Throttle check
     const now = Date.now();
     if (now - this.lastRefereeVoiceTime < this.refereeVoiceMinInterval) {
-      console.log('🔄 Throttling referee voice - too frequent, adding to queue');
+      console.log('🔄 Throttling referee voice - adding to queue');
       this.addToRefereeVoiceQueue(audioBlob);
       return;
     }
@@ -154,14 +386,13 @@ class AudioManager {
     this.executePlayRefereeVoice(audioBlob);
   }
 
-  // Thêm vào queue cho processing
+  // Queue management
   addToRefereeVoiceQueue(audioBlob) {
-    // Chỉ giữ lại audio mới nhất, bỏ qua các audio cũ
+    // Keep only the latest audio to minimize latency
     this.refereeVoiceQueue = [audioBlob];
     this.processRefereeVoiceQueue();
   }
 
-  // Xử lý queue
   async processRefereeVoiceQueue() {
     if (this.isProcessingQueue || this.refereeVoiceQueue.length === 0) {
       return;
@@ -176,11 +407,8 @@ class AudioManager {
       if (now - this.lastRefereeVoiceTime >= this.refereeVoiceMinInterval) {
         this.lastRefereeVoiceTime = now;
         this.executePlayRefereeVoice(audioBlob);
-
-        // Đợi một chút trước khi xử lý audio tiếp theo
         await new Promise(resolve => setTimeout(resolve, this.refereeVoiceMinInterval));
       } else {
-        // Đợi đủ thời gian throttle
         const waitTime = this.refereeVoiceMinInterval - (now - this.lastRefereeVoiceTime);
         await new Promise(resolve => setTimeout(resolve, waitTime));
         this.lastRefereeVoiceTime = Date.now();
@@ -191,98 +419,170 @@ class AudioManager {
     this.isProcessingQueue = false;
   }
 
-  // Logic phát audio thực tế
+  // Enhanced playback execution with fallback formats
   executePlayRefereeVoice(audioBlob) {
-    // Stop all other audio first, but not current referee voice
-    this.stopRegularAudio();
+    console.log('🎙️ Executing referee voice playback');
 
-    try {
-      // Dừng referee voice hiện tại trước khi phát mới
-      if (this.refereeVoiceRef) {
-        try {
-          this.refereeVoiceRef.pause();
-          if (this.refereeVoiceRef.src && this.refereeVoiceRef.src.startsWith('blob:')) {
-            URL.revokeObjectURL(this.refereeVoiceRef.src);
-          }
-        } catch (error) {
-          console.warn('⚠️ Error stopping previous referee voice:', error);
+    // Stop previous referee voice
+    if (this.refereeVoiceRef) {
+      try {
+        this.refereeVoiceRef.pause();
+        if (this.refereeVoiceRef.src) {
+          this.revokeBlobUrl(this.refereeVoiceRef.src);
         }
+      } catch (error) {
+        console.warn('⚠️ Error stopping previous referee voice:', error);
+      }
+      this.refereeVoiceRef = null;
+    }
+
+    // Create URL from blob
+    const audioUrl = this.createSafeBlobUrl(audioBlob);
+    if (!audioUrl) {
+      console.error('❌ Failed to create blob URL');
+      return;
+    }
+
+    const audio = new Audio();
+    
+    // Set up comprehensive event handlers
+    audio.onloadstart = () => {
+      console.log('🎙️ Referee voice loading started');
+    };
+
+    audio.oncanplay = () => {
+      console.log('🎙️ Referee voice can play');
+    };
+
+    audio.onloadeddata = () => {
+      console.log('🎙️ Referee voice data loaded, duration:', audio.duration);
+    };
+
+    audio.onended = () => {
+      console.log('✅ Referee voice playback ended');
+      this.revokeBlobUrl(audioUrl);
+      if (this.refereeVoiceRef === audio) {
+        this.refereeVoiceRef = null;
+      }
+    };
+
+    audio.onerror = (e) => {
+      console.error('❌ Referee voice playback error:', {
+        error: e,
+        audioError: audio.error,
+        readyState: audio.readyState,
+        networkState: audio.networkState,
+        src: audio.src?.substring(0, 50) + '...',
+        duration: audio.duration,
+        currentTime: audio.currentTime
+      });
+
+      // Detailed error logging
+      if (audio.error) {
+        const errorMessages = {
+          1: 'MEDIA_ERR_ABORTED - playback aborted',
+          2: 'MEDIA_ERR_NETWORK - network error', 
+          3: 'MEDIA_ERR_DECODE - decode error',
+          4: 'MEDIA_ERR_SRC_NOT_SUPPORTED - source not supported'
+        };
+        console.error('❌ Detailed error:', errorMessages[audio.error.code] || `Unknown error (${audio.error.code})`);
+      }
+
+      this.revokeBlobUrl(audioUrl);
+      if (this.refereeVoiceRef === audio) {
         this.refereeVoiceRef = null;
       }
 
-      // Create URL from blob
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const audio = new Audio();
-
-      // Set up event handlers before setting src
-      audio.onloadstart = () => {
-        console.log('🎙️ Referee voice loading started');
-      };
-
-      audio.oncanplay = () => {
-        console.log('🎙️ Referee voice can play');
-      };
-
-      audio.onended = () => {
-        console.log('✅ Referee voice playback ended');
-        try {
-          URL.revokeObjectURL(audioUrl);
-        } catch (error) {
-          console.warn('⚠️ Error revoking URL on ended:', error);
-        }
-        if (this.refereeVoiceRef === audio) {
-          this.refereeVoiceRef = null;
-        }
-      };
-
-      audio.onerror = (e) => {
-        console.error('❌ Referee voice playback error:', e);
-        try {
-          URL.revokeObjectURL(audioUrl);
-        } catch (error) {
-          console.warn('⚠️ Error revoking URL on error:', error);
-        }
-        if (this.refereeVoiceRef === audio) {
-          this.refereeVoiceRef = null;
-        }
-      };
-
-      // Set reference before playing
-      this.refereeVoiceRef = audio;
-      audio.volume = this.isMuted ? 0 : this.volume;
-
-      // Set src and play immediately without delay
-      audio.src = audioUrl;
-
-      const playPromise = audio.play();
-      if (playPromise) {
-        playPromise
-          .then(() => {
-            console.log('✅ Referee voice started playing successfully');
-          })
-          .catch((error) => {
-            console.error('❌ Failed to play referee voice:', error);
-            if (this.refereeVoiceRef === audio) {
-              try {
-                URL.revokeObjectURL(audioUrl);
-              } catch (revokeError) {
-                console.warn('⚠️ Error revoking URL on play error:', revokeError);
-              }
-              this.refereeVoiceRef = null;
-            }
-          });
+      // Try fallback approach if format not supported
+      if (audio.error && audio.error.code === 4) {
+        console.log('🔄 Attempting format fallback...');
+        this.attemptFallbackPlayback(audioBlob);
       }
+    };
+
+    // Set reference and properties
+    this.refereeVoiceRef = audio;
+    audio.volume = this.isMuted ? 0 : this.volume;
+    audio.preload = 'auto';
+    
+    try {
+      audio.src = audioUrl;
+      
+      // Attempt to play with enhanced error handling
+      setTimeout(() => {
+        if (this.refereeVoiceRef === audio) {
+          const playPromise = audio.play();
+          if (playPromise) {
+            playPromise
+              .then(() => {
+                console.log('✅ Referee voice started playing successfully');
+              })
+              .catch((error) => {
+                console.error('❌ Failed to play referee voice:', {
+                  error: error.message,
+                  name: error.name,
+                  code: error.code,
+                  readyState: audio.readyState,
+                  networkState: audio.networkState
+                });
+                
+                if (this.refereeVoiceRef === audio) {
+                  this.revokeBlobUrl(audioUrl);
+                  this.refereeVoiceRef = null;
+                  
+                  // Try fallback
+                  this.attemptFallbackPlayback(audioBlob);
+                }
+              });
+          }
+        }
+      }, 10);
 
     } catch (error) {
-      console.error('❌ Error creating referee voice audio:', error);
+      console.error('❌ Error setting up referee voice audio:', error);
+      this.revokeBlobUrl(audioUrl);
+      if (this.refereeVoiceRef === audio) {
+        this.refereeVoiceRef = null;
+      }
+    }
+  }
+
+  // Fallback playback with different format
+  attemptFallbackPlayback(originalBlob) {
+    console.log('🔄 Attempting fallback playback with WAV format');
+    
+    try {
+      // Try creating a new blob with WAV MIME type as fallback
+      const fallbackBlob = new Blob([originalBlob], { type: 'audio/wav' });
+      
+      // Don't call executePlayRefereeVoice again to avoid infinite loop
+      // Instead, create a simple audio element for fallback
+      const audioUrl = this.createSafeBlobUrl(fallbackBlob);
+      if (!audioUrl) return;
+      
+      const fallbackAudio = new Audio(audioUrl);
+      fallbackAudio.volume = this.isMuted ? 0 : this.volume;
+      
+      fallbackAudio.onended = () => {
+        this.revokeBlobUrl(audioUrl);
+      };
+      
+      fallbackAudio.onerror = () => {
+        console.error('❌ Fallback playback also failed');
+        this.revokeBlobUrl(audioUrl);
+      };
+      
+      fallbackAudio.play()
+        .then(() => console.log('✅ Fallback playback successful'))
+        .catch(() => console.error('❌ Fallback playback failed'));
+        
+    } catch (error) {
+      console.error('❌ Fallback attempt failed:', error);
     }
   }
 
   // Stop regular audio only (not referee voice)
   stopRegularAudio() {
-    console.log('🔇 Stopping regular audio elements');
-
-    // Stop regular audio
     if (this.audioRef) {
       try {
         this.audioRef.pause();
@@ -292,59 +592,20 @@ class AudioManager {
       }
       this.audioRef = null;
     }
-
-    // Stop all other audio elements on page (except current referee voice)
-    try {
-      const allAudioElements = document.querySelectorAll('audio');
-      allAudioElements.forEach((audio, index) => {
-        try {
-          // Skip if this is our current referee voice element
-          if (audio === this.refereeVoiceRef) {
-            return;
-          }
-
-          // Skip if audio is already stopped/ended
-          if (audio.ended || audio.readyState === 0) {
-            return;
-          }
-
-          if (!audio.paused) {
-            console.log(`🔇 Stopping audio element ${index + 1}`);
-            audio.pause();
-            audio.currentTime = 0;
-
-            // Revoke blob URL if it exists
-            if (audio.src && audio.src.startsWith('blob:')) {
-              try {
-                URL.revokeObjectURL(audio.src);
-              } catch (revokeError) {
-                console.warn(`⚠️ Error revoking URL for audio element ${index + 1}:`, revokeError);
-              }
-            }
-          }
-        } catch (error) {
-          console.warn(`⚠️ Error stopping audio element ${index + 1}:`, error);
-        }
-      });
-    } catch (error) {
-      console.warn('⚠️ Error finding/stopping page audio elements:', error);
-    }
   }
 
   // Stop all audio including referee voice
   stopAllAudio() {
     console.log('🔇 Stopping all audio elements');
 
-    // Stop regular audio first
     this.stopRegularAudio();
 
-    // Stop referee voice
     if (this.refereeVoiceRef) {
       try {
         this.refereeVoiceRef.pause();
         this.refereeVoiceRef.currentTime = 0;
-        if (this.refereeVoiceRef.src && this.refereeVoiceRef.src.startsWith('blob:')) {
-          URL.revokeObjectURL(this.refereeVoiceRef.src);
+        if (this.refereeVoiceRef.src) {
+          this.revokeBlobUrl(this.refereeVoiceRef.src);
         }
       } catch (error) {
         console.warn('⚠️ Error stopping referee voice:', error);
@@ -353,9 +614,23 @@ class AudioManager {
     }
   }
 
+  // Cleanup all blob URLs
+  cleanupAllBlobUrls() {
+    console.log('🗑️ Cleaning up all blob URLs');
+    this.activeBlobUrls.forEach(url => {
+      try {
+        URL.revokeObjectURL(url);
+      } catch (error) {
+        console.warn('⚠️ Error revoking blob URL during cleanup:', error);
+      }
+    });
+    this.activeBlobUrls.clear();
+  }
+
   // Cleanup
   destroy() {
     this.stopAllAudio();
+    this.cleanupAllBlobUrls();
   }
 }
 
@@ -365,7 +640,7 @@ const audioManager = new AudioManager();
 // Export simple functions for easy use
 export const audioUtils = {
   playAudio: (audioKey) => audioManager.playAudio(audioKey),
-  playRefereeVoice: (audioBlob) => audioManager.playRefereeVoice(audioBlob),
+  playRefereeVoice: (audioData, mimeType) => audioManager.playRefereeVoice(audioData, mimeType),
   stopAllAudio: () => audioManager.stopAllAudio(),
   stopRegularAudio: () => audioManager.stopRegularAudio(),
   setAudioEnabled: (enabled) => audioManager.setAudioEnabled(enabled),
@@ -377,6 +652,7 @@ export const audioUtils = {
   get volume() { return audioManager.volume; },
   get isMuted() { return audioManager.isMuted; },
   get userInteracted() { return audioManager.userInteracted; },
+  get supportedFormats() { return audioManager.supportedFormats; },
 };
 
 export default audioUtils;
