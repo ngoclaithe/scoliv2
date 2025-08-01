@@ -263,7 +263,7 @@ const ScoreboardAbove = ({
                     </div>
                 </div>
 
-                {/* Logo Team A – đè lên phía ngoài teamAName */}
+                {/* Logo Team A – đè l��n phía ngoài teamAName */}
                 <div
                     className="absolute z-20"
                     style={{
@@ -318,7 +318,7 @@ const ScoreboardAbove = ({
             {!showMatchTime && (
                 <div className="text-center mt-2">
                     <span className="bg-green-600 text-white px-4 py-1 text-sm font-bold rounded animate-pulse">
-                        ● TR���C TIẾP
+                        ● TRỰC TIẾP
                     </span>
                 </div>
             )}
@@ -512,8 +512,8 @@ const ScoreboardAbove = ({
                             });
                         }
 
-                        // Collect organizing with top-left position
-                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
+                        // Collect organizing with top-left position (check for non-empty arrays)
+                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position && organizing.position.length > 0) {
                             organizing.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
                                 if (position === 'top-left') {
