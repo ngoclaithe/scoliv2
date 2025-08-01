@@ -272,22 +272,63 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật nhà tài trợ
     socketService.on('sponsors_updated', (data) => {
-      // console.log('📝 [PublicMatchContext] sponsors_updated received:', data);
-      setSponsors(prev => ({ ...prev, ...data }));
+      console.log('📝 [PublicMatchContext] sponsors_updated received:', data);
+
+      if (data.behavior === 'remove') {
+        // Xử lý remove: set empty hoặc filter out
+        setSponsors(prev => ({
+          ...prev,
+          sponsors: {
+            url_logo: [],
+            code_logo: [],
+            position: [],
+            type_display: []
+          }
+        }));
+      } else {
+        // Xử lý add hoặc update: logic hiện tại
+        setSponsors(prev => ({ ...prev, ...data }));
+      }
       setLastUpdateTime(Date.now());
     });
 
     // Lắng nghe cập nhật đơn vị tổ chức
     socketService.on('organizing_updated', (data) => {
-      // console.log('📝 [PublicMatchContext] organizing_updated received:', data);
-      setOrganizings(prev => ({ ...prev, ...data }));
+      console.log('📝 [PublicMatchContext] organizing_updated received:', data);
+
+      if (data.behavior === 'remove') {
+        // Xử lý remove: set empty
+        setOrganizings(prev => ({
+          ...prev,
+          url_logo: [],
+          code_logo: [],
+          position: [],
+          type_display: []
+        }));
+      } else {
+        // Xử lý add hoặc update: logic hiện tại
+        setOrganizings(prev => ({ ...prev, ...data }));
+      }
       setLastUpdateTime(Date.now());
     });
 
     // Lắng nghe cập nhật đơn vị truyền thông
     socketService.on('media_partners_updated', (data) => {
-      // console.log('📝 [PublicMatchContext] media_partners_updated received:', data);
-      setMediaPartners(prev => ({ ...prev, ...data }));
+      console.log('📝 [PublicMatchContext] media_partners_updated received:', data);
+
+      if (data.behavior === 'remove') {
+        // Xử lý remove: set empty
+        setMediaPartners(prev => ({
+          ...prev,
+          url_logo: [],
+          code_logo: [],
+          position: [],
+          type_display: []
+        }));
+      } else {
+        // Xử lý add hoặc update: logic hiện tại
+        setMediaPartners(prev => ({ ...prev, ...data }));
+      }
       setLastUpdateTime(Date.now());
     });
 
