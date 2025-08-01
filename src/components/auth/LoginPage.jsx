@@ -29,6 +29,19 @@ const LoginPage = () => {
     e.preventDefault();
     setError('');
 
+    // Validate password length
+    if (registerForm.password.length < 6) {
+      setError('Mật khẩu phải có ít nhất 6 ký tự');
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(registerForm.email)) {
+      setError('Email phải có dạng xxx@yyy.com');
+      return;
+    }
+
     if (registerForm.password !== registerForm.confirmPassword) {
       setError('Mật khẩu xác nhận không khớp');
       return;
@@ -80,7 +93,7 @@ const LoginPage = () => {
         setError(result.error);
       }
     } else if (loginForm.email.trim() && loginForm.password.trim()) {
-      // Đăng nhập bằng tài khoản
+      // Đăng nhập bằng tài kho���n
       const result = await login(loginForm);
       if (result.success) {
         resetForms();
@@ -121,13 +134,61 @@ const LoginPage = () => {
 
         <div className="p-4">
           {!showRegister && !showCodeLogin ? (
-            // Form đăng nhập chính
+            // Form đăng nh��p chính
             <div>
               {error && (
                 <div className="mb-3 p-2 bg-red-100 border border-red-400 text-red-700 rounded text-xs">
                   {error}
                 </div>
               )}
+
+              {/* Section 2: Đăng nhập bằng mã trận đấu */}
+              <div className="space-y-3">
+                <div className="text-center">
+                  <h3 className="text-sm font-semibold text-gray-700 mb-3">
+                    <span className="mr-1">🔑</span>
+                    Đăng nhập bằng mã trận đấu
+                  </h3>
+                </div>
+
+                <form className="space-y-3" onSubmit={(e) => {
+                  e.preventDefault();
+                  setError('');
+                  if (accessCode.trim()) {
+                    handleAccessCodeSubmit(e);
+                  } else {
+                    setError('Vui lòng nhập mã trận đấu');
+                  }
+                }}>
+                  <div>
+                    <Input
+                      type="text"
+                      placeholder="Nhập mã trận đấu"
+                      value={accessCode}
+                      onChange={(e) => setAccessCode(e.target.value)}
+                      className="w-full text-center font-mono text-sm"
+                      required={loginForm.email.trim() === '' && loginForm.password.trim() === ''}
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    loading={loading}
+                    className="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white font-bold py-2 rounded text-sm"
+                    disabled={loginForm.email.trim() !== '' || loginForm.password.trim() !== ''}
+                  >
+                    {loading ? "Đang xử lý..." : "Vào trận"}
+                  </Button>
+                </form>
+              </div>
+
+              {/* Divider */}
+              <div className="my-4 flex items-center">
+                <div className="flex-1 border-t border-gray-300"></div>
+                <div className="mx-3 text-xs text-gray-500 font-medium">HOẶC</div>
+                <div className="flex-1 border-t border-gray-300"></div>
+              </div>
 
               {/* Section 1: Đăng nhập bằng tài khoản */}
               <div className="space-y-3">
@@ -183,54 +244,6 @@ const LoginPage = () => {
                     disabled={accessCode.trim() !== ''}
                   >
                     {loading ? "Đang xử lý..." : "Đăng nhập"}
-                  </Button>
-                </form>
-              </div>
-
-              {/* Divider */}
-              <div className="my-4 flex items-center">
-                <div className="flex-1 border-t border-gray-300"></div>
-                <div className="mx-3 text-xs text-gray-500 font-medium">HOẶC</div>
-                <div className="flex-1 border-t border-gray-300"></div>
-              </div>
-
-              {/* Section 2: Đăng nhập bằng mã trận đấu */}
-              <div className="space-y-3">
-                <div className="text-center">
-                  <h3 className="text-sm font-semibold text-gray-700 mb-3">
-                    <span className="mr-1">🔑</span>
-                    Đăng nhập bằng mã trận đấu
-                  </h3>
-                </div>
-
-                <form className="space-y-3" onSubmit={(e) => {
-                  e.preventDefault();
-                  setError('');
-                  if (accessCode.trim()) {
-                    handleAccessCodeSubmit(e);
-                  } else {
-                    setError('Vui lòng nhập mã trận đấu');
-                  }
-                }}>
-                  <div>
-                    <Input
-                      type="text"
-                      placeholder="Nhập mã trận đấu"
-                      value={accessCode}
-                      onChange={(e) => setAccessCode(e.target.value)}
-                      className="w-full text-center font-mono text-sm"
-                      required={loginForm.email.trim() === '' && loginForm.password.trim() === ''}
-                    />
-                  </div>
-
-                  <Button
-                    type="submit"
-                    variant="primary"
-                    loading={loading}
-                    className="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white font-bold py-2 rounded text-sm"
-                    disabled={loginForm.email.trim() !== '' || loginForm.password.trim() !== ''}
-                  >
-                    {loading ? "Đang xử lý..." : "Vào trận"}
                   </Button>
                 </form>
               </div>
