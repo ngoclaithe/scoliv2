@@ -1114,7 +1114,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-rose-500 to-red-600 hover:from-rose-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🕔</span>
-              <span className="text-xs font-bold text-center">Đ���M 45'</span>
+              <span className="text-xs font-bold text-center">ĐẾM 45'</span>
             </button>
 
             {/* Giới thiệu */}
