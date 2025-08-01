@@ -9,8 +9,6 @@ const ScoreboardAbove = ({
         matchData,
         displaySettings,
         marqueeData,
-        penaltyData,
-        socketConnected,
         sponsors,
         organizing,
         mediaPartners,
@@ -533,7 +531,7 @@ const ScoreboardAbove = ({
                             {currentData.teamAScore}
                         </div>
 
-                        {/* Logo League - đặt vào container riêng để không bị cắt */}
+                        {/* Logo League - đ��t vào container riêng để không bị cắt */}
                         <div className="mx-2 sm:mx-3 relative" style={{ top: '-6px' }}>
                             <DisplayLogo
                                 logos={[currentData.leagueLogo]}
