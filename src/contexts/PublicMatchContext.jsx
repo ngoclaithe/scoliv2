@@ -334,7 +334,19 @@ export const PublicMatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật logo giải đấu
     socketService.on('tournament_logo_updated', (data) => {
-      setTournamentLogo(prev => ({ ...prev, ...data.tournamentLogo }));
+      console.log('📝 [PublicMatchContext] tournament_logo_updated received:', data);
+
+      if (data.behavior === 'remove') {
+        // Xử lý remove: set empty
+        setTournamentLogo(prev => ({
+          ...prev,
+          url_logo: [],
+          code_logo: []
+        }));
+      } else {
+        // Xử lý add hoặc update: logic hiện tại
+        setTournamentLogo(prev => ({ ...prev, ...data.tournamentLogo }));
+      }
       setLastUpdateTime(Date.now());
     });
 
