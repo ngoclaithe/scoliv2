@@ -515,11 +515,14 @@ const ScoreboardAbove = ({
                             });
                         }
 
-                        // Collect organizing with top-left position
+                        // Collect organizing with top-left position (check behavior)
                         if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
                             organizing.url_logo.forEach((logo, index) => {
                                 const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
-                                if (position === 'top-left') {
+                                const behavior = organizing?.behavior;
+
+                                // Only add if behavior is 'add' or undefined (default behavior)
+                                if (position === 'top-left' && (!behavior || behavior === 'add')) {
                                     allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
                                 }
                             });
