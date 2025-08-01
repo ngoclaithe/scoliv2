@@ -120,17 +120,14 @@ const MatchManagementSection = ({ isActive = true }) => {
     setCurrentAudioFile(audioType);
   };
 
-  // Pause/resume audio functions
   const pauseCurrentAudio = () => {
-    console.log('⏸️ [MatchManagement] Pausing audio');
-    audioUtils.stopAllAudio(); // For simplicity, stop instead of pause
+    audioUtils.stopAllAudio();
     setIsPlaying(false);
     setIsPaused(true);
   };
 
   const resumeCurrentAudio = () => {
     if (currentAudioFile) {
-      console.log('▶️ [MatchManagement] Resuming audio');
       audioUtils.playAudio(currentAudioFile);
       setIsPlaying(true);
       setIsPaused(false);
@@ -138,7 +135,6 @@ const MatchManagementSection = ({ isActive = true }) => {
   };
 
   const stopCurrentAudio = () => {
-    console.log('🔇 [MatchManagement] Stopping audio');
     audioUtils.stopAllAudio();
     setIsPlaying(false);
     setIsPaused(false);
@@ -551,7 +547,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           <div className="flex gap-1 items-center">
             <input
               type="text"
-              placeholder="Đ��i A"
+              placeholder="Đội A"
               value={teamAInfo.name}
               onChange={(e) => setTeamAInfo(prev => ({ ...prev, name: e.target.value }))}
               className="flex-1 min-w-0 px-2 py-1 text-xs font-medium text-center text-red-600 bg-white border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-red-300"
@@ -1369,7 +1365,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 });
                 console.log('📡 [DEBUG] Emitted marquee_update với data:', marqueeSettings);
 
-                toast.success('✅ Đã áp dụng cài đặt chữ ch��y!');
+                toast.success('✅ Đã áp dụng cài đặt chữ chạy!');
               }}
               className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
             >
