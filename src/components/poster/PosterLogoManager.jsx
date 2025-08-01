@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from "react";
-import Button from "../common/Button";
 import LogoAPI from "../../API/apiLogo";
 import DisplaySettingsAPI from "../../API/apiSettingDisplay";
 
@@ -346,7 +345,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         ));
 
         // Thông báo lỗi
-        alert(`Lỗi khi t��i lên: ${error.message || 'Đã xảy ra lỗi'}`);
+        alert(`Lỗi khi tải lên: ${error.message || 'Đã xảy ra lỗi'}`);
       }
     };
 
@@ -564,7 +563,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
             <div className="text-xs text-gray-600 mb-1">Vị trí hiển thị:</div>
             <div className="grid grid-cols-3 gap-1">
               {[
-                { key: 'top-left', icon: '↖️', title: 'Trên trái' },
+                { key: 'top-left', icon: '↖️', title: 'Trên tr��i' },
                 { key: 'bottom-left', icon: '↙️', title: 'Dưới trái' },
                 { key: 'bottom-right', icon: '↘️', title: 'Dưới phải' }
               ].map((pos) => (
