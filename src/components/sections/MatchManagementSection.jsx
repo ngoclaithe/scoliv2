@@ -262,7 +262,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   // Component để hiển thị/chỉnh sửa thống kê
   const EditableStatBar = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => {
     if (!isEditingStats) {
-      // Chế độ hiển thị
+      // Chế đ��� hiển thị
       return (
         <div className="space-y-1">
           <div className="flex justify-between items-center text-sm">
@@ -574,7 +574,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 disabled={!logoCodeA.trim() || isSearchingLogoA}
                 className="px-1 py-1 text-xs border border-red-500 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50 flex-shrink-0"
               >
-                {isSearchingLogoA ? '⏳' : '🔍'}
+                {isSearchingLogoA ? '���' : '🔍'}
               </button>
               {teamAInfo.logo && (
                 <div className="w-4 h-4 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
@@ -849,7 +849,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
               {/* Phạt góc */}
               <EditableStatBar
-                label="Phạt góc"
+                label="Phạt g��c"
                 statKey="corners"
                 team1Value={matchStats.corners.team1}
                 team2Value={matchStats.corners.team2}
@@ -865,7 +865,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 onUpdate={(team, value) => updateStat('yellowCards', team, value)}
               />
 
-              {/* Ph���m lỗi */}
+              {/* Phạm lỗi */}
               <EditableStatBar
                 label="Phạm lỗi"
                 statKey="fouls"
@@ -999,12 +999,8 @@ const MatchManagementSection = ({ isActive = true }) => {
             <button
               onClick={() => {
                 const timeString = "00:00";
-                // Set thời gian về 0 và bắt đầu đếm tiến từ server timer
                 updateMatchTime(timeString, "Hiệp 1", "live");
-                // Chuyển sang tỉ số trên
                 updateView('scoreboard');
-                setSelectedOption("ti-so-tren");
-                // Phát audio gialap cho đếm giờ
                 playAudioForAction('gialap');
                 toast.success('⏰ Đã bắt đầu timer từ 0:00!');
               }}
