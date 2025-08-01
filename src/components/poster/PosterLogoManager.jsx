@@ -346,7 +346,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         ));
 
         // Thông báo lỗi
-        alert(`Lỗi khi tải lên: ${error.message || 'Đã xảy ra lỗi'}`);
+        alert(`Lỗi khi t��i lên: ${error.message || 'Đã xảy ra lỗi'}`);
       }
     };
 
@@ -482,13 +482,8 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         onLogoUpdate({
           logoItems: activeItems,
           displayOptions: logoDisplayOptions,
-<<<<<<< HEAD
           changedItem: updatedItem,
           behavior: behavior
-=======
-          behavior: behavior,
-          changedItem: updatedItem
->>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
         });
       }
     };
@@ -684,7 +679,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
       logoItem.displayPositions && logoItem.displayPositions.length > 0
     );
 
-<<<<<<< HEAD
     // Find the removed item to pass as changedItem
     const removedItem = (isFromAPI ? apiLogos : logoItems).find(logo => logo.id === itemId);
 
@@ -694,17 +688,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         displayOptions: logoDisplayOptions,
         changedItem: { ...removedItem, displayPositions: [] },
         behavior: 'remove'
-=======
-    // Find the removed item for behavior context
-    const removedItem = [...apiLogos, ...logoItems].find(logo => logo.id === itemId);
-
-    if (onLogoUpdate) {
-      onLogoUpdate({
-        logoItems: activeItems,
-        displayOptions: logoDisplayOptions,
-        behavior: 'remove',
-        changedItem: removedItem
->>>>>>> 8782d49351f826d5e58a6c0fb36de50d2e97e7fa
       });
     }
   };
