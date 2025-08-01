@@ -426,7 +426,7 @@ export const PublicMatchProvider = ({ children }) => {
             return;
           }
 
-          console.log('🎙�� Creating audio blob from data, size:', audioData.length, 'mimeType:', mimeType);
+          console.log('🎙️ Creating audio blob from data, size:', audioData.length, 'mimeType:', mimeType);
           const uint8Array = new Uint8Array(audioData);
           const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
 
@@ -472,7 +472,13 @@ export const PublicMatchProvider = ({ children }) => {
       setCurrentAccessCode(accessCode);
 
       // Lắng nghe các event từ server - chỉ setup 1 lần
-      setupSocketListeners();
+      if (!listenersSetup) {
+        setupSocketListeners();
+        setListenersSetup(true);
+        console.log('✅ [PublicMatchContext] Socket listeners setup completed');
+      } else {
+        console.log('📋 [PublicMatchContext] Socket listeners already setup, skipping...');
+      }
 
       console.log('✅ [PublicMatchContext] Socket initialized successfully');
     } catch (error) {
