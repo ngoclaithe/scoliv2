@@ -143,6 +143,7 @@ export const PublicMatchProvider = ({ children }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
   const [currentAccessCode, setCurrentAccessCode] = useState(null);
+  const [listenersSetup, setListenersSetup] = useState(false);
 
   // Simple update time function - không cần debounce nữa
   const updateLastTime = useCallback(() => {
@@ -425,7 +426,7 @@ export const PublicMatchProvider = ({ children }) => {
             return;
           }
 
-          console.log('🎙️ Creating audio blob from data, size:', audioData.length, 'mimeType:', mimeType);
+          console.log('🎙�� Creating audio blob from data, size:', audioData.length, 'mimeType:', mimeType);
           const uint8Array = new Uint8Array(audioData);
           const audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
 
