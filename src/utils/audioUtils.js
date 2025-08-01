@@ -39,7 +39,7 @@ class AudioManager {
       mpeg: audio.canPlayType('audio/mpeg')
     };
 
-    console.log('�� Browser audio format support:', formats);
+    console.log('🔍 Browser audio format support:', formats);
     return formats;
   }
 
@@ -98,34 +98,18 @@ class AudioManager {
       return false;
     }
 
-    if (audioBlob.size < 100) { 
+    if (audioBlob.size < 100) {
       console.warn('⚠️ Audio blob very small:', audioBlob.size, 'bytes - might be corrupted');
     }
 
-    if (audioBlob.size > 10 * 1024 * 1024) { 
+    if (audioBlob.size > 10 * 1024 * 1024) {
       console.error('❌ Audio blob too large:', audioBlob.size, 'bytes');
       return false;
     }
 
-    const blobType = audioBlob.type || expectedMimeType;
-    if (!blobType) {
-      console.warn('⚠️ Audio blob has no MIME type, will attempt playback anyway');
-    } else if (!blobType.startsWith('audio/')) {
-      console.warn('⚠️ Audio blob MIME type suspicious:', blobType);
-    } else {
-      // Check if browser can play this format
-      const audio = document.createElement('audio');
-      const canPlay = audio.canPlayType(blobType);
-      if (!canPlay || canPlay === 'no') {
-        console.warn('⚠️ Browser may not support format:', blobType, '- support:', canPlay);
-        return false;
-      }
-      console.log('✅ Format support check passed:', blobType, '- support:', canPlay);
-    }
-
     console.log('✅ Audio blob validation passed:', {
       size: audioBlob.size,
-      type: blobType || 'unknown'
+      type: audioBlob.type || expectedMimeType || 'unknown'
     });
 
     return true;
@@ -229,6 +213,40 @@ class AudioManager {
     const audio = document.createElement('audio');
     const support = audio.canPlayType(mimeType);
     return support === 'probably' || support === 'maybe';
+  }
+
+  // Debug audio data để tìm vấn đề
+  debugAudioData(audioData, mimeType) {
+    console.log('🔍 [DEBUG] Audio data analysis:', {
+      type: typeof audioData,
+      isArrayBuffer: audioData instanceof ArrayBuffer,
+      isUint8Array: audioData instanceof Uint8Array,
+      isBlob: audioData instanceof Blob,
+      length: audioData?.length,
+      byteLength: audioData?.byteLength,
+      size: audioData?.size,
+      mimeType
+    });
+
+    // Kiểm tra 10 bytes đầu để xem có phải audio data không
+    if (audioData instanceof ArrayBuffer) {
+      const view = new Uint8Array(audioData.slice(0, 10));
+      console.log('🔍 First 10 bytes:', Array.from(view).map(b => b.toString(16).padStart(2, '0')).join(' '));
+
+      // Kiểm tra magic bytes của các format phổ biến
+      const str = String.fromCharCode(...view.slice(0, 4));
+      console.log('🔍 Magic bytes as string:', str);
+
+      if (str === 'RIFF') {
+        console.log('✅ Detected WAV format');
+      } else if (str === 'OggS') {
+        console.log('✅ Detected OGG format');
+      } else if (view[0] === 0x1A && view[1] === 0x45 && view[2] === 0xDF && view[3] === 0xA3) {
+        console.log('✅ Detected WebM format');
+      } else {
+        console.warn('⚠️ Unknown audio format, raw bytes:', Array.from(view));
+      }
+    }
   }
 
   // Safe blob URL creation
@@ -363,6 +381,9 @@ class AudioManager {
       return;
     }
 
+    // Debug: Kiểm tra raw data
+    this.debugAudioData(audioData, originalMimeType);
+
     // Create optimized blob
     const audioBlob = this.createOptimizedBlob(audioData, originalMimeType);
     if (!audioBlob) {
@@ -389,7 +410,7 @@ class AudioManager {
 
   // Queue management - Chỉ giữ lại audio mới nhất
   addToRefereeVoiceQueue(audioBlob) {
-    // Clear queue và chỉ gi�� audio mới nhất để latency thấp nhất
+    // Clear queue và chỉ giữ audio mới nhất để latency thấp nhất
     this.refereeVoiceQueue = [audioBlob];
     this.processRefereeVoiceQueue();
   }
@@ -546,15 +567,64 @@ class AudioManager {
     }
   }
 
-  // Fallback playback với nhiều format
-  attemptFallbackPlayback(originalBlob) {
+  // Thử Web Audio API như một fallback cuối cùng
+  async attemptWebAudioPlayback(arrayBuffer) {
+    console.log('🔄 Attempting Web Audio API playback');
+
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const audioBuffer = await audioContext.decodeAudioData(arrayBuffer.slice());
+
+      const source = audioContext.createBufferSource();
+      const gainNode = audioContext.createGain();
+
+      source.buffer = audioBuffer;
+      gainNode.gain.value = this.isMuted ? 0 : this.volume;
+
+      source.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+
+      source.start();
+
+      console.log('✅ Web Audio API playback successful');
+      return true;
+
+    } catch (error) {
+      console.error('❌ Web Audio API playback failed:', error);
+      return false;
+    }
+  }
+
+  // Fallback playback với nhiều format và Web Audio API
+  async attemptFallbackPlayback(originalBlob) {
     console.log('🔄 Attempting fallback playback with alternative formats');
 
-    const fallbackFormats = ['audio/mpeg', 'audio/wav', 'audio/ogg'];
+    // Thử lấy ArrayBuffer từ blob để test Web Audio API
+    let arrayBuffer = null;
+    try {
+      arrayBuffer = await originalBlob.arrayBuffer();
+      console.log('🔍 Got ArrayBuffer from blob, size:', arrayBuffer.byteLength);
+    } catch (error) {
+      console.warn('⚠️ Could not get ArrayBuffer from blob:', error);
+    }
 
-    const tryFormat = (formatIndex) => {
+    const fallbackFormats = ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/mp3'];
+
+    const tryFormat = async (formatIndex) => {
       if (formatIndex >= fallbackFormats.length) {
-        console.error('❌ All fallback formats failed');
+        console.log('🔄 HTML Audio failed, trying Web Audio API...');
+
+        if (arrayBuffer) {
+          const success = await this.attemptWebAudioPlayback(arrayBuffer);
+          if (success) return;
+        }
+
+        console.error('❌ All fallback formats and Web Audio API failed');
+        console.error('❌ Possible issues:');
+        console.error('   - Audio data is corrupted or invalid');
+        console.error('   - Browser security restrictions');
+        console.error('   - Unsupported audio codec');
+        console.error('   - Missing user interaction for audio autoplay');
         return;
       }
 
@@ -572,11 +642,20 @@ class AudioManager {
         const fallbackAudio = new Audio(audioUrl);
         fallbackAudio.volume = this.isMuted ? 0 : this.volume;
 
+        // Set timeout để avoid infinite wait
+        const timeout = setTimeout(() => {
+          console.warn('⚠️ Fallback format timeout:', format);
+          this.revokeBlobUrl(audioUrl);
+          tryFormat(formatIndex + 1);
+        }, 3000);
+
         fallbackAudio.onended = () => {
+          clearTimeout(timeout);
           this.revokeBlobUrl(audioUrl);
         };
 
         fallbackAudio.onerror = () => {
+          clearTimeout(timeout);
           console.warn('⚠️ Fallback format failed:', format);
           this.revokeBlobUrl(audioUrl);
           tryFormat(formatIndex + 1);
@@ -584,9 +663,11 @@ class AudioManager {
 
         fallbackAudio.play()
           .then(() => {
+            clearTimeout(timeout);
             console.log('✅ Fallback playback successful with:', format);
           })
           .catch(() => {
+            clearTimeout(timeout);
             console.warn('⚠️ Fallback play() failed for:', format);
             this.revokeBlobUrl(audioUrl);
             tryFormat(formatIndex + 1);
