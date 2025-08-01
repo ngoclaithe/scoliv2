@@ -394,7 +394,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <Button
                 variant="primary"
                 size="sm"
-                className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
+                className="flex-[2] bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
                 onClick={() => handleScoreChange("teamA", 1)}
               >
                 <span className="text-sm sm:text-lg">+</span>
@@ -416,7 +416,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <Button
                 variant="primary"
                 size="sm"
-                className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
+                className="flex-[2] bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
                 onClick={() => handleScoreChange("teamB", 1)}
               >
                 <span className="text-sm sm:text-lg">+</span>
@@ -513,12 +513,15 @@ const MatchManagementSection = ({ isActive = true }) => {
           <Button
             variant="primary"
             size="sm"
-            className="px-2 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+            className={`px-2 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 ${showMatchInfo ? 'relative' : ''}`}
             onClick={() => setShowMatchInfo(!showMatchInfo)}
           >
             <span className="mr-1">ℹ️</span>
             <span className="hidden sm:inline">THÔNG TIN</span>
             <span className="sm:hidden">INFO</span>
+            {showMatchInfo && (
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-px h-2 bg-blue-500"></div>
+            )}
           </Button>
 
 
@@ -526,7 +529,8 @@ const MatchManagementSection = ({ isActive = true }) => {
       </div>
 
       {showMatchInfo && (
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 border border-blue-200 space-y-2">
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 border border-blue-200 space-y-2 relative">
+          <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-px h-2 bg-blue-500"></div>
           {/* Tên trận đấu & Đơn vị live - 1 hàng */}
           <div className="grid grid-cols-2 gap-1">
             <input
@@ -1032,7 +1036,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 const timeString = "20:00";
                 // Set thời gian về 25:00 và bắt đầu đếm tiến từ server timer
                 updateMatchTime(timeString, "Hiệp 1", "live");
-                // Chuyển sang tỉ số trên
+                // Chuy���n sang tỉ số trên
                 updateView('scoreboard');
                 setSelectedOption("ti-so-tren");
                 // Phát audio gialap cho đếm giờ
@@ -1613,7 +1617,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       <Modal
         isOpen={showTimerModal}
         onClose={() => setShowTimerModal(false)}
-        title="🕰️ Thiết Lập Thời Gian Tùy Chỉnh"
+        title="🕰️ Thiết L��p Thời Gian Tùy Chỉnh"
         size="md"
       >
         <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg p-4">
