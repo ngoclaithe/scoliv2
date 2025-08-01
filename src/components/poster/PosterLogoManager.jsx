@@ -323,6 +323,23 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         console.log('📍 [PosterLogoManager] Position changed for item:', updatedItem);
         onPositionChange(updatedItem);
       }
+
+      // Also trigger immediate logo update
+      const allCurrentItems = [...apiLogos, ...logoItems].map(logoItem =>
+        logoItem.id === item.id ? updatedItem : logoItem
+      );
+
+      const activeItems = allCurrentItems.filter(logoItem =>
+        logoItem.category === activeLogoCategory &&
+        logoItem.displayPositions && logoItem.displayPositions.length > 0
+      );
+
+      if (onLogoUpdate) {
+        onLogoUpdate({
+          logoItems: activeItems,
+          displayOptions: logoDisplayOptions
+        });
+      }
     };
 
     return (
@@ -455,6 +472,11 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
   const handlePosterSelect = (poster) => {
     console.log('🎨 [PosterLogoManager] handlePosterSelect called with:', poster);
     setSelectedPoster(poster);
+    // Immediate update
+    if (onPosterUpdate) {
+      console.log('🎨 [PosterLogoManager] Calling onPosterUpdate immediately with:', poster);
+      onPosterUpdate(poster);
+    }
   };
 
   const handleItemUpdate = async (itemId, updatedItem) => {
@@ -596,7 +618,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
       <div className="space-y-1">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1">
-            <span className="text-xs">🏷️</span>
+            <span className="text-xs">����️</span>
             <h3 className="text-xs font-semibold text-gray-900">Logo & Banner</h3>
             <span className="text-xs text-gray-500">({Object.values(selectedLogosCount).reduce((a, b) => a + b, 0)} đã chọn)</span>
           </div>
@@ -686,10 +708,21 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
                   value={shape.value}
                   checked={logoDisplayOptions.shape === shape.value}
                   onChange={(e) => {
-                    const newShape = e.target.value;
-                    setLogoDisplayOptions(prev => ({ ...prev, shape: newShape }));
-                    console.log('🎨 [PosterLogoManager] Logo shape changed to:', newShape);
-                  }}
+                const newShape = e.target.value;
+                setLogoDisplayOptions(prev => ({ ...prev, shape: newShape }));
+                console.log('🎨 [PosterLogoManager] Logo shape changed to:', newShape);
+                // Immediate update
+                if (onLogoUpdate) {
+                  const activeItems = allLogoItems.filter(item =>
+                    item.category === activeLogoCategory &&
+                    item.displayPositions && item.displayPositions.length > 0
+                  );
+                  onLogoUpdate({
+                    logoItems: activeItems,
+                    displayOptions: { ...logoDisplayOptions, shape: newShape }
+                  });
+                }
+              }}
                   className="w-2 h-2"
                 />
                 <span className="text-xs">{shape.icon}</span>
@@ -706,6 +739,17 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
                 const isRotate = e.target.checked;
                 setLogoDisplayOptions(prev => ({ ...prev, rotateDisplay: isRotate }));
                 console.log('🔄 [PosterLogoManager] Rotate display changed to:', isRotate);
+                // Immediate update
+                if (onLogoUpdate) {
+                  const activeItems = allLogoItems.filter(item =>
+                    item.category === activeLogoCategory &&
+                    item.displayPositions && item.displayPositions.length > 0
+                  );
+                  onLogoUpdate({
+                    logoItems: activeItems,
+                    displayOptions: { ...logoDisplayOptions, rotateDisplay: isRotate }
+                  });
+                }
               }}
               className="w-2 h-2"
             />
@@ -745,20 +789,12 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         </div>
         <div className="flex gap-1 w-full sm:w-auto">
           <Button
-            variant="outline"
+            variant="primary"
             onClick={() => onClose?.()}
             className="flex-1 sm:flex-none text-xs px-2 py-1"
           >
-            Hủy
-          </Button>
-          <Button
-            variant="primary"
-            onClick={handleSave}
-            className="flex-1 sm:flex-none text-xs px-2 py-1"
-            disabled={!selectedPoster && allLogoItems.filter(item => item.displayPositions.length > 0).length === 0}
-          >
-            <span className="mr-1">💾</span>
-            Lưu & Áp Dụng
+            <span className="mr-1">✅</span>
+            ĐÓNG
           </Button>
         </div>
       </div>
