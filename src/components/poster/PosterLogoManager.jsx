@@ -3,7 +3,7 @@ import Button from "../common/Button";
 import LogoAPI from "../../API/apiLogo";
 import DisplaySettingsAPI from "../../API/apiSettingDisplay";
 
-const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, onPositionChange, initialData }) => {
+const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, onPositionChange, initialData, accessCode }) => {
   const [selectedPoster, setSelectedPoster] = useState(null);
   const [logoItems, setLogoItems] = useState([]);
   const [apiLogos, setApiLogos] = useState([]);
