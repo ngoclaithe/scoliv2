@@ -90,21 +90,46 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         setLoading(true);
         setApiLogos([]);
 
-        // Load initial data if provided
+        // Load initial data if provided (for display options only)
         if (initialData) {
           if (initialData.selectedPoster) {
             setSelectedPoster(initialData.selectedPoster);
-          }
-          if (initialData.logoItems) {
-            setLogoItems(initialData.logoItems);
-          }
-          if (initialData.apiLogos) {
-            setApiLogos(initialData.apiLogos);
           }
           if (initialData.displayOptions) {
             setLogoDisplayOptions(initialData.displayOptions);
           }
         }
+
+        // Load logos from API for each category
+        const logoCategories = ['sponsor', 'organizing', 'media', 'tournament'];
+        const loadedLogos = [];
+
+        for (const category of logoCategories) {
+          try {
+            console.log(`🔍 [PosterLogoManager] Loading ${category} logos from API`);
+            const response = await LogoAPI.getLogosByCategory(category);
+
+            if (response?.data && Array.isArray(response.data)) {
+              response.data.forEach((logo, index) => {
+                loadedLogos.push({
+                  id: `${category}-${logo.id || index}`,
+                  unitName: logo.name || logo.unitName || `${category} ${index + 1}`,
+                  code: logo.code_logo || logo.code || `${category.toUpperCase()}${index + 1}`,
+                  type: logo.type || 'logo',
+                  category: category,
+                  url: logo.url_logo || logo.url,
+                  displayPositions: logo.displayPositions || []
+                });
+              });
+            }
+          } catch (err) {
+            console.warn(`⚠️ [PosterLogoManager] Failed to load ${category} logos:`, err);
+          }
+        }
+
+        setApiLogos(loadedLogos);
+        console.log(`✅ [PosterLogoManager] Loaded ${loadedLogos.length} logos from API`);
+
       } catch (err) {
         console.error("Error loading logos:", err);
         setApiLogos([]);
