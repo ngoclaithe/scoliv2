@@ -503,7 +503,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Cập nh���t chữ chạy
+  // Cập nhật chữ chạy
   const updateMarquee = useCallback((newMarqueeData) => {
     setMarqueeData(prev => ({ ...prev, ...newMarqueeData }));
 

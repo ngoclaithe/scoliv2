@@ -709,7 +709,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
               }}
               className="w-2 h-2"
             />
-            <span className="text-xs">🔄 Hiển thị lu��n phiên</span>
+            <span className="text-xs">🔄 Hiển thị luân phiên</span>
           </label>
         </div>
       </div>
