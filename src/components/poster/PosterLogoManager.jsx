@@ -2,13 +2,14 @@ import React, { useState, useEffect, useCallback } from "react";
 import Button from "../common/Button";
 import LogoAPI from "../../API/apiLogo";
 
-const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, onPositionChange }) => {
+const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, onPositionChange, initialData }) => {
   const [selectedPoster, setSelectedPoster] = useState(null);
   const [logoItems, setLogoItems] = useState([]);
   const [apiLogos, setApiLogos] = useState([]);
   const [activeLogoCategory, setActiveLogoCategory] = useState("sponsor");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedLogosCount, setSelectedLogosCount] = useState({ sponsor: 0, organizing: 0, media: 0, tournament: 0 });
 
   const [logoDisplayOptions, setLogoDisplayOptions] = useState({
     shape: "round",
@@ -71,12 +72,41 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
     },
   ];
 
+  // Function to update selected logos count
+  const updateSelectedLogosCount = useCallback(() => {
+    const counts = { sponsor: 0, organizing: 0, media: 0, tournament: 0 };
+
+    [...apiLogos, ...logoItems].forEach(item => {
+      if (item.displayPositions && item.displayPositions.length > 0) {
+        counts[item.category] = (counts[item.category] || 0) + 1;
+      }
+    });
+
+    setSelectedLogosCount(counts);
+  }, [apiLogos, logoItems]);
+
   useEffect(() => {
     const loadLogos = async () => {
       try {
         setLoading(true);
         setError(null);
         setApiLogos([]);
+
+        // Load initial data if provided
+        if (initialData) {
+          if (initialData.selectedPoster) {
+            setSelectedPoster(initialData.selectedPoster);
+          }
+          if (initialData.logoItems) {
+            setLogoItems(initialData.logoItems);
+          }
+          if (initialData.apiLogos) {
+            setApiLogos(initialData.apiLogos);
+          }
+          if (initialData.displayOptions) {
+            setLogoDisplayOptions(initialData.displayOptions);
+          }
+        }
       } catch (err) {
         console.error("Error loading logos:", err);
         setError("Không thể tải danh sách logo. Vui lòng thử lại.");
@@ -87,7 +117,12 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
     };
 
     loadLogos();
-  }, []);
+  }, [initialData]);
+
+  // Update count whenever logo data changes
+  useEffect(() => {
+    updateSelectedLogosCount();
+  }, [updateSelectedLogosCount]);
 
   const handleFileUpload = async (event, item) => {
     const file = event.target.files[0];
@@ -363,6 +398,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
 
           {/* Position toggles */}
           <div className="mt-2">
+            <div className="text-xs text-gray-600 mb-1">Vị trí hiển thị:</div>
             <div className="grid grid-cols-3 gap-1">
               {[
                 { key: 'top-left', icon: '↖️', title: 'Trên trái' },
@@ -372,12 +408,17 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
                 <button
                   key={pos.key}
                   onClick={() => handlePositionToggle(pos.key)}
-                  className={`flex flex-col items-center p-1 border rounded text-xs ${item.displayPositions.includes(pos.key)
-                    ? 'border-blue-500 bg-blue-100 text-blue-600'
-                    : 'border-gray-300 hover:border-gray-400 text-gray-600'}`}
+                  className={`flex flex-col items-center p-1 border rounded text-xs relative ${
+                    item.displayPositions.includes(pos.key)
+                      ? 'border-blue-500 bg-blue-100 text-blue-600 shadow-sm'
+                      : 'border-gray-300 hover:border-gray-400 text-gray-600'
+                  }`}
                   title={pos.title}
                 >
                   <span className="text-base">{pos.icon}</span>
+                  {item.displayPositions.includes(pos.key) && (
+                    <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full"></div>
+                  )}
                 </button>
               ))}
             </div>
@@ -557,6 +598,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
           <div className="flex items-center gap-1">
             <span className="text-xs">🏷️</span>
             <h3 className="text-xs font-semibold text-gray-900">Logo & Banner</h3>
+            <span className="text-xs text-gray-500">({Object.values(selectedLogosCount).reduce((a, b) => a + b, 0)} đã chọn)</span>
           </div>
         </div>
 
@@ -565,12 +607,22 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
             <button
               key={type.id}
               onClick={() => setActiveLogoCategory(type.id)}
-              className={`px-1 py-0.5 rounded text-xs font-medium transition-colors ${activeLogoCategory === type.id
+              className={`px-1 py-0.5 rounded text-xs font-medium transition-colors relative ${activeLogoCategory === type.id
                   ? 'bg-blue-500 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
             >
+              <span className="mr-1">{type.icon}</span>
               {type.name}
+              {selectedLogosCount[type.id] > 0 && (
+                <span className={`ml-1 px-1 py-0.5 rounded-full text-xs font-bold ${
+                  activeLogoCategory === type.id
+                    ? 'bg-white text-blue-500'
+                    : 'bg-blue-500 text-white'
+                }`}>
+                  {selectedLogosCount[type.id]}
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -657,7 +709,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
               }}
               className="w-2 h-2"
             />
-            <span className="text-xs">🔄 Hiển thị luân phiên</span>
+            <span className="text-xs">🔄 Hiển thị lu��n phiên</span>
           </label>
         </div>
       </div>
@@ -685,6 +737,12 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
       </div>
 
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pt-2 border-t border-gray-200">
+        <div className="text-xs text-gray-600">
+          {selectedPoster && (
+            <div>Poster: <span className="font-medium text-blue-600">{selectedPoster.name}</span></div>
+          )}
+          <div>Logo đã chọn: <span className="font-medium text-green-600">{Object.values(selectedLogosCount).reduce((a, b) => a + b, 0)}</span></div>
+        </div>
         <div className="flex gap-1 w-full sm:w-auto">
           <Button
             variant="outline"
