@@ -499,63 +499,84 @@ const ScoreboardAbove = ({
 
                 {/* Top Left Position */}
                 <div className="absolute top-4 left-4 z-40">
-                    {/* Sponsors with top-left position */}
-                    {sponsors.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && sponsors.sponsors?.position &&
-                        sponsors.sponsors.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'top-left') && 
-                        (() => {
+                    {(() => {
+                        const allLogos = [];
+
+                        // Collect sponsors with top-left position
+                        if (sponsors.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && sponsors.sponsors?.position) {
+                            sponsors.sponsors.url_logo.forEach((logo, index) => {
+                                const position = Array.isArray(sponsors.sponsors.position[index]) ? sponsors.sponsors.position[index][0] : sponsors.sponsors.position[index];
+                                if (position === 'top-left') {
+                                    allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
+                                }
+                            });
+                        }
+
+                        // Collect organizing with top-left position
+                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
+                            organizing.url_logo.forEach((logo, index) => {
+                                const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
+                                if (position === 'top-left') {
+                                    allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
+                                }
+                            });
+                        }
+
+                        // Collect media partners with top-left position
+                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
+                            mediaPartners.url_logo.forEach((logo, index) => {
+                                const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
+                                if (position === 'top-left') {
+                                    allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
+                                }
+                            });
+                        }
+
+                        // Fallback for sponsors without position specified
+                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && (!sponsors?.position || sponsors.position.length === 0)) {
+                            sponsors.url_logo.forEach(logo => {
+                                allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
+                            });
+                        }
+
+                        if (allLogos.length === 0) return null;
+
+                        if (displaySettings?.rotateDisplay && allLogos.length > 1) {
+                            // Slide mode for multiple logos
                             return (
                                 <DisplayLogo
-                                    logos={sponsors.sponsors.url_logo.filter((_, index) => (Array.isArray(sponsors.sponsors.position[index]) ? sponsors.sponsors.position[index][0] : sponsors.sponsors.position[index]) === 'top-left')}
-                                    alt="Sponsors"
+                                    logos={allLogos.map(logo => logo.url)}
+                                    alt="Sponsors & Partners"
                                     className="w-16 h-16"
                                     type_play={logoShape}
-                                    slideMode={displaySettings?.rotateDisplay || false}
-                                    maxVisible={3}
+                                    slideMode={true}
+                                    maxVisible={1}
                                     slideInterval={5000}
                                 />
                             );
-                        })()}
+                        } else {
+                            // Grid layout for multiple logos
+                            const itemsPerRow = 2;
+                            const maxItems = 4;
+                            const displayItems = allLogos.slice(0, maxItems);
 
-                    {/* Organizing with top-left position */}
-                    {organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position &&
-                     organizing.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'top-left') && (
-                        <DisplayLogo
-                            logos={organizing.url_logo.filter((_, index) => (Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index]) === 'top-left')}
-                            alt="Organizing"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
-
-                    {/* Media Partners with top-left position */}
-                    {mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position &&
-                     mediaPartners.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'top-left') && (
-                        <DisplayLogo
-                            logos={mediaPartners.url_logo.filter((_, index) => (Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index]) === 'top-left')}
-                            alt="Media Partners"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
-
-                    {/* Fallback for sponsors without position specified */}
-                    {sponsors?.url_logo && sponsors.url_logo.length > 0 && (!sponsors?.position || sponsors.position.length === 0) && (
-                        <DisplayLogo
-                            logos={sponsors.url_logo}
-                            alt="Sponsors"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                            return (
+                                <div className={`grid gap-1 ${displayItems.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                                    {displayItems.map((logo, index) => (
+                                        <div key={index} className="flex-shrink-0">
+                                            <DisplayLogo
+                                                logos={[logo.url]}
+                                                alt={logo.alt}
+                                                className="w-12 h-12"
+                                                type_play={logoShape}
+                                                slideMode={false}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            );
+                        }
+                    })()}
                 </div>
 
                 {/* Tournament Logo - Top Left (if no sponsors) */}
@@ -579,118 +600,164 @@ const ScoreboardAbove = ({
 
                 {/* Bottom Left Position */}
                 <div className="absolute bottom-4 left-4 z-40">
-                    {/* Sponsors with bottom-left position */}
-                    {sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position &&
-                     sponsors.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-left') && (
-                        <DisplayLogo
-                            logos={sponsors.url_logo.filter((_, index) => (Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index]) === 'bottom-left')}
-                            alt="Sponsors"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                    {(() => {
+                        const allLogos = [];
 
-                    {/* Organizing with bottom-left position */}
-                    {organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position &&
-                     organizing.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-left') && (
-                        <DisplayLogo
-                            logos={organizing.url_logo.filter((_, index) => (Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index]) === 'bottom-left')}
-                            alt="Organizing"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                        // Collect sponsors with bottom-left position
+                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position) {
+                            sponsors.url_logo.forEach((logo, index) => {
+                                const position = Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index];
+                                if (position === 'bottom-left') {
+                                    allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
+                                }
+                            });
+                        }
 
-                    {/* Media Partners with bottom-left position */}
-                    {mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position &&
-                     mediaPartners.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-left') && (
-                        <DisplayLogo
-                            logos={mediaPartners.url_logo.filter((_, index) => (Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index]) === 'bottom-left')}
-                            alt="Media Partners"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                        // Collect organizing with bottom-left position
+                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
+                            organizing.url_logo.forEach((logo, index) => {
+                                const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
+                                if (position === 'bottom-left') {
+                                    allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
+                                }
+                            });
+                        }
 
-                    {/* Fallback for organizing without position specified */}
-                    {organizing?.url_logo && organizing.url_logo.length > 0 && (!organizing?.position || organizing.position.length === 0) && (
-                        <DisplayLogo
-                            logos={organizing.url_logo}
-                            alt="Organizing"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                        // Collect media partners with bottom-left position
+                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
+                            mediaPartners.url_logo.forEach((logo, index) => {
+                                const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
+                                if (position === 'bottom-left') {
+                                    allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
+                                }
+                            });
+                        }
+
+                        // Fallback for organizing without position specified
+                        if (organizing?.url_logo && organizing.url_logo.length > 0 && (!organizing?.position || organizing.position.length === 0)) {
+                            organizing.url_logo.forEach(logo => {
+                                allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
+                            });
+                        }
+
+                        if (allLogos.length === 0) return null;
+
+                        if (displaySettings?.rotateDisplay && allLogos.length > 1) {
+                            // Slide mode for multiple logos
+                            return (
+                                <DisplayLogo
+                                    logos={allLogos.map(logo => logo.url)}
+                                    alt="Sponsors & Partners"
+                                    className="w-16 h-16"
+                                    type_play={logoShape}
+                                    slideMode={true}
+                                    maxVisible={1}
+                                    slideInterval={5000}
+                                />
+                            );
+                        } else {
+                            // Grid layout for multiple logos
+                            const maxItems = 4;
+                            const displayItems = allLogos.slice(0, maxItems);
+
+                            return (
+                                <div className={`grid gap-1 ${displayItems.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                                    {displayItems.map((logo, index) => (
+                                        <div key={index} className="flex-shrink-0">
+                                            <DisplayLogo
+                                                logos={[logo.url]}
+                                                alt={logo.alt}
+                                                className="w-12 h-12"
+                                                type_play={logoShape}
+                                                slideMode={false}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            );
+                        }
+                    })()}
                 </div>
 
                 {/* Bottom Right Position */}
                 <div className="absolute bottom-4 right-4 z-40">
-                    {/* Sponsors with bottom-right position */}
-                    {sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position &&
-                     sponsors.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-right') && (
-                        <DisplayLogo
-                            logos={sponsors.url_logo.filter((_, index) => (Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index]) === 'bottom-right')}
-                            alt="Sponsors"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                    {(() => {
+                        const allLogos = [];
 
-                    {/* Organizing with bottom-right position */}
-                    {organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position &&
-                     organizing.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-right') && (
-                        <DisplayLogo
-                            logos={organizing.url_logo.filter((_, index) => (Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index]) === 'bottom-right')}
-                            alt="Organizing"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                        // Collect sponsors with bottom-right position
+                        if (sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position) {
+                            sponsors.url_logo.forEach((logo, index) => {
+                                const position = Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index];
+                                if (position === 'bottom-right') {
+                                    allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
+                                }
+                            });
+                        }
 
-                    {/* Media Partners with bottom-right position */}
-                    {mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position &&
-                     mediaPartners.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'bottom-right') && (
-                        <DisplayLogo
-                            logos={mediaPartners.url_logo.filter((_, index) => (Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index]) === 'bottom-right')}
-                            alt="Media Partners"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                        // Collect organizing with bottom-right position
+                        if (organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position) {
+                            organizing.url_logo.forEach((logo, index) => {
+                                const position = Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index];
+                                if (position === 'bottom-right') {
+                                    allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
+                                }
+                            });
+                        }
 
-                    {/* Fallback for media partners without position specified */}
-                    {mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && (!mediaPartners?.position || mediaPartners.position.length === 0) && (
-                        <DisplayLogo
-                            logos={mediaPartners.url_logo}
-                            alt="Media Partners"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                        // Collect media partners with bottom-right position
+                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && mediaPartners?.position) {
+                            mediaPartners.url_logo.forEach((logo, index) => {
+                                const position = Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index];
+                                if (position === 'bottom-right') {
+                                    allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
+                                }
+                            });
+                        }
+
+                        // Fallback for media partners without position specified
+                        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0 && (!mediaPartners?.position || mediaPartners.position.length === 0)) {
+                            mediaPartners.url_logo.forEach(logo => {
+                                allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
+                            });
+                        }
+
+                        if (allLogos.length === 0) return null;
+
+                        if (displaySettings?.rotateDisplay && allLogos.length > 1) {
+                            // Slide mode for multiple logos
+                            return (
+                                <DisplayLogo
+                                    logos={allLogos.map(logo => logo.url)}
+                                    alt="Sponsors & Partners"
+                                    className="w-16 h-16"
+                                    type_play={logoShape}
+                                    slideMode={true}
+                                    maxVisible={1}
+                                    slideInterval={5000}
+                                />
+                            );
+                        } else {
+                            // Grid layout for multiple logos
+                            const maxItems = 4;
+                            const displayItems = allLogos.slice(0, maxItems);
+
+                            return (
+                                <div className={`grid gap-1 ${displayItems.length === 1 ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                                    {displayItems.map((logo, index) => (
+                                        <div key={index} className="flex-shrink-0">
+                                            <DisplayLogo
+                                                logos={[logo.url]}
+                                                alt={logo.alt}
+                                                className="w-12 h-12"
+                                                type_play={logoShape}
+                                                slideMode={false}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
+                            );
+                        }
+                    })()}
                 </div>
 
                 {/* Scrolling Text - only show if mode is not 'khong' and visibility is true */}
