@@ -239,7 +239,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
     return () => {
       isMounted = false;
     };
-  }, [accessCode]); // Chỉ depend vào accessCode thôi, không depend vào initialData
+  }, [accessCode, initialData]); // Include initialData dependency
 
   // Handle initialData separately
   useEffect(() => {
