@@ -167,7 +167,7 @@ const NewHomeLayout = () => {
 
         {/* Tab Content Container */}
         <div className="bg-white min-h-screen">
-          <div className="p-4">
+          <div className="p-0">
             {renderTabContent()}
           </div>
         </div>

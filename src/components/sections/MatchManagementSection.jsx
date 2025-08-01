@@ -345,9 +345,9 @@ const MatchManagementSection = ({ isActive = true }) => {
   };
 
   return (
-    <div className="sm:p-4 space-y-3 sm:space-y-4">
+    <div className="sm:p-0 space-y-0 sm:space-y-0">
       {/* Scoreboard */}
-      <div className="sm:p-3 shadow-xl h-auto">
+      <div className="sm:p-0 shadow-xl h-auto">
         {displaySettings.selectedSkin && skinData[displaySettings.selectedSkin] ? (
           <div className="w-full h-8 sm:h-20 bg-gray-100 rounded-lg overflow-hidden">
             <img
