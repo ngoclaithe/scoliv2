@@ -150,10 +150,8 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
   };
 
-  // Pause audio khi tab không active nữa (thay vì stop hoàn toàn)
   useEffect(() => {
     if (!isActive && isPlaying) {
-      console.log('⏸️ [MatchManagement] Tab inactive, pausing audio');
       pauseCurrentAudio();
     }
   }, [isActive, isPlaying]);
@@ -455,7 +453,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 resumeCurrentAudio();
                 toast.info('▶️ Đã tiếp tục phát audio');
               } else {
-                // Không có audio nào -> toggle audio enabled
+                // Kh��ng có audio nào -> toggle audio enabled
                 console.log('ὐ9 [MatchManagement] No audio to resume, toggling audio enabled state');
                 toggleAudioEnabled();
                 toast.info(audioEnabled ? '🔇 Đã tắt audio tĩnh' : '🔊 Đã bật audio tĩnh');
@@ -535,7 +533,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             />
             <input
               type="text"
-              placeholder="Đơn vị live"
+              placeholder="Đ��n vị live"
               value={liveUnit}
               onChange={(e) => setLiveUnit(e.target.value)}
               className="w-full min-w-0 px-2 py-1 text-xs font-medium text-center text-blue-700 bg-white border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-300"
