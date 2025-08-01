@@ -439,7 +439,7 @@ class AudioManager {
     });
 
     if (!this.audioEnabled) {
-      console.log('🔇 Audio disabled globally');
+      console.log('���� Audio disabled globally');
       return;
     }
 
@@ -690,13 +690,8 @@ class AudioManager {
 
     const tryFormat = async (formatIndex) => {
       if (formatIndex >= fallbackFormats.length) {
-        console.error('❌ All fallback methods failed');
-        console.error('❌ Possible issues:');
-        console.error('   - Audio data is corrupted or invalid');
-        console.error('   - Browser security restrictions');
-        console.error('   - Unsupported audio codec');
-        console.error('   - Missing user interaction for audio autoplay');
-        console.error('   - Network issues affecting blob data');
+        console.log('🔄 All HTML Audio formats failed, trying Data URL approach...');
+        await this.attemptDataUrlPlayback(arrayBuffer || originalBlob);
         return;
       }
 
