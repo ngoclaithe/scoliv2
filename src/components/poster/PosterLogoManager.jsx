@@ -7,7 +7,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
   const [logoItems, setLogoItems] = useState([]);
   const [apiLogos, setApiLogos] = useState([]);
   const [activeLogoCategory, setActiveLogoCategory] = useState("sponsor");
-  const [loading, setLoading] = useState(true);
   const [selectedLogosCount, setSelectedLogosCount] = useState({ sponsor: 0, organizing: 0, media: 0, tournament: 0 });
 
   const [logoDisplayOptions, setLogoDisplayOptions] = useState({
@@ -563,7 +562,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
             <div className="text-xs text-gray-600 mb-1">Vị trí hiển thị:</div>
             <div className="grid grid-cols-3 gap-1">
               {[
-                { key: 'top-left', icon: '↖️', title: 'Trên tr��i' },
+                { key: 'top-left', icon: '↖️', title: 'Trên trái' },
                 { key: 'bottom-left', icon: '↙️', title: 'Dưới trái' },
                 { key: 'bottom-right', icon: '↘️', title: 'Dưới phải' }
               ].map((pos) => (
