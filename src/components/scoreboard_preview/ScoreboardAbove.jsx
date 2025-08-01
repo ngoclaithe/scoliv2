@@ -18,6 +18,8 @@ const ScoreboardAbove = ({
     } = usePublicMatch();
     
     const [currentType, setCurrentType] = useState(type);
+    // console.log('[ScoreboardAbove] sponsors.url_logo', sponsors.sponsors.url_logo);
+    // console.log('[ScoreboardAbove] sponsors.position', sponsors.sponsors.position);
 
     const currentData = {
         teamAName: matchData?.teamA?.name || "ĐỘI A",
@@ -498,18 +500,21 @@ const ScoreboardAbove = ({
                 {/* Top Left Position */}
                 <div className="absolute top-4 left-4 z-40">
                     {/* Sponsors with top-left position */}
-                    {sponsors?.url_logo && sponsors.url_logo.length > 0 && sponsors?.position &&
-                     sponsors.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'top-left') && (
-                        <DisplayLogo
-                            logos={sponsors.url_logo.filter((_, index) => (Array.isArray(sponsors.position[index]) ? sponsors.position[index][0] : sponsors.position[index]) === 'top-left')}
-                            alt="Sponsors"
-                            className="w-16 h-16"
-                            type_play={logoShape}
-                            slideMode={displaySettings?.rotateDisplay || false}
-                            maxVisible={3}
-                            slideInterval={5000}
-                        />
-                    )}
+                    {sponsors.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0 && sponsors.sponsors?.position &&
+                        sponsors.sponsors.position.some((pos, index) => (Array.isArray(pos) ? pos[0] : pos) === 'top-left') && 
+                        (() => {
+                            return (
+                                <DisplayLogo
+                                    logos={sponsors.sponsors.url_logo.filter((_, index) => (Array.isArray(sponsors.sponsors.position[index]) ? sponsors.sponsors.position[index][0] : sponsors.sponsors.position[index]) === 'top-left')}
+                                    alt="Sponsors"
+                                    className="w-16 h-16"
+                                    type_play={logoShape}
+                                    slideMode={displaySettings?.rotateDisplay || false}
+                                    maxVisible={3}
+                                    slideInterval={5000}
+                                />
+                            );
+                        })()}
 
                     {/* Organizing with top-left position */}
                     {organizing?.url_logo && organizing.url_logo.length > 0 && organizing?.position &&
