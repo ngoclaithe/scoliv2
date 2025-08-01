@@ -248,6 +248,18 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
     };
   }, [accessCode]); // Chỉ depend vào accessCode thôi, không depend vào initialData
 
+  // Handle initialData separately
+  useEffect(() => {
+    if (initialData) {
+      if (initialData.selectedPoster) {
+        setSelectedPoster(initialData.selectedPoster);
+      }
+      if (initialData.displayOptions) {
+        setLogoDisplayOptions(initialData.displayOptions);
+      }
+    }
+  }, [initialData]);
+
   // Update count whenever logo data changes
   useEffect(() => {
     updateSelectedLogosCount();
