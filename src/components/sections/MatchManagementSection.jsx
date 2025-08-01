@@ -110,15 +110,11 @@ const MatchManagementSection = ({ isActive = true }) => {
   }, [matchData.startTime, matchData.stadium, matchData.matchDate]);
 
 
-  // HÀM PHÁT AUDIO TRỰC TIẾP - ĐƯỢC GỌI KHI CLICK BUTTON
   const playAudioForAction = (audioType) => {
-    // Chỉ phát audio khi tab MatchManagement đang active
     if (!isActive || !audioEnabled) {
-      console.log('🔇 [MatchManagement] Audio disabled or tab inactive');
       return;
     }
 
-    console.log('🎵 [MatchManagement] Playing audio for action:', audioType);
     audioUtils.playAudio(audioType);
     setIsPlaying(true);
     setCurrentAudioFile(audioType);
@@ -555,7 +551,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           <div className="flex gap-1 items-center">
             <input
               type="text"
-              placeholder="Đội A"
+              placeholder="Đ��i A"
               value={teamAInfo.name}
               onChange={(e) => setTeamAInfo(prev => ({ ...prev, name: e.target.value }))}
               className="flex-1 min-w-0 px-2 py-1 text-xs font-medium text-center text-red-600 bg-white border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-red-300"
@@ -1373,7 +1369,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 });
                 console.log('📡 [DEBUG] Emitted marquee_update với data:', marqueeSettings);
 
-                toast.success('✅ Đã áp dụng cài đặt chữ chạy!');
+                toast.success('✅ Đã áp dụng cài đặt chữ ch��y!');
               }}
               className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
             >
