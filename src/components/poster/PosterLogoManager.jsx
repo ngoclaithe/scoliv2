@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Button from "../common/Button";
 import LogoAPI from "../../API/apiLogo";
+import DisplaySettingsAPI from "../../API/apiSettingDisplay";
 
 const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, onPositionChange, initialData }) => {
   const [selectedPoster, setSelectedPoster] = useState(null);
@@ -144,7 +145,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
     const file = event.target.files[0];
     if (!file) return;
 
-    // Kiểm tra kích thư���c file (tối đa 5MB)
+    // Kiểm tra kích thước file (tối đa 5MB)
     if (file.size > 5 * 1024 * 1024) {
       alert("Kích thước file tối đa là 5MB");
       return;
