@@ -328,11 +328,10 @@ const MatchManagementSection = ({ isActive = true }) => {
       {/* Scoreboard */}
       <div className="sm:p-0 shadow-xl h-auto">
         <div className="w-full h-16 sm:h-24 bg-gray-100 rounded-lg overflow-hidden relative">
-          <div className="absolute inset-0 transform scale-50 sm:scale-75 origin-center">
-            <ScoreboardAbove
-              type={displaySettings.selectedSkin || 1}
-            />
-          </div>
+          <ScoreboardPreview
+            matchData={matchData}
+            displaySettings={displaySettings}
+          />
         </div>
       </div>
 
