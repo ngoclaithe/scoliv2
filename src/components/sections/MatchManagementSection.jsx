@@ -997,7 +997,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 updateView('scoreboard');
                 playAudioForAction('gialap');
-                toast.success('⏰ Đã b��t đầu timer từ 20:00!');
+                toast.success('⏰ Đã b���t đầu timer từ 20:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -1299,7 +1299,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
                 toast.success('✅ Đã áp dụng cài đặt chữ chạy!');
               }}
-              className="px-4 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-medium text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+              className="px-4 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               ÁP DỤNG
             </Button>
