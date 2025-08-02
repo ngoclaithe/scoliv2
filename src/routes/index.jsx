@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import App from '../App';
 import DisplayController from '../components/display/DisplayController';
 import ScoreboardBelow from '../components/scoreboard_preview/ScoreboardBelowNew';
+import PosterPreviewPage from '../pages/PosterPreviewPage';
 const AppRoutes = () => {
   return (
     <>
