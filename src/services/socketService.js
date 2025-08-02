@@ -197,6 +197,11 @@ class SocketService {
     return this.emit('marquee_update', { marqueeData });
   }
 
+  // Cập nhật tiêu đề trận đấu
+  updateMatchTitle(matchTitle) {
+    return this.emit('match_title_update', { matchTitle });
+  }
+
   // Cập nhật thời gian trận đấu
   updateMatchTime(matchTime, period, status) {
     return this.emit('match_time_update', { 
@@ -344,6 +349,7 @@ class SocketService {
       'team_logos_updated',
       'team_names_updated',
       'marquee_updated',
+      'match_title_updated',
       'match_time_updated',
       'lineup_updated',
       'penalty_updated',
