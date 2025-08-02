@@ -93,19 +93,23 @@ export const PublicMatchProvider = ({ children }) => {
   });
 
   const [organizing, setOrganizing] = useState({
-    code_logo: [],
-    url_logo: [],
-    position: [],
-    type_display: [],
-    behavior: 'add'
+    organizing: {
+      code_logo: [],
+      url_logo: [],
+      position: [],
+      type_display: [],
+      behavior: 'add'
+    }
   });
 
   const [mediaPartners, setMediaPartners] = useState({
-    code_logo: [],
-    url_logo: [],
-    position: [],
-    type_display: [],
-    behavior: 'add'
+    mediaPartners: {
+      code_logo: [],
+      url_logo: [],
+      position: [],
+      type_display: [],
+      behavior: 'add'
+    }
   });
 
   const [tournamentLogo, setTournamentLogo] = useState({

@@ -19,7 +19,7 @@ const ScoreboardAbove = ({
     
     const [currentType, setCurrentType] = useState(type);
     console.log("Giá trị organizing là:", organizing);
-
+    console.log("Giá trị sponsors là:", sponsors);
     const currentData = {
         teamAName: matchData?.teamA?.name || "ĐỘI A",
         teamBName: matchData?.teamB?.name || "ĐỘI B",
