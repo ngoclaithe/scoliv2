@@ -80,7 +80,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     name: matchData.teamB.name || "",
     logo: matchData.teamB.logo || ""
   });
-  const [matchTitle, setMatchTitle] = useState(matchData.title || "");
+  const [matchTitle, setMatchTitle] = useState(matchData.matchTitle || "");
   const [liveUnit, setLiveUnit] = useState(matchData.liveUnit || "");
 
   // Sync team info khi matchData thay đổi (từ server)
@@ -403,7 +403,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           </div>
         </div>
 
-{/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
+{/* Nút T��M DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
 <div className="flex justify-center items-center mt-2 space-x-2">
           {/* Audio Pause/Play Button */}
           <Button
