@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import DisplayLogo from '../common/DisplayLogo';
+import { getFullLogoUrl, getFullLogoUrls } from '../../utils/logoUtils';
 
 const ScoreboardAbove = ({
     type = 1
