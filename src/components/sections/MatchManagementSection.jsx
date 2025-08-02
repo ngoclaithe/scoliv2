@@ -480,7 +480,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               } else {
                 // Pause timer - sử dụng updateMatchTime với status paused
                 updateMatchTime(matchData.matchTime, matchData.period, "paused");
-                toast.info('⏸️ Đã tạm dừng timer');
+                toast.info('⏸️ ��ã tạm dừng timer');
               }
             }}
           >
@@ -1029,7 +1029,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 playAudioForAction('gialap');
                 toast.success('⏰ Đã bắt đầu timer từ 35:00!');
               }}
-              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🕒</span>
               <span className="text-xs font-bold text-center">ĐẾM 35'</span>
