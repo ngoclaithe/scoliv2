@@ -260,18 +260,18 @@ export default function TreTrungMatchIntro() {
                 </div>
               </div>
 
-              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-4 max-w-xs">
+              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative flex flex-col items-center">
                   <img
                     src="/images/background-poster/vs3.png"
                     alt="VS"
-                    className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 object-contain animate-pulse"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-18 lg:h-18 object-contain animate-pulse"
                   />
                 </div>
 
                 <div className="flex flex-col items-center space-y-1 sm:space-y-2">
                   {(matchData.showTimer || matchData.showDate) && (
-                    <div className="text-xs sm:text-sm font-semibold bg-black/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center">
+                    <div className="text-xs sm:text-sm font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
                       {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
                     </div>
                   )}
