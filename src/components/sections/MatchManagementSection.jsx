@@ -433,21 +433,13 @@ const MatchManagementSection = ({ isActive = true }) => {
                 : "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700"
               } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
-              console.log('🎵 [MatchManagement] Audio pause/play clicked - isPlaying:', isPlaying, 'isPaused:', isPaused);
-
               if (isPlaying) {
-                // Nếu đang phát -> pause
-                console.log('⏸️ [MatchManagement] Pausing current audio');
                 pauseCurrentAudio();
                 toast.info('⏸️ Đã tạm dừng audio');
               } else if (isPaused && currentAudioFile) {
-                // Nếu đang pause và có audio -> resume
-                console.log('▶️ [MatchManagement] Resuming paused audio');
                 resumeCurrentAudio();
                 toast.info('▶️ Đã tiếp tục phát audio');
               } else {
-                // Không có audio nào -> toggle audio enabled
-                console.log('ὐ9 [MatchManagement] No audio to resume, toggling audio enabled state');
                 toggleAudioEnabled();
                 toast.info(audioEnabled ? '🔇 Đã tắt audio tĩnh' : '🔊 Đã bật audio tĩnh');
               }
