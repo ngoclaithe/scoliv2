@@ -33,7 +33,8 @@ export const MatchProvider = ({ children }) => {
     tournament: "",
     stadium: "",
     matchDate: "",
-    liveText: ""
+    liveText: "",
+    matchTitle: ""
   });
 
   // State cho thống kê trận đấu
@@ -246,6 +247,12 @@ export const MatchProvider = ({ children }) => {
     // Lắng nghe cập nhật chữ chạy
     socketService.on('marquee_updated', (data) => {
       setMarqueeData(prev => ({ ...prev, ...data.marqueeData }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật tiêu đề trận đấu
+    socketService.on('match_title_updated', (data) => {
+      setMatchData(prev => ({ ...prev, matchTitle: data.matchTitle }));
       setLastUpdateTime(Date.now());
     });
 
@@ -521,6 +528,15 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
+  // Cập nhật tiêu đề trận đấu
+  const updateMatchTitle = useCallback((matchTitle) => {
+    setMatchData(prev => ({ ...prev, matchTitle }));
+
+    if (socketConnected) {
+      socketService.updateMatchTitle(matchTitle);
+    }
+  }, [socketConnected]);
+
   // Cập nhật đơn vị tổ chức
   const updateOrganizing = useCallback((newOrganizing) => {
     console.log('[MatchContext] updateOrganizing called:', newOrganizing, 'socketConnected:', socketConnected);
@@ -648,7 +664,8 @@ export const MatchProvider = ({ children }) => {
       tournament: "",
       stadium: "",
       matchDate: "",
-      liveText: ""
+      liveText: "",
+      matchTitle: ""
     });
     
     setMatchStats({
@@ -699,6 +716,7 @@ export const MatchProvider = ({ children }) => {
     updateFutsalErrors,
     updateView,
     resetMatch,
+    updateMatchTitle,
 
     // Logo update functions
     updateSponsors,
