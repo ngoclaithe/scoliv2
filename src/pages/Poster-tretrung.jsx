@@ -206,13 +206,6 @@ export default function TreTrungMatchIntro() {
                 </div>
 
                 <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  {matchData.showLiveIndicator && (
-                    <div className="flex items-center space-x-2 sm:space-x-3">
-                      <div className="bg-green-600 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-xs sm:text-sm font-bold animate-pulse shadow-lg text-white">
-                        LIVE
-                      </div>
-                    </div>
-                  )}
                   {(matchData.showTimer || matchData.showDate) && (
                     <div className="text-xs sm:text-sm font-semibold bg-black/50 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center">
                       {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
@@ -272,13 +265,13 @@ export default function TreTrungMatchIntro() {
 
         {/* Sponsors - Top left */}
         {hasSponsors && (
-          <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-30">
-            <div className="text-xs sm:text-sm font-bold text-green-400 mb-1 sm:mb-2 drop-shadow-lg">
+          <div className="absolute top-1 sm:top-2 md:top-4 left-1 sm:left-2 md:left-4 z-30">
+            <div className="text-xs font-bold text-green-400 mb-1 drop-shadow-lg">
               Nhà tài trợ
             </div>
-            <div className="flex gap-1 sm:gap-2 flex-wrap max-w-32 sm:max-w-48">
+            <div className="flex gap-1 flex-wrap" style={{maxWidth: '20vw'}}>
               {sponsorLogos.map((sponsor, index) => (
-                <div key={index} className={getPartnerLogoShapeClass("w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex justify-center items-center bg-white p-0.5 sm:p-1 shadow-lg", sponsor.typeDisplay)}>
+                <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", sponsor.typeDisplay)} style={{width: '4vw', height: '4vw', minWidth: '24px', minHeight: '24px', maxWidth: '40px', maxHeight: '40px'}}>
                   <img
                     src={sponsor.logo}
                     alt={sponsor.name}
@@ -292,13 +285,13 @@ export default function TreTrungMatchIntro() {
 
         {/* Organizing - Top left next to sponsors */}
         {hasOrganizing && (
-          <div className={`absolute top-2 sm:top-4 z-30 ${hasSponsors ? 'left-36 sm:left-52' : 'left-2 sm:left-4'}`}>
-            <div className="text-xs sm:text-sm font-bold text-blue-400 mb-1 sm:mb-2 drop-shadow-lg">
+          <div className={`absolute top-1 sm:top-2 md:top-4 z-30`} style={{left: hasSponsors ? '22vw' : '1vw'}}>
+            <div className="text-xs font-bold text-blue-400 mb-1 drop-shadow-lg">
               Đơn vị tổ chức
             </div>
-            <div className="flex gap-1 sm:gap-2 flex-wrap max-w-32 sm:max-w-48">
+            <div className="flex gap-1 flex-wrap" style={{maxWidth: '20vw'}}>
               {organizingLogos.map((organizing, index) => (
-                <div key={index} className={getPartnerLogoShapeClass("w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex justify-center items-center bg-white p-0.5 sm:p-1 shadow-lg", organizing.typeDisplay)}>
+                <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", organizing.typeDisplay)} style={{width: '4vw', height: '4vw', minWidth: '24px', minHeight: '24px', maxWidth: '40px', maxHeight: '40px'}}>
                   <img
                     src={organizing.logo}
                     alt={organizing.name}
@@ -312,13 +305,13 @@ export default function TreTrungMatchIntro() {
 
         {/* Media Partners - Top right corner */}
         {hasMediaPartners && (
-          <div className="absolute top-2 sm:top-4 right-2 sm:right-4 z-30">
-            <div className="text-xs sm:text-sm font-bold text-purple-400 mb-1 sm:mb-2 drop-shadow-lg text-right">
+          <div className="absolute top-1 sm:top-2 md:top-4 right-1 sm:right-2 md:right-4 z-30">
+            <div className="text-xs font-bold text-purple-400 mb-1 drop-shadow-lg text-right">
               Đơn vị truyền thông
             </div>
-            <div className="flex gap-1 sm:gap-2 flex-wrap max-w-32 sm:max-w-48 justify-end">
+            <div className="flex gap-1 flex-wrap justify-end" style={{maxWidth: '20vw'}}>
               {mediaPartnerLogos.map((media, index) => (
-                <div key={index} className={getPartnerLogoShapeClass("w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex justify-center items-center bg-white p-0.5 sm:p-1 shadow-lg", media.typeDisplay)}>
+                <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", media.typeDisplay)} style={{width: '4vw', height: '4vw', minWidth: '24px', minHeight: '24px', maxWidth: '40px', maxHeight: '40px'}}>
                   <img
                     src={media.logo}
                     alt={media.name}
@@ -332,7 +325,7 @@ export default function TreTrungMatchIntro() {
 
         {/* Live Unit - Top right corner (adjust position if media partners exist) */}
         {matchData.liveUnit && (
-          <div className={`absolute top-2 sm:top-4 z-30 ${hasMediaPartners ? 'right-2 sm:right-4 mt-12 sm:mt-16' : 'right-2 sm:right-4'}`}>
+          <div className={`absolute z-30`} style={{top: hasMediaPartners ? '8vh' : '1vh', right: '1vw'}}>
             <div className="bg-red-600 text-white px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2">
               <div className="w-1 h-1 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
               <img
@@ -340,7 +333,6 @@ export default function TreTrungMatchIntro() {
                 alt="Live Unit"
                 className="h-3 sm:h-4 md:h-5 object-contain"
               />
-              <span className="text-xs sm:text-sm font-bold">LIVE</span>
             </div>
           </div>
         )}
