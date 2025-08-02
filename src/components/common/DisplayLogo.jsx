@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getFullLogoUrl } from '../../utils/logoUtils';
 
 const DisplayLogo = ({ 
     logos = [], 
