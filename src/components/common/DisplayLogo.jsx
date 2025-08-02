@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getFullLogoUrl } from '../../utils/logoUtils';
 
 const DisplayLogo = ({ 
     logos = [], 
@@ -78,14 +79,16 @@ const DisplayLogo = ({
 
     if (logos.length === 1 || typeof logos === 'string') {
         const logoSrc = typeof logos === 'string' ? logos : logos[0];
+        const fullLogoUrl = getFullLogoUrl(logoSrc);
+
         return (
             <div className={`relative ${className}`}>
-                <div 
+                <div
                     className={`${shapeStyles.containerClass} p-1`}
                     style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
                 >
                     <img
-                        src={logoSrc}
+                        src={fullLogoUrl || `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${alt.charAt(0)}</text></svg>`}
                         alt={alt}
                         className={shapeStyles.imageClass}
                         style={{
@@ -107,31 +110,34 @@ const DisplayLogo = ({
         // Show all logos if slideMode is disabled or logos count <= maxVisible
         return (
             <div className={`flex gap-2 ${className}`}>
-                {logos.slice(0, maxVisible).map((logo, index) => (
-                    <div 
-                        key={index}
-                        className={`relative flex-1`}
-                    >
-                        <div 
-                            className={`${shapeStyles.containerClass} p-1`}
-                            style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
+                {logos.slice(0, maxVisible).map((logo, index) => {
+                    const fullLogoUrl = getFullLogoUrl(logo);
+                    return (
+                        <div
+                            key={index}
+                            className={`relative flex-1`}
                         >
-                            <img
-                                src={logo}
-                                alt={`${alt} ${index + 1}`}
-                                className={shapeStyles.imageClass}
-                                style={{
-                                    filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
-                                    backgroundColor: 'transparent',
-                                    ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
-                                }}
-                                onError={(e) => {
-                                    e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${alt.charAt(0)}</text></svg>`;
-                                }}
-                            />
+                            <div
+                                className={`${shapeStyles.containerClass} p-1`}
+                                style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
+                            >
+                                <img
+                                    src={fullLogoUrl || `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${alt.charAt(0)}</text></svg>`}
+                                    alt={`${alt} ${index + 1}`}
+                                    className={shapeStyles.imageClass}
+                                    style={{
+                                        filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
+                                        backgroundColor: 'transparent',
+                                        ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
+                                    }}
+                                    onError={(e) => {
+                                        e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${alt.charAt(0)}</text></svg>`;
+                                    }}
+                                />
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
         );
     }
@@ -143,31 +149,34 @@ const DisplayLogo = ({
     return (
         <div className={`relative ${className}`}>
             <div className="flex gap-2 transition-all duration-1000 ease-in-out">
-                {visibleLogos.map((logo, index) => (
-                    <div 
-                        key={startIndex + index}
-                        className="relative flex-1 animate-slide-up"
-                    >
-                        <div 
-                            className={`${shapeStyles.containerClass} p-1`}
-                            style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
+                {visibleLogos.map((logo, index) => {
+                    const fullLogoUrl = getFullLogoUrl(logo);
+                    return (
+                        <div
+                            key={startIndex + index}
+                            className="relative flex-1 animate-slide-up"
                         >
-                            <img
-                                src={logo}
-                                alt={`${alt} ${startIndex + index + 1}`}
-                                className={shapeStyles.imageClass}
-                                style={{
-                                    filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
-                                    backgroundColor: 'transparent',
-                                    ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
-                                }}
-                                onError={(e) => {
-                                    e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${alt.charAt(0)}</text></svg>`;
-                                }}
-                            />
+                            <div
+                                className={`${shapeStyles.containerClass} p-1`}
+                                style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
+                            >
+                                <img
+                                    src={fullLogoUrl || `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${alt.charAt(0)}</text></svg>`}
+                                    alt={`${alt} ${startIndex + index + 1}`}
+                                    className={shapeStyles.imageClass}
+                                    style={{
+                                        filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
+                                        backgroundColor: 'transparent',
+                                        ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
+                                    }}
+                                    onError={(e) => {
+                                        e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${alt.charAt(0)}</text></svg>`;
+                                    }}
+                                />
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    );
+                })}
             </div>
             
             {/* Indicator dots for slideshow */}

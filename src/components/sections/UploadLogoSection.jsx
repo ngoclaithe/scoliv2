@@ -4,6 +4,7 @@ import Input from "../common/Input";
 import { useAuth } from "../../contexts/AuthContext";
 import LogoAPI from "../../API/apiLogo";
 import { toast } from "react-toastify";
+import { getFullLogoUrl } from "../../utils/logoUtils";
 
 const UploadLogoSection = () => {
   const { isAuthenticated } = useAuth();
@@ -210,7 +211,7 @@ const UploadLogoSection = () => {
           <div className="flex justify-center mb-1">
             <div className="w-10 h-10 rounded border border-gray-200 overflow-hidden bg-gray-50">
               <img
-                src={logo.url_logo}
+                src={getFullLogoUrl(logo.url_logo) || logo.url_logo}
                 alt={logo.code_logo}
                 className="w-full h-full object-contain hover:scale-110 transition-transform duration-200"
               />
@@ -255,7 +256,7 @@ const UploadLogoSection = () => {
           <div className="flex justify-center mb-3">
             <div className="w-20 h-20 rounded border-2 border-green-400 overflow-hidden bg-gray-50 shadow-md">
               <img
-                src={logo.url_logo}
+                src={getFullLogoUrl(logo.url_logo) || logo.url_logo}
                 alt={logo.code_logo}
                 className="w-full h-full object-contain"
               />
@@ -289,7 +290,7 @@ const UploadLogoSection = () => {
             
             {/* Nút mở ảnh trong tab mới */}
             <button
-              onClick={() => window.open(logo.url_logo, '_blank')}
+              onClick={() => window.open(getFullLogoUrl(logo.url_logo) || logo.url_logo, '_blank')}
               className="w-full px-3 py-2 bg-gray-500 text-white text-sm rounded hover:bg-gray-600 transition-colors font-medium"
             >
               🔗 Xem ảnh gốc
@@ -331,7 +332,7 @@ const UploadLogoSection = () => {
                 }}
               >
                 <img
-                  src={result.url_logo}
+                  src={getFullLogoUrl(result.url_logo) || result.url_logo}
                   alt={result.code_logo}
                   className="w-full h-full object-contain bg-white"
                   style={{

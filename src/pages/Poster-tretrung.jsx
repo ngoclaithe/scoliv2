@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
+import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
 
 export default function TreTrungMatchIntro() {
   const {
@@ -18,19 +19,19 @@ export default function TreTrungMatchIntro() {
     matchTitle: contextMatchData.tournament || 'GIẢI BÓNG ĐÁ TRẺ TRUNG',
     team1: contextMatchData.teamA.name || 'TEAM ALPHA',
     team2: contextMatchData.teamB.name || 'TEAM BETA',
-    logo1: contextMatchData.teamA.logo || '/images/background-poster/default_logoA.png',
-    logo2: contextMatchData.teamB.logo || '/images/background-poster/default_logoB.png',
+    logo1: getFullLogoUrl(contextMatchData.teamA.logo) || '/images/background-poster/default_logoA.png',
+    logo2: getFullLogoUrl(contextMatchData.teamB.logo) || '/images/background-poster/default_logoB.png',
     stadium: contextMatchData.stadium || 'SVĐ THỐNG NHẤT',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '15:30',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
-    sponsors: sponsors?.sponsors?.url_logo || [],
+    sponsors: getFullLogoUrls(sponsors?.sponsors?.url_logo || []),
     sponsorsTypeDisplay: sponsors?.sponsors?.type_display || [],
-    organizing: organizing?.organizing?.url_logo || [],
+    organizing: getFullLogoUrls(organizing?.organizing?.url_logo || []),
     organizingTypeDisplay: organizing?.organizing?.type_display || [],
-    mediaPartners: mediaPartners?.mediaPartners?.url_logo || [],
+    mediaPartners: getFullLogoUrls(mediaPartners?.mediaPartners?.url_logo || []),
     mediaPartnersTypeDisplay: mediaPartners?.mediaPartners?.type_display || [],
-    tournamentLogo: tournamentLogo?.url_logo?.[0] || null,
-    liveUnit: liveUnit?.url_logo?.[0] || null,
+    tournamentLogo: getFullLogoUrl(tournamentLogo?.url_logo?.[0]) || null,
+    liveUnit: getFullLogoUrl(liveUnit?.url_logo?.[0]) || null,
     logoShape: displaySettings?.logoShape || 'circle',
     showTournamentLogo: displaySettings?.showTournamentLogo !== false,
     showSponsors: displaySettings?.showSponsors !== false,

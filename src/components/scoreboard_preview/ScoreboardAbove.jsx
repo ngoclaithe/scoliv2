@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import DisplayLogo from '../common/DisplayLogo';
+import { getFullLogoUrl, getFullLogoUrls } from '../../utils/logoUtils';
 
 const ScoreboardAbove = ({
     type = 1
@@ -23,8 +24,8 @@ const ScoreboardAbove = ({
     const currentData = {
         teamAName: matchData?.teamA?.name || "ĐỘI A",
         teamBName: matchData?.teamB?.name || "ĐỘI B",
-        teamALogo: matchData?.teamA?.logo || "/api/placeholder/90/90",
-        teamBLogo: matchData?.teamB?.logo || "/api/placeholder/90/90",
+        teamALogo: getFullLogoUrl(matchData?.teamA?.logo) || "/api/placeholder/90/90",
+        teamBLogo: getFullLogoUrl(matchData?.teamB?.logo) || "/api/placeholder/90/90",
         teamAScore: matchData?.teamA?.score || 0,
         teamBScore: matchData?.teamB?.score || 0,
         matchTime: matchData?.matchTime || "00:00",
@@ -121,7 +122,7 @@ const ScoreboardAbove = ({
                     : 'square'; // default vuông
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
-                    allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor', typeDisplay });
+                    allLogos.push({ url: getFullLogoUrl(logo), alt: 'Sponsor', type: 'sponsor', typeDisplay });
                 }
             });
         }
@@ -138,7 +139,7 @@ const ScoreboardAbove = ({
                     : 'square'; // default vuông
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
-                    allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing', typeDisplay });
+                    allLogos.push({ url: getFullLogoUrl(logo), alt: 'Organizing', type: 'organizing', typeDisplay });
                 }
             });
         }
@@ -155,7 +156,7 @@ const ScoreboardAbove = ({
                     : 'square'; // default vuông
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
-                    allLogos.push({ url: logo, alt: 'Media Partner', type: 'media', typeDisplay });
+                    allLogos.push({ url: getFullLogoUrl(logo), alt: 'Media Partner', type: 'media', typeDisplay });
                 }
             });
         }
@@ -581,7 +582,7 @@ const ScoreboardAbove = ({
                 {collectLogosForPosition('top-left').length === 0 && tournamentLogo?.url_logo && tournamentLogo.url_logo.length > 0 && (
                     <div className="absolute top-4 left-4 z-40 corner-logo top-left">
                         <DisplayLogo
-                            logos={tournamentLogo.url_logo}
+                            logos={getFullLogoUrls(tournamentLogo.url_logo)}
                             alt="Tournament"
                             className="w-16 h-16"
                             type_play={logoShape}

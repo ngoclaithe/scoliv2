@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import Button from "../common/Button";
 import LogoAPI from "../../API/apiLogo";
 import DisplaySettingsAPI from "../../API/apiSettingDisplay";
+import { getFullLogoUrl } from "../../utils/logoUtils";
 
 const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, onPositionChange, initialData, accessCode }) => {
   const [selectedPoster, setSelectedPoster] = useState(null);
@@ -132,7 +133,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
                     code: item.code_logo || `SP${item.id}`,
                     type: item.type_display || 'logo',
                     category: 'sponsor',
-                    url: item.url_logo,
+                    url: getFullLogoUrl(item.url_logo),
                     displayPositions: positions
                   });
                 });
@@ -158,7 +159,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
                     code: item.code_logo || `ORG${item.id}`,
                     type: item.type_display || 'logo',
                     category: 'organizing',
-                    url: item.url_logo,
+                    url: getFullLogoUrl(item.url_logo),
                     displayPositions: positions
                   });
                 });
@@ -184,7 +185,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
                     code: item.code_logo || `MED${item.id}`,
                     type: item.type_display || 'logo',
                     category: 'media',
-                    url: item.url_logo,
+                    url: getFullLogoUrl(item.url_logo),
                     displayPositions: positions
                   });
                 });
@@ -210,7 +211,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
                     code: item.code_logo || `TOUR${item.id}`,
                     type: item.type_display || 'logo',
                     category: 'tournament',
-                    url: item.url_logo,
+                    url: getFullLogoUrl(item.url_logo),
                     displayPositions: positions
                   });
                 });
@@ -320,7 +321,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
             unitName: response.data.name || item.unitName,
             code: item.code,
             type: response.data.type || item.type,
-            url: response.data.url || response.data.url_logo,
+            url: getFullLogoUrl(response.data.url || response.data.url_logo),
             category: item.category,
             displayPositions: item.displayPositions,
             uploadStatus: 'completed',
@@ -423,7 +424,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
               onUpdate(item.id, {
                 ...item,
                 code: localCode.trim(),
-                url: foundLogo.url_logo || foundLogo.file_path,
+                url: getFullLogoUrl(foundLogo.url_logo || foundLogo.file_path),
                 unitName: foundLogo.name || item.unitName,
                 displayPositions: [...item.displayPositions]
               });
@@ -904,7 +905,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         <span className="text-xs font-medium text-gray-700">Copy poster trận trước:</span>
         <select className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white">
           <option value="">Chọn trận</option>
-          <option value="match1">Hà Nội vs TPHCM (15/01)</option>
+          <option value="match1">Hà N���i vs TPHCM (15/01)</option>
           <option value="match2">Viettel vs HAGL (12/01)</option>
           <option value="match3">SHB vs Thanh Hóa (10/01)</option>
         </select>

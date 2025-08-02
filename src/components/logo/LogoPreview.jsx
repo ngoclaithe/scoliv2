@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
+import { getFullLogoUrl } from "../../utils/logoUtils";
 
 const LogoPreview = ({
   logo,
@@ -84,7 +85,7 @@ const LogoPreview = ({
           >
             {logo.url ? (
               <img
-                src={logo.url}
+                src={getFullLogoUrl(logo.url) || logo.url}
                 alt={logo.teamName}
                 className="w-full h-full object-contain p-1 rounded-lg"
               />
@@ -154,7 +155,7 @@ const LogoPreview = ({
             <div className="w-32 h-32 mx-auto bg-white rounded-lg border border-gray-200 shadow-sm flex items-center justify-center mb-4">
               {logo.url ? (
                 <img
-                  src={logo.url}
+                  src={getFullLogoUrl(logo.url) || logo.url}
                   alt={logo.teamName}
                   className="w-full h-full object-contain p-2 rounded-lg"
                 />
@@ -190,7 +191,7 @@ const LogoPreview = ({
                   >
                     {logo.url && (
                       <img
-                        src={logo.url}
+                        src={getFullLogoUrl(logo.url) || logo.url}
                         alt={logo.teamName}
                         className="w-12 h-12 object-contain"
                       />
