@@ -108,44 +108,53 @@ const ScoreboardAbove = ({
     const collectLogosForPosition = (targetPosition) => {
         const allLogos = [];
 
-        // Collect sponsors
+        // Collect sponsors (đã có sponsors.sponsors structure)
         if (sponsors?.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0) {
             sponsors.sponsors.url_logo.forEach((logo, index) => {
-                const position = sponsors.sponsors?.position && sponsors.sponsors.position[index] 
+                const position = sponsors.sponsors?.position && sponsors.sponsors.position[index]
                     ? (Array.isArray(sponsors.sponsors.position[index]) ? sponsors.sponsors.position[index][0] : sponsors.sponsors.position[index])
                     : 'top-left'; // default position
                 const behavior = sponsors.sponsors?.behavior;
+                const typeDisplay = sponsors.sponsors?.type_display && sponsors.sponsors.type_display[index]
+                    ? sponsors.sponsors.type_display[index]
+                    : 'square'; // default vuông
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
-                    allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor' });
+                    allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor', typeDisplay });
                 }
             });
         }
 
-        // Collect organizing
-        if (organizing?.url_logo && organizing.url_logo.length > 0) {
-            organizing.url_logo.forEach((logo, index) => {
-                const position = organizing?.position && organizing.position[index] 
-                    ? (Array.isArray(organizing.position[index]) ? organizing.position[index][0] : organizing.position[index])
+        // Collect organizing (cần thêm organizing.organizing structure giống sponsors)
+        if (organizing?.organizing?.url_logo && organizing.organizing.url_logo.length > 0) {
+            organizing.organizing.url_logo.forEach((logo, index) => {
+                const position = organizing.organizing?.position && organizing.organizing.position[index]
+                    ? (Array.isArray(organizing.organizing.position[index]) ? organizing.organizing.position[index][0] : organizing.organizing.position[index])
                     : 'bottom-left'; // default position
-                const behavior = organizing?.behavior;
+                const behavior = organizing.organizing?.behavior;
+                const typeDisplay = organizing.organizing?.type_display && organizing.organizing.type_display[index]
+                    ? organizing.organizing.type_display[index]
+                    : 'square'; // default vuông
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
-                    allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing' });
+                    allLogos.push({ url: logo, alt: 'Organizing', type: 'organizing', typeDisplay });
                 }
             });
         }
 
-        // Collect media partners
-        if (mediaPartners?.url_logo && mediaPartners.url_logo.length > 0) {
-            mediaPartners.url_logo.forEach((logo, index) => {
-                const position = mediaPartners?.position && mediaPartners.position[index] 
-                    ? (Array.isArray(mediaPartners.position[index]) ? mediaPartners.position[index][0] : mediaPartners.position[index])
+        // Collect media partners (cần thêm mediaPartners.mediaPartners structure giống sponsors)
+        if (mediaPartners?.mediaPartners?.url_logo && mediaPartners.mediaPartners.url_logo.length > 0) {
+            mediaPartners.mediaPartners.url_logo.forEach((logo, index) => {
+                const position = mediaPartners.mediaPartners?.position && mediaPartners.mediaPartners.position[index]
+                    ? (Array.isArray(mediaPartners.mediaPartners.position[index]) ? mediaPartners.mediaPartners.position[index][0] : mediaPartners.mediaPartners.position[index])
                     : 'bottom-right'; // default position
-                const behavior = mediaPartners?.behavior;
+                const behavior = mediaPartners.mediaPartners?.behavior;
+                const typeDisplay = mediaPartners.mediaPartners?.type_display && mediaPartners.mediaPartners.type_display[index]
+                    ? mediaPartners.mediaPartners.type_display[index]
+                    : 'square'; // default vuông
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
-                    allLogos.push({ url: logo, alt: 'Media Partner', type: 'media' });
+                    allLogos.push({ url: logo, alt: 'Media Partner', type: 'media', typeDisplay });
                 }
             });
         }
