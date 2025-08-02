@@ -689,7 +689,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
                 toast.success('✅ Đã cập nhật thông tin trận đấu và màu áo thành công!');
               }}
-              className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded shadow transform hover:scale-105 transition-all duration-200"
+              className="px-3 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-xs rounded shadow transform hover:scale-105 transition-all duration-200"
             >
               ÁP DỤNG
             </Button>
