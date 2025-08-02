@@ -39,6 +39,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateView,
     resumeTimer,
     updateMarquee,
+    updateMatchTitle,
 
     // Logo update functions
     updateSponsors,
