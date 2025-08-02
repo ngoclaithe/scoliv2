@@ -133,7 +133,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
                     code: item.code_logo || `SP${item.id}`,
                     type: item.type_display || 'logo',
                     category: 'sponsor',
-                    url: item.url_logo,
+                    url: getFullLogoUrl(item.url_logo),
                     displayPositions: positions
                   });
                 });
