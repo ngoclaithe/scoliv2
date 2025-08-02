@@ -427,7 +427,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             variant="primary"
             size="sm"
             className={`px-2 py-1 ${isPlaying
-              ? "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
+              ? "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
               : isPaused
                 ? "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
                 : "bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700"
@@ -1608,7 +1608,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                   // Format thời gian (phút:giây)
                   const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
-                  // Set thời gian và bắt đầu đếm tiến từ server timer
+                  // Set thời gian và bắt đầu đếm tiến t��� server timer
                   updateMatchTime(timeString, "Hiệp 1", "live");
 
                   // Chuyển sang tỉ số trên
