@@ -25,10 +25,13 @@ export default function TreTrungMatchIntro() {
     stadium: contextMatchData.stadium || 'SVĐ THỐNG NHẤT',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '15:30',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
-    // Các biến mới từ context - thêm kiểm tra undefined
-    sponsors: sponsors?.url_logo || [],
-    organizing: organizing?.url_logo || [],
-    mediaPartners: mediaPartners?.url_logo || [],
+    // Các biến mới từ context - sử dụng structure mới
+    sponsors: sponsors?.sponsors?.url_logo || [],
+    sponsorsTypeDisplay: sponsors?.sponsors?.type_display || [],
+    organizing: organizing?.organizing?.url_logo || [],
+    organizingTypeDisplay: organizing?.organizing?.type_display || [],
+    mediaPartners: mediaPartners?.mediaPartners?.url_logo || [],
+    mediaPartnersTypeDisplay: mediaPartners?.mediaPartners?.type_display || [],
     tournamentLogo: tournamentLogo?.url_logo?.[0] || null,
     liveUnit: liveUnit?.url_logo?.[0] || null,
     logoShape: displaySettings?.logoShape || 'circle',
@@ -43,12 +46,37 @@ export default function TreTrungMatchIntro() {
     accentColor: posterSettings?.accentColor || '#10b981'
   };
 
-  // Gộp tất cả partners lại thành một mảng
-  const allPartners = [
-    ...(matchData.showSponsors ? matchData.sponsors.map(url => ({ logo: url, name: 'Sponsor', type: 'sponsor' })) : []),
-    ...(matchData.showOrganizing ? matchData.organizing.map(url => ({ logo: url, name: 'Organizing', type: 'organizing' })) : []),
-    ...(matchData.showMediaPartners ? matchData.mediaPartners.map(url => ({ logo: url, name: 'Media', type: 'media' })) : [])
-  ];
+  // Helper function để lấy shape của logo dựa trên type_display
+  const getLogoShape = (typeDisplay) => {
+    switch (typeDisplay) {
+      case 'round': return 'circle';
+      case 'hexagonal': return 'hexagon';
+      case 'square':
+      default: return 'square';
+    }
+  };
+
+  // Tạo arrays riêng cho từng loại logo với type_display
+  const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
+    logo: url,
+    name: 'Sponsor',
+    type: 'sponsor',
+    typeDisplay: matchData.sponsorsTypeDisplay[index] || 'square'
+  })) : [];
+
+  const organizingLogos = matchData.showOrganizing ? matchData.organizing.map((url, index) => ({
+    logo: url,
+    name: 'Organizing',
+    type: 'organizing',
+    typeDisplay: matchData.organizingTypeDisplay[index] || 'square'
+  })) : [];
+
+  const mediaPartnerLogos = matchData.showMediaPartners ? matchData.mediaPartners.map((url, index) => ({
+    logo: url,
+    name: 'Media Partner',
+    type: 'media',
+    typeDisplay: matchData.mediaPartnersTypeDisplay[index] || 'square'
+  })) : [];
 
   // Sử dụng marquee data từ context
   const marquee = {
