@@ -166,8 +166,18 @@ const ScoreboardAbove = ({
     const renderLogos = (allLogos) => {
         if (allLogos.length === 0) return null;
 
+        // Helper function để convert typeDisplay thành shape
+        const getLogoShape = (typeDisplay) => {
+            switch (typeDisplay) {
+                case 'round': return 'circle';
+                case 'hexagonal': return 'hexagon';
+                case 'square':
+                default: return 'square';
+            }
+        };
+
         if (displaySettings?.rotateDisplay && allLogos.length > 1) {
-            // Slide mode - quay từng logo một
+            // Slide mode - quay từng logo một (sử dụng shape chung)
             return (
                 <DisplayLogo
                     logos={allLogos.map(logo => logo.url)}
@@ -180,7 +190,7 @@ const ScoreboardAbove = ({
                 />
             );
         } else {
-            // Hiển thị tất cả logos cùng lúc
+            // Hiển thị tất cả logos cùng lúc với individual shapes
             return (
                 <div className="flex gap-2 flex-wrap max-w-sm">
                     {allLogos.map((logo, index) => (
@@ -189,7 +199,7 @@ const ScoreboardAbove = ({
                                 logos={[logo.url]}
                                 alt={logo.alt}
                                 className="w-14 h-14"
-                                type_play={logoShape}
+                                type_play={getLogoShape(logo.typeDisplay)}
                                 slideMode={false}
                             />
                         </div>
