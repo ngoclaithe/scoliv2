@@ -117,6 +117,20 @@ export default function VangKimMatchIntro() {
     }
   };
 
+  // Helper function để lấy class cho individual partner logo shapes
+  const getPartnerLogoShapeClass = (baseClass, typeDisplay) => {
+    const shape = getLogoShape(typeDisplay);
+    switch (shape) {
+      case 'square':
+        return `${baseClass} rounded-lg`;
+      case 'hexagon':
+        return `${baseClass} rounded-full`; // Tạm thời dùng rounded-full
+      case 'circle':
+      default:
+        return `${baseClass} rounded-full`;
+    }
+  };
+
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
       {/* Main container with fixed aspect ratio */}
