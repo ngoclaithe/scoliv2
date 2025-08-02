@@ -134,13 +134,12 @@ export default function TreTrungMatchIntro() {
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col justify-between p-3 sm:p-6">
-          
-          <div className="flex-1 flex flex-col justify-center">
-            
-            <div className="absolute top-0 left-0 right-0 flex justify-between items-start p-2 z-30">
-              
-              <div className="flex gap-4">
+        <div className="relative z-10 h-full flex flex-col p-3 sm:p-6">
+
+          {/* Top section với fixed height để tránh overlap */}
+          <div className="flex justify-between items-start mb-4 sm:mb-6 md:mb-8 min-h-[8vh] sm:min-h-[10vh]">
+
+              <div className="flex gap-2 sm:gap-4">
                 {hasSponsors && (
                   <div className="flex-shrink-0">
                     <div className="text-xs font-bold text-green-400 mb-1 drop-shadow-lg">
@@ -216,16 +215,20 @@ export default function TreTrungMatchIntro() {
 
             </div>
 
-            <div className="text-center mb-3 sm:mb-6">
-              <h1 
-                className="font-black uppercase text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl"
+          {/* Main content section với proper spacing */}
+          <div className="flex-1 flex flex-col justify-center min-h-0">
+
+            {/* Title section với margin để tránh overlap */}
+            <div className="text-center mb-4 sm:mb-6 md:mb-8">
+              <h1
+                className="font-black uppercase text-white text-lg sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl px-2"
                 style={{
                   textShadow: '#166534 2px 2px 4px',
                 }}
               >
                 {matchData.matchTitle}
               </h1>
-              
+
               <div className="flex items-center justify-center mt-2 sm:mt-4">
                 <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
                 <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full mx-1 sm:mx-2"></div>
@@ -235,7 +238,8 @@ export default function TreTrungMatchIntro() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between w-full px-2 sm:px-8">
+            {/* Teams section với responsive spacing */}
+            <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-3 sm:mb-4 md:mb-6">
 
               <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3">
                 <div className="relative group">
@@ -294,27 +298,30 @@ export default function TreTrungMatchIntro() {
               </div>
             </div>
 
-            {matchData.showStadium && matchData.stadium && (
-              <div className="text-center mt-3 sm:mt-4">
-                <div className="inline-block bg-black/50 backdrop-blur-sm px-3 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl border border-white/30">
-                  <span className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-white">
-                    📍 {matchData.stadium}
-                  </span>
+            {/* Bottom section với proper spacing để tránh overlap */}
+            <div className="space-y-2 sm:space-y-3">
+              {matchData.showStadium && matchData.stadium && (
+                <div className="text-center">
+                  <div className="inline-block bg-black/50 backdrop-blur-sm px-3 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl border border-white/30">
+                    <span className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-white">
+                      📍 {matchData.stadium}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {matchData.showTournamentLogo && matchData.tournamentLogo && (
-              <div className="text-center mt-3 sm:mt-4">
-                <div className="inline-flex items-center justify-center">
-                  <img
-                    src={matchData.tournamentLogo}
-                    alt="Tournament Logo"
-                    className="h-8 sm:h-12 md:h-16 max-w-32 sm:max-w-40 object-contain"
-                  />
+              {matchData.showTournamentLogo && matchData.tournamentLogo && (
+                <div className="text-center">
+                  <div className="inline-flex items-center justify-center">
+                    <img
+                      src={matchData.tournamentLogo}
+                      alt="Tournament Logo"
+                      className="h-6 sm:h-8 md:h-12 lg:h-16 max-w-24 sm:max-w-32 md:max-w-40 object-contain"
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
 
           </div>
         </div>
