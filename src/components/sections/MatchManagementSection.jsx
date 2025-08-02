@@ -13,6 +13,7 @@ import audioUtils from '../../utils/audioUtils';
 
 import LogoAPI from '../../API/apiLogo';
 import MatchTimeDisplay from './MatchTimeDisplay';
+import ScoreboardAbove from '../scoreboard_preview/ScoreboardAbove';
 
 const MatchManagementSection = ({ isActive = true }) => {
   // Sử dụng MatchContext thay vì state local
@@ -326,34 +327,13 @@ const MatchManagementSection = ({ isActive = true }) => {
     <div className="sm:p-0 space-y-0 sm:space-y-0">
       {/* Scoreboard */}
       <div className="sm:p-0 shadow-xl h-auto">
-        {displaySettings.selectedSkin && skinData[displaySettings.selectedSkin] ? (
-          <div className="w-full h-8 sm:h-20 bg-gray-100 rounded-lg overflow-hidden">
-            <img
-              src={skinData[displaySettings.selectedSkin].image}
-              alt={skinData[displaySettings.selectedSkin].name}
-              className="w-full h-full object-contain"
-              onError={(e) => {
-                e.target.style.display = 'none';
-                e.target.nextSibling.style.display = 'flex';
-              }}
+        <div className="w-full h-16 sm:h-24 bg-gray-100 rounded-lg overflow-hidden relative">
+          <div className="absolute inset-0 transform scale-50 sm:scale-75 origin-center">
+            <ScoreboardAbove
+              type={displaySettings.selectedSkin || 1}
             />
-            <div className="w-full h-full bg-gray-200 items-center justify-center hidden">
-              <span className="text-gray-600 font-medium">
-                {skinData[displaySettings.selectedSkin].name}
-              </span>
-            </div>
           </div>
-        ) : (
-          <ScoreDisplay
-            teamA={matchData.teamA}
-            teamB={matchData.teamB}
-            matchTime={matchData.matchTime}
-            period={matchData.period}
-            status={matchData.status}
-            backgroundColor="bg-transparent"
-            size="md"
-          />
-        )}
+        </div>
       </div>
 
       {/* Score Controls */}
