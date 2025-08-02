@@ -113,7 +113,7 @@ const PosterPreviewPage = () => {
       </div>
 
       {/* Poster Info */}
-      <div className="max-w-4xl mx-auto p-4">
+      {/* <div className="max-w-4xl mx-auto p-4">
         <div className="bg-white rounded-lg shadow p-4">
           <h3 className="text-lg font-semibold mb-3">Thông tin poster</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
@@ -137,7 +137,7 @@ const PosterPreviewPage = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
