@@ -322,7 +322,22 @@ const MatchManagementSection = ({ isActive = true }) => {
       <div className="sm:p-0 p-2 shadow-md h-auto">
         <div className="w-full h-12 sm:h-16 bg-gray-100 rounded-md overflow-hidden relative">
           <ScoreboardPreview
-            matchData={matchData}
+            matchData={{
+              ...matchData,
+              teamA: {
+                ...matchData.teamA,
+                name: teamAInfo.name || matchData.teamA.name,
+                logo: teamAInfo.logo || matchData.teamA.logo
+              },
+              teamB: {
+                ...matchData.teamB,
+                name: teamBInfo.name || matchData.teamB.name,
+                logo: teamBInfo.logo || matchData.teamB.logo
+              },
+              matchTitle: matchTitle || matchData.matchTitle,
+              teamAKitColor: teamAInfo.shirtColor || matchData.teamAKitColor || '#ff0000',
+              teamBKitColor: teamBInfo.shirtColor || matchData.teamBKitColor || '#000000'
+            }}
             displaySettings={displaySettings}
           />
         </div>
