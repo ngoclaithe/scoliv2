@@ -29,6 +29,13 @@ const AppRoutes = () => {
           </PublicMatchProvider>
         } />
 
+        {/* Preview route for posters */}
+        <Route path="/:accessCode/preview" element={
+          <PublicMatchProvider>
+            <PosterPreviewPage />
+          </PublicMatchProvider>
+        } />
+
         <Route path="/demotest" element={
               <ScoreboardBelow />
         } />
