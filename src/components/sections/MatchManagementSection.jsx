@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
-import ScoreDisplay from "../scoreboard/ScoreDisplay";
 import PosterManager from "../poster/PosterManager";
 import TeamLineupModal from "../lineup/TeamLineupModal";
 import Modal from "../common/Modal";
@@ -13,6 +12,7 @@ import audioUtils from '../../utils/audioUtils';
 
 import LogoAPI from '../../API/apiLogo';
 import MatchTimeDisplay from './MatchTimeDisplay';
+import ScoreboardPreview from './ScoreboardPreview';
 
 const MatchManagementSection = ({ isActive = true }) => {
   // Sử dụng MatchContext thay vì state local
@@ -157,14 +157,6 @@ const MatchManagementSection = ({ isActive = true }) => {
   }, [isActive, isPlaying]);
   const [isEditingStats, setIsEditingStats] = useState(false);
 
-  const skinData = {
-    1: { name: "Template 1", image: "/images/templates/skin1.png" },
-    2: { name: "Template 2", image: "/images/templates/skin2.png" },
-    3: { name: "Template 3", image: "/images/templates/skin3.png" },
-    4: { name: "Template 4", image: "/images/templates/skin4.png" },
-    5: { name: "Template 5", image: "/images/templates/skin5.png" }
-  };
-
   const [showPosterModal, setShowPosterModal] = useState(false);
   const [showLineupModal, setShowLineupModal] = useState(false);
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
@@ -237,7 +229,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateStats(newStats);
   };
 
-  // Hàm cập nhật kiểm soát bóng (đảm bảo tổng = 100%)
+  // Hàm cập nhật kiểm soát bóng (đ���m bảo tổng = 100%)
   const updatePossession = (team, value) => {
     const newValue = Math.max(0, Math.min(100, parseInt(value) || 0));
     const otherTeam = team === 'team1' ? 'team2' : 'team1';
@@ -326,34 +318,12 @@ const MatchManagementSection = ({ isActive = true }) => {
     <div className="sm:p-0 space-y-0 sm:space-y-0">
       {/* Scoreboard */}
       <div className="sm:p-0 shadow-xl h-auto">
-        {displaySettings.selectedSkin && skinData[displaySettings.selectedSkin] ? (
-          <div className="w-full h-8 sm:h-20 bg-gray-100 rounded-lg overflow-hidden">
-            <img
-              src={skinData[displaySettings.selectedSkin].image}
-              alt={skinData[displaySettings.selectedSkin].name}
-              className="w-full h-full object-contain"
-              onError={(e) => {
-                e.target.style.display = 'none';
-                e.target.nextSibling.style.display = 'flex';
-              }}
-            />
-            <div className="w-full h-full bg-gray-200 items-center justify-center hidden">
-              <span className="text-gray-600 font-medium">
-                {skinData[displaySettings.selectedSkin].name}
-              </span>
-            </div>
-          </div>
-        ) : (
-          <ScoreDisplay
-            teamA={matchData.teamA}
-            teamB={matchData.teamB}
-            matchTime={matchData.matchTime}
-            period={matchData.period}
-            status={matchData.status}
-            backgroundColor="bg-transparent"
-            size="md"
+        <div className="w-full h-16 sm:h-24 bg-gray-100 rounded-lg overflow-hidden relative">
+          <ScoreboardPreview
+            matchData={matchData}
+            displaySettings={displaySettings}
           />
-        )}
+        </div>
       </div>
 
       {/* Score Controls */}
@@ -415,7 +385,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           </div>
         </div>
 
-        {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
+        {/* Nút TẠM DỪNG, NGHỈ GIỮA HI��P và THÔNG TIN */}
         <div className="flex justify-center items-center mt-2 space-x-2">
           {/* Audio Pause/Play Button */}
           <Button
@@ -1150,7 +1120,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                     playAudioForAction('gialap');
                     toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                   } else {
-                    toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
+                    toast.warning('⚠️ Vui lòng nhập thời gian h��p lệ!');
                   }
                 }}
                 disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
@@ -1341,7 +1311,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               switch (item.category) {
                 case 'sponsor':
                   console.log("[MatchManagementSection] Calling updateSponsors with logoUpdateData:", logoUpdateData);
-                  
+
                   updateSponsors(logoUpdateData);
                   break;
                 case 'organizing':
@@ -1359,6 +1329,9 @@ const MatchManagementSection = ({ isActive = true }) => {
                     url_logo: [item.url],
                     behavior: behavior
                   });
+                  break;
+                default:
+                  console.warn("[MatchManagementSection] Unknown logo category:", item.category);
                   break;
               }
             }
@@ -1533,7 +1506,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ bắt đầu chạy từ thời điểm này
+              Trận đấu sẽ b��t đầu chạy từ thời điểm này
             </p>
           </div>
 

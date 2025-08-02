@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import App from '../App';
 import DisplayController from '../components/display/DisplayController';
 import ScoreboardBelow from '../components/scoreboard_preview/ScoreboardBelowNew';
+import PosterPreviewPage from '../pages/PosterPreviewPage';
 const AppRoutes = () => {
   return (
     <>
@@ -25,6 +26,13 @@ const AppRoutes = () => {
         <Route path="/:accessCode" element={
           <PublicMatchProvider>
             <DisplayController />
+          </PublicMatchProvider>
+        } />
+
+        {/* Preview route for posters */}
+        <Route path="/:accessCode/preview" element={
+          <PublicMatchProvider>
+            <PosterPreviewPage />
           </PublicMatchProvider>
         } />
 
