@@ -13,7 +13,7 @@ import audioUtils from '../../utils/audioUtils';
 
 import LogoAPI from '../../API/apiLogo';
 import MatchTimeDisplay from './MatchTimeDisplay';
-import ScoreboardAbove from '../scoreboard_preview/ScoreboardAbove';
+import ScoreboardPreview from './ScoreboardPreview';
 
 const MatchManagementSection = ({ isActive = true }) => {
   // Sử dụng MatchContext thay vì state local
@@ -238,7 +238,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateStats(newStats);
   };
 
-  // Hàm cập nhật kiểm soát bóng (đảm bảo tổng = 100%)
+  // Hàm cập nhật kiểm soát bóng (đ���m bảo tổng = 100%)
   const updatePossession = (team, value) => {
     const newValue = Math.max(0, Math.min(100, parseInt(value) || 0));
     const otherTeam = team === 'team1' ? 'team2' : 'team1';
@@ -395,7 +395,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           </div>
         </div>
 
-        {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
+        {/* Nút TẠM DỪNG, NGHỈ GIỮA HI��P và THÔNG TIN */}
         <div className="flex justify-center items-center mt-2 space-x-2">
           {/* Audio Pause/Play Button */}
           <Button
@@ -1513,7 +1513,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ bắt đầu chạy từ thời điểm này
+              Trận đấu sẽ b��t đầu chạy từ thời điểm này
             </p>
           </div>
 
