@@ -276,7 +276,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
       return;
     }
 
-    // Kiểm tra định dạng file
+    // Ki���m tra định dạng file
     const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!validTypes.includes(file.type)) {
       alert("Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WebP)");
@@ -321,7 +321,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
             unitName: response.data.name || item.unitName,
             code: item.code,
             type: response.data.type || item.type,
-            url: response.data.url || response.data.url_logo,
+            url: getFullLogoUrl(response.data.url || response.data.url_logo),
             category: item.category,
             displayPositions: item.displayPositions,
             uploadStatus: 'completed',
@@ -435,7 +435,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
             onUpdate(item.id, { ...item, code: localCode.trim() });
           }
         } catch (error) {
-          console.error("Lỗi khi tìm kiếm logo:", error);
+          console.error("Lỗi khi tìm ki��m logo:", error);
         } finally {
           setIsSearching(false);
         }
