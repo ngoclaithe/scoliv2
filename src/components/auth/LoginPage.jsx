@@ -93,7 +93,7 @@ const LoginPage = () => {
         setError(result.error);
       }
     } else if (loginForm.email.trim() && loginForm.password.trim()) {
-      // Đăng nhập bằng tài kho���n
+      // Đăng nhập bằng tài khoản
       const result = await login(loginForm);
       if (result.success) {
         resetForms();
@@ -134,7 +134,7 @@ const LoginPage = () => {
 
         <div className="p-4">
           {!showRegister && !showCodeLogin ? (
-            // Form đăng nh��p chính
+            // Form đăng nhập chính
             <div>
               {error && (
                 <div className="mb-3 p-2 bg-red-100 border border-red-400 text-red-700 rounded text-xs">

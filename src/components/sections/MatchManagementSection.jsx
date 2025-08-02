@@ -155,11 +155,8 @@ const MatchManagementSection = ({ isActive = true }) => {
       pauseCurrentAudio();
     }
   }, [isActive, isPlaying]);
-
-  // State cho chế độ ch���nh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
 
-  // Skin data configuration
   const skinData = {
     1: { name: "Template 1", image: "/images/templates/skin1.png" },
     2: { name: "Template 2", image: "/images/templates/skin2.png" },
@@ -168,7 +165,6 @@ const MatchManagementSection = ({ isActive = true }) => {
     5: { name: "Template 5", image: "/images/templates/skin5.png" }
   };
 
-  // State cho modals
   const [showPosterModal, setShowPosterModal] = useState(false);
   const [showLineupModal, setShowLineupModal] = useState(false);
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
@@ -260,7 +256,6 @@ const MatchManagementSection = ({ isActive = true }) => {
   // Component để hiển thị/chỉnh sửa thống kê
   const EditableStatBar = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => {
     if (!isEditingStats) {
-      // Chế đ��� hiển thị
       return (
         <div className="space-y-1">
           <div className="flex justify-between items-center text-sm">
@@ -371,7 +366,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         />
 
         <div className="grid grid-cols-2 gap-2 sm:gap-4">
-          {/* Đ�����i A */}
+          {/* Đội A */}
           <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-blue-200">
             <div className="flex space-x-1">
               <Button
@@ -420,7 +415,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           </div>
         </div>
 
-        {/* Nút TẠM DỪNG, NGH�� GIỮA HIỆP và THÔNG TIN */}
+        {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
         <div className="flex justify-center items-center mt-2 space-x-2">
           {/* Audio Pause/Play Button */}
           <Button
@@ -435,13 +430,10 @@ const MatchManagementSection = ({ isActive = true }) => {
             onClick={() => {
               if (isPlaying) {
                 pauseCurrentAudio();
-                toast.info('⏸️ Đã tạm dừng audio');
               } else if (isPaused && currentAudioFile) {
                 resumeCurrentAudio();
-                toast.info('▶️ Đã tiếp tục phát audio');
               } else {
                 toggleAudioEnabled();
-                toast.info(audioEnabled ? '🔇 Đã tắt audio tĩnh' : '🔊 Đã bật audio tĩnh');
               }
             }}
             title={
@@ -455,14 +447,14 @@ const MatchManagementSection = ({ isActive = true }) => {
             }
           >
             <span className="mr-1">
-              {isPlaying ? "⏸️" : isPaused && currentAudioFile ? "▶️" : audioEnabled ? "🔊" : "🔇"}
+              {isPlaying ? "🔊⏸️" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "🔊" : "🔇"}
             </span>
-            <span className="hidden sm:inline">
+            {/* <span className="hidden sm:inline">
               {isPlaying ? "PAUSE" : isPaused && currentAudioFile ? "RESUME" : audioEnabled ? "AUDIO" : "OFF"}
-            </span>
-            <span className="sm:hidden">
-              {isPlaying ? "⏸️" : isPaused && currentAudioFile ? "���️" : audioEnabled ? "ON" : "OFF"}
-            </span>
+            </span> */}
+            {/* <span className="sm:hidden">
+              {isPlaying ? "🔊⏸️" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "ON" : "OFF"}
+            </span> */}
           </Button>
 
           <Button
@@ -474,13 +466,9 @@ const MatchManagementSection = ({ isActive = true }) => {
               } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
               if (matchData.status === "paused") {
-                // Resume timer từ server
                 resumeTimer();
-                toast.info('▶️ Đã tiếp tục timer từ server');
               } else {
-                // Pause timer - sử dụng updateMatchTime với status paused
                 updateMatchTime(matchData.matchTime, matchData.period, "paused");
-                toast.info('⏸️ ��ã tạm dừng timer');
               }
             }}
           >
@@ -495,7 +483,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             className="px-2 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
             onClick={() => setShowMatchInfo(!showMatchInfo)}
           >
-            <span className="mr-1">ℹ���</span>
+            {/* <span className="mr-1">Info</span> */}
             <span className="hidden sm:inline">THÔNG TIN</span>
             <span className="sm:hidden">INFO</span>
           </Button>
@@ -518,7 +506,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             />
             <input
               type="text"
-              placeholder="Đơn v�� live"
+              placeholder="Đơn vị live"
               value={liveUnit}
               onChange={(e) => setLiveUnit(e.target.value)}
               className="w-full min-w-0 px-2 py-1 text-xs font-medium text-center text-blue-700 bg-white border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-300"
@@ -564,7 +552,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 disabled={!logoCodeA.trim() || isSearchingLogoA}
                 className="px-1 py-1 text-xs border border-red-500 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50 flex-shrink-0"
               >
-                {isSearchingLogoA ? '���' : '🔍'}
+                {isSearchingLogoA ? '⏳' : '🔍'}
               </button>
               {teamAInfo.logo && (
                 <div className="w-4 h-4 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
@@ -625,7 +613,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             </div>
           </div>
 
-          {/* Thời gian & Địa điểm - 1 h��ng */}
+          {/* Thời gian & Địa điểm */}
           <div className="grid grid-cols-3 gap-1">
             <input
               type="date"
@@ -792,7 +780,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 onClick={() => setIsEditingStats(!isEditingStats)}
                 className="flex items-center space-x-1"
               >
-                <span>{isEditingStats ? "��" : "✏️"}</span>
+                <span>{isEditingStats ? "Ok" : "✏️"}</span>
                 <span className="text-xs">{isEditingStats ? "Lưu" : "Sửa"}</span>
               </Button>
             </div>
@@ -829,7 +817,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
               {/* Phạt góc */}
               <EditableStatBar
-                label="Phạt g��c"
+                label="Phạt góc"
                 statKey="corners"
                 team1Value={matchStats.corners.team1}
                 team2Value={matchStats.corners.team2}
@@ -997,7 +985,6 @@ const MatchManagementSection = ({ isActive = true }) => {
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 updateView('scoreboard');
                 playAudioForAction('gialap');
-                toast.success('⏰ Đã b���t đầu timer từ 20:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -1266,14 +1253,14 @@ const MatchManagementSection = ({ isActive = true }) => {
                 className={`px-2 py-1 text-xs font-medium rounded border-2 bg-red-600 text-white ${tickerColor === "white-red" ? "border-orange-600" : "border-gray-300"
                   }`}
               >
-                Ch����
+                Chữ
               </button>
               <button
                 onClick={() => setTickerColor("white-green")}
                 className={`px-2 py-1 text-xs font-medium rounded border-2 bg-green-600 text-white ${tickerColor === "white-green" ? "border-orange-600" : "border-gray-300"
                   }`}
               >
-                Ch��
+                Chữ
               </button>
             </div>
           </div>
@@ -1605,18 +1592,14 @@ const MatchManagementSection = ({ isActive = true }) => {
                 const seconds = parseInt(customSeconds) || 0;
 
                 if (minutes > 0 || seconds > 0) {
-                  // Format thời gian (phút:giây)
                   const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
-                  // Set thời gian và bắt đầu đếm tiến từ server timer
                   updateMatchTime(timeString, "Hiệp 1", "live");
 
-                  // Chuyển sang tỉ số trên
                   updateView('scoreboard');
 
-                  toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                 } else {
-                  toast.warning('⚠️ Vui lòng nhập thời gian h���p lệ!');
+                  console.log('⚠️ Vui lòng nhập thời gian hợp lệ!');
                 }
                 setShowTimerModal(false);
               }}
