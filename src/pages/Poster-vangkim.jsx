@@ -25,10 +25,13 @@ export default function VangKimMatchIntro() {
     stadium: contextMatchData.stadium || 'SVĐ HÀNG ĐÀY',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '15:00',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
-    // Các biến mới từ context - thêm kiểm tra undefined
-    sponsors: sponsors?.url_logo || [],
-    organizing: organizing?.url_logo || [],
-    mediaPartners: mediaPartners?.url_logo || [],
+    // Các biến mới từ context - sử dụng structure mới
+    sponsors: sponsors?.sponsors?.url_logo || [],
+    sponsorsTypeDisplay: sponsors?.sponsors?.type_display || [],
+    organizing: organizing?.organizing?.url_logo || [],
+    organizingTypeDisplay: organizing?.organizing?.type_display || [],
+    mediaPartners: mediaPartners?.mediaPartners?.url_logo || [],
+    mediaPartnersTypeDisplay: mediaPartners?.mediaPartners?.type_display || [],
     tournamentLogo: tournamentLogo?.url_logo?.[0] || null,
     liveUnit: liveUnit?.url_logo?.[0] || null,
     logoShape: displaySettings?.logoShape || 'circle',
@@ -43,12 +46,37 @@ export default function VangKimMatchIntro() {
     accentColor: posterSettings?.accentColor || '#f59e0b'
   };
 
-  // Gộp tất cả partners lại thành một mảng
-  const allPartners = [
-    ...(matchData.showSponsors ? matchData.sponsors.map(url => ({ logo: url, name: 'Sponsor', type: 'sponsor' })) : []),
-    ...(matchData.showOrganizing ? matchData.organizing.map(url => ({ logo: url, name: 'Organizing', type: 'organizing' })) : []),
-    ...(matchData.showMediaPartners ? matchData.mediaPartners.map(url => ({ logo: url, name: 'Media', type: 'media' })) : [])
-  ];
+  // Helper function để lấy shape của logo dựa trên type_display
+  const getLogoShape = (typeDisplay) => {
+    switch (typeDisplay) {
+      case 'round': return 'circle';
+      case 'hexagonal': return 'hexagon';
+      case 'square':
+      default: return 'square';
+    }
+  };
+
+  // Tạo arrays riêng cho từng loại logo với type_display
+  const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
+    logo: url,
+    name: 'Sponsor',
+    type: 'sponsor',
+    typeDisplay: matchData.sponsorsTypeDisplay[index] || 'square'
+  })) : [];
+
+  const organizingLogos = matchData.showOrganizing ? matchData.organizing.map((url, index) => ({
+    logo: url,
+    name: 'Organizing',
+    type: 'organizing',
+    typeDisplay: matchData.organizingTypeDisplay[index] || 'square'
+  })) : [];
+
+  const mediaPartnerLogos = matchData.showMediaPartners ? matchData.mediaPartners.map((url, index) => ({
+    logo: url,
+    name: 'Media Partner',
+    type: 'media',
+    typeDisplay: matchData.mediaPartnersTypeDisplay[index] || 'square'
+  })) : [];
 
   // Sử dụng marquee data từ context
   const marquee = {
@@ -70,9 +98,11 @@ export default function VangKimMatchIntro() {
     }
   };
 
-  const hasPartners = allPartners.length > 0;
+  const hasSponsors = sponsorLogos.length > 0;
+  const hasOrganizing = organizingLogos.length > 0;
+  const hasMediaPartners = mediaPartnerLogos.length > 0;
 
-  // Helper function để lấy class cho logo shape
+  // Helper function để lấy class cho logo shape (cho team logos)
   const getLogoShapeClass = (baseClass) => {
     switch (matchData.logoShape) {
       case 'square':
@@ -81,6 +111,20 @@ export default function VangKimMatchIntro() {
         return `${baseClass} rounded-full`; // Tạm thời dùng rounded-full
       case 'shield':
         return `${baseClass} rounded-lg`;
+      case 'circle':
+      default:
+        return `${baseClass} rounded-full`;
+    }
+  };
+
+  // Helper function để lấy class cho individual partner logo shapes
+  const getPartnerLogoShapeClass = (baseClass, typeDisplay) => {
+    const shape = getLogoShape(typeDisplay);
+    switch (shape) {
+      case 'square':
+        return `${baseClass} rounded-lg`;
+      case 'hexagon':
+        return `${baseClass} rounded-full`; // Tạm thời dùng rounded-full
       case 'circle':
       default:
         return `${baseClass} rounded-full`;
@@ -222,33 +266,64 @@ export default function VangKimMatchIntro() {
               </div>
             )}
 
-            {/* Partners - Hiển thị khi có dữ liệu từ socket */}
-            {hasPartners && (
-              <div className="text-center mt-3 sm:mt-4">
-                <h3 className="text-yellow-400 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3 uppercase tracking-wide">
-                  🤝 Đơn vị đồng hành
-                </h3>
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-2xl p-2 sm:p-4 border border-white/30 mx-4 sm:mx-8">
-                  <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
-                    {allPartners.map((partner, index) => (
-                      <div key={index} className={getLogoShapeClass("w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 flex justify-center items-center bg-white p-1 shadow-lg")}>
-                        <img
-                          src={partner.logo}
-                          alt={partner.name}
-                          className={getLogoShapeClass("max-h-full max-w-full object-contain")}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
+
           </div>
         </div>
 
-        {/* Live Unit - Top right corner */}
+        {/* Sponsors - Top left */}
+        {hasSponsors && (
+          <div className="absolute top-4 left-4 z-30">
+            <div className="flex gap-2 flex-wrap max-w-48">
+              {sponsorLogos.map((sponsor, index) => (
+                <div key={index} className={getPartnerLogoShapeClass("w-8 h-8 sm:w-10 sm:h-10 flex justify-center items-center bg-white p-1 shadow-lg", sponsor.typeDisplay)}>
+                  <img
+                    src={sponsor.logo}
+                    alt={sponsor.name}
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Organizing - Top left next to sponsors */}
+        {hasOrganizing && (
+          <div className="absolute top-4 left-52 z-30">
+            <div className="flex gap-2 flex-wrap max-w-48">
+              {organizingLogos.map((organizing, index) => (
+                <div key={index} className={getPartnerLogoShapeClass("w-8 h-8 sm:w-10 sm:h-10 flex justify-center items-center bg-white p-1 shadow-lg", organizing.typeDisplay)}>
+                  <img
+                    src={organizing.logo}
+                    alt={organizing.name}
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Media Partners - Top right corner */}
+        {hasMediaPartners && (
+          <div className="absolute top-4 right-4 z-30">
+            <div className="flex gap-2 flex-wrap max-w-48 justify-end">
+              {mediaPartnerLogos.map((media, index) => (
+                <div key={index} className={getPartnerLogoShapeClass("w-8 h-8 sm:w-10 sm:h-10 flex justify-center items-center bg-white p-1 shadow-lg", media.typeDisplay)}>
+                  <img
+                    src={media.logo}
+                    alt={media.name}
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Live Unit - Top right corner (adjust position if media partners exist) */}
         {matchData.liveUnit && (
-          <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+          <div className={`absolute top-4 z-30 ${hasMediaPartners ? 'right-4 mt-14' : 'right-4'}`}>
             <div className="bg-red-600 text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2">
               <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
               <img
