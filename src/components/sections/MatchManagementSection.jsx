@@ -1305,14 +1305,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Update marquee qua MatchContext
                 updateMarquee(marqueeSettings);
 
-                // Console log để debug
-                console.log('🎬 [DEBUG] Clock Settings applied:', {
-                  clockSetting,
-                  clockText,
-                  tickerColor,
-                  marqueeSettings
-                });
-                console.log('📡 [DEBUG] Emitted marquee_update với data:', marqueeSettings);
+
 
                 toast.success('✅ Đã áp dụng cài đặt chữ chạy!');
               }}
