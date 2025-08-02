@@ -324,6 +324,9 @@ export default function TreTrungMatchIntro() {
             </div>
 
           </div>
+
+          {/* Bottom spacer để marquee không đè lên content */}
+          <div className="h-8 sm:h-12 flex-shrink-0"></div>
         </div>
 
         {marquee.isRunning && marquee.text && (
