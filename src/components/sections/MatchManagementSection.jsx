@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
-import ScoreDisplay from "../scoreboard/ScoreDisplay";
 import PosterManager from "../poster/PosterManager";
 import TeamLineupModal from "../lineup/TeamLineupModal";
 import Modal from "../common/Modal";
@@ -453,7 +452,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           >
             <span className="mr-1">{matchData.status === "paused" ? "▶️" : "⏸️"}</span>
             <span className="hidden sm:inline">{matchData.status === "paused" ? "TIẾP TỤC" : "TẠM DỪNG"}</span>
-            <span className="sm:hidden">{matchData.status === "paused" ? "TIẾP" : "DỪNG"}</span>
+            <span className="sm:hidden">{matchData.status === "paused" ? "TI��P" : "DỪNG"}</span>
           </Button>
 
           <Button
@@ -812,7 +811,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 onUpdate={(team, value) => updateStat('yellowCards', team, value)}
               />
 
-              {/* Phạm lỗi */}
+              {/* Ph���m lỗi */}
               <EditableStatBar
                 label="Phạm lỗi"
                 statKey="fouls"
