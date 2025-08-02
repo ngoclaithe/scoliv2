@@ -98,9 +98,11 @@ export default function VangKimMatchIntro() {
     }
   };
 
-  const hasPartners = allPartners.length > 0;
+  const hasSponsors = sponsorLogos.length > 0;
+  const hasOrganizing = organizingLogos.length > 0;
+  const hasMediaPartners = mediaPartnerLogos.length > 0;
 
-  // Helper function để lấy class cho logo shape
+  // Helper function để lấy class cho logo shape (cho team logos)
   const getLogoShapeClass = (baseClass) => {
     switch (matchData.logoShape) {
       case 'square':
