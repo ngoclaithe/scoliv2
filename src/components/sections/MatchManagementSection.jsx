@@ -476,7 +476,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               if (matchData.status === "paused") {
                 // Resume timer từ server
                 resumeTimer();
-                toast.info('▶️ Đã ti��p tục timer từ server');
+                toast.info('▶️ Đã tiếp tục timer từ server');
               } else {
                 // Pause timer - sử dụng updateMatchTime với status paused
                 updateMatchTime(matchData.matchTime, matchData.period, "paused");
@@ -492,7 +492,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           <Button
             variant="primary"
             size="sm"
-            className="px-2 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+            className="px-2 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
             onClick={() => setShowMatchInfo(!showMatchInfo)}
           >
             <span className="mr-1">ℹ���</span>
@@ -1098,7 +1098,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">📊</span>
-              <span className="text-xs font-bold text-center">TỈ SỐ DƯỚI</span>
+              <span className="text-xs font-bold text-center">T�� SỐ DƯỚI</span>
             </button>
 
             {/* Nghỉ giữa hiệp */}
@@ -1608,7 +1608,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                   // Format thời gian (phút:giây)
                   const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
-                  // Set thời gian v�� bắt đầu đếm tiến từ server timer
+                  // Set thời gian và bắt đầu đếm tiến từ server timer
                   updateMatchTime(timeString, "Hiệp 1", "live");
 
                   // Chuyển sang tỉ số trên
