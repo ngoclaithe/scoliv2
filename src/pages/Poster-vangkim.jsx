@@ -266,27 +266,7 @@ export default function VangKimMatchIntro() {
               </div>
             )}
 
-            {/* Partners - Hiển thị khi có dữ liệu từ socket */}
-            {hasPartners && (
-              <div className="text-center mt-3 sm:mt-4">
-                <h3 className="text-yellow-400 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3 uppercase tracking-wide">
-                  🤝 Đơn vị đồng hành
-                </h3>
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-2xl p-2 sm:p-4 border border-white/30 mx-4 sm:mx-8">
-                  <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
-                    {allPartners.map((partner, index) => (
-                      <div key={index} className={getLogoShapeClass("w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 flex justify-center items-center bg-white p-1 shadow-lg")}>
-                        <img
-                          src={partner.logo}
-                          alt={partner.name}
-                          className={getLogoShapeClass("max-h-full max-w-full object-contain")}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
+
           </div>
         </div>
 
