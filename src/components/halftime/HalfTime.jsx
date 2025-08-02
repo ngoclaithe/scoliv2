@@ -6,10 +6,6 @@ const HalftimeBreakPoster = () => {
     // Sử dụng dữ liệu từ PublicMatchContext
     const { matchData: contextMatchData, marqueeData } = usePublicMatch();
 
-    // Audio đã được chuyển sang MatchManagementSection để quản lý tập trung
-    // const { playAudio } = useAudio();
-
-    // Kết hợp dữ liệu từ context với dữ liệu mặc định
     const matchData = {
         matchTitle: contextMatchData.tournament || "GIẢI BÓNG ĐÁ PHONG TRÀO",
         stadium: contextMatchData.stadium || "Sân vận động Thiên Trường",
@@ -39,18 +35,11 @@ const HalftimeBreakPoster = () => {
         return () => window.removeEventListener('resize', updateScreenSize);
     }, []);
 
-    // Audio đã được chuyển sang MatchManagementSection để quản lý tập trung
-    // useEffect(() => {
-    //     playAudio('poster');
-    // }, [playAudio]);
-
-    // Check if live text contains specific keywords
     const liveTextLower = matchData.liveText.toLowerCase();
     const showNSBLogo = liveTextLower.includes('nsb') || liveTextLower.includes('nga son biz');
     const showBDPXTLogo = liveTextLower.includes('bdpxt') || liveTextLower.includes('xu thanh');
     const showSCOLogo = !showNSBLogo && !showBDPXTLogo;
 
-    // Responsive values based on screen width
     const isMobile = screenSize.width < 768;
     const isTablet = screenSize.width < 1024;
 
