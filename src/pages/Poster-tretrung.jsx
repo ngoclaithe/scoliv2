@@ -330,7 +330,7 @@ export default function TreTrungMatchIntro() {
         </div>
 
         {marquee.isRunning && marquee.text && (
-          <div className="absolute bottom-0 left-0 w-full h-8 sm:h-12 bg-gradient-to-r from-green-900 via-emerald-900 to-green-900 border-t-2 border-green-400 overflow-hidden">
+          <div className="absolute bottom-0 left-0 w-full h-8 sm:h-12 bg-gradient-to-r from-green-900 via-emerald-900 to-green-900 border-t-2 border-green-400 overflow-hidden z-20">
             <div className="absolute inset-0 bg-black/50"></div>
             <div
               ref={marqueeRef}
