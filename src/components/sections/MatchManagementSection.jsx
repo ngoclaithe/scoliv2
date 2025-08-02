@@ -1152,7 +1152,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               </button>
 
               <button
-                className="px-3 py-1 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-600 hover:to-cyan-700 text-white rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-sm font-bold h-8"
+                className="px-3 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-sm font-bold h-8"
                 onClick={() => {
                   const minutes = parseInt(quickCustomMinutes) || 25;
 
@@ -1273,7 +1273,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 className={`px-2 py-1 text-xs font-medium rounded border-2 bg-green-600 text-white ${tickerColor === "white-green" ? "border-orange-600" : "border-gray-300"
                   }`}
               >
-                Chữ
+                Ch��
               </button>
             </div>
           </div>
