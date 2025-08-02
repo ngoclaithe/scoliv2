@@ -16,9 +16,8 @@ export default function DodenMatchIntro() {
     posterSettings
   } = usePublicMatch();
   
-  // Kết hợp dữ liệu từ context với dữ liệu mặc định
   const matchData = {
-    matchTitle: contextMatchData.tournament || 'GIẢI VÔ ĐỊCH QUỐC GIA',
+    matchTitle: contextMatchData.matchTitle || 'GIẢI VÔ ĐỊCH QUỐC GIA',
     team1: contextMatchData.teamA.name || 'FIRE TIGERS',
     team2: contextMatchData.teamB.name || 'BLACK EAGLES',
     logo1: getFullLogoUrl(contextMatchData.teamA.logo) || '/images/background-poster/default_logoA.png',
@@ -26,7 +25,6 @@ export default function DodenMatchIntro() {
     stadium: contextMatchData.stadium || 'SVĐ MỸ ĐÌNH',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '20:00',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
-    // Các biến mới từ context - sử dụng structure đúng như tretrung
     sponsors: getFullLogoUrls(sponsors?.sponsors?.url_logo || []),
     sponsorsTypeDisplay: sponsors?.sponsors?.type_display || [],
     organizing: getFullLogoUrls(organizing?.organizing?.url_logo || []),

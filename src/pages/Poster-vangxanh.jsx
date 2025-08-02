@@ -3,7 +3,6 @@ import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
 
 export default function VangXanhMatchIntro() {
-  // Sử dụng dữ liệu từ PublicMatchContext
   const {
     matchData: contextMatchData,
     marqueeData,
@@ -16,9 +15,8 @@ export default function VangXanhMatchIntro() {
     posterSettings
   } = usePublicMatch();
 
-  // Kết hợp dữ liệu từ context với dữ liệu mặc định
   const matchData = {
-    matchTitle: contextMatchData.tournament || 'GIẢI BÓNG ĐÁ VÀNG XANH',
+    matchTitle: contextMatchData.matchTitle || 'GIẢI BÓNG ĐÁ VÀNG XANH',
     team1: contextMatchData.teamA.name || 'TEAM ALPHA',
     team2: contextMatchData.teamB.name || 'TEAM BETA',
     logo1: getFullLogoUrl(contextMatchData.teamA.logo) || '/images/background-poster/default_logoA.png',

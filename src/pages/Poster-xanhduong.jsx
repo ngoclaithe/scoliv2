@@ -3,7 +3,6 @@ import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
 
 export default function XanhDuongMatchIntro() {
-  // Sử dụng dữ liệu từ PublicMatchContext
   const {
     matchData: contextMatchData,
     marqueeData,
@@ -16,9 +15,8 @@ export default function XanhDuongMatchIntro() {
     posterSettings
   } = usePublicMatch();
 
-  // Kết hợp dữ liệu từ context với dữ liệu mặc định
   const matchData = {
-    matchTitle: contextMatchData.tournament || 'GIẢI BÓNG ĐÁ THIẾU NIÊN',
+    matchTitle: contextMatchData.matchTitle || 'GIẢI BÓNG ĐÁ THIẾU NIÊN',
     team1: contextMatchData.teamA.name || 'TEAM BLUE',
     team2: contextMatchData.teamB.name || 'TEAM RED',
     logo1: getFullLogoUrl(contextMatchData.teamA.logo) || '/images/background-poster/default_logoA.png',
@@ -26,7 +24,6 @@ export default function XanhDuongMatchIntro() {
     stadium: contextMatchData.stadium || 'SVĐ QUẬN 1',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '16:00',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
-    // Các biến mới từ context - sử dụng structure đúng như tretrung
     sponsors: getFullLogoUrls(sponsors?.sponsors?.url_logo || []),
     sponsorsTypeDisplay: sponsors?.sponsors?.type_display || [],
     organizing: getFullLogoUrls(organizing?.organizing?.url_logo || []),
