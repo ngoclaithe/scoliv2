@@ -1311,7 +1311,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               switch (item.category) {
                 case 'sponsor':
                   console.log("[MatchManagementSection] Calling updateSponsors with logoUpdateData:", logoUpdateData);
-                  
+
                   updateSponsors(logoUpdateData);
                   break;
                 case 'organizing':
@@ -1329,6 +1329,9 @@ const MatchManagementSection = ({ isActive = true }) => {
                     url_logo: [item.url],
                     behavior: behavior
                   });
+                  break;
+                default:
+                  console.warn("[MatchManagementSection] Unknown logo category:", item.category);
                   break;
               }
             }
