@@ -997,9 +997,9 @@ const MatchManagementSection = ({ isActive = true }) => {
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 updateView('scoreboard');
                 playAudioForAction('gialap');
-                toast.success('⏰ Đã bắt đầu timer từ 20:00!');
+                toast.success('⏰ Đã b��t đầu timer từ 20:00!');
               }}
-              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🕐</span>
               <span className="text-xs font-bold text-center">ĐẾM 20'</span>
