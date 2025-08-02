@@ -24,8 +24,8 @@ const ScoreboardAbove = ({
     const currentData = {
         teamAName: matchData?.teamA?.name || "ĐỘI A",
         teamBName: matchData?.teamB?.name || "ĐỘI B",
-        teamALogo: matchData?.teamA?.logo || "/api/placeholder/90/90",
-        teamBLogo: matchData?.teamB?.logo || "/api/placeholder/90/90",
+        teamALogo: getFullLogoUrl(matchData?.teamA?.logo) || "/api/placeholder/90/90",
+        teamBLogo: getFullLogoUrl(matchData?.teamB?.logo) || "/api/placeholder/90/90",
         teamAScore: matchData?.teamA?.score || 0,
         teamBScore: matchData?.teamB?.score || 0,
         matchTime: matchData?.matchTime || "00:00",
