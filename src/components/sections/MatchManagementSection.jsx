@@ -243,7 +243,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateStats(newStats);
   };
 
-  // Hàm cập nhật kiểm soát bóng (��ảm bảo tổng = 100%)
+  // Hàm cập nhật kiểm soát bóng (đảm bảo tổng = 100%)
   const updatePossession = (team, value) => {
     const newValue = Math.max(0, Math.min(100, parseInt(value) || 0));
     const otherTeam = team === 'team1' ? 'team2' : 'team1';
@@ -696,16 +696,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                   logoTeamB: teamBInfo.logo || matchData.teamB.logo || ""
                 });
 
-                // Console log để debug
-                console.log('🎨 [DEBUG] Team kit colors updated:', teamColorsData);
-                console.log('📡 [DEBUG] Emitted match_info_update với data:', {
-                  teamAInfo,
-                  teamBInfo,
-                  matchInfo,
-                  teamColors: teamColorsData,
-                  logoA: teamAInfo.logo || matchData.teamA.logo,
-                  logoB: teamBInfo.logo || matchData.teamB.logo
-                });
+
                 toast.success('✅ Đã cập nhật thông tin trận đấu và màu áo thành công!');
               }}
               className="px-3 py-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold text-xs rounded shadow transform hover:scale-105 transition-all duration-200"
@@ -1650,7 +1641,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                   setSelectedOption("ti-so-tren");
 
                   console.log('🕰�� Áp dụng thời gian tùy chỉnh từ modal - Timer sẽ đếm từ:', timeString);
-                  console.log('���� Server s�� emit timer_tick events với displayTime format từ:', timeString);
+                  console.log('���� Server sẽ emit timer_tick events với displayTime format từ:', timeString);
 
                   toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                 } else {
