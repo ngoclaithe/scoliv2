@@ -132,7 +132,7 @@ const LogoSearch = ({ onLogoSelect, onClose, className = "" }) => {
       <div className="aspect-square bg-gray-50 rounded-lg mb-2 flex items-center justify-center overflow-hidden">
         {logo.url ? (
           <img
-            src={logo.url}
+            src={getFullLogoUrl(logo.url) || logo.url}
             alt={logo.name}
             className="w-full h-full object-contain p-2 group-hover:scale-110 transition-transform"
             onError={(e) => {
