@@ -9,10 +9,15 @@ import App from '../App';
 import DisplayController from '../components/display/DisplayController';
 import ScoreboardBelow from '../components/scoreboard_preview/ScoreboardBelowNew';
 import PosterPreviewPage from '../pages/PosterPreviewPage';
+import AdminApp from '../components/admin/AdminApp';
+
 const AppRoutes = () => {
   return (
     <>
       <Routes>
+        {/* Admin routes */}
+        <Route path="/admin/*" element={<AdminApp />} />
+
         {/* Authenticated routes */}
         <Route path="/" element={
           <AuthProvider>
