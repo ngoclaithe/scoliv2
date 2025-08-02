@@ -987,7 +987,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1"></span>
-              <span className="text-xs font-bold text-center">ĐẾM 0</span>
+              <span className="text-xs font-bold text-center">Đ��M 0</span>
             </button>
 
             {/* Đếm 25' */}
@@ -1089,7 +1089,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
             </button>
 
-            {/* Tỉ số dứới */}
+            {/* Tỉ số dứ��i */}
             <button
               onClick={() => {
                 updateView('scoreboard_below');
@@ -1328,16 +1328,8 @@ const MatchManagementSection = ({ isActive = true }) => {
 
             if (poster) {
               const posterType = poster.id || poster.name;
-              console.log("[MatchManagementSection] About to call updatePoster with:", posterType);
               updatePoster(posterType);
-
-              console.log("🎨 [MatchManagementSection] About to call updateView with: poster");
               updateView('poster');
-
-              console.log("🎨 [MatchManagementSection] Setting selectedOption to: chon-poster");
-              setSelectedOption("chon-poster");
-            } else {
-              console.log("⚠ [MatchManagementSection] No poster provided to onPosterUpdate");
             }
           }}
           onLogoUpdate={(logoData) => {
