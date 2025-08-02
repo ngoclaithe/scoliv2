@@ -505,7 +505,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             className="px-2 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
             onClick={() => setShowMatchInfo(!showMatchInfo)}
           >
-            <span className="mr-1">ℹ️</span>
+            <span className="mr-1">���️</span>
             <span className="hidden sm:inline">THÔNG TIN</span>
             <span className="sm:hidden">INFO</span>
           </Button>
@@ -1113,9 +1113,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             <button
               onClick={() => {
                 updateView('scoreboard_below');
-                setSelectedOption("ti-so-duoi");
                 playAudioForAction('rasan');
-                console.log('Chuyển sang scoreboard below');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
