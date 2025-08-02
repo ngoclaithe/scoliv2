@@ -332,7 +332,7 @@ const UploadLogoSection = () => {
                 }}
               >
                 <img
-                  src={result.url_logo}
+                  src={getFullLogoUrl(result.url_logo) || result.url_logo}
                   alt={result.code_logo}
                   className="w-full h-full object-contain bg-white"
                   style={{
