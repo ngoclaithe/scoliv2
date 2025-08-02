@@ -469,14 +469,14 @@ const MatchManagementSection = ({ isActive = true }) => {
             variant="primary"
             size="sm"
             className={`px-2 py-1 ${matchData.status === "paused"
-              ? "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700"
-              : "bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-600 hover:to-yellow-700"
+              ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
+              : "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
               } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
               if (matchData.status === "paused") {
                 // Resume timer từ server
                 resumeTimer();
-                toast.info('▶️ Đã tiếp tục timer từ server');
+                toast.info('▶️ Đã ti��p tục timer từ server');
               } else {
                 // Pause timer - sử dụng updateMatchTime với status paused
                 updateMatchTime(matchData.matchTime, matchData.period, "paused");
@@ -1608,7 +1608,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                   // Format thời gian (phút:giây)
                   const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
-                  // Set thời gian và bắt đầu đếm tiến t��� server timer
+                  // Set thời gian v�� bắt đầu đếm tiến từ server timer
                   updateMatchTime(timeString, "Hiệp 1", "live");
 
                   // Chuyển sang tỉ số trên
