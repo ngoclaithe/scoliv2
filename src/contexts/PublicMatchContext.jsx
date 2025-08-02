@@ -112,9 +112,14 @@ export const PublicMatchProvider = ({ children }) => {
       behavior: 'add'
     }
   });
-
   const [tournamentLogo, setTournamentLogo] = useState({
-
+    tournamentLogo: {
+      code_logo: [],
+      url_logo: [],
+      position:  [],
+      type_display: [],
+      behavior: 'add'
+    }    
   });
 
   const [liveUnit, setLiveUnit] = useState({
@@ -457,9 +462,67 @@ export const PublicMatchProvider = ({ children }) => {
     });
 
     socketService.on('tournament_logo_updated', (data) => {
-      setTournamentLogo(prev => ({ ...prev, ...data.tournamentLogo }));
+      console.log('📝 [PublicMatchContext] tournament_logo_updated received:', data);
+    
+      setTournamentLogo(prev => {
+        const behavior = data.behavior;
+        const d = data.tournamentLogo;
+    
+        if (!d || !Array.isArray(d.code_logo)) return prev;
+    
+        const current = prev || {
+          url_logo: [],
+          code_logo: [],
+          position: [],
+          type_display: [],
+        };
+    
+        let updatedTournamentLogo = {
+          url_logo: [...current.url_logo],
+          code_logo: [...current.code_logo],
+          position: [...current.position],
+          type_display: [...current.type_display],
+        };
+    
+        d.code_logo.forEach((code, i) => {
+          const index = updatedTournamentLogo.code_logo.findIndex(c => c === code);
+          const newUrl = d.url_logo?.[i];
+          const newPos = d.position?.[i];
+          const newType = d.type_display?.[i];
+    
+          if (behavior === 'add') {
+            if (index === -1) {
+              updatedTournamentLogo.code_logo.push(code);
+              updatedTournamentLogo.url_logo.push(newUrl || '');
+              updatedTournamentLogo.position.push(newPos || []);
+              updatedTournamentLogo.type_display.push(newType || '');
+            }
+          }
+    
+          if (behavior === 'update') {
+            if (index !== -1) {
+              if (newPos !== undefined) updatedTournamentLogo.position[index] = newPos;
+              if (newUrl !== undefined) updatedTournamentLogo.url_logo[index] = newUrl;
+              if (newType !== undefined) updatedTournamentLogo.type_display[index] = newType;
+            }
+          }
+    
+          if (behavior === 'remove') {
+            if (index !== -1) {
+              updatedTournamentLogo.code_logo.splice(index, 1);
+              updatedTournamentLogo.url_logo.splice(index, 1);
+              updatedTournamentLogo.position.splice(index, 1);
+              updatedTournamentLogo.type_display.splice(index, 1);
+            }
+          }
+        });
+    
+        return updatedTournamentLogo;
+      });
+    
       setLastUpdateTime(Date.now());
     });
+    
 
     socketService.on('live_unit_updated', (data) => {
       setLiveUnit(prev => ({ ...prev, ...data.liveUnit }));
@@ -560,7 +623,7 @@ export const PublicMatchProvider = ({ children }) => {
     currentView,
     organizing: organizing || { code_logo: [], url_logo: [], position: [], type_display: [] },
     mediaPartners: mediaPartners || { code_logo: [], url_logo: [], position: [], type_display: [] },
-    tournamentLogo: tournamentLogo || { code_logo: [], url_logo: [] },
+    tournamentLogo: tournamentLogo || { code_logo: [], url_logo: [], position: [], type_display: [] },
     liveUnit: liveUnit || { code_logo: [], url_logo: [], name: 'LIVE STREAMING', position: 'top-right' },
     posterSettings: posterSettings || { showTimer: true, showDate: true, showStadium: true, showLiveIndicator: true, backgroundOpacity: 0.8, textColor: '#ffffff', accentColor: '#3b82f6' },
 

@@ -24,7 +24,6 @@ export default function VangKimMatchIntro() {
     stadium: contextMatchData.stadium || 'SVĐ HÀNG ĐÀY',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '15:00',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
-    // Các biến mới từ context - sử dụng structure đúng như tretrung
     sponsors: getFullLogoUrls(sponsors?.sponsors?.url_logo || []),
     sponsorsTypeDisplay: sponsors?.sponsors?.type_display || [],
     organizing: getFullLogoUrls(organizing?.organizing?.url_logo || []),
@@ -32,6 +31,7 @@ export default function VangKimMatchIntro() {
     mediaPartners: getFullLogoUrls(mediaPartners?.mediaPartners?.url_logo || []),
     mediaPartnersTypeDisplay: mediaPartners?.mediaPartners?.type_display || [],
     tournamentLogo: getFullLogoUrl(tournamentLogo?.url_logo?.[0]) || null,
+    tournamentPosition: displaySettings?.tournamentPosition || 'top-center',
     liveUnit: getFullLogoUrl(liveUnit?.url_logo?.[0]) || null,
     logoShape: displaySettings?.logoShape || 'circle',
     showTournamentLogo: displaySettings?.showTournamentLogo !== false,
@@ -75,7 +75,8 @@ export default function VangKimMatchIntro() {
     typeDisplay: matchData.mediaPartnersTypeDisplay[index] || 'square'
   })) : [];
 
-  // Sử dụng marquee data từ context
+  const allPartners = [...sponsorLogos, ...organizingLogos, ...mediaPartnerLogos];
+
   const marquee = {
     text: marqueeData.text || '',
     isRunning: marqueeData.mode !== 'none'
@@ -83,7 +84,6 @@ export default function VangKimMatchIntro() {
 
   const marqueeRef = useRef(null);
 
-  // Font size adjustment function
   const adjustFontSize = (element) => {
     if (!element) return;
     let fontSize = parseInt(window.getComputedStyle(element).fontSize);
@@ -94,10 +94,6 @@ export default function VangKimMatchIntro() {
       element.style.fontSize = fontSize + "px";
     }
   };
-
-  const hasSponsors = sponsorLogos.length > 0;
-  const hasOrganizing = organizingLogos.length > 0;
-  const hasMediaPartners = mediaPartnerLogos.length > 0;
 
   const getLogoShapeClass = (baseClass) => {
     switch (matchData.logoShape) {
@@ -126,6 +122,18 @@ export default function VangKimMatchIntro() {
     }
   };
 
+  const getTournamentPositionClass = () => {
+    switch (matchData.tournamentPosition) {
+      case 'top-left':
+        return 'justify-start';
+      case 'top-right':
+        return 'justify-end';
+      case 'top-center':
+      default:
+        return 'justify-center';
+    }
+  };
+
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
       <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
@@ -138,125 +146,81 @@ export default function VangKimMatchIntro() {
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col p-3 sm:p-6">
+        <div className="relative z-10 h-full flex flex-col" style={{ fontSize: 'clamp(8px, 1.5vw, 24px)' }}>
 
-          {/* Top section với fixed height để tránh overlap */}
-          <div className="flex justify-between items-start mb-4 sm:mb-6 md:mb-8 min-h-[8vh] sm:min-h-[10vh]">
-
-              <div className="flex gap-2 sm:gap-4">
-                {hasSponsors && (
-                  <div className="flex-shrink-0">
-                    <div className="text-xs font-bold text-green-400 mb-1 drop-shadow-lg">
-                      Nhà tài trợ
-                    </div>
-                    <div className="flex gap-1 flex-wrap max-w-[15vw]">
-                      {sponsorLogos.map((sponsor, index) => (
-                        <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", sponsor.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
-                          <img
-                            src={sponsor.logo}
-                            alt={sponsor.name}
-                            className="max-h-full max-w-full object-contain"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {hasOrganizing && (
-                  <div className="flex-shrink-0">
-                    <div className="text-xs font-bold text-blue-400 mb-1 drop-shadow-lg">
-                      Đơn vị tổ chức
-                    </div>
-                    <div className="flex gap-1 flex-wrap max-w-[15vw]">
-                      {organizingLogos.map((organizing, index) => (
-                        <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", organizing.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
-                          <img
-                            src={organizing.logo}
-                            alt={organizing.name}
-                            className="max-h-full max-w-full object-contain"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="flex flex-col items-end gap-2">
-                {hasMediaPartners && (
-                  <div className="flex-shrink-0">
-                    <div className="text-xs font-bold text-purple-400 mb-1 drop-shadow-lg text-right">
-                      Đơn vị truyền thông
-                    </div>
-                    <div className="flex gap-1 flex-wrap justify-end max-w-[15vw]">
-                      {mediaPartnerLogos.map((media, index) => (
-                        <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", media.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
-                          <img
-                            src={media.logo}
-                            alt={media.name}
-                            className="max-h-full max-w-full object-contain"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {matchData.liveUnit && (
-                  <div className="flex-shrink-0">
-                    <div className="bg-red-600 text-white px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2">
-                      <div className="w-1 h-1 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
-                      <img
-                        src={matchData.liveUnit}
-                        alt="Live Unit"
-                        className="h-3 sm:h-4 md:h-5 object-contain"
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-
+          {/* Top Section - Tournament Logo & Live Unit */}
+          <div className="flex justify-between items-start px-[1vw] py-[0.5vw]">
+            
+            <div className={`flex ${getTournamentPositionClass()} flex-1`}>
+              {matchData.showTournamentLogo && matchData.tournamentLogo && (
+                <img
+                  src={matchData.tournamentLogo}
+                  alt="Tournament Logo"
+                  className="object-contain"
+                  style={{ height: '4vw', maxWidth: '15vw' }}
+                />
+              )}
             </div>
 
-          {/* Main content section với proper spacing */}
-          <div className="flex-1 flex flex-col justify-center min-h-0">
+            {matchData.liveUnit && (
+              <div className="bg-red-600 text-white rounded-lg shadow-lg flex items-center" style={{ padding: '0.3vw 0.8vw', gap: '0.3vw' }}>
+                <div className="bg-white rounded-full animate-pulse" style={{ width: '0.5vw', height: '0.5vw' }}></div>
+                <img
+                  src={matchData.liveUnit}
+                  alt="Live Unit"
+                  className="object-contain"
+                  style={{ height: '1.5vw' }}
+                />
+              </div>
+            )}
+          </div>
 
-            {/* Title section với margin để tránh overlap */}
-            <div className="text-center mb-4 sm:mb-6 md:mb-8">
+          {/* Main Content - Centered */}
+          <div className="flex-1 flex flex-col justify-center px-[2vw]">
+
+            {/* Title */}
+            <div className="text-center" style={{ marginBottom: '1.5vw' }}>
               <h1
-                className="font-black uppercase text-white text-lg sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl px-2"
+                className="font-black uppercase text-white"
                 style={{
+                  fontSize: '2.5vw',
                   textShadow: '#d97706 2px 2px 4px',
+                  marginBottom: '0.8vw'
                 }}
               >
                 {matchData.matchTitle}
               </h1>
 
-              <div className="flex items-center justify-center mt-2 sm:mt-4">
-                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-400 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-amber-500 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-orange-500 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
+              <div className="flex items-center justify-center">
+                <div className="bg-white" style={{ width: '4vw', height: '2px' }}></div>
+                <div className="bg-yellow-400 rounded-full" style={{ width: '0.5vw', height: '0.5vw', margin: '0 0.5vw' }}></div>
+                <div className="bg-amber-500 rounded-full" style={{ width: '0.5vw', height: '0.5vw', margin: '0 0.5vw' }}></div>
+                <div className="bg-orange-500 rounded-full" style={{ width: '0.5vw', height: '0.5vw', margin: '0 0.5vw' }}></div>
+                <div className="bg-white" style={{ width: '4vw', height: '2px' }}></div>
               </div>
             </div>
 
-            {/* Teams section với responsive spacing */}
-            <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-3 sm:mb-4 md:mb-6">
+            {/* Teams */}
+            <div className="flex items-center justify-between w-full" style={{ marginBottom: '1.5vw' }}>
 
-              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
+              <div className="flex-1 flex flex-col items-center max-w-[30%]" style={{ gap: '0.8vw' }}>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <img
                     src={matchData.logo1}
                     alt={matchData.team1}
-                    className={getLogoShapeClass("relative w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 lg:w-22 lg:h-22 xl:w-26 xl:h-26 object-cover border-2 sm:border-3 md:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300")}
+                    className={getLogoShapeClass("relative object-cover border-white shadow-2xl transform hover:scale-110 transition duration-300")}
+                    style={{ 
+                      width: '6vw', 
+                      height: '6vw',
+                      borderWidth: '0.15vw'
+                    }}
                   />
                 </div>
-                <div className="bg-gradient-to-r from-yellow-500 to-amber-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-full">
+                <div className="bg-gradient-to-r from-yellow-500 to-amber-600 rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2" style={{ padding: '0.3vw 0.8vw' }}>
                   <span
-                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block truncate"
+                    className="font-bold uppercase tracking-wide text-white text-center block truncate"
+                    style={{ fontSize: '0.9vw' }}
                     ref={(el) => el && adjustFontSize(el)}
                   >
                     {matchData.team1}
@@ -264,36 +228,33 @@ export default function VangKimMatchIntro() {
                 </div>
               </div>
 
-              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
-                <div className="relative flex flex-col items-center">
-                  <img
-                    src="/images/background-poster/vs5.png"
-                    alt="VS"
-                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-18 lg:h-18 object-contain animate-pulse"
-                  />
-                </div>
-
-                <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  {(matchData.showTimer || matchData.showDate) && (
-                    <div className="text-xs sm:text-sm font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
-                      {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
-                    </div>
-                  )}
-                </div>
+              <div className="flex-1 flex flex-col items-center max-w-[35%]">
+                <img
+                  src="/images/background-poster/vs5.png"
+                  alt="VS"
+                  className="object-contain animate-pulse"
+                  style={{ width: '4vw', height: '4vw' }}
+                />
               </div>
 
-              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
+              <div className="flex-1 flex flex-col items-center max-w-[30%]" style={{ gap: '0.8vw' }}>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-slate-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <img
                     src={matchData.logo2}
                     alt={matchData.team2}
-                    className={getLogoShapeClass("relative w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 lg:w-22 lg:h-22 xl:w-26 xl:h-26 object-cover border-2 sm:border-3 md:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300")}
+                    className={getLogoShapeClass("relative object-cover border-white shadow-2xl transform hover:scale-110 transition duration-300")}
+                    style={{ 
+                      width: '6vw', 
+                      height: '6vw',
+                      borderWidth: '0.15vw'
+                    }}
                   />
                 </div>
-                <div className="bg-gradient-to-r from-gray-500 to-slate-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-full">
+                <div className="bg-gradient-to-r from-gray-500 to-slate-600 rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2" style={{ padding: '0.3vw 0.8vw' }}>
                   <span
-                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block truncate"
+                    className="font-bold uppercase tracking-wide text-white text-center block truncate"
+                    style={{ fontSize: '0.9vw' }}
                     ref={(el) => el && adjustFontSize(el)}
                   >
                     {matchData.team2}
@@ -302,44 +263,79 @@ export default function VangKimMatchIntro() {
               </div>
             </div>
 
-            {/* Bottom section với proper spacing để tránh overlap */}
-            <div className="space-y-2 sm:space-y-3">
-              {matchData.showStadium && matchData.stadium && (
-                <div className="text-center">
-                  <div className="inline-block bg-black/50 backdrop-blur-sm px-3 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl border border-white/30">
-                    <span className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-white">
+            {/* Date & Stadium */}
+            <div className="text-center" style={{ marginBottom: '1.5vw' }}>
+              <div className="inline-block bg-black/50 backdrop-blur-sm rounded-xl border border-white/30" style={{ padding: '0.5vw 1.5vw' }}>
+                <div className="flex items-center justify-center" style={{ gap: '1vw' }}>
+                  {(matchData.showTimer || matchData.showDate) && (
+                    <span className="font-semibold text-white whitespace-nowrap" style={{ fontSize: '1vw' }}>
+                      {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
+                    </span>
+                  )}
+                  {(matchData.showTimer || matchData.showDate) && matchData.showStadium && matchData.stadium && (
+                    <div className="bg-white/50" style={{ width: '1px', height: '1.5vw' }}></div>
+                  )}
+                  {matchData.showStadium && matchData.stadium && (
+                    <span className="font-semibold text-white flex items-center" style={{ fontSize: '1vw' }}>
                       📍 {matchData.stadium}
                     </span>
-                  </div>
+                  )}
                 </div>
-              )}
-
-              {matchData.showTournamentLogo && matchData.tournamentLogo && (
-                <div className="text-center">
-                  <div className="inline-flex items-center justify-center">
-                    <img
-                      src={matchData.tournamentLogo}
-                      alt="Tournament Logo"
-                      className="h-6 sm:h-8 md:h-12 lg:h-16 max-w-24 sm:max-w-32 md:max-w-40 object-contain"
-                    />
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
 
           </div>
 
-          {/* Bottom spacer để marquee không đè lên content */}
-          <div className="h-8 sm:h-12 flex-shrink-0"></div>
+          {allPartners.length > 0 && (
+  <div className="px-[2vw]" style={{ paddingBottom: '1.5vw' }}>
+    <div className="text-center">
+      <div style={{ marginBottom: '1vw' }}> {/* tăng khoảng cách trên một chút */}
+        <span
+          className="font-bold text-white bg-black/50 backdrop-blur-sm rounded-lg border border-white/30"
+          style={{ fontSize: '1.6vw', padding: '0.4vw 1.6vw' }} // gấp đôi
+        >
+          Các đơn vị
+        </span>
+      </div>
+      <div
+        className="flex justify-center items-center flex-wrap"
+        style={{ gap: '1vw' }} // gấp đôi
+      >
+        {allPartners.map((partner, index) => (
+          <div
+            key={index}
+            className={getPartnerLogoShapeClass(
+              "flex justify-center items-center bg-white shadow-lg",
+              partner.typeDisplay
+            )}
+            style={{
+              width: '3vw',  // gấp đôi
+              height: '3vw', // gấp đôi
+              padding: '0.2vw' // gấp đôi
+            }}
+          >
+            <img
+              src={partner.logo}
+              alt={partner.name}
+              className="max-h-full max-w-full object-contain"
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+)}
+
         </div>
 
         {marquee.isRunning && marquee.text && (
-          <div className="absolute bottom-0 left-0 w-full h-8 sm:h-12 bg-gradient-to-r from-yellow-900 via-amber-900 to-orange-900 border-t-2 border-yellow-400 overflow-hidden z-20">
+          <div className="absolute bottom-0 left-0 w-full bg-gradient-to-r from-yellow-900 via-amber-900 to-orange-900 border-t-2 border-yellow-400 overflow-hidden z-20" style={{ height: '4vw' }}>
             <div className="absolute inset-0 bg-black/50"></div>
             <div
               ref={marqueeRef}
-              className="absolute top-1/2 transform -translate-y-1/2 whitespace-nowrap text-sm sm:text-lg font-bold text-yellow-300 drop-shadow-lg"
+              className="absolute top-1/2 transform -translate-y-1/2 whitespace-nowrap font-bold text-yellow-300 drop-shadow-lg"
               style={{
+                fontSize: '1.5vw',
                 animation: 'marquee 30s linear infinite'
               }}
             >
