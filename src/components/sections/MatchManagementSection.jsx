@@ -176,7 +176,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       const response = await LogoAPI.searchLogosByCode(logoCodeA.trim(), true);
       if (response.success && response.data && response.data.length > 0) {
         const logo = response.data[0];
-        setTeamAInfo(prev => ({ ...prev, logo: logo.url_logo }));
+        setTeamAInfo(prev => ({ ...prev, logo: getFullLogoUrl(logo.url_logo) }));
         setLogoCodeA("");
       } else {
         toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeA}"`);
