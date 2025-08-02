@@ -85,7 +85,7 @@ const LogoPreview = ({
           >
             {logo.url ? (
               <img
-                src={logo.url}
+                src={getFullLogoUrl(logo.url) || logo.url}
                 alt={logo.teamName}
                 className="w-full h-full object-contain p-1 rounded-lg"
               />
