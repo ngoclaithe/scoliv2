@@ -176,7 +176,7 @@ const NewHomeLayout = () => {
       {/* Footer với thông tin route dynamic */}
       <footer className="bg-gray-800 text-white p-4 mt-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center">
+          {/* <div className="text-center">
             <div className="text-sm mb-2">
               <span className="font-semibold">Route Dynamic:</span>
               <span className="ml-2 font-mono bg-gray-700 px-2 py-1 rounded">
@@ -186,7 +186,7 @@ const NewHomeLayout = () => {
             <div className="text-xs text-gray-400">
               Client1 (Admin) ➜ Socket.IO ➜ Server ➜ Socket.IO ➜ Client2 (Display)
             </div>
-          </div>
+          </div> */}
         </div>
       </footer>
 

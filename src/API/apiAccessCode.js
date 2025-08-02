@@ -54,19 +54,13 @@ const AccessCodeAPI = {
    * Tạo mã truy cập mới
    * @param {Object} codeData - Thông tin mã truy cập
    * @param {string} [codeData.matchId] - ID của trận đấu
-   * @param {string} [codeData.expiresAt] - Ngày hết hạn (ISO string)
-   * @param {number} [codeData.maxUses=1] - Số lần sử dụng tối đa
-   * @param {object} [codeData.metadata] - Thông tin bổ sung
    * @returns {Promise<Object>} Thông tin mã truy cập đã tạo
    */
   createCode: async (codeData) => {
     try {
       const response = await api.post('/access-codes', {
         matchId: codeData.matchId,
-        expiresAt: codeData.expiresAt,
-        maxUses: codeData.maxUses || 1,
         typeMatch: codeData.typeMatch || 'soccer',
-        metadata: codeData.metadata || {}
       });
       return response.data;
     } catch (error) {
