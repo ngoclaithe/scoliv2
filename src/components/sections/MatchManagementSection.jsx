@@ -932,7 +932,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
               >
                 <span className="mr-1">🔄</span>
-                ĐẶT L��I TẤT CẢ
+                ĐẶT LẠI TẤT CẢ
               </Button>
             </div>
           </div>
@@ -960,7 +960,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               onClick={() => {
                 setShowLineupModal(true);
               }}
-              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">📋</span>
               <span className="text-xs font-bold text-center">DANH SÁCH</span>
