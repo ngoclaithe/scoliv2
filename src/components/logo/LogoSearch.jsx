@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Input from "../common/Input";
 import Button from "../common/Button";
 import Loading from "../common/Loading";
+import { getFullLogoUrl } from "../../utils/logoUtils";
 
 const LogoSearch = ({ onLogoSelect, onClose, className = "" }) => {
   const [searchQuery, setSearchQuery] = useState("");
