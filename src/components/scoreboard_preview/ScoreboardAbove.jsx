@@ -156,7 +156,7 @@ const ScoreboardAbove = ({
                     : 'square'; // default vuông
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
-                    allLogos.push({ url: logo, alt: 'Media Partner', type: 'media', typeDisplay });
+                    allLogos.push({ url: getFullLogoUrl(logo), alt: 'Media Partner', type: 'media', typeDisplay });
                 }
             });
         }
