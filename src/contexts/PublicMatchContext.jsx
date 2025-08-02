@@ -32,7 +32,8 @@ export const PublicMatchProvider = ({ children }) => {
     matchDate: "",
     liveText: "",
     teamAKitColor: "#FF0000",
-    teamBKitColor: "#0000FF"
+    teamBKitColor: "#0000FF",
+    matchTitle: ""
   });
 
   const [matchStats, setMatchStats] = useState({
@@ -194,6 +195,11 @@ export const PublicMatchProvider = ({ children }) => {
 
     socketService.on('marquee_updated', (data) => {
       setMarqueeData(prev => ({ ...prev, ...data.marqueeData }));
+      setLastUpdateTime(Date.now());
+    });
+
+    socketService.on('match_title_updated', (data) => {
+      setMatchData(prev => ({ ...prev, matchTitle: data.matchTitle }));
       setLastUpdateTime(Date.now());
     });
 
