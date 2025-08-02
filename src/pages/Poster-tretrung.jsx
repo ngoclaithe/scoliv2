@@ -241,18 +241,18 @@ export default function TreTrungMatchIntro() {
             {/* Teams section với responsive spacing */}
             <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-3 sm:mb-4 md:mb-6">
 
-              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3">
+              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <img
                     src={matchData.logo1}
                     alt={matchData.team1}
-                    className={getLogoShapeClass("relative w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 object-cover border-2 sm:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300")}
+                    className={getLogoShapeClass("relative w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 lg:w-22 lg:h-22 xl:w-26 xl:h-26 object-cover border-2 sm:border-3 md:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300")}
                   />
                 </div>
-                <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-2 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
+                <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-full">
                   <span
-                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block"
+                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block truncate"
                     ref={(el) => el && adjustFontSize(el)}
                   >
                     {matchData.team1}
