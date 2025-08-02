@@ -1014,7 +1014,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 playAudioForAction('gialap');
                 toast.success('⏰ Đã bắt đầu timer từ 30:00!');
               }}
-              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🕑</span>
               <span className="text-xs font-bold text-center">ĐẾM 30'</span>
