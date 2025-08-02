@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 
 export default function TreTrungMatchIntro() {
-  // Sử dụng dữ liệu từ PublicMatchContext
   const {
     matchData: contextMatchData,
     marqueeData,
@@ -15,7 +14,6 @@ export default function TreTrungMatchIntro() {
     posterSettings
   } = usePublicMatch();
 
-  // Kết hợp dữ liệu từ context với dữ liệu mặc định
   const matchData = {
     matchTitle: contextMatchData.tournament || 'GIẢI BÓNG ĐÁ TRẺ TRUNG',
     team1: contextMatchData.teamA.name || 'TEAM ALPHA',
@@ -25,7 +23,6 @@ export default function TreTrungMatchIntro() {
     stadium: contextMatchData.stadium || 'SVĐ THỐNG NHẤT',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '15:30',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
-    // Các biến mới từ context - sử dụng structure mới
     sponsors: sponsors?.sponsors?.url_logo || [],
     sponsorsTypeDisplay: sponsors?.sponsors?.type_display || [],
     organizing: organizing?.organizing?.url_logo || [],
@@ -46,7 +43,6 @@ export default function TreTrungMatchIntro() {
     accentColor: posterSettings?.accentColor || '#10b981'
   };
 
-  // Helper function để lấy shape của logo dựa trên type_display
   const getLogoShape = (typeDisplay) => {
     switch (typeDisplay) {
       case 'round': return 'circle';
@@ -56,7 +52,6 @@ export default function TreTrungMatchIntro() {
     }
   };
 
-  // Tạo arrays riêng cho từng loại logo với type_display
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
     name: 'Sponsor',
@@ -78,7 +73,6 @@ export default function TreTrungMatchIntro() {
     typeDisplay: matchData.mediaPartnersTypeDisplay[index] || 'square'
   })) : [];
 
-  // Sử dụng marquee data từ context
   const marquee = {
     text: marqueeData.text || '',
     isRunning: marqueeData.mode !== 'none'
@@ -86,7 +80,6 @@ export default function TreTrungMatchIntro() {
 
   const marqueeRef = useRef(null);
 
-  // Font size adjustment function
   const adjustFontSize = (element) => {
     if (!element) return;
     let fontSize = parseInt(window.getComputedStyle(element).fontSize);
@@ -102,13 +95,12 @@ export default function TreTrungMatchIntro() {
   const hasOrganizing = organizingLogos.length > 0;
   const hasMediaPartners = mediaPartnerLogos.length > 0;
 
-  // Helper function để lấy class cho logo shape (cho team logos)
   const getLogoShapeClass = (baseClass) => {
     switch (matchData.logoShape) {
       case 'square':
         return `${baseClass} rounded-lg`;
       case 'hexagon':
-        return `${baseClass} rounded-full`; // Tạm thời dùng rounded-full
+        return `${baseClass} rounded-full`;
       case 'shield':
         return `${baseClass} rounded-lg`;
       case 'circle':
@@ -117,7 +109,6 @@ export default function TreTrungMatchIntro() {
     }
   };
 
-  // Helper function để lấy class cho individual partner logo shapes
   const getPartnerLogoShapeClass = (baseClass, typeDisplay) => {
     const shape = getLogoShape(typeDisplay);
     switch (shape) {
@@ -133,10 +124,8 @@ export default function TreTrungMatchIntro() {
 
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
-      {/* Main container with fixed aspect ratio */}
       <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
         
-        {/* Background image */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
@@ -145,13 +134,88 @@ export default function TreTrungMatchIntro() {
         >
         </div>
 
-        {/* Content */}
         <div className="relative z-10 h-full flex flex-col justify-between p-3 sm:p-6">
           
-          {/* Top Section */}
           <div className="flex-1 flex flex-col justify-center">
             
-            {/* Tournament Title */}
+            <div className="absolute top-0 left-0 right-0 flex justify-between items-start p-2 z-30">
+              
+              <div className="flex gap-4">
+                {hasSponsors && (
+                  <div className="flex-shrink-0">
+                    <div className="text-xs font-bold text-green-400 mb-1 drop-shadow-lg">
+                      Nhà tài trợ
+                    </div>
+                    <div className="flex gap-1 flex-wrap max-w-[15vw]">
+                      {sponsorLogos.map((sponsor, index) => (
+                        <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", sponsor.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
+                          <img
+                            src={sponsor.logo}
+                            alt={sponsor.name}
+                            className="max-h-full max-w-full object-contain"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {hasOrganizing && (
+                  <div className="flex-shrink-0">
+                    <div className="text-xs font-bold text-blue-400 mb-1 drop-shadow-lg">
+                      Đơn vị tổ chức
+                    </div>
+                    <div className="flex gap-1 flex-wrap max-w-[15vw]">
+                      {organizingLogos.map((organizing, index) => (
+                        <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", organizing.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
+                          <img
+                            src={organizing.logo}
+                            alt={organizing.name}
+                            className="max-h-full max-w-full object-contain"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-col items-end gap-2">
+                {hasMediaPartners && (
+                  <div className="flex-shrink-0">
+                    <div className="text-xs font-bold text-purple-400 mb-1 drop-shadow-lg text-right">
+                      Đơn vị truyền thông
+                    </div>
+                    <div className="flex gap-1 flex-wrap justify-end max-w-[15vw]">
+                      {mediaPartnerLogos.map((media, index) => (
+                        <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", media.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
+                          <img
+                            src={media.logo}
+                            alt={media.name}
+                            className="max-h-full max-w-full object-contain"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {matchData.liveUnit && (
+                  <div className="flex-shrink-0">
+                    <div className="bg-red-600 text-white px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2">
+                      <div className="w-1 h-1 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
+                      <img
+                        src={matchData.liveUnit}
+                        alt="Live Unit"
+                        className="h-3 sm:h-4 md:h-5 object-contain"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+            </div>
+
             <div className="text-center mb-3 sm:mb-6">
               <h1 
                 className="font-black uppercase text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl"
@@ -162,7 +226,6 @@ export default function TreTrungMatchIntro() {
                 {matchData.matchTitle}
               </h1>
               
-              {/* Divider */}
               <div className="flex items-center justify-center mt-2 sm:mt-4">
                 <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
                 <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full mx-1 sm:mx-2"></div>
@@ -172,10 +235,8 @@ export default function TreTrungMatchIntro() {
               </div>
             </div>
 
-            {/* Match Section */}
             <div className="flex items-center justify-between w-full px-2 sm:px-8">
 
-              {/* Team 1 */}
               <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
@@ -195,7 +256,6 @@ export default function TreTrungMatchIntro() {
                 </div>
               </div>
 
-              {/* VS Section */}
               <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-4 max-w-xs">
                 <div className="relative flex flex-col items-center">
                   <img
@@ -214,7 +274,6 @@ export default function TreTrungMatchIntro() {
                 </div>
               </div>
 
-              {/* Team 2 */}
               <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
@@ -235,7 +294,6 @@ export default function TreTrungMatchIntro() {
               </div>
             </div>
 
-            {/* Stadium */}
             {matchData.showStadium && matchData.stadium && (
               <div className="text-center mt-3 sm:mt-4">
                 <div className="inline-block bg-black/50 backdrop-blur-sm px-3 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl border border-white/30">
@@ -246,7 +304,6 @@ export default function TreTrungMatchIntro() {
               </div>
             )}
 
-            {/* Tournament Logo */}
             {matchData.showTournamentLogo && matchData.tournamentLogo && (
               <div className="text-center mt-3 sm:mt-4">
                 <div className="inline-flex items-center justify-center">
@@ -259,85 +316,9 @@ export default function TreTrungMatchIntro() {
               </div>
             )}
 
-
           </div>
         </div>
 
-        {/* Sponsors - Top left */}
-        {hasSponsors && (
-          <div className="absolute top-1 sm:top-2 md:top-4 left-1 sm:left-2 md:left-4 z-30">
-            <div className="text-xs font-bold text-green-400 mb-1 drop-shadow-lg">
-              Nhà tài trợ
-            </div>
-            <div className="flex gap-1 flex-wrap" style={{maxWidth: '20vw'}}>
-              {sponsorLogos.map((sponsor, index) => (
-                <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", sponsor.typeDisplay)} style={{width: '4vw', height: '4vw', minWidth: '24px', minHeight: '24px', maxWidth: '40px', maxHeight: '40px'}}>
-                  <img
-                    src={sponsor.logo}
-                    alt={sponsor.name}
-                    className="max-h-full max-w-full object-contain"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Organizing - Top left next to sponsors */}
-        {hasOrganizing && (
-          <div className={`absolute top-1 sm:top-2 md:top-4 z-30`} style={{left: hasSponsors ? '22vw' : '1vw'}}>
-            <div className="text-xs font-bold text-blue-400 mb-1 drop-shadow-lg">
-              Đơn vị tổ chức
-            </div>
-            <div className="flex gap-1 flex-wrap" style={{maxWidth: '20vw'}}>
-              {organizingLogos.map((organizing, index) => (
-                <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", organizing.typeDisplay)} style={{width: '4vw', height: '4vw', minWidth: '24px', minHeight: '24px', maxWidth: '40px', maxHeight: '40px'}}>
-                  <img
-                    src={organizing.logo}
-                    alt={organizing.name}
-                    className="max-h-full max-w-full object-contain"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Media Partners - Top right corner */}
-        {hasMediaPartners && (
-          <div className="absolute top-1 sm:top-2 md:top-4 right-1 sm:right-2 md:right-4 z-30">
-            <div className="text-xs font-bold text-purple-400 mb-1 drop-shadow-lg text-right">
-              Đơn vị truyền thông
-            </div>
-            <div className="flex gap-1 flex-wrap justify-end" style={{maxWidth: '20vw'}}>
-              {mediaPartnerLogos.map((media, index) => (
-                <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", media.typeDisplay)} style={{width: '4vw', height: '4vw', minWidth: '24px', minHeight: '24px', maxWidth: '40px', maxHeight: '40px'}}>
-                  <img
-                    src={media.logo}
-                    alt={media.name}
-                    className="max-h-full max-w-full object-contain"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Live Unit - Top right corner (adjust position if media partners exist) */}
-        {matchData.liveUnit && (
-          <div className={`absolute z-30`} style={{top: hasMediaPartners ? '8vh' : '1vh', right: '1vw'}}>
-            <div className="bg-red-600 text-white px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2">
-              <div className="w-1 h-1 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
-              <img
-                src={matchData.liveUnit}
-                alt="Live Unit"
-                className="h-3 sm:h-4 md:h-5 object-contain"
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Marquee - Hidden by default, will show when socket updates */}
         {marquee.isRunning && marquee.text && (
           <div className="absolute bottom-0 left-0 w-full h-8 sm:h-12 bg-gradient-to-r from-green-900 via-emerald-900 to-green-900 border-t-2 border-green-400 overflow-hidden">
             <div className="absolute inset-0 bg-black/50"></div>
@@ -353,7 +334,6 @@ export default function TreTrungMatchIntro() {
           </div>
         )}
 
-        {/* Bouncing Leaves Effect */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {[...Array(12)].map((_, i) => (
             <div
@@ -371,7 +351,6 @@ export default function TreTrungMatchIntro() {
           ))}
         </div>
 
-        {/* CSS Animations */}
         <style jsx>{`
           @keyframes marquee {
             0% { transform: translateX(100%) translateY(-50%); }
