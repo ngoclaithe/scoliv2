@@ -582,7 +582,7 @@ const ScoreboardAbove = ({
                 {collectLogosForPosition('top-left').length === 0 && tournamentLogo?.url_logo && tournamentLogo.url_logo.length > 0 && (
                     <div className="absolute top-4 left-4 z-40 corner-logo top-left">
                         <DisplayLogo
-                            logos={tournamentLogo.url_logo}
+                            logos={getFullLogoUrls(tournamentLogo.url_logo)}
                             alt="Tournament"
                             className="w-16 h-16"
                             type_play={logoShape}
