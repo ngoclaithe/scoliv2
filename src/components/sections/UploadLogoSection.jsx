@@ -4,6 +4,7 @@ import Input from "../common/Input";
 import { useAuth } from "../../contexts/AuthContext";
 import LogoAPI from "../../API/apiLogo";
 import { toast } from "react-toastify";
+import { getFullLogoUrl } from "../../utils/logoUtils";
 
 const UploadLogoSection = () => {
   const { isAuthenticated } = useAuth();
