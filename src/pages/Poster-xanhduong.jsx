@@ -190,19 +190,63 @@ export default function XanhDuongMatchIntro() {
               </div>
             )}
 
-            {/* Partners - Hidden by default, will show when socket updates */}
-            {hasPartners && (
-              <div className="text-center mt-3 sm:mt-4">
-                <h3 className="text-blue-400 text-sm sm:text-base md:text-lg font-bold mb-2 sm:mb-3 uppercase tracking-wide">
-                  🤝 Đơn vị đồng hành
+            {/* Sponsors Section */}
+            {matchData.showSponsors && matchData.sponsors.length > 0 && (
+              <div className="text-center mt-2 sm:mt-3">
+                <h3 className="text-yellow-400 text-xs sm:text-sm md:text-base font-bold mb-1 sm:mb-2 uppercase tracking-wide">
+                  💰 Nhà tài trợ
                 </h3>
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg sm:rounded-2xl p-2 sm:p-4 border border-white/30 mx-4 sm:mx-8">
-                  <div className="flex flex-wrap gap-2 sm:gap-3 justify-center">
-                    {allPartners.map((partner, index) => (
-                      <div key={index} className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 flex justify-center items-center bg-white rounded-full p-1 shadow-lg">
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/30 mx-4 sm:mx-8">
+                  <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
+                    {matchData.sponsors.map((sponsor, index) => (
+                      <div key={index} className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex justify-center items-center bg-white rounded-full p-0.5 shadow-lg">
                         <img
-                          src={partner.logo}
-                          alt={partner.name}
+                          src={sponsor}
+                          alt={`Sponsor ${index + 1}`}
+                          className="max-h-full max-w-full object-contain rounded-full"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Organizing Section */}
+            {matchData.showOrganizing && matchData.organizing.length > 0 && (
+              <div className="text-center mt-2 sm:mt-3">
+                <h3 className="text-blue-400 text-xs sm:text-sm md:text-base font-bold mb-1 sm:mb-2 uppercase tracking-wide">
+                  🤝 Đơn vị tổ chức
+                </h3>
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/30 mx-4 sm:mx-8">
+                  <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
+                    {matchData.organizing.map((organizing, index) => (
+                      <div key={index} className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex justify-center items-center bg-white rounded-full p-0.5 shadow-lg">
+                        <img
+                          src={organizing}
+                          alt={`Organizing ${index + 1}`}
+                          className="max-h-full max-w-full object-contain rounded-full"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Media Partners Section */}
+            {matchData.showMediaPartners && matchData.mediaPartners.length > 0 && (
+              <div className="text-center mt-2 sm:mt-3">
+                <h3 className="text-purple-400 text-xs sm:text-sm md:text-base font-bold mb-1 sm:mb-2 uppercase tracking-wide">
+                  📺 Đơn vị truyền thông
+                </h3>
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/30 mx-4 sm:mx-8">
+                  <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">
+                    {matchData.mediaPartners.map((media, index) => (
+                      <div key={index} className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 flex justify-center items-center bg-white rounded-full p-0.5 shadow-lg">
+                        <img
+                          src={media}
+                          alt={`Media ${index + 1}`}
                           className="max-h-full max-w-full object-contain rounded-full"
                         />
                       </div>
