@@ -317,8 +317,8 @@ const MatchManagementSection = ({ isActive = true }) => {
   return (
     <div className="sm:p-0 space-y-0 sm:space-y-0">
       {/* Scoreboard */}
-      <div className="sm:p-0 shadow-xl h-auto">
-        <div className="w-full h-16 sm:h-24 bg-gray-100 rounded-lg overflow-hidden relative">
+      <div className="sm:p-0 p-2 shadow-md h-auto">
+        <div className="w-full h-12 sm:h-16 bg-gray-100 rounded-md overflow-hidden relative">
           <ScoreboardPreview
             matchData={matchData}
             displaySettings={displaySettings}
@@ -326,14 +326,15 @@ const MatchManagementSection = ({ isActive = true }) => {
         </div>
       </div>
 
+
       {/* Score Controls */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
-        {/* Hiển thị thời gian trận đấu khi đang diễn ra */}
-        <MatchTimeDisplay
+
+        {/* <MatchTimeDisplay
           matchTime={matchData.matchTime}
           period={matchData.period}
           status={matchData.status}
-        />
+        /> */}
 
         <div className="grid grid-cols-2 gap-2 sm:gap-4">
           {/* Đội A */}
@@ -385,8 +386,8 @@ const MatchManagementSection = ({ isActive = true }) => {
           </div>
         </div>
 
-        {/* Nút TẠM DỪNG, NGHỈ GIỮA HI��P và THÔNG TIN */}
-        <div className="flex justify-center items-center mt-2 space-x-2">
+{/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
+<div className="flex justify-center items-center mt-2 space-x-2">
           {/* Audio Pause/Play Button */}
           <Button
             variant="primary"
@@ -419,12 +420,6 @@ const MatchManagementSection = ({ isActive = true }) => {
             <span className="mr-1">
               {isPlaying ? "🔊⏸️" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "🔊" : "🔇"}
             </span>
-            {/* <span className="hidden sm:inline">
-              {isPlaying ? "PAUSE" : isPaused && currentAudioFile ? "RESUME" : audioEnabled ? "AUDIO" : "OFF"}
-            </span> */}
-            {/* <span className="sm:hidden">
-              {isPlaying ? "🔊⏸️" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "ON" : "OFF"}
-            </span> */}
           </Button>
 
           <Button
@@ -450,20 +445,25 @@ const MatchManagementSection = ({ isActive = true }) => {
           <Button
             variant="primary"
             size="sm"
-            className="px-2 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+            className={`px-2 py-1 ${
+              showMatchInfo 
+                ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700" 
+                : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+            } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => setShowMatchInfo(!showMatchInfo)}
           >
-            {/* <span className="mr-1">Info</span> */}
+            <span className={`mr-1 inline-block transform transition-transform duration-300 ${
+              showMatchInfo ? 'rotate-0' : 'rotate-180'
+            }`}>
+              ▼
+            </span>
             <span className="hidden sm:inline">THÔNG TIN</span>
             <span className="sm:hidden">INFO</span>
           </Button>
-
-
         </div>
-      </div>
 
       {showMatchInfo && (
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 border border-blue-200 space-y-2">
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg space-y-2 animate-in slide-in-from-top-3 duration-300 mt-1">
           {/* Tên trận đấu & Đơn vị live - 1 hàng */}
           <div className="grid grid-cols-2 gap-1">
             <input
@@ -644,7 +644,6 @@ const MatchManagementSection = ({ isActive = true }) => {
                   logoTeamB: teamBInfo.logo || matchData.teamB.logo || ""
                 });
 
-
                 toast.success('✅ Đã cập nhật thông tin trận đấu và màu áo thành công!');
               }}
               className="px-3 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-xs rounded shadow transform hover:scale-105 transition-all duration-200"
@@ -654,7 +653,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           </div>
         </div>
       )}
-
+    </div>
       {/* Tab Controls */}
       <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200">
         <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
