@@ -111,6 +111,16 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
   }, [matchData.startTime, matchData.stadium, matchData.matchDate]);
 
+  // Sync match title and live unit when context data changes
+  useEffect(() => {
+    if (matchData.matchTitle !== undefined) {
+      setMatchTitle(matchData.matchTitle);
+    }
+    if (matchData.liveUnit !== undefined) {
+      setLiveUnit(matchData.liveUnit);
+    }
+  }, [matchData.matchTitle, matchData.liveUnit]);
+
 
   const playAudioForAction = (audioType) => {
     if (!isActive || !audioEnabled) {
@@ -403,7 +413,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           </div>
         </div>
 
-{/* Nút T��M DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
+{/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
 <div className="flex justify-center items-center mt-2 space-x-2">
           {/* Audio Pause/Play Button */}
           <Button
@@ -435,7 +445,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             }
           >
             <span className="mr-1">
-              {isPlaying ? "🔊⏸️" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "🔊" : "🔇"}
+              {isPlaying ? "���⏸️" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "🔊" : "🔇"}
             </span>
           </Button>
 
