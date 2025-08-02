@@ -124,7 +124,7 @@ export default function TreTrungMatchIntro() {
       case 'square':
         return `${baseClass} rounded-lg`;
       case 'hexagon':
-        return `${baseClass} rounded-full`; // Tạm thời dùng rounded-full
+        return `${baseClass} rounded-full`; 
       case 'circle':
       default:
         return `${baseClass} rounded-full`;
