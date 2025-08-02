@@ -122,7 +122,7 @@ const ScoreboardAbove = ({
                     : 'square'; // default vuông
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
-                    allLogos.push({ url: logo, alt: 'Sponsor', type: 'sponsor', typeDisplay });
+                    allLogos.push({ url: getFullLogoUrl(logo), alt: 'Sponsor', type: 'sponsor', typeDisplay });
                 }
             });
         }
