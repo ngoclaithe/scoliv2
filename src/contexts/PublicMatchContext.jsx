@@ -13,7 +13,6 @@ export const usePublicMatch = () => {
 };
 
 export const PublicMatchProvider = ({ children }) => {
-  // State cho thông tin trận đấu
   const [matchData, setMatchData] = useState({
     teamA: {
       name: "ĐỘI-A",
@@ -32,11 +31,10 @@ export const PublicMatchProvider = ({ children }) => {
     stadium: "",
     matchDate: "",
     liveText: "",
-    teamAKitColor: "#FF0000", // Default team A kit color
-    teamBKitColor: "#0000FF"  // Default team B kit color
+    teamAKitColor: "#FF0000",
+    teamBKitColor: "#0000FF"
   });
 
-  // State cho thống kê trận đấu
   const [matchStats, setMatchStats] = useState({
     possession: { team1: 50, team2: 50 },
     totalShots: { team1: 0, team2: 0 },
@@ -46,7 +44,6 @@ export const PublicMatchProvider = ({ children }) => {
     fouls: { team1: 0, team2: 0 },
   });
 
-  // State cho penalty
   const [penaltyData, setPenaltyData] = useState({
     teamAGoals: 0,
     teamBGoals: 0,
@@ -56,7 +53,6 @@ export const PublicMatchProvider = ({ children }) => {
     lastUpdated: null
   });
 
-  // State cho chữ chạy
   const [marqueeData, setMarqueeData] = useState({
     text: '',
     mode: 'none',
@@ -65,31 +61,27 @@ export const PublicMatchProvider = ({ children }) => {
     fontSize: 16
   });
 
-  // State cho template và poster
   const [displaySettings, setDisplaySettings] = useState({
     selectedSkin: 1,
     selectedPoster: 'tretrung',
     showStats: false,
     showPenalty: false,
     showLineup: false,
-    logoShape: 'round', // 'round', 'square', 'hexagon'
-    rotateDisplay: false, // thêm rotateDisplay
+    logoShape: 'round',
+    rotateDisplay: false,
     showTournamentLogo: true,
     showSponsors: true,
     showOrganizing: true,
     showMediaPartners: true
   });
 
-  // State cho view hiện tại trên route dynamic
-  const [currentView, setCurrentView] = useState('poster'); // poster, intro, halftime, scoreboard
+  const [currentView, setCurrentView] = useState('poster');
 
-  // State cho danh sách cầu thủ
   const [lineupData, setLineupData] = useState({
     teamA: [],
     teamB: []
   });
 
-  // State cho nhà tài trợ
   const [sponsors, setSponsors] = useState({
     sponsors: {
       code_logo: [],
@@ -120,7 +112,6 @@ export const PublicMatchProvider = ({ children }) => {
 
   });
 
-  // State cho đơn vị live/sản xuất
   const [liveUnit, setLiveUnit] = useState({
     code_logo: [],
     url_logo: [],
@@ -128,7 +119,6 @@ export const PublicMatchProvider = ({ children }) => {
     position: 'top-right'
   });
 
-  // State cho cài đặt hiển thị poster
   const [posterSettings, setPosterSettings] = useState({
     showTimer: true,
     showDate: true,
@@ -139,25 +129,20 @@ export const PublicMatchProvider = ({ children }) => {
     accentColor: '#3b82f6'
   });
 
-  // State cho socket connection
   const [socketConnected, setSocketConnected] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
   const [currentAccessCode, setCurrentAccessCode] = useState(null);
 
-  // Simple update time function - không cần debounce nữa
   const updateLastTime = useCallback(() => {
     setLastUpdateTime(Date.now());
   }, []);
 
-  // Thiết lập các listener cho socket
   const setupSocketListeners = useCallback(() => {
-    // Lắng nghe cập nhật thông tin trận đấu
     socketService.on('match_info_updated', (data) => {
       setMatchData(prev => ({ ...prev, ...data.matchInfo }));
       updateLastTime();
     });
 
-    // Lắng nghe cập nhật tỉ số
     socketService.on('score_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
@@ -167,19 +152,16 @@ export const PublicMatchProvider = ({ children }) => {
       updateLastTime();
     });
 
-    // Lắng nghe cập nhật thống kê
     socketService.on('match_stats_updated', (data) => {
       setMatchStats(prev => ({ ...prev, ...data.stats }));
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật template
     socketService.on('template_updated', (data) => {
       setDisplaySettings(prev => ({ ...prev, selectedSkin: data.templateId }));
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật poster
     socketService.on('poster_updated', (data) => {
       setDisplaySettings(prev => {
         const newSettings = { ...prev, selectedPoster: data.posterType };
@@ -188,7 +170,6 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật logo đội
     socketService.on('team_logos_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
@@ -198,7 +179,6 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật tên đội
     socketService.on('team_names_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
@@ -208,13 +188,11 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật chữ chạy
     socketService.on('marquee_updated', (data) => {
       setMarqueeData(prev => ({ ...prev, ...data.marqueeData }));
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật thời gian
     socketService.on('match_time_updated', (data) => {
       setMatchData(prev => ({
         ...prev,
@@ -225,7 +203,6 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe timer tick real-time từ backend
     socketService.on('timer_tick', (data) => {
       setMatchData(prev => ({
         ...prev,
@@ -234,7 +211,6 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe timer started
     socketService.on('timer_started', (data) => {
       setMatchData(prev => ({
         ...prev,
@@ -244,7 +220,6 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe timer paused
     socketService.on('timer_paused', (data) => {
       setMatchData(prev => ({
         ...prev,
@@ -253,7 +228,6 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe timer resumed
     socketService.on('timer_resumed', (data) => {
       setMatchData(prev => ({
         ...prev,
@@ -262,7 +236,6 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe timer reset
     socketService.on('timer_reset', (data) => {
       setMatchData(prev => ({
         ...prev,
@@ -272,13 +245,11 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật penalty
     socketService.on('penalty_updated', (data) => {
       setPenaltyData(prev => ({ ...prev, ...data.penaltyData }));
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật danh sách
     socketService.on('lineup_updated', (data) => {
       setLineupData({
         teamA: data.lineupData.teamA || [],
@@ -287,13 +258,12 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật nhà tài trợ
     socketService.on('sponsors_updated', (data) => {
       console.log('📝 [PublicMatchContext] sponsors_updated received:', data);
     
       setSponsors(prev => {
         const newSponsors = { ...prev };
-        const behavior = data.behavior; // add | update | remove
+        const behavior = data.behavior;
         const d = data.sponsors;
     
         if (!d || !Array.isArray(d.code_logo)) return prev;
@@ -351,108 +321,178 @@ export const PublicMatchProvider = ({ children }) => {
     
       setLastUpdateTime(Date.now());
     });
-    
 
-    // Lắng nghe cập nhật đơn vị truyền thông
-    socketService.on('media_partners_updated', (data) => {
-      // console.log('📝 [PublicMatchContext] media_partners_updated received:', data);
-      setMediaPartners(prev => ({
-        ...prev,
-        ...data,
-        // Append vào arrays thay vì replace
-        url_logo: data.url_logo ?
-          [...(prev.url_logo || []), ...data.url_logo] :
-          (prev.url_logo || []),
-        code_logo: data.code_logo ?
-          [...(prev.code_logo || []), ...data.code_logo] :
-          (prev.code_logo || []),
-        position: data.position ?
-          [...(prev.position || []), ...data.position] :
-          (prev.position || []),
-        type_display: data.type_display ?
-          [...(prev.type_display || []), ...data.type_display] :
-          (prev.type_display || [])
-      }));
+    socketService.on('organizing_updated', (data) => {
+      console.log('📝 [PublicMatchContext] organizing_updated received:', data);
+    
+      setOrganizing(prev => {
+        const behavior = data.behavior;
+        const d = data.organizing;
+    
+        if (!d || !Array.isArray(d.code_logo)) return prev;
+    
+        const current = prev || {
+          url_logo: [],
+          code_logo: [],
+          position: [],
+          type_display: [],
+        };
+    
+        let updatedOrganizing = {
+          url_logo: [...current.url_logo],
+          code_logo: [...current.code_logo],
+          position: [...current.position],
+          type_display: [...current.type_display],
+        };
+    
+        d.code_logo.forEach((code, i) => {
+          const index = updatedOrganizing.code_logo.findIndex(c => c === code);
+          const newUrl = d.url_logo?.[i];
+          const newPos = d.position?.[i];
+          const newType = d.type_display?.[i];
+    
+          if (behavior === 'add') {
+            if (index === -1) {
+              updatedOrganizing.code_logo.push(code);
+              updatedOrganizing.url_logo.push(newUrl || '');
+              updatedOrganizing.position.push(newPos || []);
+              updatedOrganizing.type_display.push(newType || '');
+            }
+          }
+    
+          if (behavior === 'update') {
+            if (index !== -1) {
+              if (newPos !== undefined) updatedOrganizing.position[index] = newPos;
+              if (newUrl !== undefined) updatedOrganizing.url_logo[index] = newUrl;
+              if (newType !== undefined) updatedOrganizing.type_display[index] = newType;
+            }
+          }
+    
+          if (behavior === 'remove') {
+            if (index !== -1) {
+              updatedOrganizing.code_logo.splice(index, 1);
+              updatedOrganizing.url_logo.splice(index, 1);
+              updatedOrganizing.position.splice(index, 1);
+              updatedOrganizing.type_display.splice(index, 1);
+            }
+          }
+        });
+    
+        return updatedOrganizing;
+      });
+    
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật logo giải đấu
+    socketService.on('media_partners_updated', (data) => {
+      console.log('📝 [PublicMatchContext] media_partners_updated received:', data);
+    
+      setMediaPartners(prev => {
+        const behavior = data.behavior;
+        const d = data.mediaPartners;
+    
+        if (!d || !Array.isArray(d.code_logo)) return prev;
+    
+        const current = prev || {
+          url_logo: [],
+          code_logo: [],
+          position: [],
+          type_display: [],
+        };
+    
+        let updatedMediaPartners = {
+          url_logo: [...current.url_logo],
+          code_logo: [...current.code_logo],
+          position: [...current.position],
+          type_display: [...current.type_display],
+        };
+    
+        d.code_logo.forEach((code, i) => {
+          const index = updatedMediaPartners.code_logo.findIndex(c => c === code);
+          const newUrl = d.url_logo?.[i];
+          const newPos = d.position?.[i];
+          const newType = d.type_display?.[i];
+    
+          if (behavior === 'add') {
+            if (index === -1) {
+              updatedMediaPartners.code_logo.push(code);
+              updatedMediaPartners.url_logo.push(newUrl || '');
+              updatedMediaPartners.position.push(newPos || []);
+              updatedMediaPartners.type_display.push(newType || '');
+            }
+          }
+    
+          if (behavior === 'update') {
+            if (index !== -1) {
+              if (newPos !== undefined) updatedMediaPartners.position[index] = newPos;
+              if (newUrl !== undefined) updatedMediaPartners.url_logo[index] = newUrl;
+              if (newType !== undefined) updatedMediaPartners.type_display[index] = newType;
+            }
+          }
+    
+          if (behavior === 'remove') {
+            if (index !== -1) {
+              updatedMediaPartners.code_logo.splice(index, 1);
+              updatedMediaPartners.url_logo.splice(index, 1);
+              updatedMediaPartners.position.splice(index, 1);
+              updatedMediaPartners.type_display.splice(index, 1);
+            }
+          }
+        });
+    
+        return updatedMediaPartners;
+      });
+    
+      setLastUpdateTime(Date.now());
+    });
+
     socketService.on('tournament_logo_updated', (data) => {
       setTournamentLogo(prev => ({ ...prev, ...data.tournamentLogo }));
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật đơn vị live
     socketService.on('live_unit_updated', (data) => {
       setLiveUnit(prev => ({ ...prev, ...data.liveUnit }));
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật cài đặt poster
     socketService.on('poster_settings_updated', (data) => {
       setPosterSettings(prev => ({ ...prev, ...data.posterSettings }));
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật display settings
     socketService.on('display_settings_updated', (data) => {
-      // console.log('📝 [PublicMatchContext] display_settings_updated received:', data);
       setDisplaySettings(prev => ({ ...prev, ...data }));
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật view hiện tại (MỚI) - KHÔNG update time để tránh re-render
     socketService.on('view_updated', (data) => {
       setCurrentView(data.viewType);
-      // console.log('[Audio] View updated to:', data.viewType);
     });
 
-    // Lắng nghe audio control events - để nhận referee voice từ CommentarySection
     socketService.on('audio_control', (data) => {
-      console.log('🎙️ [PublicMatchContext] Received audio_control:', data);
-    
       if (data.target === 'display' && data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
         const { audioData, mimeType } = data.payload;
         try {
-          // ✅ FIXED: Support both ArrayBuffer and Array
           let isValidData = false;
           let audioBlob = null;
     
           if (audioData instanceof ArrayBuffer && audioData.byteLength > 0) {
-            // Handle ArrayBuffer (new format)
-            console.log('🎙️ Processing ArrayBuffer, size:', audioData.byteLength, 'bytes, mimeType:', mimeType);
             audioBlob = new Blob([audioData], { type: mimeType || 'audio/webm' });
             isValidData = true;
           } else if (Array.isArray(audioData) && audioData.length > 0) {
-            // Handle Array (legacy format)
-            console.log('🎙️ Processing Array, size:', audioData.length, 'bytes, mimeType:', mimeType);
             const uint8Array = new Uint8Array(audioData);
             audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
             isValidData = true;
           } else {
-            console.error('❌ Invalid audio data type or empty:', {
-              type: typeof audioData,
-              isArrayBuffer: audioData instanceof ArrayBuffer,
-              isArray: Array.isArray(audioData),
-              size: audioData?.byteLength || audioData?.length || 'unknown'
-            });
             return;
           }
     
-          // Validate the created blob
           if (!audioBlob || audioBlob.size === 0) {
-            console.error('❌ Created blob is empty or invalid');
             return;
           }
     
-          console.log('✅ Created audio blob successfully:', {
-            blobSize: audioBlob.size,
-            mimeType: audioBlob.type
-          });
-    
-          // Play the audio - pass both blob and mimeType
           audioUtils.playRefereeVoice(audioBlob, mimeType);
-          console.log('✅ [PublicMatchContext] Playing referee voice successfully');
     
         } catch (error) {
           console.error('❌ Error processing referee voice in PublicMatchContext:', {
@@ -464,7 +504,7 @@ export const PublicMatchProvider = ({ children }) => {
         }
       }
     });
-    // Lắng nghe trạng thái kết nối
+
     socketService.on('disconnect', () => {
       setSocketConnected(false);
     });
@@ -474,23 +514,18 @@ export const PublicMatchProvider = ({ children }) => {
     });
   }, [updateLastTime]);
 
-  // Khởi tạo socket connection cho public route
   const initializeSocket = useCallback(async (accessCode) => {
     try {
-      // Tránh khởi tạo socket trùng lặp
       if (currentAccessCode === accessCode && socketConnected) {
         return;
       }
 
-      // Public route luôn sử dụng clientType 'display'
       await socketService.connect(accessCode, 'display');
       setSocketConnected(true);
       setCurrentAccessCode(accessCode);
       
-      // Lắng nghe các event từ server
       setupSocketListeners();
     } catch (error) {
-      console.error('Failed to initialize public socket:', error);
       setSocketConnected(false);
     }
   }, [currentAccessCode, socketConnected, setupSocketListeners]);
@@ -502,7 +537,6 @@ export const PublicMatchProvider = ({ children }) => {
   }, []);
 
   const value = {
-    // State
     matchData,
     matchStats,
     penaltyData,
@@ -520,11 +554,9 @@ export const PublicMatchProvider = ({ children }) => {
     liveUnit: liveUnit || { code_logo: [], url_logo: [], name: 'LIVE STREAMING', position: 'top-right' },
     posterSettings: posterSettings || { showTimer: true, showDate: true, showStadium: true, showLiveIndicator: true, backgroundOpacity: 0.8, textColor: '#ffffff', accentColor: '#3b82f6' },
 
-    // Actions
     initializeSocket,
     disconnectSocket,
 
-    // Setters for new states
     setLiveUnit,
     setPosterSettings,
     setDisplaySettings
