@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
+import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
 
 export default function TreTrungMatchIntro() {
   const {
