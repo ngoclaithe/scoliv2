@@ -373,7 +373,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         />
 
         <div className="grid grid-cols-2 gap-2 sm:gap-4">
-          {/* Đội A */}
+          {/* Đ���i A */}
           <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-blue-200">
             <div className="flex space-x-1">
               <Button
@@ -505,7 +505,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             className="px-2 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
             onClick={() => setShowMatchInfo(!showMatchInfo)}
           >
-            <span className="mr-1">���️</span>
+            <span className="mr-1">ℹ️</span>
             <span className="hidden sm:inline">THÔNG TIN</span>
             <span className="sm:hidden">INFO</span>
           </Button>
@@ -1124,11 +1124,8 @@ const MatchManagementSection = ({ isActive = true }) => {
             {/* Nghỉ giữa hiệp */}
             <button
               onClick={() => {
-                console.log('Chuyển sang nghỉ giữa hiệp');
-                console.log('Current view before update:', matchData.status);
                 updateView('halftime');
                 playAudioForAction('poster');
-                console.log('Updated view to halftime');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
