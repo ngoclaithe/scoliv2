@@ -79,14 +79,16 @@ const DisplayLogo = ({
 
     if (logos.length === 1 || typeof logos === 'string') {
         const logoSrc = typeof logos === 'string' ? logos : logos[0];
+        const fullLogoUrl = getFullLogoUrl(logoSrc);
+
         return (
             <div className={`relative ${className}`}>
-                <div 
+                <div
                     className={`${shapeStyles.containerClass} p-1`}
                     style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
                 >
                     <img
-                        src={logoSrc}
+                        src={fullLogoUrl || `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${alt.charAt(0)}</text></svg>`}
                         alt={alt}
                         className={shapeStyles.imageClass}
                         style={{
