@@ -18,6 +18,7 @@ const ScoreboardAbove = ({
     } = usePublicMatch();
     
     const [currentType, setCurrentType] = useState(type);
+    console.log("Giá trị organizing là:", organizing);
 
     const currentData = {
         teamAName: matchData?.teamA?.name || "ĐỘI A",
