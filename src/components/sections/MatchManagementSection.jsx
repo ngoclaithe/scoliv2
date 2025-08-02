@@ -13,6 +13,7 @@ import audioUtils from '../../utils/audioUtils';
 import LogoAPI from '../../API/apiLogo';
 import MatchTimeDisplay from './MatchTimeDisplay';
 import ScoreboardPreview from './ScoreboardPreview';
+import { getFullLogoUrl } from '../../utils/logoUtils';
 
 const MatchManagementSection = ({ isActive = true }) => {
   // Sử dụng MatchContext thay vì state local
