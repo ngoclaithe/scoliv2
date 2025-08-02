@@ -270,9 +270,60 @@ export default function VangKimMatchIntro() {
           </div>
         </div>
 
-        {/* Live Unit - Top right corner */}
+        {/* Sponsors - Top left */}
+        {hasSponsors && (
+          <div className="absolute top-4 left-4 z-30">
+            <div className="flex gap-2 flex-wrap max-w-48">
+              {sponsorLogos.map((sponsor, index) => (
+                <div key={index} className={getPartnerLogoShapeClass("w-8 h-8 sm:w-10 sm:h-10 flex justify-center items-center bg-white p-1 shadow-lg", sponsor.typeDisplay)}>
+                  <img
+                    src={sponsor.logo}
+                    alt={sponsor.name}
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Organizing - Top left next to sponsors */}
+        {hasOrganizing && (
+          <div className="absolute top-4 left-52 z-30">
+            <div className="flex gap-2 flex-wrap max-w-48">
+              {organizingLogos.map((organizing, index) => (
+                <div key={index} className={getPartnerLogoShapeClass("w-8 h-8 sm:w-10 sm:h-10 flex justify-center items-center bg-white p-1 shadow-lg", organizing.typeDisplay)}>
+                  <img
+                    src={organizing.logo}
+                    alt={organizing.name}
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Media Partners - Top right corner */}
+        {hasMediaPartners && (
+          <div className="absolute top-4 right-4 z-30">
+            <div className="flex gap-2 flex-wrap max-w-48 justify-end">
+              {mediaPartnerLogos.map((media, index) => (
+                <div key={index} className={getPartnerLogoShapeClass("w-8 h-8 sm:w-10 sm:h-10 flex justify-center items-center bg-white p-1 shadow-lg", media.typeDisplay)}>
+                  <img
+                    src={media.logo}
+                    alt={media.name}
+                    className="max-h-full max-w-full object-contain"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Live Unit - Top right corner (adjust position if media partners exist) */}
         {matchData.liveUnit && (
-          <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
+          <div className={`absolute top-4 z-30 ${hasMediaPartners ? 'right-4 mt-14' : 'right-4'}`}>
             <div className="bg-red-600 text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2">
               <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
               <img
