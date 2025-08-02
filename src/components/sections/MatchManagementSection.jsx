@@ -156,7 +156,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
   }, [isActive, isPlaying]);
 
-  // State cho chế độ ch���nh sửa th��ng kê
+  // State cho chế độ ch���nh sửa thống kê
   const [isEditingStats, setIsEditingStats] = useState(false);
 
   // Skin data configuration
@@ -495,7 +495,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             className="px-2 py-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
             onClick={() => setShowMatchInfo(!showMatchInfo)}
           >
-            <span className="mr-1">ℹ️</span>
+            <span className="mr-1">ℹ���</span>
             <span className="hidden sm:inline">THÔNG TIN</span>
             <span className="sm:hidden">INFO</span>
           </Button>
@@ -1089,13 +1089,13 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
             </button>
 
-            {/* Tỉ số dứ��i */}
+            {/* Tỉ số dưới */}
             <button
               onClick={() => {
                 updateView('scoreboard_below');
                 playAudioForAction('rasan');
               }}
-              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">📊</span>
               <span className="text-xs font-bold text-center">TỈ SỐ DƯỚI</span>
@@ -1266,7 +1266,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 className={`px-2 py-1 text-xs font-medium rounded border-2 bg-red-600 text-white ${tickerColor === "white-red" ? "border-orange-600" : "border-gray-300"
                   }`}
               >
-                Ch���
+                Ch����
               </button>
               <button
                 onClick={() => setTickerColor("white-green")}
@@ -1616,7 +1616,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
                   toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                 } else {
-                  toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
+                  toast.warning('⚠️ Vui lòng nhập thời gian h���p lệ!');
                 }
                 setShowTimerModal(false);
               }}
