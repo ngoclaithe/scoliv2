@@ -7,7 +7,7 @@ const PublicMatchContext = createContext();
 export const usePublicMatch = () => {
   const context = useContext(PublicMatchContext);
   if (!context) {
-    throw new Error('usePublicMatch phải được sử dụng trong PublicMatchProvider');
+    throw new Error('usePublicMatch phải đư��c sử dụng trong PublicMatchProvider');
   }
   return context;
 };
@@ -335,13 +335,13 @@ export const PublicMatchProvider = ({ children }) => {
     
         if (!d || !Array.isArray(d.code_logo)) return prev;
     
-        const current = prev || {
+        const current = prev.organizing || {
           url_logo: [],
           code_logo: [],
           position: [],
           type_display: [],
         };
-    
+
         let updatedOrganizing = {
           url_logo: [...current.url_logo],
           code_logo: [...current.code_logo],
@@ -382,7 +382,7 @@ export const PublicMatchProvider = ({ children }) => {
           }
         });
     
-        return updatedOrganizing;
+        return { organizing: updatedOrganizing };
       });
     
       setLastUpdateTime(Date.now());
@@ -397,13 +397,13 @@ export const PublicMatchProvider = ({ children }) => {
     
         if (!d || !Array.isArray(d.code_logo)) return prev;
     
-        const current = prev || {
+        const current = prev.mediaPartners || {
           url_logo: [],
           code_logo: [],
           position: [],
           type_display: [],
         };
-    
+
         let updatedMediaPartners = {
           url_logo: [...current.url_logo],
           code_logo: [...current.code_logo],
@@ -444,7 +444,7 @@ export const PublicMatchProvider = ({ children }) => {
           }
         });
     
-        return updatedMediaPartners;
+        return { mediaPartners: updatedMediaPartners };
       });
     
       setLastUpdateTime(Date.now());
