@@ -290,7 +290,7 @@ const UploadLogoSection = () => {
             
             {/* Nút mở ảnh trong tab mới */}
             <button
-              onClick={() => window.open(logo.url_logo, '_blank')}
+              onClick={() => window.open(getFullLogoUrl(logo.url_logo) || logo.url_logo, '_blank')}
               className="w-full px-3 py-2 bg-gray-500 text-white text-sm rounded hover:bg-gray-600 transition-colors font-medium"
             >
               🔗 Xem ảnh gốc
