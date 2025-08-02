@@ -256,7 +256,7 @@ const UploadLogoSection = () => {
           <div className="flex justify-center mb-3">
             <div className="w-20 h-20 rounded border-2 border-green-400 overflow-hidden bg-gray-50 shadow-md">
               <img
-                src={logo.url_logo}
+                src={getFullLogoUrl(logo.url_logo) || logo.url_logo}
                 alt={logo.code_logo}
                 className="w-full h-full object-contain"
               />
