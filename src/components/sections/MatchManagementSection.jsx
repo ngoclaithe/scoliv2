@@ -703,8 +703,8 @@ const MatchManagementSection = ({ isActive = true }) => {
           <button
             onClick={() => setSelectedOption("thong-so")}
             className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "thong-so"
-              ? "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-xl"
-              : "bg-gradient-to-r from-green-100 to-green-200 text-green-700 hover:from-green-200 hover:to-green-300"
+              ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
+              : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
               }`}
           >
             <span className="mr-0.5 text-xs">📊</span>
