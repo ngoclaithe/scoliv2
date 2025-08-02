@@ -98,9 +98,11 @@ export default function TreTrungMatchIntro() {
     }
   };
 
-  const hasPartners = allPartners.length > 0;
+  const hasSponsors = sponsorLogos.length > 0;
+  const hasOrganizing = organizingLogos.length > 0;
+  const hasMediaPartners = mediaPartnerLogos.length > 0;
 
-  // Helper function để lấy class cho logo shape
+  // Helper function để lấy class cho logo shape (cho team logos)
   const getLogoShapeClass = (baseClass) => {
     switch (matchData.logoShape) {
       case 'square':
@@ -109,6 +111,20 @@ export default function TreTrungMatchIntro() {
         return `${baseClass} rounded-full`; // Tạm thời dùng rounded-full
       case 'shield':
         return `${baseClass} rounded-lg`;
+      case 'circle':
+      default:
+        return `${baseClass} rounded-full`;
+    }
+  };
+
+  // Helper function để lấy class cho individual partner logo shapes
+  const getPartnerLogoShapeClass = (baseClass, typeDisplay) => {
+    const shape = getLogoShape(typeDisplay);
+    switch (shape) {
+      case 'square':
+        return `${baseClass} rounded-lg`;
+      case 'hexagon':
+        return `${baseClass} rounded-full`; // Tạm thời dùng rounded-full
       case 'circle':
       default:
         return `${baseClass} rounded-full`;
