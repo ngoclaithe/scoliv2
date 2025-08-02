@@ -232,7 +232,7 @@ export default function MatchIntroduction() {
             {matchData.showOrganizing && matchData.organizing.length > 0 && (
               <div className="text-center mt-2 sm:mt-3">
                 <h3 className="text-blue-400 text-xs sm:text-sm md:text-base font-bold mb-1 sm:mb-2 uppercase tracking-wide">
-                  �� Đơn vị tổ chức
+                  Đơn vị tổ chức
                 </h3>
                 <div className="bg-white/10 backdrop-blur-sm rounded-lg p-2 sm:p-3 border border-white/30 mx-4 sm:mx-8">
                   <div className="flex flex-wrap gap-1 sm:gap-2 justify-center">

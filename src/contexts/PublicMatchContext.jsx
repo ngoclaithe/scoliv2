@@ -7,7 +7,7 @@ const PublicMatchContext = createContext();
 export const usePublicMatch = () => {
   const context = useContext(PublicMatchContext);
   if (!context) {
-    throw new Error('usePublicMatch phải đư��c sử dụng trong PublicMatchProvider');
+    throw new Error('usePublicMatch phải được sử dụng trong PublicMatchProvider');
   }
   return context;
 };
