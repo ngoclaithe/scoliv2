@@ -1180,11 +1180,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                     const timeString = `${minutes.toString().padStart(2, '0')}:00`;
                     updateMatchTime(timeString, "Hiệp 1", "live");
                     updateView('scoreboard');
-                    setSelectedOption("ti-so-tren");
-                    // Phát audio gialap cho đếm giờ
                     playAudioForAction('gialap');
-                    console.log('🕰️ Đã áp dụng thời gian tùy chỉnh:', timeString);
-
                     toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                   } else {
                     toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
