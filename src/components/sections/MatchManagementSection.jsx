@@ -1047,7 +1047,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 updateView('scoreboard');
                 playAudioForAction('gialap');
-                toast.success('⏰ Đã b���t đầu timer từ 35:00!');
+                toast.success('⏰ Đã bắt đầu timer từ 35:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -1074,7 +1074,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             <button
               onClick={() => {
                 const timeString = "45:00";
-                updateMatchTime(timeString, "Hiệp 1", "live");
+                updateMatchTime(timeString, "Hi���p 1", "live");
                 updateView('scoreboard');
                 playAudioForAction('gialap');
                 toast.success('⏰ Đã bắt đầu timer từ 45:00!');
@@ -1101,9 +1101,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             <button
               onClick={() => {
                 updateView('scoreboard');
-                setSelectedOption("ti-so-tren");
                 playAudioForAction('gialap');
-                console.log('Chuyển sang scoreboard trên');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
