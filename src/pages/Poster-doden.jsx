@@ -133,12 +133,12 @@ export default function DodenMatchIntro() {
 
         {/* Tournament Logo - Top Left Corner */}
         {hasTournamentLogo && (
-          <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-20">
-            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-1 sm:p-2 border border-white/30">
+          <div className="absolute top-1 sm:top-2 md:top-4 left-1 sm:left-2 md:left-4 z-20">
+            <div className="bg-white/20 backdrop-blur-sm rounded-lg p-0.5 sm:p-1 md:p-2 border border-white/30">
               <img
                 src={matchData.tournamentLogo}
                 alt="Tournament Logo"
-                className={`w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 object-contain ${getLogoShapeClass(matchData.tournamentLogo, matchData.logoShape)}`}
+                className={`w-6 h-6 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 object-contain ${getLogoShapeClass(matchData.tournamentLogo, matchData.logoShape)}`}
               />
             </div>
           </div>
@@ -146,12 +146,12 @@ export default function DodenMatchIntro() {
 
         {/* Live Unit - Top Right Corner */}
         {hasLiveUnit && (
-          <div className="absolute top-2 sm:top-4 right-2 sm:right-4 z-20">
-            <div className="bg-red-600/90 backdrop-blur-sm rounded-lg p-1 sm:p-2 border border-white/30">
+          <div className="absolute top-1 sm:top-2 md:top-4 right-1 sm:right-2 md:right-4 z-20">
+            <div className="bg-red-600/90 backdrop-blur-sm rounded-lg p-0.5 sm:p-1 md:p-2 border border-white/30">
               <img
                 src={matchData.liveUnit}
                 alt="Live Unit"
-                className={`w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 object-contain ${getLogoShapeClass(matchData.liveUnit, matchData.logoShape)}`}
+                className={`w-6 h-6 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-16 lg:h-16 object-contain ${getLogoShapeClass(matchData.liveUnit, matchData.logoShape)}`}
               />
             </div>
           </div>
