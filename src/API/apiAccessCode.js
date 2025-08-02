@@ -65,6 +65,7 @@ const AccessCodeAPI = {
         matchId: codeData.matchId,
         expiresAt: codeData.expiresAt,
         maxUses: codeData.maxUses || 1,
+        typeMatch: codeData.typeMatch || 'soccer',
         metadata: codeData.metadata || {}
       });
       return response.data;
