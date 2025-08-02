@@ -243,7 +243,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateStats(newStats);
   };
 
-  // Hàm cập nhật kiểm soát bóng (đảm bảo tổng = 100%)
+  // Hàm cập nhật kiểm soát bóng (��ảm bảo tổng = 100%)
   const updatePossession = (team, value) => {
     const newValue = Math.max(0, Math.min(100, parseInt(value) || 0));
     const otherTeam = team === 'team1' ? 'team2' : 'team1';
@@ -766,7 +766,6 @@ const MatchManagementSection = ({ isActive = true }) => {
                 key={skinNumber}
                 onClick={() => {
                   updateTemplate(skinNumber);
-                  console.log('Template selected:', skinNumber);
                 }}
                 className={`relative cursor-pointer border-2 rounded-lg overflow-hidden transition-all duration-200 hover:shadow-lg transform hover:scale-105 ${displaySettings.selectedSkin === skinNumber
                   ? "border-blue-500 ring-2 ring-blue-200"
@@ -1651,7 +1650,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                   setSelectedOption("ti-so-tren");
 
                   console.log('🕰�� Áp dụng thời gian tùy chỉnh từ modal - Timer sẽ đếm từ:', timeString);
-                  console.log('���� Server sẽ emit timer_tick events với displayTime format từ:', timeString);
+                  console.log('���� Server s�� emit timer_tick events với displayTime format từ:', timeString);
 
                   toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                 } else {
