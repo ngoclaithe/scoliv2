@@ -157,14 +157,6 @@ const MatchManagementSection = ({ isActive = true }) => {
   }, [isActive, isPlaying]);
   const [isEditingStats, setIsEditingStats] = useState(false);
 
-  const skinData = {
-    1: { name: "Template 1", image: "/images/templates/skin1.png" },
-    2: { name: "Template 2", image: "/images/templates/skin2.png" },
-    3: { name: "Template 3", image: "/images/templates/skin3.png" },
-    4: { name: "Template 4", image: "/images/templates/skin4.png" },
-    5: { name: "Template 5", image: "/images/templates/skin5.png" }
-  };
-
   const [showPosterModal, setShowPosterModal] = useState(false);
   const [showLineupModal, setShowLineupModal] = useState(false);
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
@@ -452,7 +444,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           >
             <span className="mr-1">{matchData.status === "paused" ? "▶️" : "⏸️"}</span>
             <span className="hidden sm:inline">{matchData.status === "paused" ? "TIẾP TỤC" : "TẠM DỪNG"}</span>
-            <span className="sm:hidden">{matchData.status === "paused" ? "TI��P" : "DỪNG"}</span>
+            <span className="sm:hidden">{matchData.status === "paused" ? "TIẾP" : "DỪNG"}</span>
           </Button>
 
           <Button
@@ -811,7 +803,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 onUpdate={(team, value) => updateStat('yellowCards', team, value)}
               />
 
-              {/* Ph���m lỗi */}
+              {/* Phạm lỗi */}
               <EditableStatBar
                 label="Phạm lỗi"
                 statKey="fouls"
@@ -1128,7 +1120,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                     playAudioForAction('gialap');
                     toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                   } else {
-                    toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
+                    toast.warning('⚠️ Vui lòng nhập thời gian h��p lệ!');
                   }
                 }}
                 disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
