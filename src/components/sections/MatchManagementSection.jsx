@@ -799,7 +799,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
             {/* Stats Display */}
             <div className="space-y-3">
-              {/* Kiểm soát bóng */}
+              {/* Ki��m soát bóng */}
               <EditableStatBar
                 label="Kiểm soát bóng"
                 statKey="possession"
@@ -1044,7 +1044,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 playAudioForAction('gialap');
                 toast.success('⏰ Đã bắt đầu timer từ 40:00!');
               }}
-              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">🕓</span>
               <span className="text-xs font-bold text-center">ĐẾM 40'</span>
