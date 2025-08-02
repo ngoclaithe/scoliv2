@@ -1631,10 +1631,6 @@ const MatchManagementSection = ({ isActive = true }) => {
 
                   // Chuyển sang tỉ số trên
                   updateView('scoreboard');
-                  setSelectedOption("ti-so-tren");
-
-                  console.log('🕰�� Áp dụng thời gian tùy chỉnh từ modal - Timer sẽ đếm từ:', timeString);
-                  console.log('���� Server sẽ emit timer_tick events với displayTime format từ:', timeString);
 
                   toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                 } else {
