@@ -199,6 +199,7 @@ export const PublicMatchProvider = ({ children }) => {
     });
 
     socketService.on('match_title_updated', (data) => {
+      console.log('match_title_updated là:', data);
       setMatchData(prev => ({ ...prev, matchTitle: data.matchTitle }));
       setLastUpdateTime(Date.now());
     });

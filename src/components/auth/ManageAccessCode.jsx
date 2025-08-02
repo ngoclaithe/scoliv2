@@ -251,7 +251,7 @@ const ManageAccessCode = ({ onNavigate }) => {
     }
   };
 
-  // Xử lý nhanh v��o trận với code cụ thể
+  // Xử lý nhanh vào trận với code cụ thể
   const handleQuickEnter = async (code) => {
     const result = await enterMatchCode(code);
     if (result.success) {

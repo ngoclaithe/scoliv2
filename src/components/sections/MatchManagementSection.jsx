@@ -241,7 +241,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateStats(newStats);
   };
 
-  // Hàm cập nhật kiểm soát bóng (đ���m bảo tổng = 100%)
+  // Hàm cập nhật kiểm soát bóng (đảm bảo tổng = 100%)
   const updatePossession = (team, value) => {
     const newValue = Math.max(0, Math.min(100, parseInt(value) || 0));
     const otherTeam = team === 'team1' ? 'team2' : 'team1';
@@ -445,7 +445,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             }
           >
             <span className="mr-1">
-              {isPlaying ? "���⏸️" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "🔊" : "🔇"}
+              {isPlaying ? "🔊⏸️" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "🔊" : "🔇"}
             </span>
           </Button>
 
@@ -1060,7 +1060,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
             </button>
 
-            {/* Tỉ s�� dưới */}
+            {/* Tỉ số dưới */}
             <button
               onClick={() => {
                 updateView('scoreboard_below');
@@ -1134,7 +1134,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                     playAudioForAction('gialap');
                     toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                   } else {
-                    toast.warning('⚠️ Vui lòng nhập thời gian h��p lệ!');
+                    toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
                   }
                 }}
                 disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
@@ -1520,7 +1520,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ b��t đầu chạy từ thời điểm này
+              Trận đấu sẽ bắt đầu chạy từ thời điểm này
             </p>
           </div>
 

@@ -16,7 +16,7 @@ export default function TreTrungMatchIntro() {
   } = usePublicMatch();
 
   const matchData = {
-    matchTitle: contextMatchData.tournament || 'GIẢI BÓNG ĐÁ TRẺ TRUNG',
+    matchTitle: contextMatchData.matchTitle || 'GIẢI BÓNG ĐÁ TRẺ TRUNG',
     team1: contextMatchData.teamA.name || 'TEAM ALPHA',
     team2: contextMatchData.teamB.name || 'TEAM BETA',
     logo1: getFullLogoUrl(contextMatchData.teamA.logo) || '/images/background-poster/default_logoA.png',
