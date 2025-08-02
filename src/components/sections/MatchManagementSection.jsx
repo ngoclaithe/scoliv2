@@ -619,27 +619,15 @@ const MatchManagementSection = ({ isActive = true }) => {
                   teamAInfo.logo || matchData.teamA.logo || "",
                   teamBInfo.logo || matchData.teamB.logo || ""
                 );
+                updateMatchTitle(matchTitle);
                 updateMatchInfo({
-                  startTime: matchInfo.startTime,
-                  stadium: matchInfo.location,
-                  matchDate: matchInfo.matchDate || new Date().toISOString().split('T')[0],
-                  title: matchTitle,
-                  time: matchInfo.startTime
-                });
-                // Emit team kit colors via socket
-                const teamColorsData = {
-                  teamAKitColor: teamAInfo.shirtColor || '#ff0000',
-                  teamBKitColor: teamBInfo.shirtColor || '#000000'
-                };
-
-                // Update team kit colors in MatchContext with logo URLs
-                updateMatchInfo({
-                  ...teamColorsData,
                   startTime: matchInfo.startTime,
                   stadium: matchInfo.location,
                   matchDate: matchInfo.matchDate || new Date().toISOString().split('T')[0],
                   title: matchTitle,
                   time: matchInfo.startTime,
+                  teamAKitColor: teamAInfo.shirtColor || '#ff0000',
+                  teamBKitColor: teamBInfo.shirtColor || '#000000',
                   liveUnit: liveUnit,
                   logoTeamA: teamAInfo.logo || matchData.teamA.logo || "",
                   logoTeamB: teamBInfo.logo || matchData.teamB.logo || ""
