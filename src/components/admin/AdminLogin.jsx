@@ -137,14 +137,13 @@ const AdminLogin = ({ onLogin }) => {
             </Button>
           </div>
 
-          {/* Demo credentials info */}
-          <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+          {/* <div className="mt-6 p-4 bg-blue-50 rounded-lg">
             <h4 className="text-sm font-medium text-blue-800 mb-2">Demo Credentials:</h4>
             <div className="text-sm text-blue-700 space-y-1">
               <p><strong>Email:</strong> admin@demo.com</p>
               <p><strong>Password:</strong> admin123</p>
             </div>
-          </div>
+          </div> */}
         </form>
       </div>
     </div>
