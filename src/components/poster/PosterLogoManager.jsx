@@ -211,7 +211,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
                     code: item.code_logo || `TOUR${item.id}`,
                     type: item.type_display || 'logo',
                     category: 'tournament',
-                    url: item.url_logo,
+                    url: getFullLogoUrl(item.url_logo),
                     displayPositions: positions
                   });
                 });
@@ -504,7 +504,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
 
         <div className="text-center">
           <div className="text-xs font-bold text-green-600 mb-1">
-            {item.type === 'banner' ? '����️' : '📁'}
+            {item.type === 'banner' ? '🖼️' : '📁'}
           </div>
 
           {/* Logo preview */}
@@ -568,7 +568,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
             <div className="grid grid-cols-3 gap-1">
               {[
                 { key: 'top-left', icon: '↖️', title: 'Trên trái' },
-                { key: 'bottom-left', icon: '↙️', title: 'D��ới trái' },
+                { key: 'bottom-left', icon: '↙️', title: 'Dưới trái' },
                 { key: 'bottom-right', icon: '↘️', title: 'Dưới phải' }
               ].map((pos) => (
                 <button
