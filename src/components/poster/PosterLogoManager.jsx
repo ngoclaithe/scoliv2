@@ -159,7 +159,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
                     code: item.code_logo || `ORG${item.id}`,
                     type: item.type_display || 'logo',
                     category: 'organizing',
-                    url: item.url_logo,
+                    url: getFullLogoUrl(item.url_logo),
                     displayPositions: positions
                   });
                 });
