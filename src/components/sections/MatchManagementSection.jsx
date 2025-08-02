@@ -220,11 +220,9 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
   };
 
-  // Memoized callback to prevent infinite loops
   const handlePenaltyChange = useCallback((newPenaltyData) => {
     updatePenalty(newPenaltyData);
     updateView('penalty_scoreboard');
-    setSelectedOption("penalty");
   }, [updatePenalty, updateView]);
 
   const handleScoreChange = (team, increment) => {
