@@ -197,7 +197,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       const response = await LogoAPI.searchLogosByCode(logoCodeB.trim(), true);
       if (response.success && response.data && response.data.length > 0) {
         const logo = response.data[0];
-        setTeamBInfo(prev => ({ ...prev, logo: logo.url_logo }));
+        setTeamBInfo(prev => ({ ...prev, logo: getFullLogoUrl(logo.url_logo) }));
         setLogoCodeB("");
       } else {
         toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeB}"`);
@@ -1046,7 +1046,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
             </button>
 
-            {/* Tỉ số dưới */}
+            {/* Tỉ s�� dưới */}
             <button
               onClick={() => {
                 updateView('scoreboard_below');
