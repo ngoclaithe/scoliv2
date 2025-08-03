@@ -5,8 +5,11 @@ import Modal from '../common/Modal';
 import Loading from '../common/Loading';
 import { useAuth } from '../../contexts/AuthContext';
 import AccessCodeAPI from '../../API/apiAccessCode';
+import PaymentAccessCodeAPI from '../../API/apiPaymentAccessCode';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
+import { QRCodeCanvas } from 'qrcode.react';
+import { VietQR } from 'vietqr';
 
 const ManageAccessCode = ({ onNavigate }) => {
   const { user, logout, enterMatchCode, loading: authLoading } = useAuth();
@@ -24,6 +27,9 @@ const ManageAccessCode = ({ onNavigate }) => {
   });
   const [selectedCode, setSelectedCode] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentData, setPaymentData] = useState(null);
+  const [paymentLoading, setPaymentLoading] = useState(false);
 
   // Load danh sách codes
   const loadCodes = useCallback(async (page = 1, status = '') => {
@@ -206,6 +212,78 @@ const ManageAccessCode = ({ onNavigate }) => {
       case 'expired': return '🔴 Hết hạn';
       case 'inactive': return '⚪ Tạm dừng';
       default: return '❓ Không xác định';
+    }
+  };
+
+  // Xử lý mua mã access code
+  const handlePurchaseCode = async (accessCode) => {
+    try {
+      setPaymentLoading(true);
+
+      const paymentRequest = {
+        accessCode: accessCode,
+        bankAccountNumber: "1468651509999",
+        bankName: "MBBANK",
+        amount: "10000",
+        transactionNote: `Mua ma truy cap ${accessCode}`
+      };
+
+      const response = await PaymentAccessCodeAPI.createPaymentRequest(paymentRequest);
+
+      if (response.success) {
+        setPaymentData(response.data);
+        setShowPaymentModal(true);
+        toast.success('Tạo yêu cầu thanh toán thành công!', {
+          position: "top-left",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        });
+      } else {
+        throw new Error(response?.message || 'Không thể tạo yêu cầu thanh toán');
+      }
+    } catch (error) {
+      toast.error('Có lỗi xảy ra khi tạo thanh toán: ' + (error.message || 'Vui lòng thử lại sau'), {
+        position: "top-left",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      console.error('Lỗi khi tạo thanh toán:', error);
+    } finally {
+      setPaymentLoading(false);
+    }
+  };
+
+  // Tạo QR code URL
+  const generateQRData = (paymentInfo) => {
+    if (!paymentInfo) return '';
+
+    try {
+      const vietQR = new VietQR({
+        clientID: '', // Use empty for public endpoint
+        apiKey: ''    // Use empty for public endpoint
+      });
+
+      const amount = parseFloat(paymentInfo.amount);
+      const memo = `Thanh toan ma ${paymentInfo.accessCode} - Ma GD: ${paymentInfo.code_pay}`;
+
+      return vietQR.genQRCodeUrl({
+        bank: paymentInfo.bankName,
+        accountNumber: paymentInfo.bankAccountNumber,
+        amount: amount,
+        memo: memo
+      });
+    } catch (error) {
+      console.error('Lỗi tạo VietQR:', error);
+      // Fallback: tạo URL thủ công
+      const amount = parseFloat(paymentInfo.amount);
+      const memo = encodeURIComponent(`Thanh toan ma ${paymentInfo.accessCode} - Ma GD: ${paymentInfo.code_pay}`);
+      return `https://img.vietqr.io/image/${paymentInfo.bankName}-${paymentInfo.bankAccountNumber}-compact2.png?amount=${amount}&addInfo=${memo}`;
     }
   };
 
@@ -432,6 +510,17 @@ const ManageAccessCode = ({ onNavigate }) => {
                               🚀 Vào trận
                             </button>
                           )}
+                          {/* Purchase Button for inactive codes */}
+                          {code.status === 'inactive' && (
+                            <button
+                              onClick={() => handlePurchaseCode(code.code)}
+                              disabled={paymentLoading}
+                              className="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-2 py-1 rounded text-xs transition-colors disabled:opacity-50"
+                              title="Mua mã truy cập này"
+                            >
+                              💳 Mua
+                            </button>
+                          )}
                           <button
                             onClick={() => {
                               setSelectedCode(code);
@@ -625,6 +714,134 @@ const ManageAccessCode = ({ onNavigate }) => {
             </Button>
           </div>
         </form>
+      </Modal>
+
+      {/* Payment Modal */}
+      <Modal
+        isOpen={showPaymentModal}
+        onClose={() => {
+          setShowPaymentModal(false);
+          setPaymentData(null);
+        }}
+        title="Thanh toán mã truy cập"
+        size="lg"
+      >
+        {paymentData && (
+          <div className="space-y-6">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span className="text-2xl">💳</span>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Thanh toán cho mã: {paymentData.accessCode}
+              </h3>
+              <p className="text-sm text-gray-600">
+                Mã giao dịch: <span className="font-mono font-bold">{paymentData.code_pay}</span>
+              </p>
+            </div>
+
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* QR Code */}
+                <div className="text-center">
+                  <h4 className="font-semibold text-gray-900 mb-3">Quét mã QR để thanh toán</h4>
+                  <div className="bg-white p-4 rounded-lg inline-block shadow-sm">
+                    <QRCodeCanvas
+                      value={generateQRData(paymentData)}
+                      size={200}
+                      level="M"
+                      includeMargin={true}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Quét bằng app ngân hàng hoặc ví điện tử
+                  </p>
+                </div>
+
+                {/* Payment Info */}
+                <div className="space-y-3">
+                  <h4 className="font-semibold text-gray-900 mb-3">Thông tin chuyển khoản</h4>
+
+                  <div className="bg-white p-3 rounded border">
+                    <div className="text-sm text-gray-600">Ngân hàng</div>
+                    <div className="font-semibold">{paymentData.bankName}</div>
+                  </div>
+
+                  <div className="bg-white p-3 rounded border">
+                    <div className="text-sm text-gray-600">Số tài khoản</div>
+                    <div className="font-mono font-semibold">{paymentData.bankAccountNumber}</div>
+                  </div>
+
+                  <div className="bg-white p-3 rounded border">
+                    <div className="text-sm text-gray-600">Số tiền</div>
+                    <div className="font-semibold text-green-600">
+                      {parseInt(paymentData.amount).toLocaleString('vi-VN')} VNĐ
+                    </div>
+                  </div>
+
+                  <div className="bg-white p-3 rounded border">
+                    <div className="text-sm text-gray-600">Nội dung chuyển khoản</div>
+                    <div className="font-mono text-sm break-all">
+                      Thanh toan ma {paymentData.accessCode} - Ma GD: {paymentData.code_pay}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <div className="flex items-start space-x-3">
+                <div className="text-blue-500 mt-0.5">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="text-sm text-blue-800">
+                  <p className="font-semibold mb-1">Lưu ý quan trọng:</p>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li>Vui lòng chuyển khoản đúng số tiền và nội dung</li>
+                    <li>Mã truy cập sẽ được kích hoạt sau khi thanh toán thành công</li>
+                    <li>Thời gian xử lý: 1-5 phút sau khi chuyển khoản</li>
+                    <li>Nếu có vấn đề, vui lòng liên hệ hỗ trợ với mã giao dịch: {paymentData.code_pay}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-center space-x-3">
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setShowPaymentModal(false);
+                  setPaymentData(null);
+                }}
+              >
+                Đóng
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  // Copy payment info to clipboard
+                  const paymentInfo = `Ngân hàng: ${paymentData.bankName}\nSố TK: ${paymentData.bankAccountNumber}\nSố tiền: ${parseInt(paymentData.amount).toLocaleString('vi-VN')} VNĐ\nNội dung: Thanh toan ma ${paymentData.accessCode} - Ma GD: ${paymentData.code_pay}`;
+                  navigator.clipboard.writeText(paymentInfo).then(() => {
+                    toast.success('Đã sao chép thông tin thanh toán!', {
+                      position: "top-left",
+                      autoClose: 2000,
+                    });
+                  }).catch(() => {
+                    toast.error('Không thể sao chép. Vui lòng sao chép thủ công.', {
+                      position: "top-left",
+                      autoClose: 3000,
+                    });
+                  });
+                }}
+                className="bg-green-600 hover:bg-green-700"
+              >
+                📋 Sao chép thông tin
+              </Button>
+            </div>
+          </div>
+        )}
       </Modal>
     </div>
   );
