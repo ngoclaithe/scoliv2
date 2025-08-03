@@ -22,61 +22,33 @@ const AdminDashboard = () => {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
-      const mockStats = {
-        totalAccessCodes: 145,
-        totalAccounts: 89,
-        totalCodePurchases: 234,
-        activeRooms: 12,
+      const emptyStats = {
+        totalAccessCodes: 0,
+        totalAccounts: 0,
+        totalCodePurchases: 0,
+        activeRooms: 0,
         trends: {
-          accessCodes: { value: 12, isIncrease: true },
-          accounts: { value: 5, isIncrease: true },
-          codePurchases: { value: -3, isIncrease: false },
-          activeRooms: { value: 2, isIncrease: true }
+          accessCodes: { value: 0, isIncrease: false },
+          accounts: { value: 0, isIncrease: false },
+          codePurchases: { value: 0, isIncrease: false },
+          activeRooms: { value: 0, isIncrease: false }
         },
-        revenueThisMonth: 15420000,
-        revenueLastMonth: 12340000
+        revenueThisMonth: 0,
+        revenueLastMonth: 0
       };
 
-      const mockActivities = [
+      const emptyActivities = [
         {
           id: 1,
-          type: 'code_purchase',
-          description: 'Người dùng john@example.com đã mua 5 code',
-          timestamp: new Date(Date.now() - 2 * 60 * 1000),
-          status: 'success'
-        },
-        {
-          id: 2,
-          type: 'account_created',
-          description: 'Tài khoản mới: mary@example.com',
-          timestamp: new Date(Date.now() - 15 * 60 * 1000),
+          type: 'info',
+          description: 'Chưa có hoạt động nào',
+          timestamp: new Date(),
           status: 'info'
-        },
-        {
-          id: 3,
-          type: 'room_created',
-          description: 'Phòng ABC123 đã được tạo',
-          timestamp: new Date(Date.now() - 30 * 60 * 1000),
-          status: 'info'
-        },
-        {
-          id: 4,
-          type: 'code_expired',
-          description: 'Mã XYZ789 đã hết hạn',
-          timestamp: new Date(Date.now() - 45 * 60 * 1000),
-          status: 'warning'
-        },
-        {
-          id: 5,
-          type: 'payment_failed',
-          description: 'Thanh toán thất bại cho đơn hàng #12345',
-          timestamp: new Date(Date.now() - 60 * 60 * 1000),
-          status: 'error'
         }
       ];
 
-      setStats(mockStats);
-      setRecentActivities(mockActivities);
+      setStats(emptyStats);
+      setRecentActivities(emptyActivities);
     } catch (error) {
       console.error('Error loading dashboard data:', error);
     } finally {
@@ -182,29 +154,33 @@ const AdminDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Welcome section */}
-      <div className="bg-white overflow-hidden shadow rounded-lg">
-        <div className="px-4 py-5 sm:p-6">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Chào mừng đến với Admin Dashboard</h1>
-          <p className="text-gray-600">Quản lý và theo dõi hoạt động của hệ thống</p>
+      <div className="bg-gradient-to-r from-blue-500 to-indigo-600 overflow-hidden shadow-xl rounded-2xl">
+        <div className="px-4 py-8 sm:p-8">
+          <h1 className="text-3xl font-bold text-white mb-3">Chào mừng đến với Admin Dashboard</h1>
+          <p className="text-blue-100 text-lg">Quản lý và theo dõi hoạt động của hệ thống</p>
+          <div className="mt-4 flex items-center text-blue-100">
+            <span className="text-2xl mr-2">📊</span>
+            <span>Trung tâm điều khiển hệ thống</span>
+          </div>
         </div>
       </div>
 
       {/* Stats cards */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {statCards.map((card) => (
-          <div key={card.name} className="bg-white overflow-hidden shadow rounded-lg">
-            <div className="p-5">
+          <div key={card.name} className="bg-white overflow-hidden shadow-lg rounded-xl border border-slate-200 hover:shadow-xl transition-all duration-200">
+            <div className="p-6">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
-                  <div className={`${card.bgColor} p-3 rounded-md`}>
+                  <div className={`${card.bgColor} p-3 rounded-xl shadow-md`}>
                     <card.icon className={`h-6 w-6 ${card.color}`} />
                   </div>
                 </div>
                 <div className="ml-5 w-0 flex-1">
                   <dl>
-                    <dt className="text-sm font-medium text-gray-500 truncate">{card.name}</dt>
+                    <dt className="text-sm font-medium text-slate-600 truncate">{card.name}</dt>
                     <dd className="flex items-baseline">
-                      <div className="text-2xl font-semibold text-gray-900">{card.value}</div>
+                      <div className="text-3xl font-bold text-slate-900">{card.value || 'Chưa có'}</div>
                       {card.trend && (
                         <div className={`ml-2 flex items-baseline text-sm font-semibold ${
                           card.trend.isIncrease ? 'text-green-600' : 'text-red-600'
@@ -230,20 +206,25 @@ const AdminDashboard = () => {
       </div>
 
       {/* Revenue section */}
-      <div className="bg-white overflow-hidden shadow rounded-lg">
-        <div className="px-4 py-5 sm:p-6">
-          <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Doanh thu</h3>
+      <div className="bg-white overflow-hidden shadow-lg rounded-xl border border-slate-200">
+        <div className="px-4 py-6 sm:p-8">
+          <div className="flex items-center mb-6">
+            <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg flex items-center justify-center mr-3">
+              <span className="text-white font-bold text-sm">💰</span>
+            </div>
+            <h3 className="text-xl leading-6 font-bold text-slate-900">Doanh thu</h3>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Tháng này</dt>
-              <dd className="mt-1 text-3xl font-semibold text-gray-900">
-                {formatCurrency(stats?.revenueThisMonth || 0)}
+            <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl">
+              <dt className="text-sm font-medium text-slate-600">Tháng này</dt>
+              <dd className="mt-2 text-3xl font-bold text-green-600">
+                {stats?.revenueThisMonth ? formatCurrency(stats?.revenueThisMonth) : 'Chưa có'}
               </dd>
             </div>
-            <div>
-              <dt className="text-sm font-medium text-gray-500">Tháng trước</dt>
-              <dd className="mt-1 text-3xl font-semibold text-gray-900">
-                {formatCurrency(stats?.revenueLastMonth || 0)}
+            <div className="bg-gradient-to-r from-slate-50 to-gray-50 p-4 rounded-xl">
+              <dt className="text-sm font-medium text-slate-600">Tháng trước</dt>
+              <dd className="mt-2 text-3xl font-bold text-slate-700">
+                {stats?.revenueLastMonth ? formatCurrency(stats?.revenueLastMonth) : 'Chưa có'}
               </dd>
               <div className={`mt-2 flex items-baseline text-sm font-semibold ${
                 (stats?.revenueThisMonth || 0) > (stats?.revenueLastMonth || 0) 
@@ -263,9 +244,14 @@ const AdminDashboard = () => {
       </div>
 
       {/* Recent activities */}
-      <div className="bg-white shadow rounded-lg">
-        <div className="px-4 py-5 sm:p-6">
-          <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">Hoạt động gần đây</h3>
+      <div className="bg-white shadow-lg rounded-xl border border-slate-200">
+        <div className="px-4 py-6 sm:p-8">
+          <div className="flex items-center mb-6">
+            <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-lg flex items-center justify-center mr-3">
+              <span className="text-white font-bold text-sm">🔔</span>
+            </div>
+            <h3 className="text-xl leading-6 font-bold text-slate-900">Hoạt động gần đây</h3>
+          </div>
           <div className="flow-root">
             <ul className="-mb-8">
               {recentActivities.map((activity, activityIdx) => (
@@ -280,9 +266,9 @@ const AdminDashboard = () => {
                       </div>
                       <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                         <div>
-                          <p className="text-sm text-gray-500">{activity.description}</p>
+                          <p className="text-sm text-slate-700 font-medium">{activity.description}</p>
                         </div>
-                        <div className="text-right text-sm whitespace-nowrap text-gray-500">
+                        <div className="text-right text-sm whitespace-nowrap text-slate-500 font-medium">
                           {formatRelativeTime(activity.timestamp)}
                         </div>
                       </div>

@@ -40,8 +40,16 @@ const InfoPaymentAPI = {
       throw InfoPaymentAPI.handleError(error);
     }
   },
-  updateInfoPayment: async (id, updateData) => {
+  createInfoPayment: async (paymentData) => {
+    try {
+      const response = await api.post('/info-payments', paymentData);
+      return response.data;
+    } catch (error) {
+      throw InfoPaymentAPI.handleError(error);
+    }
+  },
 
+  updateInfoPayment: async (id, updateData) => {
     try {
       const response = await api.put(`/info-payments/${id}`, updateData);
       return response.data;
