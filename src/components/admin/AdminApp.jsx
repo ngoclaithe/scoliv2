@@ -26,15 +26,7 @@ const AdminApp = () => {
       
       // Check if admin token exists
       if (adminAPI.isAuthenticated()) {
-        // For demo purposes, we'll use a mock admin
-        const mockAdmin = {
-          id: 'admin-1',
-          name: 'Admin Demo',
-          email: 'admin@demo.com',
-          role: 'admin'
-        };
-        
-        setAdminInfo(mockAdmin);
+        setAdminInfo(null);
         setIsAuthenticated(true);
       }
     } catch (error) {
@@ -48,17 +40,11 @@ const AdminApp = () => {
   const handleLogin = async (credentials) => {
     try {
       setLoading(true);
-      const mockAdmin = {
-        id: 'admin-1',
-        name: 'Admin Demo',
-        email: 'admin@demo.com',
-        role: 'admin'
-      };
-      
-      // Set fake token
-      localStorage.setItem('admin_token', 'fake-admin-token');
-      
-      setAdminInfo(mockAdmin);
+
+      // Set token
+      localStorage.setItem('admin_token', 'admin-token');
+
+      setAdminInfo(null);
       setIsAuthenticated(true);
       setCurrentPage('dashboard');
     } catch (error) {
