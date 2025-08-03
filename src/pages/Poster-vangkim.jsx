@@ -280,9 +280,9 @@ export default function VangKimMatchIntro() {
             {/* Date & Stadium */}
             <div className="text-center">
               <div className="inline-block bg-black/50 backdrop-blur-sm rounded-xl border border-white/30" style={{ padding: 'clamp(4px, 0.5vw, 10px) clamp(8px, 1.5vw, 30px)' }}>
-                <div className="flex flex-col sm:flex-row items-center justify-center" style={{ gap: 'clamp(4px, 1vw, 20px)' }}>
+                <div className="flex flex-col sm:flex-row items-center justify-center" style={{ gap: 'clamp(2px, 1vw, 20px)' }}>
                   {(matchData.showTimer || matchData.showDate) && (
-                    <span className="font-semibold text-white whitespace-nowrap" style={{ fontSize: 'clamp(10px, 1vw, 20px)' }}>
+                    <span className="font-semibold text-white whitespace-nowrap" style={{ fontSize: 'clamp(8px, 1vw, 20px)' }}>
                       {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
                     </span>
                   )}
@@ -290,7 +290,7 @@ export default function VangKimMatchIntro() {
                     <div className="bg-white/50 hidden sm:block" style={{ width: '1px', height: 'clamp(12px, 1.5vw, 30px)' }}></div>
                   )}
                   {matchData.showStadium && matchData.stadium && (
-                    <span className="font-semibold text-white flex items-center" style={{ fontSize: 'clamp(10px, 1vw, 20px)' }}>
+                    <span className="font-semibold text-white flex items-center" style={{ fontSize: 'clamp(8px, 1vw, 20px)' }}>
                       📍 {matchData.stadium}
                     </span>
                   )}
