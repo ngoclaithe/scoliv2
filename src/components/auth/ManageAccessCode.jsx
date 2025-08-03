@@ -55,7 +55,7 @@ const ManageAccessCode = ({ onNavigate }) => {
       setCreateLoading(true);
       
       const response = await AccessCodeAPI.createCode({ typeMatch });
-      
+      console.log("Giá trị của reponse sau khi tạo code là:", response.data);
       if (response && response.data) {
         // Cập nhật danh sách mã sau khi tạo thành công
         setCodes(prev => [response.data, ...prev]);
