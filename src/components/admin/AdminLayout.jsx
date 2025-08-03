@@ -146,7 +146,7 @@ const AdminLayout = ({ children, currentPage, onNavigate, onLogout, adminInfo })
                     </span>
                   </div>
                   <span className="sr-only">Your profile</span>
-                  <span>{adminInfo?.name || 'Admin'}</span>
+                  <span>{adminInfo?.name || 'Chưa có tên'}</span>
                   <button
                     onClick={onLogout}
                     className="ml-auto text-gray-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-colors"
