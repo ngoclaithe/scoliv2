@@ -178,7 +178,7 @@ const ScoreboardAbove = ({
             }
         };
 
-        if (displaySettings?.rotateDisplay && allLogos.length > 1) {
+        if ((displaySettings?.displaySettings?.rotateDisplay || displaySettings?.rotateDisplay) && allLogos.length > 1) {
             // Slide mode - luân phiên hiển thị 3 logo 1 lần
             return (
                 <DisplayLogo
