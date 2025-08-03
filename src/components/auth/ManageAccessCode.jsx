@@ -6,6 +6,7 @@ import Loading from '../common/Loading';
 import { useAuth } from '../../contexts/AuthContext';
 import AccessCodeAPI from '../../API/apiAccessCode';
 import PaymentAccessCodeAPI from '../../API/apiPaymentAccessCode';
+import InfoPaymentAPI from '../../API/apiInfoPayment';
 import { PlusIcon } from '@heroicons/react/24/outline';
 
 const ManageAccessCode = ({ onNavigate }) => {
@@ -27,6 +28,7 @@ const ManageAccessCode = ({ onNavigate }) => {
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [paymentData, setPaymentData] = useState(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
+  const [paymentInfo, setPaymentInfo] = useState(null);
 
   // Load danh sách codes
   const loadCodes = useCallback(async (page = 1, status = '') => {
@@ -78,7 +80,20 @@ const ManageAccessCode = ({ onNavigate }) => {
 
   useEffect(() => {
     loadCodes();
+    loadPaymentInfo();
   }, []);
+
+  const loadPaymentInfo = async () => {
+    try {
+      const response = await InfoPaymentAPI.getInfoPayment();
+      if (response && response.data && response.data.length > 0) {
+        const activePaymentInfo = response.data.find(info => info.isActive) || response.data[0];
+        setPaymentInfo(activePaymentInfo);
+      }
+    } catch (error) {
+      setPaymentInfo(null);
+    }
+  };
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleString('vi-VN');
@@ -122,10 +137,14 @@ const ManageAccessCode = ({ onNavigate }) => {
     try {
       setPaymentLoading(true);
 
+      if (!paymentInfo) {
+        throw new Error('Chưa có thông tin thanh toán. Vui lòng liên hệ admin.');
+      }
+
       const paymentRequest = {
         accessCode: accessCode,
-        bankAccountNumber: "1468651509999",
-        bankName: "MBBANK",
+        bankAccountNumber: paymentInfo.bankAccountNumber,
+        bankName: paymentInfo.bankName,
         amount: "10000",
         transactionNote: `Mua ma truy cap ${accessCode}`
       };
@@ -599,6 +618,13 @@ const ManageAccessCode = ({ onNavigate }) => {
                     <div className="text-sm text-gray-600">Số tài khoản</div>
                     <div className="font-mono font-semibold">{paymentData.bankAccountNumber}</div>
                   </div>
+
+                  {paymentInfo?.accountHolderName && (
+                    <div className="bg-white p-3 rounded border">
+                      <div className="text-sm text-gray-600">Chủ tài khoản</div>
+                      <div className="font-semibold">{paymentInfo.accountHolderName}</div>
+                    </div>
+                  )}
 
                   <div className="bg-white p-3 rounded border">
                     <div className="text-sm text-gray-600">Số tiền</div>
