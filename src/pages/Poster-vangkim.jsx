@@ -44,7 +44,7 @@ export default function VangKimMatchIntro() {
     showLiveIndicator: posterSettings?.showLiveIndicator !== false,
     accentColor: posterSettings?.accentColor || '#f59e0b'
   };
-  console.log("Giá trị của tournament_logo là:", matchData.tournamentLogo);
+  console.log("Giá trị của tournament_logos là:", matchData.tournamentLogos);
   const getLogoShape = (typeDisplay) => {
     switch (typeDisplay) {
       case 'round': return 'circle';
