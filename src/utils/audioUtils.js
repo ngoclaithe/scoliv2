@@ -24,7 +24,7 @@ class AudioManager {
 
     this.setupUserInteractionListeners();
     
-    console.log('🎵 AudioManager initialized with supported formats:', this.supportedFormats);
+    // console.log('🎵 AudioManager initialized with supported formats:', this.supportedFormats);
   }
 
   detectSupportedFormats() {
@@ -39,7 +39,7 @@ class AudioManager {
       mpeg: audio.canPlayType('audio/mpeg')
     };
 
-    console.log('🔍 Browser audio format support:', formats);
+    // console.log('🔍 Browser audio format support:', formats);
     return formats;
   }
 
@@ -315,7 +315,7 @@ class AudioManager {
     this.stopRegularAudio();
 
     try {
-      console.log('🎵 Creating new audio element:', audioFile);
+      // console.log('🎵 Creating new audio element:', audioFile);
       const audio = new Audio(audioFile);
       this.audioRef = audio;
       audio.volume = this.isMuted ? 0 : this.volume;
@@ -334,7 +334,7 @@ class AudioManager {
       if (playPromise) {
         playPromise
           .then(() => {
-            console.log('✅ Audio started playing successfully');
+            // console.log('✅ Audio started playing successfully');
           })
           .catch((error) => {
             console.error('❌ Failed to play audio:', error);

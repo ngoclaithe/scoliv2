@@ -579,32 +579,26 @@ export const MatchProvider = ({ children }) => {
 
   // Cập nhật display settings
   const updateDisplaySettings = useCallback((newDisplaySettings) => {
-    console.log('[MatchContext] updateDisplaySettings called:', newDisplaySettings, 'socketConnected:', socketConnected);
-
-    // Cập nhật local state
+    // console.log('[MatchContext] updateDisplaySettings called:', newDisplaySettings, 'socketConnected:', socketConnected);
     setDisplaySettings(prev => ({ ...prev, ...newDisplaySettings }));
-
     if (socketConnected) {
       socketService.updateDisplaySettings(newDisplaySettings);
     }
   }, [socketConnected]);
 
-  // Cập nhật thời gian trận đấu - Sử dụng server timer
   const updateMatchTime = useCallback((matchTime, period, status) => {
-    // Cập nhật local state trước khi gửi đến server
     setMatchData(prev => ({ ...prev, matchTime, period, status }));
 
     if (socketConnected) {
-      // Sử dụng server timer events thay vì match_time_update
       if (status === "live") {
         socketService.startServerTimer(matchTime, period, "live");
         // console.log('▶️ [MatchContext] Started server timer:', { matchTime, period, status: "live" });
       } else if (status === "paused") {
         socketService.pauseServerTimer();
-        console.log('⏸️ [MatchContext] Paused server timer');
+        // console.log('⏸️ [MatchContext] Paused server timer');
       } else if (status === "waiting") {
         socketService.resetServerTimer(matchTime, period, "waiting");
-        console.log('🔄 [MatchContext] Reset server timer:', { matchTime, period, status: "waiting" });
+        // console.log('🔄 [MatchContext] Reset server timer:', { matchTime, period, status: "waiting" });
       }
     }
   }, [socketConnected]);

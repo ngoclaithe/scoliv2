@@ -17,7 +17,7 @@ const ScoreboardAbove = ({
         mediaPartners,
         tournamentLogo
     } = usePublicMatch();
-    
+    console.log("Giá trị display Setting là:", displaySettings);
     const [currentType, setCurrentType] = useState(type);
     console.log("Giá trị organizing là:", organizing);
     console.log("Giá trị sponsors là:", sponsors);
