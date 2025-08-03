@@ -53,17 +53,33 @@ const CodePurchaseManagement = () => {
         params.status = statusFilter;
       }
 
-      // For search, we might need to implement search in backend
-      // For now, we'll get all and filter client-side if searchTerm exists
       const response = await PaymentAccessCodeAPI.getPaymentRequests(params);
+      console.log("Giá trị nhận về khi gọi API get all", response);
       
       let filteredData = response.data || [];
       
-      // Client-side search filtering (ideally this should be done on backend)
+      // Transform data to ensure user object structure is consistent
+      filteredData = filteredData.map(item => ({
+        ...item,
+        user: {
+          // Handle different possible data structures
+          id: item.user?.id || item.userId || null,
+          email: item.owner?.email || item.userEmail || 'Chưa cập nhật',
+          name: item.owner?.name || item.userName || item.user?.fullName || 'Chưa cập nhật',
+          phone: item.user?.phone || item.userPhone || null,
+        },
+        // Keep backward compatibility
+        userEmail: item.owner?.email || item.userEmail || 'Chưa cập nhật',
+        userName: item.owner?.name || item.userName || item.user?.fullName || 'Chưa cập nhật',
+        userPhone: item.user?.phone || item.userPhone || null,
+      }));
+      
       if (searchTerm) {
         const searchLower = searchTerm.toLowerCase();
         filteredData = filteredData.filter(item => 
           item.codePay?.toLowerCase().includes(searchLower) ||
+          item.owner.email?.toLowerCase().includes(searchLower) ||
+          item.owner.name?.toLowerCase().includes(searchLower) ||
           item.userEmail?.toLowerCase().includes(searchLower) ||
           item.userName?.toLowerCase().includes(searchLower) ||
           item.description?.toLowerCase().includes(searchLower)
@@ -72,12 +88,10 @@ const CodePurchaseManagement = () => {
 
       setPurchases(filteredData);
       
-      // Handle pagination from response
       if (response.pagination) {
         setTotalPages(response.pagination.totalPages || 1);
         setTotalItems(response.pagination.totalItems || 0);
       } else {
-        // If no pagination info, calculate based on data length
         setTotalPages(Math.ceil(filteredData.length / itemsPerPage));
         setTotalItems(filteredData.length);
       }
@@ -94,16 +108,16 @@ const CodePurchaseManagement = () => {
   const loadStats = async () => {
     try {
       const response = await PaymentAccessCodeAPI.getPaymentStats();
+      console.log("Giá trị reponse của các chỉ số là", response.data);
       setStats(response.data);
     } catch (error) {
       console.error('Error loading stats:', error);
-      // Set default stats if API fails
       setStats({
-        totalOrders: 0,
-        totalRevenue: 0,
+        total_requests: 0,
+        total_amount: 0,
         pendingOrders: 0,
-        approvedToday: 0,
-        rejectedToday: 0
+        completedToday: 0,
+        cancelledToday: 0
       });
     }
   };
@@ -227,7 +241,7 @@ const CodePurchaseManagement = () => {
   const getStatusBadge = (status) => {
     const statusConfig = {
       pending: { label: 'Chờ duyệt', color: 'bg-yellow-100 text-yellow-800', icon: ClockIcon },
-      approved: { label: 'Đã duyệt', color: 'bg-green-100 text-green-800', icon: CheckCircleIcon },
+      completed: { label: 'Đã duyệt', color: 'bg-green-100 text-green-800', icon: CheckCircleIcon },
       rejected: { label: 'Từ chối', color: 'bg-red-100 text-red-800', icon: XCircleIcon },
       cancelled: { label: 'Đã hủy', color: 'bg-gray-100 text-gray-800', icon: XCircleIcon }
     };
@@ -251,6 +265,24 @@ const CodePurchaseManagement = () => {
       other: 'Khác'
     };
     return types[type] || type || 'Mua code';
+  };
+
+  // Helper function to safely get user display name
+  const getUserDisplayName = (purchase) => {
+    if (!purchase) return 'N/A';
+    return purchase.owner?.name || 
+           purchase.userName || 
+           purchase.user?.fullName || 
+           purchase.owner?.email?.split('@')[0] || 
+           'Khách hàng';
+  };
+
+  // Helper function to safely get user email
+  const getUserEmail = (purchase) => {
+    if (!purchase) return 'N/A';
+    return purchase.owner?.email || 
+           purchase.userEmail || 
+           'Chưa cập nhật';
   };
 
   return (
@@ -293,7 +325,7 @@ const CodePurchaseManagement = () => {
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 truncate">Tổng đơn hàng</dt>
-                    <dd className="text-2xl font-semibold text-gray-900">{stats.totalOrders || 0}</dd>
+                    <dd className="text-2xl font-semibold text-gray-900">{stats.total_requests || 0}</dd>
                   </dl>
                 </div>
               </div>
@@ -309,7 +341,7 @@ const CodePurchaseManagement = () => {
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 truncate">Tổng doanh thu</dt>
-                    <dd className="text-lg font-semibold text-gray-900">{formatCurrency(stats.totalRevenue)}</dd>
+                    <dd className="text-lg font-semibold text-gray-900">{formatCurrency(stats.total_amount)}</dd>
                   </dl>
                 </div>
               </div>
@@ -341,7 +373,7 @@ const CodePurchaseManagement = () => {
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 truncate">Duyệt hôm nay</dt>
-                    <dd className="text-2xl font-semibold text-gray-900">{stats.approvedToday || 0}</dd>
+                    <dd className="text-2xl font-semibold text-gray-900">{stats.completedToday || 0}</dd>
                   </dl>
                 </div>
               </div>
@@ -357,7 +389,7 @@ const CodePurchaseManagement = () => {
                 <div className="ml-5 w-0 flex-1">
                   <dl>
                     <dt className="text-sm font-medium text-gray-500 truncate">Từ chối hôm nay</dt>
-                    <dd className="text-2xl font-semibold text-gray-900">{stats.rejectedToday || 0}</dd>
+                    <dd className="text-2xl font-semibold text-gray-900">{stats.cancelledToday || 0}</dd>
                   </dl>
                 </div>
               </div>
@@ -389,7 +421,7 @@ const CodePurchaseManagement = () => {
             >
               <option value="">Tất cả trạng thái</option>
               <option value="pending">Chờ duyệt</option>
-              <option value="approved">Đã duyệt</option>
+              <option value="completed">Đã duyệt</option>
               <option value="rejected">Từ chối</option>
               <option value="cancelled">Đã hủy</option>
             </select>
@@ -449,8 +481,8 @@ const CodePurchaseManagement = () => {
                           <div className="text-sm text-gray-500">ID: {purchase.id}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          {/* <div className="text-sm font-medium text-gray-900">{purchase.user.email || 'N/A'}</div> */}
-                          <div className="text-sm text-gray-500">{purchase.user.name || 'N/A'}</div>
+                          <div className="text-sm font-medium text-gray-900">{getUserEmail(purchase)}</div>
+                          <div className="text-sm text-gray-500">{getUserDisplayName(purchase)}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-medium text-gray-900">{formatCurrency(purchase.amount)}</div>
@@ -605,11 +637,11 @@ const CodePurchaseManagement = () => {
                 <div className="space-y-2">
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Tên khách hàng</label>
-                    <p className="text-sm text-gray-900">{selectedPurchase.user.name || 'Chưa cập nhật'}</p>
+                    <p className="text-sm text-gray-900">{getUserDisplayName(selectedPurchase)}</p>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700">Email</label>
-                    <p className="text-sm text-gray-900">{selectedPurchase.user.email || 'Chưa cập nhật'}</p>
+                    <p className="text-sm text-gray-900">{getUserEmail(selectedPurchase)}</p>
                   </div>
                   {selectedPurchase.userPhone && (
                     <div>
@@ -756,7 +788,7 @@ const CodePurchaseManagement = () => {
                 </div>
                 <div>
                   <span className="text-gray-700">Khách hàng:</span>
-                  <p className="font-medium text-gray-900">{selectedPurchase.userName || selectedPurchase.userEmail || 'N/A'}</p>
+                  <p className="font-medium text-gray-900">{getUserDisplayName(selectedPurchase)}</p>
                 </div>
                 <div>
                   <span className="text-gray-700">Số tiền:</span>
@@ -846,7 +878,7 @@ const CodePurchaseManagement = () => {
             <div className="bg-red-50 rounded-lg p-4">
               <div className="text-sm">
                 <p><strong>Mã thanh toán:</strong> {selectedPurchase.codePay}</p>
-                <p><strong>Khách hàng:</strong> {selectedPurchase.userName || selectedPurchase.userEmail || 'N/A'}</p>
+                <p><strong>Khách hàng:</strong> {getUserDisplayName(selectedPurchase)}</p>
                 <p><strong>Số tiền:</strong> {formatCurrency(selectedPurchase.amount)}</p>
                 <p><strong>Trạng thái:</strong> {getStatusBadge(selectedPurchase.status)}</p>
               </div>

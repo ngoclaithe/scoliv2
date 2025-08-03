@@ -125,7 +125,7 @@ const PaymentAccessCodeAPI = {
    */
   cancelPaymentRequest: async (id, data = {}) => {
     try {
-      const response = await api.put(`/payment-access-codess/${id}/cancel`, data);
+      const response = await api.put(`/payment-access-codes/${id}/cancel`, data);
       return response.data;
     } catch (error) {
       throw PaymentAccessCodeAPI.handleError(error);
