@@ -449,7 +449,7 @@ const CodePurchaseManagement = () => {
                           <div className="text-sm text-gray-500">ID: {purchase.id}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{purchase.user.email || 'N/A'}</div>
+                          {/* <div className="text-sm font-medium text-gray-900">{purchase.user.email || 'N/A'}</div> */}
                           <div className="text-sm text-gray-500">{purchase.user.name || 'N/A'}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
