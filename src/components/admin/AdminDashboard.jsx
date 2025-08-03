@@ -22,61 +22,33 @@ const AdminDashboard = () => {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
-      const mockStats = {
-        totalAccessCodes: 145,
-        totalAccounts: 89,
-        totalCodePurchases: 234,
-        activeRooms: 12,
+      const emptyStats = {
+        totalAccessCodes: 0,
+        totalAccounts: 0,
+        totalCodePurchases: 0,
+        activeRooms: 0,
         trends: {
-          accessCodes: { value: 12, isIncrease: true },
-          accounts: { value: 5, isIncrease: true },
-          codePurchases: { value: -3, isIncrease: false },
-          activeRooms: { value: 2, isIncrease: true }
+          accessCodes: { value: 0, isIncrease: false },
+          accounts: { value: 0, isIncrease: false },
+          codePurchases: { value: 0, isIncrease: false },
+          activeRooms: { value: 0, isIncrease: false }
         },
-        revenueThisMonth: 15420000,
-        revenueLastMonth: 12340000
+        revenueThisMonth: 0,
+        revenueLastMonth: 0
       };
 
-      const mockActivities = [
+      const emptyActivities = [
         {
           id: 1,
-          type: 'code_purchase',
-          description: 'Người dùng john@example.com đã mua 5 code',
-          timestamp: new Date(Date.now() - 2 * 60 * 1000),
-          status: 'success'
-        },
-        {
-          id: 2,
-          type: 'account_created',
-          description: 'Tài khoản mới: mary@example.com',
-          timestamp: new Date(Date.now() - 15 * 60 * 1000),
+          type: 'info',
+          description: 'Chưa có hoạt động nào',
+          timestamp: new Date(),
           status: 'info'
-        },
-        {
-          id: 3,
-          type: 'room_created',
-          description: 'Phòng ABC123 đã được tạo',
-          timestamp: new Date(Date.now() - 30 * 60 * 1000),
-          status: 'info'
-        },
-        {
-          id: 4,
-          type: 'code_expired',
-          description: 'Mã XYZ789 đã hết hạn',
-          timestamp: new Date(Date.now() - 45 * 60 * 1000),
-          status: 'warning'
-        },
-        {
-          id: 5,
-          type: 'payment_failed',
-          description: 'Thanh toán thất bại cho đơn hàng #12345',
-          timestamp: new Date(Date.now() - 60 * 60 * 1000),
-          status: 'error'
         }
       ];
 
-      setStats(mockStats);
-      setRecentActivities(mockActivities);
+      setStats(emptyStats);
+      setRecentActivities(emptyActivities);
     } catch (error) {
       console.error('Error loading dashboard data:', error);
     } finally {
