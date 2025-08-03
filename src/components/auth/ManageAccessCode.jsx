@@ -7,8 +7,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import AccessCodeAPI from '../../API/apiAccessCode';
 import PaymentAccessCodeAPI from '../../API/apiPaymentAccessCode';
 import { PlusIcon } from '@heroicons/react/24/outline';
-import { toast } from 'react-toastify';
-import { QRCodeCanvas } from 'qrcode.react';
 
 const ManageAccessCode = ({ onNavigate }) => {
   const { user, logout, enterMatchCode, loading: authLoading } = useAuth();
@@ -45,14 +43,7 @@ const ManageAccessCode = ({ onNavigate }) => {
         }));
       }
     } catch (error) {
-      toast.error(error.message, {
-        position: "top-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      console.error('Lỗi khi tải danh sách codes:', error.message);
     } finally {
       setLoading(false);
     }
@@ -74,27 +65,12 @@ const ManageAccessCode = ({ onNavigate }) => {
           'pickleball': 'pickleball'
         }[typeMatch] || '';
         
-        toast.success(`Tạo mã truy cập ${sportName} thành công!`, {
-          position: "top-left",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
+        console.log(`Tạo mã truy cập ${sportName} thành công!`);
       } else {
         throw new Error(response?.message || 'Không thể tạo mã truy cập');
       }
     } catch (error) {
-      toast.error('Có lỗi xảy ra khi tạo mã: ' + (error.message || 'Vui lòng thử lại sau'), {
-        position: "top-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-      console.error('Lỗi khi tạo mã truy cập:', error);
+      console.error('Có lỗi xảy ra khi tạo mã:', error.message || 'Vui lòng thử lại sau');
     } finally {
       setCreateLoading(false);
     }
@@ -104,92 +80,6 @@ const ManageAccessCode = ({ onNavigate }) => {
     loadCodes();
   }, []);
 
-  // Xóa code - gọi API đúng cách
-  const handleDeleteCode = async (codeId) => {
-    if (!window.confirm('Bạn có chắc muốn xóa mã truy cập này?')) {
-      return;
-    }
-
-    try {
-      setLoading(true);
-      
-      // Gọi API xóa code
-      const response = await AccessCodeAPI.deleteCode(codeId);
-      
-      if (response.success) {
-        // Cập nhật danh sách sau khi xóa thành công
-        setCodes(prev => prev.filter(code => code.id !== codeId));
-        toast.success('Xóa mã truy cập thành công!', {
-          position: "top-left",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-      } else {
-        throw new Error(response?.message || 'Không thể xóa mã truy cập');
-      }
-    } catch (error) {
-      toast.error('Có lỗi xảy ra khi xóa mã: ' + (error.message || 'Vui lòng thử lại sau'), {
-        position: "top-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-      console.error('Lỗi khi xóa mã truy cập:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Xử lý cập nhật trạng thái code
-  const handleToggleStatus = async (codeId, currentStatus) => {
-    setLoading(true);
-    
-    try {
-      const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
-      
-      const response = await AccessCodeAPI.updateCode(codeId, { 
-        status: newStatus 
-      });
-      
-      if (response.success) {
-        setCodes(codes.map(code => 
-          code.id === codeId 
-            ? { 
-                ...code, 
-                status: newStatus,
-                isActive: newStatus === 'active'
-              } 
-            : code
-        ));
-        toast.success(`Đã ${currentStatus === 'active' ? 'vô hiệu hóa' : 'kích hoạt'} mã thành công`, {
-          position: "top-left",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
-      }
-    } catch (error) {
-      toast.error('Có lỗi xảy ra khi cập nhật trạng thái: ' + (error.message || 'Vui lòng thử lại sau'), {
-        position: "top-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Format date
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleString('vi-VN');
   };
@@ -214,6 +104,19 @@ const ManageAccessCode = ({ onNavigate }) => {
     }
   };
 
+  // Generate Sepay QR URL
+  const generateSepayQRUrl = (paymentData) => {
+    const baseUrl = 'https://qr.sepay.vn/img';
+    const params = new URLSearchParams({
+      acc: paymentData.bankAccountNumber,
+      bank: paymentData.bankName,
+      amount: paymentData.amount,
+      des: paymentData.code_pay,
+      template: 'compact'
+    });
+    return `${baseUrl}?${params.toString()}`;
+  };
+
   // Xử lý mua mã access code
   const handlePurchaseCode = async (accessCode) => {
     try {
@@ -232,154 +135,14 @@ const ManageAccessCode = ({ onNavigate }) => {
       if (response.success) {
         setPaymentData(response.data);
         setShowPaymentModal(true);
-        toast.success('Tạo yêu cầu thanh toán thành công!', {
-          position: "top-left",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-        });
+        console.log('Tạo yêu cầu thanh toán thành công!');
       } else {
         throw new Error(response?.message || 'Không thể tạo yêu cầu thanh toán');
       }
     } catch (error) {
-      toast.error('Có lỗi xảy ra khi tạo thanh toán: ' + (error.message || 'Vui lòng thử lại sau'), {
-        position: "top-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
-      console.error('Lỗi khi tạo thanh toán:', error);
+      console.error('Có lỗi xảy ra khi tạo thanh toán:', error.message || 'Vui lòng thử lại sau');
     } finally {
       setPaymentLoading(false);
-    }
-  };
-
-  // Map mã ngân hàng theo chuẩn VietQR
-  const getBankCode = (bankName) => {
-    const bankCodes = {
-      'MBBANK': '970422',
-      'VIETCOMBANK': '970436', 
-      'TECHCOMBANK': '970407',
-      'VIETINBANK': '970415',
-      'AGRIBANK': '970405',
-      'SACOMBANK': '970403',
-      'BIDV': '970418',
-      'VPBANK': '970432',
-      'TPBANK': '970423',
-      'ACBBANK': '970416',
-      'VIB': '970441',
-      'DONGABANK': '970406',
-      'EXIMBANK': '970431',
-      'HDBANK': '970437',
-      'LIENVIETPOSTBANK': '970449',
-      'MARITIMEBANK': '970426',
-      'NAMABANK': '970428',
-      'OCEANBANK': '970414',
-      'PGBANK': '970430',
-      'PUBLICBANK': '970439',
-      'SEABANK': '970440',
-      'SHBBANK': '970443',
-      'STANDARDCHARTERED': '970410',
-      'VIETABANK': '970427',
-      'VIETCAPITALBANK': '970454',
-      'WOORIBANK': '970457'
-    };
-    return bankCodes[bankName.toUpperCase()] || '970422';
-  };
-
-  // Tạo QR code data theo chuẩn VietQR EMVCo
-  const generateVietQRData = (paymentInfo) => {
-    if (!paymentInfo) return '';
-
-    try {
-      const bankCode = getBankCode(paymentInfo.bankName);
-      const accountNumber = paymentInfo.bankAccountNumber;
-      const amount = parseFloat(paymentInfo.amount);
-      const memo = paymentInfo.code_pay;
-
-      // Format theo chuẩn EMVCo QR Code
-      let qrString = '';
-      
-      // Payload Format Indicator
-      qrString += '000201';
-      
-      // Point of Initiation Method
-      qrString += '010212';
-      
-      // Merchant Account Information
-      const merchantInfo = `0010A000000727` + 
-                          `01${('0' + bankCode.length).slice(-2)}${bankCode}` +
-                          `02${('0' + accountNumber.length).slice(-2)}${accountNumber}`;
-      qrString += `38${('0' + merchantInfo.length).slice(-2)}${merchantInfo}`;
-      
-      // Transaction Currency (VND = 704)
-      qrString += '5303704';
-      
-      // Transaction Amount
-      if (amount > 0) {
-        const amountStr = amount.toString();
-        qrString += `54${('0' + amountStr.length).slice(-2)}${amountStr}`;
-      }
-      
-      // Country Code
-      qrString += '5802VN';
-      
-      // Additional Data Field
-      if (memo) {
-        const additionalData = `08${('0' + memo.length).slice(-2)}${memo}`;
-        qrString += `62${('0' + additionalData.length).slice(-2)}${additionalData}`;
-      }
-      
-      // CRC (sẽ tính sau)
-      qrString += '6304';
-      
-      // Tính CRC16
-      const crc = calculateCRC16(qrString);
-      qrString += crc.toUpperCase();
-      
-      return qrString;
-    } catch (error) {
-      console.error('Lỗi tạo VietQR data:', error);
-      return '';
-    }
-  };
-
-  // Tính CRC16 theo chuẩn ISO/IEC 13239
-  const calculateCRC16 = (data) => {
-    let crc = 0xFFFF;
-    const polynomial = 0x1021;
-
-    for (let i = 0; i < data.length; i++) {
-      crc ^= (data.charCodeAt(i) << 8);
-      for (let j = 0; j < 8; j++) {
-        if (crc & 0x8000) {
-          crc = (crc << 1) ^ polynomial;
-        } else {
-          crc = crc << 1;
-        }
-      }
-    }
-    
-    return (crc & 0xFFFF).toString(16).padStart(4, '0');
-  };
-
-  // Tạo URL VietQR cho hiển thị ảnh (backup)
-  const generateQRImageUrl = (paymentInfo) => {
-    if (!paymentInfo) return '';
-
-    try {
-      const amount = paymentInfo.amount;
-      const memo = encodeURIComponent(paymentInfo.code_pay);
-      const bankCode = getBankCode(paymentInfo.bankName);
-      
-      return `https://img.vietqr.io/image/${bankCode}-${paymentInfo.bankAccountNumber}-compact2.png?amount=${amount}&addInfo=${memo}&accountName=NGUOI%20NHAN`;
-    } catch (error) {
-      console.error('Lỗi tạo QR image URL:', error);
-      return '';
     }
   };
 
@@ -387,14 +150,7 @@ const ManageAccessCode = ({ onNavigate }) => {
   const handleEnterCode = async (e) => {
     e.preventDefault();
     if (!matchCode.trim()) {
-      toast.error('Vui lòng nhập mã trận đấu', {
-        position: "top-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      console.error('Vui lòng nhập mã trận đấu');
       return;
     }
 
@@ -402,26 +158,12 @@ const ManageAccessCode = ({ onNavigate }) => {
     if (result.success) {
       setShowCodeEntry(false);
       setMatchCode('');
-      toast.success('Nhập mã thành công!', {
-        position: "top-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      console.log('Nhập mã thành công!');
       if (onNavigate) {
         onNavigate('home');
       }
     } else {
-      toast.error(result.error, {
-        position: "top-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      console.error(result.error);
     }
   };
 
@@ -429,26 +171,12 @@ const ManageAccessCode = ({ onNavigate }) => {
   const handleQuickEnter = async (code) => {
     const result = await enterMatchCode(code);
     if (result.success) {
-      toast.success('Vào trận thành công!', {
-        position: "top-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      console.log('Vào trận thành công!');
       if (onNavigate) {
         onNavigate('home');
       }
     } else {
-      toast.error(result.error, {
-        position: "top-left",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-      });
+      console.error(result.error);
     }
   };
 
@@ -838,36 +566,24 @@ const ManageAccessCode = ({ onNavigate }) => {
 
             <div className="bg-gray-50 p-6 rounded-lg">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* QR Code */}
+                {/* QR Code using Sepay */}
                 <div className="text-center">
                   <h4 className="font-semibold text-gray-900 mb-3">Quét mã QR để thanh toán</h4>
                   <div className="bg-white p-4 rounded-lg inline-block shadow-sm border-2 border-gray-200">
-                    <QRCodeCanvas
-                      value={generateVietQRData(paymentData)}
-                      size={220}
-                      level="M"
-                      includeMargin={true}
-                      fgColor="#000000"
-                      bgColor="#FFFFFF"
+                    <img 
+                      src={generateSepayQRUrl(paymentData)} 
+                      alt="Sepay QR Code"
+                      className="mx-auto"
+                      style={{ width: '220px', height: '220px' }}
+                      onError={(e) => {
+                        console.error('Error loading Sepay QR code');
+                        e.target.style.display = 'none';
+                      }}
                     />
                   </div>
                   <p className="text-xs text-gray-500 mt-2">
                     Quét bằng app ngân hàng Việt Nam
                   </p>
-                  
-                  {/* Backup: Hiển thị QR từ VietQR API nếu cần */}
-                  <div className="mt-3">
-                    <p className="text-xs text-gray-400 mb-2">Hoặc dùng QR từ VietQR:</p>
-                    <img 
-                      src={generateQRImageUrl(paymentData)} 
-                      alt="VietQR Code"
-                      className="mx-auto border rounded"
-                      style={{ maxWidth: '200px' }}
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                      }}
-                    />
-                  </div>
                 </div>
 
                 {/* Payment Info */}
@@ -935,15 +651,9 @@ const ManageAccessCode = ({ onNavigate }) => {
                 onClick={() => {
                   const paymentInfo = `Ngân hàng: ${paymentData.bankName}\nSố TK: ${paymentData.bankAccountNumber}\nSố tiền: ${parseInt(paymentData.amount).toLocaleString('vi-VN')} VNĐ\nNội dung: ${paymentData.code_pay}`;
                   navigator.clipboard.writeText(paymentInfo).then(() => {
-                    toast.success('Đã sao chép thông tin thanh toán!', {
-                      position: "top-left",
-                      autoClose: 2000,
-                    });
+                    console.log('Đã sao chép thông tin thanh toán!');
                   }).catch(() => {
-                    toast.error('Không thể sao chép. Vui lòng sao chép thủ công.', {
-                      position: "top-left",
-                      autoClose: 3000,
-                    });
+                    console.error('Không thể sao chép. Vui lòng sao chép thủ công.');
                   });
                 }}
                 className="bg-green-600 hover:bg-green-700"
