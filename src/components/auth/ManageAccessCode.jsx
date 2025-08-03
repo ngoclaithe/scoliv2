@@ -9,7 +9,6 @@ import PaymentAccessCodeAPI from '../../API/apiPaymentAccessCode';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
 import { QRCodeCanvas } from 'qrcode.react';
-import { VietQR } from 'vietqr';
 
 const ManageAccessCode = ({ onNavigate }) => {
   const { user, logout, enterMatchCode, loading: authLoading } = useAuth();
@@ -210,7 +209,7 @@ const ManageAccessCode = ({ onNavigate }) => {
     switch (status) {
       case 'active': return '🟢 Hoạt động';
       case 'expired': return '🔴 Hết hạn';
-      case 'inactive': return '⚪ Tạm dừng';
+      case 'inactive': return '⚪ Chưa kích hoạt';
       default: return '❓ Không xác định';
     }
   };
@@ -259,31 +258,128 @@ const ManageAccessCode = ({ onNavigate }) => {
     }
   };
 
-  // Tạo QR code URL
-  const generateQRData = (paymentInfo) => {
+  // Map mã ngân hàng theo chuẩn VietQR
+  const getBankCode = (bankName) => {
+    const bankCodes = {
+      'MBBANK': '970422',
+      'VIETCOMBANK': '970436', 
+      'TECHCOMBANK': '970407',
+      'VIETINBANK': '970415',
+      'AGRIBANK': '970405',
+      'SACOMBANK': '970403',
+      'BIDV': '970418',
+      'VPBANK': '970432',
+      'TPBANK': '970423',
+      'ACBBANK': '970416',
+      'VIB': '970441',
+      'DONGABANK': '970406',
+      'EXIMBANK': '970431',
+      'HDBANK': '970437',
+      'LIENVIETPOSTBANK': '970449',
+      'MARITIMEBANK': '970426',
+      'NAMABANK': '970428',
+      'OCEANBANK': '970414',
+      'PGBANK': '970430',
+      'PUBLICBANK': '970439',
+      'SEABANK': '970440',
+      'SHBBANK': '970443',
+      'STANDARDCHARTERED': '970410',
+      'VIETABANK': '970427',
+      'VIETCAPITALBANK': '970454',
+      'WOORIBANK': '970457'
+    };
+    return bankCodes[bankName.toUpperCase()] || '970422';
+  };
+
+  // Tạo QR code data theo chuẩn VietQR EMVCo
+  const generateVietQRData = (paymentInfo) => {
     if (!paymentInfo) return '';
 
     try {
-      const vietQR = new VietQR({
-        clientID: '', // Use empty for public endpoint
-        apiKey: ''    // Use empty for public endpoint
-      });
-
+      const bankCode = getBankCode(paymentInfo.bankName);
+      const accountNumber = paymentInfo.bankAccountNumber;
       const amount = parseFloat(paymentInfo.amount);
-      const memo = `Thanh toan ma ${paymentInfo.accessCode} - Ma GD: ${paymentInfo.code_pay}`;
+      const memo = paymentInfo.code_pay;
 
-      return vietQR.genQRCodeUrl({
-        bank: paymentInfo.bankName,
-        accountNumber: paymentInfo.bankAccountNumber,
-        amount: amount,
-        memo: memo
-      });
+      // Format theo chuẩn EMVCo QR Code
+      let qrString = '';
+      
+      // Payload Format Indicator
+      qrString += '000201';
+      
+      // Point of Initiation Method
+      qrString += '010212';
+      
+      // Merchant Account Information
+      const merchantInfo = `0010A000000727` + 
+                          `01${('0' + bankCode.length).slice(-2)}${bankCode}` +
+                          `02${('0' + accountNumber.length).slice(-2)}${accountNumber}`;
+      qrString += `38${('0' + merchantInfo.length).slice(-2)}${merchantInfo}`;
+      
+      // Transaction Currency (VND = 704)
+      qrString += '5303704';
+      
+      // Transaction Amount
+      if (amount > 0) {
+        const amountStr = amount.toString();
+        qrString += `54${('0' + amountStr.length).slice(-2)}${amountStr}`;
+      }
+      
+      // Country Code
+      qrString += '5802VN';
+      
+      // Additional Data Field
+      if (memo) {
+        const additionalData = `08${('0' + memo.length).slice(-2)}${memo}`;
+        qrString += `62${('0' + additionalData.length).slice(-2)}${additionalData}`;
+      }
+      
+      // CRC (sẽ tính sau)
+      qrString += '6304';
+      
+      // Tính CRC16
+      const crc = calculateCRC16(qrString);
+      qrString += crc.toUpperCase();
+      
+      return qrString;
     } catch (error) {
-      console.error('Lỗi tạo VietQR:', error);
-      // Fallback: tạo URL thủ công
-      const amount = parseFloat(paymentInfo.amount);
-      const memo = encodeURIComponent(`Thanh toan ma ${paymentInfo.accessCode} - Ma GD: ${paymentInfo.code_pay}`);
-      return `https://img.vietqr.io/image/${paymentInfo.bankName}-${paymentInfo.bankAccountNumber}-compact2.png?amount=${amount}&addInfo=${memo}`;
+      console.error('Lỗi tạo VietQR data:', error);
+      return '';
+    }
+  };
+
+  // Tính CRC16 theo chuẩn ISO/IEC 13239
+  const calculateCRC16 = (data) => {
+    let crc = 0xFFFF;
+    const polynomial = 0x1021;
+
+    for (let i = 0; i < data.length; i++) {
+      crc ^= (data.charCodeAt(i) << 8);
+      for (let j = 0; j < 8; j++) {
+        if (crc & 0x8000) {
+          crc = (crc << 1) ^ polynomial;
+        } else {
+          crc = crc << 1;
+        }
+      }
+    }
+    
+    return (crc & 0xFFFF).toString(16).padStart(4, '0');
+  };
+
+  // Tạo URL VietQR cho hiển thị ảnh (backup)
+  const generateQRImageUrl = (paymentInfo) => {
+    if (!paymentInfo) return '';
+
+    try {
+      const amount = paymentInfo.amount;
+      const memo = encodeURIComponent(paymentInfo.code_pay);
+      const bankCode = getBankCode(paymentInfo.bankName);
+      
+      return `https://img.vietqr.io/image/${bankCode}-${paymentInfo.bankAccountNumber}-compact2.png?amount=${amount}&addInfo=${memo}&accountName=NGUOI%20NHAN`;
+    } catch (error) {
+      console.error('Lỗi tạo QR image URL:', error);
+      return '';
     }
   };
 
@@ -745,17 +841,33 @@ const ManageAccessCode = ({ onNavigate }) => {
                 {/* QR Code */}
                 <div className="text-center">
                   <h4 className="font-semibold text-gray-900 mb-3">Quét mã QR để thanh toán</h4>
-                  <div className="bg-white p-4 rounded-lg inline-block shadow-sm">
+                  <div className="bg-white p-4 rounded-lg inline-block shadow-sm border-2 border-gray-200">
                     <QRCodeCanvas
-                      value={generateQRData(paymentData)}
-                      size={200}
+                      value={generateVietQRData(paymentData)}
+                      size={220}
                       level="M"
                       includeMargin={true}
+                      fgColor="#000000"
+                      bgColor="#FFFFFF"
                     />
                   </div>
                   <p className="text-xs text-gray-500 mt-2">
-                    Quét bằng app ngân hàng hoặc ví điện tử
+                    Quét bằng app ngân hàng Việt Nam
                   </p>
+                  
+                  {/* Backup: Hiển thị QR từ VietQR API nếu cần */}
+                  <div className="mt-3">
+                    <p className="text-xs text-gray-400 mb-2">Hoặc dùng QR từ VietQR:</p>
+                    <img 
+                      src={generateQRImageUrl(paymentData)} 
+                      alt="VietQR Code"
+                      className="mx-auto border rounded"
+                      style={{ maxWidth: '200px' }}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  </div>
                 </div>
 
                 {/* Payment Info */}
@@ -782,7 +894,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                   <div className="bg-white p-3 rounded border">
                     <div className="text-sm text-gray-600">Nội dung chuyển khoản</div>
                     <div className="font-mono text-sm break-all">
-                      Thanh toan ma {paymentData.accessCode} - Ma GD: {paymentData.code_pay}
+                      {paymentData.code_pay}
                     </div>
                   </div>
                 </div>
@@ -821,8 +933,7 @@ const ManageAccessCode = ({ onNavigate }) => {
               <Button
                 variant="primary"
                 onClick={() => {
-                  // Copy payment info to clipboard
-                  const paymentInfo = `Ngân hàng: ${paymentData.bankName}\nSố TK: ${paymentData.bankAccountNumber}\nSố tiền: ${parseInt(paymentData.amount).toLocaleString('vi-VN')} VNĐ\nNội dung: Thanh toan ma ${paymentData.accessCode} - Ma GD: ${paymentData.code_pay}`;
+                  const paymentInfo = `Ngân hàng: ${paymentData.bankName}\nSố TK: ${paymentData.bankAccountNumber}\nSố tiền: ${parseInt(paymentData.amount).toLocaleString('vi-VN')} VNĐ\nNội dung: ${paymentData.code_pay}`;
                   navigator.clipboard.writeText(paymentInfo).then(() => {
                     toast.success('Đã sao chép thông tin thanh toán!', {
                       position: "top-left",

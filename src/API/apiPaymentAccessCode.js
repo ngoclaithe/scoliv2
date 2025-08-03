@@ -33,7 +33,7 @@ const PaymentAccessCodeAPI = {
    */
   createPaymentRequest: async (data) => {
     try {
-      const response = await api.post('/payment-access-code', data);
+      const response = await api.post('/payment-access-codes', data);
       return response.data;
     } catch (error) {
       throw PaymentAccessCodeAPI.handleError(error);
@@ -50,7 +50,7 @@ const PaymentAccessCodeAPI = {
    */
   getPaymentRequests: async (params = {}) => {
     try {
-      const response = await api.get('/payment-access-code', { params });
+      const response = await api.get('/payment-access-codes', { params });
       return response.data;
     } catch (error) {
       throw PaymentAccessCodeAPI.handleError(error);
@@ -64,7 +64,7 @@ const PaymentAccessCodeAPI = {
    */
   getPaymentRequest: async (id) => {
     try {
-      const response = await api.get(`/payment-access-code/${id}`);
+      const response = await api.get(`/payment-access-codes/${id}`);
       return response.data;
     } catch (error) {
       throw PaymentAccessCodeAPI.handleError(error);
@@ -79,7 +79,7 @@ const PaymentAccessCodeAPI = {
   getPaymentRequestByCode: async (codePay) => {
     try {
       // This endpoint doesn't require authentication
-      const response = await axios.get(`${API_BASE_URL}/payment-access-code/code/${codePay}`);
+      const response = await axios.get(`${API_BASE_URL}/payment-access-codes/code/${codePay}`);
       return response.data;
     } catch (error) {
       throw PaymentAccessCodeAPI.handleError(error);
@@ -95,7 +95,7 @@ const PaymentAccessCodeAPI = {
    */
   getPaymentStats: async (params = {}) => {
     try {
-      const response = await api.get('/payment-access-code/stats', { params });
+      const response = await api.get('/payment-access-codes/stats', { params });
       return response.data;
     } catch (error) {
       throw PaymentAccessCodeAPI.handleError(error);
@@ -110,7 +110,7 @@ const PaymentAccessCodeAPI = {
    */
   approvePaymentRequest: async (id, data = {}) => {
     try {
-      const response = await api.put(`/payment-access-code/${id}/approve`, data);
+      const response = await api.put(`/payment-access-codes/${id}/approve`, data);
       return response.data;
     } catch (error) {
       throw PaymentAccessCodeAPI.handleError(error);
@@ -125,7 +125,7 @@ const PaymentAccessCodeAPI = {
    */
   cancelPaymentRequest: async (id, data = {}) => {
     try {
-      const response = await api.put(`/payment-access-code/${id}/cancel`, data);
+      const response = await api.put(`/payment-access-codess/${id}/cancel`, data);
       return response.data;
     } catch (error) {
       throw PaymentAccessCodeAPI.handleError(error);
@@ -139,7 +139,7 @@ const PaymentAccessCodeAPI = {
    */
   deletePaymentRequest: async (id) => {
     try {
-      const response = await api.delete(`/payment-access-code/${id}`);
+      const response = await api.delete(`/payment-access-codes/${id}`);
       return response.data;
     } catch (error) {
       throw PaymentAccessCodeAPI.handleError(error);
