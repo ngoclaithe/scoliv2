@@ -225,7 +225,7 @@ export default function VangKimMatchIntro() {
                     }}
                   />
                 </div>
-                <div className="bg-gradient-to-r from-yellow-500 to-amber-600 rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-full max-w-[80%]" style={{ padding: 'clamp(2px, 0.3vw, 6px) clamp(4px, 0.8vw, 16px)' }}>
+                <div className="bg-gradient-to-r from-yellow-500 to-amber-600 rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2 max-w-[80%]" style={{ padding: 'clamp(2px, 0.3vw, 6px) clamp(4px, 0.8vw, 16px)' }}>
                   <span
                     className="font-bold uppercase tracking-wide text-white text-center block"
                     style={{
@@ -262,7 +262,7 @@ export default function VangKimMatchIntro() {
                     }}
                   />
                 </div>
-                <div className="bg-gradient-to-r from-gray-500 to-slate-600 rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-full max-w-[80%]" style={{ padding: 'clamp(2px, 0.3vw, 6px) clamp(4px, 0.8vw, 16px)' }}>
+                <div className="bg-gradient-to-r from-gray-500 to-slate-600 rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2 max-w-[80%]" style={{ padding: 'clamp(2px, 0.3vw, 6px) clamp(4px, 0.8vw, 16px)' }}>
                   <span
                     className="font-bold uppercase tracking-wide text-white text-center block"
                     style={{

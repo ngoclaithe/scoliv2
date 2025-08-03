@@ -173,6 +173,7 @@ export const PublicMatchProvider = ({ children }) => {
     });
 
     socketService.on('poster_updated', (data) => {
+      console.log('📝 [PublicMatchContext] poster_updated received:', data);
       setDisplaySettings(prev => {
         const newSettings = { ...prev, selectedPoster: data.posterType };
         return newSettings;
