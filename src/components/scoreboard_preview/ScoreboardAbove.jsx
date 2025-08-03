@@ -36,10 +36,10 @@ const ScoreboardAbove = ({
         leagueLogo: "/api/placeholder/40/40"
     };
 
-    const rawLogoShape = displaySettings?.logoShape || "round";
+    const rawLogoShape = displaySettings?.displaySettings?.logoShape || displaySettings?.logoShape || "round";
     const logoShape = rawLogoShape === 'round' ? 'circle' : rawLogoShape;
 
-    if (displaySettings?.logoShape !== 'round') {
+    if (displaySettings?.displaySettings?.logoShape !== 'round') {
         console.log('🔧 [ScoreboardAbove] Logo shape changed to:', rawLogoShape, '-> mapped to:', logoShape);
     }
 
@@ -178,8 +178,8 @@ const ScoreboardAbove = ({
             }
         };
 
-        if (displaySettings?.rotateDisplay && allLogos.length > 1) {
-            // Slide mode - quay từng logo một (sử dụng shape chung)
+        if ((displaySettings?.displaySettings?.rotateDisplay || displaySettings?.rotateDisplay) && allLogos.length > 1) {
+            // Slide mode - luân phiên hiển thị 3 logo 1 lần
             return (
                 <DisplayLogo
                     logos={allLogos.map(logo => logo.url)}
@@ -187,7 +187,7 @@ const ScoreboardAbove = ({
                     className="w-16 h-16"
                     type_play={logoShape}
                     slideMode={true}
-                    maxVisible={1}
+                    maxVisible={3}
                     slideInterval={3000}
                 />
             );
