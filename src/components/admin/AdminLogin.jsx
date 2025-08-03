@@ -24,6 +24,8 @@ const AdminLogin = ({ onLogin }) => {
         email: formData.email,
         password: formData.password
       });
+      
+      console.log('Login response:', response);
 
       if (response.success) {
         if (response.user.role === 'admin') {
@@ -33,11 +35,17 @@ const AdminLogin = ({ onLogin }) => {
           AuthAPI.logout();
         }
       } else {
-        setError('Đăng nhập thất bại. Vui lòng thử lại.');
+        setError('Thông tin đăng nhập chưa chính xác');
       }
     } catch (error) {
-      console.error('Login error:', error);
-      setError(error.message || 'Đăng nhập thất bại. Vui lòng thử lại.');
+      // console.error('Login error details:', {
+      //   message: error.message,
+      //   status: error.status,
+      //   response: error.response,
+      //   timestamp: new Date().toISOString()
+      // });
+      
+      setError('Thông tin đăng nhập chưa chính xác');
     } finally {
       setLoading(false);
     }
@@ -128,7 +136,7 @@ const AdminLogin = ({ onLogin }) => {
                   <ExclamationTriangleIcon className="h-5 w-5 text-red-400 mr-3" />
                   <div>
                     <h3 className="text-sm font-medium text-red-400">
-                      Lỗi đăng nhập
+                      Đăng nhập thất bại
                     </h3>
                     <div className="mt-1 text-sm text-red-300">
                       <p>{error}</p>
@@ -169,7 +177,6 @@ const AdminLogin = ({ onLogin }) => {
           </div>
         </div>
 
-        {/* Security notice */}
         <div className="text-center">
           <p className="text-xs text-gray-400 flex items-center justify-center">
             <ShieldCheckIcon className="h-4 w-4 mr-1" />
