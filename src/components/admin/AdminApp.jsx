@@ -5,6 +5,7 @@ import AdminDashboard from './AdminDashboard';
 import AccessCodeManagement from './AccessCodeManagement';
 import AccountManagement from './AccountManagement';
 import CodePurchaseManagement from './CodePurchaseManagement';
+import PaymentInfoManagement from './PaymentInfoManagement';
 import ActiveRoomManagement from './ActiveRoomManagement';
 import adminAPI from '../../API/apiAdmin';
 import Loading from '../common/Loading';
