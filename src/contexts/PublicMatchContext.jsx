@@ -478,10 +478,10 @@ export const PublicMatchProvider = ({ children }) => {
         };
     
         let updatedTournamentLogo = {
-          url_logo: [...current.url_logo],
-          code_logo: [...current.code_logo],
-          position: [...current.position],
-          type_display: [...current.type_display],
+          url_logo: Array.isArray(current.url_logo) ? [...current.url_logo] : [],
+          code_logo: Array.isArray(current.code_logo) ? [...current.code_logo] : [],
+          position: Array.isArray(current.position) ? [...current.position] : [],
+          type_display: Array.isArray(current.type_display) ? [...current.type_display] : [],
         };
     
         d.code_logo.forEach((code, i) => {

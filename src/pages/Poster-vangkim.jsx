@@ -3,16 +3,16 @@ import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
 
 export default function VangKimMatchIntro() {
-  const { 
-    matchData: contextMatchData, 
-    marqueeData, 
-    sponsors, 
-    organizing, 
-    mediaPartners, 
-    tournamentLogo, 
-    liveUnit, 
-    displaySettings, 
-    posterSettings 
+  const {
+    matchData: contextMatchData,
+    marqueeData,
+    sponsors,
+    organizing,
+    mediaPartners,
+    tournamentLogo,
+    liveUnit,
+    displaySettings,
+    posterSettings
   } = usePublicMatch();
 
   const matchData = {
@@ -44,7 +44,7 @@ export default function VangKimMatchIntro() {
     showLiveIndicator: posterSettings?.showLiveIndicator !== false,
     accentColor: posterSettings?.accentColor || '#f59e0b'
   };
-
+  console.log("Giá trị của tournament_logo là:", matchData.tournamentLogo);
   const getLogoShape = (typeDisplay) => {
     switch (typeDisplay) {
       case 'round': return 'circle';
@@ -88,7 +88,7 @@ export default function VangKimMatchIntro() {
     if (!element) return;
     let fontSize = parseInt(window.getComputedStyle(element).fontSize);
     const minFontSize = 14;
-    
+
     while (element.scrollWidth > element.offsetWidth && fontSize > minFontSize) {
       fontSize -= 1;
       element.style.fontSize = fontSize + "px";
@@ -115,7 +115,7 @@ export default function VangKimMatchIntro() {
       case 'square':
         return `${baseClass} rounded-lg`;
       case 'hexagon':
-        return `${baseClass} rounded-full`; 
+        return `${baseClass} rounded-full`;
       case 'circle':
       default:
         return `${baseClass} rounded-full`;
@@ -137,8 +137,8 @@ export default function VangKimMatchIntro() {
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
       <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
-        
-        <div 
+
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url('/images/background-poster/bg4.jpg')"
@@ -150,11 +150,11 @@ export default function VangKimMatchIntro() {
 
           {/* Top Section - Tournament Logo & Live Unit */}
           <div className="flex justify-between items-start px-[1vw] py-[0.5vw]">
-            
+
             <div className={`flex ${getTournamentPositionClass()} flex-1`}>
               {matchData.showTournamentLogo && matchData.tournamentLogo && (
                 <img
-                  src={matchData.tournamentLogo}
+                  src={matchData.tournamentLogo.tournament_lgo.url_logo}
                   alt="Tournament Logo"
                   className="object-contain"
                   style={{ height: '4vw', maxWidth: '15vw' }}
@@ -210,8 +210,8 @@ export default function VangKimMatchIntro() {
                     src={matchData.logo1}
                     alt={matchData.team1}
                     className={getLogoShapeClass("relative object-cover border-white shadow-2xl transform hover:scale-110 transition duration-300")}
-                    style={{ 
-                      width: '6vw', 
+                    style={{
+                      width: '6vw',
                       height: '6vw',
                       borderWidth: '0.15vw'
                     }}
@@ -244,8 +244,8 @@ export default function VangKimMatchIntro() {
                     src={matchData.logo2}
                     alt={matchData.team2}
                     className={getLogoShapeClass("relative object-cover border-white shadow-2xl transform hover:scale-110 transition duration-300")}
-                    style={{ 
-                      width: '6vw', 
+                    style={{
+                      width: '6vw',
                       height: '6vw',
                       borderWidth: '0.15vw'
                     }}
@@ -287,44 +287,44 @@ export default function VangKimMatchIntro() {
           </div>
 
           {allPartners.length > 0 && (
-  <div className="px-[2vw]" style={{ paddingBottom: '1.5vw' }}>
-    <div className="text-center">
-      <div style={{ marginBottom: '1vw' }}> {/* tăng khoảng cách trên một chút */}
-        <span
-          className="font-bold text-white bg-black/50 backdrop-blur-sm rounded-lg border border-white/30"
-          style={{ fontSize: '1.6vw', padding: '0.4vw 1.6vw' }} // gấp đôi
-        >
-          Các đơn vị
-        </span>
-      </div>
-      <div
-        className="flex justify-center items-center flex-wrap"
-        style={{ gap: '1vw' }} // gấp đôi
-      >
-        {allPartners.map((partner, index) => (
-          <div
-            key={index}
-            className={getPartnerLogoShapeClass(
-              "flex justify-center items-center bg-white shadow-lg",
-              partner.typeDisplay
-            )}
-            style={{
-              width: '3vw',  // gấp đôi
-              height: '3vw', // gấp đôi
-              padding: '0.2vw' // gấp đôi
-            }}
-          >
-            <img
-              src={partner.logo}
-              alt={partner.name}
-              className="max-h-full max-w-full object-contain"
-            />
-          </div>
-        ))}
-      </div>
-    </div>
-  </div>
-)}
+            <div className="px-[2vw]" style={{ paddingBottom: '1.5vw' }}>
+              <div className="text-center">
+                <div style={{ marginBottom: '1vw' }}> {/* tăng khoảng cách trên một chút */}
+                  <span
+                    className="font-bold text-white bg-black/50 backdrop-blur-sm rounded-lg border border-white/30"
+                    style={{ fontSize: '1.6vw', padding: '0.4vw 1.6vw' }} // gấp đôi
+                  >
+                    Các đơn vị
+                  </span>
+                </div>
+                <div
+                  className="flex justify-center items-center flex-wrap"
+                  style={{ gap: '1vw' }} // gấp đôi
+                >
+                  {allPartners.map((partner, index) => (
+                    <div
+                      key={index}
+                      className={getPartnerLogoShapeClass(
+                        "flex justify-center items-center bg-white shadow-lg",
+                        partner.typeDisplay
+                      )}
+                      style={{
+                        width: '3vw',  // gấp đôi
+                        height: '3vw', // gấp đôi
+                        padding: '0.2vw' // gấp đôi
+                      }}
+                    >
+                      <img
+                        src={partner.logo}
+                        alt={partner.name}
+                        className="max-h-full max-w-full object-contain"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
         </div>
 
