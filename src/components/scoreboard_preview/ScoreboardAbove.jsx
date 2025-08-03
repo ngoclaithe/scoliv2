@@ -179,7 +179,7 @@ const ScoreboardAbove = ({
         };
 
         if (displaySettings?.rotateDisplay && allLogos.length > 1) {
-            // Slide mode - quay từng logo một (sử dụng shape chung)
+            // Slide mode - luân phiên hiển thị 3 logo 1 lần
             return (
                 <DisplayLogo
                     logos={allLogos.map(logo => logo.url)}
@@ -187,7 +187,7 @@ const ScoreboardAbove = ({
                     className="w-16 h-16"
                     type_play={logoShape}
                     slideMode={true}
-                    maxVisible={1}
+                    maxVisible={3}
                     slideInterval={3000}
                 />
             );
