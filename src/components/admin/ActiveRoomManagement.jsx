@@ -327,7 +327,7 @@ const ActiveRoomManagement = () => {
             </div>
           </div>
 
-  2        <div className="bg-white overflow-hidden shadow rounded-lg">
+          <div className="bg-white overflow-hidden shadow rounded-lg">
             <div className="p-5">
               <div className="flex items-center">
                 <div className="flex-shrink-0">
@@ -478,9 +478,6 @@ const ActiveRoomManagement = () => {
                           <div className="text-sm text-gray-500">
                             ID: {room.id}
                           </div>
-                          <div className="text-sm text-gray-500 max-w-xs truncate">
-                            {room.matchTitle || room.title || 'Không có tiêu đề'}
-                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {getStatusBadge(room.status)}
@@ -574,14 +571,6 @@ const ActiveRoomManagement = () => {
                 </p>
               </div>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Tiêu đề trận đấu</label>
-              <p className="text-sm text-gray-900">
-                {selectedRoom.matchTitle || selectedRoom.title || 'Không có tiêu đề'}
-              </p>
-            </div>
-
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700">Kết nối</label>

@@ -252,7 +252,6 @@ class AudioManager {
     try {
       URL.revokeObjectURL(url);
       this.activeBlobUrls.delete(url);
-      console.log('🗑️ Revoked blob URL:', url.substring(0, 50) + '...');
     } catch (error) {
       console.warn('⚠️ Error revoking blob URL:', error);
     }

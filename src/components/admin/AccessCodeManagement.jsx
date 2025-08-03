@@ -4,11 +4,9 @@ import {
   MagnifyingGlassIcon,
   PencilIcon,
   TrashIcon,
-  EyeIcon,
-  CheckCircleIcon,
   XCircleIcon
 } from '@heroicons/react/24/outline';
-import adminAPI from '../../API/apiAdmin';
+import AccessCodeAPI from '../../API/apiAccessCode';
 import Loading from '../common/Loading';
 import Modal from '../common/Modal';
 import Button from '../common/Button';
@@ -18,77 +16,50 @@ const AccessCodeManagement = () => {
   const [accessCodes, setAccessCodes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedCode, setSelectedCode] = useState(null);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
-    code: '',
-    description: '',
-    expiryDate: '',
-    isActive: true,
-    maxUsage: 100,
-    currentUsage: 0
+    matchId: '',
+    typeMatch: 'soccer',
+    status: 'active',
+    maxUses: 1,
+    expiresAt: ''
   });
 
   useEffect(() => {
     loadAccessCodes();
-  }, [currentPage, searchTerm]);
+  }, [currentPage, searchTerm, statusFilter]);
 
   const loadAccessCodes = async () => {
     try {
       setLoading(true);
+      setError('');
       
-      // Mock data for demo
-      const mockData = {
-        data: [
-          {
-            id: 1,
-            code: 'ABC123',
-            description: 'Mã demo cho trận đấu A vs B',
-            expiryDate: '2024-12-31',
-            isActive: true,
-            maxUsage: 100,
-            currentUsage: 45,
-            createdAt: '2024-01-15',
-            updatedAt: '2024-01-20'
-          },
-          {
-            id: 2,
-            code: 'XYZ789',
-            description: 'Mã demo cho trận đấu C vs D',
-            expiryDate: '2024-11-30',
-            isActive: false,
-            maxUsage: 50,
-            currentUsage: 50,
-            createdAt: '2024-01-10',
-            updatedAt: '2024-01-18'
-          },
-          {
-            id: 3,
-            code: 'DEF456',
-            description: 'Mã demo cho trận đấu E vs F',
-            expiryDate: '2024-12-15',
-            isActive: true,
-            maxUsage: 200,
-            currentUsage: 12,
-            createdAt: '2024-01-12',
-            updatedAt: '2024-01-16'
-          }
-        ],
-        pagination: {
-          currentPage: 1,
-          totalPages: 1,
-          totalItems: 3
-        }
+      const params = {
+        page: currentPage,
+        limit: 10
       };
+      
+      if (statusFilter) params.status = statusFilter;
+      if (searchTerm) params.search = searchTerm;
 
-      setAccessCodes(mockData.data);
-      setTotalPages(mockData.pagination.totalPages);
+      const response = await AccessCodeAPI.getCodes(params);
+      
+      if (response.success) {
+        setAccessCodes(response.data);
+        setTotalPages(response.pagination.totalPages);
+        setTotalItems(response.pagination.totalItems);
+      }
     } catch (error) {
       console.error('Error loading access codes:', error);
+      setError(error.message || 'Không thể tải danh sách mã truy cập');
     } finally {
       setLoading(false);
     }
@@ -97,21 +68,18 @@ const AccessCodeManagement = () => {
   const handleCreate = async () => {
     try {
       setLoading(true);
-      // In production: await adminAPI.accessCodes.create(formData);
+      setError('');
       
-      // Mock success
-      setShowCreateModal(false);
-      setFormData({
-        code: '',
-        description: '',
-        expiryDate: '',
-        isActive: true,
-        maxUsage: 100,
-        currentUsage: 0
-      });
-      loadAccessCodes();
+      const response = await AccessCodeAPI.createCode(formData);
+      
+      if (response.success) {
+        setShowCreateModal(false);
+        resetFormData();
+        loadAccessCodes();
+      }
     } catch (error) {
       console.error('Error creating access code:', error);
+      setError(error.message || 'Không thể tạo mã truy cập');
     } finally {
       setLoading(false);
     }
@@ -120,14 +88,25 @@ const AccessCodeManagement = () => {
   const handleEdit = async () => {
     try {
       setLoading(true);
-      // In production: await adminAPI.accessCodes.update(selectedCode.id, formData);
+      setError('');
       
-      // Mock success
-      setShowEditModal(false);
-      setSelectedCode(null);
-      loadAccessCodes();
+      const updateData = {
+        status: formData.status,
+        maxUses: formData.maxUses,
+        expiresAt: formData.expiresAt || null
+      };
+      
+      const response = await AccessCodeAPI.updateCode(selectedCode.code, updateData);
+      
+      if (response.success) {
+        setShowEditModal(false);
+        setSelectedCode(null);
+        resetFormData();
+        loadAccessCodes();
+      }
     } catch (error) {
       console.error('Error updating access code:', error);
+      setError(error.message || 'Không thể cập nhật mã truy cập');
     } finally {
       setLoading(false);
     }
@@ -136,28 +115,41 @@ const AccessCodeManagement = () => {
   const handleDelete = async () => {
     try {
       setLoading(true);
-      // In production: await adminAPI.accessCodes.delete(selectedCode.id);
+      setError('');
       
-      // Mock success
-      setShowDeleteModal(false);
-      setSelectedCode(null);
-      loadAccessCodes();
+      const response = await AccessCodeAPI.deleteCode(selectedCode.code);
+      
+      if (response.success) {
+        setShowDeleteModal(false);
+        setSelectedCode(null);
+        loadAccessCodes();
+      }
     } catch (error) {
       console.error('Error deleting access code:', error);
+      setError(error.message || 'Không thể xóa mã truy cập');
     } finally {
       setLoading(false);
     }
   };
 
+  const resetFormData = () => {
+    setFormData({
+      matchId: '',
+      typeMatch: 'soccer',
+      status: 'active',
+      maxUses: 1,
+      expiresAt: ''
+    });
+  };
+
   const openEditModal = (code) => {
     setSelectedCode(code);
     setFormData({
-      code: code.code,
-      description: code.description,
-      expiryDate: code.expiryDate,
-      isActive: code.isActive,
-      maxUsage: code.maxUsage,
-      currentUsage: code.currentUsage
+      matchId: code.matchId || '',
+      typeMatch: code.match?.typeMatch || 'soccer',
+      status: code.status,
+      maxUses: code.maxUses,
+      expiresAt: code.expiresAt ? new Date(code.expiresAt).toISOString().split('T')[0] : ''
     });
     setShowEditModal(true);
   };
@@ -168,23 +160,29 @@ const AccessCodeManagement = () => {
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return 'Không giới hạn';
     return new Date(dateString).toLocaleDateString('vi-VN');
   };
 
   const getStatusBadge = (code) => {
-    if (!code.isActive) {
-      return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Tắt</span>;
+    switch (code.status) {
+      case 'active':
+        if (code.expiresAt && new Date(code.expiresAt) < new Date()) {
+          return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Hết hạn</span>;
+        }
+        if (code.usageCount >= code.maxUses) {
+          return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Hết lượt</span>;
+        }
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Hoạt động</span>;
+      case 'used':
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Đã dùng</span>;
+      case 'expired':
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Hết hạn</span>;
+      case 'revoked':
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Đã thu hồi</span>;
+      default:
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">{code.status}</span>;
     }
-    
-    if (new Date(code.expiryDate) < new Date()) {
-      return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Hết hạn</span>;
-    }
-    
-    if (code.currentUsage >= code.maxUsage) {
-      return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Hết lượt</span>;
-    }
-    
-    return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Hoạt động</span>;
   };
 
   const getUsagePercentage = (current, max) => {
@@ -193,11 +191,23 @@ const AccessCodeManagement = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-md p-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <XCircleIcon className="h-5 w-5 text-red-400" />
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-red-800">{error}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="sm:flex sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Quản lý mã truy cập</h1>
-          <p className="mt-2 text-sm text-gray-700">Tạo và quản lý các mã truy cập cho người dùng</p>
+          <p className="mt-2 text-sm text-gray-700">Tạo và quản lý các mã truy cập cho người dùng ({totalItems} mã)</p>
         </div>
         <div className="mt-4 sm:mt-0">
           <Button
@@ -210,7 +220,6 @@ const AccessCodeManagement = () => {
         </div>
       </div>
 
-      {/* Search and filters */}
       <div className="bg-white shadow rounded-lg p-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="md:col-span-2">
@@ -226,18 +235,21 @@ const AccessCodeManagement = () => {
             </div>
           </div>
           <div>
-            <select className="block w-full px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
+            <select 
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
               <option value="">Tất cả trạng thái</option>
               <option value="active">Hoạt động</option>
-              <option value="inactive">Tắt</option>
+              <option value="used">Đã sử dụng</option>
               <option value="expired">Hết hạn</option>
-              <option value="full">Hết lượt</option>
+              <option value="revoked">Đã thu hồi</option>
             </select>
           </div>
         </div>
       </div>
 
-      {/* Access codes table */}
       <div className="bg-white shadow rounded-lg overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center h-64">
@@ -253,7 +265,7 @@ const AccessCodeManagement = () => {
                       Mã truy cập
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Mô tả
+                      Trận đấu
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Trạng thái
@@ -274,26 +286,34 @@ const AccessCodeManagement = () => {
                     <tr key={code.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">{code.code}</div>
+                        <div className="text-xs text-gray-500">ID: {code.id}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-gray-900 max-w-xs truncate">{code.description}</div>
+                        {code.match ? (
+                          <div className="text-sm text-gray-900">
+                            <div className="font-medium">{code.match.teamAName} vs {code.match.teamBName}</div>
+                            <div className="text-xs text-gray-500 capitalize">{code.match.typeMatch}</div>
+                          </div>
+                        ) : (
+                          <div className="text-sm text-gray-500">Chưa có trận đấu</div>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {getStatusBadge(code)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          {code.currentUsage}/{code.maxUsage}
+                          {code.usageCount}/{code.maxUses}
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                           <div
                             className="bg-primary-600 h-2 rounded-full"
-                            style={{ width: `${getUsagePercentage(code.currentUsage, code.maxUsage)}%` }}
+                            style={{ width: `${getUsagePercentage(code.usageCount, code.maxUses)}%` }}
                           ></div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {formatDate(code.expiryDate)}
+                        {formatDate(code.expiresAt)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-2">
@@ -317,7 +337,6 @@ const AccessCodeManagement = () => {
               </table>
             </div>
 
-            {/* Pagination */}
             {totalPages > 1 && (
               <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
                 <div className="flex-1 flex justify-between sm:hidden">
@@ -336,132 +355,185 @@ const AccessCodeManagement = () => {
                     Sau
                   </button>
                 </div>
+                <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-sm text-gray-700">
+                      Hiển thị <span className="font-medium">{((currentPage - 1) * 10) + 1}</span> đến{' '}
+                      <span className="font-medium">{Math.min(currentPage * 10, totalItems)}</span> trong{' '}
+                      <span className="font-medium">{totalItems}</span> kết quả
+                    </p>
+                  </div>
+                  <div>
+                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                      <button
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                        className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                      >
+                        Trước
+                      </button>
+                      {[...Array(totalPages)].map((_, index) => (
+                        <button
+                          key={index + 1}
+                          onClick={() => setCurrentPage(index + 1)}
+                          className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+                            currentPage === index + 1
+                              ? 'z-10 bg-primary-50 border-primary-500 text-primary-600'
+                              : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                          }`}
+                        >
+                          {index + 1}
+                        </button>
+                      ))}
+                      <button
+                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                        className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                      >
+                        Sau
+                      </button>
+                    </nav>
+                  </div>
+                </div>
               </div>
             )}
           </>
         )}
       </div>
 
-      {/* Create Modal */}
       <Modal
         isOpen={showCreateModal}
-        onClose={() => setShowCreateModal(false)}
+        onClose={() => {
+          setShowCreateModal(false);
+          resetFormData();
+          setError('');
+        }}
         title="Tạo mã truy cập mới"
       >
         <div className="space-y-4">
-          <Input
-            label="Mã truy cập"
-            value={formData.code}
-            onChange={(e) => setFormData({...formData, code: e.target.value})}
-            placeholder="Nhập mã truy cập"
-            required
-          />
-          <Input
-            label="Mô tả"
-            value={formData.description}
-            onChange={(e) => setFormData({...formData, description: e.target.value})}
-            placeholder="Mô tả mã truy cập"
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Loại trận đấu
+            </label>
+            <select
+              value={formData.typeMatch}
+              onChange={(e) => setFormData({...formData, typeMatch: e.target.value})}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+            >
+              <option value="soccer">Bóng đá</option>
+              <option value="pickleball">Pickleball</option>
+              <option value="futsal">Futsal</option>
+            </select>
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <Input
-              label="Số lượng tối đa"
+              label="Số lượng sử dụng tối đa"
               type="number"
-              value={formData.maxUsage}
-              onChange={(e) => setFormData({...formData, maxUsage: parseInt(e.target.value)})}
+              value={formData.maxUses}
+              onChange={(e) => setFormData({...formData, maxUses: parseInt(e.target.value)})}
               min="1"
             />
             <Input
               label="Ngày hết hạn"
               type="date"
-              value={formData.expiryDate}
-              onChange={(e) => setFormData({...formData, expiryDate: e.target.value})}
+              value={formData.expiresAt}
+              onChange={(e) => setFormData({...formData, expiresAt: e.target.value})}
             />
-          </div>
-          <div className="flex items-center">
-            <input
-              id="isActive"
-              type="checkbox"
-              checked={formData.isActive}
-              onChange={(e) => setFormData({...formData, isActive: e.target.checked})}
-              className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-            />
-            <label htmlFor="isActive" className="ml-2 block text-sm text-gray-900">
-              Kích hoạt ngay
-            </label>
           </div>
         </div>
         <div className="mt-6 flex justify-end space-x-3">
-          <Button variant="outline" onClick={() => setShowCreateModal(false)}>
+          <Button 
+            variant="outline" 
+            onClick={() => {
+              setShowCreateModal(false);
+              resetFormData();
+              setError('');
+            }}
+          >
             Hủy
           </Button>
-          <Button onClick={handleCreate}>
-            Tạo mã
+          <Button onClick={handleCreate} disabled={loading}>
+            {loading ? 'Đang tạo...' : 'Tạo mã'}
           </Button>
         </div>
       </Modal>
 
-      {/* Edit Modal */}
       <Modal
         isOpen={showEditModal}
-        onClose={() => setShowEditModal(false)}
+        onClose={() => {
+          setShowEditModal(false);
+          setSelectedCode(null);
+          resetFormData();
+          setError('');
+        }}
         title="Chỉnh sửa mã truy cập"
       >
         <div className="space-y-4">
-          <Input
-            label="Mã truy cập"
-            value={formData.code}
-            onChange={(e) => setFormData({...formData, code: e.target.value})}
-            placeholder="Nhập mã truy cập"
-            required
-          />
-          <Input
-            label="Mô tả"
-            value={formData.description}
-            onChange={(e) => setFormData({...formData, description: e.target.value})}
-            placeholder="Mô tả mã truy cập"
-          />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Mã truy cập
+            </label>
+            <input
+              type="text"
+              value={selectedCode?.code || ''}
+              disabled
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-500"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Trạng thái
+            </label>
+            <select
+              value={formData.status}
+              onChange={(e) => setFormData({...formData, status: e.target.value})}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+            >
+              <option value="active">Hoạt động</option>
+              <option value="revoked">Thu hồi</option>
+            </select>
+          </div>
           <div className="grid grid-cols-2 gap-4">
             <Input
-              label="Số lượng tối đa"
+              label="Số lượng sử dụng tối đa"
               type="number"
-              value={formData.maxUsage}
-              onChange={(e) => setFormData({...formData, maxUsage: parseInt(e.target.value)})}
+              value={formData.maxUses}
+              onChange={(e) => setFormData({...formData, maxUses: parseInt(e.target.value)})}
               min="1"
             />
             <Input
               label="Ngày hết hạn"
               type="date"
-              value={formData.expiryDate}
-              onChange={(e) => setFormData({...formData, expiryDate: e.target.value})}
+              value={formData.expiresAt}
+              onChange={(e) => setFormData({...formData, expiresAt: e.target.value})}
             />
-          </div>
-          <div className="flex items-center">
-            <input
-              id="isActiveEdit"
-              type="checkbox"
-              checked={formData.isActive}
-              onChange={(e) => setFormData({...formData, isActive: e.target.checked})}
-              className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-            />
-            <label htmlFor="isActiveEdit" className="ml-2 block text-sm text-gray-900">
-              Kích hoạt
-            </label>
           </div>
         </div>
         <div className="mt-6 flex justify-end space-x-3">
-          <Button variant="outline" onClick={() => setShowEditModal(false)}>
+          <Button 
+            variant="outline" 
+            onClick={() => {
+              setShowEditModal(false);
+              setSelectedCode(null);
+              resetFormData();
+              setError('');
+            }}
+          >
             Hủy
           </Button>
-          <Button onClick={handleEdit}>
-            Cập nhật
+          <Button onClick={handleEdit} disabled={loading}>
+            {loading ? 'Đang cập nhật...' : 'Cập nhật'}
           </Button>
         </div>
       </Modal>
 
-      {/* Delete Modal */}
       <Modal
         isOpen={showDeleteModal}
-        onClose={() => setShowDeleteModal(false)}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setSelectedCode(null);
+          setError('');
+        }}
         title="Xóa mã truy cập"
       >
         <p className="text-sm text-gray-500">
@@ -469,11 +541,18 @@ const AccessCodeManagement = () => {
           Hành động này không thể hoàn tác.
         </p>
         <div className="mt-6 flex justify-end space-x-3">
-          <Button variant="outline" onClick={() => setShowDeleteModal(false)}>
+          <Button 
+            variant="outline" 
+            onClick={() => {
+              setShowDeleteModal(false);
+              setSelectedCode(null);
+              setError('');
+            }}
+          >
             Hủy
           </Button>
-          <Button variant="danger" onClick={handleDelete}>
-            Xóa
+          <Button variant="danger" onClick={handleDelete} disabled={loading}>
+            {loading ? 'Đang xóa...' : 'Xóa'}
           </Button>
         </div>
       </Modal>

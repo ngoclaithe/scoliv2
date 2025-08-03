@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://192.168.31.186:5000/api/v1';
 
-// Tạo instance axios với cấu hình cơ bản
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -10,29 +9,24 @@ const api = axios.create({
   },
 });
 
-// Danh sách các endpoints không cần token
 const NO_TOKEN_ENDPOINTS = [
   '/access-codes/:code/verify-login',
   '/access-codes/:code/match',
   '/access-codes/:code/status'
 ];
 
-// Kiểm tra xem endpoint có cần token không
 const requiresToken = (url) => {
   return !NO_TOKEN_ENDPOINTS.some(endpoint => {
-    // Chuyển đổi pattern endpoint thành regex
     const pattern = endpoint.replace(':code', '[^/]+');
     const regex = new RegExp(`^${pattern}$`);
     return regex.test(url);
   });
 };
 
-// Thêm interceptor để tự động thêm token vào header (chỉ khi cần)
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
 
-    // Chỉ thêm token nếu endpoint yêu cầu
     if (requiresToken(config.url) && token) {
       console.log("Thêm token vào request:", config.url);
       config.headers.Authorization = `Bearer ${token}`;

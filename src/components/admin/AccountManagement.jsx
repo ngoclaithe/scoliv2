@@ -6,9 +6,9 @@ import {
   TrashIcon,
   UserIcon,
   ShieldCheckIcon,
-  ShieldExclamationIcon
+  XCircleIcon
 } from '@heroicons/react/24/outline';
-import adminAPI from '../../API/apiAdmin';
+import UserAPI from '../../API/apiUser';
 import Loading from '../common/Loading';
 import Modal from '../common/Modal';
 import Button from '../common/Button';
@@ -18,109 +18,47 @@ const AccountManagement = () => {
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [roleFilter, setRoleFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [totalItems, setTotalItems] = useState(0);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedAccount, setSelectedAccount] = useState(null);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: '',
-    role: 'user',
-    status: 'active'
+    role: 'user'
   });
 
   useEffect(() => {
     loadAccounts();
-  }, [currentPage, searchTerm]);
+  }, [currentPage, searchTerm, roleFilter]);
 
   const loadAccounts = async () => {
     try {
       setLoading(true);
+      setError('');
       
-      // Mock data for demo
-      const mockData = {
-        data: [
-          {
-            id: 1,
-            name: 'Nguyễn Văn A',
-            email: 'nguyenvana@example.com',
-            role: 'user',
-            status: 'active',
-            lastLogin: '2024-01-20T10:30:00Z',
-            createdAt: '2024-01-01T08:00:00Z',
-            totalCodes: 15,
-            avatar: null
-          },
-          {
-            id: 2,
-            name: 'Trần Thị B',
-            email: 'tranthib@example.com',
-            role: 'admin',
-            status: 'active',
-            lastLogin: '2024-01-19T15:45:00Z',
-            createdAt: '2023-12-15T09:15:00Z',
-            totalCodes: 0,
-            avatar: null
-          },
-          {
-            id: 3,
-            name: 'Lê Văn C',
-            email: 'levanc@example.com',
-            role: 'user',
-            status: 'inactive',
-            lastLogin: '2024-01-10T14:20:00Z',
-            createdAt: '2024-01-05T11:30:00Z',
-            totalCodes: 3,
-            avatar: null
-          },
-          {
-            id: 4,
-            name: 'Phạm Thị D',
-            email: 'phamthid@example.com',
-            role: 'user',
-            status: 'banned',
-            lastLogin: '2024-01-08T09:10:00Z',
-            createdAt: '2023-12-20T16:45:00Z',
-            totalCodes: 25,
-            avatar: null
-          }
-        ],
-        pagination: {
-          currentPage: 1,
-          totalPages: 1,
-          totalItems: 4
-        }
+      const params = {
+        page: currentPage,
+        limit: 10
       };
+      
+      if (searchTerm) params.name = searchTerm;
+      if (roleFilter) params.role = roleFilter;
 
-      setAccounts(mockData.data);
-      setTotalPages(mockData.pagination.totalPages);
+      const response = await UserAPI.getUsers(params);
+      
+      if (response.success) {
+        setAccounts(response.data);
+        setTotalPages(response.pagination.totalPages);
+        setTotalItems(response.pagination.totalItems);
+      }
     } catch (error) {
       console.error('Error loading accounts:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCreate = async () => {
-    try {
-      setLoading(true);
-      // In production: await adminAPI.accounts.create(formData);
-      
-      // Mock success
-      setShowCreateModal(false);
-      setFormData({
-        name: '',
-        email: '',
-        password: '',
-        role: 'user',
-        status: 'active'
-      });
-      loadAccounts();
-    } catch (error) {
-      console.error('Error creating account:', error);
+      setError(error.message || 'Không thể tải danh sách tài khoản');
     } finally {
       setLoading(false);
     }
@@ -129,14 +67,19 @@ const AccountManagement = () => {
   const handleEdit = async () => {
     try {
       setLoading(true);
-      // In production: await adminAPI.accounts.update(selectedAccount.id, formData);
+      setError('');
       
-      // Mock success
-      setShowEditModal(false);
-      setSelectedAccount(null);
-      loadAccounts();
+      const response = await UserAPI.updateUser(selectedAccount.id, formData);
+      
+      if (response.success) {
+        setShowEditModal(false);
+        setSelectedAccount(null);
+        resetFormData();
+        loadAccounts();
+      }
     } catch (error) {
       console.error('Error updating account:', error);
+      setError(error.message || 'Không thể cập nhật tài khoản');
     } finally {
       setLoading(false);
     }
@@ -145,31 +88,29 @@ const AccountManagement = () => {
   const handleDelete = async () => {
     try {
       setLoading(true);
-      // In production: await adminAPI.accounts.delete(selectedAccount.id);
+      setError('');
       
-      // Mock success
-      setShowDeleteModal(false);
-      setSelectedAccount(null);
-      loadAccounts();
+      const response = await UserAPI.deleteUser(selectedAccount.id);
+      
+      if (response.success) {
+        setShowDeleteModal(false);
+        setSelectedAccount(null);
+        loadAccounts();
+      }
     } catch (error) {
       console.error('Error deleting account:', error);
+      setError(error.message || 'Không thể xóa tài khoản');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleStatusChange = async (accountId, newStatus) => {
-    try {
-      setLoading(true);
-      // In production: await adminAPI.accounts.updateStatus(accountId, newStatus);
-      
-      // Mock success
-      loadAccounts();
-    } catch (error) {
-      console.error('Error updating account status:', error);
-    } finally {
-      setLoading(false);
-    }
+  const resetFormData = () => {
+    setFormData({
+      name: '',
+      email: '',
+      role: 'user'
+    });
   };
 
   const openEditModal = (account) => {
@@ -177,9 +118,7 @@ const AccountManagement = () => {
     setFormData({
       name: account.name,
       email: account.email,
-      password: '',
-      role: account.role,
-      status: account.status
+      role: account.role
     });
     setShowEditModal(true);
   };
@@ -190,6 +129,7 @@ const AccountManagement = () => {
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return 'Chưa có';
     return new Date(dateString).toLocaleDateString('vi-VN', {
       year: 'numeric',
       month: 'short',
@@ -197,21 +137,6 @@ const AccountManagement = () => {
       hour: '2-digit',
       minute: '2-digit'
     });
-  };
-
-  const getStatusBadge = (status) => {
-    const statusConfig = {
-      active: { label: 'Hoạt động', color: 'bg-green-100 text-green-800' },
-      inactive: { label: 'Tạm dừng', color: 'bg-yellow-100 text-yellow-800' },
-      banned: { label: 'Bị cấm', color: 'bg-red-100 text-red-800' }
-    };
-
-    const config = statusConfig[status] || statusConfig.active;
-    return (
-      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}>
-        {config.label}
-      </span>
-    );
   };
 
   const getRoleBadge = (role) => {
@@ -239,32 +164,34 @@ const AccountManagement = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-md p-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <XCircleIcon className="h-5 w-5 text-red-400" />
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-red-800">{error}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="sm:flex sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Quản lý tài khoản</h1>
-          <p className="mt-2 text-sm text-gray-700">Quản lý người dùng và quyền hạn trong hệ thống</p>
-        </div>
-        <div className="mt-4 sm:mt-0">
-          <Button
-            onClick={() => setShowCreateModal(true)}
-            className="inline-flex items-center"
-          >
-            <PlusIcon className="h-4 w-4 mr-2" />
-            Tạo tài khoản
-          </Button>
+          <p className="mt-2 text-sm text-gray-700">Quản lý người dùng và quyền hạn trong hệ thống ({totalItems} tài khoản)</p>
         </div>
       </div>
 
-      {/* Search and filters */}
       <div className="bg-white shadow rounded-lg p-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="md:col-span-2">
             <div className="relative">
               <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Tìm kiếm theo tên hoặc email..."
+                placeholder="Tìm kiếm theo tên..."
                 className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -272,24 +199,19 @@ const AccountManagement = () => {
             </div>
           </div>
           <div>
-            <select className="block w-full px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
+            <select 
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+              value={roleFilter}
+              onChange={(e) => setRoleFilter(e.target.value)}
+            >
               <option value="">Tất cả vai trò</option>
               <option value="admin">Admin</option>
               <option value="user">User</option>
             </select>
           </div>
-          <div>
-            <select className="block w-full px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500">
-              <option value="">Tất cả trạng thái</option>
-              <option value="active">Hoạt động</option>
-              <option value="inactive">Tạm dừng</option>
-              <option value="banned">Bị cấm</option>
-            </select>
-          </div>
         </div>
       </div>
 
-      {/* Accounts table */}
       <div className="bg-white shadow rounded-lg overflow-hidden">
         {loading ? (
           <div className="flex items-center justify-center h-64">
@@ -308,13 +230,10 @@ const AccountManagement = () => {
                       Vai trò
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Trạng thái
+                      Ngày tạo
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Số code
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Đăng nhập cuối
+                      Cập nhật cuối
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Thao tác
@@ -327,15 +246,11 @@ const AccountManagement = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10">
-                            {account.avatar ? (
-                              <img className="h-10 w-10 rounded-full" src={account.avatar} alt="" />
-                            ) : (
-                              <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
-                                <span className="text-sm font-medium text-primary-800">
-                                  {getAvatarInitials(account.name)}
-                                </span>
-                              </div>
-                            )}
+                            <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                              <span className="text-sm font-medium text-primary-800">
+                                {getAvatarInitials(account.name)}
+                              </span>
+                            </div>
                           </div>
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">{account.name}</div>
@@ -346,22 +261,11 @@ const AccountManagement = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         {getRoleBadge(account.role)}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <select
-                          value={account.status}
-                          onChange={(e) => handleStatusChange(account.id, e.target.value)}
-                          className="text-sm border-0 bg-transparent focus:ring-0 focus:outline-none"
-                        >
-                          <option value="active">Hoạt động</option>
-                          <option value="inactive">Tạm dừng</option>
-                          <option value="banned">Bị cấm</option>
-                        </select>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {account.totalCodes}
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {formatDate(account.createdAt)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {formatDate(account.lastLogin)}
+                        {formatDate(account.updatedAt)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex space-x-2">
@@ -385,7 +289,6 @@ const AccountManagement = () => {
               </table>
             </div>
 
-            {/* Pagination */}
             {totalPages > 1 && (
               <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
                 <div className="flex-1 flex justify-between sm:hidden">
@@ -404,82 +307,60 @@ const AccountManagement = () => {
                     Sau
                   </button>
                 </div>
+                <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-sm text-gray-700">
+                      Hiển thị <span className="font-medium">{((currentPage - 1) * 10) + 1}</span> đến{' '}
+                      <span className="font-medium">{Math.min(currentPage * 10, totalItems)}</span> trong{' '}
+                      <span className="font-medium">{totalItems}</span> kết quả
+                    </p>
+                  </div>
+                  <div>
+                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                      <button
+                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                        disabled={currentPage === 1}
+                        className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                      >
+                        Trước
+                      </button>
+                      {[...Array(totalPages)].map((_, index) => (
+                        <button
+                          key={index + 1}
+                          onClick={() => setCurrentPage(index + 1)}
+                          className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
+                            currentPage === index + 1
+                              ? 'z-10 bg-primary-50 border-primary-500 text-primary-600'
+                              : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
+                          }`}
+                        >
+                          {index + 1}
+                        </button>
+                      ))}
+                      <button
+                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                        className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                      >
+                        Sau
+                      </button>
+                    </nav>
+                  </div>
+                </div>
               </div>
             )}
           </>
         )}
       </div>
 
-      {/* Create Modal */}
-      <Modal
-        isOpen={showCreateModal}
-        onClose={() => setShowCreateModal(false)}
-        title="Tạo tài khoản mới"
-      >
-        <div className="space-y-4">
-          <Input
-            label="Họ và tên"
-            value={formData.name}
-            onChange={(e) => setFormData({...formData, name: e.target.value})}
-            placeholder="Nhập họ và tên"
-            required
-          />
-          <Input
-            label="Email"
-            type="email"
-            value={formData.email}
-            onChange={(e) => setFormData({...formData, email: e.target.value})}
-            placeholder="Nhập địa chỉ email"
-            required
-          />
-          <Input
-            label="Mật khẩu"
-            type="password"
-            value={formData.password}
-            onChange={(e) => setFormData({...formData, password: e.target.value})}
-            placeholder="Nhập mật khẩu"
-            required
-          />
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Vai trò</label>
-              <select
-                value={formData.role}
-                onChange={(e) => setFormData({...formData, role: e.target.value})}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
-              >
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Trạng thái</label>
-              <select
-                value={formData.status}
-                onChange={(e) => setFormData({...formData, status: e.target.value})}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
-              >
-                <option value="active">Hoạt động</option>
-                <option value="inactive">Tạm dừng</option>
-                <option value="banned">Bị cấm</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div className="mt-6 flex justify-end space-x-3">
-          <Button variant="outline" onClick={() => setShowCreateModal(false)}>
-            Hủy
-          </Button>
-          <Button onClick={handleCreate}>
-            Tạo tài khoản
-          </Button>
-        </div>
-      </Modal>
-
-      {/* Edit Modal */}
       <Modal
         isOpen={showEditModal}
-        onClose={() => setShowEditModal(false)}
+        onClose={() => {
+          setShowEditModal(false);
+          setSelectedAccount(null);
+          resetFormData();
+          setError('');
+        }}
         title="Chỉnh sửa tài khoản"
       >
         <div className="space-y-4">
@@ -498,53 +379,43 @@ const AccountManagement = () => {
             placeholder="Nhập địa chỉ email"
             required
           />
-          <Input
-            label="Mật khẩu mới (để trống nếu không đổi)"
-            type="password"
-            value={formData.password}
-            onChange={(e) => setFormData({...formData, password: e.target.value})}
-            placeholder="Nhập mật khẩu mới"
-          />
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Vai trò</label>
-              <select
-                value={formData.role}
-                onChange={(e) => setFormData({...formData, role: e.target.value})}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
-              >
-                <option value="user">User</option>
-                <option value="admin">Admin</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Trạng thái</label>
-              <select
-                value={formData.status}
-                onChange={(e) => setFormData({...formData, status: e.target.value})}
-                className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
-              >
-                <option value="active">Hoạt động</option>
-                <option value="inactive">Tạm dừng</option>
-                <option value="banned">Bị cấm</option>
-              </select>
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Vai trò</label>
+            <select
+              value={formData.role}
+              onChange={(e) => setFormData({...formData, role: e.target.value})}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
+            >
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
           </div>
         </div>
         <div className="mt-6 flex justify-end space-x-3">
-          <Button variant="outline" onClick={() => setShowEditModal(false)}>
+          <Button 
+            variant="outline" 
+            onClick={() => {
+              setShowEditModal(false);
+              setSelectedAccount(null);
+              resetFormData();
+              setError('');
+            }}
+          >
             Hủy
           </Button>
-          <Button onClick={handleEdit}>
-            Cập nhật
+          <Button onClick={handleEdit} disabled={loading}>
+            {loading ? 'Đang cập nhật...' : 'Cập nhật'}
           </Button>
         </div>
       </Modal>
 
-      {/* Delete Modal */}
       <Modal
         isOpen={showDeleteModal}
-        onClose={() => setShowDeleteModal(false)}
+        onClose={() => {
+          setShowDeleteModal(false);
+          setSelectedAccount(null);
+          setError('');
+        }}
         title="Xóa tài khoản"
       >
         <p className="text-sm text-gray-500">
@@ -552,11 +423,18 @@ const AccountManagement = () => {
           Hành động này không thể hoàn tác và sẽ xóa tất cả dữ liệu liên quan.
         </p>
         <div className="mt-6 flex justify-end space-x-3">
-          <Button variant="outline" onClick={() => setShowDeleteModal(false)}>
+          <Button 
+            variant="outline" 
+            onClick={() => {
+              setShowDeleteModal(false);
+              setSelectedAccount(null);
+              setError('');
+            }}
+          >
             Hủy
           </Button>
-          <Button variant="danger" onClick={handleDelete}>
-            Xóa tài khoản
+          <Button variant="danger" onClick={handleDelete} disabled={loading}>
+            {loading ? 'Đang xóa...' : 'Xóa tài khoản'}
           </Button>
         </div>
       </Modal>

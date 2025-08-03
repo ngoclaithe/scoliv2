@@ -439,20 +439,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                             }}
                             className="text-blue-600 hover:text-blue-900 hover:bg-blue-50 px-2 py-1 rounded text-xs transition-colors"
                           >
-                            👁️ Xem
-                          </button>
-                          <button
-                            onClick={() => handleToggleStatus(code.id, code.status)}
-                            className={`${code.status === 'active' ? 'text-orange-600 hover:text-orange-900 hover:bg-orange-50' : 'text-green-600 hover:text-green-900 hover:bg-green-50'} px-2 py-1 rounded text-xs transition-colors`}
-                            disabled={code.status === 'expired'}
-                          >
-                            {code.status === 'active' ? '⏸️' : '▶️'}
-                          </button>
-                          <button
-                            onClick={() => handleDeleteCode(code.id)}
-                            className="text-red-600 hover:text-red-900 hover:bg-red-50 px-2 py-1 rounded text-xs transition-colors"
-                          >
-                            🗑️
+                            👁️
                           </button>
                         </div>
                       </td>
