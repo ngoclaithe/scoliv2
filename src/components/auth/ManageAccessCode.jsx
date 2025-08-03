@@ -8,8 +8,8 @@ import AccessCodeAPI from '../../API/apiAccessCode';
 import PaymentAccessCodeAPI from '../../API/apiPaymentAccessCode';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { toast } from 'react-toastify';
-import QRCode from 'qrcode.react';
-import { generateVietQR } from 'vietqr';
+import { QRCodeCanvas } from 'qrcode.react';
+import { VietQR } from 'vietqr';
 
 const ManageAccessCode = ({ onNavigate }) => {
   const { user, logout, enterMatchCode, loading: authLoading } = useAuth();
@@ -210,7 +210,7 @@ const ManageAccessCode = ({ onNavigate }) => {
     switch (status) {
       case 'active': return '🟢 Hoạt động';
       case 'expired': return '🔴 Hết hạn';
-      case 'inactive': return '⚪ Tạm d��ng';
+      case 'inactive': return '⚪ Tạm dừng';
       default: return '❓ Không xác định';
     }
   };
