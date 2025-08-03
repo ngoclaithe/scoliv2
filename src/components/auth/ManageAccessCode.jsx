@@ -264,13 +264,20 @@ const ManageAccessCode = ({ onNavigate }) => {
     if (!paymentInfo) return '';
 
     try {
-      const vietQRUrl = generateVietQR({
+      const vietQR = new VietQR({
+        clientID: '', // Use empty for public endpoint
+        apiKey: ''    // Use empty for public endpoint
+      });
+
+      const amount = parseFloat(paymentInfo.amount);
+      const memo = `Thanh toan ma ${paymentInfo.accessCode} - Ma GD: ${paymentInfo.code_pay}`;
+
+      return vietQR.genQRCodeUrl({
         bank: paymentInfo.bankName,
         accountNumber: paymentInfo.bankAccountNumber,
-        amount: parseFloat(paymentInfo.amount),
-        memo: `Thanh toan ma ${paymentInfo.accessCode} - Ma GD: ${paymentInfo.code_pay}`
+        amount: amount,
+        memo: memo
       });
-      return vietQRUrl;
     } catch (error) {
       console.error('Lỗi tạo VietQR:', error);
       // Fallback: tạo URL thủ công
