@@ -30,7 +30,6 @@ const ManageAccessCode = ({ onNavigate }) => {
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [paymentInfo, setPaymentInfo] = useState(null);
 
-  // Load danh sách codes
   const loadCodes = useCallback(async (page = 1, status = '') => {
     try {
       setLoading(true);
@@ -51,7 +50,6 @@ const ManageAccessCode = ({ onNavigate }) => {
     }
   }, [pagination.limit]);
 
-  // Tạo code mới
   const handleCreateCode = async (typeMatch = 'soccer') => {
     try {
       setCreateLoading(true);
@@ -59,7 +57,6 @@ const ManageAccessCode = ({ onNavigate }) => {
       const response = await AccessCodeAPI.createCode({ typeMatch });
       console.log("Giá trị của reponse sau khi tạo code là:", response.data);
       if (response && response.data) {
-        // Cập nhật danh sách mã sau khi tạo thành công
         setCodes(prev => [response.data, ...prev]);
         const sportName = {
           'soccer': 'bóng đá',
@@ -99,7 +96,6 @@ const ManageAccessCode = ({ onNavigate }) => {
     return new Date(dateString).toLocaleString('vi-VN');
   };
 
-  // Get status color
   const getStatusColor = (status) => {
     switch (status) {
       case 'active': return 'text-green-600 bg-green-100';
@@ -109,7 +105,6 @@ const ManageAccessCode = ({ onNavigate }) => {
     }
   };
 
-  // Get status text
   const getStatusText = (status) => {
     switch (status) {
       case 'active': return '🟢 Hoạt động';
@@ -119,12 +114,12 @@ const ManageAccessCode = ({ onNavigate }) => {
     }
   };
 
-  // Generate Sepay QR URL
   const generateSepayQRUrl = (paymentData) => {
     const baseUrl = 'https://qr.sepay.vn/img';
     const params = new URLSearchParams({
-      acc: paymentData.bankAccountNumber,
-      bank: paymentData.bankName,
+      acc: paymentData.accountNumber,
+      name: paymentData.name,
+      bank: paymentData.bank,
       amount: paymentData.amount,
       des: paymentData.code_pay,
       template: 'compact'
@@ -132,7 +127,6 @@ const ManageAccessCode = ({ onNavigate }) => {
     return `${baseUrl}?${params.toString()}`;
   };
 
-  // Xử lý mua mã access code
   const handlePurchaseCode = async (accessCode) => {
     try {
       setPaymentLoading(true);
@@ -165,7 +159,6 @@ const ManageAccessCode = ({ onNavigate }) => {
     }
   };
 
-  // Xử lý nhập code để vào Home
   const handleEnterCode = async (e) => {
     e.preventDefault();
     if (!matchCode.trim()) {
@@ -186,7 +179,6 @@ const ManageAccessCode = ({ onNavigate }) => {
     }
   };
 
-  // Xử lý nhanh vào trận với code cụ thể
   const handleQuickEnter = async (code) => {
     const result = await enterMatchCode(code);
     if (result.success) {
@@ -611,18 +603,18 @@ const ManageAccessCode = ({ onNavigate }) => {
 
                   <div className="bg-white p-3 rounded border">
                     <div className="text-sm text-gray-600">Ngân hàng</div>
-                    <div className="font-semibold">{paymentData.bankName}</div>
+                    <div className="font-semibold">{paymentData.bank}</div>
                   </div>
 
                   <div className="bg-white p-3 rounded border">
                     <div className="text-sm text-gray-600">Số tài khoản</div>
-                    <div className="font-mono font-semibold">{paymentData.bankAccountNumber}</div>
+                    <div className="font-mono font-semibold">{paymentData.accountNumber}</div>
                   </div>
 
-                  {paymentInfo?.accountHolderName && (
+                  {paymentData?.name && (
                     <div className="bg-white p-3 rounded border">
                       <div className="text-sm text-gray-600">Chủ tài khoản</div>
-                      <div className="font-semibold">{paymentInfo.accountHolderName}</div>
+                      <div className="font-semibold">{paymentData.name}</div>
                     </div>
                   )}
 
