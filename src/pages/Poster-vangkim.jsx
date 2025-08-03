@@ -30,7 +30,7 @@ export default function VangKimMatchIntro() {
     organizingTypeDisplay: organizing?.organizing?.type_display || [],
     mediaPartners: getFullLogoUrls(mediaPartners?.mediaPartners?.url_logo || []),
     mediaPartnersTypeDisplay: mediaPartners?.mediaPartners?.type_display || [],
-    tournamentLogo: getFullLogoUrl(tournamentLogo?.url_logo?.[0]) || null,
+    tournamentLogos: getFullLogoUrls(tournamentLogo?.url_logo || []),
     tournamentPosition: displaySettings?.tournamentPosition || 'top-center',
     liveUnit: getFullLogoUrl(liveUnit?.url_logo?.[0]) || null,
     logoShape: displaySettings?.logoShape || 'circle',
