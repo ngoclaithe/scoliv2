@@ -20,9 +20,9 @@ const PaymentInfoManagement = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingInfo, setEditingInfo] = useState(null);
   const [formData, setFormData] = useState({
-    bankName: '',
-    bankAccountNumber: '',
-    accountHolderName: '',
+    bank: '',
+    accountNumber: '',
+    name: '',
     email: '',
     password_app: '',
     isActive: true
@@ -54,18 +54,18 @@ const PaymentInfoManagement = () => {
   const validateForm = () => {
     const errors = {};
     
-    if (!formData.bankName.trim()) {
-      errors.bankName = 'Vui lòng nhập tên ngân hàng';
+    if (!formData.bank.trim()) {
+      errors.bank = 'Vui lòng nhập tên ngân hàng';
     }
     
-    if (!formData.bankAccountNumber.trim()) {
-      errors.bankAccountNumber = 'Vui lòng nhập số tài khoản';
-    } else if (!/^\d+$/.test(formData.bankAccountNumber)) {
-      errors.bankAccountNumber = 'Số tài khoản chỉ được chứa số';
+    if (!formData.accountNumber.trim()) {
+      errors.accountNumber = 'Vui lòng nhập số tài khoản';
+    } else if (!/^\d+$/.test(formData.accountNumber)) {
+      errors.accountNumber = 'Số tài khoản chỉ được chứa số';
     }
     
-    if (!formData.accountHolderName.trim()) {
-      errors.accountHolderName = 'Vui lòng nhập tên chủ tài khoản';
+    if (!formData.name.trim()) {
+      errors.name = 'Vui lòng nhập tên chủ tài khoản';
     }
 
     if (!formData.email.trim()) {
@@ -110,9 +110,9 @@ const PaymentInfoManagement = () => {
   const handleEdit = (info) => {
     setEditingInfo(info);
     setFormData({
-      bankName: info.bankName || '',
-      bankAccountNumber: info.bankAccountNumber || '',
-      accountHolderName: info.accountHolderName || '',
+      bank: info.bank || '',
+      accountNumber: info.accountNumber || '',
+      name: info.name || '',
       email: info.email || '',
       password_app: info.password_app || '',
       isActive: info.isActive !== false
@@ -142,9 +142,9 @@ const PaymentInfoManagement = () => {
     setShowModal(false);
     setEditingInfo(null);
     setFormData({
-      bankName: '',
-      bankAccountNumber: '',
-      accountHolderName: '',
+      bank: '',
+      accountNumber: '',
+      name: '',
       email: '',
       password_app: '',
       isActive: true
@@ -216,9 +216,6 @@ const PaymentInfoManagement = () => {
                       Chủ tài khoản
                     </th>
                     <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">
-                      Email
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-bold text-slate-700 uppercase tracking-wider">
                       Trạng thái
                     </th>
                     <th className="px-6 py-4 text-right text-xs font-bold text-slate-700 uppercase tracking-wider">
@@ -235,26 +232,18 @@ const PaymentInfoManagement = () => {
                             <BanknotesIcon className="h-5 w-5 text-white" />
                           </div>
                           <div className="text-sm font-semibold text-slate-900">
-                            {info.bankName}
+                            {info.bank}
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-mono font-semibold text-slate-900 bg-slate-100 px-3 py-1 rounded-lg inline-block">
-                          {info.bankAccountNumber}
+                          {info.accountNumber}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-slate-900">
-                          {info.accountHolderName}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <EnvelopeIcon className="h-4 w-4 text-slate-400 mr-2" />
-                          <div className="text-sm text-slate-900">
-                            {info.email}
-                          </div>
+                          {info.name}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -311,14 +300,14 @@ const PaymentInfoManagement = () => {
               </label>
               <Input
                 type="text"
-                value={formData.bankName}
-                onChange={(e) => handleInputChange('bankName', e.target.value)}
+                value={formData.bank}
+                onChange={(e) => handleInputChange('bank', e.target.value)}
                 placeholder="Ví dụ: MBBANK, Vietcombank, Techcombank..."
-                className={formErrors.bankName ? 'border-red-500' : ''}
+                className={formErrors.bank ? 'border-red-500' : ''}
                 required
               />
-              {formErrors.bankName && (
-                <p className="mt-1 text-sm text-red-600">{formErrors.bankName}</p>
+              {formErrors.bank && (
+                <p className="mt-1 text-sm text-red-600">{formErrors.bank}</p>
               )}
             </div>
 
@@ -328,14 +317,14 @@ const PaymentInfoManagement = () => {
               </label>
               <Input
                 type="text"
-                value={formData.bankAccountNumber}
-                onChange={(e) => handleInputChange('bankAccountNumber', e.target.value)}
+                value={formData.accountNumber}
+                onChange={(e) => handleInputChange('accountNumber', e.target.value)}
                 placeholder="Ví dụ: 1234567890"
-                className={`font-mono ${formErrors.bankAccountNumber ? 'border-red-500' : ''}`}
+                className={`font-mono ${formErrors.accountNumber ? 'border-red-500' : ''}`}
                 required
               />
-              {formErrors.bankAccountNumber && (
-                <p className="mt-1 text-sm text-red-600">{formErrors.bankAccountNumber}</p>
+              {formErrors.accountNumber && (
+                <p className="mt-1 text-sm text-red-600">{formErrors.accountNumber}</p>
               )}
             </div>
 
@@ -345,14 +334,14 @@ const PaymentInfoManagement = () => {
               </label>
               <Input
                 type="text"
-                value={formData.accountHolderName}
-                onChange={(e) => handleInputChange('accountHolderName', e.target.value)}
+                value={formData.name}
+                onChange={(e) => handleInputChange('name', e.target.value)}
                 placeholder="Ví dụ: NGUYEN VAN A"
-                className={formErrors.accountHolderName ? 'border-red-500' : ''}
+                className={formErrors.name ? 'border-red-500' : ''}
                 required
               />
-              {formErrors.accountHolderName && (
-                <p className="mt-1 text-sm text-red-600">{formErrors.accountHolderName}</p>
+              {formErrors.name && (
+                <p className="mt-1 text-sm text-red-600">{formErrors.name}</p>
               )}
             </div>
 
