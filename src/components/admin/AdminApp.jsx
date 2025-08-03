@@ -85,6 +85,8 @@ const AdminApp = () => {
         return <AccountManagement />;
       case 'code-purchases':
         return <CodePurchaseManagement />;
+      case 'payment-info':
+        return <PaymentInfoManagement />;
       case 'active-rooms':
         return <ActiveRoomManagement />;
       default:
