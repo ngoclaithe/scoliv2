@@ -301,7 +301,7 @@ export default function VangKimMatchIntro() {
           </div>
 
           {allPartners.length > 0 && (
-            <div className="px-[2vw]" style={{ paddingBottom: 'clamp(8px, 1.5vw, 30px)' }}>
+            <div className="px-[2vw]" style={{ paddingBottom: 'clamp(12px, 2vw, 40px)', paddingTop: 'clamp(4px, 0.5vw, 10px)' }}>
               <div className="text-center">
                 <div style={{ marginBottom: 'clamp(4px, 1vw, 20px)' }}>
                   <span
@@ -323,9 +323,9 @@ export default function VangKimMatchIntro() {
                         partner.typeDisplay
                       )}
                       style={{
-                        width: 'clamp(20px, 3vw, 60px)',
-                        height: 'clamp(20px, 3vw, 60px)',
-                        padding: 'clamp(1px, 0.2vw, 4px)'
+                        width: 'clamp(20px, 4vw, 80px)',
+                        height: 'clamp(20px, 4vw, 80px)',
+                        padding: 'clamp(1px, 0.3vw, 6px)'
                       }}
                     >
                       <img
