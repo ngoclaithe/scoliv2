@@ -7,7 +7,7 @@ import AccountManagement from './AccountManagement';
 import CodePurchaseManagement from './CodePurchaseManagement';
 import PaymentInfoManagement from './PaymentInfoManagement';
 import ActiveRoomManagement from './ActiveRoomManagement';
-import adminAPI from '../../API/apiAdmin';
+import AuthAPI from '../../API/apiAuth';
 import Loading from '../common/Loading';
 
 const AdminApp = () => {
@@ -23,28 +23,30 @@ const AdminApp = () => {
   const checkAuthentication = async () => {
     try {
       setLoading(true);
-      
-      // Check if admin token exists
-      if (adminAPI.isAuthenticated()) {
-        setAdminInfo(null);
-        setIsAuthenticated(true);
+
+      // Check if token exists and get user info
+      if (AuthAPI.isAuthenticated()) {
+        const response = await AuthAPI.getMe();
+        if (response.success && response.user.role === 'admin') {
+          setAdminInfo(response.user);
+          setIsAuthenticated(true);
+        } else {
+          AuthAPI.logout();
+        }
       }
     } catch (error) {
       console.error('Error checking authentication:', error);
-      adminAPI.logout();
+      AuthAPI.logout();
     } finally {
       setLoading(false);
     }
   };
 
-  const handleLogin = async (credentials) => {
+  const handleLogin = async (user) => {
     try {
       setLoading(true);
 
-      // Set token
-      localStorage.setItem('admin_token', 'admin-token');
-
-      setAdminInfo(null);
+      setAdminInfo(user);
       setIsAuthenticated(true);
       setCurrentPage('dashboard');
     } catch (error) {
@@ -55,7 +57,7 @@ const AdminApp = () => {
   };
 
   const handleLogout = () => {
-    adminAPI.logout();
+    AuthAPI.logout();
     setIsAuthenticated(false);
     setAdminInfo(null);
     setCurrentPage('dashboard');
