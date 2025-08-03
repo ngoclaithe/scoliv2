@@ -36,10 +36,10 @@ const ScoreboardAbove = ({
         leagueLogo: "/api/placeholder/40/40"
     };
 
-    const rawLogoShape = displaySettings?.logoShape || "round";
+    const rawLogoShape = displaySettings?.displaySettings?.logoShape || displaySettings?.logoShape || "round";
     const logoShape = rawLogoShape === 'round' ? 'circle' : rawLogoShape;
 
-    if (displaySettings?.logoShape !== 'round') {
+    if (displaySettings?.displaySettings?.logoShape !== 'round') {
         console.log('🔧 [ScoreboardAbove] Logo shape changed to:', rawLogoShape, '-> mapped to:', logoShape);
     }
 
