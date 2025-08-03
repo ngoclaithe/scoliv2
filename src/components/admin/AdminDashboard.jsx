@@ -8,7 +8,6 @@ import {
   ArrowDownIcon,
   EyeIcon
 } from '@heroicons/react/24/outline';
-import adminAPI from '../../API/apiAdmin';
 import Loading from '../common/Loading';
 
 const AdminDashboard = () => {
@@ -23,11 +22,6 @@ const AdminDashboard = () => {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
-      
-      // For demo purposes, we'll use mock data
-      // In production, you would call: const data = await adminAPI.getDashboardStats();
-      
-      // Mock data
       const mockStats = {
         totalAccessCodes: 145,
         totalAccounts: 89,

@@ -47,11 +47,6 @@ const AdminApp = () => {
   const handleLogin = async (credentials) => {
     try {
       setLoading(true);
-      
-      // For demo purposes, we'll mock the login
-      // In production: const result = await adminAPI.login(credentials);
-      
-      // Mock successful login
       const mockAdmin = {
         id: 'admin-1',
         name: 'Admin Demo',
