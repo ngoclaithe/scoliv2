@@ -135,8 +135,8 @@ export default function VangKimMatchIntro() {
   };
 
   return (
-    <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
-      <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
+    <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-1 sm:p-2 md:p-4">
+      <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden shadow-2xl">
 
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -146,64 +146,70 @@ export default function VangKimMatchIntro() {
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col" style={{ fontSize: 'clamp(8px, 1.5vw, 24px)' }}>
+        <div className="relative z-10 h-full flex flex-col" style={{ fontSize: 'clamp(6px, 1.8vw, 24px)' }}>
 
-          {/* Top Section - Tournament Logo & Live Unit */}
-          <div className="flex justify-between items-start px-[1vw] py-[0.5vw]">
-
-            <div className={`flex ${getTournamentPositionClass()} flex-1`}>
-              {matchData.showTournamentLogo && matchData.tournamentLogo && (
-                <img
-                  src={matchData.tournamentLogo.tournament_lgo.url_logo}
-                  alt="Tournament Logo"
-                  className="object-contain"
-                  style={{ height: '4vw', maxWidth: '15vw' }}
-                />
-              )}
-            </div>
-
+          {/* Top Section - Live Unit Only */}
+          <div className="flex justify-end items-start px-[2vw] py-[1vw]">
             {matchData.liveUnit && (
-              <div className="bg-red-600 text-white rounded-lg shadow-lg flex items-center" style={{ padding: '0.3vw 0.8vw', gap: '0.3vw' }}>
-                <div className="bg-white rounded-full animate-pulse" style={{ width: '0.5vw', height: '0.5vw' }}></div>
+              <div className="bg-red-600 text-white rounded-lg shadow-lg flex items-center" style={{ padding: 'clamp(4px, 0.4vw, 12px) clamp(8px, 0.8vw, 16px)', gap: 'clamp(2px, 0.3vw, 6px)' }}>
+                <div className="bg-white rounded-full animate-pulse" style={{ width: 'clamp(4px, 0.5vw, 10px)', height: 'clamp(4px, 0.5vw, 10px)' }}></div>
                 <img
                   src={matchData.liveUnit}
                   alt="Live Unit"
                   className="object-contain"
-                  style={{ height: '1.5vw' }}
+                  style={{ height: 'clamp(12px, 1.5vw, 30px)' }}
                 />
               </div>
             )}
           </div>
 
           {/* Main Content - Centered */}
-          <div className="flex-1 flex flex-col justify-center px-[2vw]">
+          <div className="flex-1 flex flex-col justify-center px-[2vw] space-y-[clamp(8px,1.5vw,30px)]">
+
+            {/* Tournament Logos */}
+            {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 && (
+              <div className={`flex ${getTournamentPositionClass()} items-center`} style={{ gap: 'clamp(8px, 1vw, 20px)' }}>
+                {matchData.tournamentLogos.map((logo, index) => (
+                  <img
+                    key={index}
+                    src={logo}
+                    alt={`Tournament Logo ${index + 1}`}
+                    className="object-contain"
+                    style={{
+                      height: 'clamp(24px, 4vw, 80px)',
+                      maxWidth: 'clamp(60px, 15vw, 200px)'
+                    }}
+                  />
+                ))}
+              </div>
+            )}
 
             {/* Title */}
-            <div className="text-center" style={{ marginBottom: '1.5vw' }}>
+            <div className="text-center">
               <h1
                 className="font-black uppercase text-white"
                 style={{
-                  fontSize: '2.5vw',
+                  fontSize: 'clamp(16px, 2.8vw, 56px)',
                   textShadow: '#d97706 2px 2px 4px',
-                  marginBottom: '0.8vw'
+                  marginBottom: 'clamp(4px, 0.8vw, 16px)'
                 }}
               >
                 {matchData.matchTitle}
               </h1>
 
               <div className="flex items-center justify-center">
-                <div className="bg-white" style={{ width: '4vw', height: '2px' }}></div>
-                <div className="bg-yellow-400 rounded-full" style={{ width: '0.5vw', height: '0.5vw', margin: '0 0.5vw' }}></div>
-                <div className="bg-amber-500 rounded-full" style={{ width: '0.5vw', height: '0.5vw', margin: '0 0.5vw' }}></div>
-                <div className="bg-orange-500 rounded-full" style={{ width: '0.5vw', height: '0.5vw', margin: '0 0.5vw' }}></div>
-                <div className="bg-white" style={{ width: '4vw', height: '2px' }}></div>
+                <div className="bg-white" style={{ width: 'clamp(20px, 4vw, 80px)', height: '2px' }}></div>
+                <div className="bg-yellow-400 rounded-full" style={{ width: 'clamp(4px, 0.5vw, 10px)', height: 'clamp(4px, 0.5vw, 10px)', margin: '0 clamp(2px, 0.5vw, 10px)' }}></div>
+                <div className="bg-amber-500 rounded-full" style={{ width: 'clamp(4px, 0.5vw, 10px)', height: 'clamp(4px, 0.5vw, 10px)', margin: '0 clamp(2px, 0.5vw, 10px)' }}></div>
+                <div className="bg-orange-500 rounded-full" style={{ width: 'clamp(4px, 0.5vw, 10px)', height: 'clamp(4px, 0.5vw, 10px)', margin: '0 clamp(2px, 0.5vw, 10px)' }}></div>
+                <div className="bg-white" style={{ width: 'clamp(20px, 4vw, 80px)', height: '2px' }}></div>
               </div>
             </div>
 
             {/* Teams */}
-            <div className="flex items-center justify-between w-full" style={{ marginBottom: '1.5vw' }}>
+            <div className="flex items-center justify-between w-full">
 
-              <div className="flex-1 flex flex-col items-center max-w-[30%]" style={{ gap: '0.8vw' }}>
+              <div className="flex-1 flex flex-col items-center max-w-[30%]" style={{ gap: 'clamp(4px, 0.8vw, 16px)' }}>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <img
@@ -211,17 +217,20 @@ export default function VangKimMatchIntro() {
                     alt={matchData.team1}
                     className={getLogoShapeClass("relative object-cover border-white shadow-2xl transform hover:scale-110 transition duration-300")}
                     style={{
-                      width: '6vw',
-                      height: '6vw',
-                      borderWidth: '0.15vw'
+                      width: 'clamp(40px, 6vw, 120px)',
+                      height: 'clamp(40px, 6vw, 120px)',
+                      borderWidth: 'clamp(1px, 0.15vw, 3px)'
                     }}
                   />
                 </div>
-                <div className="bg-gradient-to-r from-yellow-500 to-amber-600 rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2" style={{ padding: '0.3vw 0.8vw' }}>
+                <div className="bg-gradient-to-r from-yellow-500 to-amber-600 rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-full max-w-[80%]" style={{ padding: 'clamp(2px, 0.3vw, 6px) clamp(4px, 0.8vw, 16px)' }}>
                   <span
-                    className="font-bold uppercase tracking-wide text-white text-center block truncate"
-                    style={{ fontSize: '0.9vw' }}
-                    ref={(el) => el && adjustFontSize(el)}
+                    className="font-bold uppercase tracking-wide text-white text-center block"
+                    style={{
+                      fontSize: 'clamp(8px, 0.9vw, 18px)',
+                      lineHeight: '1.2',
+                      wordBreak: 'break-word'
+                    }}
                   >
                     {matchData.team1}
                   </span>
@@ -233,11 +242,11 @@ export default function VangKimMatchIntro() {
                   src="/images/background-poster/vs5.png"
                   alt="VS"
                   className="object-contain animate-pulse"
-                  style={{ width: '4vw', height: '4vw' }}
+                  style={{ width: 'clamp(30px, 4vw, 80px)', height: 'clamp(30px, 4vw, 80px)' }}
                 />
               </div>
 
-              <div className="flex-1 flex flex-col items-center max-w-[30%]" style={{ gap: '0.8vw' }}>
+              <div className="flex-1 flex flex-col items-center max-w-[30%]" style={{ gap: 'clamp(4px, 0.8vw, 16px)' }}>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-slate-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <img
@@ -245,17 +254,20 @@ export default function VangKimMatchIntro() {
                     alt={matchData.team2}
                     className={getLogoShapeClass("relative object-cover border-white shadow-2xl transform hover:scale-110 transition duration-300")}
                     style={{
-                      width: '6vw',
-                      height: '6vw',
-                      borderWidth: '0.15vw'
+                      width: 'clamp(40px, 6vw, 120px)',
+                      height: 'clamp(40px, 6vw, 120px)',
+                      borderWidth: 'clamp(1px, 0.15vw, 3px)'
                     }}
                   />
                 </div>
-                <div className="bg-gradient-to-r from-gray-500 to-slate-600 rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2" style={{ padding: '0.3vw 0.8vw' }}>
+                <div className="bg-gradient-to-r from-gray-500 to-slate-600 rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-full max-w-[80%]" style={{ padding: 'clamp(2px, 0.3vw, 6px) clamp(4px, 0.8vw, 16px)' }}>
                   <span
-                    className="font-bold uppercase tracking-wide text-white text-center block truncate"
-                    style={{ fontSize: '0.9vw' }}
-                    ref={(el) => el && adjustFontSize(el)}
+                    className="font-bold uppercase tracking-wide text-white text-center block"
+                    style={{
+                      fontSize: 'clamp(8px, 0.9vw, 18px)',
+                      lineHeight: '1.2',
+                      wordBreak: 'break-word'
+                    }}
                   >
                     {matchData.team2}
                   </span>
@@ -264,19 +276,19 @@ export default function VangKimMatchIntro() {
             </div>
 
             {/* Date & Stadium */}
-            <div className="text-center" style={{ marginBottom: '1.5vw' }}>
-              <div className="inline-block bg-black/50 backdrop-blur-sm rounded-xl border border-white/30" style={{ padding: '0.5vw 1.5vw' }}>
-                <div className="flex items-center justify-center" style={{ gap: '1vw' }}>
+            <div className="text-center">
+              <div className="inline-block bg-black/50 backdrop-blur-sm rounded-xl border border-white/30" style={{ padding: 'clamp(4px, 0.5vw, 10px) clamp(8px, 1.5vw, 30px)' }}>
+                <div className="flex flex-col sm:flex-row items-center justify-center" style={{ gap: 'clamp(4px, 1vw, 20px)' }}>
                   {(matchData.showTimer || matchData.showDate) && (
-                    <span className="font-semibold text-white whitespace-nowrap" style={{ fontSize: '1vw' }}>
+                    <span className="font-semibold text-white whitespace-nowrap" style={{ fontSize: 'clamp(10px, 1vw, 20px)' }}>
                       {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
                     </span>
                   )}
                   {(matchData.showTimer || matchData.showDate) && matchData.showStadium && matchData.stadium && (
-                    <div className="bg-white/50" style={{ width: '1px', height: '1.5vw' }}></div>
+                    <div className="bg-white/50 hidden sm:block" style={{ width: '1px', height: 'clamp(12px, 1.5vw, 30px)' }}></div>
                   )}
                   {matchData.showStadium && matchData.stadium && (
-                    <span className="font-semibold text-white flex items-center" style={{ fontSize: '1vw' }}>
+                    <span className="font-semibold text-white flex items-center" style={{ fontSize: 'clamp(10px, 1vw, 20px)' }}>
                       📍 {matchData.stadium}
                     </span>
                   )}
@@ -287,19 +299,19 @@ export default function VangKimMatchIntro() {
           </div>
 
           {allPartners.length > 0 && (
-            <div className="px-[2vw]" style={{ paddingBottom: '1.5vw' }}>
+            <div className="px-[2vw]" style={{ paddingBottom: 'clamp(8px, 1.5vw, 30px)' }}>
               <div className="text-center">
-                <div style={{ marginBottom: '1vw' }}> {/* tăng khoảng cách trên một chút */}
+                <div style={{ marginBottom: 'clamp(4px, 1vw, 20px)' }}>
                   <span
                     className="font-bold text-white bg-black/50 backdrop-blur-sm rounded-lg border border-white/30"
-                    style={{ fontSize: '1.6vw', padding: '0.4vw 1.6vw' }} // gấp đôi
+                    style={{ fontSize: 'clamp(10px, 1.6vw, 32px)', padding: 'clamp(2px, 0.4vw, 8px) clamp(8px, 1.6vw, 32px)' }}
                   >
                     Các đơn vị
                   </span>
                 </div>
                 <div
                   className="flex justify-center items-center flex-wrap"
-                  style={{ gap: '1vw' }} // gấp đôi
+                  style={{ gap: 'clamp(4px, 1vw, 20px)' }}
                 >
                   {allPartners.map((partner, index) => (
                     <div
@@ -309,9 +321,9 @@ export default function VangKimMatchIntro() {
                         partner.typeDisplay
                       )}
                       style={{
-                        width: '3vw',  // gấp đôi
-                        height: '3vw', // gấp đôi
-                        padding: '0.2vw' // gấp đôi
+                        width: 'clamp(20px, 3vw, 60px)',
+                        height: 'clamp(20px, 3vw, 60px)',
+                        padding: 'clamp(1px, 0.2vw, 4px)'
                       }}
                     >
                       <img
