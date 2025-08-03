@@ -746,7 +746,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                 <div className="text-center">
                   <h4 className="font-semibold text-gray-900 mb-3">Quét mã QR để thanh toán</h4>
                   <div className="bg-white p-4 rounded-lg inline-block shadow-sm">
-                    <QRCode
+                    <QRCodeCanvas
                       value={generateQRData(paymentData)}
                       size={200}
                       level="M"
