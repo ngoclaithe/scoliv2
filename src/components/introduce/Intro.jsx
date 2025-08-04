@@ -176,17 +176,17 @@ const Intro = () => {
             {/* Bottom left SCO logo */}
             {showSCOLogo && (
                 <div className={`fixed z-50 ${isMobile ? 'bottom-4 left-4' : 'bottom-8 left-8'}`}>
-                    <div className="relative group">
+                    <div className="relative">
                         <div className="absolute inset-0 bg-white/20 rounded-lg blur-sm scale-110"></div>
                         <img
                             src="/images/basic/ScoLivLogo.png"
                             alt="SCO Logo"
-                            className={`relative ${isMobile ? 'h-12' : 'h-16'} w-auto object-contain shadow-xl border-2 border-white/30 group-hover:scale-110 transition-transform duration-300 rounded-lg`}
+                            className={`relative ${isMobile ? 'h-12' : 'h-16'} w-auto object-contain shadow-xl border-2 border-white/30 rounded-lg`}
                             onError={(e) => {
                                 // Fallback to text logo if image fails
                                 e.target.style.display = 'none';
                                 e.target.parentElement.innerHTML = `
-                                    <div class="${isMobile ? 'w-24 h-12' : 'w-32 h-16'} bg-gray-700 rounded-lg flex items-center justify-center text-white font-bold shadow-xl border-2 border-white/30 group-hover:scale-110 transition-transform duration-300">
+                                    <div class="${isMobile ? 'w-24 h-12' : 'w-32 h-16'} bg-gray-700 rounded-lg flex items-center justify-center text-white font-bold shadow-xl border-2 border-white/30">
                                         <span class="${isMobile ? 'text-sm' : 'text-base'}">SCO</span>
                                     </div>
                                 `;
