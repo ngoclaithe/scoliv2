@@ -14,6 +14,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
     teamAKitColor: matchData?.teamAKitColor || "#FF0000", 
     teamBKitColor: matchData?.teamBKitColor || "#0000FF"
   };
+  console.log("Giá trị matchData hiện tại là:", matchData);
 
   const currentType = displaySettings?.selectedSkin || 1;
   const showMatchTime = currentData.status === 'live' || currentData.status === 'paused';
@@ -29,8 +30,19 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
 
   const renderScoreboardType1 = () => (
     <div className="flex items-center justify-center gap-0">
-      <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold">
-        A
+      <div className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden">
+        <img 
+          src={currentData.teamALogo} 
+          alt="Team A Logo" 
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            e.target.nextSibling.style.display = 'flex';
+          }}
+        />
+        <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
+          A
+        </div>
       </div>
 
       <div className="flex items-center gap-0">
@@ -71,14 +83,42 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
         </div>
       </div>
 
-      <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold">
-        B
+      <div className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden">
+        <img 
+          src={currentData.teamBLogo} 
+          alt="Team B Logo" 
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            e.target.nextSibling.style.display = 'flex';
+          }}
+        />
+        <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
+          B
+        </div>
       </div>
     </div>
   );
 
   const renderScoreboardType2 = () => (
     <div className="flex justify-center items-center">
+      <div className="flex items-center mr-2">
+        <div className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden">
+          <img 
+            src={currentData.teamALogo} 
+            alt="Team A Logo" 
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.nextSibling.style.display = 'flex';
+            }}
+          />
+          <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
+            A
+          </div>
+        </div>
+      </div>
+
       <div
         className="flex items-center justify-center h-6 rounded-md gap-0"
         style={{
@@ -143,13 +183,41 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
           {currentData.teamBName}
         </div>
       </div>
+
+      <div className="flex items-center ml-2">
+        <div className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden">
+          <img 
+            src={currentData.teamBLogo} 
+            alt="Team B Logo" 
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              e.target.style.display = 'none';
+              e.target.nextSibling.style.display = 'flex';
+            }}
+          />
+          <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
+            B
+          </div>
+        </div>
+      </div>
     </div>
   );
 
   const renderScoreboardType3 = () => (
     <div className="flex items-center justify-between">
-      <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold">
-        A
+      <div className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden">
+        <img 
+          src={currentData.teamALogo} 
+          alt="Team A Logo" 
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            e.target.nextSibling.style.display = 'flex';
+          }}
+        />
+        <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
+          A
+        </div>
       </div>
 
       <div className="flex items-center bg-black/20 backdrop-blur-sm rounded-lg p-1">
@@ -187,16 +255,38 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
         </div>
       </div>
 
-      <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold">
-        B
+      <div className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden">
+        <img 
+          src={currentData.teamBLogo} 
+          alt="Team B Logo" 
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            e.target.nextSibling.style.display = 'flex';
+          }}
+        />
+        <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
+          B
+        </div>
       </div>
     </div>
   );
 
   const renderScoreboardType4 = () => (
     <div className="flex items-center justify-between">
-      <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold">
-        A
+      <div className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden">
+        <img 
+          src={currentData.teamALogo} 
+          alt="Team A Logo" 
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            e.target.nextSibling.style.display = 'flex';
+          }}
+        />
+        <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
+          A
+        </div>
       </div>
 
       <div className="flex items-center">
@@ -230,8 +320,19 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
           <div className="text-white font-bold text-sm min-w-[1rem] text-center">
             {currentData.teamAScore}
           </div>
-          <div className="mx-1 w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center text-xs">
-            L
+          <div className="mx-1 w-5 h-5 rounded-full flex items-center justify-center text-xs overflow-hidden">
+            <img 
+              src="/api/placeholder/20/20" 
+              alt="League Logo" 
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'flex';
+              }}
+            />
+            <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
+              L
+            </div>
           </div>
           <div className="text-white font-bold text-sm min-w-[1rem] text-center">
             {currentData.teamBScore}
@@ -261,8 +362,19 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
         </div>
       </div>
 
-      <div className="w-6 h-6 bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold">
-        B
+      <div className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden">
+        <img 
+          src={currentData.teamBLogo} 
+          alt="Team B Logo" 
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            e.target.style.display = 'none';
+            e.target.nextSibling.style.display = 'flex';
+          }}
+        />
+        <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
+          B
+        </div>
       </div>
     </div>
   );
