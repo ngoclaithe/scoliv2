@@ -142,16 +142,15 @@ const Intro = () => {
 
                     {/* Team 2 */}
                     <div className="flex-1 flex flex-col items-center">
-                        <div className="relative group">
+                        <div className="relative">
                             <div className="absolute inset-0 bg-white/20 rounded-full blur-sm scale-110"></div>
                             <img
                                 src={matchData.logo2}
                                 alt={matchData.team2}
-                                className="relative rounded-full bg-white p-2 object-cover shadow-xl border-4 border-white/30 group-hover:scale-105 transition-transform duration-300"
+                                className="relative rounded-full bg-white p-2 object-cover shadow-xl border-4 border-white/30"
                                 style={{
                                     width: `${logoSize}px`,
-                                    height: `${logoSize}px`,
-                                    animation: 'rotate 8s linear infinite reverse'
+                                    height: `${logoSize}px`
                                 }}
                                 onError={(e) => {
                                     e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjZGMyNjI2Ii8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBCPC90ZXh0Pgo8L3N2Zz4K';
