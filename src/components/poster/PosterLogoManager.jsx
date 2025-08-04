@@ -616,6 +616,16 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
         )}
       </div>
     );
+  }, (prevProps, nextProps) => {
+    // Only rerender if item properties actually changed
+    return (
+      prevProps.item.id === nextProps.item.id &&
+      prevProps.item.code === nextProps.item.code &&
+      prevProps.item.url === nextProps.item.url &&
+      JSON.stringify(prevProps.item.displayPositions) === JSON.stringify(nextProps.item.displayPositions) &&
+      prevProps.onUpdate === nextProps.onUpdate &&
+      prevProps.onRemove === nextProps.onRemove
+    );
   });
 
   const handlePosterSelect = (poster) => {
