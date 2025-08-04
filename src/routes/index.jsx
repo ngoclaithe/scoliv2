@@ -27,11 +27,13 @@ const AppRoutes = () => {
           </AuthProvider>
         } />
 
-        {/* Public dynamic routes for access codes - không cần authentication */}
+        {/* Public dynamic routes for access codes - cần AuthProvider để tránh lỗi useAuth */}
         <Route path="/:accessCode" element={
-          <PublicMatchProvider>
-            <DisplayController />
-          </PublicMatchProvider>
+          <AuthProvider>
+            <PublicMatchProvider>
+              <DisplayController />
+            </PublicMatchProvider>
+          </AuthProvider>
         } />
 
         {/* Preview route for posters */}

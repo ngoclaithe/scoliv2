@@ -540,6 +540,8 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
           {/* Input tìm kiếm với icon */}
           <div className="relative">
             <input
+              id="logo-search-code"
+              name="logoSearchCode"
               type="text"
               value={localCode}
               onChange={handleCodeChange}
