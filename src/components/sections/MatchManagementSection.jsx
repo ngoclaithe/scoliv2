@@ -1066,6 +1066,18 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">🥤</span>
               <span className="text-xs font-bold text-center">NGHỈ GIỮA</span>
             </button>
+
+            {/* Thống kê */}
+            <button
+              onClick={() => {
+                updateView('stat');
+                playAudioForAction('poster');
+              }}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">📊</span>
+              <span className="text-xs font-bold text-center">THỐNG KÊ</span>
+            </button>
           </div>
 
           {/* Đếm T - Input phút đơn giản */}
