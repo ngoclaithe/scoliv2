@@ -207,16 +207,11 @@ const Intro = () => {
 
             {/* Custom styles for animations */}
             <style jsx>{`
-                @keyframes rotate {
-                    from { transform: rotateY(0deg); }
-                    to { transform: rotateY(360deg); }
-                }
-                
                 @keyframes marquee {
                     0% { transform: translateX(100%); }
                     100% { transform: translateX(-100%); }
                 }
-                
+
                 .animate-marquee {
                     animation: marquee 15s linear infinite;
                 }
