@@ -260,7 +260,7 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật template
+    // Lắng nghe c���p nhật template
     socketService.on('template_updated', (data) => {
       setDisplaySettings(prev => ({ ...prev, selectedSkin: data.templateId }));
       setLastUpdateTime(Date.now());
@@ -472,6 +472,11 @@ export const MatchProvider = ({ children }) => {
 
   // Ngắt kết nối socket
   const disconnectSocket = useCallback(() => {
+    // Remove room status listener
+    socketService.removeAllListeners('room_joined');
+    socketService.removeAllListeners('room_left');
+    socketService.removeAllListeners('room_error');
+
     socketService.disconnect();
     setSocketConnected(false);
   }, []);
@@ -527,7 +532,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Cập nh���t poster
+  // Cập nhật poster
   const updatePoster = useCallback((posterType) => {
     console.log('🎨 [MatchContext] updatePoster called with:', posterType);
     console.log('🎨 [MatchContext] socketConnected:', socketConnected);
