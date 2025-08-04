@@ -194,7 +194,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         setTeamAInfo(prev => ({ ...prev, logo: getFullLogoUrl(logo.url_logo) }));
         setLogoCodeA("");
       } else {
-        toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeA}"`);
+        toast.error(`⚠�� Không tìm thấy logo với code "${logoCodeA}"`);
       }
     } catch (error) {
       toast.error('❌ Lỗi tìm kiếm logo A');
@@ -657,8 +657,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                   teamAKitColor: teamAInfo.shirtColor || '#ff0000',
                   teamBKitColor: teamBInfo.shirtColor || '#000000',
                   liveText: liveText,
-                  logoTeamA: teamAInfo.logo || matchData.teamA.logo || "",
-                  logoTeamB: teamBInfo.logo || matchData.teamB.logo || ""
+                  logoTeamA: teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
+                  logoTeamB: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || ""
                 });
 
                 // Cập nhật đơn vị live riêng biệt để emit đến backend
