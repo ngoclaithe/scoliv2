@@ -152,7 +152,7 @@ const MatchPreview = ({
               <div className="w-12 h-12 md:w-20 md:h-20 mx-auto mb-2 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
                 {match.homeTeam.logo ? (
                   <img
-                    src={match.homeTeam.logo}
+                    src={getFullLogoUrl(match.homeTeam.logo)}
                     alt={match.homeTeam.name}
                     className="w-8 h-8 md:w-12 md:h-12 object-contain"
                   />
