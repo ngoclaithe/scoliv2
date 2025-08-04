@@ -659,7 +659,7 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
     }
   }, [apiLogos]);
 
-  const handleItemRemove = async (itemId) => {
+  const handleItemRemove = useCallback(async (itemId) => {
     console.log('🗑️ [PosterLogoManager] Removing item:', itemId);
 
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);
@@ -703,7 +703,7 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
         behavior: 'remove'
       });
     }
-  };
+  }, [apiLogos, logoItems, activeLogoCategory, logoDisplayOptions, onLogoUpdate]);
 
   const handleAddNewLogo = async () => {
     const newLogo = {
