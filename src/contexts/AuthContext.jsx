@@ -356,7 +356,8 @@ export const AuthProvider = ({ children }) => {
     hasMatchAccess,
     canAccessProfile,
     enterMatchCode,
-    clearMatchCode
+    clearMatchCode,
+    handleExpiredAccess
   };
 
   return (
