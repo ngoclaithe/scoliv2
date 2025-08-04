@@ -145,7 +145,7 @@ const MatchInfo = ({
             <div className="w-16 h-16 mx-auto mb-2 bg-blue-100 rounded-full flex items-center justify-center">
               {match.homeTeam.logo ? (
                 <img
-                  src={match.homeTeam.logo}
+                  src={getFullLogoUrl(match.homeTeam.logo)}
                   alt="Home"
                   className="w-10 h-10 object-contain"
                 />
@@ -353,7 +353,7 @@ const MatchInfo = ({
                 <span className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-medium">
                   {i + 1}
                 </span>
-                <span>Cầu thủ {i + 1}</span>
+                <span>C��u thủ {i + 1}</span>
               </div>
             ))}
           </div>
