@@ -216,7 +216,7 @@ const MatchManager = ({
                 <div className="w-16 h-16 bg-white rounded-full mx-auto flex items-center justify-center border">
                   {matchData.homeTeam.logo ? (
                     <img
-                      src={matchData.homeTeam.logo}
+                      src={getFullLogoUrl(matchData.homeTeam.logo)}
                       alt="Home"
                       className="w-12 h-12 object-contain"
                     />
