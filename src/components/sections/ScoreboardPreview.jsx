@@ -14,7 +14,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
     teamAKitColor: matchData?.teamAKitColor || "#FF0000", 
     teamBKitColor: matchData?.teamBKitColor || "#0000FF"
   };
-  console.log("Giá trị matchData hiện tại là:", matchData);
+  // console.log("Giá trị matchData hiện tại là:", matchData);
 
   const currentType = displaySettings?.selectedSkin || 1;
   const showMatchTime = currentData.status === 'live' || currentData.status === 'paused';

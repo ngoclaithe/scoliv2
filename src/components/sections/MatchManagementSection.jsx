@@ -82,6 +82,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   });
   const [matchTitle, setMatchTitle] = useState(matchData.matchTitle || "");
   const [liveUnit, setLiveUnit] = useState(matchData.liveUnit || "");
+  const [liveText, setLiveText] = useState(matchData.liveText || "");
 
   // Sync team info khi matchData thay đổi (từ server)
   useEffect(() => {
@@ -119,7 +120,10 @@ const MatchManagementSection = ({ isActive = true }) => {
     if (matchData.liveUnit !== undefined) {
       setLiveUnit(matchData.liveUnit);
     }
-  }, [matchData.matchTitle, matchData.liveUnit]);
+    if (matchData.liveText !== undefined) {
+      setLiveText(matchData.liveText);
+    }
+  }, [matchData.matchTitle, matchData.liveUnit, matchData.liveText]);
 
 
   const playAudioForAction = (audioType) => {
@@ -504,8 +508,8 @@ const MatchManagementSection = ({ isActive = true }) => {
             <input
               type="text"
               placeholder="Đơn vị live"
-              value={liveUnit}
-              onChange={(e) => setLiveUnit(e.target.value)}
+              value={liveText}
+              onChange={(e) => setLiveText(e.target.value)}
               className="w-full min-w-0 px-2 py-1 text-xs font-medium text-center text-blue-700 bg-white border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-300"
               maxLength={50}
             />
