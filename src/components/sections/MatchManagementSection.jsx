@@ -765,159 +765,132 @@ const MatchManagementSection = ({ isActive = true }) => {
 
       {/* Tab Thông số */}
       {selectedOption === "thong-so" && (
-        <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
-          <div className="space-y-4">
-            {/* Header với nút chỉnh sửa */}
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-gray-900">Thông số trận đấu</h3>
-              <Button
-                variant={isEditingStats ? "primary" : "outline"}
-                size="sm"
-                onClick={() => setIsEditingStats(!isEditingStats)}
-                className="flex items-center space-x-1"
-              >
-                <span>{isEditingStats ? "Ok" : "✏️"}</span>
-                <span className="text-xs">{isEditingStats ? "Lưu" : "Sửa"}</span>
-              </Button>
-            </div>
+        <div className="bg-white rounded-lg p-2 border border-gray-200 shadow-sm">
+          {/* Header với nút chỉnh sửa */}
+          <div className="flex justify-between items-center mb-2">
+            <h3 className="text-base font-semibold text-gray-900">Thông số trận đấu</h3>
+            <Button
+              variant={isEditingStats ? "primary" : "outline"}
+              size="sm"
+              onClick={() => setIsEditingStats(!isEditingStats)}
+              className="flex items-center space-x-1 px-2 py-1"
+            >
+              <span>{isEditingStats ? "✓" : "✏️"}</span>
+              <span className="text-xs">{isEditingStats ? "OK" : "Sửa"}</span>
+            </Button>
+          </div>
 
-            {/* Stats Display */}
-            <div className="space-y-3">
-              {/* Kiểm soát bóng */}
-              <EditableStatBar
-                label="Kiểm soát bóng"
-                statKey="possession"
-                team1Value={matchStats.possession.team1}
-                team2Value={matchStats.possession.team2}
-                isPercentage={true}
-                onUpdate={(team, value) => updatePossession(team, value)}
-              />
+          {/* Stats Display - Gom chung vào 1 thẻ */}
+          <div className="bg-gray-50 rounded-lg p-2 space-y-2">
+            {/* Kiểm soát bóng */}
+            <EditableStatBar
+              label="Kiểm soát bóng"
+              statKey="possession"
+              team1Value={matchStats.possession.team1}
+              team2Value={matchStats.possession.team2}
+              isPercentage={true}
+              onUpdate={(team, value) => updatePossession(team, value)}
+            />
 
-              {/* Tổng số cú sút */}
-              <EditableStatBar
-                label="Tổng số cú sút"
-                statKey="totalShots"
-                team1Value={matchStats.totalShots.team1}
-                team2Value={matchStats.totalShots.team2}
-                onUpdate={(team, value) => updateStat('totalShots', team, value)}
-              />
+            {/* Tổng số cú sút */}
+            <EditableStatBar
+              label="Tổng số cú sút"
+              statKey="totalShots"
+              team1Value={matchStats.totalShots.team1}
+              team2Value={matchStats.totalShots.team2}
+              onUpdate={(team, value) => updateStat('totalShots', team, value)}
+            />
 
-              {/* Sút trúng đích */}
-              <EditableStatBar
-                label="Sút trúng đích"
-                statKey="shotsOnTarget"
-                team1Value={matchStats.shotsOnTarget.team1}
-                team2Value={matchStats.shotsOnTarget.team2}
-                onUpdate={(team, value) => updateStat('shotsOnTarget', team, value)}
-              />
+            {/* Sút trúng đích */}
+            <EditableStatBar
+              label="Sút trúng đích"
+              statKey="shotsOnTarget"
+              team1Value={matchStats.shotsOnTarget.team1}
+              team2Value={matchStats.shotsOnTarget.team2}
+              onUpdate={(team, value) => updateStat('shotsOnTarget', team, value)}
+            />
 
-              {/* Phạt góc */}
-              <EditableStatBar
-                label="Phạt góc"
-                statKey="corners"
-                team1Value={matchStats.corners.team1}
-                team2Value={matchStats.corners.team2}
-                onUpdate={(team, value) => updateStat('corners', team, value)}
-              />
+            {/* Phạt góc */}
+            <EditableStatBar
+              label="Phạt góc"
+              statKey="corners"
+              team1Value={matchStats.corners.team1}
+              team2Value={matchStats.corners.team2}
+              onUpdate={(team, value) => updateStat('corners', team, value)}
+            />
 
-              {/* Thẻ vàng */}
-              <EditableStatBar
-                label="Thẻ vàng"
-                statKey="yellowCards"
-                team1Value={matchStats.yellowCards.team1}
-                team2Value={matchStats.yellowCards.team2}
-                onUpdate={(team, value) => updateStat('yellowCards', team, value)}
-              />
+            {/* Thẻ vàng */}
+            <EditableStatBar
+              label="Thẻ vàng"
+              statKey="yellowCards"
+              team1Value={matchStats.yellowCards.team1}
+              team2Value={matchStats.yellowCards.team2}
+              onUpdate={(team, value) => updateStat('yellowCards', team, value)}
+            />
 
-              {/* Phạm lỗi */}
-              <EditableStatBar
-                label="Phạm lỗi"
-                statKey="fouls"
-                team1Value={matchStats.fouls.team1}
-                team2Value={matchStats.fouls.team2}
-                onUpdate={(team, value) => updateStat('fouls', team, value)}
-              />
+            {/* Phạm lỗi */}
+            <EditableStatBar
+              label="Phạm lỗi"
+              statKey="fouls"
+              team1Value={matchStats.fouls.team1}
+              team2Value={matchStats.fouls.team2}
+              onUpdate={(team, value) => updateStat('fouls', team, value)}
+            />
 
-              {/* Lỗi Futsal */}
-              <div className="space-y-2 p-3 bg-gray-50 rounded-lg border">
-                <div className="text-center">
-                  <span className="font-medium text-gray-700 text-sm">Lỗi Futsal</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex-1">
-                    <label className="hidden sm:block text-xs text-red-600 font-medium mb-1">Đội A</label>
-                    <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="px-2 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
-                        onClick={() => updateFutsalErrors('teamA', -1)}
-                      >
-                        -
-                      </Button>
-                      <div className="px-3 py-1 bg-red-100 text-red-800 text-sm font-bold min-w-8 text-center">
-                        {futsalErrors.teamA}
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="px-2 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
-                        onClick={() => updateFutsalErrors('teamA', 1)}
-                      >
-                        +
-                      </Button>
+            {/* Lỗi Futsal */}
+            <div className="py-1">
+              <div className="text-center mb-1">
+                <span className="font-medium text-gray-700 text-sm">Lỗi Futsal</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="flex-1">
+                  <div className="flex items-center bg-white rounded border border-gray-300">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="px-1 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
+                      onClick={() => updateFutsalErrors('teamA', -1)}
+                    >
+                      -
+                    </Button>
+                    <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-6 text-center">
+                      {futsalErrors.teamA}
                     </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="px-1 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
+                      onClick={() => updateFutsalErrors('teamA', 1)}
+                    >
+                      +
+                    </Button>
                   </div>
-                  <div className="text-gray-400 text-sm">vs</div>
-                  <div className="flex-1">
-                    <label className="hidden sm:block text-xs text-gray-800 font-medium mb-1">Đội B</label>
-                    <div className="flex items-center bg-white rounded-lg border border-gray-300 shadow-sm">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="px-2 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
-                        onClick={() => updateFutsalErrors('teamB', -1)}
-                      >
-                        -
-                      </Button>
-                      <div className="px-3 py-1 bg-gray-100 text-gray-800 text-sm font-bold min-w-8 text-center">
-                        {futsalErrors.teamB}
-                      </div>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="px-2 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
-                        onClick={() => updateFutsalErrors('teamB', 1)}
-                      >
-                        +
-                      </Button>
+                </div>
+                <div className="text-gray-400 text-xs">vs</div>
+                <div className="flex-1">
+                  <div className="flex items-center bg-white rounded border border-gray-300">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="px-1 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
+                      onClick={() => updateFutsalErrors('teamB', -1)}
+                    >
+                      -
+                    </Button>
+                    <div className="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold min-w-6 text-center">
+                      {futsalErrors.teamB}
                     </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="px-1 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
+                      onClick={() => updateFutsalErrors('teamB', 1)}
+                    >
+                      +
+                    </Button>
                   </div>
                 </div>
               </div>
-
-            </div>
-
-            {/* Control buttons */}
-            <div className="flex justify-center pt-4 border-t border-gray-200">
-              <Button
-                variant="warning"
-                size="sm"
-                onClick={() => {
-                  updateStats({
-                    possession: { team1: 50, team2: 50 },
-                    totalShots: { team1: 0, team2: 0 },
-                    shotsOnTarget: { team1: 0, team2: 0 },
-                    corners: { team1: 0, team2: 0 },
-                    yellowCards: { team1: 0, team2: 0 },
-                    fouls: { team1: 0, team2: 0 },
-                  });
-                }}
-                className="px-4 py-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
-              >
-                <span className="mr-1">🔄</span>
-                ĐẶT LẠI TẤT CẢ
-              </Button>
             </div>
           </div>
         </div>
