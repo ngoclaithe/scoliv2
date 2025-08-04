@@ -454,7 +454,7 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
     const handlePositionToggle = (position) => {
       // Logic: Mỗi logo chỉ được ch���n 1 position duy nhất
       const newPositions = item.displayPositions.includes(position)
-        ? [] // Nếu đang chọn position này thì bỏ chọn (xóa hết)
+        ? [] // Nếu đang chọn position này thì b��� chọn (xóa hết)
         : [position]; // Nếu chưa chọn thì chọn position này (thay thế position cũ)
 
       const updatedItem = { ...item, displayPositions: newPositions };
@@ -755,13 +755,15 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
     );
   };
 
-  const renderLogoSection = () => {
-
-    const currentItems = allLogoItems.filter(item => {
+  const currentItems = useMemo(() => {
+    return allLogoItems.filter(item => {
       if (item.category !== activeLogoCategory) return false;
       if (logoItems.find(logo => logo.id === item.id)) return true;
       return item.displayPositions && item.displayPositions.length > 0;
     });
+  }, [allLogoItems, activeLogoCategory, logoItems]);
+
+  const renderLogoSection = () => {
 
     return (
       <div className="space-y-1">
