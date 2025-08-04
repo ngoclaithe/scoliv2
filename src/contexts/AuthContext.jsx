@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import AuthAPI from '../API/apiAuth';
 import AccessCodeAPI from '../API/apiAccessCode';
+import { toast } from 'react-toastify';
 
 const AuthContext = createContext();
 
@@ -63,7 +64,7 @@ export const AuthProvider = ({ children }) => {
         }
       }
     } catch (error) {
-      console.error('Lỗi tải thông tin người dùng:', error);
+      console.error('Lỗi tải th��ng tin người dùng:', error);
       AuthAPI.logout();
     } finally {
       setLoading(false);
