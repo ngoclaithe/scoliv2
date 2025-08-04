@@ -13,7 +13,7 @@ export const useMatch = () => {
 };
 
 export const MatchProvider = ({ children }) => {
-  const { matchCode, isAuthenticated, user } = useAuth();
+  const { matchCode, isAuthenticated, user, handleExpiredAccess } = useAuth();
   
   // State cho thông tin trận đấu
   const [matchData, setMatchData] = useState({
