@@ -154,6 +154,9 @@ export const MatchProvider = ({ children }) => {
       // Lắng nghe các event từ server
       setupSocketListeners();
 
+      // Lắng nghe trạng thái room (room_joined, room_left, room_error)
+      setupRoomStatusListener();
+
       // Request state hiện tại từ server sau khi connect
       setTimeout(() => {
         socketService.requestCurrentState();
@@ -187,7 +190,7 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật thống kê
+    // Lắng nghe cập nhật thống k��
     socketService.on('match_stats_updated', (data) => {
       setMatchStats(prev => ({ ...prev, ...data.stats }));
       setLastUpdateTime(Date.now());
