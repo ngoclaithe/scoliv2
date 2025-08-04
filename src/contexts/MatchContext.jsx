@@ -154,6 +154,9 @@ export const MatchProvider = ({ children }) => {
       // Lắng nghe các event từ server
       setupSocketListeners();
 
+      // Lắng nghe trạng thái room (room_joined, room_left, room_error)
+      setupRoomStatusListener();
+
       // Request state hiện tại từ server sau khi connect
       setTimeout(() => {
         socketService.requestCurrentState();
@@ -165,6 +168,70 @@ export const MatchProvider = ({ children }) => {
       console.error('Failed to initialize socket:', error);
       setSocketConnected(false);
     }
+  }, []);
+
+  // Thiết lập listener cho trạng thái room
+  const setupRoomStatusListener = useCallback(() => {
+    socketService.onRoomStatus((eventType, data) => {
+      console.log(`🏠 [MatchContext] Room event: ${eventType}`, data);
+
+      if (eventType === 'room_joined' && data) {
+        // Khi join_room thành công, backend sẽ emit room_joined với current state
+        console.log('✅ [MatchContext] Successfully joined room, processing current state from room_joined...');
+
+        // Cập nhật tất cả dữ liệu từ backend nếu có trong room_joined response
+        if (data.currentState) {
+          const state = data.currentState;
+
+          if (state.matchData) {
+            console.log('🔄 [MatchContext] Updating matchData from room_joined:', state.matchData);
+            setMatchData(prev => ({ ...prev, ...state.matchData }));
+          }
+
+          if (state.matchStats) {
+            console.log('📊 [MatchContext] Updating matchStats from room_joined:', state.matchStats);
+            setMatchStats(prev => ({ ...prev, ...state.matchStats }));
+          }
+
+          if (state.displaySettings) {
+            console.log('🎨 [MatchContext] Updating displaySettings from room_joined:', state.displaySettings);
+            setDisplaySettings(prev => ({ ...prev, ...state.displaySettings }));
+          }
+
+          if (state.marqueeData) {
+            console.log('📢 [MatchContext] Updating marqueeData from room_joined:', state.marqueeData);
+            setMarqueeData(prev => ({ ...prev, ...state.marqueeData }));
+          }
+
+          if (state.penaltyData) {
+            console.log('⚽ [MatchContext] Updating penaltyData from room_joined:', state.penaltyData);
+            setPenaltyData(prev => ({ ...prev, ...state.penaltyData }));
+          }
+
+          if (state.lineupData) {
+            console.log('📋 [MatchContext] Updating lineupData from room_joined:', state.lineupData);
+            setLineupData(state.lineupData);
+          }
+
+          if (state.futsalErrors) {
+            console.log('🚫 [MatchContext] Updating futsalErrors from room_joined:', state.futsalErrors);
+            setFutsalErrors(prev => ({ ...prev, ...state.futsalErrors }));
+          }
+
+          if (state.sponsors) {
+            console.log('🏢 [MatchContext] Updating sponsors from room_joined:', state.sponsors);
+            setSponsors(prev => ({ ...prev, ...state.sponsors }));
+          }
+
+          console.log('✅ [MatchContext] All data updated from room_joined event');
+          setLastUpdateTime(Date.now());
+        }
+      } else if (eventType === 'room_error') {
+        console.error('❌ [MatchContext] Room join error:', data);
+      } else if (eventType === 'room_left') {
+        console.log('👋 [MatchContext] Left room:', data);
+      }
+    });
   }, []);
 
   // Thiết lập các listener cho socket
@@ -193,7 +260,7 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật template
+    // Lắng nghe c���p nhật template
     socketService.on('template_updated', (data) => {
       setDisplaySettings(prev => ({ ...prev, selectedSkin: data.templateId }));
       setLastUpdateTime(Date.now());
@@ -405,6 +472,11 @@ export const MatchProvider = ({ children }) => {
 
   // Ngắt kết nối socket
   const disconnectSocket = useCallback(() => {
+    // Remove room status listener
+    socketService.removeAllListeners('room_joined');
+    socketService.removeAllListeners('room_left');
+    socketService.removeAllListeners('room_error');
+
     socketService.disconnect();
     setSocketConnected(false);
   }, []);
