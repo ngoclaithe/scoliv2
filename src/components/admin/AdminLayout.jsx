@@ -19,6 +19,7 @@ const AdminLayout = ({ children, currentPage, onNavigate, onLogout, adminInfo })
     { name: 'Quản lý mã truy cập', href: 'access-codes', icon: KeyIcon, current: currentPage === 'access-codes' },
     { name: 'Quản lý tài khoản', href: 'accounts', icon: UserGroupIcon, current: currentPage === 'accounts' },
     { name: 'Quản lý mua code', href: 'code-purchases', icon: CurrencyDollarIcon, current: currentPage === 'code-purchases' },
+    { name: 'Quản lý Logo', href : 'logo-management', icon: CurrencyDollarIcon, current: currentPage === 'logo-management'},
     { name: 'Thông tin thanh toán', href: 'payment-info', icon: CreditCardIcon, current: currentPage === 'payment-info' },
     { name: 'Phòng hoạt động', href: 'active-rooms', icon: ChatBubbleLeftRightIcon, current: currentPage === 'active-rooms' },
   ];

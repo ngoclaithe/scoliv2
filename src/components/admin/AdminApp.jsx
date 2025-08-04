@@ -7,6 +7,7 @@ import AccountManagement from './AccountManagement';
 import CodePurchaseManagement from './CodePurchaseManagement';
 import PaymentInfoManagement from './PaymentInfoManagement';
 import ActiveRoomManagement from './ActiveRoomManagement';
+import LogoManagement from './LogoManagement';
 import AuthAPI from '../../API/apiAuth';
 import Loading from '../common/Loading';
 
@@ -77,6 +78,8 @@ const AdminApp = () => {
         return <PaymentInfoManagement />;
       case 'active-rooms':
         return <ActiveRoomManagement />;
+      case 'logo-management':
+        return <LogoManagement />;
       default:
         return <AdminDashboard />;
     }
