@@ -317,7 +317,7 @@ const MatchManager = ({
                 <div className="w-16 h-16 bg-white rounded-full mx-auto flex items-center justify-center border">
                   {matchData.awayTeam.logo ? (
                     <img
-                      src={matchData.awayTeam.logo}
+                      src={getFullLogoUrl(matchData.awayTeam.logo)}
                       alt="Away"
                       className="w-12 h-12 object-contain"
                     />
@@ -727,7 +727,7 @@ const MatchManager = ({
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-gray-500">Trọng tài</div>
+                <div className="text-gray-500">Tr���ng tài</div>
                 <div className="font-medium">
                   {matchData.referee || "Chưa cập nhật"}
                 </div>
