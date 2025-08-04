@@ -71,7 +71,7 @@ const DisplayController = () => {
     return () => {
       isCleanedUp = true;
     };
-  }, [accessCode, initializeSocket]);
+  }, [accessCode, initializeSocket, handleExpiredAccess]);
 
   // Render poster component theo type
   const renderPoster = (posterType) => {
