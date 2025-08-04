@@ -1140,7 +1140,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
                 title="Áp dụng"
               >
-                OK
+                ĐẾM T
               </button>
             </div>
           </div>
