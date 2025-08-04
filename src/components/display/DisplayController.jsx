@@ -18,6 +18,7 @@ import ScoreboardAbove from '../scoreboard_preview/ScoreboardAbove';
 import ScoreboardBelowNew from '../scoreboard_preview/ScoreboardBelowNew';
 import PenaltyScoreboard from '../scoreboard_preview/PenaltyScoreboard';
 import PlayerList from '../lineup/PlayerList';
+import Stat from '../sections/Stat';
 
 const DisplayController = () => {
   const { accessCode } = useParams();
