@@ -265,13 +265,13 @@ const MatchManagementSection = ({ isActive = true }) => {
   const EditableStatBar = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => {
     if (!isEditingStats) {
       return (
-        <div className="space-y-1">
-          <div className="flex justify-between items-center text-sm">
-            <span className="font-semibold">{team1Value}{isPercentage ? '%' : ''}</span>
+        <div className="py-1">
+          <div className="flex justify-between items-center text-xs mb-1">
+            <span className="font-semibold text-red-600">{team1Value}{isPercentage ? '%' : ''}</span>
             <span className="font-medium text-gray-700">{label}</span>
-            <span className="font-semibold">{team2Value}{isPercentage ? '%' : ''}</span>
+            <span className="font-semibold text-gray-800">{team2Value}{isPercentage ? '%' : ''}</span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+          <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
             <div className="h-full flex">
               <div
                 className="bg-red-500"
@@ -297,32 +297,30 @@ const MatchManagementSection = ({ isActive = true }) => {
 
     // Chế độ chỉnh sửa
     return (
-      <div className="space-y-2 p-3 bg-gray-50 rounded-lg border">
-        <div className="text-center">
-          <span className="font-medium text-gray-700 text-sm">{label}</span>
+      <div className="py-1 px-2 bg-white rounded border">
+        <div className="text-center mb-1">
+          <span className="font-medium text-gray-700 text-xs">{label}</span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <div className="flex-1">
-            {/* <label className="hidden sm:block text-xs text-red-600 font-medium mb-1">Đội A</label> */}
             <input
               type="number"
               min="0"
               max={isPercentage ? "100" : "99"}
               value={team1Value}
               onChange={(e) => onUpdate('team1', e.target.value)}
-              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:border-red-500 focus:outline-none text-center"
+              className="w-full px-1 py-1 text-xs border border-gray-300 rounded focus:border-red-500 focus:outline-none text-center"
             />
           </div>
-          <div className="text-gray-400 text-sm">vs</div>
+          <div className="text-gray-400 text-xs">vs</div>
           <div className="flex-1">
-            {/* <label className="hidden sm:block text-xs text-gray-800 font-medium mb-1">Đội B</label> */}
             <input
               type="number"
               min="0"
               max={isPercentage ? "100" : "99"}
               value={team2Value}
               onChange={(e) => onUpdate('team2', e.target.value)}
-              className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:border-gray-700 focus:outline-none text-center"
+              className="w-full px-1 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 focus:outline-none text-center"
             />
           </div>
         </div>
