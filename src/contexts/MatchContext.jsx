@@ -189,6 +189,7 @@ export const MatchProvider = ({ children }) => {
   const setupSocketListeners = useCallback(() => {
     // Lắng nghe cập nhật thông tin trận đấu
     socketService.on('match_info_updated', (data) => {
+      console.log('📝 [MatchContext] match_info_updated received:', data);
       setMatchData(prev => ({ ...prev, ...data.matchInfo }));
       setLastUpdateTime(Date.now());
     });
