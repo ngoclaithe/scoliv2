@@ -28,6 +28,7 @@ const DisplayController = () => {
     displaySettings,
     currentView
   } = usePublicMatch();
+  const { handleExpiredAccess } = useAuth();
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
