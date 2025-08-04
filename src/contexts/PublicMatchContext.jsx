@@ -526,7 +526,17 @@ export const PublicMatchProvider = ({ children }) => {
     
 
     socketService.on('live_unit_updated', (data) => {
+      console.log('📝 [PublicMatchContext] live_unit_updated received:', data);
       setLiveUnit(prev => ({ ...prev, ...data.liveUnit }));
+
+      // Cập nhật liveText vào matchData để Intro component có thể sử dụng
+      if (data.liveUnit && (data.liveUnit.text || data.liveUnit.name)) {
+        setMatchData(prev => ({
+          ...prev,
+          liveText: data.liveUnit.text || data.liveUnit.name || prev.liveText
+        }));
+      }
+
       setLastUpdateTime(Date.now());
     });
 

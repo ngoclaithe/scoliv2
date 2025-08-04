@@ -189,6 +189,7 @@ export const MatchProvider = ({ children }) => {
   const setupSocketListeners = useCallback(() => {
     // Lắng nghe cập nhật thông tin trận đấu
     socketService.on('match_info_updated', (data) => {
+      console.log('📝 [MatchContext] match_info_updated received:', data);
       setMatchData(prev => ({ ...prev, ...data.matchInfo }));
       setLastUpdateTime(Date.now());
     });
@@ -253,6 +254,18 @@ export const MatchProvider = ({ children }) => {
     // Lắng nghe cập nhật tiêu đề trận đấu
     socketService.on('match_title_updated', (data) => {
       setMatchData(prev => ({ ...prev, matchTitle: data.matchTitle }));
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật đơn vị live
+    socketService.on('live_unit_updated', (data) => {
+      console.log('📝 [MatchContext] live_unit_updated received:', data);
+      if (data.liveUnit && (data.liveUnit.text || data.liveUnit.name)) {
+        setMatchData(prev => ({
+          ...prev,
+          liveText: data.liveUnit.text || data.liveUnit.name || prev.liveText
+        }));
+      }
       setLastUpdateTime(Date.now());
     });
 

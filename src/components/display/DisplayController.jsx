@@ -18,6 +18,7 @@ import ScoreboardAbove from '../scoreboard_preview/ScoreboardAbove';
 import ScoreboardBelowNew from '../scoreboard_preview/ScoreboardBelowNew';
 import PenaltyScoreboard from '../scoreboard_preview/PenaltyScoreboard';
 import PlayerList from '../lineup/PlayerList';
+import Stat from '../sections/Stat';
 
 const DisplayController = () => {
   const { accessCode } = useParams();
@@ -106,6 +107,8 @@ const DisplayController = () => {
         />;
       case 'player_list':
         return <PlayerList accessCode={accessCode} />;
+      case 'stat':
+        return <Stat accessCode={accessCode} />;
       case 'poster':
       default:
         const posterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;
