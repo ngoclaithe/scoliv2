@@ -112,7 +112,7 @@ export const AuthProvider = ({ children }) => {
       });
 
       setCodeOnly(false);
-      setAuthType('account'); // Chỉ đăng nhập tài khoản
+      setAuthType('account'); 
       setIsAuthenticated(true);
       return { success: true, user: userData };
     } catch (error) {
@@ -129,12 +129,9 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
 
-      // Sử dụng API GET để xác thực mã đăng nhập
       const response = await AccessCodeAPI.verifyCodeForLogin(code);
 
-      // Kiểm tra response có hợp lệ không
       if (response.success && response.isValid) {
-        // Thiết lập thông tin user từ response
         const matchInfo = response.data?.match;
         const userData = {
           id: 'code-user-' + code,
@@ -176,12 +173,11 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
 
-      // Đăng ký thực tế thông qua API
       const response = await AuthAPI.register({
         name: userData.name,
         email: userData.email,
         password: userData.password,
-        role: 'user' // Mặc định là user
+        role: 'user' 
       });
 
       setUser({
@@ -220,7 +216,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Thêm các hàm mới cho cập nhật thông tin và mật khẩu
   const updateProfile = async (userData) => {
     try {
       setLoading(true);
@@ -277,15 +272,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Hàm mới để nhập code trận đấu sau khi đã đăng nhập tài khoản
   const enterMatchCode = async (code) => {
     try {
       setLoading(true);
 
-      // Sử dụng API GET để xác thực code
       const response = await AccessCodeAPI.verifyCodeForLogin(code);
-
-      // Kiểm tra response có hợp lệ không
       if (response.success && response.isValid) {
         setMatchCode(code);
         setAuthType('full'); // Có cả tài khoản và code
@@ -311,7 +302,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Hàm để clear code trận đấu
   const clearMatchCode = () => {
     setMatchCode(null);
     if (authType === 'full') {
@@ -319,7 +309,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Computed values
   const hasAccountAccess = authType === 'account' || authType === 'full';
   const hasMatchAccess = authType === 'code' || authType === 'full';
   const canAccessProfile = hasAccountAccess && !codeOnly;

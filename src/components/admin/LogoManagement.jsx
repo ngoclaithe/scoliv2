@@ -37,7 +37,7 @@ const LogoManagement = () => {
   });
 
   const logoTypes = [
-    { value: 'logo', label: 'Logo chính' },
+    { value: 'logo', label: 'Logo' },
     { value: 'banner', label: 'Banner' },
     { value: 'other', label: 'Khác' },
   ];
@@ -51,6 +51,7 @@ const LogoManagement = () => {
       setLoading(true);
       setError(null);
       const response = await LogoAPI.getLogos();
+      console.log("Giá trị reponse là:", response);
       setLogos(Array.isArray(response) ? response : (response?.data || []));
     } catch (error) {
       console.error('Error loading logos:', error);
