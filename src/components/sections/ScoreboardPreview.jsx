@@ -1,4 +1,5 @@
 import React from 'react';
+import { getFullLogoUrl } from '../../utils/logoUtils';
 
 const ScoreboardPreview = ({ matchData, displaySettings }) => {
   const currentData = {
@@ -339,7 +340,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
           </div>
         </div>
         <div className={`text-white text-xs font-bold px-1 py-0.5 ${showMatchTime ? 'bg-red-600' : 'bg-green-600'}`}>
-          {showMatchTime ? currentData.matchTime : '● LIVE'}
+          {showMatchTime ? currentData.matchTime : '�� LIVE'}
         </div>
       </div>
 
