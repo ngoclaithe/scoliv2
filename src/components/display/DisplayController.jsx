@@ -54,6 +54,11 @@ const DisplayController = () => {
       } catch (err) {
         console.error('❌ [DisplayController] Failed to initialize display:', err);
         if (!isCleanedUp) {
+          // Kiểm tra lỗi hết hạn truy cập trước
+          if (handleExpiredAccess && handleExpiredAccess(err)) {
+            // Đã xử lý lỗi hết hạn, không cần set error
+            return;
+          }
           setError('Không thể kết nối đến hệ thống');
         }
       }
