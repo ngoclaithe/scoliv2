@@ -170,6 +170,70 @@ export const MatchProvider = ({ children }) => {
     }
   }, []);
 
+  // Thiết lập listener cho trạng thái room
+  const setupRoomStatusListener = useCallback(() => {
+    socketService.onRoomStatus((eventType, data) => {
+      console.log(`🏠 [MatchContext] Room event: ${eventType}`, data);
+
+      if (eventType === 'room_joined' && data) {
+        // Khi join_room thành công, backend sẽ emit room_joined với current state
+        console.log('✅ [MatchContext] Successfully joined room, processing current state from room_joined...');
+
+        // Cập nhật tất cả dữ liệu từ backend nếu có trong room_joined response
+        if (data.currentState) {
+          const state = data.currentState;
+
+          if (state.matchData) {
+            console.log('🔄 [MatchContext] Updating matchData from room_joined:', state.matchData);
+            setMatchData(prev => ({ ...prev, ...state.matchData }));
+          }
+
+          if (state.matchStats) {
+            console.log('📊 [MatchContext] Updating matchStats from room_joined:', state.matchStats);
+            setMatchStats(prev => ({ ...prev, ...state.matchStats }));
+          }
+
+          if (state.displaySettings) {
+            console.log('🎨 [MatchContext] Updating displaySettings from room_joined:', state.displaySettings);
+            setDisplaySettings(prev => ({ ...prev, ...state.displaySettings }));
+          }
+
+          if (state.marqueeData) {
+            console.log('📢 [MatchContext] Updating marqueeData from room_joined:', state.marqueeData);
+            setMarqueeData(prev => ({ ...prev, ...state.marqueeData }));
+          }
+
+          if (state.penaltyData) {
+            console.log('⚽ [MatchContext] Updating penaltyData from room_joined:', state.penaltyData);
+            setPenaltyData(prev => ({ ...prev, ...state.penaltyData }));
+          }
+
+          if (state.lineupData) {
+            console.log('📋 [MatchContext] Updating lineupData from room_joined:', state.lineupData);
+            setLineupData(state.lineupData);
+          }
+
+          if (state.futsalErrors) {
+            console.log('🚫 [MatchContext] Updating futsalErrors from room_joined:', state.futsalErrors);
+            setFutsalErrors(prev => ({ ...prev, ...state.futsalErrors }));
+          }
+
+          if (state.sponsors) {
+            console.log('🏢 [MatchContext] Updating sponsors from room_joined:', state.sponsors);
+            setSponsors(prev => ({ ...prev, ...state.sponsors }));
+          }
+
+          console.log('✅ [MatchContext] All data updated from room_joined event');
+          setLastUpdateTime(Date.now());
+        }
+      } else if (eventType === 'room_error') {
+        console.error('❌ [MatchContext] Room join error:', data);
+      } else if (eventType === 'room_left') {
+        console.log('👋 [MatchContext] Left room:', data);
+      }
+    });
+  }, []);
+
   // Thiết lập các listener cho socket
   const setupSocketListeners = useCallback(() => {
     // Lắng nghe cập nhật thông tin trận đấu
@@ -190,7 +254,7 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật thống k��
+    // Lắng nghe cập nhật thống kê
     socketService.on('match_stats_updated', (data) => {
       setMatchStats(prev => ({ ...prev, ...data.stats }));
       setLastUpdateTime(Date.now());
@@ -463,7 +527,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Cập nhật poster
+  // Cập nh���t poster
   const updatePoster = useCallback((posterType) => {
     console.log('🎨 [MatchContext] updatePoster called with:', posterType);
     console.log('🎨 [MatchContext] socketConnected:', socketConnected);
