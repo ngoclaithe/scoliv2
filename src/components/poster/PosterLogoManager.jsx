@@ -4,7 +4,7 @@ import LogoAPI from "../../API/apiLogo";
 import DisplaySettingsAPI from "../../API/apiSettingDisplay";
 import { getFullLogoUrl } from "../../utils/logoUtils";
 
-const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, onPositionChange, initialData, accessCode }) => {
+const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate, onClose, onPositionChange, initialData, accessCode }) => {
   const [selectedPoster, setSelectedPoster] = useState(null);
   const [logoItems, setLogoItems] = useState([]);
   const [apiLogos, setApiLogos] = useState([]);
@@ -937,6 +937,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
 
     </div>
   );
-};
+});
 
 export default PosterLogoManager;
