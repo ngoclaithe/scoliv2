@@ -107,6 +107,8 @@ const DisplayController = () => {
         />;
       case 'player_list':
         return <PlayerList accessCode={accessCode} />;
+      case 'stat':
+        return <Stat accessCode={accessCode} />;
       case 'poster':
       default:
         const posterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;
