@@ -5,7 +5,7 @@ const DisplayLogo = ({
     logos = [], 
     alt = "Logo", 
     className = "", 
-    type_play = "round", // "round", "square", "hexagon"
+    type_play = "round", 
     slideMode = false, 
     maxVisible = 3, 
     slideInterval = 5000,
@@ -29,62 +29,29 @@ const DisplayLogo = ({
         switch (type) {
             case "round":
                 return {
-                    containerClass: "relative",
-                    imageClass: baseClasses,
-                    maskClass: "absolute inset-0 rounded-full border-4 border-white/20 pointer-events-none z-10"
+                    containerClass: "rounded-full overflow-hidden",
+                    imageClass: `${baseClasses} rounded-full`
                 };
             case "square":
                 return {
-                    containerClass: "relative",
-                    imageClass: baseClasses,
-                    maskClass: "absolute inset-0 border-2 border-white/20 pointer-events-none z-10"
+                    containerClass: "overflow-hidden",
+                    imageClass: baseClasses
                 };
             case "hexagon":
                 return {
-                    containerClass: "relative",
+                    containerClass: "overflow-hidden",
                     imageClass: baseClasses,
-                    maskClass: "absolute inset-0 pointer-events-none z-10",
-                    hexMask: true
+                    clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)"
                 };
             default:
                 return {
-                    containerClass: "relative",
-                    imageClass: baseClasses,
-                    maskClass: "absolute inset-0 rounded-full border-4 border-white/20 pointer-events-none z-10"
+                    containerClass: "rounded-full overflow-hidden",
+                    imageClass: `${baseClasses} rounded-full`
                 };
         }
     };
 
     const shapeStyles = getShapeStyles(type_play);
-
-    // Component để tạo hexagon mask
-    const HexagonMask = () => (
-        <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 100 100">
-            <defs>
-                <mask id="hexagon-mask">
-                    <rect width="100" height="100" fill="black"/>
-                    <polygon 
-                        points="50,5 90,25 90,75 50,95 10,75 10,25" 
-                        fill="white"
-                    />
-                </mask>
-            </defs>
-            <polygon 
-                points="50,5 90,25 90,75 50,95 10,75 10,25" 
-                fill="none" 
-                stroke="rgba(255,255,255,0.3)" 
-                strokeWidth="2"
-            />
-        </svg>
-    );
-
-    // Render mask overlay
-    const renderMask = () => {
-        if (shapeStyles.hexMask) {
-            return <HexagonMask />;
-        }
-        return <div className={shapeStyles.maskClass}></div>;
-    };
 
     // Tạo fallback SVG
     const createFallbackSVG = (altText) => {
@@ -104,10 +71,10 @@ const DisplayLogo = ({
                         className={shapeStyles.imageClass}
                         style={{
                             filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
-                            backgroundColor: 'transparent'
+                            backgroundColor: 'transparent',
+                            ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
                         }}
                     />
-                    {renderMask()}
                 </div>
             </div>
         );
@@ -129,13 +96,13 @@ const DisplayLogo = ({
                         className={shapeStyles.imageClass}
                         style={{
                             filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
-                            backgroundColor: 'transparent'
+                            backgroundColor: 'transparent',
+                            ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
                         }}
                         onError={(e) => {
                             e.target.src = createFallbackSVG(alt);
                         }}
                     />
-                    {renderMask()}
                 </div>
             </div>
         );
@@ -149,7 +116,7 @@ const DisplayLogo = ({
                     return (
                         <div
                             key={index}
-                            className={`relative ${logoSize}`}
+                            className={`relative ${logoSize}`} // Sử dụng kích thước cố định thay vì flex-1
                         >
                             <div
                                 className={`${shapeStyles.containerClass} p-1 w-full h-full`}
@@ -161,13 +128,13 @@ const DisplayLogo = ({
                                     className={shapeStyles.imageClass}
                                     style={{
                                         filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
-                                        backgroundColor: 'transparent'
+                                        backgroundColor: 'transparent',
+                                        ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
                                     }}
                                     onError={(e) => {
                                         e.target.src = createFallbackSVG(alt);
                                     }}
                                 />
-                                {renderMask()}
                             </div>
                         </div>
                     );
@@ -187,29 +154,25 @@ const DisplayLogo = ({
                     return (
                         <div
                             key={startIndex + index}
-                            className={`relative animate-slide-up ${logoSize}`} // Sử dụng kích thước cố định
+                            className={`relative animate-slide-up ${logoSize}`} 
                         >
                             <div
-                                className={`${shapeStyles.containerClass} w-full h-full`}
+                                className={`${shapeStyles.containerClass} p-1 w-full h-full`}
                                 style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
                             >
-                                <div className={`${shapeStyles.imagePadding} w-full h-full flex items-center justify-center`}>
-                                    <img
-                                        src={fullLogoUrl || createFallbackSVG(alt)}
-                                        alt={`${alt} ${startIndex + index + 1}`}
-                                        className={shapeStyles.imageClass}
-                                        style={{
-                                            filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
-                                            backgroundColor: 'transparent',
-                                            maxWidth: '100%',
-                                            maxHeight: '100%',
-                                            ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
-                                        }}
-                                        onError={(e) => {
-                                            e.target.src = createFallbackSVG(alt);
-                                        }}
-                                    />
-                                </div>
+                                <img
+                                    src={fullLogoUrl || createFallbackSVG(alt)}
+                                    alt={`${alt} ${startIndex + index + 1}`}
+                                    className={shapeStyles.imageClass}
+                                    style={{
+                                        filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
+                                        backgroundColor: 'transparent',
+                                        ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
+                                    }}
+                                    onError={(e) => {
+                                        e.target.src = createFallbackSVG(alt);
+                                    }}
+                                />
                             </div>
                         </div>
                     );
