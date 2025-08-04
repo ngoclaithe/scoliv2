@@ -5,14 +5,14 @@ const DisplayLogo = ({
     logos = [], 
     alt = "Logo", 
     className = "", 
-    type_play = "circle", // "circle", "square", "hexagon"
-    slideMode = false, // enable slideshow for multiple logos
-    maxVisible = 3, // max logos visible at once
-    slideInterval = 5000 // 5 seconds
+    type_play = "round", // "round", "square", "hexagon"
+    slideMode = false, 
+    maxVisible = 3, 
+    slideInterval = 5000,
+    logoSize = "w-16 h-16" 
 }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     
-    // Auto-slide effect for multiple logos
     useEffect(() => {
         if (slideMode && logos.length > maxVisible) {
             const interval = setInterval(() => {
@@ -23,43 +23,79 @@ const DisplayLogo = ({
         }
     }, [slideMode, logos.length, maxVisible, slideInterval]);
 
-    // Get shape styles based on type_play
     const getShapeStyles = (type) => {
         const baseClasses = "w-full h-full object-contain";
         
         switch (type) {
-            case "circle":
+            case "round":
                 return {
-                    containerClass: "rounded-full overflow-hidden",
-                    imageClass: `${baseClasses} rounded-full`
+                    containerClass: "relative",
+                    imageClass: baseClasses,
+                    maskClass: "absolute inset-0 rounded-full border-4 border-white/20 pointer-events-none z-10"
                 };
             case "square":
                 return {
-                    containerClass: "overflow-hidden",
-                    imageClass: baseClasses
+                    containerClass: "relative",
+                    imageClass: baseClasses,
+                    maskClass: "absolute inset-0 border-2 border-white/20 pointer-events-none z-10"
                 };
             case "hexagon":
                 return {
-                    containerClass: "overflow-hidden",
+                    containerClass: "relative",
                     imageClass: baseClasses,
-                    clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)"
+                    maskClass: "absolute inset-0 pointer-events-none z-10",
+                    hexMask: true
                 };
             default:
                 return {
-                    containerClass: "rounded-full overflow-hidden",
-                    imageClass: `${baseClasses} rounded-full`
+                    containerClass: "relative",
+                    imageClass: baseClasses,
+                    maskClass: "absolute inset-0 rounded-full border-4 border-white/20 pointer-events-none z-10"
                 };
         }
     };
 
     const shapeStyles = getShapeStyles(type_play);
 
-    // Handle single logo or no logos
+    // Component để tạo hexagon mask
+    const HexagonMask = () => (
+        <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 100 100">
+            <defs>
+                <mask id="hexagon-mask">
+                    <rect width="100" height="100" fill="black"/>
+                    <polygon 
+                        points="50,5 90,25 90,75 50,95 10,75 10,25" 
+                        fill="white"
+                    />
+                </mask>
+            </defs>
+            <polygon 
+                points="50,5 90,25 90,75 50,95 10,75 10,25" 
+                fill="none" 
+                stroke="rgba(255,255,255,0.3)" 
+                strokeWidth="2"
+            />
+        </svg>
+    );
+
+    // Render mask overlay
+    const renderMask = () => {
+        if (shapeStyles.hexMask) {
+            return <HexagonMask />;
+        }
+        return <div className={shapeStyles.maskClass}></div>;
+    };
+
+    // Tạo fallback SVG
+    const createFallbackSVG = (altText) => {
+        return `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${altText.charAt(0)}</text></svg>`;
+    };
+
     if (!logos || logos.length === 0) {
         return (
             <div className={`relative ${className}`}>
                 <div 
-                    className={`${shapeStyles.containerClass} p-1`}
+                    className={`${shapeStyles.containerClass} p-1 ${logoSize}`}
                     style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
                 >
                     <img
@@ -68,10 +104,10 @@ const DisplayLogo = ({
                         className={shapeStyles.imageClass}
                         style={{
                             filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
-                            backgroundColor: 'transparent',
-                            ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
+                            backgroundColor: 'transparent'
                         }}
                     />
+                    {renderMask()}
                 </div>
             </div>
         );
@@ -84,30 +120,28 @@ const DisplayLogo = ({
         return (
             <div className={`relative ${className}`}>
                 <div
-                    className={`${shapeStyles.containerClass} p-1`}
+                    className={`${shapeStyles.containerClass} p-1 ${logoSize}`}
                     style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
                 >
                     <img
-                        src={fullLogoUrl || `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${alt.charAt(0)}</text></svg>`}
+                        src={fullLogoUrl || createFallbackSVG(alt)}
                         alt={alt}
                         className={shapeStyles.imageClass}
                         style={{
                             filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
-                            backgroundColor: 'transparent',
-                            ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
+                            backgroundColor: 'transparent'
                         }}
                         onError={(e) => {
-                            e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${alt.charAt(0)}</text></svg>`;
+                            e.target.src = createFallbackSVG(alt);
                         }}
                     />
+                    {renderMask()}
                 </div>
             </div>
         );
     }
 
-    // Handle multiple logos
     if (!slideMode || logos.length <= maxVisible) {
-        // Show all logos if slideMode is disabled or logos count <= maxVisible
         return (
             <div className={`flex gap-2 ${className}`}>
                 {logos.slice(0, maxVisible).map((logo, index) => {
@@ -115,25 +149,25 @@ const DisplayLogo = ({
                     return (
                         <div
                             key={index}
-                            className={`relative flex-1`}
+                            className={`relative ${logoSize}`}
                         >
                             <div
-                                className={`${shapeStyles.containerClass} p-1`}
+                                className={`${shapeStyles.containerClass} p-1 w-full h-full`}
                                 style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
                             >
                                 <img
-                                    src={fullLogoUrl || `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${alt.charAt(0)}</text></svg>`}
+                                    src={fullLogoUrl || createFallbackSVG(alt)}
                                     alt={`${alt} ${index + 1}`}
                                     className={shapeStyles.imageClass}
                                     style={{
                                         filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
-                                        backgroundColor: 'transparent',
-                                        ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
+                                        backgroundColor: 'transparent'
                                     }}
                                     onError={(e) => {
-                                        e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${alt.charAt(0)}</text></svg>`;
+                                        e.target.src = createFallbackSVG(alt);
                                     }}
                                 />
+                                {renderMask()}
                             </div>
                         </div>
                     );
@@ -142,7 +176,6 @@ const DisplayLogo = ({
         );
     }
 
-    // Slideshow mode for multiple logos
     const startIndex = currentIndex * maxVisible;
     const visibleLogos = logos.slice(startIndex, startIndex + maxVisible);
 
@@ -154,44 +187,34 @@ const DisplayLogo = ({
                     return (
                         <div
                             key={startIndex + index}
-                            className="relative flex-1 animate-slide-up"
+                            className={`relative animate-slide-up ${logoSize}`} // Sử dụng kích thước cố định
                         >
                             <div
-                                className={`${shapeStyles.containerClass} p-1`}
+                                className={`${shapeStyles.containerClass} w-full h-full`}
                                 style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
                             >
-                                <img
-                                    src={fullLogoUrl || `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${alt.charAt(0)}</text></svg>`}
-                                    alt={`${alt} ${startIndex + index + 1}`}
-                                    className={shapeStyles.imageClass}
-                                    style={{
-                                        filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
-                                        backgroundColor: 'transparent',
-                                        ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
-                                    }}
-                                    onError={(e) => {
-                                        e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${alt.charAt(0)}</text></svg>`;
-                                    }}
-                                />
+                                <div className={`${shapeStyles.imagePadding} w-full h-full flex items-center justify-center`}>
+                                    <img
+                                        src={fullLogoUrl || createFallbackSVG(alt)}
+                                        alt={`${alt} ${startIndex + index + 1}`}
+                                        className={shapeStyles.imageClass}
+                                        style={{
+                                            filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
+                                            backgroundColor: 'transparent',
+                                            maxWidth: '100%',
+                                            maxHeight: '100%',
+                                            ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
+                                        }}
+                                        onError={(e) => {
+                                            e.target.src = createFallbackSVG(alt);
+                                        }}
+                                    />
+                                </div>
                             </div>
                         </div>
                     );
                 })}
             </div>
-            
-            {/* Indicator dots for slideshow */}
-            {slideMode && logos.length > maxVisible && (
-                <div className="flex justify-center mt-2 gap-1">
-                    {Array.from({ length: Math.ceil(logos.length / maxVisible) }).map((_, index) => (
-                        <div
-                            key={index}
-                            className={`w-2 h-2 rounded-full transition-colors duration-300 ${
-                                index === currentIndex ? 'bg-blue-500' : 'bg-gray-300'
-                            }`}
-                        />
-                    ))}
-                </div>
-            )}
         </div>
     );
 };

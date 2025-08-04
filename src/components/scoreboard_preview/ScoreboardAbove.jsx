@@ -37,7 +37,7 @@ const ScoreboardAbove = ({
     };
 
     const rawLogoShape = displaySettings?.displaySettings?.logoShape || displaySettings?.logoShape || "round";
-    const logoShape = rawLogoShape === 'round' ? 'circle' : rawLogoShape;
+    const logoShape = rawLogoShape === 'round' ? 'round' : rawLogoShape;
 
     if (displaySettings?.displaySettings?.logoShape !== 'round') {
         console.log('🔧 [ScoreboardAbove] Logo shape changed to:', rawLogoShape, '-> mapped to:', logoShape);
@@ -106,20 +106,18 @@ const ScoreboardAbove = ({
         return brightness > 128 ? '#000000' : '#FFFFFF';
     };
 
-    // Function để collect logos theo position
     const collectLogosForPosition = (targetPosition) => {
         const allLogos = [];
 
-        // Collect sponsors (đã có sponsors.sponsors structure)
         if (sponsors?.sponsors?.url_logo && sponsors.sponsors.url_logo.length > 0) {
             sponsors.sponsors.url_logo.forEach((logo, index) => {
                 const position = sponsors.sponsors?.position && sponsors.sponsors.position[index]
                     ? (Array.isArray(sponsors.sponsors.position[index]) ? sponsors.sponsors.position[index][0] : sponsors.sponsors.position[index])
-                    : 'top-left'; // default position
+                    : 'top-left'; 
                 const behavior = sponsors.sponsors?.behavior;
                 const typeDisplay = sponsors.sponsors?.type_display && sponsors.sponsors.type_display[index]
                     ? sponsors.sponsors.type_display[index]
-                    : 'square'; // default vuông
+                    : 'square'; 
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
                     allLogos.push({ url: getFullLogoUrl(logo), alt: 'Sponsor', type: 'sponsor', typeDisplay });
@@ -127,16 +125,15 @@ const ScoreboardAbove = ({
             });
         }
 
-        // Collect organizing (cần thêm organizing.organizing structure giống sponsors)
         if (organizing?.organizing?.url_logo && organizing.organizing.url_logo.length > 0) {
             organizing.organizing.url_logo.forEach((logo, index) => {
                 const position = organizing.organizing?.position && organizing.organizing.position[index]
                     ? (Array.isArray(organizing.organizing.position[index]) ? organizing.organizing.position[index][0] : organizing.organizing.position[index])
-                    : 'bottom-left'; // default position
+                    : 'bottom-left'; 
                 const behavior = organizing.organizing?.behavior;
                 const typeDisplay = organizing.organizing?.type_display && organizing.organizing.type_display[index]
                     ? organizing.organizing.type_display[index]
-                    : 'square'; // default vuông
+                    : 'square'; 
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
                     allLogos.push({ url: getFullLogoUrl(logo), alt: 'Organizing', type: 'organizing', typeDisplay });
@@ -144,16 +141,15 @@ const ScoreboardAbove = ({
             });
         }
 
-        // Collect media partners (cần thêm mediaPartners.mediaPartners structure giống sponsors)
         if (mediaPartners?.mediaPartners?.url_logo && mediaPartners.mediaPartners.url_logo.length > 0) {
             mediaPartners.mediaPartners.url_logo.forEach((logo, index) => {
                 const position = mediaPartners.mediaPartners?.position && mediaPartners.mediaPartners.position[index]
                     ? (Array.isArray(mediaPartners.mediaPartners.position[index]) ? mediaPartners.mediaPartners.position[index][0] : mediaPartners.mediaPartners.position[index])
-                    : 'bottom-right'; // default position
+                    : 'bottom-right'; 
                 const behavior = mediaPartners.mediaPartners?.behavior;
                 const typeDisplay = mediaPartners.mediaPartners?.type_display && mediaPartners.mediaPartners.type_display[index]
                     ? mediaPartners.mediaPartners.type_display[index]
-                    : 'square'; // default vuông
+                    : 'square';
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
                     allLogos.push({ url: getFullLogoUrl(logo), alt: 'Media Partner', type: 'media', typeDisplay });
@@ -164,14 +160,12 @@ const ScoreboardAbove = ({
         return allLogos;
     };
 
-    // Function render logos
     const renderLogos = (allLogos) => {
         if (allLogos.length === 0) return null;
 
-        // Helper function để convert typeDisplay thành shape
         const getLogoShape = (typeDisplay) => {
             switch (typeDisplay) {
-                case 'round': return 'circle';
+                case 'round': return 'round';
                 case 'hexagonal': return 'hexagon';
                 case 'square':
                 default: return 'square';
@@ -179,20 +173,18 @@ const ScoreboardAbove = ({
         };
 
         if ((displaySettings?.displaySettings?.rotateDisplay || displaySettings?.rotateDisplay) && allLogos.length > 1) {
-            // Slide mode - luân phiên hiển thị 3 logo 1 lần
             return (
                 <DisplayLogo
                     logos={allLogos.map(logo => logo.url)}
                     alt="Sponsors & Partners"
-                    className="w-16 h-16"
+                    className="w-full h-full"
                     type_play={logoShape}
                     slideMode={true}
                     maxVisible={3}
-                    slideInterval={3000}
+                    slideInterval={5000}
                 />
             );
         } else {
-            // Hiển thị tất cả logos cùng lúc với individual shapes
             return (
                 <div className="flex gap-2 flex-wrap max-w-sm">
                     {allLogos.map((logo, index) => (
@@ -366,7 +358,7 @@ const ScoreboardAbove = ({
                         className="w-12 h-12 border-2"
                         style={{
                             borderColor: currentData.teamAKitColor,
-                            borderRadius: logoShape === 'circle' ? '50%' : logoShape === 'hexagon' ? '0' : '8px'
+                            borderRadius: logoShape === 'round' ? '50%' : logoShape === 'hexagon' ? '0' : '8px'
                         }}
                     >
                         <DisplayLogo
@@ -390,7 +382,7 @@ const ScoreboardAbove = ({
                         className="w-12 h-12 border-2"
                         style={{
                             borderColor: currentData.teamBKitColor,
-                            borderRadius: logoShape === 'circle' ? '50%' : logoShape === 'hexagon' ? '0' : '8px'
+                            borderRadius: logoShape === 'round' ? '50%' : logoShape === 'hexagon' ? '0' : '8px'
                         }}
                     >
                         <DisplayLogo
