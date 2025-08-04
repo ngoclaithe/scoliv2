@@ -644,8 +644,8 @@ const MatchManagementSection = ({ isActive = true }) => {
               onClick={() => {
                 updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
                 updateTeamLogos(
-                  teamAInfo.logo || matchData.teamA.logo || "",
-                  teamBInfo.logo || matchData.teamB.logo || ""
+                  teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
+                  teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || ""
                 );
                 updateMatchTitle(matchTitle);
                 updateMatchInfo({
@@ -1135,7 +1135,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
                 title="Áp dụng"
               >
-                ĐẾM T
+                Đ��M T
               </button>
             </div>
           </div>
