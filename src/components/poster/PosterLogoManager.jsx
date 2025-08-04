@@ -628,7 +628,7 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
     );
   });
 
-  const handlePosterSelect = (poster) => {
+  const handlePosterSelect = useCallback((poster) => {
     console.log('🎨 [PosterLogoManager] handlePosterSelect called with:', poster);
     setSelectedPoster(poster);
     // Immediate update
@@ -636,7 +636,7 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
       console.log('🎨 [PosterLogoManager] Calling onPosterUpdate immediately with:', poster);
       onPosterUpdate(poster);
     }
-  };
+  }, [onPosterUpdate]);
 
   const handleItemUpdate = useCallback(async (itemId, updatedItem) => {
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);
