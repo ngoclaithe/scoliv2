@@ -38,9 +38,11 @@ const AppRoutes = () => {
 
         {/* Preview route for posters */}
         <Route path="/:accessCode/preview" element={
-          <PublicMatchProvider>
-            <PosterPreviewPage />
-          </PublicMatchProvider>
+          <AuthProvider>
+            <PublicMatchProvider>
+              <PosterPreviewPage />
+            </PublicMatchProvider>
+          </AuthProvider>
         } />
 
         <Route path="/demotest" element={
