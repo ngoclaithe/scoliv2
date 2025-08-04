@@ -120,19 +120,6 @@ export const MatchProvider = ({ children }) => {
     };
   }, [matchCode, isAuthenticated]);
 
-  // Hàm helper để chuyển đổi thời gian
-  const parseTimeToSeconds = (timeString) => {
-    if (!timeString || typeof timeString !== 'string') return 0;
-    const [minutes, seconds] = timeString.split(':').map(Number);
-    return (minutes || 0) * 60 + (seconds || 0);
-  };
-
-  const formatSecondsToTime = (totalSeconds) => {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  };
-
   // Timer tự động DISABLED - Sử dụng server timer thay thế
   useEffect(() => {
     // Dọn dẹp interval cũ nếu có
@@ -140,11 +127,6 @@ export const MatchProvider = ({ children }) => {
       clearInterval(timerInterval);
       setTimerInterval(null);
     }
-
-    // ĐÃ TẮT LOCAL TIMER - Server sẽ gửi timer updates qua socket
-    // Khi status thay đổi thành "live", request timer sync từ server
-
-
     // Cleanup khi component unmount
     return () => {
       if (timerInterval) {
@@ -175,7 +157,7 @@ export const MatchProvider = ({ children }) => {
       // Request state hiện tại từ server sau khi connect
       setTimeout(() => {
         socketService.requestCurrentState();
-        // console.log('🔄 [MatchContext] Requested current state from server');
+        console.log('🔄 [MatchContext] Requested current state from server');
       }, 1000); // Delay 1s để đảm bảo connect thành công
 
       console.log(`Socket initialized for access code: ${accessCode}`);

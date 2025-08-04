@@ -370,14 +370,20 @@ class SocketService {
     });
   }
 
-  // Lắng nghe trạng thái room
+  // Lắng nghe trạng thái room và log chi tiết
   onRoomStatus(callback) {
-    this.on('room_joined', callback);
-    this.on('room_left', callback);
-    this.on('room_error', callback);
+    const events = ['room_joined', 'room_left', 'room_error'];
+
+    events.forEach(event => {
+      this.on(event, (data) => {
+        console.log(`[Socket][${event}]`, data); 
+        if (typeof callback === 'function') {
+          callback(event, data);
+        }
+      });
+    });
   }
 }
-
 // Export singleton instance
 const socketService = new SocketService();
 export default socketService;
