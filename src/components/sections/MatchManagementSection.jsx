@@ -658,12 +658,20 @@ const MatchManagementSection = ({ isActive = true }) => {
                   time: matchInfo.startTime,
                   teamAKitColor: teamAInfo.shirtColor || '#ff0000',
                   teamBKitColor: teamBInfo.shirtColor || '#000000',
-                  liveUnit: liveUnit,
+                  liveText: liveText,
                   logoTeamA: teamAInfo.logo || matchData.teamA.logo || "",
                   logoTeamB: teamBInfo.logo || matchData.teamB.logo || ""
                 });
 
-                toast.success('✅ Đã cập nhật thông tin trận đấu và màu áo thành công!');
+                // Cập nhật đơn vị live riêng biệt để emit đến backend
+                if (liveText !== matchData.liveText) {
+                  updateLiveUnit({
+                    name: liveText || 'LIVE STREAMING',
+                    text: liveText
+                  });
+                }
+
+                toast.success('✅ Đã cập nhật thông tin trận đấu và đơn vị live thành công!');
               }}
               className="px-3 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-xs rounded shadow transform hover:scale-105 transition-all duration-200"
             >
