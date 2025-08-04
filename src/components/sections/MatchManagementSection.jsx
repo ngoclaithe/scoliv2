@@ -339,12 +339,12 @@ const MatchManagementSection = ({ isActive = true }) => {
               teamA: {
                 ...matchData.teamA,
                 name: teamAInfo.name || matchData.teamA.name,
-                logo: teamAInfo.logo || matchData.teamA.logo
+                logo: teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo)
               },
               teamB: {
                 ...matchData.teamB,
                 name: teamBInfo.name || matchData.teamB.name,
-                logo: teamBInfo.logo || matchData.teamB.logo
+                logo: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo)
               },
               matchTitle: matchTitle || matchData.matchTitle,
               teamAKitColor: teamAInfo.shirtColor || matchData.teamAKitColor || '#ff0000',
@@ -497,7 +497,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           <div className="grid grid-cols-2 gap-1">
             <input
               type="text"
-              placeholder="Tên trận đấu"
+              placeholder="Tên trận đ��u"
               value={matchTitle}
               onChange={(e) => setMatchTitle(e.target.value)}
               className="w-full min-w-0 px-2 py-1 text-xs font-medium text-center text-blue-700 bg-white border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-300"
