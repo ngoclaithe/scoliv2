@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import Button from "../common/Button";
 import LogoAPI from "../../API/apiLogo";
 import DisplaySettingsAPI from "../../API/apiSettingDisplay";
 import { getFullLogoUrl } from "../../utils/logoUtils";
 
-const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, onPositionChange, initialData, accessCode }) => {
+const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate, onClose, onPositionChange, initialData, accessCode }) => {
   const [selectedPoster, setSelectedPoster] = useState(null);
   const [logoItems, setLogoItems] = useState([]);
   const [apiLogos, setApiLogos] = useState([]);
@@ -452,9 +452,9 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
     };
 
     const handlePositionToggle = (position) => {
-      // Logic: Mỗi logo chỉ được chọn 1 position duy nhất
+      // Logic: Mỗi logo chỉ được ch���n 1 position duy nhất
       const newPositions = item.displayPositions.includes(position)
-        ? [] // Nếu đang chọn position này thì bỏ chọn (xóa hết)
+        ? [] // Nếu đang chọn position này thì b��� chọn (xóa hết)
         : [position]; // Nếu chưa chọn thì chọn position này (thay thế position cũ)
 
       const updatedItem = { ...item, displayPositions: newPositions };
@@ -616,9 +616,19 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         )}
       </div>
     );
+  }, (prevProps, nextProps) => {
+    // Only rerender if item properties actually changed
+    return (
+      prevProps.item.id === nextProps.item.id &&
+      prevProps.item.code === nextProps.item.code &&
+      prevProps.item.url === nextProps.item.url &&
+      JSON.stringify(prevProps.item.displayPositions) === JSON.stringify(nextProps.item.displayPositions) &&
+      prevProps.onUpdate === nextProps.onUpdate &&
+      prevProps.onRemove === nextProps.onRemove
+    );
   });
 
-  const handlePosterSelect = (poster) => {
+  const handlePosterSelect = useCallback((poster) => {
     console.log('🎨 [PosterLogoManager] handlePosterSelect called with:', poster);
     setSelectedPoster(poster);
     // Immediate update
@@ -626,9 +636,9 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
       console.log('🎨 [PosterLogoManager] Calling onPosterUpdate immediately with:', poster);
       onPosterUpdate(poster);
     }
-  };
+  }, [onPosterUpdate]);
 
-  const handleItemUpdate = async (itemId, updatedItem) => {
+  const handleItemUpdate = useCallback(async (itemId, updatedItem) => {
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);
 
     if (isFromAPI) {
@@ -647,9 +657,9 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         item.id === itemId ? updatedItem : item
       ));
     }
-  };
+  }, [apiLogos]);
 
-  const handleItemRemove = async (itemId) => {
+  const handleItemRemove = useCallback(async (itemId) => {
     console.log('🗑️ [PosterLogoManager] Removing item:', itemId);
 
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);
@@ -693,7 +703,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         behavior: 'remove'
       });
     }
-  };
+  }, [apiLogos, logoItems, activeLogoCategory, logoDisplayOptions, onLogoUpdate]);
 
   const handleAddNewLogo = async () => {
     const newLogo = {
@@ -745,13 +755,15 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
     );
   };
 
-  const renderLogoSection = () => {
-
-    const currentItems = allLogoItems.filter(item => {
+  const currentItems = useMemo(() => {
+    return allLogoItems.filter(item => {
       if (item.category !== activeLogoCategory) return false;
       if (logoItems.find(logo => logo.id === item.id)) return true;
       return item.displayPositions && item.displayPositions.length > 0;
     });
+  }, [allLogoItems, activeLogoCategory, logoItems]);
+
+  const renderLogoSection = () => {
 
     return (
       <div className="space-y-1">
@@ -832,7 +844,7 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
         </div>
 
         <div className="border-t border-gray-200 pt-1 space-y-1">
-          <div className="text-xs font-medium text-gray-700">Tùy chọn hiển thị:</div>
+          <div className="text-xs font-medium text-gray-700">Tùy chọn hi��n thị:</div>
 
           <div className="flex gap-1">
             {[
@@ -937,6 +949,6 @@ const PosterLogoManager = ({ matchData, onPosterUpdate, onLogoUpdate, onClose, o
 
     </div>
   );
-};
+});
 
 export default PosterLogoManager;

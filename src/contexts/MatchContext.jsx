@@ -13,7 +13,7 @@ export const useMatch = () => {
 };
 
 export const MatchProvider = ({ children }) => {
-  const { matchCode, isAuthenticated, user } = useAuth();
+  const { matchCode, isAuthenticated, user, handleExpiredAccess } = useAuth();
   
   // State cho thông tin trận đấu
   const [matchData, setMatchData] = useState({
@@ -166,6 +166,13 @@ export const MatchProvider = ({ children }) => {
       console.log(`Socket initialized for access code: ${accessCode}`);
     } catch (error) {
       console.error('Failed to initialize socket:', error);
+
+      // Kiểm tra lỗi hết hạn truy cập
+      if (handleExpiredAccess && handleExpiredAccess(error)) {
+        // Đã xử lý lỗi hết hạn
+        return;
+      }
+
       setSocketConnected(false);
     }
   }, []);
@@ -551,7 +558,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Cập nhật logo đội
+  // Cập nh���t logo đội
   const updateTeamLogos = useCallback((teamALogo, teamBLogo) => {
     setMatchData(prev => ({
       ...prev,

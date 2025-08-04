@@ -1,17 +1,18 @@
 import React from 'react';
+import { getFullLogoUrl } from '../../utils/logoUtils';
 
 const ScoreboardPreview = ({ matchData, displaySettings }) => {
   const currentData = {
-    teamAName: matchData?.teamA?.name || "ĐỘI A",
-    teamBName: matchData?.teamB?.name || "ĐỘI B",
-    teamALogo: matchData?.teamA?.logo || "/api/placeholder/90/90",
-    teamBLogo: matchData?.teamB?.logo || "/api/placeholder/90/90",
+    teamAName: matchData?.teamA?.name || matchData?.homeTeam?.name || "ĐỘI A",
+    teamBName: matchData?.teamB?.name || matchData?.awayTeam?.name || "ĐỘI B",
+    teamALogo: getFullLogoUrl(matchData?.teamA?.logo || matchData?.homeTeam?.logo) || "/api/placeholder/90/90",
+    teamBLogo: getFullLogoUrl(matchData?.teamB?.logo || matchData?.awayTeam?.logo) || "/api/placeholder/90/90",
     teamAScore: matchData?.teamA?.score || 0,
     teamBScore: matchData?.teamB?.score || 0,
     matchTime: matchData?.matchTime || "00:00",
     period: matchData?.period || "Chưa bắt đầu",
     status: matchData?.status || "waiting",
-    teamAKitColor: matchData?.teamAKitColor || "#FF0000", 
+    teamAKitColor: matchData?.teamAKitColor || "#FF0000",
     teamBKitColor: matchData?.teamBKitColor || "#0000FF"
   };
   // console.log("Giá trị matchData hiện tại là:", matchData);

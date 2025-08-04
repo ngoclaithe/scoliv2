@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
+import { useAuth } from '../../contexts/AuthContext';
 import PublicAPI from '../../API/apiPublic';
 import audioUtils from '../../utils/audioUtils';
 import socketService from '../../services/socketService';
@@ -27,6 +28,7 @@ const DisplayController = () => {
     displaySettings,
     currentView
   } = usePublicMatch();
+  const { handleExpiredAccess } = useAuth();
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
@@ -52,6 +54,11 @@ const DisplayController = () => {
       } catch (err) {
         console.error('❌ [DisplayController] Failed to initialize display:', err);
         if (!isCleanedUp) {
+          // Kiểm tra lỗi hết hạn truy cập trước
+          if (handleExpiredAccess && handleExpiredAccess(err)) {
+            // Đã xử lý lỗi hết hạn, không cần set error
+            return;
+          }
           setError('Không thể kết nối đến hệ thống');
         }
       }
@@ -64,7 +71,7 @@ const DisplayController = () => {
     return () => {
       isCleanedUp = true;
     };
-  }, [accessCode, initializeSocket]);
+  }, [accessCode, initializeSocket, handleExpiredAccess]);
 
   // Render poster component theo type
   const renderPoster = (posterType) => {

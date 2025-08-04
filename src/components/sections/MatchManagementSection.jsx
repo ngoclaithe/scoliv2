@@ -194,7 +194,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         setTeamAInfo(prev => ({ ...prev, logo: getFullLogoUrl(logo.url_logo) }));
         setLogoCodeA("");
       } else {
-        toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeA}"`);
+        toast.error(`⚠�� Không tìm thấy logo với code "${logoCodeA}"`);
       }
     } catch (error) {
       toast.error('❌ Lỗi tìm kiếm logo A');
@@ -339,12 +339,12 @@ const MatchManagementSection = ({ isActive = true }) => {
               teamA: {
                 ...matchData.teamA,
                 name: teamAInfo.name || matchData.teamA.name,
-                logo: teamAInfo.logo || matchData.teamA.logo
+                logo: teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo)
               },
               teamB: {
                 ...matchData.teamB,
                 name: teamBInfo.name || matchData.teamB.name,
-                logo: teamBInfo.logo || matchData.teamB.logo
+                logo: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo)
               },
               matchTitle: matchTitle || matchData.matchTitle,
               teamAKitColor: teamAInfo.shirtColor || matchData.teamAKitColor || '#ff0000',
@@ -497,7 +497,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           <div className="grid grid-cols-2 gap-1">
             <input
               type="text"
-              placeholder="Tên trận đấu"
+              placeholder="Tên trận đ��u"
               value={matchTitle}
               onChange={(e) => setMatchTitle(e.target.value)}
               className="w-full min-w-0 px-2 py-1 text-xs font-medium text-center text-blue-700 bg-white border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-300"
@@ -644,8 +644,8 @@ const MatchManagementSection = ({ isActive = true }) => {
               onClick={() => {
                 updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
                 updateTeamLogos(
-                  teamAInfo.logo || matchData.teamA.logo || "",
-                  teamBInfo.logo || matchData.teamB.logo || ""
+                  teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
+                  teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || ""
                 );
                 updateMatchTitle(matchTitle);
                 updateMatchInfo({
@@ -657,8 +657,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                   teamAKitColor: teamAInfo.shirtColor || '#ff0000',
                   teamBKitColor: teamBInfo.shirtColor || '#000000',
                   liveText: liveText,
-                  logoTeamA: teamAInfo.logo || matchData.teamA.logo || "",
-                  logoTeamB: teamBInfo.logo || matchData.teamB.logo || ""
+                  logoTeamA: teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
+                  logoTeamB: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || ""
                 });
 
                 // Cập nhật đơn vị live riêng biệt để emit đến backend
@@ -1135,7 +1135,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
                 title="Áp dụng"
               >
-                ĐẾM T
+                Đ��M T
               </button>
             </div>
           </div>

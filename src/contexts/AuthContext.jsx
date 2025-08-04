@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import AuthAPI from '../API/apiAuth';
 import AccessCodeAPI from '../API/apiAccessCode';
+import { toast } from 'react-toastify';
 
 const AuthContext = createContext();
 
@@ -309,6 +310,28 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Hàm kiểm tra và xử lý lỗi hết hạn truy cập
+  const handleExpiredAccess = useCallback((error) => {
+    if (error?.message && error.message.includes('Mã truy cập đã bị hết hạn')) {
+      toast.error('Mã truy cập đã hết hạn. Đang đăng xuất...', {
+        position: "top-center",
+        autoClose: 3000,
+      });
+
+      // Delay logout một chút để user thấy thông báo
+      setTimeout(() => {
+        logout();
+        // Redirect về trang login hoặc home
+        if (window.location.pathname !== '/') {
+          window.location.href = '/';
+        }
+      }, 1000);
+
+      return true; // Đã xử lý error
+    }
+    return false; // Không phải lỗi hết hạn
+  }, [logout]);
+
   const hasAccountAccess = authType === 'account' || authType === 'full';
   const hasMatchAccess = authType === 'code' || authType === 'full';
   const canAccessProfile = hasAccountAccess && !codeOnly;
@@ -333,7 +356,8 @@ export const AuthProvider = ({ children }) => {
     hasMatchAccess,
     canAccessProfile,
     enterMatchCode,
-    clearMatchCode
+    clearMatchCode,
+    handleExpiredAccess
   };
 
   return (

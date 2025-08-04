@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
+import { getFullLogoUrl } from "../../utils/logoUtils";
 
 const MatchInfo = ({
   match,
@@ -144,7 +145,7 @@ const MatchInfo = ({
             <div className="w-16 h-16 mx-auto mb-2 bg-blue-100 rounded-full flex items-center justify-center">
               {match.homeTeam.logo ? (
                 <img
-                  src={match.homeTeam.logo}
+                  src={getFullLogoUrl(match.homeTeam.logo)}
                   alt="Home"
                   className="w-10 h-10 object-contain"
                 />
@@ -169,7 +170,7 @@ const MatchInfo = ({
             <div className="w-16 h-16 mx-auto mb-2 bg-red-100 rounded-full flex items-center justify-center">
               {match.awayTeam.logo ? (
                 <img
-                  src={match.awayTeam.logo}
+                  src={getFullLogoUrl(match.awayTeam.logo)}
                   alt="Away"
                   className="w-10 h-10 object-contain"
                 />
