@@ -130,6 +130,38 @@ export const TimerProvider = ({ children }) => {
       }));
     });
 
+    // Lắng nghe current_state_response để cập nhật timer data
+    socketService.on('current_state_response', (data) => {
+      console.log('🕐 [TimerContext] Received current_state_response:', data);
+      if (data.matchData) {
+        const { matchTime, period, status } = data.matchData;
+        if (matchTime || period || status) {
+          setTimerData(prev => ({
+            ...prev,
+            matchTime: matchTime || prev.matchTime,
+            period: period || prev.period,
+            status: status || prev.status
+          }));
+        }
+      }
+    });
+
+    // Lắng nghe room_joined để cập nhật timer data
+    socketService.onRoomStatus((eventType, data) => {
+      if (eventType === 'room_joined' && data?.currentState?.matchData) {
+        const { matchTime, period, status } = data.currentState.matchData;
+        if (matchTime || period || status) {
+          console.log('🕐 [TimerContext] Updating timer from room_joined:', { matchTime, period, status });
+          setTimerData(prev => ({
+            ...prev,
+            matchTime: matchTime || prev.matchTime,
+            period: period || prev.period,
+            status: status || prev.status
+          }));
+        }
+      }
+    });
+
   }, []);
 
   // Cleanup timer listeners
