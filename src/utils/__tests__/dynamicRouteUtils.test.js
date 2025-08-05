@@ -1,3 +1,12 @@
+// Mock dependencies trước khi import
+jest.mock('../../API/apiLogo', () => ({
+  searchLogosByCode: jest.fn()
+}));
+
+jest.mock('../logoUtils', () => ({
+  getFullLogoUrl: jest.fn((url) => url)
+}));
+
 import {
   parseColorParam,
   parseTeamName,
