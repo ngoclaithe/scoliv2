@@ -105,7 +105,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   }, [matchData.teamA.name, matchData.teamA.logo, matchData.teamB.name, matchData.teamB.logo, matchData.teamA.teamAKitColor, matchData.teamAKitColor, matchData.teamB.teamBKitColor, matchData.teamBKitColor]);
   const [matchInfo, setMatchInfo] = useState({
     startTime: matchData.startTime || "19:30",
-    location: matchData.stadium || "SÂN VẬN ĐỘNG QU���C GIA",
+    location: matchData.stadium || "SÂN VẬN ĐỘNG QUỐC GIA",
     matchDate: matchData.matchDate || new Date().toISOString().split('T')[0]
   });
 
@@ -338,6 +338,10 @@ const MatchManagementSection = ({ isActive = true }) => {
       {/* Scoreboard */}
       <div className="sm:p-0 p-2 shadow-md h-auto">
         <div className="w-full h-12 sm:h-16 bg-gray-100 rounded-md overflow-hidden relative">
+          {/* Hiển thị view hiện tại */}
+          <div className="absolute top-1 left-1 bg-blue-500 text-white px-2 py-0.5 rounded text-xs font-bold z-10">
+            View: {currentView || 'intro'}
+          </div>
           <ScoreboardPreview
             matchData={{
               ...matchData,
@@ -1578,7 +1582,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 if (minutes > 0 || seconds > 0) {
                   const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
-                  updateMatchTime(timeString, "Hi��p 1", "live");
+                  updateMatchTime(timeString, "Hiệp 1", "live");
 
                   updateView('scoreboard');
 
