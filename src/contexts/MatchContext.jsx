@@ -300,7 +300,7 @@ export const MatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật tên đội
     socketService.on('team_names_updated', (data) => {
-      console.log('📛 [MatchContext] Received team_names_updated:', data);
+      console.log('���� [MatchContext] Received team_names_updated:', data);
       setMatchData(prev => ({
         ...prev,
         teamA: { ...prev.teamA, name: data.names.teamA },
@@ -424,7 +424,7 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật danh sách
+    // Lắng nghe cập nh��t danh sách
     socketService.on('lineup_updated', (data) => {
       setLineupData({
         teamA: data.lineupData.teamA,
@@ -727,6 +727,9 @@ export const MatchProvider = ({ children }) => {
 
   // Cập nhật view hiện tại cho route dynamic (MỚI)
   const updateView = useCallback((viewType) => {
+    console.log('🎯 [MatchContext] updateView called with:', viewType);
+    setCurrentView(viewType);
+
     if (socketConnected) {
       socketService.emit('view_update', { viewType });
       console.log('Sent view update:', viewType);
@@ -743,7 +746,7 @@ export const MatchProvider = ({ children }) => {
 
 
 
-  // Reset toàn bộ dữ liệu trận đấu
+  // Reset toàn bộ dữ liệu trận đ���u
   const resetMatch = useCallback(() => {
     setMatchData({
       teamA: { name: "ĐỘI-A", score: 0, logo: null },
