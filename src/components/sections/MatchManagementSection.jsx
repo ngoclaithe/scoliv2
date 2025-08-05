@@ -149,7 +149,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         teamBKitcolor: matchData.teamB.teamBKitColor || matchData.teamBKitColor || prev.teamBKitcolor,
       };
 
-      // Chỉ update nếu có thay đổi thực sự
+      // Chỉ update nếu có thay ��ổi thực sự
       if (JSON.stringify(newTeamBInfo) !== JSON.stringify(prev)) {
         return newTeamBInfo;
       }
@@ -510,15 +510,15 @@ const MatchManagementSection = ({ isActive = true }) => {
           <Button
             variant="primary"
             size="sm"
-            className={`px-2 py-1 ${matchData.status === "paused"
+            className={`px-2 py-1 ${timerData.status === "paused"
               ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
               : "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
               } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
-              if (matchData.status === "paused") {
+              if (timerData.status === "paused") {
                 resumeTimer();
               } else {
-                updateMatchTime(matchData.matchTime, matchData.period, "paused");
+                updateMatchTime(timerData.matchTime, timerData.period, "paused");
               }
             }}
           >
@@ -1300,7 +1300,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 className={`px-2 py-1 text-xs font-medium rounded border-2 bg-red-600 text-white ${tickerColor === "white-red" ? "border-orange-600" : "border-gray-300"
                   }`}
               >
-                Ch���
+                Chữ
               </button>
               <button
                 onClick={() => setTickerColor("white-green")}
