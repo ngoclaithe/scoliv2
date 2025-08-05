@@ -16,7 +16,7 @@ import ScoreboardPreview from './ScoreboardPreview';
 import { getFullLogoUrl } from '../../utils/logoUtils';
 
 const MatchManagementSection = ({ isActive = true }) => {
-  // Sử dụng MatchContext thay vì state local
+  // Sử dụng MatchContext và TimerContext
   const {
     matchData,
     matchStats,
@@ -28,7 +28,6 @@ const MatchManagementSection = ({ isActive = true }) => {
 
     updateScore,
     updateMatchInfo,
-    updateMatchTime,
     updateStats,
     updateTemplate,
     updatePoster,
@@ -38,7 +37,6 @@ const MatchManagementSection = ({ isActive = true }) => {
     updatePenalty,
 
     updateView,
-    resumeTimer,
     updateMarquee,
     updateMatchTitle,
 
@@ -51,6 +49,13 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateDisplaySettings,
 
   } = useMatch();
+
+  // Sử dụng TimerContext cho timer
+  const {
+    timerData,
+    updateMatchTime,
+    resumeTimer
+  } = useTimer();
 
   const { matchCode } = useAuth();
 
@@ -1295,7 +1300,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 className={`px-2 py-1 text-xs font-medium rounded border-2 bg-red-600 text-white ${tickerColor === "white-red" ? "border-orange-600" : "border-gray-300"
                   }`}
               >
-                Chữ
+                Ch���
               </button>
               <button
                 onClick={() => setTickerColor("white-green")}
