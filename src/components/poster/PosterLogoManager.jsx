@@ -351,7 +351,7 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
       }
     };
 
-    // Bắt đ��u đọc file
+    // Bắt đầu đọc file
     reader.readAsDataURL(file);
   };
 
@@ -562,6 +562,7 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
           {/* Input tìm kiếm với icon */}
           <div className="relative">
             <input
+              ref={inputRef}
               id="logo-search-code"
               name="logoSearchCode"
               type="text"
