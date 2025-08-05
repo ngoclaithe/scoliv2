@@ -75,12 +75,15 @@ const MatchManagementSection = ({ isActive = true }) => {
     stadium: matchData.stadium,
     matchDate: matchData.matchDate,
     liveText: matchData.liveText,
-    matchTitle: matchData.matchTitle
+    matchTitle: matchData.matchTitle,
+    // Thêm timer data từ TimerContext riêng biệt
+    ...timerData
   }), [
     matchData.teamA.name, matchData.teamA.logo, matchData.teamA.score,
     matchData.teamB.name, matchData.teamB.logo, matchData.teamB.score,
     matchData.tournament, matchData.stadium, matchData.matchDate,
-    matchData.liveText, matchData.matchTitle
+    matchData.liveText, matchData.matchTitle,
+    timerData.matchTime, timerData.period, timerData.status
   ]);
 
   const stableInitialData = useMemo(() => ({
@@ -735,7 +738,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                   });
                 }
 
-                toast.success('✅ Đã c��p nhật thông tin trận đấu và đơn vị live thành công!');
+                toast.success('✅ Đã cập nhật thông tin trận đấu và đơn vị live thành công!');
               }}
               className="px-3 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-xs rounded shadow transform hover:scale-105 transition-all duration-200"
             >
