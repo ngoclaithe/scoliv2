@@ -653,8 +653,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                   matchDate: matchInfo.matchDate || new Date().toISOString().split('T')[0],
                   title: matchTitle,
                   time: matchInfo.startTime,
-                  teamAKitColor: teamAInfo.shirtColor || '#ff0000',
-                  teamBKitColor: teamBInfo.shirtColor || '#000000',
+                  teamAKitColor: teamAInfo.teamAKitcolor || '#ff0000',
+                  teamBKitColor: teamBInfo.teamBKitcolor || '#000000',
                   liveText: liveText,
                   logoTeamA: teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
                   logoTeamB: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || ""
