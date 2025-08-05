@@ -162,8 +162,8 @@ describe('dynamicRouteUtils', () => {
       };
 
       const result = buildDynamicRoute(params);
-      expect(result).toContain('My%20Dinh%20Stadium');
-      expect(result).toContain('V%20League%202024');
+      expect(result).toContain('My_Dinh_Stadium');
+      expect(result).toContain('V_League_2024');
     });
   });
 });
