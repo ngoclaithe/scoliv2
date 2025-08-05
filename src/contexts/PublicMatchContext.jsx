@@ -607,8 +607,11 @@ export const PublicMatchProvider = ({ children }) => {
       await socketService.connect(accessCode, 'display');
       setSocketConnected(true);
       setCurrentAccessCode(accessCode);
-      
+
       setupSocketListeners();
+
+      // Thiết lập listener cho room status để lắng nghe join_roomed event
+      setupRoomStatusListener();
     } catch (error) {
       setSocketConnected(false);
     }
