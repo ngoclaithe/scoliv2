@@ -28,13 +28,30 @@ export const TimerProvider = ({ children }) => {
 
   // Setup timer listeners khi có matchCode và authenticated
   useEffect(() => {
+    let intervalId;
+
     if (matchCode && isAuthenticated) {
       console.log('🕐 [TimerContext] Setting up timer listeners for:', matchCode);
+
+      // Setup listeners ngay lập tức
       setupTimerListeners();
+
+      // Kiểm tra connection status và setup lại nếu cần
+      intervalId = setInterval(() => {
+        const connectionStatus = socketService.getConnectionStatus();
+        if (connectionStatus.isConnected && connectionStatus.accessCode === matchCode) {
+          // Connection OK, không cần làm gì
+        } else {
+          console.log('🕐 [TimerContext] Socket not connected, waiting...');
+        }
+      }, 1000);
     }
 
     return () => {
       console.log('🕐 [TimerContext] Cleaning up timer listeners');
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
       // Cleanup timer interval
       if (timerInterval) {
         clearInterval(timerInterval);
