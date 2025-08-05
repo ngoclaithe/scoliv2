@@ -74,32 +74,24 @@ const PosterPreviewPage = () => {
   }, [accessCode, initializeSocket, handleExpiredAccess]);
 
   const renderPosterComponent = () => {
-    const posterType = displaySettings?.selectedPoster || 'tretrung';
-    
-    const posterProps = {
-      matchData,
-      sponsors,
-      organizing,
-      mediaPartners,
-      tournamentLogo,
-      displaySettings
-    };
+    const posterType = displaySettings?.selectedPoster?.id || displaySettings?.selectedPoster || 'tretrung';
 
+    // Truyền accessCode như trong DisplayController để poster components có thể sử dụng
     switch (posterType) {
       case 'tretrung':
-        return <PosterTretrung {...posterProps} />;
+        return <PosterTretrung accessCode={accessCode} />;
       case 'haoquang':
-        return <PosterHaoquang {...posterProps} />;
+        return <PosterHaoquang accessCode={accessCode} />;
       case 'doden':
-        return <PosterDoden {...posterProps} />;
+        return <PosterDoden accessCode={accessCode} />;
       case 'vangkim':
-        return <PosterVangkim {...posterProps} />;
+        return <PosterVangkim accessCode={accessCode} />;
       case 'vangxanh':
-        return <PosterVangxanh {...posterProps} />;
+        return <PosterVangxanh accessCode={accessCode} />;
       case 'xanhduong':
-        return <PosterXanhduong {...posterProps} />;
+        return <PosterXanhduong accessCode={accessCode} />;
       default:
-        return <PosterTretrung {...posterProps} />;
+        return <PosterTretrung accessCode={accessCode} />;
     }
   };
 
