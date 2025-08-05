@@ -395,13 +395,6 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
       <div className="scoreboard-preview">
         {renderScoreboard()}
       </div>
-      {!showMatchTime && (
-        <div className="absolute bottom-1 right-1">
-          <span className="bg-green-600 text-white px-2 py-0.5 text-xs font-bold rounded animate-pulse">
-            ● LIVE
-          </span>
-        </div>
-      )}
     </div>
   );
 };

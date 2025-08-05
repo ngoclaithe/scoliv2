@@ -177,7 +177,6 @@ export const TimerProvider = ({ children }) => {
     // Lắng nghe socket connect để setup lại listeners
     socketService.on('connect', () => {
       console.log('🕐 [TimerContext] Socket connected, setting up timer listeners');
-      // Không cần setup lại vì đã setup ở trên
     });
 
   }, []);
@@ -185,8 +184,6 @@ export const TimerProvider = ({ children }) => {
   // Cleanup timer listeners (không thực sự cleanup để tránh conflict)
   const cleanupTimerListeners = useCallback(() => {
     console.log('🕐 [TimerContext] Cleanup timer listeners called (but not actually cleaning up)');
-    // KHÔNG cleanup để tránh conflict với MatchContext
-    // socketService sẽ tự động cleanup khi disconnect
   }, []);
 
   // Timer control functions
@@ -209,7 +206,7 @@ export const TimerProvider = ({ children }) => {
         console.log('▶️ [TimerContext] Started server timer:', { matchTime, period, status: "live" });
       } else if (status === "paused") {
         socketService.pauseServerTimer();
-        console.log('���️ [TimerContext] Paused server timer');
+        console.log('[TimerContext] Paused server timer');
       } else if (status === "waiting") {
         socketService.resetServerTimer(matchTime, period, "waiting");
         console.log('🔄 [TimerContext] Reset server timer:', { matchTime, period, status: "waiting" });

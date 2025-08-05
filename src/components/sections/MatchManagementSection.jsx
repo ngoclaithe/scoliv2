@@ -889,9 +889,9 @@ const MatchManagementSection = ({ isActive = true }) => {
               : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
               }`}
           >
-            <span className="mr-0.5 text-xs">���</span>
+            {/* <span className="mr-0.5 text-xs">���</span> */}
             <span className="hidden sm:inline">THÔNG SỐ</span>
-            <span className="sm:hidden">TS</span>
+            <span className="sm:hidden">Thông Số</span>
           </button>
           <button
             onClick={() => setSelectedOption("dieu-khien")}
@@ -900,9 +900,9 @@ const MatchManagementSection = ({ isActive = true }) => {
               : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
               }`}
           >
-            <span className="mr-0.5 text-xs">🎮</span>
+            {/* <span className="mr-0.5 text-xs">🎮</span> */}
             <span className="hidden sm:inline">ĐIỀU KHIỂN</span>
-            <span className="sm:hidden">DK</span>
+            <span className="sm:hidden">Điều khiển</span>
           </button>
           <button
             onClick={() => {
@@ -913,7 +913,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               : "bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 hover:from-blue-200 hover:to-blue-300"
               }`}
           >
-            <span className="mr-0.5 text-xs">🎨</span>
+            {/* <span className="mr-0.5 text-xs">🎨</span> */}
             <span className="hidden sm:inline">Skin</span>
             <span className="sm:hidden">Skin</span>
           </button>
@@ -980,7 +980,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
           {/* Stats Display - Gom chung vào 1 thẻ */}
           <div className="bg-gray-50 rounded-lg p-2 space-y-2">
-            {/* Ki���m soát bóng */}
+            {/* Kiểm soát bóng */}
             <EditableStatBar
               label="Kiểm soát bóng"
               statKey="possession"
@@ -1454,7 +1454,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               variant="primary"
               size="sm"
               onClick={() => {
-                // Tạo marquee data t�� clock settings
+                // Tạo marquee data từ clock settings
                 const marqueeSettings = {
                   text: clockText || "TRỰC TIẾP BÓNG ĐÁ",
                   mode: clockSetting,
@@ -1538,7 +1538,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
             // Handle bulk update (fallback cho compatibility)
             if (logoData && logoData.logoItems && !logoData.changedItem) {
-              // Phân lo��i logo items theo category
+              // Phân loại logo items theo category
               const logosByCategory = logoData.logoItems.reduce((acc, item) => {
                 if (!acc[item.category]) {
                   acc[item.category] = [];
