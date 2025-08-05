@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '../contexts/AuthContext';
 import { MatchProvider } from '../contexts/MatchContext';
+import { TimerProvider } from '../contexts/TimerContext';
 import { PublicMatchProvider } from '../contexts/PublicMatchContext';
 
 import 'react-toastify/dist/ReactToastify.css';
