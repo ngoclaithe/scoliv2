@@ -291,6 +291,122 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateView('penalty_scoreboard');
   }, [updatePenalty, updateView]);
 
+  // Stable logo update callback để tránh PosterManager re-render
+  const handleLogoUpdate = useCallback((logoData) => {
+    // Handle individual item change with behavior
+    if (logoData.changedItem && logoData.behavior) {
+      const item = logoData.changedItem;
+      const behavior = logoData.behavior;
+
+      console.log(`[MatchManagementSection] ${behavior} logo:`, item);
+
+      // Prepare data with behavior
+      const logoUpdateData = {
+        code_logo: [item.code],
+        url_logo: [item.url],
+        position: item.displayPositions,
+        type_display: [item.type || 'default'],
+        behavior: behavior
+      };
+
+      // Emit to specific category with behavior
+      switch (item.category) {
+        case 'sponsor':
+          console.log("[MatchManagementSection] Calling updateSponsors with logoUpdateData:", logoUpdateData);
+          updateSponsors(logoUpdateData);
+          break;
+        case 'organizing':
+          console.log("[MatchManagementSection] Calling updateOrganizing with behavior:", behavior);
+          updateOrganizing(logoUpdateData);
+          break;
+        case 'media':
+          console.log("[MatchManagementSection] Calling updateMediaPartners with behavior:", behavior);
+          updateMediaPartners(logoUpdateData);
+          break;
+        case 'tournament':
+          console.log("[MatchManagementSection] Calling updateTournamentLogo with behavior:", behavior);
+          updateTournamentLogo({
+            code_logo: [item.code],
+            url_logo: [item.url],
+            behavior: behavior
+          });
+          break;
+        default:
+          console.warn("[MatchManagementSection] Unknown logo category:", item.category);
+          break;
+      }
+    }
+
+    // Handle bulk update (fallback cho compatibility)
+    if (logoData && logoData.logoItems && !logoData.changedItem) {
+      // Phân loại logo items theo category
+      const logosByCategory = logoData.logoItems.reduce((acc, item) => {
+        if (!acc[item.category]) {
+          acc[item.category] = [];
+        }
+        acc[item.category].push({
+          code_logo: item.code,
+          url_logo: item.url,
+          position: item.displayPositions || [],
+          type_display: item.type || 'default'
+        });
+        return acc;
+      }, {});
+
+      console.log("[MatchManagementSection] logosByCategory:", logosByCategory);
+
+      // Emit socket events cho từng category
+      if (logosByCategory.sponsor) {
+        console.log("[MatchManagementSection] Calling updateSponsors");
+        updateSponsors({
+          code_logo: logosByCategory.sponsor.map(s => s.code_logo),
+          url_logo: logosByCategory.sponsor.map(s => s.url_logo),
+          position: logosByCategory.sponsor.map(s => s.position),
+          type_display: logosByCategory.sponsor.map(s => s.type_display)
+        });
+      }
+
+      if (logosByCategory.organizing) {
+        console.log("[MatchManagementSection] Calling updateOrganizing");
+        updateOrganizing({
+          code_logo: logosByCategory.organizing.map(o => o.code_logo),
+          url_logo: logosByCategory.organizing.map(o => o.url_logo),
+          position: logosByCategory.organizing.map(o => o.position),
+          type_display: logosByCategory.organizing.map(o => o.type_display)
+        });
+      }
+
+      if (logosByCategory.media) {
+        console.log("[MatchManagementSection] Calling updateMediaPartners");
+        updateMediaPartners({
+          code_logo: logosByCategory.media.map(m => m.code_logo),
+          url_logo: logosByCategory.media.map(m => m.url_logo),
+          position: logosByCategory.media.map(m => m.position),
+          type_display: logosByCategory.media.map(m => m.type_display)
+        });
+      }
+
+      if (logosByCategory.tournament) {
+        console.log("[MatchManagementSection] Calling updateTournamentLogo");
+        updateTournamentLogo({
+          code_logo: logosByCategory.tournament.map(t => t.code_logo),
+          url_logo: logosByCategory.tournament.map(t => t.url_logo)
+        });
+      }
+    }
+
+    // Cập nhật display options nếu có
+    if (logoData && logoData.displayOptions) {
+      console.log("[MatchManagementSection] Calling updateDisplaySettings");
+      const displayOptions = {
+        logoShape: logoData.displayOptions.shape || 'round',
+        rotateDisplay: logoData.displayOptions.rotateDisplay || false
+      };
+      console.log('[MatchManagementSection] Display options to update:', displayOptions);
+      updateDisplaySettings(displayOptions);
+    }
+  }, [updateSponsors, updateOrganizing, updateMediaPartners, updateTournamentLogo, updateDisplaySettings]);
+
   const handleScoreChange = (team, increment) => {
     updateScore(team, increment);
   };
@@ -1324,7 +1440,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               variant="primary"
               size="sm"
               onClick={() => {
-                // Tạo marquee data từ clock settings
+                // Tạo marquee data t�� clock settings
                 const marqueeSettings = {
                   text: clockText || "TRỰC TIẾP BÓNG ĐÁ",
                   mode: clockSetting,
