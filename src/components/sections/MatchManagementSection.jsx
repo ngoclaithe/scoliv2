@@ -558,56 +558,56 @@ const MatchManagementSection = ({ isActive = true }) => {
 
         <div className="grid grid-cols-2 gap-2 sm:gap-4">
           {/* Đội A */}
-          <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-blue-200">
+          <div className="bg-white rounded-lg p-1 sm:p-2 shadow-md border border-blue-200">
             <div className="flex space-x-1">
               <Button
                 variant="primary"
                 size="sm"
-                className="bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
-                style={{flex: 2}}
+                className="bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-10 sm:h-14 px-2 text-base sm:text-lg"
+                style={{ flex: 2 }}
                 onClick={() => handleScoreChange("teamA", 1)}
               >
-                <span className="text-sm sm:text-lg">+</span>
+                <span className="text-lg sm:text-xl">+</span>
               </Button>
               <Button
                 variant="primary"
                 size="sm"
-                className="bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
-                style={{flex: 1}}
+                className="bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-10 sm:h-14 px-2 text-base sm:text-lg"
+                style={{ flex: 1 }}
                 onClick={() => handleScoreChange("teamA", -1)}
               >
-                <span className="text-sm sm:text-lg">-</span>
+                <span className="text-lg sm:text-xl">-</span>
               </Button>
             </div>
           </div>
 
           {/* Đội B */}
-          <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-purple-200">
+          <div className="bg-white rounded-lg p-1 sm:p-2 shadow-md border border-purple-200">
             <div className="flex space-x-1">
               <Button
                 variant="primary"
                 size="sm"
-                className="bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
-                style={{flex: 2}}
+                className="bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-10 sm:h-14 px-2 text-base sm:text-lg"
+                style={{ flex: 2 }}
                 onClick={() => handleScoreChange("teamB", 1)}
               >
-                <span className="text-sm sm:text-lg">+</span>
+                <span className="text-lg sm:text-xl">+</span>
               </Button>
               <Button
                 variant="primary"
                 size="sm"
-                className="bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-7 sm:h-9 text-sm sm:text-base"
-                style={{flex: 1}}
+                className="bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-10 sm:h-14 px-2 text-base sm:text-lg"
+                style={{ flex: 1 }}
                 onClick={() => handleScoreChange("teamB", -1)}
               >
-                <span className="text-sm sm:text-lg">-</span>
+                <span className="text-lg sm:text-xl">-</span>
               </Button>
             </div>
           </div>
         </div>
 
-{/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
-<div className="flex justify-center items-center mt-2 space-x-2">
+        {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
+        <div className="flex justify-center items-center mt-2 space-x-2">
           {/* Audio Pause/Play Button */}
           <Button
             variant="primary"
@@ -665,16 +665,14 @@ const MatchManagementSection = ({ isActive = true }) => {
           <Button
             variant="primary"
             size="sm"
-            className={`px-2 py-1 ${
-              showMatchInfo 
-                ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700" 
-                : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
-            } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
+            className={`px-2 py-1 ${showMatchInfo
+              ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
+              : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+              } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => setShowMatchInfo(!showMatchInfo)}
           >
-            <span className={`mr-1 inline-block transform transition-transform duration-300 ${
-              showMatchInfo ? 'rotate-0' : 'rotate-180'
-            }`}>
+            <span className={`mr-1 inline-block transform transition-transform duration-300 ${showMatchInfo ? 'rotate-0' : 'rotate-180'
+              }`}>
               ▼
             </span>
             <span className="hidden sm:inline">THÔNG TIN</span>
@@ -682,203 +680,203 @@ const MatchManagementSection = ({ isActive = true }) => {
           </Button>
         </div>
 
-      {showMatchInfo && (
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg space-y-2 animate-in slide-in-from-top-3 duration-300 mt-1">
-          {/* Tên trận đấu & Đơn vị live - 1 hàng */}
-          <div className="grid grid-cols-2 gap-1">
-            <input
-              type="text"
-              placeholder="Tên trận đấu"
-              value={matchTitle}
-              onChange={(e) => setMatchTitle(e.target.value)}
-              className="w-full min-w-0 px-2 py-1 text-xs font-medium text-center text-blue-700 bg-white border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-300"
-              maxLength={50}
-            />
-            <input
-              type="text"
-              placeholder="Đơn vị live"
-              value={liveText}
-              onChange={(e) => setLiveText(e.target.value)}
-              className="w-full min-w-0 px-2 py-1 text-xs font-medium text-center text-blue-700 bg-white border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-300"
-              maxLength={50}
-            />
-          </div>
-
-          {/* Tên đội */}
-          <div className="flex gap-1 items-center">
-            <input
-              type="text"
-              placeholder="Đội A"
-              value={teamAInfo.name}
-              onChange={(e) => setTeamAInfo(prev => ({ ...prev, name: e.target.value }))}
-              className="flex-1 min-w-0 px-2 py-1 text-xs font-medium text-center text-red-600 bg-white border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-red-300"
-              maxLength={20}
-            />
-            <span className="text-xs font-bold text-gray-500 px-1 flex-shrink-0">VS</span>
-            <input
-              type="text"
-              placeholder="Đội B"
-              value={teamBInfo.name}
-              onChange={(e) => setTeamBInfo(prev => ({ ...prev, name: e.target.value }))}
-              className="flex-1 min-w-0 px-2 py-1 text-xs font-medium text-center text-gray-800 bg-white border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-300"
-              maxLength={20}
-            />
-          </div>
-
-          {/* Logo đội - compact */}
-          <div className="grid grid-cols-2 gap-1">
-            <div className="flex items-center gap-1 min-w-0">
-              <span className="text-xs text-red-600 flex-shrink-0">A:</span>
+        {showMatchInfo && (
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg space-y-2 animate-in slide-in-from-top-3 duration-300 mt-1">
+            {/* Tên trận đấu & Đơn vị live - 1 hàng */}
+            <div className="grid grid-cols-2 gap-1">
               <input
                 type="text"
-                placeholder="Code"
-                value={logoCodeA}
-                onChange={(e) => setLogoCodeA(e.target.value)}
-                onKeyUp={(e) => e.key === 'Enter' && handleSearchLogoA()}
-                className="w-16 min-w-0 px-1 py-1 text-xs border border-gray-300 rounded focus:border-red-500 text-center bg-white flex-shrink-0"
+                placeholder="Tên trận đấu"
+                value={matchTitle}
+                onChange={(e) => setMatchTitle(e.target.value)}
+                className="w-full min-w-0 px-2 py-1 text-xs font-medium text-center text-blue-700 bg-white border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-300"
+                maxLength={50}
               />
-              <button
-                onClick={handleSearchLogoA}
-                disabled={!logoCodeA.trim() || isSearchingLogoA}
-                className="px-1 py-1 text-xs border border-red-500 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50 flex-shrink-0"
-              >
-                {isSearchingLogoA ? '⏳' : '🔍'}
-              </button>
-              {teamAInfo.logo && (
-                <div className="w-4 h-4 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
-                  <img src={teamAInfo.logo} alt="A" className="w-full h-full object-contain" />
-                </div>
-              )}
-            </div>
-            <div className="flex items-center gap-1 min-w-0">
-              <span className="text-xs text-gray-800 flex-shrink-0">B:</span>
               <input
                 type="text"
-                placeholder="Code"
-                value={logoCodeB}
-                onChange={(e) => setLogoCodeB(e.target.value)}
-                onKeyUp={(e) => e.key === 'Enter' && handleSearchLogoB()}
-                className="w-16 min-w-0 px-1 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 text-center bg-white flex-shrink-0"
+                placeholder="Đơn vị live"
+                value={liveText}
+                onChange={(e) => setLiveText(e.target.value)}
+                className="w-full min-w-0 px-2 py-1 text-xs font-medium text-center text-blue-700 bg-white border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-300"
+                maxLength={50}
               />
-              <button
-                onClick={handleSearchLogoB}
-                disabled={!logoCodeB.trim() || isSearchingLogoB}
-                className="px-1 py-1 text-xs border border-gray-700 bg-gray-700 text-white rounded hover:bg-gray-800 disabled:opacity-50 flex-shrink-0"
-              >
-                {isSearchingLogoB ? '⏳' : '🔍'}
-              </button>
-              {teamBInfo.logo && (
-                <div className="w-4 h-4 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
-                  <img src={teamBInfo.logo} alt="B" className="w-full h-full object-contain" />
-                </div>
-              )}
             </div>
-          </div>
 
-          {/* Màu áo - 1 hàng compact */}
-          <div className="grid grid-cols-2 gap-1">
-            {/* Đội A */}
-            <div className="flex items-center gap-1 min-w-0">
-              <span className="text-xs text-red-600 flex-shrink-0">A:</span>
+            {/* Tên đội */}
+            <div className="flex gap-1 items-center">
               <input
-                type="color"
-                value={teamAInfo.teamAKitcolor || '#ff0000'}
-                onChange={(e) => setTeamAInfo(prev => ({ ...prev, teamAKitcolor: e.target.value }))}
-                className="w-5 h-5 border border-gray-300 rounded cursor-pointer flex-shrink-0"
-                title="Áo A"
+                type="text"
+                placeholder="Đội A"
+                value={teamAInfo.name}
+                onChange={(e) => setTeamAInfo(prev => ({ ...prev, name: e.target.value }))}
+                className="flex-1 min-w-0 px-2 py-1 text-xs font-medium text-center text-red-600 bg-white border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-red-300"
+                maxLength={20}
               />
-              <span className="text-xs text-gray-500 flex-shrink-0">Áo</span>
-            </div>
-            {/* Đội B */}
-            <div className="flex items-center gap-1 min-w-0">
-              <span className="text-xs text-gray-800 flex-shrink-0">B:</span>
+              <span className="text-xs font-bold text-gray-500 px-1 flex-shrink-0">VS</span>
               <input
-                type="color"
-                value={teamBInfo.teamBKitcolor || '#000000'}
-                onChange={(e) => setTeamBInfo(prev => ({ ...prev, teamBKitcolor: e.target.value }))}
-                className="w-5 h-5 border border-gray-300 rounded cursor-pointer flex-shrink-0"
-                title="Áo B"
+                type="text"
+                placeholder="Đội B"
+                value={teamBInfo.name}
+                onChange={(e) => setTeamBInfo(prev => ({ ...prev, name: e.target.value }))}
+                className="flex-1 min-w-0 px-2 py-1 text-xs font-medium text-center text-gray-800 bg-white border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-300"
+                maxLength={20}
               />
-              <span className="text-xs text-gray-500 flex-shrink-0">Áo</span>
             </div>
-          </div>
 
-          {/* Thời gian & Địa điểm */}
-          <div className="grid grid-cols-3 gap-1">
-            <input
-              type="date"
-              // value={matchInfo.matchDate || new Date().toISOString().split('T')[0]}
-              value={toDateInputFormat(matchInfo.matchDate) || new Date().toISOString().split('T')[0]}
-              onChange={(e) => setMatchInfo(prev => ({ ...prev, matchDate: e.target.value }))}
-              className="w-full min-w-0 px-1 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center bg-white"
-            />
-            <input
-              type="time"
-              value={matchInfo.startTime}
-              onChange={(e) => setMatchInfo(prev => ({ ...prev, startTime: e.target.value }))}
-              className="w-full min-w-0 px-1 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center bg-white"
-            />
-            <input
-              type="text"
-              placeholder="Sân..."
-              value={matchInfo.location}
-              onChange={(e) => setMatchInfo(prev => ({ ...prev, location: e.target.value }))}
-              className="w-full min-w-0 px-1 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center bg-white"
-              maxLength={20}
-            />
-          </div>
+            {/* Logo đội - compact */}
+            <div className="grid grid-cols-2 gap-1">
+              <div className="flex items-center gap-1 min-w-0">
+                <span className="text-xs text-red-600 flex-shrink-0">A:</span>
+                <input
+                  type="text"
+                  placeholder="Code"
+                  value={logoCodeA}
+                  onChange={(e) => setLogoCodeA(e.target.value)}
+                  onKeyUp={(e) => e.key === 'Enter' && handleSearchLogoA()}
+                  className="w-16 min-w-0 px-1 py-1 text-xs border border-gray-300 rounded focus:border-red-500 text-center bg-white flex-shrink-0"
+                />
+                <button
+                  onClick={handleSearchLogoA}
+                  disabled={!logoCodeA.trim() || isSearchingLogoA}
+                  className="px-1 py-1 text-xs border border-red-500 bg-red-500 text-white rounded hover:bg-red-600 disabled:opacity-50 flex-shrink-0"
+                >
+                  {isSearchingLogoA ? '⏳' : '🔍'}
+                </button>
+                {teamAInfo.logo && (
+                  <div className="w-4 h-4 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
+                    <img src={teamAInfo.logo} alt="A" className="w-full h-full object-contain" />
+                  </div>
+                )}
+              </div>
+              <div className="flex items-center gap-1 min-w-0">
+                <span className="text-xs text-gray-800 flex-shrink-0">B:</span>
+                <input
+                  type="text"
+                  placeholder="Code"
+                  value={logoCodeB}
+                  onChange={(e) => setLogoCodeB(e.target.value)}
+                  onKeyUp={(e) => e.key === 'Enter' && handleSearchLogoB()}
+                  className="w-16 min-w-0 px-1 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 text-center bg-white flex-shrink-0"
+                />
+                <button
+                  onClick={handleSearchLogoB}
+                  disabled={!logoCodeB.trim() || isSearchingLogoB}
+                  className="px-1 py-1 text-xs border border-gray-700 bg-gray-700 text-white rounded hover:bg-gray-800 disabled:opacity-50 flex-shrink-0"
+                >
+                  {isSearchingLogoB ? '⏳' : '🔍'}
+                </button>
+                {teamBInfo.logo && (
+                  <div className="w-4 h-4 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
+                    <img src={teamBInfo.logo} alt="B" className="w-full h-full object-contain" />
+                  </div>
+                )}
+              </div>
+            </div>
 
-          {/* Nút áp dụng - compact */}
-          <div className="flex justify-center pt-1">
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => {
-                console.log("🎨 [DEBUG] Áp dụng màu áo:", {
-                  teamAKitcolor: teamAInfo.teamAKitcolor,
-                  teamBKitcolor: teamBInfo.teamBKitcolor
-                });
+            {/* Màu áo - 1 hàng compact */}
+            <div className="grid grid-cols-2 gap-1">
+              {/* Đội A */}
+              <div className="flex items-center gap-1 min-w-0">
+                <span className="text-xs text-red-600 flex-shrink-0">A:</span>
+                <input
+                  type="color"
+                  value={teamAInfo.teamAKitcolor || '#ff0000'}
+                  onChange={(e) => setTeamAInfo(prev => ({ ...prev, teamAKitcolor: e.target.value }))}
+                  className="w-5 h-5 border border-gray-300 rounded cursor-pointer flex-shrink-0"
+                  title="Áo A"
+                />
+                <span className="text-xs text-gray-500 flex-shrink-0">Áo</span>
+              </div>
+              {/* Đội B */}
+              <div className="flex items-center gap-1 min-w-0">
+                <span className="text-xs text-gray-800 flex-shrink-0">B:</span>
+                <input
+                  type="color"
+                  value={teamBInfo.teamBKitcolor || '#000000'}
+                  onChange={(e) => setTeamBInfo(prev => ({ ...prev, teamBKitcolor: e.target.value }))}
+                  className="w-5 h-5 border border-gray-300 rounded cursor-pointer flex-shrink-0"
+                  title="Áo B"
+                />
+                <span className="text-xs text-gray-500 flex-shrink-0">Áo</span>
+              </div>
+            </div>
 
-                updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
-                updateTeamLogos(
-                  teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
-                  teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || ""
-                );
-                updateMatchTitle(matchTitle);
+            {/* Thời gian & Địa điểm */}
+            <div className="grid grid-cols-3 gap-1">
+              <input
+                type="date"
+                // value={matchInfo.matchDate || new Date().toISOString().split('T')[0]}
+                value={toDateInputFormat(matchInfo.matchDate) || new Date().toISOString().split('T')[0]}
+                onChange={(e) => setMatchInfo(prev => ({ ...prev, matchDate: e.target.value }))}
+                className="w-full min-w-0 px-1 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center bg-white"
+              />
+              <input
+                type="time"
+                value={matchInfo.startTime}
+                onChange={(e) => setMatchInfo(prev => ({ ...prev, startTime: e.target.value }))}
+                className="w-full min-w-0 px-1 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center bg-white"
+              />
+              <input
+                type="text"
+                placeholder="Sân..."
+                value={matchInfo.location}
+                onChange={(e) => setMatchInfo(prev => ({ ...prev, location: e.target.value }))}
+                className="w-full min-w-0 px-1 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center bg-white"
+                maxLength={20}
+              />
+            </div>
 
-                const matchInfoData = {
-                  startTime: matchInfo.startTime,
-                  stadium: matchInfo.location,
-                  matchDate: matchInfo.matchDate || new Date().toISOString().split('T')[0],
-                  title: matchTitle,
-                  time: matchInfo.startTime,
-                  teamAKitColor: teamAInfo.teamAKitcolor || '#ff0000',
-                  teamBKitColor: teamBInfo.teamBKitcolor || '#000000',
-                  liveText: liveText,
-                  logoTeamA: teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
-                  logoTeamB: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || ""
-                };
-
-                console.log("🎨 [DEBUG] Gửi updateMatchInfo với:", matchInfoData);
-                updateMatchInfo(matchInfoData);
-
-                // Cập nhật đơn vị live riêng biệt để emit đến backend
-                if (liveText !== matchData.liveText) {
-                  updateLiveUnit({
-                    text: liveText
+            {/* Nút áp dụng - compact */}
+            <div className="flex justify-center pt-1">
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => {
+                  console.log("🎨 [DEBUG] Áp dụng màu áo:", {
+                    teamAKitcolor: teamAInfo.teamAKitcolor,
+                    teamBKitcolor: teamBInfo.teamBKitcolor
                   });
-                }
 
-                toast.success('✅ Đã cập nhật thông tin trận đấu và đơn vị live thành công!');
-              }}
-              className="px-3 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-xs rounded shadow transform hover:scale-105 transition-all duration-200"
-            >
-              ÁP DỤNG
-            </Button>
+                  updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
+                  updateTeamLogos(
+                    teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
+                    teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || ""
+                  );
+                  updateMatchTitle(matchTitle);
+
+                  const matchInfoData = {
+                    startTime: matchInfo.startTime,
+                    stadium: matchInfo.location,
+                    matchDate: matchInfo.matchDate || new Date().toISOString().split('T')[0],
+                    title: matchTitle,
+                    time: matchInfo.startTime,
+                    teamAKitColor: teamAInfo.teamAKitcolor || '#ff0000',
+                    teamBKitColor: teamBInfo.teamBKitcolor || '#000000',
+                    liveText: liveText,
+                    logoTeamA: teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
+                    logoTeamB: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || ""
+                  };
+
+                  console.log("🎨 [DEBUG] Gửi updateMatchInfo với:", matchInfoData);
+                  updateMatchInfo(matchInfoData);
+
+                  // Cập nhật đơn vị live riêng biệt để emit đến backend
+                  if (liveText !== matchData.liveText) {
+                    updateLiveUnit({
+                      text: liveText
+                    });
+                  }
+
+                  toast.success('✅ Đã cập nhật thông tin trận đấu và đơn vị live thành công!');
+                }}
+                className="px-3 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-xs rounded shadow transform hover:scale-105 transition-all duration-200"
+              >
+                ÁP DỤNG
+              </Button>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
       {/* Tab Controls */}
       <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200">
         <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
@@ -1349,133 +1347,133 @@ const MatchManagementSection = ({ isActive = true }) => {
       {/* Clock Settings */}
       {selectedOption === "dieu-khien" && (
         <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-2 sm:p-3 border border-indigo-200">
-        <div className="space-y-3">
-          {/* Radio buttons */}
-          <div className="flex justify-center space-x-4">
-            <div className="flex items-center space-x-1">
-              <input
-                type="radio"
-                name="clock"
-                value="khong"
-                checked={clockSetting === "khong"}
-                onChange={(e) => setClockSetting(e.target.value)}
-                className="scale-75"
-              />
-              <label className="text-xs">KHÔNG</label>
+          <div className="space-y-3">
+            {/* Radio buttons */}
+            <div className="flex justify-center space-x-4">
+              <div className="flex items-center space-x-1">
+                <input
+                  type="radio"
+                  name="clock"
+                  value="khong"
+                  checked={clockSetting === "khong"}
+                  onChange={(e) => setClockSetting(e.target.value)}
+                  className="scale-75"
+                />
+                <label className="text-xs">KHÔNG</label>
+              </div>
+              <div className="flex items-center space-x-1">
+                <input
+                  type="radio"
+                  name="clock"
+                  value="lien-tuc"
+                  checked={clockSetting === "lien-tuc"}
+                  onChange={(e) => setClockSetting(e.target.value)}
+                  className="scale-75"
+                />
+                <label className="text-xs">LIÊN TỤC</label>
+              </div>
+              <div className="flex items-center space-x-1">
+                <input
+                  type="radio"
+                  name="clock"
+                  value="moi-2"
+                  checked={clockSetting === "moi-2"}
+                  onChange={(e) => setClockSetting(e.target.value)}
+                  className="scale-75"
+                />
+                <label className="text-xs">MỖI 2'</label>
+              </div>
+              <div className="flex items-center space-x-1">
+                <input
+                  type="radio"
+                  name="clock"
+                  value="moi-5"
+                  checked={clockSetting === "moi-5"}
+                  onChange={(e) => setClockSetting(e.target.value)}
+                  className="scale-75"
+                />
+                <label className="text-xs">MỖI 5'</label>
+              </div>
             </div>
-            <div className="flex items-center space-x-1">
-              <input
-                type="radio"
-                name="clock"
-                value="lien-tuc"
-                checked={clockSetting === "lien-tuc"}
-                onChange={(e) => setClockSetting(e.target.value)}
-                className="scale-75"
-              />
-              <label className="text-xs">LIÊN TỤC</label>
+
+            {/* Text content */}
+            <Input
+              placeholder="Nội dung chữ chạy..."
+              value={clockText}
+              onChange={(e) => setClockText(e.target.value)}
+              maxLength={100}
+              className="w-full text-xs"
+            />
+
+            {/* Text Style Selection */}
+            <div>
+              <div className="flex gap-1 flex-wrap justify-center">
+                <button
+                  onClick={() => setTickerColor("white-black")}
+                  className={`px-2 py-1 text-xs font-medium rounded border-2 bg-black text-white ${tickerColor === "white-black" ? "border-orange-600" : "border-gray-300"
+                    }`}
+                >
+                  Chữ
+                </button>
+                <button
+                  onClick={() => setTickerColor("black-white")}
+                  className={`px-2 py-1 text-xs font-medium rounded border-2 bg-white text-black ${tickerColor === "black-white" ? "border-orange-600" : "border-gray-300"
+                    }`}
+                >
+                  Chữ
+                </button>
+                <button
+                  onClick={() => setTickerColor("white-blue")}
+                  className={`px-2 py-1 text-xs font-medium rounded border-2 bg-blue-600 text-white ${tickerColor === "white-blue" ? "border-orange-600" : "border-gray-300"
+                    }`}
+                >
+                  Chữ
+                </button>
+                <button
+                  onClick={() => setTickerColor("white-red")}
+                  className={`px-2 py-1 text-xs font-medium rounded border-2 bg-red-600 text-white ${tickerColor === "white-red" ? "border-orange-600" : "border-gray-300"
+                    }`}
+                >
+                  Chữ
+                </button>
+                <button
+                  onClick={() => setTickerColor("white-green")}
+                  className={`px-2 py-1 text-xs font-medium rounded border-2 bg-green-600 text-white ${tickerColor === "white-green" ? "border-orange-600" : "border-gray-300"
+                    }`}
+                >
+                  Chữ
+                </button>
+              </div>
             </div>
-            <div className="flex items-center space-x-1">
-              <input
-                type="radio"
-                name="clock"
-                value="moi-2"
-                checked={clockSetting === "moi-2"}
-                onChange={(e) => setClockSetting(e.target.value)}
-                className="scale-75"
-              />
-              <label className="text-xs">MỖI 2'</label>
+
+            {/* Apply Button */}
+            <div className="flex justify-center pt-2 border-t border-indigo-200">
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={() => {
+                  // Tạo marquee data từ clock settings
+                  const marqueeSettings = {
+                    text: clockText || "TRỰC TIẾP BÓNG ĐÁ",
+                    mode: clockSetting,
+                    color: tickerColor,
+                    interval: clockSetting === 'moi-2' ? 2 : clockSetting === 'moi-5' ? 5 : 0
+                  };
+
+                  // Update marquee qua MatchContext
+                  updateMarquee(marqueeSettings);
+
+
+
+                  toast.success('✅ Đã áp dụng cài đặt chữ chạy!');
+                }}
+                className="px-4 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+              >
+                ÁP DỤNG
+              </Button>
             </div>
-            <div className="flex items-center space-x-1">
-              <input
-                type="radio"
-                name="clock"
-                value="moi-5"
-                checked={clockSetting === "moi-5"}
-                onChange={(e) => setClockSetting(e.target.value)}
-                className="scale-75"
-              />
-              <label className="text-xs">MỖI 5'</label>
-            </div>
-          </div>
-
-          {/* Text content */}
-          <Input
-            placeholder="Nội dung chữ chạy..."
-            value={clockText}
-            onChange={(e) => setClockText(e.target.value)}
-            maxLength={100}
-            className="w-full text-xs"
-          />
-
-          {/* Text Style Selection */}
-          <div>
-            <div className="flex gap-1 flex-wrap justify-center">
-              <button
-                onClick={() => setTickerColor("white-black")}
-                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-black text-white ${tickerColor === "white-black" ? "border-orange-600" : "border-gray-300"
-                  }`}
-              >
-                Chữ
-              </button>
-              <button
-                onClick={() => setTickerColor("black-white")}
-                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-white text-black ${tickerColor === "black-white" ? "border-orange-600" : "border-gray-300"
-                  }`}
-              >
-                Chữ
-              </button>
-              <button
-                onClick={() => setTickerColor("white-blue")}
-                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-blue-600 text-white ${tickerColor === "white-blue" ? "border-orange-600" : "border-gray-300"
-                  }`}
-              >
-                Chữ
-              </button>
-              <button
-                onClick={() => setTickerColor("white-red")}
-                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-red-600 text-white ${tickerColor === "white-red" ? "border-orange-600" : "border-gray-300"
-                  }`}
-              >
-                Chữ
-              </button>
-              <button
-                onClick={() => setTickerColor("white-green")}
-                className={`px-2 py-1 text-xs font-medium rounded border-2 bg-green-600 text-white ${tickerColor === "white-green" ? "border-orange-600" : "border-gray-300"
-                  }`}
-              >
-                Chữ
-              </button>
-            </div>
-          </div>
-
-          {/* Apply Button */}
-          <div className="flex justify-center pt-2 border-t border-indigo-200">
-            <Button
-              variant="primary"
-              size="sm"
-              onClick={() => {
-                // Tạo marquee data từ clock settings
-                const marqueeSettings = {
-                  text: clockText || "TRỰC TIẾP BÓNG ĐÁ",
-                  mode: clockSetting,
-                  color: tickerColor,
-                  interval: clockSetting === 'moi-2' ? 2 : clockSetting === 'moi-5' ? 5 : 0
-                };
-
-                // Update marquee qua MatchContext
-                updateMarquee(marqueeSettings);
-
-
-
-                toast.success('✅ Đã áp dụng cài đặt chữ chạy!');
-              }}
-              className="px-4 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
-            >
-              ÁP DỤNG
-            </Button>
           </div>
         </div>
-      </div>
       )}
       {/* Modals */}
       <Modal
@@ -1679,13 +1677,13 @@ const MatchManagementSection = ({ isActive = true }) => {
           console.log("Saved lineup data:", lineupData);
           setShowLineupModal(false);
         }}
-        matchData={{...matchData, ...timerData}}
+        matchData={{ ...matchData, ...timerData }}
       />
 
       <SimplePenaltyModal
         isOpen={showPenaltyModal}
         onClose={() => setShowPenaltyModal(false)}
-        matchData={{...matchData, ...timerData}}
+        matchData={{ ...matchData, ...timerData }}
         penaltyData={penaltyData}
         onPenaltyChange={handlePenaltyChange}
       />

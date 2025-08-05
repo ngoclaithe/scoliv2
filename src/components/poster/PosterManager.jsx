@@ -91,11 +91,8 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate, onPositionChan
       {/* Main Content - Hiển thị trực tiếp PosterLogoManager */}
       <div className="w-full">
         <PosterLogoManager
-          matchData={matchData}
           onPosterUpdate={handlePosterLogoUpdate}
           onLogoUpdate={handleLogoUpdateFromManager}
-          onPositionChange={onPositionChange}
-          onClose={onClose}
           initialData={initialData}
           accessCode={accessCode}
         />

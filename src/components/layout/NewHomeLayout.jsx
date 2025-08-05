@@ -15,23 +15,23 @@ const NewHomeLayout = () => {
 
   // Định nghĩa các tab theo yêu cầu
   const tabs = [
-    { 
-      id: "upload-logo", 
-      name: "UPLOAD LOGO", 
+    {
+      id: "upload-logo",
+      name: "UPLOAD LOGO",
       icon: "🏆",
       color: "blue",
       description: "Quản lý logo đội bóng và nhà tài trợ"
     },
-    { 
-      id: "quan-ly-tran", 
-      name: "QUẢN LÝ TRẬN", 
+    {
+      id: "quan-ly-tran",
+      name: "QUẢN LÝ TRẬN",
       icon: "⚽",
-      color: "purple", 
+      color: "purple",
       description: "Điều khiển trận đấu và giao diện hiển thị"
     },
-    { 
-      id: "binh-luan", 
-      name: "BÌNH LUẬN", 
+    {
+      id: "binh-luan",
+      name: "BÌNH LUẬN",
       icon: "🎙️",
       color: "red",
       description: "Quản lý audio và bình luận trận đấu"
@@ -55,12 +55,6 @@ const NewHomeLayout = () => {
       default:
         return <UploadLogoSection />;
     }
-  };
-
-  // Lấy thông tin màu cho tab hiện tại
-  const getCurrentTabColor = () => {
-    const currentTab = tabs.find(tab => tab.id === activeTab);
-    return currentTab?.color || 'blue';
   };
 
   return (
@@ -124,46 +118,44 @@ const NewHomeLayout = () => {
       <main>
         {/* Navigation Tabs */}
         <div className="bg-white border-b border-gray-200 shadow-sm">
-  <div className="flex">
-    {tabs.map((tab) => (
-      <button
-        key={tab.id}
-        onClick={() => handleTabChange(tab.id)}
-        className={`flex-1 py-3 px-2 text-center font-semibold text-xs border-b-2 transition-all duration-300 hover:bg-gray-50 ${
-          activeTab === tab.id
-            ? `border-${tab.color}-500 text-${tab.color}-700 bg-${tab.color}-50`
-            : "border-transparent text-gray-600 hover:text-gray-800"
-        }`}
-        style={{
-          borderBottomColor: activeTab === tab.id ? (
-            tab.color === 'blue' ? '#3b82f6' :
-            tab.color === 'purple' ? '#8b5cf6' :
-            tab.color === 'red' ? '#ef4444' : '#3b82f6'
-          ) : 'transparent',
-          backgroundColor: activeTab === tab.id ? (
-            tab.color === 'blue' ? '#eff6ff' :
-            tab.color === 'purple' ? '#f3e8ff' :
-            tab.color === 'red' ? '#fef2f2' : '#eff6ff'
-          ) : 'transparent',
-          color: activeTab === tab.id ? (
-            tab.color === 'blue' ? '#1d4ed8' :
-            tab.color === 'purple' ? '#7c3aed' :
-            tab.color === 'red' ? '#dc2626' : '#1d4ed8'
-          ) : undefined
-        }}
-      >
-        <div className="flex flex-col items-center space-y-1">
-          <span className="text-lg">{tab.icon}</span>
-          <span className="text-xs">
-            {tab.id === "upload-logo" ? "LOGO" :
-             tab.id === "quan-ly-tran" ? "TRẬN" : "AUDIO"}
-          </span>
+          <div className="flex">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => handleTabChange(tab.id)}
+                className={`flex-1 py-1.5 px-2 text-center font-semibold text-xs border-b-2 transition-all duration-300 hover:bg-gray-50 ${activeTab === tab.id
+                    ? `border-${tab.color}-500 text-${tab.color}-700 bg-${tab.color}-50`
+                    : "border-transparent text-gray-600 hover:text-gray-800"
+                  }`}
+                style={{
+                  borderBottomColor: activeTab === tab.id
+                    ? (tab.color === 'blue' ? '#3b82f6' :
+                      tab.color === 'purple' ? '#8b5cf6' :
+                        tab.color === 'red' ? '#ef4444' : '#3b82f6')
+                    : 'transparent',
+                  backgroundColor: activeTab === tab.id
+                    ? (tab.color === 'blue' ? '#eff6ff' :
+                      tab.color === 'purple' ? '#f3e8ff' :
+                        tab.color === 'red' ? '#fef2f2' : '#eff6ff')
+                    : 'transparent',
+                  color: activeTab === tab.id
+                    ? (tab.color === 'blue' ? '#1d4ed8' :
+                      tab.color === 'purple' ? '#7c3aed' :
+                        tab.color === 'red' ? '#dc2626' : '#1d4ed8')
+                    : undefined
+                }}
+              >
+                <div className="flex flex-col items-center space-y-0.5">
+                  <span className="text-base">{tab.icon}</span>
+                  <span className="text-[10px] leading-none">
+                    {tab.id === "upload-logo" ? "LOGO" :
+                      tab.id === "quan-ly-tran" ? "TRẬN" : "AUDIO"}
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
-      </button>
-    ))}
-  </div>
-</div>
-
 
         {/* Tab Content Container */}
         <div className="bg-white min-h-screen">
