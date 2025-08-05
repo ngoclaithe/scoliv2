@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useMemo } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import PosterManager from "../poster/PosterManager";
@@ -23,6 +23,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     penaltyData,
 
     displaySettings,
+    currentView,
 
     updateScore,
     updateMatchInfo,
@@ -51,6 +52,38 @@ const MatchManagementSection = ({ isActive = true }) => {
   } = useMatch();
 
   const { matchCode } = useAuth();
+
+  // Tạo stable props cho PosterManager để tránh re-render do timer
+  const stableMatchData = useMemo(() => ({
+    teamA: {
+      name: matchData.teamA.name,
+      logo: matchData.teamA.logo,
+      score: matchData.teamA.score
+    },
+    teamB: {
+      name: matchData.teamB.name,
+      logo: matchData.teamB.logo,
+      score: matchData.teamB.score
+    },
+    tournament: matchData.tournament,
+    stadium: matchData.stadium,
+    matchDate: matchData.matchDate,
+    liveText: matchData.liveText,
+    matchTitle: matchData.matchTitle
+  }), [
+    matchData.teamA.name, matchData.teamA.logo, matchData.teamA.score,
+    matchData.teamB.name, matchData.teamB.logo, matchData.teamB.score,
+    matchData.tournament, matchData.stadium, matchData.matchDate,
+    matchData.liveText, matchData.matchTitle
+  ]);
+
+  const stableInitialData = useMemo(() => ({
+    selectedPoster: displaySettings.selectedPoster ? { id: displaySettings.selectedPoster, name: displaySettings.selectedPoster } : null,
+    displayOptions: {
+      shape: displaySettings.logoShape || 'round',
+      rotateDisplay: displaySettings.rotateDisplay || false
+    }
+  }), [displaySettings.selectedPoster, displaySettings.logoShape, displaySettings.rotateDisplay]);
 
   // Audio state management
   const [audioEnabled, setAudioEnabled] = useState(true);
@@ -86,22 +119,37 @@ const MatchManagementSection = ({ isActive = true }) => {
   const [matchTitle, setMatchTitle] = useState(matchData.matchTitle || "");
   const [liveText, setLiveText] = useState(matchData.liveText || "");
 
-  // Sync team info khi matchData thay đổi (từ server)
+  // Sync team info khi matchData thay đổi (từ server) - KHÔNG bao gồm matchTime để tránh timer trigger
   useEffect(() => {
     console.log("Giá trị đồng bộ từ backend socket là", matchData);
-    setTeamAInfo(prev => ({
-      name: matchData.teamA.name || prev.name,
-      logo: matchData.teamA.logo || prev.logo,
-      teamAKitcolor: matchData.teamA.teamAKitcolor || prev.teamAKitcolor,
-      // teamA2Kitcolor: matchData.teamA.teamA2Kitcolor || prev.teamAK2itcolor,      
-    }));
-    setTeamBInfo(prev => ({
-      name: matchData.teamB.name || prev.name,
-      logo: matchData.teamB.logo || prev.logo,
-      teamBKitcolor: matchData.teamB.teamBKitcolor || prev.teamBKitcolor,
-      // teamB2Kitcolor: matchData.teamB.teamB2Kitcolor || prev.teamB2Kitcolor,
-    }));
-  }, [matchData.teamA.name, matchData.teamA.logo, matchData.teamB.name, matchData.teamB.logo]);
+    setTeamAInfo(prev => {
+      const newTeamAInfo = {
+        name: matchData.teamA.name || prev.name,
+        logo: matchData.teamA.logo || prev.logo,
+        teamAKitcolor: matchData.teamA.teamAKitColor || matchData.teamAKitColor || prev.teamAKitcolor,
+      };
+
+      // Chỉ update nếu có thay đổi thực sự
+      if (JSON.stringify(newTeamAInfo) !== JSON.stringify(prev)) {
+        return newTeamAInfo;
+      }
+      return prev;
+    });
+
+    setTeamBInfo(prev => {
+      const newTeamBInfo = {
+        name: matchData.teamB.name || prev.name,
+        logo: matchData.teamB.logo || prev.logo,
+        teamBKitcolor: matchData.teamB.teamBKitColor || matchData.teamBKitColor || prev.teamBKitcolor,
+      };
+
+      // Chỉ update nếu có thay đổi thực sự
+      if (JSON.stringify(newTeamBInfo) !== JSON.stringify(prev)) {
+        return newTeamBInfo;
+      }
+      return prev;
+    });
+  }, [matchData.teamA.name, matchData.teamA.logo, matchData.teamB.name, matchData.teamB.logo, matchData.teamA.teamAKitColor, matchData.teamAKitColor, matchData.teamB.teamBKitColor, matchData.teamBKitColor]);
   const [matchInfo, setMatchInfo] = useState({
     startTime: matchData.startTime || "19:30",
     location: matchData.stadium || "SÂN VẬN ĐỘNG QUỐC GIA",
@@ -337,6 +385,10 @@ const MatchManagementSection = ({ isActive = true }) => {
       {/* Scoreboard */}
       <div className="sm:p-0 p-2 shadow-md h-auto">
         <div className="w-full h-12 sm:h-16 bg-gray-100 rounded-md overflow-hidden relative">
+          {/* Hiển thị view hiện tại */}
+          <div className="absolute top-1 left-1 bg-blue-500 text-white px-2 py-0.5 rounded text-xs font-bold z-10">
+            View: {currentView || 'intro'}
+          </div>
           <ScoreboardPreview
             matchData={{
               ...matchData,
@@ -351,8 +403,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                 logo: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo)
               },
               matchTitle: matchTitle || matchData.matchTitle,
-              teamAKitColor: teamAInfo.shirtColor || matchData.teamAKitColor || '#ff0000',
-              teamBKitColor: teamBInfo.shirtColor || matchData.teamBKitColor || '#000000'
+              teamAKitColor: teamAInfo.teamAKitcolor || matchData.teamAKitColor || matchData.teamAKitColor || '#ff0000',
+              teamBKitColor: teamBInfo.teamBKitcolor || matchData.teamBKitColor || matchData.teamBKitColor || '#000000'
             }}
             displaySettings={displaySettings}
           />
@@ -641,24 +693,33 @@ const MatchManagementSection = ({ isActive = true }) => {
               variant="primary"
               size="sm"
               onClick={() => {
+                console.log("🎨 [DEBUG] Áp dụng màu áo:", {
+                  teamAKitcolor: teamAInfo.teamAKitcolor,
+                  teamBKitcolor: teamBInfo.teamBKitcolor
+                });
+
                 updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
                 updateTeamLogos(
                   teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
                   teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || ""
                 );
                 updateMatchTitle(matchTitle);
-                updateMatchInfo({
+
+                const matchInfoData = {
                   startTime: matchInfo.startTime,
                   stadium: matchInfo.location,
                   matchDate: matchInfo.matchDate || new Date().toISOString().split('T')[0],
                   title: matchTitle,
                   time: matchInfo.startTime,
-                  teamAKitColor: teamAInfo.shirtColor || '#ff0000',
-                  teamBKitColor: teamBInfo.shirtColor || '#000000',
+                  teamAKitColor: teamAInfo.teamAKitcolor || '#ff0000',
+                  teamBKitColor: teamBInfo.teamBKitcolor || '#000000',
                   liveText: liveText,
                   logoTeamA: teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
                   logoTeamB: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || ""
-                });
+                };
+
+                console.log("🎨 [DEBUG] Gửi updateMatchInfo với:", matchInfoData);
+                updateMatchInfo(matchInfoData);
 
                 // Cập nhật đơn vị live riêng biệt để emit đến backend
                 if (liveText !== matchData.liveText) {
@@ -1282,15 +1343,9 @@ const MatchManagementSection = ({ isActive = true }) => {
         size="full"
       >
         <PosterManager
-          matchData={matchData}
+          matchData={stableMatchData}
           accessCode={matchCode}
-          initialData={{
-            selectedPoster: displaySettings.selectedPoster ? { id: displaySettings.selectedPoster, name: displaySettings.selectedPoster } : null,
-            displayOptions: {
-              shape: displaySettings.logoShape || 'round',
-              rotateDisplay: displaySettings.rotateDisplay || false
-            }
-          }}
+          initialData={stableInitialData}
           onPosterUpdate={(poster) => {
 
             if (poster) {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import Button from "../common/Button";
 import LogoAPI from "../../API/apiLogo";
 import DisplaySettingsAPI from "../../API/apiSettingDisplay";
@@ -406,11 +406,33 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
   const LogoItem = React.memo(function LogoItem({ item, onUpdate, onRemove }) {
     const [localCode, setLocalCode] = useState(item.code);
     const [isSearching, setIsSearching] = useState(false);
+    const [localCodeRef, setLocalCodeRef] = useState(item.code);
+    const inputRef = useRef(null);
+    const lastFocusedRef = useRef(false);
 
-    const handleCodeChange = (e) => {
+    // Chỉ update localCode khi item.code thay đổi thật sự, không phải do re-render
+    useEffect(() => {
+      if (item.code !== localCodeRef) {
+        // Lưu trạng thái focus trước khi update
+        const wasFocused = inputRef.current && document.activeElement === inputRef.current;
+        lastFocusedRef.current = wasFocused;
+
+        setLocalCode(item.code);
+        setLocalCodeRef(item.code);
+
+        // Khôi phục focus sau khi update
+        if (wasFocused && inputRef.current) {
+          setTimeout(() => {
+            inputRef.current.focus();
+          }, 0);
+        }
+      }
+    }, [item.code, localCodeRef]);
+
+    const handleCodeChange = useCallback((e) => {
       const newCode = e.target.value.toUpperCase();
       setLocalCode(newCode);
-    };
+    }, []);
 
     const handleSearch = async () => {
       if (localCode.trim().length >= 3) {
@@ -540,6 +562,7 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
           {/* Input tìm kiếm với icon */}
           <div className="relative">
             <input
+              ref={inputRef}
               id="logo-search-code"
               name="logoSearchCode"
               type="text"
@@ -620,14 +643,20 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
     );
   }, (prevProps, nextProps) => {
     // Only rerender if item properties actually changed
-    return (
-      prevProps.item.id === nextProps.item.id &&
-      prevProps.item.code === nextProps.item.code &&
-      prevProps.item.url === nextProps.item.url &&
-      JSON.stringify(prevProps.item.displayPositions) === JSON.stringify(nextProps.item.displayPositions) &&
-      prevProps.onUpdate === nextProps.onUpdate &&
-      prevProps.onRemove === nextProps.onRemove
+    const itemChanged = (
+      prevProps.item.id !== nextProps.item.id ||
+      prevProps.item.code !== nextProps.item.code ||
+      prevProps.item.url !== nextProps.item.url ||
+      JSON.stringify(prevProps.item.displayPositions) !== JSON.stringify(nextProps.item.displayPositions)
     );
+
+    const callbacksChanged = (
+      prevProps.onUpdate !== nextProps.onUpdate ||
+      prevProps.onRemove !== nextProps.onRemove
+    );
+
+    // Return true to prevent re-render, false to allow re-render
+    return !itemChanged && !callbacksChanged;
   });
 
   const handlePosterSelect = useCallback((poster) => {

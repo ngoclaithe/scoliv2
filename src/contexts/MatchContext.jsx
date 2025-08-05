@@ -100,6 +100,9 @@ export const MatchProvider = ({ children }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
 
+  // State cho view hiện tại
+  const [currentView, setCurrentView] = useState('intro');
+
   // State cho timer tự động
   const [timerInterval, setTimerInterval] = useState(null);
   const [startTime, setStartTime] = useState(null);
@@ -230,6 +233,11 @@ export const MatchProvider = ({ children }) => {
             setSponsors(prev => ({ ...prev, ...state.sponsors }));
           }
 
+          if (state.view) {
+            console.log('👁️ [MatchContext] Updating currentView from room_joined:', state.view);
+            setCurrentView(state.view);
+          }
+
           console.log('✅ [MatchContext] All data updated from room_joined event');
           setLastUpdateTime(Date.now());
         }
@@ -246,7 +254,21 @@ export const MatchProvider = ({ children }) => {
     // Lắng nghe cập nhật thông tin trận đấu
     socketService.on('match_info_updated', (data) => {
       console.log('📝 [MatchContext] match_info_updated received:', data);
-      setMatchData(prev => ({ ...prev, ...data.matchInfo }));
+      setMatchData(prev => ({
+        ...prev,
+        ...data.matchInfo,
+        // Đảm bảo màu áo được cập nhật từ backend
+        teamA: {
+          ...prev.teamA,
+          teamAKitColor: data.matchInfo.teamAKitColor || prev.teamA.teamAKitColor,
+          ...(data.matchInfo.logoTeamA && { logo: data.matchInfo.logoTeamA })
+        },
+        teamB: {
+          ...prev.teamB,
+          teamBKitColor: data.matchInfo.teamBKitColor || prev.teamB.teamBKitColor,
+          ...(data.matchInfo.logoTeamB && { logo: data.matchInfo.logoTeamB })
+        }
+      }));
       setLastUpdateTime(Date.now());
     });
 
@@ -440,6 +462,15 @@ export const MatchProvider = ({ children }) => {
       setSocketConnected(true);
     });
 
+    // Lắng nghe cập nhật view
+    socketService.on('view_updated', (data) => {
+      console.log('👁️ [MatchContext] view_updated received:', data);
+      if (data.viewType) {
+        setCurrentView(data.viewType);
+      }
+      setLastUpdateTime(Date.now());
+    });
+
     // Lắng nghe response state hiện tại từ server
     socketService.on('current_state_response', (data) => {
       console.log('🔄 [MatchContext] Received current_state_response:', data);
@@ -470,6 +501,11 @@ export const MatchProvider = ({ children }) => {
 
       if (data.futsalErrors) {
         setFutsalErrors(prev => ({ ...prev, ...data.futsalErrors }));
+      }
+
+      if (data.view) {
+        console.log('👁️ [MatchContext] Updating currentView from current_state_response:', data.view);
+        setCurrentView(data.view);
       }
 
       console.log('✅ [MatchContext] State loaded from server successfully');
@@ -514,8 +550,22 @@ export const MatchProvider = ({ children }) => {
 
   // Cập nhật thông tin trận đấu
   const updateMatchInfo = useCallback((newMatchInfo) => {
-    setMatchData(prev => ({ ...prev, ...newMatchInfo }));
-    
+    setMatchData(prev => ({
+      ...prev,
+      ...newMatchInfo,
+      // Đảm bảo màu áo được cập nhật đúng cách
+      teamA: {
+        ...prev.teamA,
+        teamAKitColor: newMatchInfo.teamAKitColor || prev.teamA.teamAKitColor,
+        ...(newMatchInfo.logoTeamA && { logo: newMatchInfo.logoTeamA })
+      },
+      teamB: {
+        ...prev.teamB,
+        teamBKitColor: newMatchInfo.teamBKitColor || prev.teamB.teamBKitColor,
+        ...(newMatchInfo.logoTeamB && { logo: newMatchInfo.logoTeamB })
+      }
+    }));
+
     if (socketConnected) {
       socketService.updateMatchInfo(newMatchInfo);
     }
@@ -705,6 +755,9 @@ export const MatchProvider = ({ children }) => {
 
   // Cập nhật view hiện tại cho route dynamic (MỚI)
   const updateView = useCallback((viewType) => {
+    console.log('🎯 [MatchContext] updateView called with:', viewType);
+    setCurrentView(viewType);
+
     if (socketConnected) {
       socketService.emit('view_update', { viewType });
       console.log('Sent view update:', viewType);
@@ -768,6 +821,7 @@ export const MatchProvider = ({ children }) => {
     sponsors,
     socketConnected,
     lastUpdateTime,
+    currentView,
     
     // Actions
     updateScore,
