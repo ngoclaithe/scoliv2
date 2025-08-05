@@ -138,8 +138,8 @@ describe('dynamicRouteUtils', () => {
       };
 
       const result = buildDynamicRoute(params);
-      expect(result).toContain('H%C3%A0%20N%E1%BB%99i%20FC');
-      expect(result).toContain('TP%20HCM');
+      expect(result).toContain('H%C3%A0_N%E1%BB%99i_FC');
+      expect(result).toContain('TP_HCM');
     });
 
     test('should remove # from colors', () => {
