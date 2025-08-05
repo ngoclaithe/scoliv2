@@ -166,6 +166,12 @@ export const TimerProvider = ({ children }) => {
       }
     });
 
+    // Lắng nghe socket connect để setup lại listeners
+    socketService.on('connect', () => {
+      console.log('🕐 [TimerContext] Socket connected, setting up timer listeners');
+      // Không cần setup lại vì đã setup ở trên
+    });
+
   }, []);
 
   // Cleanup timer listeners
