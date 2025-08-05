@@ -980,7 +980,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
           {/* Stats Display - Gom chung vào 1 thẻ */}
           <div className="bg-gray-50 rounded-lg p-2 space-y-2">
-            {/* Kiểm soát bóng */}
+            {/* Ki���m soát bóng */}
             <EditableStatBar
               label="Kiểm soát bóng"
               statKey="possession"
@@ -1429,7 +1429,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 className={`px-2 py-1 text-xs font-medium rounded border-2 bg-blue-600 text-white ${tickerColor === "white-blue" ? "border-orange-600" : "border-gray-300"
                   }`}
               >
-                Ch���
+                Chữ
               </button>
               <button
                 onClick={() => setTickerColor("white-red")}
@@ -1484,7 +1484,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         title="🎨 Quản Lý Poster & Logo"
         size="full"
       >
-        <PosterManager
+        <MemoizedPosterManager
           matchData={stableMatchData}
           accessCode={matchCode}
           initialData={stableInitialData}
