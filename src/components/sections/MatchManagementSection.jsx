@@ -693,13 +693,19 @@ const MatchManagementSection = ({ isActive = true }) => {
               variant="primary"
               size="sm"
               onClick={() => {
+                console.log("🎨 [DEBUG] Áp dụng màu áo:", {
+                  teamAKitcolor: teamAInfo.teamAKitcolor,
+                  teamBKitcolor: teamBInfo.teamBKitcolor
+                });
+
                 updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
                 updateTeamLogos(
                   teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
                   teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || ""
                 );
                 updateMatchTitle(matchTitle);
-                updateMatchInfo({
+
+                const matchInfoData = {
                   startTime: matchInfo.startTime,
                   stadium: matchInfo.location,
                   matchDate: matchInfo.matchDate || new Date().toISOString().split('T')[0],
@@ -710,7 +716,10 @@ const MatchManagementSection = ({ isActive = true }) => {
                   liveText: liveText,
                   logoTeamA: teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
                   logoTeamB: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || ""
-                });
+                };
+
+                console.log("🎨 [DEBUG] Gửi updateMatchInfo với:", matchInfoData);
+                updateMatchInfo(matchInfoData);
 
                 // Cập nhật đơn vị live riêng biệt để emit đến backend
                 if (liveText !== matchData.liveText) {
@@ -832,7 +841,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           <div className="bg-gray-50 rounded-lg p-2 space-y-2">
             {/* Kiểm soát bóng */}
             <EditableStatBar
-              label="Kiểm so��t bóng"
+              label="Kiểm soát bóng"
               statKey="possession"
               team1Value={matchStats.possession.team1}
               team2Value={matchStats.possession.team2}
