@@ -56,6 +56,14 @@ export const TimerProvider = ({ children }) => {
   const setupTimerListeners = useCallback(() => {
     console.log('🕐 [TimerContext] Setting up timer listeners');
 
+    // Remove existing listeners để tránh duplicate
+    socketService.removeAllListeners('timer_tick');
+    socketService.removeAllListeners('timer_started');
+    socketService.removeAllListeners('timer_paused');
+    socketService.removeAllListeners('timer_resumed');
+    socketService.removeAllListeners('timer_reset');
+    socketService.removeAllListeners('match_time_updated');
+
     // Lắng nghe timer real-time updates từ server
     socketService.on('timer_tick', (data) => {
       console.log('🕐 [TimerContext] Received timer_tick:', data);
