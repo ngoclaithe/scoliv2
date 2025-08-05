@@ -66,7 +66,7 @@ export const TimerProvider = ({ children }) => {
 
     // Lắng nghe timer real-time updates từ server
     socketService.on('timer_tick', (data) => {
-      console.log('🕐 [TimerContext] Received timer_tick:', data);
+      // console.log('🕐 [TimerContext] Received timer_tick:', data);
       setTimerData(prev => {
         const newTime = data.displayTime || data.currentTime;
         const newStatus = prev.status === 'paused' ? 'paused' : 'live';
@@ -76,7 +76,7 @@ export const TimerProvider = ({ children }) => {
           return prev;
         }
 
-        console.log('🕐 [TimerContext] Updating timer:', { newTime, newStatus });
+        // console.log('🕐 [TimerContext] Updating timer:', { newTime, newStatus });
         return {
           ...prev,
           matchTime: newTime,
@@ -209,7 +209,7 @@ export const TimerProvider = ({ children }) => {
         console.log('▶️ [TimerContext] Started server timer:', { matchTime, period, status: "live" });
       } else if (status === "paused") {
         socketService.pauseServerTimer();
-        console.log('⏸️ [TimerContext] Paused server timer');
+        console.log('���️ [TimerContext] Paused server timer');
       } else if (status === "waiting") {
         socketService.resetServerTimer(matchTime, period, "waiting");
         console.log('🔄 [TimerContext] Reset server timer:', { matchTime, period, status: "waiting" });
