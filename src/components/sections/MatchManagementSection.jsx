@@ -87,21 +87,36 @@ const MatchManagementSection = ({ isActive = true }) => {
   const [matchTitle, setMatchTitle] = useState(matchData.matchTitle || "");
   const [liveText, setLiveText] = useState(matchData.liveText || "");
 
-  // Sync team info khi matchData thay đổi (từ server)
+  // Sync team info khi matchData thay đổi (từ server) - KHÔNG bao gồm matchTime để tránh timer trigger
   useEffect(() => {
     console.log("Giá trị đồng bộ từ backend socket là", matchData);
-    setTeamAInfo(prev => ({
-      name: matchData.teamA.name || prev.name,
-      logo: matchData.teamA.logo || prev.logo,
-      teamAKitcolor: matchData.teamA.teamAKitColor || matchData.teamAKitColor || prev.teamAKitcolor,
-      // teamA2Kitcolor: matchData.teamA.teamA2Kitcolor || prev.teamAK2itcolor,
-    }));
-    setTeamBInfo(prev => ({
-      name: matchData.teamB.name || prev.name,
-      logo: matchData.teamB.logo || prev.logo,
-      teamBKitcolor: matchData.teamB.teamBKitColor || matchData.teamBKitColor || prev.teamBKitcolor,
-      // teamB2Kitcolor: matchData.teamB.teamB2Kitcolor || prev.teamB2Kitcolor,
-    }));
+    setTeamAInfo(prev => {
+      const newTeamAInfo = {
+        name: matchData.teamA.name || prev.name,
+        logo: matchData.teamA.logo || prev.logo,
+        teamAKitcolor: matchData.teamA.teamAKitColor || matchData.teamAKitColor || prev.teamAKitcolor,
+      };
+
+      // Chỉ update nếu có thay đổi thực sự
+      if (JSON.stringify(newTeamAInfo) !== JSON.stringify(prev)) {
+        return newTeamAInfo;
+      }
+      return prev;
+    });
+
+    setTeamBInfo(prev => {
+      const newTeamBInfo = {
+        name: matchData.teamB.name || prev.name,
+        logo: matchData.teamB.logo || prev.logo,
+        teamBKitcolor: matchData.teamB.teamBKitColor || matchData.teamBKitColor || prev.teamBKitcolor,
+      };
+
+      // Chỉ update nếu có thay đổi thực sự
+      if (JSON.stringify(newTeamBInfo) !== JSON.stringify(prev)) {
+        return newTeamBInfo;
+      }
+      return prev;
+    });
   }, [matchData.teamA.name, matchData.teamA.logo, matchData.teamB.name, matchData.teamB.logo, matchData.teamA.teamAKitColor, matchData.teamAKitColor, matchData.teamB.teamBKitColor, matchData.teamBKitColor]);
   const [matchInfo, setMatchInfo] = useState({
     startTime: matchData.startTime || "19:30",
