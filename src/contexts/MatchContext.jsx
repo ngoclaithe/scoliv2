@@ -107,7 +107,7 @@ export const MatchProvider = ({ children }) => {
   const [timerInterval, setTimerInterval] = useState(null);
   const [startTime, setStartTime] = useState(null);
 
-  // Kết n��i socket khi có matchCode (cho authenticated users)
+  // Kết nối socket khi có matchCode (cho authenticated users)
   useEffect(() => {
     if (matchCode && isAuthenticated) {
       initializeSocket(matchCode);
@@ -254,7 +254,21 @@ export const MatchProvider = ({ children }) => {
     // Lắng nghe cập nhật thông tin trận đấu
     socketService.on('match_info_updated', (data) => {
       console.log('📝 [MatchContext] match_info_updated received:', data);
-      setMatchData(prev => ({ ...prev, ...data.matchInfo }));
+      setMatchData(prev => ({
+        ...prev,
+        ...data.matchInfo,
+        // Đảm bảo màu áo được cập nhật từ backend
+        teamA: {
+          ...prev.teamA,
+          teamAKitColor: data.matchInfo.teamAKitColor || prev.teamA.teamAKitColor,
+          ...(data.matchInfo.logoTeamA && { logo: data.matchInfo.logoTeamA })
+        },
+        teamB: {
+          ...prev.teamB,
+          teamBKitColor: data.matchInfo.teamBKitColor || prev.teamB.teamBKitColor,
+          ...(data.matchInfo.logoTeamB && { logo: data.matchInfo.logoTeamB })
+        }
+      }));
       setLastUpdateTime(Date.now());
     });
 
