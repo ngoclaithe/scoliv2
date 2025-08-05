@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useMemo } from "react";
+import React, { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import PosterManager from "../poster/PosterManager";
@@ -886,7 +886,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
               }`}
           >
-            <span className="mr-0.5 text-xs">🎮</span>
+            <span className="mr-0.5 text-xs">���</span>
             <span className="hidden sm:inline">ĐIỀU KHIỂN</span>
             <span className="sm:hidden">DK</span>
           </button>
