@@ -37,7 +37,7 @@ export const MatchProvider = ({ children }) => {
     matchTitle: ""
   });
 
-  // State cho thống kê trận đấu
+  // State cho thống k�� trận đấu
   const [matchStats, setMatchStats] = useState({
     possession: { team1: 50, team2: 50 },
     totalShots: { team1: 0, team2: 0 },
@@ -258,7 +258,7 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật tỉ s���
+    // Lắng nghe cập nhật tỉ số
     socketService.on('score_updated', (data) => {
       console.log('⚽ [MatchContext] Received score_updated:', data);
       setMatchData(prev => ({
@@ -478,6 +478,11 @@ export const MatchProvider = ({ children }) => {
 
       if (data.futsalErrors) {
         setFutsalErrors(prev => ({ ...prev, ...data.futsalErrors }));
+      }
+
+      if (data.view) {
+        console.log('👁️ [MatchContext] Updating currentView from current_state_response:', data.view);
+        setCurrentView(data.view);
       }
 
       console.log('✅ [MatchContext] State loaded from server successfully');
