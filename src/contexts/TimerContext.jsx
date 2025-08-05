@@ -30,24 +30,16 @@ export const TimerProvider = ({ children }) => {
   useEffect(() => {
     if (matchCode && isAuthenticated) {
       console.log('🕐 [TimerContext] Setting up timer listeners for:', matchCode);
-
-      // Delay setup để đảm bảo MatchContext đã setup xong
-      const timeoutId = setTimeout(() => {
-        setupTimerListeners();
-      }, 2000); // Delay 2 giây
-
-      return () => {
-        clearTimeout(timeoutId);
-      };
+      setupTimerListeners();
     }
 
     return () => {
-      console.log('🕐 [TimerContext] Cleaning up timer listeners');
+      console.log('🕐 [TimerContext] Cleaning up timer context');
       // Cleanup timer interval
       if (timerInterval) {
         clearInterval(timerInterval);
       }
-      cleanupTimerListeners();
+      // KHÔNG cleanup socket listeners vì có thể conflict với MatchContext
     };
   }, [matchCode, isAuthenticated]);
 
