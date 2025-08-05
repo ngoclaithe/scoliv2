@@ -92,16 +92,16 @@ const MatchManagementSection = ({ isActive = true }) => {
     setTeamAInfo(prev => ({
       name: matchData.teamA.name || prev.name,
       logo: matchData.teamA.logo || prev.logo,
-      teamAKitcolor: matchData.teamA.teamAKitcolor || prev.teamAKitcolor,
-      // teamA2Kitcolor: matchData.teamA.teamA2Kitcolor || prev.teamAK2itcolor,      
+      teamAKitcolor: matchData.teamA.teamAKitColor || matchData.teamAKitColor || prev.teamAKitcolor,
+      // teamA2Kitcolor: matchData.teamA.teamA2Kitcolor || prev.teamAK2itcolor,
     }));
     setTeamBInfo(prev => ({
       name: matchData.teamB.name || prev.name,
       logo: matchData.teamB.logo || prev.logo,
-      teamBKitcolor: matchData.teamB.teamBKitcolor || prev.teamBKitcolor,
+      teamBKitcolor: matchData.teamB.teamBKitColor || matchData.teamBKitColor || prev.teamBKitcolor,
       // teamB2Kitcolor: matchData.teamB.teamB2Kitcolor || prev.teamB2Kitcolor,
     }));
-  }, [matchData.teamA.name, matchData.teamA.logo, matchData.teamB.name, matchData.teamB.logo]);
+  }, [matchData.teamA.name, matchData.teamA.logo, matchData.teamB.name, matchData.teamB.logo, matchData.teamA.teamAKitColor, matchData.teamAKitColor, matchData.teamB.teamBKitColor, matchData.teamBKitColor]);
   const [matchInfo, setMatchInfo] = useState({
     startTime: matchData.startTime || "19:30",
     location: matchData.stadium || "SÂN VẬN ĐỘNG QUỐC GIA",
@@ -1348,7 +1348,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
             // Handle bulk update (fallback cho compatibility)
             if (logoData && logoData.logoItems && !logoData.changedItem) {
-              // Phân loại logo items theo category
+              // Phân lo���i logo items theo category
               const logosByCategory = logoData.logoItems.reduce((acc, item) => {
                 if (!acc[item.category]) {
                   acc[item.category] = [];
