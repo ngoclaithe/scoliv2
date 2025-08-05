@@ -267,7 +267,7 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe c���p nhật template
+    // Lắng nghe cập nhật template
     socketService.on('template_updated', (data) => {
       setDisplaySettings(prev => ({ ...prev, selectedSkin: data.templateId }));
       setLastUpdateTime(Date.now());
@@ -316,10 +316,10 @@ export const MatchProvider = ({ children }) => {
     // Lắng nghe cập nhật đơn vị live
     socketService.on('live_unit_updated', (data) => {
       console.log('📝 [MatchContext] live_unit_updated received:', data);
-      if (data.liveUnit && (data.liveUnit.text || data.liveUnit.name)) {
+      if (data.liveUnit && (data.liveUnit.text)) {
         setMatchData(prev => ({
           ...prev,
-          liveText: data.liveUnit.text || data.liveUnit.name || prev.liveText
+          liveText: data.liveUnit.text || prev.liveText
         }));
       }
       setLastUpdateTime(Date.now());
@@ -558,7 +558,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Cập nh���t logo đội
+  // Cập nhật logo đội
   const updateTeamLogos = useCallback((teamALogo, teamBLogo) => {
     setMatchData(prev => ({
       ...prev,

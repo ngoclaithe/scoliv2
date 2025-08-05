@@ -727,7 +727,7 @@ const MatchManager = ({
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-gray-500">Tr���ng tài</div>
+                <div className="text-gray-500">Trọng tài</div>
                 <div className="font-medium">
                   {matchData.referee || "Chưa cập nhật"}
                 </div>

@@ -452,9 +452,9 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
     };
 
     const handlePositionToggle = (position) => {
-      // Logic: Mỗi logo chỉ được ch���n 1 position duy nhất
+      // Logic: Mỗi logo chỉ được chọn 1 position duy nhất
       const newPositions = item.displayPositions.includes(position)
-        ? [] // Nếu đang chọn position này thì b��� chọn (xóa hết)
+        ? [] // Nếu đang chọn position này thì bỏ chọn (xóa hết)
         : [position]; // Nếu chưa chọn thì chọn position này (thay thế position cũ)
 
       const updatedItem = { ...item, displayPositions: newPositions };
@@ -846,7 +846,7 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
         </div>
 
         <div className="border-t border-gray-200 pt-1 space-y-1">
-          <div className="text-xs font-medium text-gray-700">Tùy chọn hi��n thị:</div>
+          <div className="text-xs font-medium text-gray-700">Tùy chọn hiển thị:</div>
 
           <div className="flex gap-1">
             {[

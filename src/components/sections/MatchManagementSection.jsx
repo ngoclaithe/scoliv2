@@ -81,7 +81,6 @@ const MatchManagementSection = ({ isActive = true }) => {
     logo: matchData.teamB.logo || ""
   });
   const [matchTitle, setMatchTitle] = useState(matchData.matchTitle || "");
-  const [liveUnit, setLiveUnit] = useState(matchData.liveUnit || "");
   const [liveText, setLiveText] = useState(matchData.liveText || "");
 
   // Sync team info khi matchData thay đổi (từ server)
@@ -114,16 +113,14 @@ const MatchManagementSection = ({ isActive = true }) => {
 
   // Sync match title and live unit when context data changes
   useEffect(() => {
+    console.log("Giá trị đồng bộ từ backend socket là", matchData);
     if (matchData.matchTitle !== undefined) {
       setMatchTitle(matchData.matchTitle);
-    }
-    if (matchData.liveUnit !== undefined) {
-      setLiveUnit(matchData.liveUnit);
     }
     if (matchData.liveText !== undefined) {
       setLiveText(matchData.liveText);
     }
-  }, [matchData.matchTitle, matchData.liveUnit, matchData.liveText]);
+  }, [matchData.matchTitle, matchData.liveText]);
 
 
   const playAudioForAction = (audioType) => {
@@ -194,7 +191,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         setTeamAInfo(prev => ({ ...prev, logo: getFullLogoUrl(logo.url_logo) }));
         setLogoCodeA("");
       } else {
-        toast.error(`⚠�� Không tìm thấy logo với code "${logoCodeA}"`);
+        toast.error(`⚠Không tìm thấy logo với code "${logoCodeA}"`);
       }
     } catch (error) {
       toast.error('❌ Lỗi tìm kiếm logo A');
@@ -497,7 +494,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           <div className="grid grid-cols-2 gap-1">
             <input
               type="text"
-              placeholder="Tên trận đ��u"
+              placeholder="Tên trận đấu"
               value={matchTitle}
               onChange={(e) => setMatchTitle(e.target.value)}
               className="w-full min-w-0 px-2 py-1 text-xs font-medium text-center text-blue-700 bg-white border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-300"
@@ -664,7 +661,6 @@ const MatchManagementSection = ({ isActive = true }) => {
                 // Cập nhật đơn vị live riêng biệt để emit đến backend
                 if (liveText !== matchData.liveText) {
                   updateLiveUnit({
-                    name: liveText || 'LIVE STREAMING',
                     text: liveText
                   });
                 }
@@ -1135,7 +1131,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
                 title="Áp dụng"
               >
-                Đ��M T
+                ĐẾM T
               </button>
             </div>
           </div>
@@ -1402,15 +1398,15 @@ const MatchManagementSection = ({ isActive = true }) => {
                 });
               }
 
-              if (logosByCategory.live) {
-                console.log("[MatchManagementSection] Calling updateLiveUnit");
-                updateLiveUnit({
-                  code_logo: logosByCategory.live.map(l => l.code_logo),
-                  url_logo: logosByCategory.live.map(l => l.url_logo),
-                  name: 'LIVE STREAMING',
-                  position: 'top-right'
-                });
-              }
+              // if (logosByCategory.live) {
+              //   console.log("[MatchManagementSection] Calling updateLiveUnit");
+              //   updateLiveUnit({
+              //     code_logo: logosByCategory.live.map(l => l.code_logo),
+              //     url_logo: logosByCategory.live.map(l => l.url_logo),
+              //     name: 'LIVE STREAMING',
+              //     position: 'top-right'
+              //   });
+              // }
             }
 
             // Cập nhật display options nếu có

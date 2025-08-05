@@ -530,10 +530,10 @@ export const PublicMatchProvider = ({ children }) => {
       setLiveUnit(prev => ({ ...prev, ...data.liveUnit }));
 
       // Cập nhật liveText vào matchData để Intro component có thể sử dụng
-      if (data.liveUnit && (data.liveUnit.text || data.liveUnit.name)) {
+      if (data.liveUnit && (data.liveUnit.text )) {
         setMatchData(prev => ({
           ...prev,
-          liveText: data.liveUnit.text || data.liveUnit.name || prev.liveText
+          liveText: data.liveUnit.text || prev.liveText
         }));
       }
 
