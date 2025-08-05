@@ -191,11 +191,19 @@ export const TimerProvider = ({ children }) => {
 
   // Timer control functions
   const updateMatchTime = useCallback((matchTime, period, status) => {
+    console.log('🕐 [TimerContext] updateMatchTime called:', { matchTime, period, status });
+
     // Update local state
-    setTimerData(prev => ({ ...prev, matchTime, period, status }));
+    setTimerData(prev => {
+      console.log('🕐 [TimerContext] Updating local timerData from:', prev, 'to:', { matchTime, period, status });
+      return { ...prev, matchTime, period, status };
+    });
 
     // Emit to server if connected
-    if (socketService.getConnectionStatus().isConnected) {
+    const connectionStatus = socketService.getConnectionStatus();
+    console.log('🕐 [TimerContext] Socket connection status:', connectionStatus);
+
+    if (connectionStatus.isConnected) {
       if (status === "live") {
         socketService.startServerTimer(matchTime, period, "live");
         console.log('▶️ [TimerContext] Started server timer:', { matchTime, period, status: "live" });
@@ -206,6 +214,8 @@ export const TimerProvider = ({ children }) => {
         socketService.resetServerTimer(matchTime, period, "waiting");
         console.log('🔄 [TimerContext] Reset server timer:', { matchTime, period, status: "waiting" });
       }
+    } else {
+      console.log('❌ [TimerContext] Socket not connected, cannot emit timer update');
     }
   }, []);
 
