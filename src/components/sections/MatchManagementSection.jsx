@@ -53,6 +53,38 @@ const MatchManagementSection = ({ isActive = true }) => {
 
   const { matchCode } = useAuth();
 
+  // Tạo stable props cho PosterManager để tránh re-render do timer
+  const stableMatchData = useMemo(() => ({
+    teamA: {
+      name: matchData.teamA.name,
+      logo: matchData.teamA.logo,
+      score: matchData.teamA.score
+    },
+    teamB: {
+      name: matchData.teamB.name,
+      logo: matchData.teamB.logo,
+      score: matchData.teamB.score
+    },
+    tournament: matchData.tournament,
+    stadium: matchData.stadium,
+    matchDate: matchData.matchDate,
+    liveText: matchData.liveText,
+    matchTitle: matchData.matchTitle
+  }), [
+    matchData.teamA.name, matchData.teamA.logo, matchData.teamA.score,
+    matchData.teamB.name, matchData.teamB.logo, matchData.teamB.score,
+    matchData.tournament, matchData.stadium, matchData.matchDate,
+    matchData.liveText, matchData.matchTitle
+  ]);
+
+  const stableInitialData = useMemo(() => ({
+    selectedPoster: displaySettings.selectedPoster ? { id: displaySettings.selectedPoster, name: displaySettings.selectedPoster } : null,
+    displayOptions: {
+      shape: displaySettings.logoShape || 'round',
+      rotateDisplay: displaySettings.rotateDisplay || false
+    }
+  }), [displaySettings.selectedPoster, displaySettings.logoShape, displaySettings.rotateDisplay]);
+
   // Audio state management
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
