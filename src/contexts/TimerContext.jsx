@@ -28,11 +28,13 @@ export const TimerProvider = ({ children }) => {
 
   // Setup timer listeners khi có matchCode và authenticated
   useEffect(() => {
-    if (matchCode && isAuthenticated && socketService.getConnectionStatus().isConnected) {
+    if (matchCode && isAuthenticated) {
+      console.log('🕐 [TimerContext] Setting up timer listeners for:', matchCode);
       setupTimerListeners();
     }
 
     return () => {
+      console.log('🕐 [TimerContext] Cleaning up timer listeners');
       // Cleanup timer interval
       if (timerInterval) {
         clearInterval(timerInterval);
