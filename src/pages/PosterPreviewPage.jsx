@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
+import { useAuth } from '../contexts/AuthContext';
+import PublicAPI from '../API/apiPublic';
 
 // Import các poster templates
 import PosterTretrung from './Poster-tretrung';
@@ -12,25 +14,64 @@ import PosterXanhduong from './Poster-xanhduong';
 
 const PosterPreviewPage = () => {
   const { accessCode } = useParams();
-  const { 
-    matchData, 
-    displaySettings, 
-    sponsors, 
-    organizing, 
-    mediaPartners, 
-    tournamentLogo 
+  const {
+    initializeSocket,
+    matchData,
+    displaySettings,
+    sponsors,
+    organizing,
+    mediaPartners,
+    tournamentLogo,
+    liveUnit,
+    posterSettings
   } = usePublicMatch();
-  
+  const { handleExpiredAccess } = useAuth();
+
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // Khởi tạo kết nối socket giống như DisplayController
   useEffect(() => {
-    // Simulated loading time for poster rendering
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    let isCleanedUp = false;
 
-    return () => clearTimeout(timer);
-  }, []);
+    const initializePreview = async () => {
+      try {
+        const verifyResult = await PublicAPI.verifyAccessCode(accessCode);
+
+        if (!verifyResult.success || !verifyResult.isValid) {
+          setError(`Mã truy cập không hợp lệ: ${accessCode}`);
+          return;
+        }
+
+        await initializeSocket(accessCode);
+
+        if (!isCleanedUp) {
+          // Delay để đảm bảo dữ liệu được tải
+          setTimeout(() => {
+            setLoading(false);
+          }, 1500);
+        }
+      } catch (err) {
+        console.error('❌ [PosterPreviewPage] Failed to initialize preview:', err);
+        if (!isCleanedUp) {
+          // Kiểm tra lỗi hết hạn truy cập trước
+          if (handleExpiredAccess && handleExpiredAccess(err)) {
+            // Đã xử lý lỗi hết hạn, không cần set error
+            return;
+          }
+          setError('Không thể kết nối đến hệ thống');
+        }
+      }
+    };
+
+    if (accessCode && !isCleanedUp) {
+      initializePreview();
+    }
+
+    return () => {
+      isCleanedUp = true;
+    };
+  }, [accessCode, initializeSocket, handleExpiredAccess]);
 
   const renderPosterComponent = () => {
     const posterType = displaySettings?.selectedPoster || 'tretrung';
