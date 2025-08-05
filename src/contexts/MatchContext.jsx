@@ -100,6 +100,9 @@ export const MatchProvider = ({ children }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [lastUpdateTime, setLastUpdateTime] = useState(Date.now());
 
+  // State cho view hiện tại
+  const [currentView, setCurrentView] = useState('intro');
+
   // State cho timer tự động
   const [timerInterval, setTimerInterval] = useState(null);
   const [startTime, setStartTime] = useState(null);
