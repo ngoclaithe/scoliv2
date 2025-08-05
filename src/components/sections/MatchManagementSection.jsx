@@ -1554,13 +1554,13 @@ const MatchManagementSection = ({ isActive = true }) => {
           console.log("Saved lineup data:", lineupData);
           setShowLineupModal(false);
         }}
-        matchData={matchData}
+        matchData={{...matchData, ...timerData}}
       />
 
       <SimplePenaltyModal
         isOpen={showPenaltyModal}
         onClose={() => setShowPenaltyModal(false)}
-        matchData={matchData}
+        matchData={{...matchData, ...timerData}}
         penaltyData={penaltyData}
         onPenaltyChange={handlePenaltyChange}
       />
