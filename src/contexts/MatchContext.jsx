@@ -790,6 +790,7 @@ export const MatchProvider = ({ children }) => {
     sponsors,
     socketConnected,
     lastUpdateTime,
+    currentView,
     
     // Actions
     updateScore,
