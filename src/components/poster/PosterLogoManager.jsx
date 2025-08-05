@@ -406,11 +406,20 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
   const LogoItem = React.memo(function LogoItem({ item, onUpdate, onRemove }) {
     const [localCode, setLocalCode] = useState(item.code);
     const [isSearching, setIsSearching] = useState(false);
+    const [localCodeRef, setLocalCodeRef] = useState(item.code);
 
-    const handleCodeChange = (e) => {
+    // Chỉ update localCode khi item.code thay đổi thật sự, không phải do re-render
+    useEffect(() => {
+      if (item.code !== localCodeRef) {
+        setLocalCode(item.code);
+        setLocalCodeRef(item.code);
+      }
+    }, [item.code, localCodeRef]);
+
+    const handleCodeChange = useCallback((e) => {
       const newCode = e.target.value.toUpperCase();
       setLocalCode(newCode);
-    };
+    }, []);
 
     const handleSearch = async () => {
       if (localCode.trim().length >= 3) {
