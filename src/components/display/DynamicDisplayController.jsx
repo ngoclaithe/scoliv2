@@ -116,11 +116,18 @@ const DynamicDisplayController = () => {
       console.log('👕 [DynamicDisplayController] Updating kit colors:', matchInfoWithColors);
       socketService.updateMatchInfo(matchInfoWithColors);
 
-      // TODO: Tìm và cập nhật logo đội dựa trên code (cần API endpoint để tìm logo theo code)
+      // Tìm và cập nhật logo đội dựa trên code
       if (params.teamA.logoCode || params.teamB.logoCode) {
         console.log('🏆 [DynamicDisplayController] Team logo codes received:', params.teamA.logoCode, params.teamB.logoCode);
-        // Có thể gọi API để tìm logo URL dựa trên code
-        // socketService.updateTeamLogos(teamALogoUrl, teamBLogoUrl);
+        try {
+          const { teamALogo, teamBLogo } = await findTeamLogos(params.teamA.logoCode, params.teamB.logoCode);
+          if (teamALogo || teamBLogo) {
+            console.log('🏆 [DynamicDisplayController] Found team logos, updating...', { teamALogo, teamBLogo });
+            socketService.updateTeamLogos(teamALogo, teamBLogo);
+          }
+        } catch (error) {
+          console.error('❌ [DynamicDisplayController] Failed to find team logos:', error);
+        }
       }
 
     } catch (error) {
