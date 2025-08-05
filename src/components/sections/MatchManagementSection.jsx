@@ -351,8 +351,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                 logo: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo)
               },
               matchTitle: matchTitle || matchData.matchTitle,
-              teamAKitColor: teamAInfo.shirtColor || matchData.teamAKitColor || '#ff0000',
-              teamBKitColor: teamBInfo.shirtColor || matchData.teamBKitColor || '#000000'
+              teamAKitColor: teamAInfo.teamAKitcolor || matchData.teamAKitColor || matchData.teamAKitColor || '#ff0000',
+              teamBKitColor: teamBInfo.teamBKitcolor || matchData.teamBKitColor || matchData.teamBKitColor || '#000000'
             }}
             displaySettings={displaySettings}
           />
@@ -1348,7 +1348,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
             // Handle bulk update (fallback cho compatibility)
             if (logoData && logoData.logoItems && !logoData.changedItem) {
-              // Phân lo���i logo items theo category
+              // Phân loại logo items theo category
               const logosByCategory = logoData.logoItems.reduce((acc, item) => {
                 if (!acc[item.category]) {
                   acc[item.category] = [];
