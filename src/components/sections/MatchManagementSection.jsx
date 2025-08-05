@@ -1,12 +1,13 @@
-import React, { useState, useCallback, useEffect, useMemo } from "react";
+import React, { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
-import PosterManager from "../poster/PosterManager";
+import MemoizedPosterManager from "./MemoizedPosterManager";
 import TeamLineupModal from "../lineup/TeamLineupModal";
 import Modal from "../common/Modal";
 import SimplePenaltyModal from "../common/SimplePenaltyModal";
 import { useMatch } from "../../contexts/MatchContext";
 import { useAuth } from "../../contexts/AuthContext";
+import { useTimer } from "../../contexts/TimerContext";
 import { toast } from 'react-toastify';
 import audioUtils from '../../utils/audioUtils';
 import { toDateInputFormat } from '../../utils/helpers';
@@ -15,7 +16,7 @@ import ScoreboardPreview from './ScoreboardPreview';
 import { getFullLogoUrl } from '../../utils/logoUtils';
 
 const MatchManagementSection = ({ isActive = true }) => {
-  // Sử dụng MatchContext thay vì state local
+  // Sử dụng MatchContext và TimerContext
   const {
     matchData,
     matchStats,
@@ -27,7 +28,6 @@ const MatchManagementSection = ({ isActive = true }) => {
 
     updateScore,
     updateMatchInfo,
-    updateMatchTime,
     updateStats,
     updateTemplate,
     updatePoster,
@@ -37,7 +37,6 @@ const MatchManagementSection = ({ isActive = true }) => {
     updatePenalty,
 
     updateView,
-    resumeTimer,
     updateMarquee,
     updateMatchTitle,
 
@@ -51,30 +50,41 @@ const MatchManagementSection = ({ isActive = true }) => {
 
   } = useMatch();
 
+  // Sử dụng TimerContext cho timer
+  const {
+    timerData,
+    updateMatchTime,
+    resumeTimer
+  } = useTimer();
+
   const { matchCode } = useAuth();
 
-  // Tạo stable props cho PosterManager để tránh re-render do timer
-  const stableMatchData = useMemo(() => ({
-    teamA: {
-      name: matchData.teamA.name,
-      logo: matchData.teamA.logo,
-      score: matchData.teamA.score
-    },
-    teamB: {
-      name: matchData.teamB.name,
-      logo: matchData.teamB.logo,
-      score: matchData.teamB.score
-    },
-    tournament: matchData.tournament,
-    stadium: matchData.stadium,
-    matchDate: matchData.matchDate,
-    liveText: matchData.liveText,
-    matchTitle: matchData.matchTitle
-  }), [
+  // Tạo stable props cho PosterManager để tránh re-render do timer - KHÔNG bao gồm timer data
+  const stableMatchData = useMemo(() => {
+    return {
+      teamA: {
+        name: matchData.teamA.name,
+        logo: matchData.teamA.logo,
+        score: matchData.teamA.score
+      },
+      teamB: {
+        name: matchData.teamB.name,
+        logo: matchData.teamB.logo,
+        score: matchData.teamB.score
+      },
+      tournament: matchData.tournament,
+      stadium: matchData.stadium,
+      matchDate: matchData.matchDate,
+      liveText: matchData.liveText,
+      matchTitle: matchData.matchTitle
+      // KHÔNG thêm timerData để tránh re-render khi timer tick
+    };
+  }, [
     matchData.teamA.name, matchData.teamA.logo, matchData.teamA.score,
     matchData.teamB.name, matchData.teamB.logo, matchData.teamB.score,
     matchData.tournament, matchData.stadium, matchData.matchDate,
     matchData.liveText, matchData.matchTitle
+    // KHÔNG include timer dependencies
   ]);
 
   const stableInitialData = useMemo(() => ({
@@ -281,6 +291,136 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateView('penalty_scoreboard');
   }, [updatePenalty, updateView]);
 
+  // Stable logo update callback để tránh PosterManager re-render
+  // Stable refs cho callbacks
+  const onLogoUpdateRef = useRef();
+  const onPosterUpdateRef = useRef();
+
+  const handleLogoUpdate = useCallback((logoData) => {
+    // Handle individual item change with behavior
+    if (logoData.changedItem && logoData.behavior) {
+      const item = logoData.changedItem;
+      const behavior = logoData.behavior;
+
+      console.log(`[MatchManagementSection] ${behavior} logo:`, item);
+
+      // Prepare data with behavior
+      const logoUpdateData = {
+        code_logo: [item.code],
+        url_logo: [item.url],
+        position: item.displayPositions,
+        type_display: [item.type || 'default'],
+        behavior: behavior
+      };
+
+      // Emit to specific category with behavior
+      switch (item.category) {
+        case 'sponsor':
+          console.log("[MatchManagementSection] Calling updateSponsors with logoUpdateData:", logoUpdateData);
+          updateSponsors(logoUpdateData);
+          break;
+        case 'organizing':
+          console.log("[MatchManagementSection] Calling updateOrganizing with behavior:", behavior);
+          updateOrganizing(logoUpdateData);
+          break;
+        case 'media':
+          console.log("[MatchManagementSection] Calling updateMediaPartners with behavior:", behavior);
+          updateMediaPartners(logoUpdateData);
+          break;
+        case 'tournament':
+          console.log("[MatchManagementSection] Calling updateTournamentLogo with behavior:", behavior);
+          updateTournamentLogo({
+            code_logo: [item.code],
+            url_logo: [item.url],
+            behavior: behavior
+          });
+          break;
+        default:
+          console.warn("[MatchManagementSection] Unknown logo category:", item.category);
+          break;
+      }
+    }
+
+    // Handle bulk update (fallback cho compatibility)
+    if (logoData && logoData.logoItems && !logoData.changedItem) {
+      // Phân loại logo items theo category
+      const logosByCategory = logoData.logoItems.reduce((acc, item) => {
+        if (!acc[item.category]) {
+          acc[item.category] = [];
+        }
+        acc[item.category].push({
+          code_logo: item.code,
+          url_logo: item.url,
+          position: item.displayPositions || [],
+          type_display: item.type || 'default'
+        });
+        return acc;
+      }, {});
+
+      console.log("[MatchManagementSection] logosByCategory:", logosByCategory);
+
+      // Emit socket events cho từng category
+      if (logosByCategory.sponsor) {
+        console.log("[MatchManagementSection] Calling updateSponsors");
+        updateSponsors({
+          code_logo: logosByCategory.sponsor.map(s => s.code_logo),
+          url_logo: logosByCategory.sponsor.map(s => s.url_logo),
+          position: logosByCategory.sponsor.map(s => s.position),
+          type_display: logosByCategory.sponsor.map(s => s.type_display)
+        });
+      }
+
+      if (logosByCategory.organizing) {
+        console.log("[MatchManagementSection] Calling updateOrganizing");
+        updateOrganizing({
+          code_logo: logosByCategory.organizing.map(o => o.code_logo),
+          url_logo: logosByCategory.organizing.map(o => o.url_logo),
+          position: logosByCategory.organizing.map(o => o.position),
+          type_display: logosByCategory.organizing.map(o => o.type_display)
+        });
+      }
+
+      if (logosByCategory.media) {
+        console.log("[MatchManagementSection] Calling updateMediaPartners");
+        updateMediaPartners({
+          code_logo: logosByCategory.media.map(m => m.code_logo),
+          url_logo: logosByCategory.media.map(m => m.url_logo),
+          position: logosByCategory.media.map(m => m.position),
+          type_display: logosByCategory.media.map(m => m.type_display)
+        });
+      }
+
+      if (logosByCategory.tournament) {
+        console.log("[MatchManagementSection] Calling updateTournamentLogo");
+        updateTournamentLogo({
+          code_logo: logosByCategory.tournament.map(t => t.code_logo),
+          url_logo: logosByCategory.tournament.map(t => t.url_logo)
+        });
+      }
+    }
+
+    // Cập nhật display options nếu có
+    if (logoData && logoData.displayOptions) {
+      console.log("[MatchManagementSection] Calling updateDisplaySettings");
+      const displayOptions = {
+        logoShape: logoData.displayOptions.shape || 'round',
+        rotateDisplay: logoData.displayOptions.rotateDisplay || false
+      };
+      console.log('[MatchManagementSection] Display options to update:', displayOptions);
+      updateDisplaySettings(displayOptions);
+    }
+  }, [updateSponsors, updateOrganizing, updateMediaPartners, updateTournamentLogo, updateDisplaySettings]);
+
+  // Assign stable callbacks to refs
+  onLogoUpdateRef.current = handleLogoUpdate;
+  onPosterUpdateRef.current = useCallback((poster) => {
+    if (poster) {
+      const posterType = poster.id || poster.name;
+      updatePoster(posterType);
+      updateView('poster');
+    }
+  }, [updatePoster, updateView]);
+
   const handleScoreChange = (team, increment) => {
     updateScore(team, increment);
   };
@@ -392,6 +532,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           <ScoreboardPreview
             matchData={{
               ...matchData,
+              ...timerData, // Thêm timer data từ TimerContext
               teamA: {
                 ...matchData.teamA,
                 name: teamAInfo.name || matchData.teamA.name,
@@ -504,21 +645,21 @@ const MatchManagementSection = ({ isActive = true }) => {
           <Button
             variant="primary"
             size="sm"
-            className={`px-2 py-1 ${matchData.status === "paused"
+            className={`px-2 py-1 ${timerData.status === "paused"
               ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
               : "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
               } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
             onClick={() => {
-              if (matchData.status === "paused") {
+              if (timerData.status === "paused") {
                 resumeTimer();
               } else {
-                updateMatchTime(matchData.matchTime, matchData.period, "paused");
+                updateMatchTime(timerData.matchTime, timerData.period, "paused");
               }
             }}
           >
-            <span className="mr-1">{matchData.status === "paused" ? "▶️" : "⏸️"}</span>
-            <span className="hidden sm:inline">{matchData.status === "paused" ? "TIẾP TỤC" : "TẠM DỪNG"}</span>
-            <span className="sm:hidden">{matchData.status === "paused" ? "TIẾP" : "DỪNG"}</span>
+            <span className="mr-1">{timerData.status === "paused" ? "▶️" : "⏸️"}</span>
+            <span className="hidden sm:inline">{timerData.status === "paused" ? "TIẾP TỤC" : "TẠM DỪNG"}</span>
+            <span className="sm:hidden">{timerData.status === "paused" ? "TIẾP" : "DỪNG"}</span>
           </Button>
 
           <Button
@@ -748,7 +889,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
               }`}
           >
-            <span className="mr-0.5 text-xs">📊</span>
+            <span className="mr-0.5 text-xs">���</span>
             <span className="hidden sm:inline">THÔNG SỐ</span>
             <span className="sm:hidden">TS</span>
           </button>
@@ -839,7 +980,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
           {/* Stats Display - Gom chung vào 1 thẻ */}
           <div className="bg-gray-50 rounded-lg p-2 space-y-2">
-            {/* Kiểm soát bóng */}
+            {/* Ki���m soát bóng */}
             <EditableStatBar
               label="Kiểm soát bóng"
               statKey="possession"
@@ -993,6 +1134,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             <button
               onClick={() => {
                 const timeString = "00:00";
+                console.log('🎯 [MatchManagementSection] Clicked ĐẾM 0 - calling updateMatchTime:', { timeString, period: "Hiệp 1", status: "live" });
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 updateView('scoreboard');
                 playAudioForAction('gialap');
@@ -1312,7 +1454,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               variant="primary"
               size="sm"
               onClick={() => {
-                // Tạo marquee data từ clock settings
+                // Tạo marquee data t�� clock settings
                 const marqueeSettings = {
                   text: clockText || "TRỰC TIẾP BÓNG ĐÁ",
                   mode: clockSetting,
@@ -1342,18 +1484,11 @@ const MatchManagementSection = ({ isActive = true }) => {
         title="🎨 Quản Lý Poster & Logo"
         size="full"
       >
-        <PosterManager
+        <MemoizedPosterManager
           matchData={stableMatchData}
           accessCode={matchCode}
           initialData={stableInitialData}
-          onPosterUpdate={(poster) => {
-
-            if (poster) {
-              const posterType = poster.id || poster.name;
-              updatePoster(posterType);
-              updateView('poster');
-            }
-          }}
+          onPosterUpdate={onPosterUpdateRef.current}
           onLogoUpdate={(logoData) => {
 
             // Handle individual item change with behavior
@@ -1403,7 +1538,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
             // Handle bulk update (fallback cho compatibility)
             if (logoData && logoData.logoItems && !logoData.changedItem) {
-              // Phân loại logo items theo category
+              // Phân lo��i logo items theo category
               const logosByCategory = logoData.logoItems.reduce((acc, item) => {
                 if (!acc[item.category]) {
                   acc[item.category] = [];
@@ -1544,13 +1679,13 @@ const MatchManagementSection = ({ isActive = true }) => {
           console.log("Saved lineup data:", lineupData);
           setShowLineupModal(false);
         }}
-        matchData={matchData}
+        matchData={{...matchData, ...timerData}}
       />
 
       <SimplePenaltyModal
         isOpen={showPenaltyModal}
         onClose={() => setShowPenaltyModal(false)}
-        matchData={matchData}
+        matchData={{...matchData, ...timerData}}
         penaltyData={penaltyData}
         onPenaltyChange={handlePenaltyChange}
       />

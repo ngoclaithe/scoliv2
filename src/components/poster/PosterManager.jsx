@@ -128,4 +128,4 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate, onPositionChan
   );
 };
 
-export default PosterManager;
+export default React.memo(PosterManager);

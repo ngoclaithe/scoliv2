@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { AuthProvider } from '../contexts/AuthContext';
 import { MatchProvider } from '../contexts/MatchContext';
+import { TimerProvider } from '../contexts/TimerContext';
 import { PublicMatchProvider } from '../contexts/PublicMatchContext';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -21,9 +22,11 @@ const AppRoutes = () => {
         {/* Authenticated routes */}
         <Route path="/" element={
           <AuthProvider>
-            <MatchProvider>
-              <App />
-            </MatchProvider>
+            <TimerProvider>
+              <MatchProvider>
+                <App />
+              </MatchProvider>
+            </TimerProvider>
           </AuthProvider>
         } />
 

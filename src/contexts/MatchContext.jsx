@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import socketService from '../services/socketService';
 import { useAuth } from './AuthContext';
+import { useTimer } from './TimerContext';
 
 const MatchContext = createContext();
 
@@ -14,6 +15,7 @@ export const useMatch = () => {
 
 export const MatchProvider = ({ children }) => {
   const { matchCode, isAuthenticated, user, handleExpiredAccess } = useAuth();
+  const { updateTimerData } = useTimer();
   
   // State cho thông tin trận đấu
   const [matchData, setMatchData] = useState({
@@ -27,9 +29,7 @@ export const MatchProvider = ({ children }) => {
       score: 0,
       logo: null
     },
-    matchTime: "00:00",
-    period: "Chưa bắt đầu",
-    status: "waiting", // waiting, live, paused, ended
+    // Note: matchTime, period, status đã được chuyển sang TimerContext
     tournament: "",
     stadium: "",
     matchDate: "",
@@ -103,9 +103,7 @@ export const MatchProvider = ({ children }) => {
   // State cho view hiện tại
   const [currentView, setCurrentView] = useState('intro');
 
-  // State cho timer tự động
-  const [timerInterval, setTimerInterval] = useState(null);
-  const [startTime, setStartTime] = useState(null);
+  // Timer state đã được chuyển sang TimerContext
 
   // Kết nối socket khi có matchCode (cho authenticated users)
   useEffect(() => {
@@ -123,20 +121,7 @@ export const MatchProvider = ({ children }) => {
     };
   }, [matchCode, isAuthenticated]);
 
-  // Timer tự động DISABLED - Sử dụng server timer thay thế
-  useEffect(() => {
-    // Dọn dẹp interval cũ nếu có
-    if (timerInterval) {
-      clearInterval(timerInterval);
-      setTimerInterval(null);
-    }
-    // Cleanup khi component unmount
-    return () => {
-      if (timerInterval) {
-        clearInterval(timerInterval);
-      }
-    };
-  }, [matchData.status, socketConnected]);
+  // Timer logic đã được chuyển sang TimerContext
 
   // Khởi tạo socket connection
   const initializeSocket = useCallback(async (accessCode) => {
@@ -195,7 +180,14 @@ export const MatchProvider = ({ children }) => {
 
           if (state.matchData) {
             console.log('🔄 [MatchContext] Updating matchData from room_joined:', state.matchData);
-            setMatchData(prev => ({ ...prev, ...state.matchData }));
+            // Tách timer data và gửi sang TimerContext
+            const { matchTime, period, status, ...otherMatchData } = state.matchData;
+            setMatchData(prev => ({ ...prev, ...otherMatchData }));
+
+            // Cập nhật timer data trong TimerContext
+            if (matchTime || period || status) {
+              updateTimerData({ matchTime, period, status });
+            }
           }
 
           if (state.matchStats) {
@@ -347,90 +339,7 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật thời gian
-    socketService.on('match_time_updated', (data) => {
-      setMatchData(prev => ({
-        ...prev,
-        matchTime: data.time.matchTime,
-        period: data.time.period,
-        status: data.time.status
-      }));
-      setLastUpdateTime(Date.now());
-    });
-
-    // === TIMER REAL-TIME LISTENERS ===
-
-
-
-    // Lắng nghe timer real-time updates từ server
-    socketService.on('timer_tick', (data) => {
-      setMatchData(prev => {
-        const newTime = data.displayTime || data.currentTime;
-        const newStatus = prev.status === 'paused' ? 'paused' : 'live';
-
-        // Chỉ cập nhật nếu có thay đổi thực sự
-        if (prev.matchTime === newTime && prev.status === newStatus) {
-          return prev;
-        }
-
-        return {
-          ...prev,
-          matchTime: newTime,
-          status: newStatus,
-          serverTimestamp: data.timestamp || data.serverTimestamp
-        };
-      });
-    });
-
-    // Lắng nghe timer start từ server
-    socketService.on('timer_started', (data) => {
-      // console.log('▶️ [MatchContext] Timer started from server:', data);
-      setMatchData(prev => ({
-        ...prev,
-        matchTime: data.currentTime,
-        period: data.period,
-        status: 'live',
-        serverTimestamp: data.serverTimestamp
-      }));
-      setLastUpdateTime(Date.now());
-    });
-
-    // Lắng nghe timer pause từ server
-    socketService.on('timer_paused', (data) => {
-      console.log('⏸️ [MatchContext] Timer paused from server:', data);
-      setMatchData(prev => ({
-        ...prev,
-        matchTime: data.currentTime,
-        status: 'paused',
-        serverTimestamp: data.serverTimestamp
-      }));
-      setLastUpdateTime(Date.now());
-    });
-
-    // Lắng nghe timer resume từ server
-    socketService.on('timer_resumed', (data) => {
-      console.log('▶️ [MatchContext] Timer resumed from server:', data);
-      setMatchData(prev => ({
-        ...prev,
-        matchTime: data.currentTime,
-        status: 'live',
-        serverTimestamp: data.serverTimestamp
-      }));
-      setLastUpdateTime(Date.now());
-    });
-
-    // Lắng nghe timer reset từ server
-    socketService.on('timer_reset', (data) => {
-      console.log('🔄 [MatchContext] Timer reset from server:', data);
-      setMatchData(prev => ({
-        ...prev,
-        matchTime: data.resetTime,
-        period: data.period,
-        status: 'waiting',
-        serverTimestamp: data.serverTimestamp
-      }));
-      setLastUpdateTime(Date.now());
-    });
+    // Timer events đã được chuyển sang TimerContext
 
     // Lắng nghe cập nhật penalty
     socketService.on('penalty_updated', (data) => {
@@ -476,7 +385,14 @@ export const MatchProvider = ({ children }) => {
       console.log('🔄 [MatchContext] Received current_state_response:', data);
 
       if (data.matchData) {
-        setMatchData(prev => ({ ...prev, ...data.matchData }));
+        // Tách timer data và gửi sang TimerContext
+        const { matchTime, period, status, ...otherMatchData } = data.matchData;
+        setMatchData(prev => ({ ...prev, ...otherMatchData }));
+
+        // Cập nhật timer data trong TimerContext
+        if (matchTime || period || status) {
+          updateTimerData({ matchTime, period, status });
+        }
       }
 
       if (data.matchStats) {
@@ -710,22 +626,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  const updateMatchTime = useCallback((matchTime, period, status) => {
-    setMatchData(prev => ({ ...prev, matchTime, period, status }));
-
-    if (socketConnected) {
-      if (status === "live") {
-        socketService.startServerTimer(matchTime, period, "live");
-        // console.log('▶️ [MatchContext] Started server timer:', { matchTime, period, status: "live" });
-      } else if (status === "paused") {
-        socketService.pauseServerTimer();
-        // console.log('⏸️ [MatchContext] Paused server timer');
-      } else if (status === "waiting") {
-        socketService.resetServerTimer(matchTime, period, "waiting");
-        // console.log('🔄 [MatchContext] Reset server timer:', { matchTime, period, status: "waiting" });
-      }
-    }
-  }, [socketConnected]);
+  // updateMatchTime đã được chuyển sang TimerContext
 
   // Cập nhật penalty
   const updatePenalty = useCallback((newPenaltyData) => {
@@ -764,13 +665,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Resume timer từ server
-  const resumeTimer = useCallback(() => {
-    if (socketConnected) {
-      socketService.resumeServerTimer();
-      console.log('▶️ [MatchContext] Resumed server timer');
-    }
-  }, [socketConnected]);
+  // resumeTimer đã được chuyển sang TimerContext
 
 
 
@@ -779,14 +674,18 @@ export const MatchProvider = ({ children }) => {
     setMatchData({
       teamA: { name: "ĐỘI-A", score: 0, logo: null },
       teamB: { name: "ĐỘI-B", score: 0, logo: null },
-      matchTime: "00:00",
-      period: "Chưa bắt đầu",
-      status: "waiting",
       tournament: "",
       stadium: "",
       matchDate: "",
       liveText: "",
       matchTitle: ""
+    });
+
+    // Reset timer trong TimerContext
+    updateTimerData({
+      matchTime: "00:00",
+      period: "Chưa bắt đầu",
+      status: "waiting"
     });
     
     setMatchStats({
@@ -832,7 +731,6 @@ export const MatchProvider = ({ children }) => {
     updateTeamLogos,
     updateTeamNames,
     updateMarquee,
-    updateMatchTime,
     updatePenalty,
     updateLineup,
     updateFutsalErrors,
@@ -849,22 +747,14 @@ export const MatchProvider = ({ children }) => {
     updatePosterSettings,
     updateDisplaySettings,
 
-    // Timer functions
-    resumeTimer,
+    // Timer functions đã được chuyển sang TimerContext
 
     // Socket functions
     initializeSocket,
     disconnectSocket
   };
 
-  // Cleanup timer khi component unmount
-  useEffect(() => {
-    return () => {
-      if (timerInterval) {
-        clearInterval(timerInterval);
-      }
-    };
-  }, [timerInterval]);
+  // Timer cleanup đã được chuyển sang TimerContext
 
   return (
     <MatchContext.Provider value={value}>
