@@ -62,6 +62,9 @@ const AppRoutes = () => {
         <Route path="/demotest" element={
               <ScoreboardBelow />
         } />
+
+        {/* Demo route for testing dynamic routes */}
+        <Route path="/demo/dynamic-route" element={<DynamicRouteDemo />} />
       </Routes>
 
       {/* Toast Container - để ở đây để có thể dùng cho tất cả routes */}
