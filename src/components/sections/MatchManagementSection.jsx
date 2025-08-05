@@ -61,7 +61,6 @@ const MatchManagementSection = ({ isActive = true }) => {
 
   // Tạo stable props cho PosterManager để tránh re-render do timer - KHÔNG bao gồm timer data
   const stableMatchData = useMemo(() => {
-    console.log('🔄 [MatchManagementSection] Creating stableMatchData WITHOUT timer data');
     return {
       teamA: {
         name: matchData.teamA.name,
