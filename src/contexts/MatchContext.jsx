@@ -233,6 +233,11 @@ export const MatchProvider = ({ children }) => {
             setSponsors(prev => ({ ...prev, ...state.sponsors }));
           }
 
+          if (state.view) {
+            console.log('👁️ [MatchContext] Updating currentView from room_joined:', state.view);
+            setCurrentView(state.view);
+          }
+
           console.log('✅ [MatchContext] All data updated from room_joined event');
           setLastUpdateTime(Date.now());
         }
@@ -253,7 +258,7 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật tỉ số
+    // Lắng nghe cập nhật tỉ s���
     socketService.on('score_updated', (data) => {
       console.log('⚽ [MatchContext] Received score_updated:', data);
       setMatchData(prev => ({
