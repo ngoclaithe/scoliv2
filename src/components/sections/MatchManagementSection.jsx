@@ -59,9 +59,9 @@ const MatchManagementSection = ({ isActive = true }) => {
 
   const { matchCode } = useAuth();
 
-  // Tạo stable props cho PosterManager để tránh re-render do timer
+  // Tạo stable props cho PosterManager để tránh re-render do timer - KHÔNG bao gồm timer data
   const stableMatchData = useMemo(() => {
-    console.log('🔄 [MatchManagementSection] Creating stableMatchData with timerData:', timerData);
+    console.log('🔄 [MatchManagementSection] Creating stableMatchData WITHOUT timer data');
     return {
       teamA: {
         name: matchData.teamA.name,
@@ -77,16 +77,15 @@ const MatchManagementSection = ({ isActive = true }) => {
       stadium: matchData.stadium,
       matchDate: matchData.matchDate,
       liveText: matchData.liveText,
-      matchTitle: matchData.matchTitle,
-      // Thêm timer data từ TimerContext riêng biệt
-      ...timerData
+      matchTitle: matchData.matchTitle
+      // KHÔNG thêm timerData để tránh re-render khi timer tick
     };
   }, [
     matchData.teamA.name, matchData.teamA.logo, matchData.teamA.score,
     matchData.teamB.name, matchData.teamB.logo, matchData.teamB.score,
     matchData.tournament, matchData.stadium, matchData.matchDate,
-    matchData.liveText, matchData.matchTitle,
-    timerData.matchTime, timerData.period, timerData.status
+    matchData.liveText, matchData.matchTitle
+    // KHÔNG include timer dependencies
   ]);
 
   const stableInitialData = useMemo(() => ({
@@ -246,7 +245,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   const [isSearchingLogoA, setIsSearchingLogoA] = useState(false);
   const [isSearchingLogoB, setIsSearchingLogoB] = useState(false);
 
-  // X��� lý tìm kiếm logo cho đội A
+  // Xử lý tìm kiếm logo cho đội A
   const handleSearchLogoA = async () => {
     if (!logoCodeA.trim()) return;
 
@@ -761,7 +760,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
               }`}
           >
-            <span className="mr-0.5 text-xs">📊</span>
+            <span className="mr-0.5 text-xs">���</span>
             <span className="hidden sm:inline">THÔNG SỐ</span>
             <span className="sm:hidden">TS</span>
           </button>
