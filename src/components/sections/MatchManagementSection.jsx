@@ -256,7 +256,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         setTeamAInfo(prev => ({ ...prev, logo: getFullLogoUrl(logo.url_logo) }));
         setLogoCodeA("");
       } else {
-        toast.error(`⚠Không tìm thấy logo với code "${logoCodeA}"`);
+        toast.error(`��Không tìm thấy logo với code "${logoCodeA}"`);
       }
     } catch (error) {
       toast.error('❌ Lỗi tìm kiếm logo A');
@@ -410,6 +410,16 @@ const MatchManagementSection = ({ isActive = true }) => {
       updateDisplaySettings(displayOptions);
     }
   }, [updateSponsors, updateOrganizing, updateMediaPartners, updateTournamentLogo, updateDisplaySettings]);
+
+  // Assign stable callbacks to refs
+  onLogoUpdateRef.current = handleLogoUpdate;
+  onPosterUpdateRef.current = useCallback((poster) => {
+    if (poster) {
+      const posterType = poster.id || poster.name;
+      updatePoster(posterType);
+      updateView('poster');
+    }
+  }, [updatePoster, updateView]);
 
   const handleScoreChange = (team, increment) => {
     updateScore(team, increment);
@@ -1028,7 +1038,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             {/* Lỗi Futsal */}
             <div className="py-1">
               <div className="text-center mb-1">
-                <span className="font-medium text-gray-700 text-sm">Lỗi Futsal</span>
+                <span className="font-medium text-gray-700 text-sm">L��i Futsal</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex-1">
@@ -1444,7 +1454,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               variant="primary"
               size="sm"
               onClick={() => {
-                // Tạo marquee data t�� clock settings
+                // Tạo marquee data t���� clock settings
                 const marqueeSettings = {
                   text: clockText || "TRỰC TIẾP BÓNG ĐÁ",
                   mode: clockSetting,
