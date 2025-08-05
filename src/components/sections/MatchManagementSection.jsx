@@ -256,7 +256,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         setTeamAInfo(prev => ({ ...prev, logo: getFullLogoUrl(logo.url_logo) }));
         setLogoCodeA("");
       } else {
-        toast.error(`��Không tìm thấy logo với code "${logoCodeA}"`);
+        toast.error(`⚠Không tìm thấy logo với code "${logoCodeA}"`);
       }
     } catch (error) {
       toast.error('❌ Lỗi tìm kiếm logo A');
@@ -1038,7 +1038,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             {/* Lỗi Futsal */}
             <div className="py-1">
               <div className="text-center mb-1">
-                <span className="font-medium text-gray-700 text-sm">L��i Futsal</span>
+                <span className="font-medium text-gray-700 text-sm">Lỗi Futsal</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex-1">
@@ -1394,7 +1394,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 onChange={(e) => setClockSetting(e.target.value)}
                 className="scale-75"
               />
-              <label className="text-xs">MỖI 5'</label>
+              <label className="text-xs">M���I 5'</label>
             </div>
           </div>
 
@@ -1454,7 +1454,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               variant="primary"
               size="sm"
               onClick={() => {
-                // Tạo marquee data t���� clock settings
+                // Tạo marquee data t�� clock settings
                 const marqueeSettings = {
                   text: clockText || "TRỰC TIẾP BÓNG ĐÁ",
                   mode: clockSetting,
@@ -1488,13 +1488,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           matchData={stableMatchData}
           accessCode={matchCode}
           initialData={stableInitialData}
-          onPosterUpdate={useCallback((poster) => {
-            if (poster) {
-              const posterType = poster.id || poster.name;
-              updatePoster(posterType);
-              updateView('poster');
-            }
-          }, [updatePoster, updateView])}
+          onPosterUpdate={onPosterUpdateRef.current}
           onLogoUpdate={(logoData) => {
 
             // Handle individual item change with behavior
