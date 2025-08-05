@@ -56,20 +56,20 @@ const DynamicDisplayController = () => {
   // Parse và validate parameters từ URL
   const parseUrlParams = useCallback(() => {
     const params = {
-      location: location || '',
-      matchTitle: matchTitle ? decodeURIComponent(matchTitle) : '',
-      liveText: liveText ? decodeURIComponent(liveText) : '',
+      location: parseTextParam(location),
+      matchTitle: parseTextParam(matchTitle),
+      liveText: parseTextParam(liveText),
       teamA: {
-        name: teamAName ? decodeURIComponent(teamAName) : 'ĐỘI-A',
-        score: teamAScore ? parseInt(teamAScore) || 0 : 0,
+        name: parseTeamName(teamAName, 'ĐỘI-A'),
+        score: parseNumberParam(teamAScore, 0),
         logoCode: teamALogoCode || '',
-        kitColor: teamAKitColor ? `#${teamAKitColor}` : '#FF0000'
+        kitColor: parseColorParam(teamAKitColor) || '#FF0000'
       },
       teamB: {
-        name: teamBName ? decodeURIComponent(teamBName) : 'ĐỘI-B',
-        score: teamBScore ? parseInt(teamBScore) || 0 : 0,
+        name: parseTeamName(teamBName, 'ĐỘI-B'),
+        score: parseNumberParam(teamBScore, 0),
         logoCode: teamBLogoCode || '',
-        kitColor: teamBKitColor ? `#${teamBKitColor}` : '#0000FF'
+        kitColor: parseColorParam(teamBKitColor) || '#0000FF'
       }
     };
 
