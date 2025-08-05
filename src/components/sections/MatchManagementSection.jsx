@@ -246,7 +246,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   const [isSearchingLogoA, setIsSearchingLogoA] = useState(false);
   const [isSearchingLogoB, setIsSearchingLogoB] = useState(false);
 
-  // Xử lý tìm kiếm logo cho đội A
+  // X��� lý tìm kiếm logo cho đội A
   const handleSearchLogoA = async () => {
     if (!logoCodeA.trim()) return;
 
@@ -1006,6 +1006,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             <button
               onClick={() => {
                 const timeString = "00:00";
+                console.log('🎯 [MatchManagementSection] Clicked ĐẾM 0 - calling updateMatchTime:', { timeString, period: "Hiệp 1", status: "live" });
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 updateView('scoreboard');
                 playAudioForAction('gialap');
