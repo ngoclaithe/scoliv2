@@ -53,7 +53,7 @@ const ManageAccessCode = ({ onNavigate }) => {
   const handleCreateCode = async (typeMatch = 'soccer') => {
     try {
       setCreateLoading(true);
-      
+
       const response = await AccessCodeAPI.createCode({ typeMatch });
       console.log("Giá trị của reponse sau khi tạo code là:", response.data);
       if (response && response.data) {
@@ -63,7 +63,7 @@ const ManageAccessCode = ({ onNavigate }) => {
           'futsal': 'futsal',
           'pickleball': 'pickleball'
         }[typeMatch] || '';
-        
+
         console.log(`Tạo mã truy cập ${sportName} thành công!`);
       } else {
         throw new Error(response?.message || 'Không thể tạo mã truy cập');
@@ -98,18 +98,25 @@ const ManageAccessCode = ({ onNavigate }) => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'active': return 'text-green-600 bg-green-100';
-      case 'expired': return 'text-red-600 bg-red-100';
-      case 'inactive': return 'text-gray-600 bg-gray-100';
-      default: return 'text-gray-600 bg-gray-100';
+      case 'active':
+        return 'text-green-600 bg-green-100';
+      case 'used':
+        return 'text-yellow-600 bg-yellow-100';
+      case 'expired':
+        return 'text-red-600 bg-red-100';
+      case 'inactive':
+        return 'text-gray-600 bg-gray-100';
+      default:
+        return 'text-gray-600 bg-gray-100';
     }
   };
 
   const getStatusText = (status) => {
     switch (status) {
-      case 'active': return '🟢 Hoạt động';
+      case 'active': return '🟢 Sẵn sàng';
       case 'expired': return '🔴 Hết hạn';
       case 'inactive': return '⚪ Chưa kích hoạt';
+      case 'used': return '🟡 Đang sử dụng';
       default: return '❓ Không xác định';
     }
   };
@@ -248,11 +255,10 @@ const ManageAccessCode = ({ onNavigate }) => {
           <div className="flex space-x-8 border-b border-gray-200 mb-6">
             <button
               onClick={() => setActiveTab('list')}
-              className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                activeTab === 'list'
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'list'
                   ? 'border-purple-500 text-purple-600'
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
+                }`}
             >
               Danh sách mã
             </button>
@@ -267,7 +273,7 @@ const ManageAccessCode = ({ onNavigate }) => {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <h2 className="text-2xl font-bold text-gray-900">Quản lý mã truy cập</h2>
             <div className="flex flex-wrap gap-2 w-full sm:w-auto">
-              <Button 
+              <Button
                 onClick={() => handleCreateCode('soccer')}
                 disabled={createLoading}
                 className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
@@ -275,7 +281,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                 <PlusIcon className="h-5 w-5" />
                 Bóng đá
               </Button>
-              <Button 
+              <Button
                 onClick={() => handleCreateCode('futsal')}
                 disabled={createLoading}
                 className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors"
@@ -283,7 +289,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                 <PlusIcon className="h-5 w-5" />
                 Futsal
               </Button>
-              <Button 
+              <Button
                 onClick={() => handleCreateCode('pickleball')}
                 disabled={createLoading}
                 className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md transition-colors"
@@ -336,7 +342,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                       <td className="px-2 sm:px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex flex-col sm:flex-row gap-1 sm:gap-2 justify-end">
                           {/* Quick Enter Button */}
-                          {onNavigate && code.status === 'active' && (
+                          {onNavigate && (code.status === 'active' || code.status === 'used') && (
                             <button
                               onClick={() => handleQuickEnter(code.code)}
                               className="text-purple-600 hover:text-purple-900 bg-purple-50 hover:bg-purple-100 px-2 py-1 rounded text-xs transition-colors"
@@ -406,11 +412,10 @@ const ManageAccessCode = ({ onNavigate }) => {
                         <button
                           key={i + 1}
                           onClick={() => loadCodes(i + 1)}
-                          className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                            pagination.page === i + 1
+                          className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${pagination.page === i + 1
                               ? 'z-10 bg-purple-50 border-purple-500 text-purple-600'
                               : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
-                          }`}
+                            }`}
                         >
                           {i + 1}
                         </button>
@@ -442,7 +447,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                   {selectedCode.code}
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="font-medium text-gray-600">Tên:</span>
@@ -473,7 +478,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                   <div className="mt-1">{selectedCode.lastUsed ? formatDate(selectedCode.lastUsed) : 'Chưa sử dụng'}</div>
                 </div>
               </div>
-              
+
               {selectedCode.description && (
                 <div className="mt-4">
                   <span className="font-medium text-gray-600">Mô tả:</span>
@@ -581,8 +586,8 @@ const ManageAccessCode = ({ onNavigate }) => {
                 <div className="text-center">
                   <h4 className="font-semibold text-gray-900 mb-3">Quét mã QR để thanh toán</h4>
                   <div className="bg-white p-4 rounded-lg inline-block shadow-sm border-2 border-gray-200">
-                    <img 
-                      src={generateSepayQRUrl(paymentData)} 
+                    <img
+                      src={generateSepayQRUrl(paymentData)}
                       alt="Sepay QR Code"
                       className="mx-auto"
                       style={{ width: '220px', height: '220px' }}

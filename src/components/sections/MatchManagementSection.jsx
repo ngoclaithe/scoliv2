@@ -11,7 +11,6 @@ import { toast } from 'react-toastify';
 import audioUtils from '../../utils/audioUtils';
 import { toDateInputFormat } from '../../utils/helpers';
 import LogoAPI from '../../API/apiLogo';
-import MatchTimeDisplay from './MatchTimeDisplay';
 import ScoreboardPreview from './ScoreboardPreview';
 import { getFullLogoUrl } from '../../utils/logoUtils';
 
@@ -74,24 +73,33 @@ const MatchManagementSection = ({ isActive = true }) => {
   // State cho thông tin đội và trận đấu
   const [teamAInfo, setTeamAInfo] = useState({
     name: matchData.teamA.name || "",
-    logo: matchData.teamA.logo || ""
+    logo: matchData.teamA.logo || "",
+    teamAKitcolor: matchData.teamA.teamAKitcolor || "",
+    teamA2Kitcolor: matchData.teamA.teamA2Kitcolor || "",
   });
   const [teamBInfo, setTeamBInfo] = useState({
     name: matchData.teamB.name || "",
-    logo: matchData.teamB.logo || ""
+    logo: matchData.teamB.logo || "",
+    teamBKitcolor: matchData.teamB.teamBKitcolor || "",
+    teamB2Kitcolor: matchData.teamB.teamB2Kitcolor || "",
   });
   const [matchTitle, setMatchTitle] = useState(matchData.matchTitle || "");
   const [liveText, setLiveText] = useState(matchData.liveText || "");
 
   // Sync team info khi matchData thay đổi (từ server)
   useEffect(() => {
+    console.log("Giá trị đồng bộ từ backend socket là", matchData);
     setTeamAInfo(prev => ({
       name: matchData.teamA.name || prev.name,
-      logo: matchData.teamA.logo || prev.logo
+      logo: matchData.teamA.logo || prev.logo,
+      teamAKitcolor: matchData.teamA.teamAKitcolor || prev.teamAKitcolor,
+      // teamA2Kitcolor: matchData.teamA.teamA2Kitcolor || prev.teamAK2itcolor,      
     }));
     setTeamBInfo(prev => ({
       name: matchData.teamB.name || prev.name,
-      logo: matchData.teamB.logo || prev.logo
+      logo: matchData.teamB.logo || prev.logo,
+      teamBKitcolor: matchData.teamB.teamBKitcolor || prev.teamBKitcolor,
+      // teamB2Kitcolor: matchData.teamB.teamB2Kitcolor || prev.teamB2Kitcolor,
     }));
   }, [matchData.teamA.name, matchData.teamA.logo, matchData.teamB.name, matchData.teamB.logo]);
   const [matchInfo, setMatchInfo] = useState({
@@ -113,7 +121,6 @@ const MatchManagementSection = ({ isActive = true }) => {
 
   // Sync match title and live unit when context data changes
   useEffect(() => {
-    console.log("Giá trị đồng bộ từ backend socket là", matchData);
     if (matchData.matchTitle !== undefined) {
       setMatchTitle(matchData.matchTitle);
     }
@@ -356,12 +363,6 @@ const MatchManagementSection = ({ isActive = true }) => {
       {/* Score Controls */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
 
-        {/* <MatchTimeDisplay
-          matchTime={matchData.matchTime}
-          period={matchData.period}
-          status={matchData.status}
-        /> */}
-
         <div className="grid grid-cols-2 gap-2 sm:gap-4">
           {/* Đội A */}
           <div className="bg-white rounded-lg p-1.5 sm:p-3 shadow-md border border-blue-200">
@@ -588,8 +589,8 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-xs text-red-600 flex-shrink-0">A:</span>
               <input
                 type="color"
-                value={teamAInfo.shirtColor || '#ff0000'}
-                onChange={(e) => setTeamAInfo(prev => ({ ...prev, shirtColor: e.target.value }))}
+                value={teamAInfo.teamAKitcolor || '#ff0000'}
+                onChange={(e) => setTeamAInfo(prev => ({ ...prev, teamAKitcolor: e.target.value }))}
                 className="w-5 h-5 border border-gray-300 rounded cursor-pointer flex-shrink-0"
                 title="Áo A"
               />
@@ -600,8 +601,8 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-xs text-gray-800 flex-shrink-0">B:</span>
               <input
                 type="color"
-                value={teamBInfo.shirtColor || '#000000'}
-                onChange={(e) => setTeamBInfo(prev => ({ ...prev, shirtColor: e.target.value }))}
+                value={teamBInfo.teamBKitcolor || '#000000'}
+                onChange={(e) => setTeamBInfo(prev => ({ ...prev, teamBKitcolor: e.target.value }))}
                 className="w-5 h-5 border border-gray-300 rounded cursor-pointer flex-shrink-0"
                 title="Áo B"
               />
