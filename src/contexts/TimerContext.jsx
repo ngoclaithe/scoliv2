@@ -173,6 +173,10 @@ export const TimerProvider = ({ children }) => {
     socketService.removeAllListeners('timer_resumed');
     socketService.removeAllListeners('timer_reset');
     socketService.removeAllListeners('match_time_updated');
+    socketService.removeAllListeners('current_state_response');
+    socketService.removeAllListeners('room_joined');
+    socketService.removeAllListeners('room_left');
+    socketService.removeAllListeners('room_error');
   }, []);
 
   // Timer control functions
