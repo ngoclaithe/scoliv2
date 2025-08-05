@@ -58,6 +58,7 @@ export const TimerProvider = ({ children }) => {
 
     // Lắng nghe timer real-time updates từ server
     socketService.on('timer_tick', (data) => {
+      console.log('🕐 [TimerContext] Received timer_tick:', data);
       setTimerData(prev => {
         const newTime = data.displayTime || data.currentTime;
         const newStatus = prev.status === 'paused' ? 'paused' : 'live';
@@ -67,6 +68,7 @@ export const TimerProvider = ({ children }) => {
           return prev;
         }
 
+        console.log('🕐 [TimerContext] Updating timer:', { newTime, newStatus });
         return {
           ...prev,
           matchTime: newTime,
