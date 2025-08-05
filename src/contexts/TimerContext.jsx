@@ -174,19 +174,11 @@ export const TimerProvider = ({ children }) => {
 
   }, []);
 
-  // Cleanup timer listeners
+  // Cleanup timer listeners (không thực sự cleanup để tránh conflict)
   const cleanupTimerListeners = useCallback(() => {
-    console.log('🕐 [TimerContext] Cleaning up timer listeners');
-    socketService.removeAllListeners('timer_tick');
-    socketService.removeAllListeners('timer_started');
-    socketService.removeAllListeners('timer_paused');
-    socketService.removeAllListeners('timer_resumed');
-    socketService.removeAllListeners('timer_reset');
-    socketService.removeAllListeners('match_time_updated');
-    socketService.removeAllListeners('current_state_response');
-    socketService.removeAllListeners('room_joined');
-    socketService.removeAllListeners('room_left');
-    socketService.removeAllListeners('room_error');
+    console.log('🕐 [TimerContext] Cleanup timer listeners called (but not actually cleaning up)');
+    // KHÔNG cleanup để tránh conflict với MatchContext
+    // socketService sẽ tự động cleanup khi disconnect
   }, []);
 
   // Timer control functions
