@@ -23,6 +23,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     penaltyData,
 
     displaySettings,
+    currentView,
 
     updateScore,
     updateMatchInfo,
@@ -104,7 +105,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   }, [matchData.teamA.name, matchData.teamA.logo, matchData.teamB.name, matchData.teamB.logo, matchData.teamA.teamAKitColor, matchData.teamAKitColor, matchData.teamB.teamBKitColor, matchData.teamBKitColor]);
   const [matchInfo, setMatchInfo] = useState({
     startTime: matchData.startTime || "19:30",
-    location: matchData.stadium || "SÂN VẬN ĐỘNG QUỐC GIA",
+    location: matchData.stadium || "SÂN VẬN ĐỘNG QU���C GIA",
     matchDate: matchData.matchDate || new Date().toISOString().split('T')[0]
   });
 
@@ -1577,7 +1578,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 if (minutes > 0 || seconds > 0) {
                   const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
-                  updateMatchTime(timeString, "Hiệp 1", "live");
+                  updateMatchTime(timeString, "Hi��p 1", "live");
 
                   updateView('scoreboard');
 
