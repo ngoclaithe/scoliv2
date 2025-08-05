@@ -149,7 +149,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         teamBKitcolor: matchData.teamB.teamBKitColor || matchData.teamBKitColor || prev.teamBKitcolor,
       };
 
-      // Chỉ update nếu có thay ��ổi thực sự
+      // Chỉ update nếu có thay đổi thực sự
       if (JSON.stringify(newTeamBInfo) !== JSON.stringify(prev)) {
         return newTeamBInfo;
       }
@@ -522,9 +522,9 @@ const MatchManagementSection = ({ isActive = true }) => {
               }
             }}
           >
-            <span className="mr-1">{matchData.status === "paused" ? "▶️" : "⏸️"}</span>
-            <span className="hidden sm:inline">{matchData.status === "paused" ? "TIẾP TỤC" : "TẠM DỪNG"}</span>
-            <span className="sm:hidden">{matchData.status === "paused" ? "TIẾP" : "DỪNG"}</span>
+            <span className="mr-1">{timerData.status === "paused" ? "▶️" : "⏸️"}</span>
+            <span className="hidden sm:inline">{timerData.status === "paused" ? "TIẾP TỤC" : "TẠM DỪNG"}</span>
+            <span className="sm:hidden">{timerData.status === "paused" ? "TIẾP" : "DỪNG"}</span>
           </Button>
 
           <Button
