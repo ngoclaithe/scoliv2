@@ -629,14 +629,20 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
     );
   }, (prevProps, nextProps) => {
     // Only rerender if item properties actually changed
-    return (
-      prevProps.item.id === nextProps.item.id &&
-      prevProps.item.code === nextProps.item.code &&
-      prevProps.item.url === nextProps.item.url &&
-      JSON.stringify(prevProps.item.displayPositions) === JSON.stringify(nextProps.item.displayPositions) &&
-      prevProps.onUpdate === nextProps.onUpdate &&
-      prevProps.onRemove === nextProps.onRemove
+    const itemChanged = (
+      prevProps.item.id !== nextProps.item.id ||
+      prevProps.item.code !== nextProps.item.code ||
+      prevProps.item.url !== nextProps.item.url ||
+      JSON.stringify(prevProps.item.displayPositions) !== JSON.stringify(nextProps.item.displayPositions)
     );
+
+    const callbacksChanged = (
+      prevProps.onUpdate !== nextProps.onUpdate ||
+      prevProps.onRemove !== nextProps.onRemove
+    );
+
+    // Return true to prevent re-render, false to allow re-render
+    return !itemChanged && !callbacksChanged;
   });
 
   const handlePosterSelect = useCallback((poster) => {
