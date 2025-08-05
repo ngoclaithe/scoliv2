@@ -832,7 +832,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           <div className="bg-gray-50 rounded-lg p-2 space-y-2">
             {/* Kiểm soát bóng */}
             <EditableStatBar
-              label="Kiểm soát bóng"
+              label="Kiểm so��t bóng"
               statKey="possession"
               team1Value={matchStats.possession.team1}
               team2Value={matchStats.possession.team2}
@@ -1334,15 +1334,9 @@ const MatchManagementSection = ({ isActive = true }) => {
         size="full"
       >
         <PosterManager
-          matchData={matchData}
+          matchData={stableMatchData}
           accessCode={matchCode}
-          initialData={{
-            selectedPoster: displaySettings.selectedPoster ? { id: displaySettings.selectedPoster, name: displaySettings.selectedPoster } : null,
-            displayOptions: {
-              shape: displaySettings.logoShape || 'round',
-              rotateDisplay: displaySettings.rotateDisplay || false
-            }
-          }}
+          initialData={stableInitialData}
           onPosterUpdate={(poster) => {
 
             if (poster) {
