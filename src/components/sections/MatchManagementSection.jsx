@@ -398,6 +398,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           <ScoreboardPreview
             matchData={{
               ...matchData,
+              ...timerData, // Thêm timer data từ TimerContext
               teamA: {
                 ...matchData.teamA,
                 name: teamAInfo.name || matchData.teamA.name,
@@ -734,7 +735,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                   });
                 }
 
-                toast.success('✅ Đã cập nhật thông tin trận đấu và đơn vị live thành công!');
+                toast.success('✅ Đã c��p nhật thông tin trận đấu và đơn vị live thành công!');
               }}
               className="px-3 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-xs rounded shadow transform hover:scale-105 transition-all duration-200"
             >
