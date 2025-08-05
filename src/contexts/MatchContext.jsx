@@ -37,7 +37,7 @@ export const MatchProvider = ({ children }) => {
     matchTitle: ""
   });
 
-  // State cho thống k�� trận đấu
+  // State cho thống kê trận đấu
   const [matchStats, setMatchStats] = useState({
     possession: { team1: 50, team2: 50 },
     totalShots: { team1: 0, team2: 0 },
@@ -446,6 +446,15 @@ export const MatchProvider = ({ children }) => {
 
     socketService.on('connect', () => {
       setSocketConnected(true);
+    });
+
+    // Lắng nghe cập nhật view
+    socketService.on('view_updated', (data) => {
+      console.log('👁️ [MatchContext] view_updated received:', data);
+      if (data.viewType) {
+        setCurrentView(data.viewType);
+      }
+      setLastUpdateTime(Date.now());
     });
 
     // Lắng nghe response state hiện tại từ server
