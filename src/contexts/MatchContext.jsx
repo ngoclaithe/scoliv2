@@ -107,7 +107,7 @@ export const MatchProvider = ({ children }) => {
   const [timerInterval, setTimerInterval] = useState(null);
   const [startTime, setStartTime] = useState(null);
 
-  // Kết nối socket khi có matchCode (cho authenticated users)
+  // Kết n��i socket khi có matchCode (cho authenticated users)
   useEffect(() => {
     if (matchCode && isAuthenticated) {
       initializeSocket(matchCode);
@@ -300,7 +300,7 @@ export const MatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật tên đội
     socketService.on('team_names_updated', (data) => {
-      console.log('���� [MatchContext] Received team_names_updated:', data);
+      console.log('📛 [MatchContext] Received team_names_updated:', data);
       setMatchData(prev => ({
         ...prev,
         teamA: { ...prev.teamA, name: data.names.teamA },
@@ -424,7 +424,7 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nh��t danh sách
+    // Lắng nghe cập nhật danh sách
     socketService.on('lineup_updated', (data) => {
       setLineupData({
         teamA: data.lineupData.teamA,
@@ -536,8 +536,22 @@ export const MatchProvider = ({ children }) => {
 
   // Cập nhật thông tin trận đấu
   const updateMatchInfo = useCallback((newMatchInfo) => {
-    setMatchData(prev => ({ ...prev, ...newMatchInfo }));
-    
+    setMatchData(prev => ({
+      ...prev,
+      ...newMatchInfo,
+      // Đảm bảo màu áo được cập nhật đúng cách
+      teamA: {
+        ...prev.teamA,
+        teamAKitColor: newMatchInfo.teamAKitColor || prev.teamA.teamAKitColor,
+        ...(newMatchInfo.logoTeamA && { logo: newMatchInfo.logoTeamA })
+      },
+      teamB: {
+        ...prev.teamB,
+        teamBKitColor: newMatchInfo.teamBKitColor || prev.teamB.teamBKitColor,
+        ...(newMatchInfo.logoTeamB && { logo: newMatchInfo.logoTeamB })
+      }
+    }));
+
     if (socketConnected) {
       socketService.updateMatchInfo(newMatchInfo);
     }
@@ -746,7 +760,7 @@ export const MatchProvider = ({ children }) => {
 
 
 
-  // Reset toàn bộ dữ liệu trận đ���u
+  // Reset toàn bộ dữ liệu trận đấu
   const resetMatch = useCallback(() => {
     setMatchData({
       teamA: { name: "ĐỘI-A", score: 0, logo: null },
