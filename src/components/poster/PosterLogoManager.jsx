@@ -529,11 +529,11 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
           </div>
 
           {/* Logo code display */}
-          <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded p-1 mb-1">
+          {/* <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded p-1 mb-1">
             <div className="text-xs text-green-700 bg-white rounded px-1 py-0.5 font-bold truncate">
               {item.code}
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="mt-2">
@@ -711,12 +711,13 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
     const newLogo = {
       id: `custom-logo-${Date.now()}`,
       unitName: `Logo ${logoItems.filter(item => item.type === 'logo').length + 1}`,
-      code: `LOGO${logoItems.filter(item => item.type === 'logo').length + 1}`,
+      code: ` `,
       type: "logo",
       category: activeLogoCategory,
       url: null,
       displayPositions: [],
-      isCustom: true
+      isCustom: true,
+      // name: `LOGO${logoItems.filter(item => item.type === 'logo').length + 1}`
     };
 
     setLogoItems(prev => [...prev, newLogo]);
@@ -856,28 +857,30 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
             ].map((shape) => (
               <label key={shape.value} className="flex items-center gap-0.5 cursor-pointer">
                 <input
-                  type="radio"
+                  id={`logo-shape-${shape.value}`}
                   name="logoShape"
+                  type="radio"
                   value={shape.value}
                   checked={logoDisplayOptions.shape === shape.value}
                   onChange={(e) => {
-                const newShape = e.target.value;
-                setLogoDisplayOptions(prev => ({ ...prev, shape: newShape }));
-                console.log('🎨 [PosterLogoManager] Logo shape changed to:', newShape);
-                // Immediate update
-                if (onLogoUpdate) {
-                  const activeItems = allLogoItems.filter(item =>
-                    item.category === activeLogoCategory &&
-                    item.displayPositions && item.displayPositions.length > 0
-                  );
-                  onLogoUpdate({
-                    logoItems: activeItems,
-                    displayOptions: { ...logoDisplayOptions, shape: newShape }
-                  });
-                }
-              }}
+                    const newShape = e.target.value;
+                    setLogoDisplayOptions(prev => ({ ...prev, shape: newShape }));
+                    console.log('🎨 [PosterLogoManager] Logo shape changed to:', newShape);
+
+                    if (onLogoUpdate) {
+                      const activeItems = allLogoItems.filter(item =>
+                        item.category === activeLogoCategory &&
+                        item.displayPositions && item.displayPositions.length > 0
+                      );
+                      onLogoUpdate({
+                        logoItems: activeItems,
+                        displayOptions: { ...logoDisplayOptions, shape: newShape }
+                      });
+                    }
+                  }}
                   className="w-2 h-2"
                 />
+
                 <span className="text-xs">{shape.icon}</span>
                 <span className="text-xs">{shape.label}</span>
               </label>

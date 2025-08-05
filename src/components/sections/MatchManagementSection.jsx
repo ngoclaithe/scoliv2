@@ -9,7 +9,7 @@ import { useMatch } from "../../contexts/MatchContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { toast } from 'react-toastify';
 import audioUtils from '../../utils/audioUtils';
-
+import { toDateInputFormat } from '../../utils/helpers';
 import LogoAPI from '../../API/apiLogo';
 import MatchTimeDisplay from './MatchTimeDisplay';
 import ScoreboardPreview from './ScoreboardPreview';
@@ -613,7 +613,8 @@ const MatchManagementSection = ({ isActive = true }) => {
           <div className="grid grid-cols-3 gap-1">
             <input
               type="date"
-              value={matchInfo.matchDate || new Date().toISOString().split('T')[0]}
+              // value={matchInfo.matchDate || new Date().toISOString().split('T')[0]}
+              value={toDateInputFormat(matchInfo.matchDate) || new Date().toISOString().split('T')[0]}
               onChange={(e) => setMatchInfo(prev => ({ ...prev, matchDate: e.target.value }))}
               className="w-full min-w-0 px-1 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center bg-white"
             />
@@ -1092,6 +1093,8 @@ const MatchManagementSection = ({ isActive = true }) => {
               </button>
 
               <input
+                id="custom-duration"
+                name="custom-duration"
                 type="number"
                 min="1"
                 max="120"
@@ -1100,6 +1103,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 placeholder="25"
                 className="w-16 text-sm border border-gray-300 rounded px-2 py-1 focus:border-teal-500 focus:outline-none text-center font-bold h-8"
               />
+
 
               <button
                 onClick={() => {
