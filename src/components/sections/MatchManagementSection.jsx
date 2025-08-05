@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import Button from "../common/Button";
 import Input from "../common/Input";
-import PosterManager from "../poster/PosterManager";
+import MemoizedPosterManager from "./MemoizedPosterManager";
 import TeamLineupModal from "../lineup/TeamLineupModal";
 import Modal from "../common/Modal";
 import SimplePenaltyModal from "../common/SimplePenaltyModal";
@@ -1394,7 +1394,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 onChange={(e) => setClockSetting(e.target.value)}
                 className="scale-75"
               />
-              <label className="text-xs">M���I 5'</label>
+              <label className="text-xs">MỖI 5'</label>
             </div>
           </div>
 
@@ -1429,7 +1429,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 className={`px-2 py-1 text-xs font-medium rounded border-2 bg-blue-600 text-white ${tickerColor === "white-blue" ? "border-orange-600" : "border-gray-300"
                   }`}
               >
-                Chữ
+                Ch���
               </button>
               <button
                 onClick={() => setTickerColor("white-red")}
