@@ -49,6 +49,15 @@ const AppRoutes = () => {
           </AuthProvider>
         } />
 
+        {/* Dynamic route with multiple parameters */}
+        <Route path="/:accessCode/:location/:matchTitle/:liveText/:teamALogoCode/:teamBLogoCode/:teamAName/:teamBName/:teamAKitColor/:teamBKitColor/:teamAScore/:teamBScore" element={
+          <AuthProvider>
+            <PublicMatchProvider>
+              <DynamicDisplayController />
+            </PublicMatchProvider>
+          </AuthProvider>
+        } />
+
         <Route path="/demotest" element={
               <ScoreboardBelow />
         } />
