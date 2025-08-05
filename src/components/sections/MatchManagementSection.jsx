@@ -1358,14 +1358,13 @@ const MatchManagementSection = ({ isActive = true }) => {
           matchData={stableMatchData}
           accessCode={matchCode}
           initialData={stableInitialData}
-          onPosterUpdate={(poster) => {
-
+          onPosterUpdate={useCallback((poster) => {
             if (poster) {
               const posterType = poster.id || poster.name;
               updatePoster(posterType);
               updateView('poster');
             }
-          }}
+          }, [updatePoster, updateView])}
           onLogoUpdate={(logoData) => {
 
             // Handle individual item change with behavior
