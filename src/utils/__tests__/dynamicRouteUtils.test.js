@@ -117,7 +117,7 @@ describe('dynamicRouteUtils', () => {
         teamBScore: 1
       };
 
-      const expected = '/ABC123/My%20Dinh%20Stadium/V%20League%202024/LIVE%20STREAMING/HN/TPHCM/Ha%20Noi%20FC/Ho%20Chi%20Minh%20City/FF0000/0000FF/2/1';
+      const expected = '/ABC123/My_Dinh_Stadium/V_League_2024/LIVE_STREAMING/HN/TPHCM/Ha_Noi_FC/Ho_Chi_Minh_City/FF0000/0000FF/2/1';
       expect(buildDynamicRoute(params)).toBe(expected);
     });
 
