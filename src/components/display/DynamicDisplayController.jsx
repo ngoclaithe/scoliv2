@@ -4,6 +4,13 @@ import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { useAuth } from '../../contexts/AuthContext';
 import PublicAPI from '../../API/apiPublic';
 import socketService from '../../services/socketService';
+import {
+  findTeamLogos,
+  parseColorParam,
+  parseTeamName,
+  parseTextParam,
+  parseNumberParam
+} from '../../utils/dynamicRouteUtils';
 
 // Import các component hiển thị
 import PosterTreTrung from '../../pages/Poster-tretrung';
