@@ -292,6 +292,10 @@ const MatchManagementSection = ({ isActive = true }) => {
   }, [updatePenalty, updateView]);
 
   // Stable logo update callback để tránh PosterManager re-render
+  // Stable refs cho callbacks
+  const onLogoUpdateRef = useRef();
+  const onPosterUpdateRef = useRef();
+
   const handleLogoUpdate = useCallback((logoData) => {
     // Handle individual item change with behavior
     if (logoData.changedItem && logoData.behavior) {
@@ -886,7 +890,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
               }`}
           >
-            <span className="mr-0.5 text-xs">���</span>
+            <span className="mr-0.5 text-xs">🎮</span>
             <span className="hidden sm:inline">ĐIỀU KHIỂN</span>
             <span className="sm:hidden">DK</span>
           </button>
