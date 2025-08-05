@@ -22,9 +22,11 @@ const AppRoutes = () => {
         {/* Authenticated routes */}
         <Route path="/" element={
           <AuthProvider>
-            <MatchProvider>
-              <App />
-            </MatchProvider>
+            <TimerProvider>
+              <MatchProvider>
+                <App />
+              </MatchProvider>
+            </TimerProvider>
           </AuthProvider>
         } />
 
