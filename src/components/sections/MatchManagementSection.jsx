@@ -60,25 +60,28 @@ const MatchManagementSection = ({ isActive = true }) => {
   const { matchCode } = useAuth();
 
   // Tạo stable props cho PosterManager để tránh re-render do timer
-  const stableMatchData = useMemo(() => ({
-    teamA: {
-      name: matchData.teamA.name,
-      logo: matchData.teamA.logo,
-      score: matchData.teamA.score
-    },
-    teamB: {
-      name: matchData.teamB.name,
-      logo: matchData.teamB.logo,
-      score: matchData.teamB.score
-    },
-    tournament: matchData.tournament,
-    stadium: matchData.stadium,
-    matchDate: matchData.matchDate,
-    liveText: matchData.liveText,
-    matchTitle: matchData.matchTitle,
-    // Thêm timer data từ TimerContext riêng biệt
-    ...timerData
-  }), [
+  const stableMatchData = useMemo(() => {
+    console.log('🔄 [MatchManagementSection] Creating stableMatchData with timerData:', timerData);
+    return {
+      teamA: {
+        name: matchData.teamA.name,
+        logo: matchData.teamA.logo,
+        score: matchData.teamA.score
+      },
+      teamB: {
+        name: matchData.teamB.name,
+        logo: matchData.teamB.logo,
+        score: matchData.teamB.score
+      },
+      tournament: matchData.tournament,
+      stadium: matchData.stadium,
+      matchDate: matchData.matchDate,
+      liveText: matchData.liveText,
+      matchTitle: matchData.matchTitle,
+      // Thêm timer data từ TimerContext riêng biệt
+      ...timerData
+    };
+  }, [
     matchData.teamA.name, matchData.teamA.logo, matchData.teamA.score,
     matchData.teamB.name, matchData.teamB.logo, matchData.teamB.score,
     matchData.tournament, matchData.stadium, matchData.matchDate,
@@ -1413,7 +1416,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
             // Handle bulk update (fallback cho compatibility)
             if (logoData && logoData.logoItems && !logoData.changedItem) {
-              // Phân loại logo items theo category
+              // Phân lo��i logo items theo category
               const logosByCategory = logoData.logoItems.reduce((acc, item) => {
                 if (!acc[item.category]) {
                   acc[item.category] = [];
