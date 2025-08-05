@@ -351,7 +351,7 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
       }
     };
 
-    // Bắt đầu đọc file
+    // Bắt đ��u đọc file
     reader.readAsDataURL(file);
   };
 
@@ -407,12 +407,25 @@ const PosterLogoManager = React.memo(({ matchData, onPosterUpdate, onLogoUpdate,
     const [localCode, setLocalCode] = useState(item.code);
     const [isSearching, setIsSearching] = useState(false);
     const [localCodeRef, setLocalCodeRef] = useState(item.code);
+    const inputRef = useRef(null);
+    const lastFocusedRef = useRef(false);
 
     // Chỉ update localCode khi item.code thay đổi thật sự, không phải do re-render
     useEffect(() => {
       if (item.code !== localCodeRef) {
+        // Lưu trạng thái focus trước khi update
+        const wasFocused = inputRef.current && document.activeElement === inputRef.current;
+        lastFocusedRef.current = wasFocused;
+
         setLocalCode(item.code);
         setLocalCodeRef(item.code);
+
+        // Khôi phục focus sau khi update
+        if (wasFocused && inputRef.current) {
+          setTimeout(() => {
+            inputRef.current.focus();
+          }, 0);
+        }
       }
     }, [item.code, localCodeRef]);
 
