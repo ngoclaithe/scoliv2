@@ -43,6 +43,14 @@ const NewHomeLayout = () => {
     setActiveTab(tabId);
   };
 
+  // Hàm mở trang display trong tab mới
+  const handleOpenDisplayPage = () => {
+    if (matchCode) {
+      const displayUrl = `/${matchCode}`;
+      window.open(displayUrl, '_blank');
+    }
+  };
+
   // Render nội dung tab
   const renderTabContent = () => {
     switch (activeTab) {
@@ -207,8 +215,28 @@ const NewHomeLayout = () => {
               </div>
             </div>
 
-            <div className="text-xs text-gray-500">
-              Chia sẻ link này với đội ngũ để họ có thể xem trực tiếp
+            {/* Nút truy cập trang display */}
+            <div className="mb-4">
+              <button
+                onClick={handleOpenDisplayPage}
+                disabled={!matchCode}
+                className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-colors flex items-center justify-center space-x-2 ${
+                  matchCode 
+                    ? 'bg-green-500 hover:bg-green-600' 
+                    : 'bg-gray-400 cursor-not-allowed'
+                }`}
+              >
+                <span>🌐</span>
+                <span>Mở Trang Display</span>
+              </button>
+            </div>
+
+            <div className="text-xs text-gray-500 space-y-1">
+              <div>Chia sẻ link này với đội ngũ để họ có thể xem trực tiếp</div>
+              <div className="bg-yellow-50 border border-yellow-200 rounded p-2 text-yellow-700">
+                <div className="font-medium">⏰ Lưu ý quan trọng:</div>
+                <div>Code sẽ tính giờ từ lần đầu tiên truy cập đường dẫn này</div>
+              </div>
             </div>
           </div>
         </div>
