@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
+import { useAuth } from '../contexts/AuthContext';
+import PublicAPI from '../API/apiPublic';
 
 // Import các poster templates
 import PosterTretrung from './Poster-tretrung';
@@ -12,55 +14,105 @@ import PosterXanhduong from './Poster-xanhduong';
 
 const PosterPreviewPage = () => {
   const { accessCode } = useParams();
-  const { 
-    matchData, 
-    displaySettings, 
-    sponsors, 
-    organizing, 
-    mediaPartners, 
-    tournamentLogo 
+  const {
+    initializeSocket,
+    matchData,
+    displaySettings,
+    sponsors,
+    organizing,
+    mediaPartners,
+    tournamentLogo,
+    liveUnit,
+    posterSettings
   } = usePublicMatch();
-  
+  const { handleExpiredAccess } = useAuth();
+
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
+  // Khởi tạo kết nối socket giống như DisplayController
   useEffect(() => {
-    // Simulated loading time for poster rendering
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 1000);
+    let isCleanedUp = false;
 
-    return () => clearTimeout(timer);
-  }, []);
+    const initializePreview = async () => {
+      try {
+        const verifyResult = await PublicAPI.verifyAccessCode(accessCode);
 
-  const renderPosterComponent = () => {
-    const posterType = displaySettings?.selectedPoster || 'tretrung';
-    
-    const posterProps = {
-      matchData,
-      sponsors,
-      organizing,
-      mediaPartners,
-      tournamentLogo,
-      displaySettings
+        if (!verifyResult.success || !verifyResult.isValid) {
+          setError(`Mã truy cập không hợp lệ: ${accessCode}`);
+          return;
+        }
+
+        await initializeSocket(accessCode);
+
+        if (!isCleanedUp) {
+          // Delay để đảm bảo dữ liệu được tải
+          setTimeout(() => {
+            setLoading(false);
+          }, 1500);
+        }
+      } catch (err) {
+        console.error('❌ [PosterPreviewPage] Failed to initialize preview:', err);
+        if (!isCleanedUp) {
+          // Kiểm tra lỗi hết hạn truy cập trước
+          if (handleExpiredAccess && handleExpiredAccess(err)) {
+            // Đã xử lý lỗi hết hạn, không cần set error
+            return;
+          }
+          setError('Không thể kết nối đến hệ thống');
+        }
+      }
     };
 
+    if (accessCode && !isCleanedUp) {
+      initializePreview();
+    }
+
+    return () => {
+      isCleanedUp = true;
+    };
+  }, [accessCode, initializeSocket, handleExpiredAccess]);
+
+  const renderPosterComponent = () => {
+    const posterType = displaySettings?.selectedPoster?.id || displaySettings?.selectedPoster || 'tretrung';
+
+    // Truyền accessCode như trong DisplayController để poster components có thể sử dụng
     switch (posterType) {
       case 'tretrung':
-        return <PosterTretrung {...posterProps} />;
+        return <PosterTretrung accessCode={accessCode} />;
       case 'haoquang':
-        return <PosterHaoquang {...posterProps} />;
+        return <PosterHaoquang accessCode={accessCode} />;
       case 'doden':
-        return <PosterDoden {...posterProps} />;
+        return <PosterDoden accessCode={accessCode} />;
       case 'vangkim':
-        return <PosterVangkim {...posterProps} />;
+        return <PosterVangkim accessCode={accessCode} />;
       case 'vangxanh':
-        return <PosterVangxanh {...posterProps} />;
+        return <PosterVangxanh accessCode={accessCode} />;
       case 'xanhduong':
-        return <PosterXanhduong {...posterProps} />;
+        return <PosterXanhduong accessCode={accessCode} />;
       default:
-        return <PosterTretrung {...posterProps} />;
+        return <PosterTretrung accessCode={accessCode} />;
     }
   };
+
+  // Render error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-red-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4">❌</div>
+          <h1 className="text-2xl font-bold mb-2 text-red-700">Lỗi kết nối</h1>
+          <p className="text-red-600">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="mt-4 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+          >
+            🔄 Thử lại
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

@@ -598,6 +598,95 @@ export const PublicMatchProvider = ({ children }) => {
     });
   }, [updateLastTime]);
 
+  // Thiết lập listener cho trạng thái room để lắng nghe join_roomed event
+  const setupRoomStatusListener = useCallback(() => {
+    socketService.onRoomStatus((eventType, data) => {
+      console.log(`🏠 [PublicMatchContext] Room event: ${eventType}`, data);
+
+      if (eventType === 'room_joined' || eventType === 'join_roomed') {
+        // Khi join_room thành công, backend sẽ emit join_roomed với current state
+        console.log('✅ [PublicMatchContext] Successfully joined room, processing current state from join_roomed...');
+
+        // Cập nhật tất cả dữ liệu từ backend nếu có trong join_roomed response
+        if (data && data.currentState) {
+          const state = data.currentState;
+
+          if (state.matchData) {
+            console.log('🔄 [PublicMatchContext] Updating matchData from join_roomed:', state.matchData);
+            setMatchData(prev => ({ ...prev, ...state.matchData }));
+          }
+
+          if (state.matchStats) {
+            console.log('📊 [PublicMatchContext] Updating matchStats from join_roomed:', state.matchStats);
+            setMatchStats(prev => ({ ...prev, ...state.matchStats }));
+          }
+
+          if (state.displaySettings) {
+            console.log('🎨 [PublicMatchContext] Updating displaySettings from join_roomed:', state.displaySettings);
+            setDisplaySettings(prev => ({ ...prev, ...state.displaySettings }));
+          }
+
+          if (state.marqueeData) {
+            console.log('📢 [PublicMatchContext] Updating marqueeData from join_roomed:', state.marqueeData);
+            setMarqueeData(prev => ({ ...prev, ...state.marqueeData }));
+          }
+
+          if (state.penaltyData) {
+            console.log('⚽ [PublicMatchContext] Updating penaltyData from join_roomed:', state.penaltyData);
+            setPenaltyData(prev => ({ ...prev, ...state.penaltyData }));
+          }
+
+          if (state.lineupData) {
+            console.log('📋 [PublicMatchContext] Updating lineupData from join_roomed:', state.lineupData);
+            setLineupData(state.lineupData);
+          }
+
+          if (state.sponsors) {
+            console.log('🏢 [PublicMatchContext] Updating sponsors from join_roomed:', state.sponsors);
+            setSponsors(prev => ({ ...prev, sponsors: state.sponsors }));
+          }
+
+          if (state.organizing) {
+            console.log('🏛️ [PublicMatchContext] Updating organizing from join_roomed:', state.organizing);
+            setOrganizing(prev => ({ ...prev, organizing: state.organizing }));
+          }
+
+          if (state.mediaPartners) {
+            console.log('📺 [PublicMatchContext] Updating mediaPartners from join_roomed:', state.mediaPartners);
+            setMediaPartners(prev => ({ ...prev, mediaPartners: state.mediaPartners }));
+          }
+
+          if (state.tournamentLogo) {
+            console.log('🏆 [PublicMatchContext] Updating tournamentLogo from join_roomed:', state.tournamentLogo);
+            setTournamentLogo(state.tournamentLogo);
+          }
+
+          if (state.liveUnit) {
+            console.log('📡 [PublicMatchContext] Updating liveUnit from join_roomed:', state.liveUnit);
+            setLiveUnit(prev => ({ ...prev, ...state.liveUnit }));
+          }
+
+          if (state.posterSettings) {
+            console.log('🖼️ [PublicMatchContext] Updating posterSettings from join_roomed:', state.posterSettings);
+            setPosterSettings(prev => ({ ...prev, ...state.posterSettings }));
+          }
+
+          if (state.view) {
+            console.log('👁️ [PublicMatchContext] Updating currentView from join_roomed:', state.view);
+            setCurrentView(state.view);
+          }
+
+          console.log('✅ [PublicMatchContext] All data updated from join_roomed event');
+          setLastUpdateTime(Date.now());
+        }
+      } else if (eventType === 'room_error') {
+        console.error('❌ [PublicMatchContext] Room join error:', data);
+      } else if (eventType === 'room_left') {
+        console.log('👋 [PublicMatchContext] Left room:', data);
+      }
+    });
+  }, []);
+
   const initializeSocket = useCallback(async (accessCode) => {
     try {
       if (currentAccessCode === accessCode && socketConnected) {
@@ -607,8 +696,11 @@ export const PublicMatchProvider = ({ children }) => {
       await socketService.connect(accessCode, 'display');
       setSocketConnected(true);
       setCurrentAccessCode(accessCode);
-      
+
       setupSocketListeners();
+
+      // Thiết lập listener cho room status để lắng nghe join_roomed event
+      setupRoomStatusListener();
     } catch (error) {
       setSocketConnected(false);
     }
