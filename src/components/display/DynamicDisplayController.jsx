@@ -173,10 +173,18 @@ const DynamicDisplayController = () => {
           if (Object.keys(params).length > 0) {
             // Delay một chút để đảm bảo socket đã kết nối hoàn toàn
             console.log('⏰ [DynamicDisplayController] Setting timeout to update socket params...');
+
+            // Thử sau 1 giây
             setTimeout(() => {
-              console.log('🚀 [DynamicDisplayController] Timeout fired, updating socket with params...');
+              console.log('🚀 [DynamicDisplayController] First attempt to update socket params...');
               updateSocketWithParams(params);
             }, 1000);
+
+            // Fallback: thử lại sau 3 giây nếu lần đầu thất bại
+            setTimeout(() => {
+              console.log('🔄 [DynamicDisplayController] Fallback attempt to update socket params...');
+              updateSocketWithParams(params);
+            }, 3000);
           }
         }
       } catch (err) {
