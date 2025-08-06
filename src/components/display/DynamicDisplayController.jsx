@@ -128,7 +128,7 @@ const DynamicDisplayController = () => {
       console.log('👕 [DynamicDisplayController] Updating kit colors:', matchInfoWithColors);
       socketService.updateMatchInfo(matchInfoWithColors);
 
-      // T��m và cập nhật logo đội dựa trên code
+      // Tìm và cập nhật logo đội dựa trên code
       if (params.teamA.logoCode || params.teamB.logoCode) {
         console.log('🏆 [DynamicDisplayController] Team logo codes received:', params.teamA.logoCode, params.teamB.logoCode);
         try {
@@ -164,12 +164,17 @@ const DynamicDisplayController = () => {
 
         if (!isCleanedUp) {
           setIsInitialized(true);
-          
+          console.log('✅ [DynamicDisplayController] Initialized successfully');
+
           // Parse parameters từ URL và gửi lên socket
           const params = parseUrlParams();
+          console.log('📋 [DynamicDisplayController] About to update socket with params:', params);
+
           if (Object.keys(params).length > 0) {
             // Delay một chút để đảm bảo socket đã kết nối hoàn toàn
+            console.log('⏰ [DynamicDisplayController] Setting timeout to update socket params...');
             setTimeout(() => {
+              console.log('🚀 [DynamicDisplayController] Timeout fired, updating socket with params...');
               updateSocketWithParams(params);
             }, 1000);
           }
