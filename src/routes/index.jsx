@@ -32,11 +32,11 @@ const AppRoutes = () => {
           </AuthProvider>
         } />
 
-        {/* Public dynamic routes for access codes - cần AuthProvider để tránh lỗi useAuth */}
-        <Route path="/:accessCode" element={
+        {/* Dynamic route with multiple parameters - PHẢI ĐẶT TRƯỚC route /:accessCode */}
+        <Route path="/:accessCode/:location/:matchTitle/:liveText/:teamALogoCode/:teamBLogoCode/:teamAName/:teamBName/:teamAKitColor/:teamBKitColor/:teamAScore/:teamBScore" element={
           <AuthProvider>
             <PublicMatchProvider>
-              <DisplayController />
+              <DynamicDisplayController />
             </PublicMatchProvider>
           </AuthProvider>
         } />
@@ -50,11 +50,11 @@ const AppRoutes = () => {
           </AuthProvider>
         } />
 
-        {/* Dynamic route with multiple parameters */}
-        <Route path="/:accessCode/:location/:matchTitle/:liveText/:teamALogoCode/:teamBLogoCode/:teamAName/:teamBName/:teamAKitColor/:teamBKitColor/:teamAScore/:teamBScore" element={
+        {/* Public dynamic routes for access codes - cần AuthProvider để tránh lỗi useAuth */}
+        <Route path="/:accessCode" element={
           <AuthProvider>
             <PublicMatchProvider>
-              <DynamicDisplayController />
+              <DisplayController />
             </PublicMatchProvider>
           </AuthProvider>
         } />
