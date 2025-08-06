@@ -82,10 +82,14 @@ const DynamicDisplayController = () => {
 
   // Gửi cập nhật lên socket khi có tham số từ URL
   const updateSocketWithParams = useCallback(async (params) => {
+    console.log('🔄 [DynamicDisplayController] updateSocketWithParams called with:', params);
+
     if (!socketService.getConnectionStatus().isConnected) {
       console.warn('⚠️ [DynamicDisplayController] Socket not connected, cannot update parameters');
       return;
     }
+
+    console.log('✅ [DynamicDisplayController] Socket is connected, proceeding with updates...');
 
     try {
       // Cập nhật thông tin trận đấu
