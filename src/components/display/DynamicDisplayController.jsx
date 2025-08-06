@@ -58,6 +58,11 @@ const DynamicDisplayController = () => {
 
   // Parse và validate parameters từ URL
   const parseUrlParams = useCallback(() => {
+    console.log('🔍 [DynamicDisplayController] Raw URL params:', {
+      location, matchTitle, liveText, teamALogoCode, teamBLogoCode,
+      teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore
+    });
+
     const params = {
       location: parseTextParam(location),
       matchTitle: parseTextParam(matchTitle),
@@ -123,7 +128,7 @@ const DynamicDisplayController = () => {
       console.log('👕 [DynamicDisplayController] Updating kit colors:', matchInfoWithColors);
       socketService.updateMatchInfo(matchInfoWithColors);
 
-      // Tìm và cập nhật logo đội dựa trên code
+      // T��m và cập nhật logo đội dựa trên code
       if (params.teamA.logoCode || params.teamB.logoCode) {
         console.log('🏆 [DynamicDisplayController] Team logo codes received:', params.teamA.logoCode, params.teamB.logoCode);
         try {
