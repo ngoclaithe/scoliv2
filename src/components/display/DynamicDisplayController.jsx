@@ -28,20 +28,23 @@ import PlayerList from '../lineup/PlayerList';
 import Stat from '../sections/Stat';
 
 const DynamicDisplayController = () => {
-  const { 
-    accessCode, 
-    location, 
-    matchTitle, 
-    liveText, 
-    teamALogoCode, 
-    teamBLogoCode, 
-    teamAName, 
-    teamBName, 
-    teamAKitColor, 
-    teamBKitColor, 
-    teamAScore, 
-    teamBScore 
-  } = useParams();
+  const params = useParams();
+  console.log('🌐 [DynamicDisplayController] Route params:', params);
+
+  const {
+    accessCode,
+    location,
+    matchTitle,
+    liveText,
+    teamALogoCode,
+    teamBLogoCode,
+    teamAName,
+    teamBName,
+    teamAKitColor,
+    teamBKitColor,
+    teamAScore,
+    teamBScore
+  } = params;
 
   const {
     initializeSocket,
@@ -238,7 +241,7 @@ const DynamicDisplayController = () => {
       <div className="fixed inset-0 bg-gradient-to-br from-blue-900 to-purple-900 text-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin text-6xl mb-4">⚽</div>
-          <h1 className="text-2xl font-bold mb-2">Đang kết nối...</h1>
+          <h1 className="text-2xl font-bold mb-2">��ang kết nối...</h1>
           <p className="text-gray-300">Mã truy cập: {accessCode}</p>
           <div className="mt-4 w-48 h-2 bg-gray-700 rounded-full overflow-hidden">
             <div className="h-full bg-gradient-to-r from-blue-500 to-purple-500 animate-pulse"></div>
