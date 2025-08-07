@@ -13,6 +13,7 @@ const ScoreboardType4 = ({ currentData, logoShape, showMatchTime }) => {
                         alt={currentData.teamAName}
                         className="w-full h-full"
                         type_play={logoShape}
+                        logoSize="w-[32px] h-[32px] sm:w-[56px] sm:h-[56px]"
                     />
                 </div>
 
@@ -61,7 +62,7 @@ const ScoreboardType4 = ({ currentData, logoShape, showMatchTime }) => {
                                     alt="League"
                                     type_play={logoShape}
                                     className="w-full h-full"
-                                    logoSize="w-full h-full"
+                                    logoSize="w-[32px] h-[32px] sm:w-[40px] sm:h-[40px]"
                                 />
                             </div>
 
@@ -110,6 +111,7 @@ const ScoreboardType4 = ({ currentData, logoShape, showMatchTime }) => {
                         alt={currentData.teamBName}
                         className="w-full h-full"
                         type_play={logoShape}
+                        logoSize="w-[32px] h-[32px] sm:w-[56px] sm:h-[56px]"
                     />
                 </div>
             </div>
