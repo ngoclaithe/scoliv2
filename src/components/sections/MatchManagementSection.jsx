@@ -1029,7 +1029,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       </div>
       {/* Tab Controls */}
       <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200">
-        <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
+        <div className={`grid ${typeMatch === 'pickleball' ? 'grid-cols-1' : 'grid-cols-3'} gap-1.5 sm:gap-2`}>
           <button
             onClick={() => setSelectedOption("thong-so")}
             className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "thong-so"
@@ -1052,19 +1052,20 @@ const MatchManagementSection = ({ isActive = true }) => {
             <span className="hidden sm:inline">ĐIỀU KHIỂN</span>
             <span className="sm:hidden">Điều khiển</span>
           </button>
-          <button
-            onClick={() => {
-              setSelectedOption(selectedOption === "chon-skin" ? "dieu-khien" : "chon-skin");
-            }}
-            className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "chon-skin"
-              ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
-              : "bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 hover:from-blue-200 hover:to-blue-300"
-              }`}
-          >
-            {/* <span className="mr-0.5 text-xs">🎨</span> */}
-            <span className="hidden sm:inline">Skin</span>
-            <span className="sm:hidden">Skin</span>
-          </button>
+          {typeMatch !== 'pickleball' && (
+            <button
+              onClick={() => {
+                setSelectedOption(selectedOption === "chon-skin" ? "dieu-khien" : "chon-skin");
+              }}
+              className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "chon-skin"
+                ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
+                : "bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 hover:from-blue-200 hover:to-blue-300"
+                }`}
+            >
+              <span className="hidden sm:inline">Skin</span>
+              <span className="sm:hidden">Skin</span>
+            </button>
+          )}
         </div>
       </div>
 
@@ -1353,7 +1354,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-xs font-bold text-center">ĐẾM 40'</span>
             </button>
 
-            {/* Đếm 45' */}
+            {/* Đ���m 45' */}
             <button
               onClick={() => {
                 const timeString = "45:00";
@@ -1425,7 +1426,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">📊</span>
-              <span className="text-xs font-bold text-center">THỐNG KÊ</span>
+              <span className="text-xs font-bold text-center">TH���NG KÊ</span>
             </button>
           </div>
 
