@@ -459,6 +459,22 @@ export const MatchProvider = ({ children }) => {
     }
   }, [matchData, socketConnected]);
 
+  // Cập nhật set scores cho pickleball
+  const updateSetScore = useCallback((team, increment) => {
+    const newMatchData = { ...matchData };
+    newMatchData[team].scoreSet = Math.max(0, newMatchData[team].scoreSet + increment);
+
+    setMatchData(newMatchData);
+
+    // Emit to socket
+    if (socketConnected) {
+      socketService.emit('set_score_updated', {
+        teamASetScore: newMatchData.teamA.scoreSet,
+        teamBSetScore: newMatchData.teamB.scoreSet
+      });
+    }
+  }, [matchData, socketConnected]);
+
   // Cập nhật thông tin trận đấu
   const updateMatchInfo = useCallback((newMatchInfo) => {
     setMatchData(prev => ({
