@@ -8,7 +8,6 @@ import SimplePenaltyModal from "../common/SimplePenaltyModal";
 import { useMatch } from "../../contexts/MatchContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTimer } from "../../contexts/TimerContext";
-import { toast } from 'react-toastify';
 import audioUtils from '../../utils/audioUtils';
 import { toDateInputFormat } from '../../utils/helpers';
 import LogoAPI from '../../API/apiLogo';
@@ -251,10 +250,10 @@ const MatchManagementSection = ({ isActive = true }) => {
         setTeamAInfo(prev => ({ ...prev, logo: getFullLogoUrl(logo.url_logo) }));
         setLogoCodeA("");
       } else {
-        toast.error(`⚠Không tìm thấy logo với code "${logoCodeA}"`);
+        console.log(`⚠Không tìm thấy logo với code "${logoCodeA}"`);
       }
     } catch (error) {
-      toast.error('❌ Lỗi tìm kiếm logo A');
+      console.log('❌ Lỗi tìm kiếm logo A');
     } finally {
       setIsSearchingLogoA(false);
     }
@@ -274,7 +273,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         console.log(`⚠️ Không tìm thấy logo với code "${logoCodeB}"`);
       }
     } catch (error) {
-      toast.error('❌ Lỗi tìm kiếm logo B');
+      console.log('❌ Lỗi tìm kiếm logo B');
     } finally {
       setIsSearchingLogoB(false);
     }
@@ -1296,44 +1295,12 @@ const MatchManagementSection = ({ isActive = true }) => {
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 updateView('scoreboard');
                 playAudioForAction('gialap');
-                toast.success('⏰ Đã bắt đầu timer từ 0:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">⏰</span>
               <span className="text-xs font-bold text-center">ĐẾM 0</span>
             </button>
-
-            {/* ĐẾM T cho pickleball */}
-            {typeMatch === 'pickleball' && (
-            <button
-              onClick={() => {
-                updateMatchTime("00:00", "Timeout", "paused");
-                updateView('scoreboard');
-                playAudioForAction('gialap');
-                toast.success('⏱️ Timeout!');
-              }}
-              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
-            >
-              <span className="text-sm mr-1">⏱️</span>
-              <span className="text-xs font-bold text-center">ĐẾM T</span>
-            </button>
-            )}
-
-            {/* TỈ SỐ TRÊN cho pickleball */}
-            {typeMatch === 'pickleball' && (
-            <button
-              onClick={() => {
-                updateView('scoreboard');
-                playAudioForAction('gialap');
-                toast.success('📊 Hiển thị tỉ số trên!');
-              }}
-              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
-            >
-              <span className="text-sm mr-1">📊</span>
-              <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
-            </button>
-            )}
 
             {/* Đếm 25' */}
             {typeMatch !== 'pickleball' && (
@@ -1359,7 +1326,6 @@ const MatchManagementSection = ({ isActive = true }) => {
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 updateView('scoreboard');
                 playAudioForAction('gialap');
-                toast.success('⏰ Đã bắt đầu timer từ 30:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -1376,7 +1342,6 @@ const MatchManagementSection = ({ isActive = true }) => {
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 updateView('scoreboard');
                 playAudioForAction('gialap');
-                toast.success('⏰ Đã bắt đầu timer từ 35:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -1393,7 +1358,6 @@ const MatchManagementSection = ({ isActive = true }) => {
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 updateView('scoreboard');
                 playAudioForAction('gialap');
-                toast.success('⏰ Đã bắt đầu timer từ 40:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -1411,7 +1375,6 @@ const MatchManagementSection = ({ isActive = true }) => {
                 updateMatchTime(timeString, "Hiệp 1", "live");
                 updateView('scoreboard');
                 playAudioForAction('gialap');
-                toast.success('⏰ Đã bắt đầu timer từ 45:00!');
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
@@ -1433,6 +1396,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             </button>
 
             {/* Tỉ số trên */}
+            {typeMatch !== 'pickleball' && (
             <button
               onClick={() => {
                 updateView('scoreboard');
@@ -1443,9 +1407,11 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">📊</span>
               <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
             </button>
+            )}
 
             {/* Tỉ số dưới */}
-            <button
+            {typeMatch !== 'pickleball' && (
+              <button
               onClick={() => {
                 updateView('scoreboard_below');
                 playAudioForAction('rasan');
@@ -1455,7 +1421,8 @@ const MatchManagementSection = ({ isActive = true }) => {
               {/* <span className="text-sm mr-1">���</span> */}
               <span className="text-xs font-bold text-center">TỈ SỐ DƯỚI</span>
             </button>
-
+            )}
+            
             {/* Nghỉ giữa hiệp */}
             <button
               onClick={() => {
@@ -1469,6 +1436,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             </button>
 
             {/* Thống kê */}
+            {typeMatch !== 'pickleball' && (
             <button
               onClick={() => {
                 updateView('stat');
@@ -1479,6 +1447,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">📊</span>
               <span className="text-xs font-bold text-center">THỐNG KÊ</span>
             </button>
+            )}
           </div>
 
           {/* Đếm T - Input phút đơn giản */}
@@ -1531,9 +1500,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                     updateMatchTime(timeString, "Hiệp 1", "live");
                     updateView('scoreboard');
                     playAudioForAction('gialap');
-                    toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                   } else {
-                    toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
+                    console.log('⚠️ Vui lòng nhập thời gian hợp lệ!');
                   }
                 }}
                 disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
@@ -1664,10 +1632,6 @@ const MatchManagementSection = ({ isActive = true }) => {
 
                   // Update marquee qua MatchContext
                   updateMarquee(marqueeSettings);
-
-
-
-                  toast.success('✅ Đã áp dụng cài đặt chữ chạy!');
                 }}
                 className="px-4 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
               >
