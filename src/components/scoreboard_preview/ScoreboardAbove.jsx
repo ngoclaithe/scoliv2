@@ -127,6 +127,12 @@ const ScoreboardAbove = ({ type = 1 }) => {
     };
 
     const renderScoreboard = () => {
+        // For pickleball, always use table format
+        if (currentData.typeMatch === 'pickleball') {
+            return <PickleballScoreboardTable currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
+        }
+
+        // For soccer, use the selected type
         switch (currentType) {
             case 1: return <ScoreboardType1 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
             case 2: return <ScoreboardType2 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
