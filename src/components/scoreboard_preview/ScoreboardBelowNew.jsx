@@ -115,6 +115,7 @@ const ScoreboardBelowNew = ({
                     alt={currentData.teamAName}
                     className="w-14 h-14"
                     type_play={logoShape}
+                    logoSize="w-14 h-14"
                 />
 
                 {/* Score + team A name */}
@@ -164,6 +165,7 @@ const ScoreboardBelowNew = ({
                     alt={currentData.teamBName}
                     className="w-14 h-14"
                     type_play={logoShape}
+                    logoSize="w-14 h-14"
                 />
             </div>
 
@@ -282,6 +284,7 @@ const ScoreboardBelowNew = ({
                             alt={currentData.teamAName}
                             className="w-full h-full"
                             type_play={logoShape}
+                            logoSize="w-12 h-12"
                         />
                     </div>
                 </div>
@@ -307,6 +310,7 @@ const ScoreboardBelowNew = ({
                             alt={currentData.teamBName}
                             className="w-full h-full"
                             type_play={logoShape}
+                            logoSize="w-12 h-12"
                         />
                     </div>
                 </div>
@@ -330,6 +334,7 @@ const ScoreboardBelowNew = ({
                 alt={currentData.teamAName}
                 className="w-12 h-12"
                 type_play={logoShape}
+                logoSize="w-12 h-12"
             />
 
             <div className="flex items-center bg-black/20 backdrop-blur-sm rounded-lg p-1 shadow-xl">
@@ -380,6 +385,7 @@ const ScoreboardBelowNew = ({
                 alt={currentData.teamBName}
                 className="w-12 h-12"
                 type_play={logoShape}
+                logoSize="w-12 h-12"
             />
         </div>
     );
@@ -392,6 +398,7 @@ const ScoreboardBelowNew = ({
                     alt={currentData.teamAName}
                     className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0"
                     type_play={logoShape}
+                    logoSize="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
                 />
 
                 <div className="flex items-center z-20">
@@ -436,6 +443,7 @@ const ScoreboardBelowNew = ({
                                 alt="League"
                                 className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 flex-shrink-0"
                                 type_play={logoShape}
+                                logoSize="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10"
                             />
                         </div>
 
@@ -474,6 +482,7 @@ const ScoreboardBelowNew = ({
                     alt={currentData.teamBName}
                     className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0"
                     type_play={logoShape}
+                    logoSize="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
                 />
             </div>
         </div>
