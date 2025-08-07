@@ -20,6 +20,7 @@ export const PublicMatchProvider = ({ children }) => {
       logo: null,
       teamAKitColor: "#FF0000",
       teamBKitColor: "#0000FF",
+      scoreSet: 0 // For pickleball
     },
     teamB: {
       name: "ĐỘI-B",
@@ -27,6 +28,7 @@ export const PublicMatchProvider = ({ children }) => {
       logo: null,
       teamA2KitColor: "#FF0000",
       teamB2KitColor: "#0000FF",
+      scoreSet: 0 // For pickleball
     },
     matchTime: "00:00",
     period: "Chưa bắt đầu",
@@ -35,7 +37,8 @@ export const PublicMatchProvider = ({ children }) => {
     stadium: "",
     matchDate: "",
     liveText: "",
-    matchTitle: ""
+    matchTitle: "",
+    typeMatch: "soccer" // 'soccer' or 'pickleball'
   });
 
   const [matchStats, setMatchStats] = useState({
