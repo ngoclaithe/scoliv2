@@ -26,6 +26,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     currentView,
 
     updateScore,
+    updateSetScore,
     updateMatchInfo,
     updateStats,
     updateTemplate,
@@ -744,7 +745,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             }
           >
             <span className="mr-1">
-              {isPlaying ? "��⏸️" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "🔊" : "🔇"}
+              {isPlaying ? "🔊⏸️" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "🔊" : "🔇"}
             </span>
           </Button>
 
@@ -1853,7 +1854,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ bắt đầu chạy từ thời điểm này
+              Trận đấu sẽ bắt đ���u chạy từ thời điểm này
             </p>
           </div>
 
@@ -1890,7 +1891,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           </div>
 
           <div className="text-center text-sm text-yellow-700 mb-4">
-            ⏱️ Trận đ��u sẽ bắt đầu từ: <strong>
+            ⏱️ Trận đấu sẽ bắt đầu từ: <strong>
               {(parseInt(customTime) || 0).toString().padStart(2, '0')}:
               {(parseInt(customSeconds) || 0).toString().padStart(2, '0')}
             </strong>
