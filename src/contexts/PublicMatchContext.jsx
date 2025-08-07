@@ -33,6 +33,8 @@ export const PublicMatchProvider = ({ children }) => {
     liveText: "",
     teamAKitColor: "#FF0000",
     teamBKitColor: "#0000FF",
+    teamA2KitColor: "#FF0000",
+    teamB2KitColor: "#0000FF",
     matchTitle: ""
   });
 

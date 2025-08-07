@@ -875,7 +875,9 @@ const MatchManagementSection = ({ isActive = true }) => {
                 onClick={() => {
                   console.log("🎨 [DEBUG] Áp dụng màu áo:", {
                     teamAKitcolor: teamAInfo.teamAKitcolor,
-                    teamBKitcolor: teamBInfo.teamBKitcolor
+                    teamBKitcolor: teamBInfo.teamBKitcolor,
+                    teamA2Kitcolor: teamAInfo.teamA2Kitcolor,
+                    teamB2Kitcolor: teamBInfo.teamB2Kitcolor
                   });
 
                   updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
@@ -893,6 +895,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                     time: matchInfo.startTime,
                     teamAKitColor: teamAInfo.teamAKitcolor || '#ff0000',
                     teamBKitColor: teamBInfo.teamBKitcolor || '#000000',
+                    teamA2KitColor: teamAInfo.teamA2Kitcolor || '#0000ff',
+                    teamB2KitColor: teamBInfo.teamB2Kitcolor || '#00ff00',
                     liveText: liveText,
                     logoTeamA: teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
                     logoTeamB: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || ""
@@ -901,14 +905,11 @@ const MatchManagementSection = ({ isActive = true }) => {
                   console.log("🎨 [DEBUG] Gửi updateMatchInfo với:", matchInfoData);
                   updateMatchInfo(matchInfoData);
 
-                  // Cập nhật đơn vị live riêng biệt để emit đến backend
                   if (liveText !== matchData.liveText) {
                     updateLiveUnit({
                       text: liveText
                     });
                   }
-
-                  toast.success('✅ Đã cập nhật thông tin trận đấu và đơn vị live thành công!');
                 }}
                 className="px-3 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-xs rounded shadow transform hover:scale-105 transition-all duration-200"
               >

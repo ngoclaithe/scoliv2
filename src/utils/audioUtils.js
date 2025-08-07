@@ -69,7 +69,7 @@ class AudioManager {
 
   setupUserInteractionListeners() {
     const handleUserInteraction = () => {
-      console.log('🎵 User interaction detected');
+      // console.log('🎵 User interaction detected');
       this.userInteracted = true;
       
       document.removeEventListener('click', handleUserInteraction);

@@ -103,8 +103,6 @@ export const MatchProvider = ({ children }) => {
   // State cho view hiện tại
   const [currentView, setCurrentView] = useState('intro');
 
-  // Timer state đã được chuyển sang TimerContext
-
   // Kết nối socket khi có matchCode (cho authenticated users)
   useEffect(() => {
     if (matchCode && isAuthenticated) {
@@ -121,15 +119,11 @@ export const MatchProvider = ({ children }) => {
     };
   }, [matchCode, isAuthenticated]);
 
-  // Timer logic đã được chuyển sang TimerContext
-
   // Khởi tạo socket connection
   const initializeSocket = useCallback(async (accessCode) => {
     try {
       // Tất cả người vào Home.jsx đều là admin (theo yêu cầu)
       let clientType = 'admin';
-
-      // Tránh khởi tạo socket trùng lặp
       if (socketService.getConnectionStatus().accessCode === accessCode &&
           socketService.getConnectionStatus().isConnected &&
           socketService.getConnectionStatus().clientType === clientType) {
@@ -165,14 +159,12 @@ export const MatchProvider = ({ children }) => {
     }
   }, []);
 
-  // Thiết lập listener cho trạng thái room
   const setupRoomStatusListener = useCallback(() => {
     socketService.onRoomStatus((eventType, data) => {
       console.log(`🏠 [MatchContext] Room event: ${eventType}`, data);
 
       if (eventType === 'room_joined' && data) {
-        // Khi join_room thành công, backend sẽ emit room_joined với current state
-        console.log('✅ [MatchContext] Successfully joined room, processing current state from room_joined...');
+        // console.log('✅ [MatchContext] Successfully joined room, processing current state from room_joined...');
 
         // Cập nhật tất cả dữ liệu từ backend nếu có trong room_joined response
         if (data.currentState) {
@@ -469,19 +461,20 @@ export const MatchProvider = ({ children }) => {
     setMatchData(prev => ({
       ...prev,
       ...newMatchInfo,
-      // Đảm bảo màu áo được cập nhật đúng cách
       teamA: {
         ...prev.teamA,
         teamAKitColor: newMatchInfo.teamAKitColor || prev.teamA.teamAKitColor,
-        ...(newMatchInfo.logoTeamA && { logo: newMatchInfo.logoTeamA })
+        teamA2KitColor: newMatchInfo.teamA2KitColor || prev.teamA.teamA2KitColor,
+        ...(newMatchInfo.logoTeamA && { logo: newMatchInfo.logoTeamA }),
       },
       teamB: {
         ...prev.teamB,
         teamBKitColor: newMatchInfo.teamBKitColor || prev.teamB.teamBKitColor,
-        ...(newMatchInfo.logoTeamB && { logo: newMatchInfo.logoTeamB })
+        teamB2KitColor: newMatchInfo.teamB2KitColor || prev.teamB.teamB2KitColor,
+        ...(newMatchInfo.logoTeamB && { logo: newMatchInfo.logoTeamB }),
       }
     }));
-
+  
     if (socketConnected) {
       socketService.updateMatchInfo(newMatchInfo);
     }
