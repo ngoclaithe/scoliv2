@@ -981,7 +981,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 variant="primary"
                 size="sm"
                 onClick={() => {
-                  console.log("🎨 [DEBUG] Áp dụng màu áo:", {
+                  console.log("🎨 [DEBUG] Áp dụng màu ��o:", {
                     teamAKitcolor: teamAInfo.teamAKitcolor,
                     teamBKitcolor: teamBInfo.teamBKitcolor,
                     teamA2Kitcolor: teamAInfo.teamA2Kitcolor,
@@ -1262,6 +1262,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             </button>
 
             {/* Danh sách */}
+            {typeMatch !== 'pickleball' && (
             <button
               onClick={() => {
                 setShowLineupModal(true);
@@ -1271,8 +1272,10 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">📋</span>
               <span className="text-xs font-bold text-center">DANH SÁCH</span>
             </button>
+            )}
 
             {/* Penalty */}
+            {typeMatch !== 'pickleball' && (
             <button
               onClick={() => setShowPenaltyModal(true)}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -1280,6 +1283,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">⚽</span>
               <span className="text-xs font-bold text-center">PENALTY</span>
             </button>
+            )}
 
             {/* Đếm 0 */}
             <button
@@ -1298,6 +1302,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             </button>
 
             {/* Đếm 25' */}
+            {typeMatch !== 'pickleball' && (
             <button
               onClick={() => {
                 const timeString = "20:00";
@@ -1310,8 +1315,10 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">🕐</span>
               <span className="text-xs font-bold text-center">ĐẾM 20'</span>
             </button>
+            )}
 
             {/* Đếm 30' */}
+            {typeMatch !== 'pickleball' && (
             <button
               onClick={() => {
                 const timeString = "30:00";
@@ -1325,8 +1332,10 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">🕑</span>
               <span className="text-xs font-bold text-center">ĐẾM 30'</span>
             </button>
+            )}
 
             {/* Đếm 35' */}
+            {typeMatch !== 'pickleball' && (
             <button
               onClick={() => {
                 const timeString = "35:00";
@@ -1340,6 +1349,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">🕒</span>
               <span className="text-xs font-bold text-center">ĐẾM 35'</span>
             </button>
+            )}
 
             {/* Đếm 40' */}
             <button
@@ -1403,7 +1413,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">📊</span>
+              <span className="text-sm mr-1">���</span>
               <span className="text-xs font-bold text-center">TỈ SỐ DƯỚI</span>
             </button>
 
@@ -1484,7 +1494,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                     playAudioForAction('gialap');
                     toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                   } else {
-                    toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
+                    toast.warning('⚠️ Vui lòng nhập thời gian hợp l���!');
                   }
                 }}
                 disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
