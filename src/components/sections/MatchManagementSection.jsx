@@ -271,7 +271,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         setTeamBInfo(prev => ({ ...prev, logo: getFullLogoUrl(logo.url_logo) }));
         setLogoCodeB("");
       } else {
-        toast.error(`⚠️ Không t��m thấy logo với code "${logoCodeB}"`);
+        console.log(`⚠️ Không tìm thấy logo với code "${logoCodeB}"`);
       }
     } catch (error) {
       toast.error('❌ Lỗi tìm kiếm logo B');
@@ -472,7 +472,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       );
     }
 
-    // Chế đ�� chỉnh sửa
+    // Chế độ chỉnh sửa
     return (
       <div className="py-1 px-2 bg-white rounded border">
         <div className="text-center mb-1">
@@ -748,7 +748,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             }
           >
             <span className="mr-1">
-              {isPlaying ? "🔊�����" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "🔊" : "🔇"}
+              {isPlaying ? "🔊▶️" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "🔊" : "🔇"}
             </span>
           </Button>
 
@@ -984,12 +984,12 @@ const MatchManagementSection = ({ isActive = true }) => {
                 variant="primary"
                 size="sm"
                 onClick={() => {
-                  console.log("🎨 [DEBUG] Áp dụng màu ��o:", {
-                    teamAKitcolor: teamAInfo.teamAKitcolor,
-                    teamBKitcolor: teamBInfo.teamBKitcolor,
-                    teamA2Kitcolor: teamAInfo.teamA2Kitcolor,
-                    teamB2Kitcolor: teamBInfo.teamB2Kitcolor
-                  });
+                  // console.log("🎨 [DEBUG] Áp dụng màu áo:", {
+                  //   teamAKitcolor: teamAInfo.teamAKitcolor,
+                  //   teamBKitcolor: teamBInfo.teamBKitcolor,
+                  //   teamA2Kitcolor: teamAInfo.teamA2Kitcolor,
+                  //   teamB2Kitcolor: teamBInfo.teamB2Kitcolor
+                  // });
 
                   updateTeamNames(teamAInfo.name || matchData.teamA.name, teamBInfo.name || matchData.teamB.name);
                   updateTeamLogos(
@@ -1452,7 +1452,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">���</span>
+              {/* <span className="text-sm mr-1">���</span> */}
               <span className="text-xs font-bold text-center">TỈ SỐ DƯỚI</span>
             </button>
 
@@ -1477,7 +1477,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">📊</span>
-              <span className="text-xs font-bold text-center">TH���NG KÊ</span>
+              <span className="text-xs font-bold text-center">THỐNG KÊ</span>
             </button>
           </div>
 
@@ -1533,7 +1533,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                     playAudioForAction('gialap');
                     toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                   } else {
-                    toast.warning('⚠️ Vui lòng nhập thời gian hợp l���!');
+                    toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
                   }
                 }}
                 disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
@@ -1906,7 +1906,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ bắt đ���u chạy từ thời điểm này
+              Trận đấu sẽ bắt đầu chạy từ thời điểm này
             </p>
           </div>
 
