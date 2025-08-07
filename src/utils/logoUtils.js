@@ -1,9 +1,4 @@
-/**
- * Utility functions for handling logo URLs
- */
-
-// Lấy API base URL từ environment variable
-const API_BASE_URL = process.env.REACT_APP_BASE_URL || 'http://192.168.31.186:5000';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://192.168.31.186:5000';
 
 /**
  * Kiểm tra xem URL có phải là đường dẫn tuyệt đối hay không
@@ -13,17 +8,14 @@ const API_BASE_URL = process.env.REACT_APP_BASE_URL || 'http://192.168.31.186:50
 const isAbsoluteUrl = (url) => {
   if (!url || typeof url !== 'string') return false;
   
-  // Kiểm tra nếu URL bắt đầu bằng http:// hoặc https://
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return true;
   }
   
-  // Kiểm tra nếu URL bắt đầu bằng //
   if (url.startsWith('//')) {
     return true;
   }
   
-  // Kiểm tra nếu URL bắt đầu bằng data: (base64)
   if (url.startsWith('data:')) {
     return true;
   }
@@ -37,21 +29,16 @@ const isAbsoluteUrl = (url) => {
  * @returns {string} - URL đầy đủ có thể sử dụng được
  */
 export const getFullLogoUrl = (logoUrl) => {
-  // Nếu URL null, undefined hoặc chuỗi rỗng, trả về null
   if (!logoUrl || typeof logoUrl !== 'string' || logoUrl.trim() === '') {
     return null;
   }
   
-  // Nếu đã là đường dẫn tuyệt đối, trả về nguyên bản
   if (isAbsoluteUrl(logoUrl)) {
     return logoUrl;
   }
-  
-  // Nếu là đường dẫn tương đối, thêm API_BASE_URL vào trước
-  // Loại bỏ dấu / ở đầu nếu có để tránh double slashes
+
   const cleanPath = logoUrl.startsWith('/') ? logoUrl.substring(1) : logoUrl;
   
-  // Đảm bảo API_BASE_URL không kết thúc bằng dấu /
   const baseUrl = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
   
   return `${baseUrl}/${cleanPath}`;
@@ -69,7 +56,7 @@ export const getFullLogoUrls = (logoUrls) => {
   
   return logoUrls
     .map(url => getFullLogoUrl(url))
-    .filter(url => url !== null); // Loại bỏ các URL null
+    .filter(url => url !== null);
 };
 
 /**

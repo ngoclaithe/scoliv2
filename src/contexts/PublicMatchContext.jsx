@@ -17,12 +17,16 @@ export const PublicMatchProvider = ({ children }) => {
     teamA: {
       name: "ĐỘI-A",
       score: 0,
-      logo: null
+      logo: null,
+      teamAKitColor: "#FF0000",
+      teamBKitColor: "#0000FF",
     },
     teamB: {
       name: "ĐỘI-B",
       score: 0,
-      logo: null
+      logo: null,
+      teamA2KitColor: "#FF0000",
+      teamB2KitColor: "#0000FF",
     },
     matchTime: "00:00",
     period: "Chưa bắt đầu",
@@ -31,10 +35,6 @@ export const PublicMatchProvider = ({ children }) => {
     stadium: "",
     matchDate: "",
     liveText: "",
-    teamAKitColor: "#FF0000",
-    teamBKitColor: "#0000FF",
-    teamA2KitColor: "#FF0000",
-    teamB2KitColor: "#0000FF",
     matchTitle: ""
   });
 
@@ -151,7 +151,20 @@ export const PublicMatchProvider = ({ children }) => {
 
   const setupSocketListeners = useCallback(() => {
     socketService.on('match_info_updated', (data) => {
-      setMatchData(prev => ({ ...prev, ...data.matchInfo }));
+      setMatchData(prev => ({
+        ...prev,
+        ...data.matchInfo,
+        teamA: {
+          ...prev.teamA,
+          teamAKitColor: data.matchInfo.teamAkitcolor || prev.teamA.teamAKitColor,
+          teamA2KitColor: data.matchInfo.teamA2kitcolor || prev.teamA.teamA2KitColor
+        },
+        teamB: {
+          ...prev.teamB, 
+          teamBKitColor: data.matchInfo.teamBkitcolor || prev.teamB.teamBKitColor,
+          teamB2KitColor: data.matchInfo.teamB2kitcolor || prev.teamB.teamB2KitColor
+        }
+      }));
       updateLastTime();
     });
 
@@ -531,7 +544,6 @@ export const PublicMatchProvider = ({ children }) => {
       console.log('📝 [PublicMatchContext] live_unit_updated received:', data);
       setLiveUnit(prev => ({ ...prev, ...data.liveUnit }));
 
-      // Cập nhật liveText vào matchData để Intro component có thể sử dụng
       if (data.liveUnit && (data.liveUnit.text )) {
         setMatchData(prev => ({
           ...prev,
@@ -600,16 +612,13 @@ export const PublicMatchProvider = ({ children }) => {
     });
   }, [updateLastTime]);
 
-  // Thiết lập listener cho trạng thái room để lắng nghe join_roomed event
   const setupRoomStatusListener = useCallback(() => {
     socketService.onRoomStatus((eventType, data) => {
       console.log(`🏠 [PublicMatchContext] Room event: ${eventType}`, data);
 
       if (eventType === 'room_joined' || eventType === 'join_roomed') {
-        // Khi join_room thành công, backend sẽ emit join_roomed với current state
         console.log('✅ [PublicMatchContext] Successfully joined room, processing current state from join_roomed...');
 
-        // Cập nhật tất cả dữ liệu từ backend nếu có trong join_roomed response
         if (data && data.currentState) {
           const state = data.currentState;
 
@@ -701,7 +710,6 @@ export const PublicMatchProvider = ({ children }) => {
 
       setupSocketListeners();
 
-      // Thiết lập listener cho room status để lắng nghe join_roomed event
       setupRoomStatusListener();
     } catch (error) {
       setSocketConnected(false);
