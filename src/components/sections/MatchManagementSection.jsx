@@ -748,7 +748,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             }
           >
             <span className="mr-1">
-              {isPlaying ? "🔊���️" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "🔊" : "🔇"}
+              {isPlaying ? "🔊�����" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "🔊" : "🔇"}
             </span>
           </Button>
 
@@ -1371,6 +1371,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             )}
 
             {/* Đ���m 45' */}
+            {typeMatch !== 'pickleball' && (
             <button
               onClick={() => {
                 const timeString = "45:00";
@@ -1384,6 +1385,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">🕔</span>
               <span className="text-xs font-bold text-center">ĐẾM 45'</span>
             </button>
+            )}
 
             {/* Giới thiệu */}
             <button
