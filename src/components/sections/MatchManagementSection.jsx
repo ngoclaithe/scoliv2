@@ -58,6 +58,9 @@ const MatchManagementSection = ({ isActive = true }) => {
 
   const { matchCode, typeMatch } = useAuth();
 
+  // Debug log
+  console.log('🏸 [MatchManagementSection] typeMatch:', typeMatch);
+
   const stableMatchData = useMemo(() => {
     return {
       teamA: {
@@ -268,7 +271,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         setTeamBInfo(prev => ({ ...prev, logo: getFullLogoUrl(logo.url_logo) }));
         setLogoCodeB("");
       } else {
-        toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeB}"`);
+        toast.error(`⚠️ Không t��m thấy logo với code "${logoCodeB}"`);
       }
     } catch (error) {
       toast.error('❌ Lỗi tìm kiếm logo B');
@@ -745,7 +748,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             }
           >
             <span className="mr-1">
-              {isPlaying ? "🔊⏸️" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "🔊" : "🔇"}
+              {isPlaying ? "🔊���️" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "🔊" : "🔇"}
             </span>
           </Button>
 
