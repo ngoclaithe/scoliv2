@@ -361,6 +361,7 @@ export const AuthProvider = ({ children }) => {
     authType,
     matchCode,
     codeOnly,
+    typeMatch,
     hasAccountAccess,
     hasMatchAccess,
     canAccessProfile,
