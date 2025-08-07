@@ -1401,9 +1401,9 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-xs font-bold text-center">ĐẾM 40'</span>
             </button>
             )}
-            )}
+            
 
-            {/* Đ���m 45' */}
+            {/* Đếm 45' */}
             {typeMatch !== 'pickleball' && (
             <button
               onClick={() => {
