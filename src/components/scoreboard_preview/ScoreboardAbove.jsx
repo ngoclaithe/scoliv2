@@ -8,8 +8,7 @@ import ScoreboardType4 from './scoreboard_types/ScoreboardType4';
 import ScoreboardLogos from './ScoreboardLogos';
 import ScoreboardMarquee from './ScoreboardMarquee';
 import DisplayLogo from '../common/DisplayLogo';
-import PickleballScoreboardTable from './PickleballScoreboardTable';
-import PickleballScoreboardSimple from './scoreboard_types/PickleballScoreboardSimple';
+import ScoreboardTypePickleBall from './scoreboard_types/ScoreboardTypePickleBall';
 
 const ScoreboardAbove = ({ type = 1 }) => {
     const {
@@ -128,12 +127,9 @@ const ScoreboardAbove = ({ type = 1 }) => {
     };
 
     const renderScoreboard = () => {
-        // For pickleball, always use simple table format (like Type 5)
         if (currentData.typeMatch === 'pickleball') {
-            return <PickleballScoreboardSimple currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
+            return <ScoreboardTypePickleBall currentData={currentData} showMatchTime={showMatchTime} />;
         }
-
-        // For soccer, use the selected type
         switch (currentType) {
             case 1: return <ScoreboardType1 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
             case 2: return <ScoreboardType2 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
