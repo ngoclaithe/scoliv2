@@ -1304,6 +1304,37 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-xs font-bold text-center">ĐẾM 0</span>
             </button>
 
+            {/* ĐẾM T cho pickleball */}
+            {typeMatch === 'pickleball' && (
+            <button
+              onClick={() => {
+                updateMatchTime("00:00", "Timeout", "paused");
+                updateView('scoreboard');
+                playAudioForAction('gialap');
+                toast.success('⏱️ Timeout!');
+              }}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">⏱️</span>
+              <span className="text-xs font-bold text-center">ĐẾM T</span>
+            </button>
+            )}
+
+            {/* TỈ SỐ TRÊN cho pickleball */}
+            {typeMatch === 'pickleball' && (
+            <button
+              onClick={() => {
+                updateView('scoreboard');
+                playAudioForAction('gialap');
+                toast.success('📊 Hiển thị tỉ số trên!');
+              }}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">📊</span>
+              <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
+            </button>
+            )}
+
             {/* Đếm 25' */}
             {typeMatch !== 'pickleball' && (
             <button
