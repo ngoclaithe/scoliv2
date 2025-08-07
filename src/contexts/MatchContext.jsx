@@ -146,7 +146,7 @@ export const MatchProvider = ({ children }) => {
       setTimeout(() => {
         socketService.requestCurrentState();
         console.log('🔄 [MatchContext] Requested current state from server');
-      }, 1000); // Delay 1s để đảm bảo connect thành công
+      }, 1000); // Delay 1s để đ��m bảo connect thành công
 
       console.log(`Socket initialized for access code: ${accessCode}`);
     } catch (error) {
@@ -179,7 +179,7 @@ export const MatchProvider = ({ children }) => {
             const { matchTime, period, status, ...otherMatchData } = state.matchData;
             setMatchData(prev => ({ ...prev, ...otherMatchData }));
 
-            // Cập nhật timer data trong TimerContext
+            // Cập nh���t timer data trong TimerContext
             if (matchTime || period || status) {
               updateTimerData({ matchTime, period, status });
             }
@@ -736,6 +736,7 @@ export const MatchProvider = ({ children }) => {
     
     // Actions
     updateScore,
+    updateSetScore,
     updateMatchInfo,
     updateStats,
     updateTemplate,
