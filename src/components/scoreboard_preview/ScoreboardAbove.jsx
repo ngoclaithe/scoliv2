@@ -8,6 +8,8 @@ import ScoreboardType4 from './scoreboard_types/ScoreboardType4';
 import ScoreboardLogos from './ScoreboardLogos';
 import ScoreboardMarquee from './ScoreboardMarquee';
 import DisplayLogo from '../common/DisplayLogo';
+import PickleballScoreboardTable from './PickleballScoreboardTable';
+import PickleballScoreboardSimple from './scoreboard_types/PickleballScoreboardSimple';
 
 const ScoreboardAbove = ({ type = 1 }) => {
     const {
@@ -29,6 +31,8 @@ const ScoreboardAbove = ({ type = 1 }) => {
         teamBLogo: getFullLogoUrl(matchData?.teamB?.logo) || "/api/placeholder/90/90",
         teamAScore: matchData?.teamA?.score || 0,
         teamBScore: matchData?.teamB?.score || 0,
+        teamAScoreSet: matchData?.teamA?.scoreSet || 0,
+        teamBScoreSet: matchData?.teamB?.scoreSet || 0,
         matchTime: matchData?.matchTime || "00:00",
         period: matchData?.period || "Chưa bắt đầu",
         status: matchData?.status || "waiting",
@@ -36,7 +40,8 @@ const ScoreboardAbove = ({ type = 1 }) => {
         teamA2KitColor: matchData?.teamA?.teamA2KitColor || "#FF0000",
         teamBKitColor: matchData?.teamB?.teamBKitColor || "#0000FF",
         teamB2KitColor: matchData?.teamB?.teamB2KitColor || "#FF0000",
-        leagueLogo: "/api/placeholder/40/40"
+        leagueLogo: "/api/placeholder/40/40",
+        typeMatch: matchData?.typeMatch || "soccer"
     };
 
     const rawLogoShape = displaySettings?.displaySettings?.logoShape || displaySettings?.logoShape || "round";
@@ -123,6 +128,12 @@ const ScoreboardAbove = ({ type = 1 }) => {
     };
 
     const renderScoreboard = () => {
+        // For pickleball, always use simple table format (like Type 5)
+        if (currentData.typeMatch === 'pickleball') {
+            return <PickleballScoreboardSimple currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
+        }
+
+        // For soccer, use the selected type
         switch (currentType) {
             case 1: return <ScoreboardType1 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
             case 2: return <ScoreboardType2 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
@@ -164,11 +175,11 @@ const ScoreboardAbove = ({ type = 1 }) => {
                     </div>
                 )}
 
-                {/* Main Scoreboard - Top Right */}
+                {/* Main Scoreboard - Top Right for all types including pickleball */}
                 <div className="absolute top-4 right-4 z-30 origin-top-right
                     md:top-4 md:right-4 md:scale-100
-                    sm:top-3 sm:right-3 sm:scale-75 
-                    max-[480px]:top-2 max-[480px]:right-2 max-[480px]:scale-[0.6] 
+                    sm:top-3 sm:right-3 sm:scale-75
+                    max-[480px]:top-2 max-[480px]:right-2 max-[480px]:scale-[0.6]
                     max-[360px]:top-1.5 max-[360px]:right-1.5 max-[360px]:scale-50">
                     <div className="bg-transparent rounded-lg shadow-2xl">
                         {renderScoreboard()}

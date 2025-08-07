@@ -22,19 +22,22 @@ export const MatchProvider = ({ children }) => {
     teamA: {
       name: "ĐỘI-A",
       score: 0,
-      logo: null
+      logo: null,
+      scoreSet: 0 // For pickleball
     },
     teamB: {
       name: "ĐỘI-B",
       score: 0,
-      logo: null
+      logo: null,
+      scoreSet: 0 // For pickleball
     },
     // Note: matchTime, period, status đã được chuyển sang TimerContext
     tournament: "",
     stadium: "",
     matchDate: "",
     liveText: "",
-    matchTitle: ""
+    matchTitle: "",
+    typeMatch: "soccer" // 'soccer' or 'pickleball'
   });
 
   // State cho thống kê trận đấu
@@ -143,7 +146,7 @@ export const MatchProvider = ({ children }) => {
       setTimeout(() => {
         socketService.requestCurrentState();
         console.log('🔄 [MatchContext] Requested current state from server');
-      }, 1000); // Delay 1s để đảm bảo connect thành công
+      }, 1000); // Delay 1s để đ��m bảo connect thành công
 
       console.log(`Socket initialized for access code: ${accessCode}`);
     } catch (error) {
@@ -176,7 +179,7 @@ export const MatchProvider = ({ children }) => {
             const { matchTime, period, status, ...otherMatchData } = state.matchData;
             setMatchData(prev => ({ ...prev, ...otherMatchData }));
 
-            // Cập nhật timer data trong TimerContext
+            // Cập nh���t timer data trong TimerContext
             if (matchTime || period || status) {
               updateTimerData({ matchTime, period, status });
             }
@@ -456,6 +459,22 @@ export const MatchProvider = ({ children }) => {
     }
   }, [matchData, socketConnected]);
 
+  // Cập nhật set scores cho pickleball
+  const updateSetScore = useCallback((team, increment) => {
+    const newMatchData = { ...matchData };
+    newMatchData[team].scoreSet = Math.max(0, newMatchData[team].scoreSet + increment);
+
+    setMatchData(newMatchData);
+
+    // Emit to socket
+    if (socketConnected) {
+      socketService.emit('set_score_updated', {
+        teamASetScore: newMatchData.teamA.scoreSet,
+        teamBSetScore: newMatchData.teamB.scoreSet
+      });
+    }
+  }, [matchData, socketConnected]);
+
   // Cập nhật thông tin trận đấu
   const updateMatchInfo = useCallback((newMatchInfo) => {
     setMatchData(prev => ({
@@ -717,6 +736,7 @@ export const MatchProvider = ({ children }) => {
     
     // Actions
     updateScore,
+    updateSetScore,
     updateMatchInfo,
     updateStats,
     updateTemplate,

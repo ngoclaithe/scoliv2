@@ -362,7 +362,7 @@ export default function DodenMatchIntro() {
           ))}
         </div>
 
-        <style jsx>{`
+        <style>{`
           @keyframes marquee {
             0% { transform: translateX(100%) translateY(-50%); }
             100% { transform: translateX(-100%) translateY(-50%); }

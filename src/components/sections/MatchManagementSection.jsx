@@ -26,6 +26,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     currentView,
 
     updateScore,
+    updateSetScore,
     updateMatchInfo,
     updateStats,
     updateTemplate,
@@ -55,7 +56,10 @@ const MatchManagementSection = ({ isActive = true }) => {
     resumeTimer
   } = useTimer();
 
-  const { matchCode } = useAuth();
+  const { matchCode, typeMatch } = useAuth();
+
+  // Debug log
+  console.log('🏸 [MatchManagementSection] typeMatch:', typeMatch);
 
   const stableMatchData = useMemo(() => {
     return {
@@ -267,7 +271,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         setTeamBInfo(prev => ({ ...prev, logo: getFullLogoUrl(logo.url_logo) }));
         setLogoCodeB("");
       } else {
-        toast.error(`⚠️ Không tìm thấy logo với code "${logoCodeB}"`);
+        toast.error(`⚠️ Không t��m thấy logo với code "${logoCodeB}"`);
       }
     } catch (error) {
       toast.error('❌ Lỗi tìm kiếm logo B');
@@ -468,7 +472,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       );
     }
 
-    // Chế độ chỉnh sửa
+    // Chế đ�� chỉnh sửa
     return (
       <div className="py-1 px-2 bg-white rounded border">
         <div className="text-center mb-1">
@@ -536,56 +540,181 @@ const MatchManagementSection = ({ isActive = true }) => {
 
       {/* Score Controls */}
       <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-2 sm:p-4 border border-blue-200">
+        {typeMatch === 'pickleball' ? (
+          // Pickleball Score Controls - Sets and Points
+          <div className="space-y-3">
+            {/* Set Controls */}
+            <div className="bg-yellow-50 rounded-lg p-2 border border-yellow-200">
+              <h4 className="text-center font-bold text-sm mb-2 text-yellow-800">ĐIỀU KHIỂN SET</h4>
+              <div className="grid grid-cols-2 gap-2">
+                {/* Đội A Set */}
+                <div className="bg-white rounded-lg p-1 shadow-md border border-yellow-200">
+                  <div className="flex space-x-1">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-8 px-2 text-sm"
+                      style={{ flex: 2 }}
+                      onClick={() => updateSetScore("teamA", 1)}
+                    >
+                      +
+                    </Button>
+                    <div className="bg-orange-100 text-orange-800 font-bold h-8 px-2 flex items-center justify-center rounded text-sm min-w-8">
+                      {matchData.teamA.scoreSet || 0}
+                    </div>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="bg-red-500 hover:bg-red-600 text-white font-bold h-8 px-2 text-sm"
+                      style={{ flex: 1 }}
+                      onClick={() => updateSetScore("teamA", -1)}
+                    >
+                      -
+                    </Button>
+                  </div>
+                </div>
 
-        <div className="grid grid-cols-2 gap-2 sm:gap-4">
-          {/* Đội A */}
-          <div className="bg-white rounded-lg p-1 sm:p-2 shadow-md border border-blue-200">
-            <div className="flex space-x-1">
-              <Button
-                variant="primary"
-                size="sm"
-                className="bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-10 sm:h-14 px-2 text-base sm:text-lg"
-                style={{ flex: 2 }}
-                onClick={() => handleScoreChange("teamA", 1)}
-              >
-                <span className="text-lg sm:text-xl">+</span>
-              </Button>
-              <Button
-                variant="primary"
-                size="sm"
-                className="bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-10 sm:h-14 px-2 text-base sm:text-lg"
-                style={{ flex: 1 }}
-                onClick={() => handleScoreChange("teamA", -1)}
-              >
-                <span className="text-lg sm:text-xl">-</span>
-              </Button>
+                {/* Đội B Set */}
+                <div className="bg-white rounded-lg p-1 shadow-md border border-yellow-200">
+                  <div className="flex space-x-1">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="bg-orange-500 hover:bg-orange-600 text-white font-bold h-8 px-2 text-sm"
+                      style={{ flex: 2 }}
+                      onClick={() => updateSetScore("teamB", 1)}
+                    >
+                      +
+                    </Button>
+                    <div className="bg-orange-100 text-orange-800 font-bold h-8 px-2 flex items-center justify-center rounded text-sm min-w-8">
+                      {matchData.teamB.scoreSet || 0}
+                    </div>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="bg-red-500 hover:bg-red-600 text-white font-bold h-8 px-2 text-sm"
+                      style={{ flex: 1 }}
+                      onClick={() => updateSetScore("teamB", -1)}
+                    >
+                      -
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Point Controls */}
+            <div className="bg-green-50 rounded-lg p-2 border border-green-200">
+              <h4 className="text-center font-bold text-sm mb-2 text-green-800">ĐIỀU KHIỂN ĐIỂM</h4>
+              <div className="grid grid-cols-2 gap-2">
+                {/* Đội A Points */}
+                <div className="bg-white rounded-lg p-1 shadow-md border border-green-200">
+                  <div className="flex space-x-1">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="bg-green-500 hover:bg-green-600 text-white font-bold h-10 px-2 text-base"
+                      style={{ flex: 2 }}
+                      onClick={() => handleScoreChange("teamA", 1)}
+                    >
+                      +
+                    </Button>
+                    <div className="bg-green-100 text-green-800 font-bold h-10 px-2 flex items-center justify-center rounded text-base min-w-10">
+                      {matchData.teamA.score || 0}
+                    </div>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="bg-red-500 hover:bg-red-600 text-white font-bold h-10 px-2 text-base"
+                      style={{ flex: 1 }}
+                      onClick={() => handleScoreChange("teamA", -1)}
+                    >
+                      -
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Đội B Points */}
+                <div className="bg-white rounded-lg p-1 shadow-md border border-green-200">
+                  <div className="flex space-x-1">
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="bg-green-500 hover:bg-green-600 text-white font-bold h-10 px-2 text-base"
+                      style={{ flex: 2 }}
+                      onClick={() => handleScoreChange("teamB", 1)}
+                    >
+                      +
+                    </Button>
+                    <div className="bg-green-100 text-green-800 font-bold h-10 px-2 flex items-center justify-center rounded text-base min-w-10">
+                      {matchData.teamB.score || 0}
+                    </div>
+                    <Button
+                      variant="primary"
+                      size="sm"
+                      className="bg-red-500 hover:bg-red-600 text-white font-bold h-10 px-2 text-base"
+                      style={{ flex: 1 }}
+                      onClick={() => handleScoreChange("teamB", -1)}
+                    >
+                      -
+                    </Button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+        ) : (
+          // Soccer Score Controls (Original)
+          <div className="grid grid-cols-2 gap-2 sm:gap-4">
+            {/* Đội A */}
+            <div className="bg-white rounded-lg p-1 sm:p-2 shadow-md border border-blue-200">
+              <div className="flex space-x-1">
+                <Button
+                  variant="primary"
+                  size="sm"
+                  className="bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-10 sm:h-14 px-2 text-base sm:text-lg"
+                  style={{ flex: 2 }}
+                  onClick={() => handleScoreChange("teamA", 1)}
+                >
+                  <span className="text-lg sm:text-xl">+</span>
+                </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-10 sm:h-14 px-2 text-base sm:text-lg"
+                  style={{ flex: 1 }}
+                  onClick={() => handleScoreChange("teamA", -1)}
+                >
+                  <span className="text-lg sm:text-xl">-</span>
+                </Button>
+              </div>
+            </div>
 
-          {/* Đội B */}
-          <div className="bg-white rounded-lg p-1 sm:p-2 shadow-md border border-purple-200">
-            <div className="flex space-x-1">
-              <Button
-                variant="primary"
-                size="sm"
-                className="bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-10 sm:h-14 px-2 text-base sm:text-lg"
-                style={{ flex: 2 }}
-                onClick={() => handleScoreChange("teamB", 1)}
-              >
-                <span className="text-lg sm:text-xl">+</span>
-              </Button>
-              <Button
-                variant="primary"
-                size="sm"
-                className="bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-10 sm:h-14 px-2 text-base sm:text-lg"
-                style={{ flex: 1 }}
-                onClick={() => handleScoreChange("teamB", -1)}
-              >
-                <span className="text-lg sm:text-xl">-</span>
-              </Button>
+            {/* Đội B */}
+            <div className="bg-white rounded-lg p-1 sm:p-2 shadow-md border border-purple-200">
+              <div className="flex space-x-1">
+                <Button
+                  variant="primary"
+                  size="sm"
+                  className="bg-green-500 hover:bg-green-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-10 sm:h-14 px-2 text-base sm:text-lg"
+                  style={{ flex: 2 }}
+                  onClick={() => handleScoreChange("teamB", 1)}
+                >
+                  <span className="text-lg sm:text-xl">+</span>
+                </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold shadow-lg transform hover:scale-105 transition-all duration-200 h-10 sm:h-14 px-2 text-base sm:text-lg"
+                  style={{ flex: 1 }}
+                  onClick={() => handleScoreChange("teamB", -1)}
+                >
+                  <span className="text-lg sm:text-xl">-</span>
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Nút TẠM DỪNG, NGHỈ GIỮA HIỆP và THÔNG TIN */}
         <div className="flex justify-center items-center mt-2 space-x-2">
@@ -619,7 +748,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             }
           >
             <span className="mr-1">
-              {isPlaying ? "🔊⏸️" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "🔊" : "🔇"}
+              {isPlaying ? "🔊�����" : isPaused && currentAudioFile ? "🔊▶️" : audioEnabled ? "🔊" : "🔇"}
             </span>
           </Button>
 
@@ -855,7 +984,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                 variant="primary"
                 size="sm"
                 onClick={() => {
-                  console.log("🎨 [DEBUG] Áp dụng màu áo:", {
+                  console.log("🎨 [DEBUG] Áp dụng màu ��o:", {
                     teamAKitcolor: teamAInfo.teamAKitcolor,
                     teamBKitcolor: teamBInfo.teamBKitcolor,
                     teamA2Kitcolor: teamAInfo.teamA2Kitcolor,
@@ -903,8 +1032,9 @@ const MatchManagementSection = ({ isActive = true }) => {
       </div>
       {/* Tab Controls */}
       <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200">
-        <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
-          <button
+        <div className={`grid ${typeMatch === 'pickleball' ? 'grid-cols-1' : 'grid-cols-3'} gap-1.5 sm:gap-2`}>
+          {typeMatch !== 'pickleball' && (
+            <button
             onClick={() => setSelectedOption("thong-so")}
             className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "thong-so"
               ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
@@ -914,7 +1044,8 @@ const MatchManagementSection = ({ isActive = true }) => {
             {/* <span className="mr-0.5 text-xs">���</span> */}
             <span className="hidden sm:inline">THÔNG SỐ</span>
             <span className="sm:hidden">Thông Số</span>
-          </button>
+            </button>
+          )}
           <button
             onClick={() => setSelectedOption("dieu-khien")}
             className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "dieu-khien"
@@ -926,24 +1057,25 @@ const MatchManagementSection = ({ isActive = true }) => {
             <span className="hidden sm:inline">ĐIỀU KHIỂN</span>
             <span className="sm:hidden">Điều khiển</span>
           </button>
-          <button
-            onClick={() => {
-              setSelectedOption(selectedOption === "chon-skin" ? "dieu-khien" : "chon-skin");
-            }}
-            className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "chon-skin"
-              ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
-              : "bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 hover:from-blue-200 hover:to-blue-300"
-              }`}
-          >
-            {/* <span className="mr-0.5 text-xs">🎨</span> */}
-            <span className="hidden sm:inline">Skin</span>
-            <span className="sm:hidden">Skin</span>
-          </button>
+          {typeMatch !== 'pickleball' && (
+            <button
+              onClick={() => {
+                setSelectedOption(selectedOption === "chon-skin" ? "dieu-khien" : "chon-skin");
+              }}
+              className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "chon-skin"
+                ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
+                : "bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 hover:from-blue-200 hover:to-blue-300"
+                }`}
+            >
+              <span className="hidden sm:inline">Skin</span>
+              <span className="sm:hidden">Skin</span>
+            </button>
+          )}
         </div>
       </div>
 
       {/* Inline Template Selection */}
-      {selectedOption === "chon-skin" && (
+      {selectedOption === "chon-skin" && typeMatch !== 'pickleball' && (
         <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200 animate-slide-up">
           <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-1.5 sm:gap-2">
             {[1, 2, 3, 4, 5].map((skinNumber) => (
@@ -984,7 +1116,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
 
       {/* Tab Thông số */}
-      {selectedOption === "thong-so" && (
+      {selectedOption === "thong-so" && typeMatch !== 'pickleball' && (
         <div className="bg-white rounded-lg p-2 border border-gray-200 shadow-sm">
           {/* Header với nút chỉnh sửa */}
           <div className="flex justify-between items-center mb-2">
@@ -1119,7 +1251,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       {/* Options - Các action buttons điều khiển */}
       {selectedOption === "dieu-khien" && (
         <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-2 sm:p-3 border border-indigo-200">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
+          <div className={`grid ${typeMatch === 'pickleball' ? 'grid-cols-2 sm:grid-cols-3' : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'} gap-1.5 sm:gap-2`}>
             {/* Poster */}
             <button
               onClick={() => {
@@ -1133,6 +1265,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             </button>
 
             {/* Danh sách */}
+            {typeMatch !== 'pickleball' && (
             <button
               onClick={() => {
                 setShowLineupModal(true);
@@ -1142,8 +1275,10 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">📋</span>
               <span className="text-xs font-bold text-center">DANH SÁCH</span>
             </button>
+            )}
 
             {/* Penalty */}
+            {typeMatch !== 'pickleball' && (
             <button
               onClick={() => setShowPenaltyModal(true)}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
@@ -1151,6 +1286,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">⚽</span>
               <span className="text-xs font-bold text-center">PENALTY</span>
             </button>
+            )}
 
             {/* Đếm 0 */}
             <button
@@ -1168,7 +1304,39 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-xs font-bold text-center">ĐẾM 0</span>
             </button>
 
+            {/* ĐẾM T cho pickleball */}
+            {typeMatch === 'pickleball' && (
+            <button
+              onClick={() => {
+                updateMatchTime("00:00", "Timeout", "paused");
+                updateView('scoreboard');
+                playAudioForAction('gialap');
+                toast.success('⏱️ Timeout!');
+              }}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">⏱️</span>
+              <span className="text-xs font-bold text-center">ĐẾM T</span>
+            </button>
+            )}
+
+            {/* TỈ SỐ TRÊN cho pickleball */}
+            {typeMatch === 'pickleball' && (
+            <button
+              onClick={() => {
+                updateView('scoreboard');
+                playAudioForAction('gialap');
+                toast.success('📊 Hiển thị tỉ số trên!');
+              }}
+              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            >
+              <span className="text-sm mr-1">📊</span>
+              <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
+            </button>
+            )}
+
             {/* Đếm 25' */}
+            {typeMatch !== 'pickleball' && (
             <button
               onClick={() => {
                 const timeString = "20:00";
@@ -1181,8 +1349,10 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">🕐</span>
               <span className="text-xs font-bold text-center">ĐẾM 20'</span>
             </button>
+            )}
 
             {/* Đếm 30' */}
+            {typeMatch !== 'pickleball' && (
             <button
               onClick={() => {
                 const timeString = "30:00";
@@ -1196,8 +1366,10 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">🕑</span>
               <span className="text-xs font-bold text-center">ĐẾM 30'</span>
             </button>
+            )}
 
             {/* Đếm 35' */}
+            {typeMatch !== 'pickleball' && (
             <button
               onClick={() => {
                 const timeString = "35:00";
@@ -1211,8 +1383,10 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">🕒</span>
               <span className="text-xs font-bold text-center">ĐẾM 35'</span>
             </button>
+            )}
 
             {/* Đếm 40' */}
+            {typeMatch !== 'pickleball' && (
             <button
               onClick={() => {
                 const timeString = "40:00";
@@ -1226,8 +1400,11 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">🕓</span>
               <span className="text-xs font-bold text-center">ĐẾM 40'</span>
             </button>
+            )}
+            )}
 
-            {/* Đếm 45' */}
+            {/* Đ���m 45' */}
+            {typeMatch !== 'pickleball' && (
             <button
               onClick={() => {
                 const timeString = "45:00";
@@ -1241,6 +1418,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">🕔</span>
               <span className="text-xs font-bold text-center">ĐẾM 45'</span>
             </button>
+            )}
 
             {/* Giới thiệu */}
             <button
@@ -1274,7 +1452,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              <span className="text-sm mr-1">📊</span>
+              <span className="text-sm mr-1">���</span>
               <span className="text-xs font-bold text-center">TỈ SỐ DƯỚI</span>
             </button>
 
@@ -1299,7 +1477,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
               <span className="text-sm mr-1">📊</span>
-              <span className="text-xs font-bold text-center">THỐNG KÊ</span>
+              <span className="text-xs font-bold text-center">TH���NG KÊ</span>
             </button>
           </div>
 
@@ -1355,7 +1533,7 @@ const MatchManagementSection = ({ isActive = true }) => {
                     playAudioForAction('gialap');
                     toast.success(`⏰ Đã bắt đầu timer từ ${timeString}!`);
                   } else {
-                    toast.warning('⚠️ Vui lòng nhập thời gian hợp lệ!');
+                    toast.warning('⚠️ Vui lòng nhập thời gian hợp l���!');
                   }
                 }}
                 disabled={!quickCustomMinutes || quickCustomMinutes === '0'}
@@ -1728,7 +1906,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="ml-2">🕰️</span>
             </h4>
             <p className="text-sm text-yellow-700 mt-1">
-              Trận đấu sẽ bắt đầu chạy từ thời điểm này
+              Trận đấu sẽ bắt đ���u chạy từ thời điểm này
             </p>
           </div>
 

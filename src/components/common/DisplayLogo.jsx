@@ -85,17 +85,17 @@ const DisplayLogo = ({
         const fullLogoUrl = getFullLogoUrl(logoSrc);
 
         return (
-            <div className={`relative ${className}`}>
+            <div className={`relative ${className} overflow-hidden`}>
                 <div
-                    className={`${shapeStyles.containerClass} p-1 ${logoSize}`}
+                    className={`${shapeStyles.containerClass} p-0.5 ${logoSize} flex items-center justify-center`}
                     style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
                 >
                     <img
                         src={fullLogoUrl || createFallbackSVG(alt)}
                         alt={alt}
-                        className={shapeStyles.imageClass}
+                        className={`${shapeStyles.imageClass} max-w-full max-h-full object-contain`}
                         style={{
-                            filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
+                            filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.2))',
                             backgroundColor: 'transparent',
                             ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
                         }}
@@ -116,18 +116,18 @@ const DisplayLogo = ({
                     return (
                         <div
                             key={index}
-                            className={`relative ${logoSize}`} // Sử dụng kích thước cố định thay vì flex-1
+                            className={`relative ${logoSize} overflow-hidden shrink-0`}
                         >
                             <div
-                                className={`${shapeStyles.containerClass} p-1 w-full h-full`}
+                                className={`${shapeStyles.containerClass} p-0.5 w-full h-full flex items-center justify-center`}
                                 style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
                             >
                                 <img
                                     src={fullLogoUrl || createFallbackSVG(alt)}
                                     alt={`${alt} ${index + 1}`}
-                                    className={shapeStyles.imageClass}
+                                    className={`${shapeStyles.imageClass} max-w-full max-h-full object-contain`}
                                     style={{
-                                        filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
+                                        filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.2))',
                                         backgroundColor: 'transparent',
                                         ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
                                     }}
@@ -154,18 +154,18 @@ const DisplayLogo = ({
                     return (
                         <div
                             key={startIndex + index}
-                            className={`relative animate-slide-up ${logoSize}`} 
+                            className={`relative animate-slide-up ${logoSize} overflow-hidden shrink-0`}
                         >
                             <div
-                                className={`${shapeStyles.containerClass} p-1 w-full h-full`}
+                                className={`${shapeStyles.containerClass} p-0.5 w-full h-full flex items-center justify-center`}
                                 style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}
                             >
                                 <img
                                     src={fullLogoUrl || createFallbackSVG(alt)}
                                     alt={`${alt} ${startIndex + index + 1}`}
-                                    className={shapeStyles.imageClass}
+                                    className={`${shapeStyles.imageClass} max-w-full max-h-full object-contain`}
                                     style={{
-                                        filter: 'drop-shadow(2px 2px 4px rgba(0,0,0,0.3))',
+                                        filter: 'drop-shadow(1px 1px 2px rgba(0,0,0,0.2))',
                                         backgroundColor: 'transparent',
                                         ...(shapeStyles.clipPath && { clipPath: shapeStyles.clipPath })
                                     }}

@@ -274,11 +274,11 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
   );
 
   const renderScoreboardType4 = () => (
-    <div className="flex items-center justify-between">
+    <div className="flex items-center justify-center gap-0">
       <div className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden">
-        <img 
-          src={currentData.teamALogo} 
-          alt="Team A Logo" 
+        <img
+          src={currentData.teamALogo}
+          alt="Team A Logo"
           className="w-full h-full object-cover"
           onError={(e) => {
             e.target.style.display = 'none';
@@ -290,7 +290,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
         </div>
       </div>
 
-      <div className="flex items-center">
+      <div className="flex items-center gap-0 -space-x-2">
         <div
           className="text-white text-xs font-semibold flex items-center justify-center w-16 h-5"
           style={{
@@ -301,7 +301,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
           <span className="truncate text-center">{currentData.teamAName}</span>
         </div>
         <div
-          className="w-8 h-5"
+          className="w-6 h-5 z-10"
           style={{
             backgroundColor: currentData.teamAKitColor,
             clipPath: 'polygon(0% 0%, 55% 0%, 100% 100%, 45% 100%)'
@@ -309,22 +309,23 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
         />
       </div>
 
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center -mx-1">
         <div
           className="flex items-center justify-center px-2 relative"
           style={{
             backgroundColor: '#213f80',
             clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)',
-            minHeight: '32px'
+            minHeight: '32px',
+            width: '120px'
           }}
         >
           <div className="text-white font-bold text-sm min-w-[1rem] text-center">
             {currentData.teamAScore}
           </div>
           <div className="mx-1 w-5 h-5 rounded-full flex items-center justify-center text-xs overflow-hidden">
-            <img 
-              src="/api/placeholder/20/20" 
-              alt="League Logo" 
+            <img
+              src="/api/placeholder/20/20"
+              alt="League Logo"
               className="w-full h-full object-cover"
               onError={(e) => {
                 e.target.style.display = 'none';
@@ -339,14 +340,14 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
             {currentData.teamBScore}
           </div>
         </div>
-        <div className={`text-white text-xs font-bold px-1 py-0.5 ${showMatchTime ? 'bg-red-600' : 'bg-green-600'}`}>
+        <div className={`text-white text-xs font-bold px-1 py-0.5 rounded ${showMatchTime ? 'bg-red-600' : 'bg-green-600'}`}>
           {showMatchTime ? currentData.matchTime : '● LIVE'}
         </div>
       </div>
 
-      <div className="flex items-center">
+      <div className="flex items-center gap-0 -space-x-2">
         <div
-          className="w-8 h-5"
+          className="w-6 h-5 z-10"
           style={{
             backgroundColor: currentData.teamBKitColor,
             clipPath: 'polygon(45% 0%, 100% 0%, 55% 100%, 0% 100%)'
@@ -364,9 +365,9 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
       </div>
 
       <div className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden">
-        <img 
-          src={currentData.teamBLogo} 
-          alt="Team B Logo" 
+        <img
+          src={currentData.teamBLogo}
+          alt="Team B Logo"
           className="w-full h-full object-cover"
           onError={(e) => {
             e.target.style.display = 'none';

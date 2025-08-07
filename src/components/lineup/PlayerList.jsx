@@ -133,7 +133,7 @@ const PlayerList = () => {
 
     return (
         <div className="w-full h-screen overflow-hidden">
-            <style jsx>{`
+            <style>{`
                 .text-stroke {
                     text-shadow: 
                         -1px -1px 0 #000,
