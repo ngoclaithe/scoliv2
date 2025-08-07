@@ -1248,7 +1248,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       {/* Options - Các action buttons điều khiển */}
       {selectedOption === "dieu-khien" && (
         <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-2 sm:p-3 border border-indigo-200">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-1.5 sm:gap-2">
+          <div className={`grid ${typeMatch === 'pickleball' ? 'grid-cols-2 sm:grid-cols-3' : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'} gap-1.5 sm:gap-2`}>
             {/* Poster */}
             <button
               onClick={() => {
