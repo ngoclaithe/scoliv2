@@ -16,7 +16,6 @@ import ScoreboardPreview from './ScoreboardPreview';
 import { getFullLogoUrl } from '../../utils/logoUtils';
 
 const MatchManagementSection = ({ isActive = true }) => {
-  // Sử dụng MatchContext và TimerContext
   const {
     matchData,
     matchStats,
@@ -50,7 +49,6 @@ const MatchManagementSection = ({ isActive = true }) => {
 
   } = useMatch();
 
-  // Sử dụng TimerContext cho timer
   const {
     timerData,
     updateMatchTime,
@@ -59,7 +57,6 @@ const MatchManagementSection = ({ isActive = true }) => {
 
   const { matchCode } = useAuth();
 
-  // Tạo stable props cho PosterManager để tránh re-render do timer - KHÔNG bao gồm timer data
   const stableMatchData = useMemo(() => {
     return {
       teamA: {
@@ -77,14 +74,12 @@ const MatchManagementSection = ({ isActive = true }) => {
       matchDate: matchData.matchDate,
       liveText: matchData.liveText,
       matchTitle: matchData.matchTitle
-      // KHÔNG thêm timerData để tránh re-render khi timer tick
     };
   }, [
     matchData.teamA.name, matchData.teamA.logo, matchData.teamA.score,
     matchData.teamB.name, matchData.teamB.logo, matchData.teamB.score,
     matchData.tournament, matchData.stadium, matchData.matchDate,
     matchData.liveText, matchData.matchTitle
-    // KHÔNG include timer dependencies
   ]);
 
   const stableInitialData = useMemo(() => ({
@@ -110,7 +105,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   // State cho custom time
   const [customTime, setCustomTime] = useState("");
   const [customSeconds, setCustomSeconds] = useState("");
-  const [quickCustomMinutes, setQuickCustomMinutes] = useState(""); // Phút
+  const [quickCustomMinutes, setQuickCustomMinutes] = useState(""); 
   const [tickerColor, setTickerColor] = useState("#ffffff");
 
   // State cho thông tin đội và trận đấu
@@ -129,7 +124,6 @@ const MatchManagementSection = ({ isActive = true }) => {
   const [matchTitle, setMatchTitle] = useState(matchData.matchTitle || "");
   const [liveText, setLiveText] = useState(matchData.liveText || "");
 
-  // Sync team info khi matchData thay đổi (từ server) - KHÔNG bao gồm matchTime để tránh timer trigger
   useEffect(() => {
     console.log("Giá trị đồng bộ từ backend socket là", matchData);
     setTeamAInfo(prev => {
@@ -140,7 +134,6 @@ const MatchManagementSection = ({ isActive = true }) => {
         teamA2Kitcolor: matchData.teamA.teamA2KitColor || matchData.teamA2KitColor || prev.teamA2Kitcolor,
       };
 
-      // Chỉ update nếu có thay đổi thực sự
       if (JSON.stringify(newTeamAInfo) !== JSON.stringify(prev)) {
         return newTeamAInfo;
       }
@@ -155,7 +148,6 @@ const MatchManagementSection = ({ isActive = true }) => {
         teamB2Kitcolor: matchData.teamB.teamB2KitColor || matchData.teamB2KitColor || prev.teamB2Kitcolor,
       };
 
-      // Chỉ update nếu có thay đổi thực sự
       if (JSON.stringify(newTeamBInfo) !== JSON.stringify(prev)) {
         return newTeamBInfo;
       }
@@ -168,7 +160,6 @@ const MatchManagementSection = ({ isActive = true }) => {
     matchDate: matchData.matchDate || new Date().toISOString().split('T')[0]
   });
 
-  // Sync match info khi matchData thay đổi
   useEffect(() => {
     if (matchData.startTime || matchData.stadium || matchData.matchDate) {
       setMatchInfo(prev => ({
@@ -179,7 +170,6 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
   }, [matchData.startTime, matchData.stadium, matchData.matchDate]);
 
-  // Sync match title and live unit when context data changes
   useEffect(() => {
     if (matchData.matchTitle !== undefined) {
       setMatchTitle(matchData.matchTitle);
@@ -246,7 +236,6 @@ const MatchManagementSection = ({ isActive = true }) => {
   const [isSearchingLogoA, setIsSearchingLogoA] = useState(false);
   const [isSearchingLogoB, setIsSearchingLogoB] = useState(false);
 
-  // Xử lý tìm kiếm logo cho đội A
   const handleSearchLogoA = async () => {
     if (!logoCodeA.trim()) return;
 
@@ -267,7 +256,6 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
   };
 
-  // Xử lý tìm kiếm logo cho đội B
   const handleSearchLogoB = async () => {
     if (!logoCodeB.trim()) return;
 
@@ -293,20 +281,16 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateView('penalty_scoreboard');
   }, [updatePenalty, updateView]);
 
-  // Stable logo update callback để tránh PosterManager re-render
-  // Stable refs cho callbacks
   const onLogoUpdateRef = useRef();
   const onPosterUpdateRef = useRef();
 
   const handleLogoUpdate = useCallback((logoData) => {
-    // Handle individual item change with behavior
     if (logoData.changedItem && logoData.behavior) {
       const item = logoData.changedItem;
       const behavior = logoData.behavior;
 
       console.log(`[MatchManagementSection] ${behavior} logo:`, item);
 
-      // Prepare data with behavior
       const logoUpdateData = {
         code_logo: [item.code],
         url_logo: [item.url],
@@ -315,7 +299,6 @@ const MatchManagementSection = ({ isActive = true }) => {
         behavior: behavior
       };
 
-      // Emit to specific category with behavior
       switch (item.category) {
         case 'sponsor':
           console.log("[MatchManagementSection] Calling updateSponsors with logoUpdateData:", logoUpdateData);
@@ -345,7 +328,6 @@ const MatchManagementSection = ({ isActive = true }) => {
 
     // Handle bulk update (fallback cho compatibility)
     if (logoData && logoData.logoItems && !logoData.changedItem) {
-      // Phân loại logo items theo category
       const logosByCategory = logoData.logoItems.reduce((acc, item) => {
         if (!acc[item.category]) {
           acc[item.category] = [];
@@ -361,7 +343,6 @@ const MatchManagementSection = ({ isActive = true }) => {
 
       console.log("[MatchManagementSection] logosByCategory:", logosByCategory);
 
-      // Emit socket events cho từng category
       if (logosByCategory.sponsor) {
         console.log("[MatchManagementSection] Calling updateSponsors");
         updateSponsors({
@@ -439,7 +420,6 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateStats(newStats);
   };
 
-  // Hàm cập nhật kiểm soát bóng (đảm bảo tổng = 100%)
   const updatePossession = (team, value) => {
     const newValue = Math.max(0, Math.min(100, parseInt(value) || 0));
     const otherTeam = team === 'team1' ? 'team2' : 'team1';
@@ -455,7 +435,6 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateStats(newStats);
   };
 
-  // Component để hiển thị/chỉnh sửa thống kê
   const EditableStatBar = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => {
     if (!isEditingStats) {
       return (
@@ -746,7 +725,9 @@ const MatchManagementSection = ({ isActive = true }) => {
                 </button>
                 {teamAInfo.logo && (
                   <div className="w-4 h-4 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
-                    <img src={teamAInfo.logo} alt="A" className="w-full h-full object-contain" />
+                    {/* <img src={teamAInfo.logo} alt="A" className="w-full h-full object-contain" /> */}
+                    <img src={getFullLogoUrl(teamAInfo.logo)} alt="A" className="w-full h-full object-contain" />
+
                   </div>
                 )}
               </div>
@@ -769,7 +750,8 @@ const MatchManagementSection = ({ isActive = true }) => {
                 </button>
                 {teamBInfo.logo && (
                   <div className="w-4 h-4 bg-gray-100 rounded border overflow-hidden flex-shrink-0">
-                    <img src={teamBInfo.logo} alt="B" className="w-full h-full object-contain" />
+                    {/* <img src={teamBInfo.logo} alt="B" className="w-full h-full object-contain" /> */}
+                    <img src={getFullLogoUrl(teamBInfo.logo)} alt="B" className="w-full h-full object-contain" />
                   </div>
                 )}
               </div>

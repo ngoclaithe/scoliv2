@@ -3,7 +3,7 @@
  */
 
 // Lấy API base URL từ environment variable
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://192.168.31.186:5000/api/v1';
+const API_BASE_URL = process.env.REACT_APP_BASE_URL || 'http://192.168.31.186:5000';
 
 /**
  * Kiểm tra xem URL có phải là đường dẫn tuyệt đối hay không
