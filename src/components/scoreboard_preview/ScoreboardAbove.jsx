@@ -8,6 +8,7 @@ import ScoreboardType4 from './scoreboard_types/ScoreboardType4';
 import ScoreboardLogos from './ScoreboardLogos';
 import ScoreboardMarquee from './ScoreboardMarquee';
 import DisplayLogo from '../common/DisplayLogo';
+import PickleballScoreboardTable from './PickleballScoreboardTable';
 
 const ScoreboardAbove = ({ type = 1 }) => {
     const {
