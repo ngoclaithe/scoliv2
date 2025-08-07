@@ -1368,6 +1368,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">🕓</span>
               <span className="text-xs font-bold text-center">ĐẾM 40'</span>
             </button>
+            )}
 
             {/* Đ���m 45' */}
             <button
