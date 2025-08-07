@@ -1030,7 +1030,8 @@ const MatchManagementSection = ({ isActive = true }) => {
       {/* Tab Controls */}
       <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200">
         <div className={`grid ${typeMatch === 'pickleball' ? 'grid-cols-1' : 'grid-cols-3'} gap-1.5 sm:gap-2`}>
-          <button
+          {typeMatch !== 'pickleball' && (
+            <button
             onClick={() => setSelectedOption("thong-so")}
             className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "thong-so"
               ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-xl"
@@ -1040,7 +1041,8 @@ const MatchManagementSection = ({ isActive = true }) => {
             {/* <span className="mr-0.5 text-xs">���</span> */}
             <span className="hidden sm:inline">THÔNG SỐ</span>
             <span className="sm:hidden">Thông Số</span>
-          </button>
+            </button>
+          )}
           <button
             onClick={() => setSelectedOption("dieu-khien")}
             className={`py-1.5 sm:py-2 px-1.5 sm:px-3 rounded-lg font-bold text-xs transition-all duration-300 transform hover:scale-105 shadow-md ${selectedOption === "dieu-khien"
@@ -1070,7 +1072,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       </div>
 
       {/* Inline Template Selection */}
-      {selectedOption === "chon-skin" && (
+      {selectedOption === "chon-skin" && typeMatch !== 'pickleball' && (
         <div className="bg-white rounded-lg p-2 sm:p-3 shadow-lg border border-gray-200 animate-slide-up">
           <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-1.5 sm:gap-2">
             {[1, 2, 3, 4, 5].map((skinNumber) => (
@@ -1111,7 +1113,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
 
       {/* Tab Thông số */}
-      {selectedOption === "thong-so" && (
+      {selectedOption === "thong-so" && typeMatch !== 'pickleball' && (
         <div className="bg-white rounded-lg p-2 border border-gray-200 shadow-sm">
           {/* Header với nút chỉnh sửa */}
           <div className="flex justify-between items-center mb-2">
