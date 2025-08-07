@@ -165,7 +165,7 @@ const PenaltyScoreboard = () => {
                 </div>
             </div>
 
-            <style jsx>{`
+            <style>{`
                 .combined-container {
                     transform-origin: center bottom;
                     transform: scale(0.6);

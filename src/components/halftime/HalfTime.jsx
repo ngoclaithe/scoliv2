@@ -237,7 +237,7 @@ const HalftimeBreakPoster = () => {
             </div>
 
             {/* Enhanced custom styles for animations */}
-            <style jsx>{`
+            <style>{`
                 @keyframes spin {
                     from { transform: rotateY(0deg); }
                     to { transform: rotateY(360deg); }
