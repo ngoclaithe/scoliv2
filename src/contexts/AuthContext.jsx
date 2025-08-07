@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
   const [authType, setAuthType] = useState(null); // 'account', 'code', 'full'
   const [matchCode, setMatchCode] = useState(null); // Code trận đấu hiện tại
   const [codeOnly, setCodeOnly] = useState(false); // Đăng nhập chỉ bằng code
+  const [typeMatch, setTypeMatch] = useState('soccer'); // 'soccer', 'pickleball'
 
   // Hàm load thông tin người dùng từ token
   const loadUser = useCallback(async () => {
@@ -134,6 +135,7 @@ export const AuthProvider = ({ children }) => {
 
       if (response.success && response.isValid) {
         const matchInfo = response.data?.match;
+        const typeMatch = response.data?.type_match || 'soccer';
         const userData = {
           id: 'code-user-' + code,
           email: null,
@@ -147,11 +149,13 @@ export const AuthProvider = ({ children }) => {
         setCodeOnly(true);
         setAuthType('code');
         setIsAuthenticated(true);
+        setTypeMatch(typeMatch);
 
         return {
           success: true,
           user: userData,
-          matchInfo: matchInfo
+          matchInfo: matchInfo,
+          typeMatch: typeMatch
         };
       } else {
         return {
@@ -214,6 +218,7 @@ export const AuthProvider = ({ children }) => {
       setAuthType(null);
       setMatchCode(null);
       setCodeOnly(false);
+      setTypeMatch('soccer');
     }
   };
 
@@ -279,12 +284,15 @@ export const AuthProvider = ({ children }) => {
 
       const response = await AccessCodeAPI.verifyCodeForLogin(code);
       if (response.success && response.isValid) {
+        const typeMatch = response.data?.type_match || 'soccer';
         setMatchCode(code);
         setAuthType('full'); // Có cả tài khoản và code
+        setTypeMatch(typeMatch);
         return {
           success: true,
           matchData: response.data?.match,
-          codeInfo: response.data
+          codeInfo: response.data,
+          typeMatch: typeMatch
         };
       } else {
         return {
@@ -305,6 +313,7 @@ export const AuthProvider = ({ children }) => {
 
   const clearMatchCode = () => {
     setMatchCode(null);
+    setTypeMatch('soccer');
     if (authType === 'full') {
       setAuthType('account');
     }
