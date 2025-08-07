@@ -30,6 +30,8 @@ const ScoreboardAbove = ({ type = 1 }) => {
         teamBLogo: getFullLogoUrl(matchData?.teamB?.logo) || "/api/placeholder/90/90",
         teamAScore: matchData?.teamA?.score || 0,
         teamBScore: matchData?.teamB?.score || 0,
+        teamAScoreSet: matchData?.teamA?.scoreSet || 0,
+        teamBScoreSet: matchData?.teamB?.scoreSet || 0,
         matchTime: matchData?.matchTime || "00:00",
         period: matchData?.period || "Chưa bắt đầu",
         status: matchData?.status || "waiting",
@@ -37,7 +39,8 @@ const ScoreboardAbove = ({ type = 1 }) => {
         teamA2KitColor: matchData?.teamA?.teamA2KitColor || "#FF0000",
         teamBKitColor: matchData?.teamB?.teamBKitColor || "#0000FF",
         teamB2KitColor: matchData?.teamB?.teamB2KitColor || "#FF0000",
-        leagueLogo: "/api/placeholder/40/40"
+        leagueLogo: "/api/placeholder/40/40",
+        typeMatch: matchData?.typeMatch || "soccer"
     };
 
     const rawLogoShape = displaySettings?.displaySettings?.logoShape || displaySettings?.logoShape || "round";
