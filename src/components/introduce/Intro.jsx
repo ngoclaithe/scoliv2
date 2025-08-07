@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
-// Audio moved to audioUtils
 
 const Intro = () => {
     const { matchData: contextMatchData, marqueeData } = usePublicMatch();
 
-    // Kết hợp dữ liệu từ context với dữ liệu mặc định
     const matchData = {
-        matchTitle: contextMatchData.tournament || "GIẢI BÓNG ĐÁ PHONG TRÀO",
+        matchTitle: contextMatchData.matchTitle || "GIẢI BÓNG ĐÁ PHONG TRÀO",
         stadium: contextMatchData.stadium || "Sân vận động Thiên Trường",
         time: contextMatchData.startTime || contextMatchData.time || "19:30",
         date: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
@@ -38,10 +36,6 @@ const Intro = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // Audio đã được chuyển sang MatchManagementSection để quản lý tập trung
-    // Intro component chỉ hiển thị, không phát audio
-
-    // Responsive calculations
     const isMobile = windowSize.width < 768;
     const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
     
@@ -54,7 +48,6 @@ const Intro = () => {
     const teamNameSize = isMobile ? 'text-lg' : isTablet ? 'text-xl' : 'text-2xl';
     const liveSize = isMobile ? 'text-lg' : isTablet ? 'text-xl' : 'text-2xl';
 
-    // Check if live text contains specific keywords
     const liveTextLower = matchData.liveText.toLowerCase();
     const showNSBLogo = liveTextLower.includes('nsb') || liveTextLower.includes('nga son biz');
     const showBDPXTLogo = liveTextLower.includes('bdpxt') || liveTextLower.includes('xu thanh');

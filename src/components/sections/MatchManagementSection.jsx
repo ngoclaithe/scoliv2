@@ -137,6 +137,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         name: matchData.teamA.name || prev.name,
         logo: matchData.teamA.logo || prev.logo,
         teamAKitcolor: matchData.teamA.teamAKitColor || matchData.teamAKitColor || prev.teamAKitcolor,
+        teamA2Kitcolor: matchData.teamA.teamA2KitColor || matchData.teamA2KitColor || prev.teamA2Kitcolor,
       };
 
       // Chỉ update nếu có thay đổi thực sự
@@ -151,6 +152,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         name: matchData.teamB.name || prev.name,
         logo: matchData.teamB.logo || prev.logo,
         teamBKitcolor: matchData.teamB.teamBKitColor || matchData.teamBKitColor || prev.teamBKitcolor,
+        teamB2Kitcolor: matchData.teamB.teamB2KitColor || matchData.teamB2KitColor || prev.teamB2Kitcolor,
       };
 
       // Chỉ update nếu có thay đổi thực sự
@@ -773,31 +775,70 @@ const MatchManagementSection = ({ isActive = true }) => {
               </div>
             </div>
 
-            {/* Màu áo - 1 hàng compact */}
+            {/* Màu áo & quần - 1 hàng compact */}
             <div className="grid grid-cols-2 gap-1">
               {/* Đội A */}
-              <div className="flex items-center gap-1 min-w-0">
+              <div className="flex items-center gap-1 min-w-0 flex-wrap">
                 <span className="text-xs text-red-600 flex-shrink-0">A:</span>
                 <input
                   type="color"
                   value={teamAInfo.teamAKitcolor || '#ff0000'}
-                  onChange={(e) => setTeamAInfo(prev => ({ ...prev, teamAKitcolor: e.target.value }))}
+                  onChange={(e) =>
+                    setTeamAInfo((prev) => ({
+                      ...prev,
+                      teamAKitcolor: e.target.value,
+                    }))
+                  }
                   className="w-5 h-5 border border-gray-300 rounded cursor-pointer flex-shrink-0"
                   title="Áo A"
                 />
                 <span className="text-xs text-gray-500 flex-shrink-0">Áo</span>
+
+                <input
+                  type="color"
+                  value={teamAInfo.teamA2Kitcolor || '#0000ff'}
+                  onChange={(e) =>
+                    setTeamAInfo((prev) => ({
+                      ...prev,
+                      teamA2Kitcolor: e.target.value,
+                    }))
+                  }
+                  className="w-5 h-5 border border-gray-300 rounded cursor-pointer flex-shrink-0 ml-2"
+                  title="Quần A"
+                />
+                <span className="text-xs text-gray-500 flex-shrink-0">Quần</span>
               </div>
+
               {/* Đội B */}
-              <div className="flex items-center gap-1 min-w-0">
+              <div className="flex items-center gap-1 min-w-0 flex-wrap">
                 <span className="text-xs text-gray-800 flex-shrink-0">B:</span>
                 <input
                   type="color"
                   value={teamBInfo.teamBKitcolor || '#000000'}
-                  onChange={(e) => setTeamBInfo(prev => ({ ...prev, teamBKitcolor: e.target.value }))}
+                  onChange={(e) =>
+                    setTeamBInfo((prev) => ({
+                      ...prev,
+                      teamBKitcolor: e.target.value,
+                    }))
+                  }
                   className="w-5 h-5 border border-gray-300 rounded cursor-pointer flex-shrink-0"
                   title="Áo B"
                 />
                 <span className="text-xs text-gray-500 flex-shrink-0">Áo</span>
+
+                <input
+                  type="color"
+                  value={teamBInfo.teamB2Kitcolor || '#00ff00'}
+                  onChange={(e) =>
+                    setTeamBInfo((prev) => ({
+                      ...prev,
+                      teamB2Kitcolor: e.target.value,
+                    }))
+                  }
+                  className="w-5 h-5 border border-gray-300 rounded cursor-pointer flex-shrink-0 ml-2"
+                  title="Quần B"
+                />
+                <span className="text-xs text-gray-500 flex-shrink-0">Quần</span>
               </div>
             </div>
 
