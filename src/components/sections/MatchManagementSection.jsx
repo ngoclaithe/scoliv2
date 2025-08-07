@@ -472,7 +472,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       );
     }
 
-    // Chế độ chỉnh sửa
+    // Chế đ�� chỉnh sửa
     return (
       <div className="py-1 px-2 bg-white rounded border">
         <div className="text-center mb-1">
@@ -1355,6 +1355,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             )}
 
             {/* Đếm 40' */}
+            {typeMatch !== 'pickleball' && (
             <button
               onClick={() => {
                 const timeString = "40:00";
@@ -1368,6 +1369,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">🕓</span>
               <span className="text-xs font-bold text-center">ĐẾM 40'</span>
             </button>
+            )}
             )}
 
             {/* Đ���m 45' */}
