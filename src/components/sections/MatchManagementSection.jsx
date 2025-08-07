@@ -55,7 +55,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     resumeTimer
   } = useTimer();
 
-  const { matchCode } = useAuth();
+  const { matchCode, typeMatch } = useAuth();
 
   const stableMatchData = useMemo(() => {
     return {
