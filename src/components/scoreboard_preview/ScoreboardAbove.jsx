@@ -174,16 +174,27 @@ const ScoreboardAbove = ({ type = 1 }) => {
                     </div>
                 )}
 
-                {/* Main Scoreboard - Top Right */}
-                <div className="absolute top-4 right-4 z-30 origin-top-right
-                    md:top-4 md:right-4 md:scale-100
-                    sm:top-3 sm:right-3 sm:scale-75 
-                    max-[480px]:top-2 max-[480px]:right-2 max-[480px]:scale-[0.6] 
-                    max-[360px]:top-1.5 max-[360px]:right-1.5 max-[360px]:scale-50">
-                    <div className="bg-transparent rounded-lg shadow-2xl">
-                        {renderScoreboard()}
+                {/* Main Scoreboard - Positioned differently for pickleball vs soccer */}
+                {currentData.typeMatch === 'pickleball' ? (
+                    // Pickleball table - centered
+                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30
+                        md:scale-100 sm:scale-90 max-[480px]:scale-75 max-[360px]:scale-60">
+                        <div className="bg-transparent rounded-lg shadow-2xl">
+                            {renderScoreboard()}
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    // Soccer scoreboard - top right
+                    <div className="absolute top-4 right-4 z-30 origin-top-right
+                        md:top-4 md:right-4 md:scale-100
+                        sm:top-3 sm:right-3 sm:scale-75
+                        max-[480px]:top-2 max-[480px]:right-2 max-[480px]:scale-[0.6]
+                        max-[360px]:top-1.5 max-[360px]:right-1.5 max-[360px]:scale-50">
+                        <div className="bg-transparent rounded-lg shadow-2xl">
+                            {renderScoreboard()}
+                        </div>
+                    </div>
+                )}
 
                 {/* Bottom Left Position */}
                 <div className="absolute bottom-4 left-4 z-40 origin-center
