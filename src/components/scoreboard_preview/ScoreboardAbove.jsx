@@ -17,10 +17,12 @@ const ScoreboardAbove = ({
         mediaPartners,
         tournamentLogo
     } = usePublicMatch();
-    console.log("Giá trị display Setting là:", displaySettings);
+    // console.log("Giá trị display Setting là:", displaySettings);
     const [currentType, setCurrentType] = useState(type);
-    console.log("Giá trị organizing là:", organizing);
-    console.log("Giá trị sponsors là:", sponsors);
+    // console.log("Giá trị organizing là:", organizing);
+    // console.log("Giá trị sponsors là:", sponsors);
+    console.log("Giá trị của matchData.TeamAKitColor là:", matchData);
+
     const currentData = {
         teamAName: matchData?.teamA?.name || "ĐỘI A",
         teamBName: matchData?.teamB?.name || "ĐỘI B",
@@ -31,8 +33,10 @@ const ScoreboardAbove = ({
         matchTime: matchData?.matchTime || "00:00",
         period: matchData?.period || "Chưa bắt đầu",
         status: matchData?.status || "waiting",
-        teamAKitColor: matchData?.teamAKitColor || "#FF0000", 
-        teamBKitColor: matchData?.teamBKitColor || "#0000FF", 
+        teamAKitColor: matchData?.teamA?.teamAKitColor || "#FF0000", 
+        teamA2KitColor: matchData?.teamA?.teamA2KitColor || "#FF0000", 
+        teamBKitColor: matchData?.teamB?.teamBKitColor || "#0000FF", 
+        teamB2KitColor: matchData?.teamB?.teamB2KitColor || "#FF0000", 
         leagueLogo: "/api/placeholder/40/40"
     };
 
@@ -213,19 +217,29 @@ const ScoreboardAbove = ({
                     type_play={logoShape}
                 />
 
-                <div className="flex items-center gap-0">
-                    <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 min-w-[2.2rem] text-center"
-                        style={{ clipPath: 'polygon(12px 0%, 100% 0%, 100% 100%, 12px 100%, 0% 50%)' }}>
+                <div className="flex items-center">
+                    <div
+                        className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 min-w-[2.2rem] text-center"
+                        style={{ clipPath: 'polygon(12px 0%, 100% 0%, 100% 100%, 12px 100%, 0% 50%)' }}
+                    >
                         {currentData.teamAScore}
                     </div>
-                    <div className="container-name-color-left flex flex-col items-center w-[90px]">
-                        <div className="w-full bg-blue-600 text-white px-2 py-0.5 text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]">
+
+                    <div className="flex flex-col items-center w-[90px]">
+                        <div className="w-full bg-blue-600 text-white text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]">
                             {currentData.teamAName}
                         </div>
-                        <div
-                            className="w-full h-3"
-                            style={{ backgroundColor: currentData.teamAKitColor }}
-                        />
+
+                        <div className="flex w-full h-3">
+                            <div
+                                className="flex-1 h-full"
+                                style={{ backgroundColor: currentData.teamAKitColor }}
+                            />
+                            <div
+                                className="flex-1 h-full"
+                                style={{ backgroundColor: currentData.teamA2KitColor }}
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -235,15 +249,22 @@ const ScoreboardAbove = ({
                     </div>
                 )}
 
-                <div className="flex items-center gap-0">
-                    <div className="container-name-color-right flex flex-col items-center w-[90px]">
-                        <div className="w-full bg-blue-600 text-white px-2 py-0.5 text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]">
+                <div className="flex items-center">
+                <div className="flex flex-col items-center w-[90px]">
+                        <div className="w-full bg-blue-600 text-white text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]">
                             {currentData.teamBName}
                         </div>
-                        <div
-                            className="w-full h-3"
-                            style={{ backgroundColor: currentData.teamBKitColor }}
-                        />
+
+                        <div className="flex w-full h-3">
+                            <div
+                                className="flex-1 h-full"
+                                style={{ backgroundColor: currentData.teamB2KitColor }}
+                            />
+                            <div
+                                className="flex-1 h-full"
+                                style={{ backgroundColor: currentData.teamBKitColor }}
+                            />
+                        </div>
                     </div>
                     <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 min-w-[2.2rem] text-center"
                         style={{ clipPath: 'polygon(0% 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 0% 100%)' }}>
