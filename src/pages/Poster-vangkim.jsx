@@ -272,11 +272,11 @@ export default function VangKimMatchIntro() {
           </div>
 
           {allPartners.length > 0 && (
-            <div className="mb-2 sm:mb-4">
+            <div className="mb-1 sm:mb-2 relative z-10">
               <div className="text-center">
-                <div className="mb-2 sm:mb-4">
+                <div className="mb-1 sm:mb-2">
                   <span
-                    className="text-xs sm:text-sm md:text-base font-bold text-white bg-black/50 backdrop-blur-sm rounded-lg border border-white/30 px-2 sm:px-4 py-1 sm:py-2"
+                    className="text-[8px] sm:text-[10px] md:text-xs font-bold text-white bg-black/50 backdrop-blur-sm rounded-lg border border-white/30 px-1 sm:px-2 py-0.5 sm:py-1"
                   >
                     Các đơn vị
                   </span>
@@ -311,7 +311,7 @@ export default function VangKimMatchIntro() {
           )}
 
           {/* Bottom spacer để marquee không đè lên content */}
-          <div className="h-3 sm:h-4 md:h-6 flex-shrink-0"></div>
+          <div className="h-4 sm:h-5 md:h-7 flex-shrink-0"></div>
 
         </div>
 
