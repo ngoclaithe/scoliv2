@@ -120,10 +120,22 @@ export default function DodenMatchIntro() {
       case 'square':
         return `${baseClass} rounded-lg`;
       case 'hexagon':
-        return `${baseClass} rounded-full`; 
+        return `${baseClass} rounded-full`;
       case 'circle':
       default:
         return `${baseClass} rounded-full`;
+    }
+  };
+
+  const getTournamentPositionClass = () => {
+    switch (matchData.tournamentPosition) {
+      case 'top-left':
+        return 'justify-start';
+      case 'top-right':
+        return 'justify-end';
+      case 'top-center':
+      default:
+        return 'justify-center';
     }
   };
 
