@@ -126,6 +126,11 @@ const ScoreboardAbove = ({ type = 1 }) => {
         return allLogos;
     };
 
+    // Lấy tournament logo
+    const tournamentLogoUrl = tournamentLogo?.url_logo && tournamentLogo.url_logo.length > 0
+        ? getFullLogoUrl(tournamentLogo.url_logo[0])
+        : null;
+
     const renderScoreboard = () => {
         if (currentData.typeMatch === 'pickleball') {
             return <ScoreboardTypePickleBall currentData={currentData} showMatchTime={showMatchTime} />;
@@ -134,7 +139,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
             case 1: return <ScoreboardType1 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
             case 2: return <ScoreboardType2 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
             case 3: return <ScoreboardType3 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
-            case 4: return <ScoreboardType4 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
+            case 4: return <ScoreboardType4 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} tournamentLogo={tournamentLogoUrl} />;
             default: return <ScoreboardType1 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
         }
     };
