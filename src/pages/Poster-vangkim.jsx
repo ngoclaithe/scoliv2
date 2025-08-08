@@ -146,24 +146,20 @@ export default function VangKimMatchIntro() {
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col" style={{ fontSize: 'clamp(6px, 1.8vw, 24px)' }}>
+        <div className="relative z-10 h-full flex flex-col p-1 sm:p-3 md:p-6">
 
           {/* Top Section - Tournament Logos and Live Unit */}
-          <div className="flex justify-between items-start px-[2vw]" style={{ paddingTop: 'clamp(8px, 0.5vw, 10px)', paddingBottom: 'clamp(4px, 0.25vw, 5px)' }}>
+          <div className="flex justify-between items-start mb-2 sm:mb-4 md:mb-6 min-h-[6vh] sm:min-h-[8vh]">
 
             {/* Tournament Logos */}
-            <div className={`flex ${getTournamentPositionClass()} items-center flex-1`} style={{ gap: 'clamp(8px, 1vw, 20px)' }}>
+            <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4`}>
               {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 &&
                 matchData.tournamentLogos.map((logo, index) => (
                   <img
                     key={index}
                     src={logo}
                     alt={`Tournament Logo ${index + 1}`}
-                    className="object-contain"
-                    style={{
-                      height: 'clamp(24px, 4vw, 80px)',
-                      maxWidth: 'clamp(60px, 15vw, 200px)'
-                    }}
+                    className="object-contain h-6 sm:h-8 md:h-12 lg:h-16 max-w-16 sm:max-w-24 md:max-w-32"
                   />
                 ))
               }
@@ -171,20 +167,19 @@ export default function VangKimMatchIntro() {
 
             {/* Live Unit */}
             {matchData.liveUnit && (
-              <div className="bg-red-600 text-white rounded-lg shadow-lg flex items-center" style={{ padding: 'clamp(4px, 0.4vw, 12px) clamp(8px, 0.8vw, 16px)', gap: 'clamp(2px, 0.3vw, 6px)' }}>
-                <div className="bg-white rounded-full animate-pulse" style={{ width: 'clamp(4px, 0.5vw, 10px)', height: 'clamp(4px, 0.5vw, 10px)' }}></div>
+              <div className="bg-red-600 text-white px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2">
+                <div className="w-1 h-1 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
                 <img
                   src={matchData.liveUnit}
                   alt="Live Unit"
-                  className="object-contain"
-                  style={{ height: 'clamp(12px, 1.5vw, 30px)' }}
+                  className="h-3 sm:h-4 md:h-5 object-contain"
                 />
               </div>
             )}
           </div>
 
           {/* Main Content - Centered */}
-          <div className="flex-1 flex flex-col justify-center px-[2vw] space-y-[clamp(8px,1.5vw,30px)]">
+          <div className="flex-1 flex flex-col justify-center min-h-0">
 
             {/* Title */}
             <div className="text-center">
