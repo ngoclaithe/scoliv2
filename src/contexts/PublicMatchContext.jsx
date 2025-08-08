@@ -179,8 +179,8 @@ export const PublicMatchProvider = ({ children }) => {
       }));
       updateLastTime();
     });
-    socketService.on('set_score_updated', (data) => {
-      console.log("Giá trị của data khi nhận set_score_updated là:");
+    socketService.on('team_score_set_updated', (data) => {
+      console.log("Giá trị của data khi nhận team_score_set_update là:");
       setMatchData(prev => ({
         ...prev,
         teamA: { ...prev.teamA, scoreSet: data.scores.teamA || data.scores.home || 0 },

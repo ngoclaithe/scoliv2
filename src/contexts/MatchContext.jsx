@@ -467,7 +467,7 @@ export const MatchProvider = ({ children }) => {
 
     // Emit to socket
     if (socketConnected) {
-      socketService.emit('set_score_updated', {
+      socketService.emit('team_score_set_update', {
         teamASetScore: newMatchData.teamA.scoreSet,
         teamBSetScore: newMatchData.teamB.scoreSet
       });
