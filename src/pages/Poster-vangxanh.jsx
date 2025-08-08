@@ -154,7 +154,7 @@ export default function VangXanhMatchIntro() {
         <div className="relative z-10 h-full flex flex-col p-3 sm:p-6">
 
           {/* Top section với fixed height để tránh overlap */}
-          <div className="flex justify-between items-start mb-2 sm:mb-4 md:mb-6 min-h-[12vh] sm:min-h-[14vh] md:min-h-[16vh]">
+          <div className="flex justify-between items-start mb-1 sm:mb-3 md:mb-5 min-h-[8vh] sm:min-h-[12vh] md:min-h-[14vh]">
 
             {/* Tournament Logos */}
             <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4`}>
@@ -250,7 +250,7 @@ export default function VangXanhMatchIntro() {
           <div className="flex-1 flex flex-col justify-center min-h-0">
 
             {/* Title section với margin để tránh overlap */}
-            <div className="text-center mb-2 sm:mb-3 md:mb-4">
+            <div className="text-center mb-1 sm:mb-2 md:mb-3">
               <h1
                 className="font-black uppercase text-white text-sm sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl px-1 sm:px-2"
                 style={{
@@ -270,7 +270,7 @@ export default function VangXanhMatchIntro() {
             </div>
 
             {/* Teams section với responsive spacing */}
-            <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-3 sm:mb-4 md:mb-6">
+            <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-1 sm:mb-2 md:mb-4">
 
               <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative group">
