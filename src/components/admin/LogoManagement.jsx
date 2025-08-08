@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { 
-  TrashIcon, 
-  PencilIcon, 
+import {
+  TrashIcon,
+  PencilIcon,
   CloudArrowUpIcon,
   MagnifyingGlassIcon,
   FunnelIcon,
@@ -106,9 +106,9 @@ const LogoManagement = () => {
     try {
       setUploading(true);
       setError(null);
-      
+
       await LogoAPI.uploadLogo(file, logoData.type, logoData.name || 'Unnamed Logo');
-      
+
       // Reset form
       setFile(null);
       setLogoData({
@@ -116,10 +116,10 @@ const LogoManagement = () => {
         type: 'logo',
       });
       setShowUploadModal(false);
-      
+
       // Refresh logo list
       await loadLogos();
-      
+
     } catch (error) {
       console.error('Error uploading logo:', error);
       setError(error.message || 'Có lỗi khi tải lên logo');
@@ -134,13 +134,13 @@ const LogoManagement = () => {
     try {
       setUploading(true);
       setError(null);
-      
+
       await LogoAPI.updateLogo(editingLogo.id, {
         name: logoData.name,
         type: logoData.type,
         file: file // file is optional for updates
       });
-      
+
       // Reset form
       setEditingLogo(null);
       setFile(null);
@@ -148,10 +148,10 @@ const LogoManagement = () => {
         name: '',
         type: 'logo',
       });
-      
+
       // Refresh logo list
       await loadLogos();
-      
+
     } catch (error) {
       console.error('Error updating logo:', error);
       setError(error.message || 'Có lỗi khi cập nhật logo');
@@ -166,13 +166,13 @@ const LogoManagement = () => {
     try {
       setUploading(true);
       setError(null);
-      
+
       await LogoAPI.deleteLogo(selectedLogo.id);
       setShowDeleteModal(false);
-      
+
       // Refresh logo list
       await loadLogos();
-      
+
     } catch (error) {
       console.error('Error deleting logo:', error);
       setError(error.message || 'Có lỗi khi xóa logo');
@@ -202,7 +202,7 @@ const LogoManagement = () => {
   const getDateRange = (period) => {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    
+
     switch (period) {
       case 'today':
         return { from: today, to: now };
@@ -230,19 +230,19 @@ const LogoManagement = () => {
       const matchesSearch = logo.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         logo.type_logo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         logo.code_logo?.toLowerCase().includes(searchTerm.toLowerCase());
-      
+
       // Type filter
       const matchesType = !filterType || logo.type_logo === filterType;
-      
+
       // Date filter
       const { from, to } = getDateRange(dateFilter.period);
       let matchesDate = true;
-      
+
       if (from && to && logo.last_requested) {
         const logoDate = new Date(logo.last_requested);
         matchesDate = logoDate >= from && logoDate <= to;
       }
-      
+
       return matchesSearch && matchesType && matchesDate;
     });
 
@@ -250,19 +250,19 @@ const LogoManagement = () => {
     filtered.sort((a, b) => {
       let aValue = a[sortBy];
       let bValue = b[sortBy];
-      
+
       // Handle date sorting
       if (sortBy === 'createdAt' || sortBy === 'last_requested') {
         aValue = new Date(aValue);
         bValue = new Date(bValue);
       }
-      
+
       // Handle numeric sorting
       if (sortBy === 'request_count' || sortBy === 'file_size') {
         aValue = Number(aValue) || 0;
         bValue = Number(bValue) || 0;
       }
-      
+
       if (sortOrder === 'asc') {
         return aValue > bValue ? 1 : -1;
       } else {
@@ -423,7 +423,7 @@ const LogoManagement = () => {
             </div>
           </div>
         </div>
-        
+
         <div className="bg-white overflow-hidden shadow rounded-lg">
           <div className="p-5">
             <div className="flex items-center">
@@ -447,8 +447,8 @@ const LogoManagement = () => {
           <div className="p-5">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-semibold text-sm">
+                <div className="min-w-[2rem] h-8 bg-yellow-500 rounded-full flex items-center justify-center px-1">
+                  <span className="text-white font-semibold text-xs whitespace-nowrap overflow-hidden overflow-ellipsis max-w-[4rem]">
                     {formatFileSize(filteredAndSortedLogos().reduce((sum, logo) => sum + Number(logo.file_size || 0), 0))}
                   </span>
                 </div>
@@ -480,8 +480,8 @@ const LogoManagement = () => {
                       <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
                         Logo
                       </th>
-                      <th 
-                        scope="col" 
+                      <th
+                        scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
                         onClick={() => handleSort('name')}
                       >
@@ -490,36 +490,36 @@ const LogoManagement = () => {
                       <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                         Mã
                       </th>
-                      <th 
-                        scope="col" 
+                      <th
+                        scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
                         onClick={() => handleSort('type_logo')}
                       >
                         Loại {getSortIcon('type_logo')}
                       </th>
-                      <th 
-                        scope="col" 
+                      <th
+                        scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
                         onClick={() => handleSort('file_size')}
                       >
                         Kích thước {getSortIcon('file_size')}
                       </th>
-                      <th 
-                        scope="col" 
+                      <th
+                        scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
                         onClick={() => handleSort('request_count')}
                       >
                         Lượt sử dụng {getSortIcon('request_count')}
                       </th>
-                      <th 
-                        scope="col" 
+                      <th
+                        scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
                         onClick={() => handleSort('last_requested')}
                       >
                         Lần cuối sử dụng {getSortIcon('last_requested')}
                       </th>
-                      <th 
-                        scope="col" 
+                      <th
+                        scope="col"
                         className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 cursor-pointer hover:bg-gray-100"
                         onClick={() => handleSort('createdAt')}
                       >
@@ -576,8 +576,8 @@ const LogoManagement = () => {
                               <span className="font-medium">{logo.request_count || 0}</span>
                               {logo.request_count > 0 && (
                                 <div className="ml-2 w-16 bg-gray-200 rounded-full h-2">
-                                  <div 
-                                    className="bg-indigo-600 h-2 rounded-full" 
+                                  <div
+                                    className="bg-indigo-600 h-2 rounded-full"
                                     style={{
                                       width: `${Math.min((logo.request_count / Math.max(...filteredAndSortedLogos().map(l => l.request_count || 0))) * 100, 100)}%`
                                     }}

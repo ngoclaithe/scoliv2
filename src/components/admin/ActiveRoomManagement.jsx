@@ -142,7 +142,7 @@ const ActiveRoomManagement = () => {
   const handleCloseRoom = async () => {
     try {
       setLoading(true);
-      await RoomSessionAPI.deleteRoomSession(selectedRoom.id);
+      await RoomSessionAPI.deleteRoomSessionById(selectedRoom.id);
       
       setShowCloseModal(false);
       setSelectedRoom(null);

@@ -9,6 +9,8 @@ import {
   EyeIcon
 } from '@heroicons/react/24/outline';
 import Loading from '../common/Loading';
+import StatisticsAPI from '../../API/apiStatistics';
+import ActivitiesAPI from '../../API/apiActivities';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
@@ -22,6 +24,76 @@ const AdminDashboard = () => {
   const loadDashboardData = async () => {
     try {
       setLoading(true);
+      const [
+        accessCodesResponse,
+        usersResponse,
+        paymentRequestsResponse,
+        activeRoomsResponse,
+        activitiesResponse
+      ] = await Promise.allSettled([
+        StatisticsAPI.getTotalAccessCodes(),
+        StatisticsAPI.getTotalUsers(),
+        StatisticsAPI.getTotalPaymentRequests(),
+        StatisticsAPI.getActiveRoomSessionsCount(),
+        ActivitiesAPI.getActivities()
+      ]);
+
+      console.log("Gía trị getActivities", activitiesResponse);
+      const totalAccessCodes = accessCodesResponse.status === 'fulfilled'
+        ? accessCodesResponse.value?.data?.total || 0
+        : 0;
+
+      const totalAccounts = usersResponse.status === 'fulfilled'
+        ? usersResponse.value?.data?.total || 0
+        : 0;
+
+      const totalCodePurchases = paymentRequestsResponse.status === 'fulfilled'
+        ? paymentRequestsResponse.value?.data?.total || 0
+        : 0;
+
+      const activeRooms = activeRoomsResponse.status === 'fulfilled'
+        ? activeRoomsResponse.value?.data?.total || 0
+        : 0;
+
+      const activities = activitiesResponse.status === 'fulfilled'
+        ? activitiesResponse.value?.data || []
+        : [];
+
+      const statsData = {
+        totalAccessCodes,
+        totalAccounts,
+        totalCodePurchases,
+        activeRooms,
+        trends: {
+          accessCodes: { value: 0, isIncrease: false },
+          accounts: { value: 0, isIncrease: false },
+          codePurchases: { value: 0, isIncrease: false },
+          activeRooms: { value: 0, isIncrease: false }
+        }
+      };
+
+      if (accessCodesResponse.status === 'rejected') {
+        console.error('Error loading access codes count:', accessCodesResponse.reason);
+      }
+      if (usersResponse.status === 'rejected') {
+        console.error('Error loading users count:', usersResponse.reason);
+      }
+      if (paymentRequestsResponse.status === 'rejected') {
+        console.error('Error loading payment requests count:', paymentRequestsResponse.reason);
+      }
+      if (activeRoomsResponse.status === 'rejected') {
+        console.error('Error loading active rooms count:', activeRoomsResponse.reason);
+      }
+      if (activitiesResponse.status === 'rejected') {
+        console.error('Error loading activities:', activitiesResponse.reason);
+      }
+
+      setStats(statsData);
+      setRecentActivities(activities);
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+
+      // Fallback data nếu có lỗi
       const emptyStats = {
         totalAccessCodes: 0,
         totalAccounts: 0,
@@ -32,35 +104,24 @@ const AdminDashboard = () => {
           accounts: { value: 0, isIncrease: false },
           codePurchases: { value: 0, isIncrease: false },
           activeRooms: { value: 0, isIncrease: false }
-        },
-        revenueThisMonth: 0,
-        revenueLastMonth: 0
+        }
       };
 
       const emptyActivities = [
         {
           id: 1,
-          type: 'info',
-          description: 'Chưa có hoạt động nào',
+          type: 'error',
+          description: 'Không thể tải dữ liệu từ server',
           timestamp: new Date(),
-          status: 'info'
+          status: 'error'
         }
       ];
 
       setStats(emptyStats);
       setRecentActivities(emptyActivities);
-    } catch (error) {
-      console.error('Error loading dashboard data:', error);
     } finally {
       setLoading(false);
     }
-  };
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
-    }).format(amount);
   };
 
   const formatRelativeTime = (date) => {
@@ -78,16 +139,20 @@ const AdminDashboard = () => {
 
   const getActivityIcon = (type) => {
     switch (type) {
-      case 'code_purchase':
+      case 'payment_request':
         return <CurrencyDollarIcon className="h-5 w-5 text-green-600" />;
-      case 'account_created':
+      case 'user':
         return <UserGroupIcon className="h-5 w-5 text-blue-600" />;
+      case 'access_code':
+        return <KeyIcon className="h-5 w-5 text-indigo-600" />;
       case 'room_created':
         return <ChatBubbleLeftRightIcon className="h-5 w-5 text-indigo-600" />;
       case 'code_expired':
         return <KeyIcon className="h-5 w-5 text-orange-600" />;
       case 'payment_failed':
         return <CurrencyDollarIcon className="h-5 w-5 text-red-600" />;
+      case 'error':
+        return <EyeIcon className="h-5 w-5 text-red-600" />;
       default:
         return <EyeIcon className="h-5 w-5 text-gray-600" />;
     }
@@ -95,16 +160,33 @@ const AdminDashboard = () => {
 
   const getActivityColor = (status) => {
     switch (status) {
-      case 'success':
+      case 'completed':
+      case 'active':
         return 'bg-green-50 border-green-200';
-      case 'info':
-        return 'bg-blue-50 border-blue-200';
-      case 'warning':
+      case 'cancelled':
         return 'bg-orange-50 border-orange-200';
       case 'error':
         return 'bg-red-50 border-red-200';
       default:
         return 'bg-gray-50 border-gray-200';
+    }
+  };
+
+  const getActivityDescription = (activity) => {
+    switch (activity.type) {
+      case 'payment_request':
+        if (activity.status === 'completed') {
+          return `Yêu cầu thanh toán ${activity.code} đã hoàn thành - ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(activity.amount)}`;
+        } else if (activity.status === 'cancelled') {
+          return `Yêu cầu thanh toán ${activity.code} đã bị hủy - ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(activity.amount)}`;
+        }
+        return `Yêu cầu thanh toán ${activity.code} - ${new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(activity.amount)}`;
+      case 'access_code':
+        return `Mã truy cập ${activity.code} được tạo bởi ${activity.createdBy?.name || 'Unknown'}`;
+      case 'user':
+        return `Tài khoản mới: ${activity.name} (${activity.email})`;
+      default:
+        return activity.description || 'Hoạt động không xác định';
     }
   };
 
@@ -134,7 +216,7 @@ const AdminDashboard = () => {
       bgColor: 'bg-green-50'
     },
     {
-      name: 'Tổng mua code',
+      name: 'Yêu cầu thanh toán',
       value: stats?.totalCodePurchases || 0,
       trend: stats?.trends?.codePurchases,
       icon: CurrencyDollarIcon,
@@ -182,9 +264,8 @@ const AdminDashboard = () => {
                     <dd className="flex items-baseline">
                       <div className="text-3xl font-bold text-slate-900">{card.value || 'Chưa có'}</div>
                       {card.trend && (
-                        <div className={`ml-2 flex items-baseline text-sm font-semibold ${
-                          card.trend.isIncrease ? 'text-green-600' : 'text-red-600'
-                        }`}>
+                        <div className={`ml-2 flex items-baseline text-sm font-semibold ${card.trend.isIncrease ? 'text-green-600' : 'text-red-600'
+                          }`}>
                           {card.trend.isIncrease ? (
                             <ArrowUpIcon className="self-center flex-shrink-0 h-4 w-4" />
                           ) : (
@@ -205,44 +286,6 @@ const AdminDashboard = () => {
         ))}
       </div>
 
-      {/* Revenue section */}
-      <div className="bg-white overflow-hidden shadow-lg rounded-xl border border-slate-200">
-        <div className="px-4 py-6 sm:p-8">
-          <div className="flex items-center mb-6">
-            <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg flex items-center justify-center mr-3">
-              <span className="text-white font-bold text-sm">💰</span>
-            </div>
-            <h3 className="text-xl leading-6 font-bold text-slate-900">Doanh thu</h3>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl">
-              <dt className="text-sm font-medium text-slate-600">Tháng này</dt>
-              <dd className="mt-2 text-3xl font-bold text-green-600">
-                {stats?.revenueThisMonth ? formatCurrency(stats?.revenueThisMonth) : 'Chưa có'}
-              </dd>
-            </div>
-            <div className="bg-gradient-to-r from-slate-50 to-gray-50 p-4 rounded-xl">
-              <dt className="text-sm font-medium text-slate-600">Tháng trước</dt>
-              <dd className="mt-2 text-3xl font-bold text-slate-700">
-                {stats?.revenueLastMonth ? formatCurrency(stats?.revenueLastMonth) : 'Chưa có'}
-              </dd>
-              <div className={`mt-2 flex items-baseline text-sm font-semibold ${
-                (stats?.revenueThisMonth || 0) > (stats?.revenueLastMonth || 0) 
-                  ? 'text-green-600' 
-                  : 'text-red-600'
-              }`}>
-                {(stats?.revenueThisMonth || 0) > (stats?.revenueLastMonth || 0) ? (
-                  <ArrowUpIcon className="self-center flex-shrink-0 h-4 w-4 mr-1" />
-                ) : (
-                  <ArrowDownIcon className="self-center flex-shrink-0 h-4 w-4 mr-1" />
-                )}
-                {Math.abs(((stats?.revenueThisMonth || 0) - (stats?.revenueLastMonth || 0)) / (stats?.revenueLastMonth || 1) * 100).toFixed(1)}%
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Recent activities */}
       <div className="bg-white shadow-lg rounded-xl border border-slate-200">
         <div className="px-4 py-6 sm:p-8">
@@ -255,7 +298,7 @@ const AdminDashboard = () => {
           <div className="flow-root">
             <ul className="-mb-8">
               {recentActivities.map((activity, activityIdx) => (
-                <li key={activity.id}>
+                <li key={`${activity.type}-${activity.id}`}>
                   <div className="relative pb-8">
                     {activityIdx !== recentActivities.length - 1 ? (
                       <span className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" />
@@ -266,10 +309,12 @@ const AdminDashboard = () => {
                       </div>
                       <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
                         <div>
-                          <p className="text-sm text-slate-700 font-medium">{activity.description}</p>
+                          <p className="text-sm text-slate-700 font-medium">
+                            {getActivityDescription(activity)}
+                          </p>
                         </div>
                         <div className="text-right text-sm whitespace-nowrap text-slate-500 font-medium">
-                          {formatRelativeTime(activity.timestamp)}
+                          {formatRelativeTime(new Date(activity.createdAt))}
                         </div>
                       </div>
                     </div>

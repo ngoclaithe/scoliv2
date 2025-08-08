@@ -49,10 +49,25 @@ const RoomSessionAPI = {
       throw RoomSessionAPI.handleError(error);
     }
   },
-
-  deleteRoomSession: async (id) => {
+  getRoomSessionById: async (id) => {
+    try {
+      const response = await api.get(`/room-sessions/${id}`);
+      return response.data;
+    } catch (error) {
+      throw RoomSessionAPI.handleError(error);
+    }
+  },
+  deleteRoomSessionById: async (id) => {
     try {
       const response = await api.delete(`/room-sessions/${id}`);
+      return response.data;
+    } catch (error) {
+      throw RoomSessionAPI.handleError(error);
+    }
+  },
+  disconnectClient: async (idClient) => {
+    try {
+      const response = await api.post(`/room-sessions/disconnect-client/${idClient}`);
       return response.data;
     } catch (error) {
       throw RoomSessionAPI.handleError(error);
