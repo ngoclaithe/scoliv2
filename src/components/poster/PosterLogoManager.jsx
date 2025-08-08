@@ -68,7 +68,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     },
     {
       id: "tournament",
-      name: "GIẢI ĐẤU",
+      name: "GI���I ĐẤU",
       icon: "🏆",
     },
   ];
@@ -806,9 +806,14 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     });
   }, [allLogoItems, activeLogoCategory, logoItems]);
 
-  // Kiểm tra xem có banner nào được chọn không
+  // Kiểm tra xem có banner nào được chọn không (theo code bắt đầu bằng B hoặc type banner)
   const hasBannerSelected = useMemo(() => {
-    return currentItems.some(item => item.type === 'banner' && item.displayPositions && item.displayPositions.length > 0);
+    return currentItems.some(item => {
+      const isBannerByCode = item.code && item.code.toUpperCase().startsWith('B');
+      const isBannerByType = item.type === 'banner';
+      const isActive = item.displayPositions && item.displayPositions.length > 0;
+      return (isBannerByCode || isBannerByType) && isActive;
+    });
   }, [currentItems]);
 
   // Kiểm tra xem có logo nào được chọn không
@@ -824,9 +829,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
   // Logic để disable shape options
   const shouldDisableShapeOption = (shapeValue) => {
-    if (activeLogoCategory !== 'tournament') return false;
-
-    // Nếu đã chọn banner thì chỉ cho phép square
+    // Nếu đã chọn banner (bất kì category nào) thì chỉ cho phép square
     if (hasBannerSelected && shapeValue !== 'square') {
       return true;
     }
@@ -917,7 +920,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
         <div className="border-t border-gray-200 pt-1 space-y-1">
           <div className="text-xs font-medium text-gray-700">Tùy chọn hiển thị:</div>
-          {activeLogoCategory === 'tournament' && hasBannerSelected && (
+          {hasBannerSelected && (
             <div className="text-xs text-orange-600 bg-orange-50 p-1 rounded border">
               ⚠️ Đã chọn banner, chỉ được chọn hình vuông
             </div>
