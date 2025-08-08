@@ -20,6 +20,7 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
                         logos={[currentData.teamALogo]}
                         alt={currentData.teamAName}
                         className="w-12 h-12 sm:w-14 sm:h-14"
+                        logoSize="w-12 h-12 sm:w-14 sm:h-14"
                         style={{
                             borderColor: currentData.teamAKitColor,
                             borderRadius: logoShape === 'round' ? '50%' : logoShape === 'hexagon' ? '0' : '8px',
@@ -125,6 +126,7 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
                         logos={[currentData.teamBLogo]}
                         alt={currentData.teamBName}
                         className="w-12 h-12 sm:w-14 sm:h-14"
+                        logoSize="w-12 h-12 sm:w-14 sm:h-14"
                         style={{
                             borderColor: currentData.teamBKitColor,
                             borderRadius: logoShape === 'round' ? '50%' : logoShape === 'hexagon' ? '0' : '8px',
