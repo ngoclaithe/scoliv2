@@ -345,11 +345,11 @@ export default function XanhDuongMatchIntro() {
           </div>
 
           {/* Bottom spacer để marquee không đè lên content */}
-          <div className="h-8 sm:h-12 flex-shrink-0"></div>
+          <div className="h-3 sm:h-4 md:h-6 flex-shrink-0"></div>
         </div>
 
         {marquee.isRunning && marquee.text && (
-          <div className="absolute bottom-0 left-0 w-full h-8 sm:h-12 bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 border-t-2 border-blue-400 overflow-hidden z-20">
+          <div className="absolute bottom-0 left-0 w-full h-3 sm:h-4 md:h-6 bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 border-t-2 border-blue-400 overflow-hidden z-20">
             <div className="absolute inset-0 bg-black/50"></div>
             <div
               ref={marqueeRef}
