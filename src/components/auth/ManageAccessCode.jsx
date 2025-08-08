@@ -226,7 +226,6 @@ const ManageAccessCode = ({ onNavigate }) => {
             <div className="flex items-center space-x-3">
               <div className="flex items-center bg-white/10 rounded-full px-3 py-2">
                 <span className="text-white text-sm mr-2">👤</span>
-                <span className="text-white text-sm font-medium">{user?.name}</span>
               </div>
               {onNavigate && (
                 <button
@@ -234,7 +233,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                   className="flex items-center bg-white/10 hover:bg-white/20 rounded-full px-3 py-2 transition-colors"
                   title="Về trang chủ (cần nhập code)"
                 >
-                  <span className="text-white text-sm">🏠Vào trận</span>
+                  <span className="text-white text-sm">🚀Vào trận</span>
                 </button>
               )}
               <button
