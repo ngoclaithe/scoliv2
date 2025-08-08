@@ -232,11 +232,20 @@ export default function VangKimMatchIntro() {
                 </div>
 
                 <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  {(matchData.showTimer || matchData.showDate) && (
-                    <div className="text-[8px] sm:text-[10px] md:text-xs font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
-                      {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
-                    </div>
-                  )}
+                  {/* Date/Time và Stadium cùng 1 dòng */}
+                  <div className="text-[8px] sm:text-[10px] md:text-xs font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
+                    {(matchData.showTimer || matchData.showDate) && (
+                      <span>
+                        {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
+                      </span>
+                    )}
+                    {(matchData.showTimer || matchData.showDate) && matchData.showStadium && matchData.stadium && (
+                      <span> | </span>
+                    )}
+                    {matchData.showStadium && matchData.stadium && (
+                      <span>📍 {matchData.stadium}</span>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -259,18 +268,6 @@ export default function VangKimMatchIntro() {
               </div>
             </div>
 
-            {/* Bottom section */}
-            <div className="space-y-2 sm:space-y-3">
-              {matchData.showStadium && matchData.stadium && (
-                <div className="text-center">
-                  <div className="inline-block bg-black/50 backdrop-blur-sm px-3 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl border border-white/30">
-                    <span className="text-[8px] sm:text-[10px] md:text-xs lg:text-sm font-semibold text-white">
-                      📍 {matchData.stadium}
-                    </span>
-                  </div>
-                </div>
-              )}
-            </div>
 
           </div>
 
@@ -314,12 +311,12 @@ export default function VangKimMatchIntro() {
           )}
 
           {/* Bottom spacer để marquee không đè lên content */}
-          <div className="h-6 sm:h-8 md:h-12 flex-shrink-0"></div>
+          <div className="h-3 sm:h-4 md:h-6 flex-shrink-0"></div>
 
         </div>
 
         {marquee.isRunning && marquee.text && (
-          <div className="absolute bottom-0 left-0 w-full h-6 sm:h-8 md:h-12 bg-gradient-to-r from-yellow-900 via-amber-900 to-orange-900 border-t-2 border-yellow-400 overflow-hidden z-20">
+          <div className="absolute bottom-0 left-0 w-full h-3 sm:h-4 md:h-6 bg-gradient-to-r from-yellow-900 via-amber-900 to-orange-900 border-t-2 border-yellow-400 overflow-hidden z-20">
             <div className="absolute inset-0 bg-black/50"></div>
             <div
               ref={marqueeRef}
