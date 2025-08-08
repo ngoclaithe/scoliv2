@@ -917,6 +917,16 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
         <div className="border-t border-gray-200 pt-1 space-y-1">
           <div className="text-xs font-medium text-gray-700">Tùy chọn hiển thị:</div>
+          {activeLogoCategory === 'tournament' && hasBannerSelected && (
+            <div className="text-xs text-orange-600 bg-orange-50 p-1 rounded border">
+              ⚠️ Đã chọn banner, chỉ được chọn hình vuông
+            </div>
+          )}
+          {activeLogoCategory === 'tournament' && tournamentItemsCount >= 1 && (
+            <div className="text-xs text-blue-600 bg-blue-50 p-1 rounded border">
+              📝 Tournament chỉ cho phép 1 logo/banner duy nhất
+            </div>
+          )}
 
           <div className="flex gap-1">
             {[
