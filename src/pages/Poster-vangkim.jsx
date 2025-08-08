@@ -323,7 +323,7 @@ export default function VangKimMatchIntro() {
             <div className="absolute inset-0 bg-black/50"></div>
             <div
               ref={marqueeRef}
-              className="absolute top-1/2 transform -translate-y-1/2 whitespace-nowrap text-xs sm:text-sm md:text-lg font-bold text-yellow-300 drop-shadow-lg"
+              className="absolute top-1/2 transform -translate-y-1/2 whitespace-nowrap text-[10px] sm:text-xs md:text-sm lg:text-base font-bold text-yellow-300 drop-shadow-lg"
               style={{
                 animation: 'marquee 30s linear infinite'
               }}
