@@ -272,7 +272,7 @@ export default function VangKimMatchIntro() {
           </div>
 
           {allPartners.length > 0 && (
-            <div className="mb-1 sm:mb-2 relative z-10">
+            <div className="mb-4 sm:mb-6 md:mb-8 relative z-10 mt-2 sm:mt-4">
               <div className="text-center">
                 <div className="mb-1 sm:mb-2">
                   <span
@@ -311,7 +311,7 @@ export default function VangKimMatchIntro() {
           )}
 
           {/* Bottom spacer để marquee không đè lên content */}
-          <div className="h-4 sm:h-5 md:h-7 flex-shrink-0"></div>
+          <div className="h-6 sm:h-8 md:h-10 flex-shrink-0"></div>
 
         </div>
 
