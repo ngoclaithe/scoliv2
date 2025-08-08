@@ -154,7 +154,7 @@ export default function MatchIntroduction() {
         <div className="relative z-10 h-full flex flex-col p-3 sm:p-6">
 
           {/* Top section với fixed height để tránh overlap */}
-          <div className="flex justify-between items-start mb-4 sm:mb-6 md:mb-8 min-h-[8vh] sm:min-h-[10vh]">
+          <div className="flex justify-between items-start mb-2 sm:mb-4 md:mb-6 min-h-[12vh] sm:min-h-[14vh] md:min-h-[16vh]">
 
             {/* Tournament Logos */}
             <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4`}>
@@ -250,9 +250,9 @@ export default function MatchIntroduction() {
           <div className="flex-1 flex flex-col justify-center min-h-0">
 
             {/* Title section với margin để tránh overlap */}
-            <div className="text-center mb-4 sm:mb-6 md:mb-8">
+            <div className="text-center mb-2 sm:mb-3 md:mb-4">
               <h1
-                className="font-black uppercase text-white text-lg sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl px-2"
+                className="font-black uppercase text-white text-sm sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl px-1 sm:px-2"
                 style={{
                   textShadow: '#0006 2px 2px 4px',
                 }}
@@ -354,7 +354,7 @@ export default function MatchIntroduction() {
             <div className="absolute inset-0 bg-black/50"></div>
             <div
               ref={marqueeRef}
-              className="absolute top-1/2 transform -translate-y-1/2 whitespace-nowrap text-sm sm:text-lg font-bold text-yellow-300 drop-shadow-lg"
+              className="absolute top-1/2 transform -translate-y-1/2 whitespace-nowrap text-[10px] sm:text-xs md:text-sm lg:text-base font-bold text-yellow-300 drop-shadow-lg"
               style={{
                 animation: 'marquee 30s linear infinite'
               }}
