@@ -179,6 +179,15 @@ export const PublicMatchProvider = ({ children }) => {
       }));
       updateLastTime();
     });
+    socketService.on('set_score_updated', (data) => {
+      console.log("Giá trị của data khi nhận set_score_updated là:");
+      setMatchData(prev => ({
+        ...prev,
+        teamA: { ...prev.teamA, scoreSet: data.scores.teamA || data.scores.home || 0 },
+        teamB: { ...prev.teamB, scoreSet: data.scores.teamB || data.scores.away || 0 }
+      }));
+      updateLastTime();
+    });
 
     socketService.on('match_stats_updated', (data) => {
       setMatchStats(prev => ({ ...prev, ...data.stats }));
