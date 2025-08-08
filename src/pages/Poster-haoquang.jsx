@@ -156,7 +156,48 @@ export default function MatchIntroduction() {
           {/* Top section với fixed height để tránh overlap */}
           <div className="flex justify-between items-start mb-1 sm:mb-3 md:mb-5 min-h-[8vh] sm:min-h-[12vh] md:min-h-[14vh]">
 
-            {/* Tournament Logos */}
+            {/* Top-left: Sponsors and Organizing */}
+            <div className="flex gap-2 sm:gap-4">
+              {hasSponsors && (
+                <div className="flex-shrink-0">
+                  <div className="text-xs font-bold text-green-400 mb-1 drop-shadow-lg">
+                    Nhà tài trợ
+                  </div>
+                  <div className="flex gap-1 flex-wrap max-w-[15vw]">
+                    {sponsorLogos.map((sponsor, index) => (
+                      <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", sponsor.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
+                        <img
+                          src={sponsor.logo}
+                          alt={sponsor.name}
+                          className="max-h-full max-w-full object-contain"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {hasOrganizing && (
+                <div className="flex-shrink-0">
+                  <div className="text-xs font-bold text-blue-400 mb-1 drop-shadow-lg">
+                    Đơn vị tổ chức
+                  </div>
+                  <div className="flex gap-1 flex-wrap max-w-[15vw]">
+                    {organizingLogos.map((organizing, index) => (
+                      <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", organizing.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
+                        <img
+                          src={organizing.logo}
+                          alt={organizing.name}
+                          className="max-h-full max-w-full object-contain"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Top-center: Tournament Logos */}
             <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4`}>
               {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 &&
                 matchData.tournamentLogos.map((logo, index) => (
@@ -170,81 +211,42 @@ export default function MatchIntroduction() {
               }
             </div>
 
-              <div className="flex gap-2 sm:gap-4">
-                {hasSponsors && (
-                  <div className="flex-shrink-0">
-                    <div className="text-xs font-bold text-green-400 mb-1 drop-shadow-lg">
-                      Nhà tài trợ
-                    </div>
-                    <div className="flex gap-1 flex-wrap max-w-[15vw]">
-                      {sponsorLogos.map((sponsor, index) => (
-                        <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", sponsor.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
-                          <img
-                            src={sponsor.logo}
-                            alt={sponsor.name}
-                            className="max-h-full max-w-full object-contain"
-                          />
-                        </div>
-                      ))}
-                    </div>
+            {/* Top-right: Media Partners and Live Unit */}
+            <div className="flex flex-col items-end gap-2">
+              {hasMediaPartners && (
+                <div className="flex-shrink-0">
+                  <div className="text-xs font-bold text-purple-400 mb-1 drop-shadow-lg text-right">
+                    Đơn vị truyền thông
                   </div>
-                )}
-
-                {hasOrganizing && (
-                  <div className="flex-shrink-0">
-                    <div className="text-xs font-bold text-blue-400 mb-1 drop-shadow-lg">
-                      Đơn vị tổ chức
-                    </div>
-                    <div className="flex gap-1 flex-wrap max-w-[15vw]">
-                      {organizingLogos.map((organizing, index) => (
-                        <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", organizing.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
-                          <img
-                            src={organizing.logo}
-                            alt={organizing.name}
-                            className="max-h-full max-w-full object-contain"
-                          />
-                        </div>
-                      ))}
-                    </div>
+                  <div className="flex gap-1 flex-wrap justify-end max-w-[15vw]">
+                    {mediaPartnerLogos.map((media, index) => (
+                      <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", media.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
+                        <img
+                          src={media.logo}
+                          alt={media.name}
+                          className="max-h-full max-w-full object-contain"
+                        />
+                      </div>
+                    ))}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
 
-              <div className="flex flex-col items-end gap-2">
-                {hasMediaPartners && (
-                  <div className="flex-shrink-0">
-                    <div className="text-xs font-bold text-purple-400 mb-1 drop-shadow-lg text-right">
-                      Đơn vị truyền thông
-                    </div>
-                    <div className="flex gap-1 flex-wrap justify-end max-w-[15vw]">
-                      {mediaPartnerLogos.map((media, index) => (
-                        <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", media.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
-                          <img
-                            src={media.logo}
-                            alt={media.name}
-                            className="max-h-full max-w-full object-contain"
-                          />
-                        </div>
-                      ))}
-                    </div>
+              {matchData.liveUnit && (
+                <div className="flex-shrink-0">
+                  <div className="bg-red-600 text-white px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2">
+                    <div className="w-1 h-1 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
+                    <img
+                      src={matchData.liveUnit}
+                      alt="Live Unit"
+                      className="h-3 sm:h-4 md:h-5 object-contain"
+                    />
                   </div>
-                )}
-
-                {matchData.liveUnit && (
-                  <div className="flex-shrink-0">
-                    <div className="bg-red-600 text-white px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2">
-                      <div className="w-1 h-1 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
-                      <img
-                        src={matchData.liveUnit}
-                        alt="Live Unit"
-                        className="h-3 sm:h-4 md:h-5 object-contain"
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-
+                </div>
+              )}
             </div>
+
+          </div>
 
           {/* Main content section với proper spacing */}
           <div className="flex-1 flex flex-col justify-center min-h-0">
