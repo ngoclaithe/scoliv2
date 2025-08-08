@@ -414,7 +414,7 @@ const ScoreboardBelowNew = ({
                     >
                         <span className="truncate text-center">{currentData.teamAName}</span>
                     </div>
-                    {/* Màu áo đội A - hình bình h��nh khít vào hình thang xuôi */}
+                    {/* Màu áo đội A - hình bình hành khít vào hình thang xuôi */}
                     <div
                         className="w-12 h-8 -ml-3 z-0 mr-2.5"
                         style={{

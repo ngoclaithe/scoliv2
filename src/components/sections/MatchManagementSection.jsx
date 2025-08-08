@@ -1179,7 +1179,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
             {/* Phạt góc */}
             <EditableStatBar
-              label="Ph���t góc"
+              label="Phạt góc"
               statKey="corners"
               team1Value={matchStats.corners.team1}
               team2Value={matchStats.corners.team2}

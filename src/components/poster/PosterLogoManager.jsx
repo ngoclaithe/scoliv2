@@ -68,7 +68,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     },
     {
       id: "tournament",
-      name: "GI���I ĐẤU",
+      name: "GIẢI ĐẤU",
       icon: "🏆",
     },
   ];
