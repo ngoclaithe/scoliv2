@@ -182,29 +182,27 @@ export default function VangKimMatchIntro() {
           <div className="flex-1 flex flex-col justify-center min-h-0">
 
             {/* Title */}
-            <div className="text-center">
+            <div className="text-center mb-3 sm:mb-4 md:mb-6">
               <h1
-                className="font-black uppercase text-white"
+                className="font-black uppercase text-white text-lg sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl px-2 mb-2 sm:mb-4"
                 style={{
-                  fontSize: 'clamp(16px, 2.8vw, 56px)',
-                  textShadow: '#d97706 2px 2px 4px',
-                  marginBottom: 'clamp(4px, 0.8vw, 16px)'
+                  textShadow: '#d97706 2px 2px 4px'
                 }}
               >
                 {matchData.matchTitle}
               </h1>
 
-              <div className="flex items-center justify-center">
-                <div className="bg-white" style={{ width: 'clamp(20px, 4vw, 80px)', height: '2px' }}></div>
-                <div className="bg-yellow-400 rounded-full" style={{ width: 'clamp(4px, 0.5vw, 10px)', height: 'clamp(4px, 0.5vw, 10px)', margin: '0 clamp(2px, 0.5vw, 10px)' }}></div>
-                <div className="bg-amber-500 rounded-full" style={{ width: 'clamp(4px, 0.5vw, 10px)', height: 'clamp(4px, 0.5vw, 10px)', margin: '0 clamp(2px, 0.5vw, 10px)' }}></div>
-                <div className="bg-orange-500 rounded-full" style={{ width: 'clamp(4px, 0.5vw, 10px)', height: 'clamp(4px, 0.5vw, 10px)', margin: '0 clamp(2px, 0.5vw, 10px)' }}></div>
-                <div className="bg-white" style={{ width: 'clamp(20px, 4vw, 80px)', height: '2px' }}></div>
+              <div className="flex items-center justify-center mt-2 sm:mt-4">
+                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-400 rounded-full mx-1 sm:mx-2"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-amber-500 rounded-full mx-1 sm:mx-2"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-orange-500 rounded-full mx-1 sm:mx-2"></div>
+                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
               </div>
             </div>
 
             {/* Teams */}
-            <div className="flex items-center justify-between w-full">
+            <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-3 sm:mb-4 md:mb-6">
 
               <div className="flex-1 flex flex-col items-center max-w-[30%]" style={{ gap: 'clamp(4px, 0.8vw, 16px)' }}>
                 <div className="relative group">
