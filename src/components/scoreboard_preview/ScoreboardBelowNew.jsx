@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
+import { getFullLogoUrl } from '../../utils/logoUtils';
 import DisplayLogo from '../common/DisplayLogo';
 
 const ScoreboardBelowNew = ({
@@ -440,7 +441,7 @@ const ScoreboardBelowNew = ({
                         {/* Tournament/League Logo - đặt vào container riêng để không bị cắt */}
                         <div className="mx-2 sm:mx-3 relative" style={{ top: '-6px' }}>
                             <DisplayLogo
-                                logos={[tournamentLogo?.url_logo?.[0] || currentData.leagueLogo]}
+                                logos={[getFullLogoUrl(tournamentLogo?.url_logo?.[0]) || currentData.leagueLogo]}
                                 alt="Tournament"
                                 className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 flex-shrink-0"
                                 type_play={logoShape}
