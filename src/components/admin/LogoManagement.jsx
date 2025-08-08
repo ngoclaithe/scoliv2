@@ -3,8 +3,6 @@ import {
   TrashIcon, 
   PencilIcon, 
   CloudArrowUpIcon,
-  XMarkIcon,
-  CheckIcon,
   MagnifyingGlassIcon
 } from '@heroicons/react/24/outline';
 import LogoAPI from '../../API/apiLogo';

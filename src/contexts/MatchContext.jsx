@@ -166,9 +166,8 @@ export const MatchProvider = ({ children }) => {
       console.log(`🏠 [MatchContext] Room event: ${eventType}`, data);
 
       if (eventType === 'room_joined' && data) {
-        // console.log('✅ [MatchContext] Successfully joined room, processing current state from room_joined...');
+        console.log('✅ [MatchContext] Successfully joined room, processing current state from room_joined...');
 
-        // Cập nhật tất cả dữ liệu từ backend nếu có trong room_joined response
         if (data.currentState) {
           const state = data.currentState;
 
