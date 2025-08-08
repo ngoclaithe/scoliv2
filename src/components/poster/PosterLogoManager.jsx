@@ -108,8 +108,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           try {
             console.log('🔍 [PosterLogoManager] Loading display settings from API for:', accessCode);
             const response = await DisplaySettingsAPI.getDisplaySettings(accessCode);
-
+            console.log("giá trị của reponse.data là", response.data);
             if (response?.success && response?.data && isMounted) {
+
               const loadedLogos = [];
 
               // Process sponsors
@@ -166,8 +167,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               }
 
               // Process media (nếu có trong response)
-              if (response.data.media && Array.isArray(response.data.media)) {
-                response.data.media.forEach((item) => {
+              if (response.data.media_partners && Array.isArray(response.data.media_partners)) {
+                response.data.media_partners.forEach((item) => {
                   let positions = [];
                   if (item.position) {
                     try {
@@ -192,8 +193,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               }
 
               // Process tournament (nếu có trong response)
-              if (response.data.tournament && Array.isArray(response.data.tournament)) {
-                response.data.tournament.forEach((item) => {
+              if (response.data.tournament_logo && Array.isArray(response.data.tournament_logo)) {
+                response.data.tournament_logo.forEach((item) => {
                   let positions = [];
                   if (item.position) {
                     try {
@@ -599,11 +600,10 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                 <button
                   key={pos.key}
                   onClick={() => handlePositionToggle(pos.key)}
-                  className={`flex flex-col items-center p-1 border rounded text-xs relative ${
-                    item.displayPositions.includes(pos.key)
+                  className={`flex flex-col items-center p-1 border rounded text-xs relative ${item.displayPositions.includes(pos.key)
                       ? 'border-blue-500 bg-blue-100 text-blue-600 shadow-sm'
                       : 'border-gray-300 hover:border-gray-400 text-gray-600'
-                  }`}
+                    }`}
                   title={pos.title}
                 >
                   <span className="text-base">{pos.icon}</span>
@@ -629,8 +629,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             <label
               htmlFor={`file-${item.id}`}
               className={`block w-full text-xs text-center border rounded px-1 py-1 cursor-pointer transition-colors ${item.uploadStatus === 'preview' ? 'bg-yellow-50 border-yellow-300 text-yellow-700' :
-                  item.uploadStatus === 'error' ? 'bg-red-50 border-red-300 text-red-700' :
-                    'bg-blue-50 border-blue-300 hover:bg-blue-100'
+                item.uploadStatus === 'error' ? 'bg-red-50 border-red-300 text-red-700' :
+                  'bg-blue-50 border-blue-300 hover:bg-blue-100'
                 }`}
             >
               {item.uploadStatus === 'preview' ? '⏳ Đang tải...' :
@@ -856,18 +856,17 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               key={type.id}
               onClick={() => setActiveLogoCategory(type.id)}
               className={`px-1 py-0.5 rounded text-xs font-medium transition-colors relative ${activeLogoCategory === type.id
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
             >
               <span className="mr-1">{type.icon}</span>
               {type.name}
               {selectedLogosCount[type.id] > 0 && (
-                <span className={`ml-1 px-1 py-0.5 rounded-full text-xs font-bold ${
-                  activeLogoCategory === type.id
+                <span className={`ml-1 px-1 py-0.5 rounded-full text-xs font-bold ${activeLogoCategory === type.id
                     ? 'bg-white text-blue-500'
                     : 'bg-blue-500 text-white'
-                }`}>
+                  }`}>
                   {selectedLogosCount[type.id]}
                 </span>
               )}

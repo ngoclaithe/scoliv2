@@ -9,6 +9,7 @@ import LogoAPI from '../../API/apiLogo';
 import Loading from '../common/Loading';
 import Modal from '../common/Modal';
 import Button from '../common/Button';
+import { getFullLogoUrl } from '../../utils/logoUtils';
 
 export const formatFileSize = (bytes) => {
   if (bytes === 0) return '0 Bytes';
@@ -269,7 +270,7 @@ const LogoManagement = () => {
                           <td className="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 whitespace-nowrap sm:pl-6">
                             <div className="flex items-center">
                               <img
-                                src={logo.url || logo.path}
+                                src={getFullLogoUrl(logo.url_logo) || logo.path}
                                 alt={logo.name}
                                 className="flex-shrink-0 w-12 h-12 rounded-md object-contain bg-gray-100"
                                 onError={(e) => {
@@ -287,7 +288,7 @@ const LogoManagement = () => {
                           </td>
                           <td className="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-                              {getLogoTypeLabel(logo.type)}
+                              {getLogoTypeLabel(logo.type_logo)}
                             </span>
                           </td>
                           <td className="px-3 py-4 text-sm text-gray-500 whitespace-nowrap">
