@@ -259,55 +259,46 @@ export default function VangKimMatchIntro() {
               </div>
             </div>
 
-            {/* Date & Stadium */}
-            <div className="text-center">
-              <div className="inline-block bg-black/50 backdrop-blur-sm rounded-xl border border-white/30" style={{ padding: 'clamp(4px, 0.5vw, 10px) clamp(8px, 1.5vw, 30px)' }}>
-                <div className="flex flex-col sm:flex-row items-center justify-center" style={{ gap: 'clamp(2px, 1vw, 20px)' }}>
-                  {(matchData.showTimer || matchData.showDate) && (
-                    <span className="font-semibold text-white whitespace-nowrap" style={{ fontSize: 'clamp(8px, 1vw, 20px)' }}>
-                      {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
-                    </span>
-                  )}
-                  {(matchData.showTimer || matchData.showDate) && matchData.showStadium && matchData.stadium && (
-                    <div className="bg-white/50 hidden sm:block" style={{ width: '1px', height: 'clamp(12px, 1.5vw, 30px)' }}></div>
-                  )}
-                  {matchData.showStadium && matchData.stadium && (
-                    <span className="font-semibold text-white flex items-center" style={{ fontSize: 'clamp(8px, 1vw, 20px)' }}>
+            {/* Bottom section */}
+            <div className="space-y-2 sm:space-y-3">
+              {matchData.showStadium && matchData.stadium && (
+                <div className="text-center">
+                  <div className="inline-block bg-black/50 backdrop-blur-sm px-3 sm:px-4 py-1 sm:py-2 rounded-lg sm:rounded-xl border border-white/30">
+                    <span className="text-xs sm:text-sm md:text-base lg:text-lg font-semibold text-white">
                       📍 {matchData.stadium}
                     </span>
-                  )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
           </div>
 
           {allPartners.length > 0 && (
-            <div className="px-[2vw]" style={{ paddingBottom: 'clamp(12px, 2vw, 40px)', paddingTop: 'clamp(4px, 0.5vw, 10px)' }}>
+            <div className="mb-2 sm:mb-4">
               <div className="text-center">
-                <div style={{ marginBottom: 'clamp(4px, 1vw, 20px)' }}>
+                <div className="mb-2 sm:mb-4">
                   <span
-                    className="font-bold text-white bg-black/50 backdrop-blur-sm rounded-lg border border-white/30"
-                    style={{ fontSize: 'clamp(10px, 1.6vw, 32px)', padding: 'clamp(2px, 0.4vw, 8px) clamp(8px, 1.6vw, 32px)' }}
+                    className="text-xs sm:text-sm md:text-base font-bold text-white bg-black/50 backdrop-blur-sm rounded-lg border border-white/30 px-2 sm:px-4 py-1 sm:py-2"
                   >
                     Các đơn vị
                   </span>
                 </div>
-                <div
-                  className="flex justify-center items-center flex-wrap"
-                  style={{ gap: 'clamp(4px, 1vw, 20px)' }}
-                >
+                <div className="flex justify-center items-center flex-wrap gap-1 sm:gap-2 md:gap-4">
                   {allPartners.map((partner, index) => (
                     <div
                       key={index}
                       className={getPartnerLogoShapeClass(
-                        "flex justify-center items-center bg-white shadow-lg",
+                        "flex justify-center items-center bg-white shadow-lg p-0.5",
                         partner.typeDisplay
                       )}
                       style={{
-                        width: 'clamp(20px, 4vw, 80px)',
-                        height: 'clamp(20px, 4vw, 80px)',
-                        padding: 'clamp(1px, 0.3vw, 6px)'
+                        width: '2.5vw',
+                        height: '2.5vw',
+                        minWidth: '20px',
+                        minHeight: '20px',
+                        maxWidth: '35px',
+                        maxHeight: '35px'
                       }}
                     >
                       <img
@@ -322,16 +313,18 @@ export default function VangKimMatchIntro() {
             </div>
           )}
 
+          {/* Bottom spacer để marquee không đè lên content */}
+          <div className="h-6 sm:h-8 md:h-12 flex-shrink-0"></div>
+
         </div>
 
         {marquee.isRunning && marquee.text && (
-          <div className="absolute bottom-0 left-0 w-full bg-gradient-to-r from-yellow-900 via-amber-900 to-orange-900 border-t-2 border-yellow-400 overflow-hidden z-20" style={{ height: '4vw' }}>
+          <div className="absolute bottom-0 left-0 w-full h-6 sm:h-8 md:h-12 bg-gradient-to-r from-yellow-900 via-amber-900 to-orange-900 border-t-2 border-yellow-400 overflow-hidden z-20">
             <div className="absolute inset-0 bg-black/50"></div>
             <div
               ref={marqueeRef}
-              className="absolute top-1/2 transform -translate-y-1/2 whitespace-nowrap font-bold text-yellow-300 drop-shadow-lg"
+              className="absolute top-1/2 transform -translate-y-1/2 whitespace-nowrap text-xs sm:text-sm md:text-lg font-bold text-yellow-300 drop-shadow-lg"
               style={{
-                fontSize: '1.5vw',
                 animation: 'marquee 30s linear infinite'
               }}
             >
