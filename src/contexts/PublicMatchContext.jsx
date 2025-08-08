@@ -183,8 +183,8 @@ export const PublicMatchProvider = ({ children }) => {
       console.log("Giá trị của data khi nhận team_score_set_updated là:", data);
       setMatchData(prev => ({
         ...prev,
-        teamA: { ...prev.teamA, scoreSet: data.scores.teamA || data.scores.home || 0 },
-        teamB: { ...prev.teamB, scoreSet: data.scores.teamB || data.scores.away || 0 }
+        teamA: { ...prev.teamA, scoreSet: data.teamAScoreSet || 0 },
+        teamB: { ...prev.teamB, scoreSet: data.teamBScoreSet  || 0 }
       }));
       updateLastTime();
     });
