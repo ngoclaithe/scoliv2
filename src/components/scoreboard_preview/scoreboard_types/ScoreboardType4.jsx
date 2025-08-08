@@ -1,7 +1,7 @@
 import React from 'react';
 import DisplayLogo from '../../common/DisplayLogo';
 
-const ScoreboardType4 = ({ currentData, logoShape, showMatchTime }) => {
+const ScoreboardType4 = ({ currentData, logoShape, showMatchTime, tournamentLogo }) => {
     return (
         <div className="w-full flex justify-center px-[4px] sm:px-[8px]">
             <div className="flex flex-row items-end min-h-[64px] sm:min-h-[72px] relative bg-transparent">
@@ -55,11 +55,11 @@ const ScoreboardType4 = ({ currentData, logoShape, showMatchTime }) => {
                                 {currentData.teamAScore}
                             </div>
 
-                            {/* League Logo */}
+                            {/* Tournament/League Logo */}
                             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[32px] h-[32px] sm:w-[40px] sm:h-[40px]">
                                 <DisplayLogo
-                                    logos={[currentData.leagueLogo]}
-                                    alt="League"
+                                    logos={[tournamentLogo || currentData.leagueLogo]}
+                                    alt="Tournament"
                                     type_play={logoShape}
                                     className="w-full h-full"
                                     logoSize="w-[32px] h-[32px] sm:w-[40px] sm:h-[40px]"

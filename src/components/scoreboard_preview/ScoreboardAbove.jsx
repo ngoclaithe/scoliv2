@@ -126,6 +126,11 @@ const ScoreboardAbove = ({ type = 1 }) => {
         return allLogos;
     };
 
+    // Lấy tournament logo
+    const tournamentLogoUrl = tournamentLogo?.url_logo && tournamentLogo.url_logo.length > 0
+        ? getFullLogoUrl(tournamentLogo.url_logo[0])
+        : null;
+
     const renderScoreboard = () => {
         if (currentData.typeMatch === 'pickleball') {
             return <ScoreboardTypePickleBall currentData={currentData} showMatchTime={showMatchTime} />;
@@ -134,7 +139,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
             case 1: return <ScoreboardType1 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
             case 2: return <ScoreboardType2 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
             case 3: return <ScoreboardType3 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
-            case 4: return <ScoreboardType4 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
+            case 4: return <ScoreboardType4 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} tournamentLogo={tournamentLogoUrl} />;
             default: return <ScoreboardType1 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
         }
     };
@@ -143,11 +148,11 @@ const ScoreboardAbove = ({ type = 1 }) => {
         <div className="w-full h-screen relative overflow-hidden">
             <div className="w-full h-full relative bg-transparent">
                 {/* Top Left Position */}
-                <div className="absolute top-4 left-4 z-40 
-                    md:top-4 md:left-4 
-                    sm:top-3 sm:left-3 sm:scale-75 
-                    max-[480px]:top-2 max-[480px]:left-2 max-[480px]:scale-[0.6] 
-                    max-[360px]:top-1.5 max-[360px]:left-1.5 max-[360px]:scale-50">
+                <div className="absolute top-4 left-4 z-40
+                    md:top-4 md:left-4
+                    sm:top-3 sm:left-1 sm:scale-75
+                    max-[480px]:top-2 max-[480px]:left-0.5 max-[480px]:scale-[0.6]
+                    max-[360px]:top-1.5 max-[360px]:left-0 max-[360px]:scale-50">
                     <ScoreboardLogos 
                         allLogos={collectLogosForPosition('top-left')} 
                         logoShape={logoShape} 
@@ -157,11 +162,11 @@ const ScoreboardAbove = ({ type = 1 }) => {
 
                 {/* Tournament Logo - Top Left (if no sponsors) */}
                 {collectLogosForPosition('top-left').length === 0 && tournamentLogo?.url_logo && tournamentLogo.url_logo.length > 0 && (
-                    <div className="absolute top-4 left-4 z-40 
-                        md:top-4 md:left-4 
-                        sm:top-3 sm:left-3 sm:scale-75 
-                        max-[480px]:top-2 max-[480px]:left-2 max-[480px]:scale-[0.6] 
-                        max-[360px]:top-1.5 max-[360px]:left-1.5 max-[360px]:scale-50">
+                    <div className="absolute top-4 left-4 z-40
+                        md:top-4 md:left-4
+                        sm:top-3 sm:left-1 sm:scale-75
+                        max-[480px]:top-2 max-[480px]:left-0.5 max-[480px]:scale-[0.6]
+                        max-[360px]:top-1.5 max-[360px]:left-0 max-[360px]:scale-50">
                         <DisplayLogo
                             logos={getFullLogoUrls(tournamentLogo.url_logo)}
                             alt="Tournament"
@@ -183,11 +188,11 @@ const ScoreboardAbove = ({ type = 1 }) => {
                 </div>
 
                 {/* Bottom Left Position */}
-                <div className="absolute bottom-4 left-4 z-40 origin-center
-                    md:bottom-4 md:left-4 md:scale-100
-                    sm:bottom-3 sm:left-3 sm:scale-75 
-                    max-[480px]:bottom-2 max-[480px]:left-2 max-[480px]:scale-[0.6] 
-                    max-[360px]:bottom-1.5 max-[360px]:left-1.5 max-[360px]:scale-50">
+                <div className="absolute bottom-8 left-4 z-40 origin-center
+                    md:bottom-8 md:left-4 md:scale-100
+                    sm:bottom-6 sm:left-3 sm:scale-75
+                    max-[480px]:bottom-5 max-[480px]:left-2 max-[480px]:scale-[0.6]
+                    max-[360px]:bottom-4 max-[360px]:left-1.5 max-[360px]:scale-50">
                     <ScoreboardLogos 
                         allLogos={collectLogosForPosition('bottom-left')} 
                         logoShape={logoShape} 
@@ -196,11 +201,11 @@ const ScoreboardAbove = ({ type = 1 }) => {
                 </div>
 
                 {/* Bottom Right Position */}
-                <div className="absolute bottom-4 right-4 z-40 origin-center
-                    md:bottom-4 md:right-4 md:scale-100
-                    sm:bottom-3 sm:right-3 sm:scale-75 
-                    max-[480px]:bottom-2 max-[480px]:right-2 max-[480px]:scale-[0.6] 
-                    max-[360px]:bottom-1.5 max-[360px]:right-1.5 max-[360px]:scale-50">
+                <div className="absolute bottom-8 right-4 z-40 origin-center
+                    md:bottom-8 md:right-4 md:scale-100
+                    sm:bottom-6 sm:right-3 sm:scale-75
+                    max-[480px]:bottom-5 max-[480px]:right-2 max-[480px]:scale-[0.6]
+                    max-[360px]:bottom-4 max-[360px]:right-1.5 max-[360px]:scale-50">
                     <ScoreboardLogos 
                         allLogos={collectLogosForPosition('bottom-right')} 
                         logoShape={logoShape} 

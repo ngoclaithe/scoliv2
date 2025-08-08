@@ -68,7 +68,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     },
     {
       id: "tournament",
-      name: "GIẢI ĐẤU",
+      name: "GI���I ĐẤU",
       icon: "🏆",
     },
   ];
@@ -737,6 +737,12 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   }, [apiLogos, logoItems, activeLogoCategory, logoDisplayOptions, onLogoUpdate]);
 
   const handleAddNewLogo = async () => {
+    // Kiểm tra giới hạn cho tournament
+    if (activeLogoCategory === 'tournament' && tournamentItemsCount >= 1) {
+      alert('Chỉ được phép có 1 logo hoặc banner duy nhất cho tournament!');
+      return;
+    }
+
     const newLogo = {
       id: `custom-logo-${Date.now()}`,
       unitName: `Logo ${logoItems.filter(item => item.type === 'logo').length + 1}`,
@@ -745,14 +751,19 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       category: activeLogoCategory,
       url: null,
       displayPositions: [],
-      isCustom: true,
-      // name: `LOGO${logoItems.filter(item => item.type === 'logo').length + 1}`
+      isCustom: true
     };
 
     setLogoItems(prev => [...prev, newLogo]);
   };
 
   const handleAddNewBanner = async () => {
+    // Kiểm tra giới hạn cho tournament
+    if (activeLogoCategory === 'tournament' && tournamentItemsCount >= 1) {
+      alert('Chỉ được phép có 1 logo hoặc banner duy nhất cho tournament!');
+      return;
+    }
+
     const newBanner = {
       id: `custom-banner-${Date.now()}`,
       unitName: `Banner ${logoItems.filter(item => item.type === 'banner').length + 1}`,
@@ -794,6 +805,38 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       return item.displayPositions && item.displayPositions.length > 0;
     });
   }, [allLogoItems, activeLogoCategory, logoItems]);
+
+  // Kiểm tra xem có banner nào được chọn không (theo code bắt đầu bằng B hoặc type banner)
+  const hasBannerSelected = useMemo(() => {
+    return currentItems.some(item => {
+      const isBannerByCode = item.code && item.code.toUpperCase().startsWith('B');
+      const isBannerByType = item.type === 'banner';
+      const isActive = item.displayPositions && item.displayPositions.length > 0;
+      return (isBannerByCode || isBannerByType) && isActive;
+    });
+  }, [currentItems]);
+
+  // Kiểm tra xem có logo nào được chọn không
+  const hasLogoSelected = useMemo(() => {
+    return currentItems.some(item => item.type === 'logo' && item.displayPositions && item.displayPositions.length > 0);
+  }, [currentItems]);
+
+  // Đối với tournament, chỉ cho phép 1 item duy nhất
+  const tournamentItemsCount = useMemo(() => {
+    if (activeLogoCategory !== 'tournament') return 0;
+    return currentItems.filter(item => item.displayPositions && item.displayPositions.length > 0).length;
+  }, [currentItems, activeLogoCategory]);
+
+  // Logic để disable shape options
+  const shouldDisableShapeOption = (shapeValue) => {
+    // Nếu đã chọn banner (bất kì category nào) thì chỉ cho phép square
+    if (hasBannerSelected && shapeValue !== 'square') {
+      return true;
+    }
+
+    // Nếu chỉ chọn logo thì cho phép tất cả shapes
+    return false;
+  };
 
   const renderLogoSection = () => {
 
@@ -877,43 +920,58 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
         <div className="border-t border-gray-200 pt-1 space-y-1">
           <div className="text-xs font-medium text-gray-700">Tùy chọn hiển thị:</div>
+          {hasBannerSelected && (
+            <div className="text-xs text-orange-600 bg-orange-50 p-1 rounded border">
+              ⚠️ Đã chọn banner, chỉ được chọn hình vuông
+            </div>
+          )}
+          {activeLogoCategory === 'tournament' && tournamentItemsCount >= 1 && (
+            <div className="text-xs text-blue-600 bg-blue-50 p-1 rounded border">
+              📝 Tournament chỉ cho phép 1 logo/banner duy nhất
+            </div>
+          )}
 
           <div className="flex gap-1">
             {[
               { value: 'round', label: 'Tròn', icon: '⭕' },
               { value: 'square', label: 'Vuông', icon: '⬜' },
               { value: 'hexagon', label: 'Lục giác', icon: '⬡' }
-            ].map((shape) => (
-              <label key={shape.value} className="flex items-center gap-0.5 cursor-pointer">
-                <input
-                  id={`logo-shape-${shape.value}`}
-                  name="logoShape"
-                  type="radio"
-                  value={shape.value}
-                  checked={logoDisplayOptions.shape === shape.value}
-                  onChange={(e) => {
-                    const newShape = e.target.value;
-                    setLogoDisplayOptions(prev => ({ ...prev, shape: newShape }));
-                    console.log('🎨 [PosterLogoManager] Logo shape changed to:', newShape);
+            ].map((shape) => {
+              const isDisabled = shouldDisableShapeOption(shape.value);
+              return (
+                <label key={shape.value} className={`flex items-center gap-0.5 ${isDisabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}>
+                  <input
+                    id={`logo-shape-${shape.value}`}
+                    name="logoShape"
+                    type="radio"
+                    value={shape.value}
+                    checked={logoDisplayOptions.shape === shape.value}
+                    disabled={isDisabled}
+                    onChange={(e) => {
+                      const newShape = e.target.value;
+                      setLogoDisplayOptions(prev => ({ ...prev, shape: newShape }));
+                      console.log('🎨 [PosterLogoManager] Logo shape changed to:', newShape);
 
-                    if (onLogoUpdate) {
-                      const activeItems = allLogoItems.filter(item =>
-                        item.category === activeLogoCategory &&
-                        item.displayPositions && item.displayPositions.length > 0
-                      );
-                      onLogoUpdate({
-                        logoItems: activeItems,
-                        displayOptions: { ...logoDisplayOptions, shape: newShape }
-                      });
-                    }
-                  }}
-                  className="w-2 h-2"
-                />
+                      if (onLogoUpdate) {
+                        const activeItems = allLogoItems.filter(item =>
+                          item.category === activeLogoCategory &&
+                          item.displayPositions && item.displayPositions.length > 0
+                        );
+                        onLogoUpdate({
+                          logoItems: activeItems,
+                          displayOptions: { ...logoDisplayOptions, shape: newShape }
+                        });
+                      }
+                    }}
+                    className="w-2 h-2"
+                  />
 
-                <span className="text-xs">{shape.icon}</span>
-                <span className="text-xs">{shape.label}</span>
-              </label>
-            ))}
+                  <span className="text-xs">{shape.icon}</span>
+                  <span className="text-xs">{shape.label}</span>
+                  {isDisabled && <span className="text-xs text-red-500">(Bị khóa)</span>}
+                </label>
+              );
+            })}
           </div>
 
           <label className="flex items-center gap-0.5 cursor-pointer">

@@ -146,24 +146,20 @@ export default function VangKimMatchIntro() {
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col" style={{ fontSize: 'clamp(6px, 1.8vw, 24px)' }}>
+        <div className="relative z-10 h-full flex flex-col p-1 sm:p-3 md:p-6">
 
           {/* Top Section - Tournament Logos and Live Unit */}
-          <div className="flex justify-between items-start px-[2vw]" style={{ paddingTop: 'clamp(8px, 0.5vw, 10px)', paddingBottom: 'clamp(4px, 0.25vw, 5px)' }}>
+          <div className="flex justify-between items-start mb-1 sm:mb-3 md:mb-5 min-h-[6vh] sm:min-h-[8vh] md:min-h-[10vh]">
 
             {/* Tournament Logos */}
-            <div className={`flex ${getTournamentPositionClass()} items-center flex-1`} style={{ gap: 'clamp(8px, 1vw, 20px)' }}>
+            <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4`}>
               {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 &&
                 matchData.tournamentLogos.map((logo, index) => (
                   <img
                     key={index}
                     src={logo}
                     alt={`Tournament Logo ${index + 1}`}
-                    className="object-contain"
-                    style={{
-                      height: 'clamp(24px, 4vw, 80px)',
-                      maxWidth: 'clamp(60px, 15vw, 200px)'
-                    }}
+                    className="object-contain h-6 sm:h-8 md:h-12 lg:h-16 max-w-16 sm:max-w-24 md:max-w-32"
                   />
                 ))
               }
@@ -171,105 +167,100 @@ export default function VangKimMatchIntro() {
 
             {/* Live Unit */}
             {matchData.liveUnit && (
-              <div className="bg-red-600 text-white rounded-lg shadow-lg flex items-center" style={{ padding: 'clamp(4px, 0.4vw, 12px) clamp(8px, 0.8vw, 16px)', gap: 'clamp(2px, 0.3vw, 6px)' }}>
-                <div className="bg-white rounded-full animate-pulse" style={{ width: 'clamp(4px, 0.5vw, 10px)', height: 'clamp(4px, 0.5vw, 10px)' }}></div>
+              <div className="bg-red-600 text-white px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2">
+                <div className="w-1 h-1 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
                 <img
                   src={matchData.liveUnit}
                   alt="Live Unit"
-                  className="object-contain"
-                  style={{ height: 'clamp(12px, 1.5vw, 30px)' }}
+                  className="h-3 sm:h-4 md:h-5 object-contain"
                 />
               </div>
             )}
           </div>
 
           {/* Main Content - Centered */}
-          <div className="flex-1 flex flex-col justify-center px-[2vw] space-y-[clamp(8px,1.5vw,30px)]">
+          <div className="flex-1 flex flex-col justify-center min-h-0">
 
             {/* Title */}
-            <div className="text-center">
+            <div className="text-center mb-1 sm:mb-2 md:mb-3">
               <h1
-                className="font-black uppercase text-white"
+                className="font-black uppercase text-white text-sm sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl px-1 sm:px-2 mb-1 sm:mb-2"
                 style={{
-                  fontSize: 'clamp(16px, 2.8vw, 56px)',
-                  textShadow: '#d97706 2px 2px 4px',
-                  marginBottom: 'clamp(4px, 0.8vw, 16px)'
+                  textShadow: '#d97706 2px 2px 4px'
                 }}
               >
                 {matchData.matchTitle}
               </h1>
 
-              <div className="flex items-center justify-center">
-                <div className="bg-white" style={{ width: 'clamp(20px, 4vw, 80px)', height: '2px' }}></div>
-                <div className="bg-yellow-400 rounded-full" style={{ width: 'clamp(4px, 0.5vw, 10px)', height: 'clamp(4px, 0.5vw, 10px)', margin: '0 clamp(2px, 0.5vw, 10px)' }}></div>
-                <div className="bg-amber-500 rounded-full" style={{ width: 'clamp(4px, 0.5vw, 10px)', height: 'clamp(4px, 0.5vw, 10px)', margin: '0 clamp(2px, 0.5vw, 10px)' }}></div>
-                <div className="bg-orange-500 rounded-full" style={{ width: 'clamp(4px, 0.5vw, 10px)', height: 'clamp(4px, 0.5vw, 10px)', margin: '0 clamp(2px, 0.5vw, 10px)' }}></div>
-                <div className="bg-white" style={{ width: 'clamp(20px, 4vw, 80px)', height: '2px' }}></div>
+              <div className="flex items-center justify-center mt-2 sm:mt-4">
+                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-400 rounded-full mx-1 sm:mx-2"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-amber-500 rounded-full mx-1 sm:mx-2"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-orange-500 rounded-full mx-1 sm:mx-2"></div>
+                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
               </div>
             </div>
 
             {/* Teams */}
-            <div className="flex items-center justify-between w-full">
+            <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-1 sm:mb-2 md:mb-4">
 
-              <div className="flex-1 flex flex-col items-center max-w-[30%]" style={{ gap: 'clamp(4px, 0.8vw, 16px)' }}>
+              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <img
                     src={matchData.logo1}
                     alt={matchData.team1}
-                    className={getLogoShapeClass("relative object-cover border-white shadow-2xl transform hover:scale-110 transition duration-300")}
-                    style={{
-                      width: 'clamp(40px, 6vw, 120px)',
-                      height: 'clamp(40px, 6vw, 120px)',
-                      borderWidth: 'clamp(1px, 0.15vw, 3px)'
-                    }}
+                    className={getLogoShapeClass("relative w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 lg:w-22 lg:h-22 xl:w-26 xl:h-26 object-cover border-2 sm:border-3 md:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300")}
                   />
                 </div>
-                <div className="bg-gradient-to-r from-yellow-500 to-amber-600 rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2 max-w-[80%]" style={{ padding: 'clamp(2px, 0.3vw, 6px) clamp(4px, 0.8vw, 16px)' }}>
+                <div className="bg-gradient-to-r from-yellow-500 to-amber-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
                   <span
-                    className="font-bold uppercase tracking-wide text-white text-center block"
-                    style={{
-                      fontSize: 'clamp(8px, 0.9vw, 18px)',
-                      lineHeight: '1.2',
-                      wordBreak: 'break-word'
-                    }}
+                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block truncate"
                   >
                     {matchData.team1}
                   </span>
                 </div>
               </div>
 
-              <div className="flex-1 flex flex-col items-center max-w-[35%]">
-                <img
-                  src="/images/background-poster/vs5.png"
-                  alt="VS"
-                  className="object-contain animate-pulse"
-                  style={{ width: 'clamp(30px, 4vw, 80px)', height: 'clamp(30px, 4vw, 80px)' }}
-                />
+              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
+                <div className="relative flex flex-col items-center">
+                  <img
+                    src="/images/background-poster/vs5.png"
+                    alt="VS"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-18 lg:h-18 object-contain animate-pulse"
+                  />
+                </div>
+
+                <div className="flex flex-col items-center space-y-1 sm:space-y-2">
+                  {/* Date/Time và Stadium cùng 1 dòng */}
+                  <div className="text-[8px] sm:text-[10px] md:text-xs font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
+                    {(matchData.showTimer || matchData.showDate) && (
+                      <span>
+                        {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
+                      </span>
+                    )}
+                    {(matchData.showTimer || matchData.showDate) && matchData.showStadium && matchData.stadium && (
+                      <span> | </span>
+                    )}
+                    {matchData.showStadium && matchData.stadium && (
+                      <span>📍 {matchData.stadium}</span>
+                    )}
+                  </div>
+                </div>
               </div>
 
-              <div className="flex-1 flex flex-col items-center max-w-[30%]" style={{ gap: 'clamp(4px, 0.8vw, 16px)' }}>
+              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-slate-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <img
                     src={matchData.logo2}
                     alt={matchData.team2}
-                    className={getLogoShapeClass("relative object-cover border-white shadow-2xl transform hover:scale-110 transition duration-300")}
-                    style={{
-                      width: 'clamp(40px, 6vw, 120px)',
-                      height: 'clamp(40px, 6vw, 120px)',
-                      borderWidth: 'clamp(1px, 0.15vw, 3px)'
-                    }}
+                    className={getLogoShapeClass("relative w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 lg:w-22 lg:h-22 xl:w-26 xl:h-26 object-cover border-2 sm:border-3 md:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300")}
                   />
                 </div>
-                <div className="bg-gradient-to-r from-gray-500 to-slate-600 rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2 max-w-[80%]" style={{ padding: 'clamp(2px, 0.3vw, 6px) clamp(4px, 0.8vw, 16px)' }}>
+                <div className="bg-gradient-to-r from-gray-500 to-slate-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
                   <span
-                    className="font-bold uppercase tracking-wide text-white text-center block"
-                    style={{
-                      fontSize: 'clamp(8px, 0.9vw, 18px)',
-                      lineHeight: '1.2',
-                      wordBreak: 'break-word'
-                    }}
+                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block truncate"
                   >
                     {matchData.team2}
                   </span>
@@ -277,55 +268,34 @@ export default function VangKimMatchIntro() {
               </div>
             </div>
 
-            {/* Date & Stadium */}
-            <div className="text-center">
-              <div className="inline-block bg-black/50 backdrop-blur-sm rounded-xl border border-white/30" style={{ padding: 'clamp(4px, 0.5vw, 10px) clamp(8px, 1.5vw, 30px)' }}>
-                <div className="flex flex-col sm:flex-row items-center justify-center" style={{ gap: 'clamp(2px, 1vw, 20px)' }}>
-                  {(matchData.showTimer || matchData.showDate) && (
-                    <span className="font-semibold text-white whitespace-nowrap" style={{ fontSize: 'clamp(8px, 1vw, 20px)' }}>
-                      {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
-                    </span>
-                  )}
-                  {(matchData.showTimer || matchData.showDate) && matchData.showStadium && matchData.stadium && (
-                    <div className="bg-white/50 hidden sm:block" style={{ width: '1px', height: 'clamp(12px, 1.5vw, 30px)' }}></div>
-                  )}
-                  {matchData.showStadium && matchData.stadium && (
-                    <span className="font-semibold text-white flex items-center" style={{ fontSize: 'clamp(8px, 1vw, 20px)' }}>
-                      📍 {matchData.stadium}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
 
           </div>
 
           {allPartners.length > 0 && (
-            <div className="px-[2vw]" style={{ paddingBottom: 'clamp(12px, 2vw, 40px)', paddingTop: 'clamp(4px, 0.5vw, 10px)' }}>
+            <div className="mb-4 sm:mb-6 md:mb-8 relative z-10 mt-2 sm:mt-4">
               <div className="text-center">
-                <div style={{ marginBottom: 'clamp(4px, 1vw, 20px)' }}>
+                <div className="mb-1 sm:mb-2">
                   <span
-                    className="font-bold text-white bg-black/50 backdrop-blur-sm rounded-lg border border-white/30"
-                    style={{ fontSize: 'clamp(10px, 1.6vw, 32px)', padding: 'clamp(2px, 0.4vw, 8px) clamp(8px, 1.6vw, 32px)' }}
+                    className="text-[8px] sm:text-[10px] md:text-xs font-bold text-white bg-black/50 backdrop-blur-sm rounded-lg border border-white/30 px-1 sm:px-2 py-0.5 sm:py-1"
                   >
                     Các đơn vị
                   </span>
                 </div>
-                <div
-                  className="flex justify-center items-center flex-wrap"
-                  style={{ gap: 'clamp(4px, 1vw, 20px)' }}
-                >
+                <div className="flex justify-center items-center flex-wrap gap-1 sm:gap-2 md:gap-4">
                   {allPartners.map((partner, index) => (
                     <div
                       key={index}
                       className={getPartnerLogoShapeClass(
-                        "flex justify-center items-center bg-white shadow-lg",
+                        "flex justify-center items-center bg-white shadow-lg p-0.5",
                         partner.typeDisplay
                       )}
                       style={{
-                        width: 'clamp(20px, 4vw, 80px)',
-                        height: 'clamp(20px, 4vw, 80px)',
-                        padding: 'clamp(1px, 0.3vw, 6px)'
+                        width: '2.5vw',
+                        height: '2.5vw',
+                        minWidth: '20px',
+                        minHeight: '20px',
+                        maxWidth: '35px',
+                        maxHeight: '35px'
                       }}
                     >
                       <img
@@ -340,16 +310,18 @@ export default function VangKimMatchIntro() {
             </div>
           )}
 
+          {/* Bottom spacer để marquee không đè lên content */}
+          <div className="h-6 sm:h-8 md:h-10 flex-shrink-0"></div>
+
         </div>
 
         {marquee.isRunning && marquee.text && (
-          <div className="absolute bottom-0 left-0 w-full bg-gradient-to-r from-yellow-900 via-amber-900 to-orange-900 border-t-2 border-yellow-400 overflow-hidden z-20" style={{ height: '4vw' }}>
+          <div className="absolute bottom-0 left-0 w-full h-3 sm:h-4 md:h-6 bg-gradient-to-r from-yellow-900 via-amber-900 to-orange-900 border-t-2 border-yellow-400 overflow-hidden z-20">
             <div className="absolute inset-0 bg-black/50"></div>
             <div
               ref={marqueeRef}
-              className="absolute top-1/2 transform -translate-y-1/2 whitespace-nowrap font-bold text-yellow-300 drop-shadow-lg"
+              className="absolute top-1/2 transform -translate-y-1/2 whitespace-nowrap text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-bold text-yellow-300 drop-shadow-lg"
               style={{
-                fontSize: '1.5vw',
                 animation: 'marquee 30s linear infinite'
               }}
             >
