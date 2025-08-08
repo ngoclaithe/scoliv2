@@ -468,8 +468,8 @@ export const MatchProvider = ({ children }) => {
     // Emit to socket
     if (socketConnected) {
       socketService.emit('team_score_set_update', {
-        teamASetScore: newMatchData.teamA.scoreSet,
-        teamBSetScore: newMatchData.teamB.scoreSet
+        teamAScoreSet: newMatchData.teamA.scoreSet,
+        teamBScoreSet: newMatchData.teamB.scoreSet
       });
     }
   }, [matchData, socketConnected]);
