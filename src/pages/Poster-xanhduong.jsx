@@ -30,7 +30,8 @@ export default function XanhDuongMatchIntro() {
     organizingTypeDisplay: organizing?.organizing?.type_display || [],
     mediaPartners: getFullLogoUrls(mediaPartners?.mediaPartners?.url_logo || []),
     mediaPartnersTypeDisplay: mediaPartners?.mediaPartners?.type_display || [],
-    tournamentLogo: getFullLogoUrl(tournamentLogo?.url_logo?.[0]) || null,
+    tournamentLogos: getFullLogoUrls(tournamentLogo?.url_logo || []),
+    tournamentPosition: displaySettings?.tournamentPosition || 'top-center',
     liveUnit: getFullLogoUrl(liveUnit?.url_logo?.[0]) || null,
     logoShape: displaySettings?.logoShape || 'circle',
     showTournamentLogo: displaySettings?.showTournamentLogo !== false,
@@ -118,10 +119,22 @@ export default function XanhDuongMatchIntro() {
       case 'square':
         return `${baseClass} rounded-lg`;
       case 'hexagon':
-        return `${baseClass} rounded-full`; 
+        return `${baseClass} rounded-full`;
       case 'circle':
       default:
         return `${baseClass} rounded-full`;
+    }
+  };
+
+  const getTournamentPositionClass = () => {
+    switch (matchData.tournamentPosition) {
+      case 'top-left':
+        return 'justify-start';
+      case 'top-right':
+        return 'justify-end';
+      case 'top-center':
+      default:
+        return 'justify-center';
     }
   };
 
@@ -141,6 +154,20 @@ export default function XanhDuongMatchIntro() {
 
           {/* Top section với fixed height để tránh overlap */}
           <div className="flex justify-between items-start mb-4 sm:mb-6 md:mb-8 min-h-[8vh] sm:min-h-[10vh]">
+
+            {/* Tournament Logos */}
+            <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4`}>
+              {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 &&
+                matchData.tournamentLogos.map((logo, index) => (
+                  <img
+                    key={index}
+                    src={logo}
+                    alt={`Tournament Logo ${index + 1}`}
+                    className="object-contain h-6 sm:h-8 md:h-12 lg:h-16 max-w-16 sm:max-w-24 md:max-w-32"
+                  />
+                ))
+              }
+            </div>
 
               <div className="flex gap-2 sm:gap-4">
                 {hasSponsors && (
@@ -313,17 +340,6 @@ export default function XanhDuongMatchIntro() {
                 </div>
               )}
 
-              {matchData.showTournamentLogo && matchData.tournamentLogo && (
-                <div className="text-center">
-                  <div className="inline-flex items-center justify-center">
-                    <img
-                      src={matchData.tournamentLogo}
-                      alt="Tournament Logo"
-                      className="h-6 sm:h-8 md:h-12 lg:h-16 max-w-24 sm:max-w-32 md:max-w-40 object-contain"
-                    />
-                  </div>
-                </div>
-              )}
             </div>
 
           </div>
