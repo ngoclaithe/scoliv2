@@ -29,15 +29,14 @@ export const MatchProvider = ({ children }) => {
       name: "ĐỘI-B",
       score: 0,
       logo: null,
-      scoreSet: 0 // For pickleball
+      scoreSet: 0 
     },
-    // Note: matchTime, period, status đã được chuyển sang TimerContext
     tournament: "",
     stadium: "",
     matchDate: "",
     liveText: "",
     matchTitle: "",
-    typeMatch: "soccer" // 'soccer' or 'pickleball'
+    typeMatch: "soccer" 
   });
 
   // State cho thống kê trận đấu
