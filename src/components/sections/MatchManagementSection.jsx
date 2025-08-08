@@ -57,9 +57,6 @@ const MatchManagementSection = ({ isActive = true }) => {
 
   const { matchCode, typeMatch } = useAuth();
 
-  // Debug log
-  console.log('🏸 [MatchManagementSection] typeMatch:', typeMatch);
-
   const stableMatchData = useMemo(() => {
     return {
       teamA: {

@@ -9,8 +9,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import App from '../App';
 import DisplayController from '../components/display/DisplayController';
 import DynamicDisplayController from '../components/display/DynamicDisplayController';
-import DynamicRouteDemo from '../components/demo/DynamicRouteDemo';
-import ScoreboardBelow from '../components/scoreboard_preview/ScoreboardBelowNew';
 import PosterPreviewPage from '../pages/PosterPreviewPage';
 import AdminApp from '../components/admin/AdminApp';
 
@@ -58,13 +56,6 @@ const AppRoutes = () => {
             </PublicMatchProvider>
           </AuthProvider>
         } />
-
-        <Route path="/demotest" element={
-              <ScoreboardBelow />
-        } />
-
-        {/* Demo route for testing dynamic routes */}
-        <Route path="/demo/dynamic-route" element={<DynamicRouteDemo />} />
       </Routes>
 
       {/* Toast Container - để ở đây để có thể dùng cho tất cả routes */}
