@@ -204,41 +204,40 @@ export default function VangKimMatchIntro() {
             {/* Teams */}
             <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-3 sm:mb-4 md:mb-6">
 
-              <div className="flex-1 flex flex-col items-center max-w-[30%]" style={{ gap: 'clamp(4px, 0.8vw, 16px)' }}>
+              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <img
                     src={matchData.logo1}
                     alt={matchData.team1}
-                    className={getLogoShapeClass("relative object-cover border-white shadow-2xl transform hover:scale-110 transition duration-300")}
-                    style={{
-                      width: 'clamp(40px, 6vw, 120px)',
-                      height: 'clamp(40px, 6vw, 120px)',
-                      borderWidth: 'clamp(1px, 0.15vw, 3px)'
-                    }}
+                    className={getLogoShapeClass("relative w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 lg:w-22 lg:h-22 xl:w-26 xl:h-26 object-cover border-2 sm:border-3 md:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300")}
                   />
                 </div>
-                <div className="bg-gradient-to-r from-yellow-500 to-amber-600 rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2 max-w-[80%]" style={{ padding: 'clamp(2px, 0.3vw, 6px) clamp(4px, 0.8vw, 16px)' }}>
+                <div className="bg-gradient-to-r from-yellow-500 to-amber-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
                   <span
-                    className="font-bold uppercase tracking-wide text-white text-center block"
-                    style={{
-                      fontSize: 'clamp(8px, 0.9vw, 18px)',
-                      lineHeight: '1.2',
-                      wordBreak: 'break-word'
-                    }}
+                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block truncate"
                   >
                     {matchData.team1}
                   </span>
                 </div>
               </div>
 
-              <div className="flex-1 flex flex-col items-center max-w-[35%]">
-                <img
-                  src="/images/background-poster/vs5.png"
-                  alt="VS"
-                  className="object-contain animate-pulse"
-                  style={{ width: 'clamp(30px, 4vw, 80px)', height: 'clamp(30px, 4vw, 80px)' }}
-                />
+              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
+                <div className="relative flex flex-col items-center">
+                  <img
+                    src="/images/background-poster/vs5.png"
+                    alt="VS"
+                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-18 lg:h-18 object-contain animate-pulse"
+                  />
+                </div>
+
+                <div className="flex flex-col items-center space-y-1 sm:space-y-2">
+                  {(matchData.showTimer || matchData.showDate) && (
+                    <div className="text-xs sm:text-sm font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
+                      {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="flex-1 flex flex-col items-center max-w-[30%]" style={{ gap: 'clamp(4px, 0.8vw, 16px)' }}>
