@@ -25,7 +25,7 @@ const DisplayLogo = ({
 
     const getShapeStyles = (type) => {
         const baseClasses = "w-full h-full object-contain";
-        
+
         switch (type) {
             case "round":
                 return {
@@ -39,7 +39,7 @@ const DisplayLogo = ({
                 };
             case "hexagon":
                 return {
-                    containerClass: "overflow-hidden",
+                    containerClass: "", // Không dùng overflow-hidden để không cắt hexagon
                     imageClass: baseClasses,
                     clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)"
                 };
@@ -85,7 +85,7 @@ const DisplayLogo = ({
         const fullLogoUrl = getFullLogoUrl(logoSrc);
 
         return (
-            <div className={`relative ${className} overflow-hidden`}>
+            <div className={`relative ${className} ${type_play === 'hexagon' ? '' : 'overflow-hidden'}`}>
                 <div
                     className={`${shapeStyles.containerClass} p-0.5 ${logoSize} flex items-center justify-center`}
                     style={{ backgroundColor: 'rgba(255,255,255,0.9)' }}

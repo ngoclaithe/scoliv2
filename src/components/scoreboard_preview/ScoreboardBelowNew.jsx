@@ -47,7 +47,7 @@ const ScoreboardBelowNew = ({
                  marqueeData?.color === 'white-blue' ? '#2563eb' :
                  marqueeData?.color === 'white-red' ? '#dc2626' :
                  marqueeData?.color === 'white-green' ? '#16a34a' : "#FF0000",
-        repeat: 3,
+        repeat: 1,
         mode: marqueeData?.mode || 'khong',
         interval: marqueeData?.mode === 'moi-2' ? 120000 : // 2 minutes = 120 seconds
                   marqueeData?.mode === 'moi-5' ? 300000 : // 5 minutes = 300 seconds
@@ -412,7 +412,7 @@ const ScoreboardBelowNew = ({
                     >
                         <span className="truncate text-center">{currentData.teamAName}</span>
                     </div>
-                    {/* Màu áo đội A - hình bình hành khít vào hình thang xuôi */}
+                    {/* Màu áo đội A - hình bình h��nh khít vào hình thang xuôi */}
                     <div
                         className="w-12 h-8 -ml-3 z-0 mr-2.5"
                         style={{

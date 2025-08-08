@@ -9,6 +9,7 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                     logos={[currentData.teamALogo]}
                     alt={currentData.teamAName}
                     className="w-14 h-14"
+                    logoSize="w-14 h-14"
                     type_play={logoShape}
                 />
 
@@ -71,6 +72,7 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                     logos={[currentData.teamBLogo]}
                     alt={currentData.teamBName}
                     className="w-14 h-14"
+                    logoSize="w-14 h-14"
                     type_play={logoShape}
                 />
             </div>

@@ -1117,18 +1117,30 @@ const MatchManagementSection = ({ isActive = true }) => {
       {/* Tab Thông số */}
       {selectedOption === "thong-so" && typeMatch !== 'pickleball' && (
         <div className="bg-white rounded-lg p-2 border border-gray-200 shadow-sm">
-          {/* Header với nút chỉnh sửa */}
+          {/* Header với nút chỉnh sửa và thống kê */}
           <div className="flex justify-between items-center mb-2">
             <h3 className="text-base font-semibold text-gray-900">Thông số trận đấu</h3>
-            <Button
-              variant={isEditingStats ? "primary" : "outline"}
-              size="sm"
-              onClick={() => setIsEditingStats(!isEditingStats)}
-              className="flex items-center space-x-1 px-2 py-1"
-            >
-              <span>{isEditingStats ? "✓" : "✏️"}</span>
-              <span className="text-xs">{isEditingStats ? "OK" : "Sửa"}</span>
-            </Button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  updateView('stat');
+                  playAudioForAction('poster');
+                }}
+                className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+              >
+                <span className="text-sm mr-1">📊</span>
+                <span className="text-xs font-bold text-center">THỐNG KÊ</span>
+              </button>
+              <Button
+                variant={isEditingStats ? "primary" : "outline"}
+                size="sm"
+                onClick={() => setIsEditingStats(!isEditingStats)}
+                className="flex items-center space-x-1 px-2 py-1"
+              >
+                <span>{isEditingStats ? "✓" : "✏️"}</span>
+                <span className="text-xs">{isEditingStats ? "OK" : "Sửa"}</span>
+              </Button>
+            </div>
           </div>
 
           {/* Stats Display - Gom chung vào 1 thẻ */}
@@ -1163,7 +1175,7 @@ const MatchManagementSection = ({ isActive = true }) => {
 
             {/* Phạt góc */}
             <EditableStatBar
-              label="Phạt góc"
+              label="Ph���t góc"
               statKey="corners"
               team1Value={matchStats.corners.team1}
               team2Value={matchStats.corners.team2}
@@ -1435,19 +1447,6 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-xs font-bold text-center">NGHỈ GIỮA</span>
             </button>
 
-            {/* Thống kê */}
-            {typeMatch !== 'pickleball' && (
-            <button
-              onClick={() => {
-                updateView('stat');
-                playAudioForAction('poster');
-              }}
-              className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
-            >
-              <span className="text-sm mr-1">📊</span>
-              <span className="text-xs font-bold text-center">THỐNG KÊ</span>
-            </button>
-            )}
           </div>
 
           {/* Đếm T - Input phút đơn giản */}

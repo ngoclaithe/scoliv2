@@ -59,7 +59,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
                 marqueeData?.color === 'white-blue' ? '#2563eb' :
                     marqueeData?.color === 'white-red' ? '#dc2626' :
                         marqueeData?.color === 'white-green' ? '#16a34a' : "#FF0000",
-        repeat: 3,
+        repeat: 1,
         mode: marqueeData?.mode || 'khong',
         interval: marqueeData?.mode === 'moi-2' ? 120000 :
             marqueeData?.mode === 'moi-5' ? 300000 :
