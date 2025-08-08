@@ -500,7 +500,14 @@ const MatchManagementSection = ({ isActive = true }) => {
       </div>
     );
   };
-
+  const viewMap = {
+    scoreboard: 'Tỉ số trên',
+    scoreboard_below: 'Tỉ số dưới',
+    poster: 'Poster',
+    intro: 'Giới thiệu',
+    halftime: 'Nghỉ giữa hiệp',
+    player_list: 'Danh sách cầu thủ',
+  };
   return (
     <div className="sm:p-0 space-y-0 sm:space-y-0">
       {/* Scoreboard */}
@@ -508,7 +515,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         <div className="w-full h-12 sm:h-16 bg-gray-100 rounded-md overflow-hidden relative">
           {/* Hiển thị view hiện tại */}
           <div className="absolute top-1 left-1 bg-blue-500 text-white px-2 py-0.5 rounded text-xs font-bold z-10">
-            View: {currentView || 'intro'}
+            View: {viewMap[currentView || 'intro'] || 'Giới thiệu'}
           </div>
           <ScoreboardPreview
             matchData={{
