@@ -86,6 +86,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
                     : 'square';
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
+                    console.log('🔍 Sponsors typeDisplay for position', targetPosition, ':', typeDisplay);
                     allLogos.push({ url: getFullLogoUrl(logo), alt: 'Sponsor', type: 'sponsor', typeDisplay });
                 }
             });
