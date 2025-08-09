@@ -7,7 +7,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import AccessCodeAPI from '../../API/apiAccessCode';
 import PaymentAccessCodeAPI from '../../API/apiPaymentAccessCode';
 import InfoPaymentAPI from '../../API/apiInfoPayment';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, ClockIcon, UserIcon } from '@heroicons/react/24/outline';
+import UserAPI from '../../API/apiUser';
 
 const ManageAccessCode = ({ onNavigate }) => {
   const { user, logout, enterMatchCode, loading: authLoading } = useAuth();
@@ -116,7 +117,7 @@ const ManageAccessCode = ({ onNavigate }) => {
       case 'active': return '🟢 Sẵn sàng';
       case 'expired': return '🔴 Hết hạn';
       case 'inactive': return '⚪ Chưa kích hoạt';
-      case 'used': return '🟡 Đang sử dụng';
+      case 'used': return '��� Đang sử dụng';
       default: return '❓ Không xác định';
     }
   };
