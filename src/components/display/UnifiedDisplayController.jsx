@@ -110,15 +110,26 @@ const UnifiedDisplayController = () => {
   }, [isDynamicRoute, location, matchTitle, liveText, teamALogoCode, teamBLogoCode, teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore, view, matchTime]);
 
   // Chờ socket connection và gửi cập nhật
-  const waitForSocketAndUpdate = useCallback(async (params, maxAttempts = 10) => {
+  const waitForSocketAndUpdate = useCallback(async (params, maxAttempts = 20) => {
     if (!params) return;
 
     console.log('⏳ [UnifiedDisplayController] Waiting for socket connection...');
+    console.log('📊 [UnifiedDisplayController] Params to update:', params);
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-      if (socketService.getConnectionStatus().isConnected) {
+      const status = socketService.getConnectionStatus();
+      console.log(`🔍 [UnifiedDisplayController] Attempt ${attempt}/${maxAttempts}, Socket status:`, status);
+
+      if (status.isConnected && status.socketId) {
         console.log(`✅ [UnifiedDisplayController] Socket connected on attempt ${attempt}, updating params...`);
         await updateSocketWithParams(params);
+
+        // Thử gửi lại sau 2 giây để đảm bảo
+        setTimeout(() => {
+          console.log('🔄 [UnifiedDisplayController] Backup attempt to update params...');
+          updateSocketWithParams(params);
+        }, 2000);
+
         return;
       }
 
