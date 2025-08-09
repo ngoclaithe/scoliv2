@@ -163,15 +163,15 @@ const ScoreboardAbove = ({ type = 1 }) => {
 
                 {/* Tournament Logo - Top Left (if no sponsors) */}
                 {collectLogosForPosition('top-left').length === 0 && tournamentLogo?.url_logo && tournamentLogo.url_logo.length > 0 && (
-                    <div className="absolute top-4 left-4 z-40
+                    <div className="absolute top-2 left-2 z-40
                         md:top-4 md:left-4
-                        sm:top-3 sm:left-1 sm:scale-75
-                        max-[480px]:top-2 max-[480px]:left-0.5 max-[480px]:scale-[0.6]
-                        max-[360px]:top-1.5 max-[360px]:left-0 max-[360px]:scale-50">
+                        sm:top-2 sm:left-2
+                        max-[480px]:top-1 max-[480px]:left-1
+                        max-[360px]:top-0.5 max-[360px]:left-0.5">
                         <DisplayLogo
                             logos={getFullLogoUrls(tournamentLogo.url_logo)}
                             alt="Tournament"
-                            className="w-16 h-16"
+                            className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16"
                             type_play={logoShape}
                         />
                     </div>
