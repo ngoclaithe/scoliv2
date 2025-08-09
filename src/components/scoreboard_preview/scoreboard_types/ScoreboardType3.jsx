@@ -2,7 +2,7 @@ import React from 'react';
 
 const ScoreboardType3 = ({ currentData, logoShape, showMatchTime }) => {
     return (
-        <div className="flex items-center justify-center w-full px-2 max-w-sm mx-auto">
+        <div className="flex items-center justify-center w-full px-2 max-w-sm mx-auto scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
             {/* Logo đội A */}
             <div className="flex-shrink-0 mr-2 sm:mr-3">
                 <div

@@ -1131,10 +1131,10 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               const previewUrl = `/${accessCode}/preview`;
               window.open(previewUrl, '_blank');
             }}
-            className="px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white font-bold text-sm rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
+            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-sm rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
           >
-            <span>👁️</span>
-            <span>PREVIEW POSTER</span>
+            <span>📥</span>
+            <span>TẢI LOGO</span>
           </button>
         </div>
       </div>

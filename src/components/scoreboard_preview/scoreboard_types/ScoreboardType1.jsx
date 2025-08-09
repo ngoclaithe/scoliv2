@@ -2,7 +2,7 @@ import React from 'react';
 
 const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
             <div className="flex items-center justify-center w-full px-2 gap-0">
                 <div
                     className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
