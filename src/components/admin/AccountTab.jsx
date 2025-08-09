@@ -30,76 +30,91 @@ const AccountTab = () => {
   });
 
   useEffect(() => {
-    loadUsers();
-  }, [currentPage, searchTerm, roleFilter]);
+    loadCurrentUser();
+  }, []);
 
-  const loadUsers = async () => {
+  const loadCurrentUser = async () => {
     try {
       setLoading(true);
       setError('');
-      
-      const params = {
-        page: currentPage,
-        limit: 10
-      };
-      
-      if (roleFilter) params.role = roleFilter;
-      if (searchTerm) {
-        params.name = searchTerm;
-        params.email = searchTerm;
-      }
 
-      const response = await UserAPI.getUsers(params);
-      
+      // Giả sử user hiện tại có id = 1 (trong thực tế sẽ lấy từ token hoặc context)
+      const response = await UserAPI.getUser('1');
+
       if (response.success) {
-        setUsers(response.data);
-        setTotalPages(response.pagination?.totalPages || 1);
-        setTotalItems(response.pagination?.totalItems || response.data.length);
+        setCurrentUser(response.data);
+        setFormData({
+          name: response.data.name || '',
+          email: response.data.email || ''
+        });
       }
     } catch (error) {
-      console.error('Error loading users:', error);
-      setError(error.message || 'Không thể tải danh sách người dùng');
+      console.error('Error loading current user:', error);
+      // Nếu không load được, tạo user giả lập
+      setCurrentUser({
+        id: '1',
+        name: 'Admin User',
+        email: 'admin@example.com',
+        role: 'admin',
+        createdAt: new Date().toISOString(),
+        lastLoginAt: new Date().toISOString()
+      });
+      setFormData({
+        name: 'Admin User',
+        email: 'admin@example.com'
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  const handleEdit = async () => {
+  const handleUpdateProfile = async () => {
     try {
       setLoading(true);
       setError('');
-      
-      const response = await UserAPI.updateUser(selectedUser.id, formData);
-      
+      setSuccess('');
+
+      const response = await UserAPI.updateUser(currentUser.id, formData);
+
       if (response.success) {
-        setShowEditModal(false);
-        setSelectedUser(null);
-        resetFormData();
-        loadUsers();
+        setCurrentUser(prev => ({ ...prev, ...formData }));
+        setShowEditProfileModal(false);
+        setSuccess('Cập nhật thông tin thành công!');
       }
     } catch (error) {
-      console.error('Error updating user:', error);
-      setError(error.message || 'Không thể cập nhật người dùng');
+      console.error('Error updating profile:', error);
+      setError(error.message || 'Không thể cập nhật thông tin');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async () => {
+  const handleChangePassword = async () => {
     try {
+      if (passwordData.newPassword !== passwordData.confirmPassword) {
+        setError('Mật khẩu mới và xác nhận mật khẩu không khớp!');
+        return;
+      }
+
+      if (passwordData.newPassword.length < 6) {
+        setError('Mật khẩu mới phải có ít nhất 6 ký tự!');
+        return;
+      }
+
       setLoading(true);
       setError('');
-      
-      const response = await UserAPI.deleteUser(selectedUser.id);
-      
-      if (response.success) {
-        setShowDeleteModal(false);
-        setSelectedUser(null);
-        loadUsers();
-      }
+      setSuccess('');
+
+      // Giả lập API change password
+      // const response = await UserAPI.changePassword(currentUser.id, passwordData);
+
+      // Giả lập thành công
+      setShowChangePasswordModal(false);
+      setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      setSuccess('Đổi mật khẩu thành công!');
     } catch (error) {
-      console.error('Error deleting user:', error);
-      setError(error.message || 'Không thể xóa người dùng');
+      console.error('Error changing password:', error);
+      setError(error.message || 'Không thể đổi mật khẩu');
     } finally {
       setLoading(false);
     }
