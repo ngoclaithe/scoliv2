@@ -172,11 +172,16 @@ export const PublicMatchProvider = ({ children }) => {
     });
 
     socketService.on('score_updated', (data) => {
-      setMatchData(prev => ({
-        ...prev,
-        teamA: { ...prev.teamA, score: data.scores.teamA || data.scores.home || 0 },
-        teamB: { ...prev.teamB, score: data.scores.teamB || data.scores.away || 0 }
-      }));
+      console.log('⚽ [PublicMatchContext] score_updated received:', data);
+      setMatchData(prev => {
+        const updated = {
+          ...prev,
+          teamA: { ...prev.teamA, score: data.scores.teamA || data.scores.home || 0 },
+          teamB: { ...prev.teamB, score: data.scores.teamB || data.scores.away || 0 }
+        };
+        console.log('⚽ [PublicMatchContext] Updated matchData with scores:', updated);
+        return updated;
+      });
       updateLastTime();
     });
     socketService.on('team_score_set_updated', (data) => {
