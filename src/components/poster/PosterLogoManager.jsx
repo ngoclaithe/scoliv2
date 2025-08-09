@@ -12,6 +12,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   const [activeLogoCategory, setActiveLogoCategory] = useState("sponsor");
   const [loading, setLoading] = useState(true);
   const [selectedLogosCount, setSelectedLogosCount] = useState({ sponsor: 0, organizing: 0, media: 0, tournament: 0 });
+  const [historyMatches, setHistoryMatches] = useState([]);
+  const [selectedHistoryMatch, setSelectedHistoryMatch] = useState("");
 
   const [logoDisplayOptions, setLogoDisplayOptions] = useState({
     shape: "round",
