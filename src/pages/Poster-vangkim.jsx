@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
+import ScoreboardLogos from '../components/scoreboard_preview/ScoreboardLogos';
 
 export default function VangKimMatchIntro() {
   const {
@@ -179,7 +180,7 @@ export default function VangKimMatchIntro() {
 
             <div className="text-center mb-1 sm:mb-2 md:mb-3">
               <h1
-                className="font-black uppercase text-white text-sm sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl px-1 sm:px-2 mb-1 sm:mb-2"
+                className="font-black uppercase text-white text-xs sm:text-sm md:text-lg lg:text-2xl xl:text-3xl px-1 sm:px-2 mb-1 sm:mb-2"
                 style={{
                   textShadow: '#d97706 2px 2px 4px'
                 }}
@@ -220,7 +221,7 @@ export default function VangKimMatchIntro() {
                 </div>
                 <div className="bg-gradient-to-r from-yellow-500 to-amber-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
                   <span
-                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block truncate"
+                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-white text-center block truncate"
                   >
                     {matchData.team1}
                   </span>
@@ -237,7 +238,7 @@ export default function VangKimMatchIntro() {
                 </div>
 
                 <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  <div className="text-[8px] sm:text-[10px] md:text-xs font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
+                  <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
                     {(matchData.showTimer || matchData.showDate) && (
                       <span>
                         {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
@@ -250,6 +251,17 @@ export default function VangKimMatchIntro() {
                       <span>📍 {matchData.stadium}</span>
                     )}
                   </div>
+                  {matchData.liveUnit && (
+                    <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-semibold bg-red-600/80 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap flex items-center space-x-1">
+                      <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full animate-pulse"></div>
+                      <img
+                        src={matchData.liveUnit}
+                        alt="Live Unit"
+                        className="h-2 sm:h-3 md:h-4 object-contain"
+                      />
+                      <span>LIVE</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -275,7 +287,7 @@ export default function VangKimMatchIntro() {
                 </div>
                 <div className="bg-gradient-to-r from-gray-500 to-slate-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
                   <span
-                    className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block truncate"
+                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-white text-center block truncate"
                   >
                     {matchData.team2}
                   </span>
@@ -290,35 +302,17 @@ export default function VangKimMatchIntro() {
               <div className="text-center">
                 <div className="mb-1 sm:mb-2">
                   <span
-                    className="text-[8px] sm:text-[10px] md:text-xs font-bold text-white bg-black/50 backdrop-blur-sm rounded-lg border border-white/30 px-1 sm:px-2 py-0.5 sm:py-1"
+                    className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-bold text-white bg-black/50 backdrop-blur-sm rounded-lg border border-white/30 px-1 sm:px-2 py-0.5 sm:py-1"
                   >
                     Các đơn vị
                   </span>
                 </div>
                 <div className="flex justify-center items-center flex-wrap gap-1 sm:gap-2 md:gap-4">
-                  {allPartners.map((partner, index) => {
-                    const getContainerShape = (typeDisplay) => {
-                      switch (typeDisplay) {
-                        case 'round': return 'rounded-full';
-                        case 'hexagonal': return 'hexagon-shape';
-                        case 'square':
-                        default: return 'rounded-lg';
-                      }
-                    };
-                    return (
-                      <div
-                        key={index}
-                        className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${getContainerShape(partner.typeDisplay)}`}
-                        style={{width: '32px', height: '32px'}}
-                      >
-                        <img
-                          src={partner.logo}
-                          alt={partner.name}
-                          className="object-contain w-full h-full"
-                        />
-                      </div>
-                    );
-                  })}
+                  <ScoreboardLogos
+                    allLogos={allPartners.map(p => ({url: p.logo, alt: p.name}))}
+                    logoShape={getLogoShape(allPartners[0]?.typeDisplay || 'square')}
+                    rotateDisplay={false}
+                  />
                 </div>
               </div>
             </div>
