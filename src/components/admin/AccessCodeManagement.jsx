@@ -307,12 +307,6 @@ const AccessCodeManagement = () => {
                         <div className="text-sm text-gray-900">
                           {code.usageCount}/{code.maxUses}
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
-                          <div
-                            className="bg-primary-600 h-2 rounded-full"
-                            style={{ width: `${getUsagePercentage(code.usageCount, code.maxUses)}%` }}
-                          ></div>
-                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         {formatDate(code.expiresAt)}
