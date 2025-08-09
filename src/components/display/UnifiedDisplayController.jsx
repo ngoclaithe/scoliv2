@@ -315,13 +315,14 @@ const UnifiedDisplayController = () => {
           <div className="mt-4 w-48 h-2 bg-gray-700 rounded-full overflow-hidden">
             <div className="h-full bg-gradient-to-r from-blue-500 to-purple-500 animate-pulse"></div>
           </div>
-          {isDynamicRoute && (teamAName || teamBName) && (
+          {isDynamicRoute && (
             <>
               <p className="text-gray-400 mt-2 text-sm">
-                {teamAName ? decodeURIComponent(teamAName) : 'ĐỘI-A'} vs {teamBName ? decodeURIComponent(teamBName) : 'ĐỘI-B'}
+                {teamAName ? decodeURIComponent(teamAName.replace(/_/g, ' ')) : 'ĐỘI-A'} vs {teamBName ? decodeURIComponent(teamBName.replace(/_/g, ' ')) : 'ĐỘI-B'}
               </p>
-              {view && <p className="text-gray-500 mt-1 text-xs">View: {decodeURIComponent(view)}</p>}
-              {matchTime && <p className="text-gray-500 mt-1 text-xs">Time: {decodeURIComponent(matchTime)}</p>}
+              {view && <p className="text-gray-500 mt-1 text-xs">View: {decodeURIComponent(view.replace(/_/g, ' '))}</p>}
+              {matchTime && <p className="text-gray-500 mt-1 text-xs">Time: {decodeURIComponent(matchTime.replace(/_/g, ' '))}</p>}
+              <p className="text-orange-400 mt-2 text-xs">Đang đồng bộ dữ liệu động...</p>
             </>
           )}
         </div>
