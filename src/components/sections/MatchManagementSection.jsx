@@ -1412,7 +1412,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             </button>
 
             {/* Tỉ số trên */}
-            {typeMatch !== 'pickleball' && (
+            {/* {typeMatch !== 'pickleball' && (
             <button
               onClick={() => {
                 updateView('scoreboard');
@@ -1423,7 +1423,7 @@ const MatchManagementSection = ({ isActive = true }) => {
               <span className="text-sm mr-1">📊</span>
               <span className="text-xs font-bold text-center">TỈ SỐ TRÊN</span>
             </button>
-            )}
+            )} */}
 
             {/* Tỉ số dưới */}
             {typeMatch !== 'pickleball' && (
