@@ -211,7 +211,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
                     sm:bottom-6 sm:right-2
                     max-[480px]:bottom-4 max-[480px]:right-1
                     max-[360px]:bottom-3 max-[360px]:right-0.5
-                    max-w-[200px] sm:max-w-[250px] md:max-w-[300px]">
+                    max-w-[120px] sm:max-w-[150px] md:max-w-[200px] lg:max-w-[250px] xl:max-w-[300px]">
                     <ScoreboardLogos
                         allLogos={collectLogosForPosition('bottom-right')}
                         logoShape={logoShape}
