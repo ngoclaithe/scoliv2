@@ -253,18 +253,20 @@ export default function MatchIntroduction() {
                   <div className="flex gap-1 flex-wrap justify-end max-w-[15vw]">
                     {mediaPartnerLogos.map((media, index) => {
                       const getContainerShape = (typeDisplay) => {
+                        console.log('🔍 Media typeDisplay:', typeDisplay);
                         switch (typeDisplay) {
                           case 'round': return 'rounded-full';
                           case 'hexagonal': return 'hexagon-shape';
-                          case 'square':
+                          case 'square': return 'rounded-lg';
                           default: return 'rounded-lg';
                         }
                       };
+                      const shapeClass = getContainerShape(media.typeDisplay);
                       return (
                         <div
                           key={index}
-                          className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${getContainerShape(media.typeDisplay)}`}
-                          style={{width: '48px', height: '48px'}}
+                          className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${shapeClass}
+                            w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12`}
                         >
                           <img
                             src={media.logo}
