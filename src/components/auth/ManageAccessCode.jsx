@@ -754,7 +754,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                   setSelectedCode(null);
                 }}
               >
-                Đóng
+                Đ��ng
               </Button>
             </div>
           </div>
@@ -945,6 +945,101 @@ const ManageAccessCode = ({ onNavigate }) => {
             </div>
           </div>
         )}
+      </Modal>
+
+      {/* Edit Profile Modal */}
+      <Modal
+        isOpen={showEditProfileModal}
+        onClose={() => {
+          setShowEditProfileModal(false);
+          setProfileData({
+            name: currentUser?.name || '',
+            email: currentUser?.email || ''
+          });
+        }}
+        title="Chỉnh sửa thông tin"
+      >
+        <div className="space-y-4">
+          <Input
+            label="Tên đầy đủ"
+            type="text"
+            value={profileData.name}
+            onChange={(e) => setProfileData({...profileData, name: e.target.value})}
+            placeholder="Nhập tên đầy đủ"
+          />
+          <Input
+            label="Email"
+            type="email"
+            value={profileData.email}
+            onChange={(e) => setProfileData({...profileData, email: e.target.value})}
+            placeholder="Nhập địa chỉ email"
+          />
+        </div>
+        <div className="mt-6 flex justify-end space-x-3">
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setShowEditProfileModal(false);
+              setProfileData({
+                name: currentUser?.name || '',
+                email: currentUser?.email || ''
+              });
+            }}
+          >
+            Hủy
+          </Button>
+          <Button onClick={handleUpdateProfile} disabled={loading}>
+            {loading ? 'Đang cập nhật...' : 'Cập nhật'}
+          </Button>
+        </div>
+      </Modal>
+
+      {/* Change Password Modal */}
+      <Modal
+        isOpen={showChangePasswordModal}
+        onClose={() => {
+          setShowChangePasswordModal(false);
+          setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+        }}
+        title="Đổi mật khẩu"
+      >
+        <div className="space-y-4">
+          <Input
+            label="Mật khẩu hiện tại"
+            type="password"
+            value={passwordData.currentPassword}
+            onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+            placeholder="Nhập mật khẩu hiện tại"
+          />
+          <Input
+            label="Mật khẩu mới"
+            type="password"
+            value={passwordData.newPassword}
+            onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+            placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)"
+          />
+          <Input
+            label="Xác nhận mật khẩu mới"
+            type="password"
+            value={passwordData.confirmPassword}
+            onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+            placeholder="Nhập lại mật khẩu mới"
+          />
+        </div>
+        <div className="mt-6 flex justify-end space-x-3">
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setShowChangePasswordModal(false);
+              setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+            }}
+          >
+            Hủy
+          </Button>
+          <Button onClick={handleChangePassword} disabled={loading}>
+            {loading ? 'Đang đổi...' : 'Đổi mật khẩu'}
+          </Button>
+        </div>
       </Modal>
     </div>
   );
