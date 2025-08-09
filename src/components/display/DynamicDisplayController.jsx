@@ -127,7 +127,7 @@ const DynamicDisplayController = () => {
 
       } catch (err) {
         console.error('❌ [DynamicDisplayController] Failed to load dynamic data:', err);
-        setError('Không thể tải dữ liệu trận đấu');
+        setError('Không thể tải dữ li��u trận đấu');
         setIsLoading(false);
       }
     };
@@ -190,7 +190,7 @@ const DynamicDisplayController = () => {
         return <Stat {...viewProps} />;
       case 'poster':
       default:
-        return renderPoster('tretrung'); // Default poster
+        return <DynamicPoster dynamicData={dynamicData} posterType="tretrung" />;
     }
   };
 
