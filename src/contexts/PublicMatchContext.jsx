@@ -721,7 +721,16 @@ export const PublicMatchProvider = ({ children }) => {
 
           if (state.organizing) {
             console.log('🏛️ [PublicMatchContext] Updating organizing from join_roomed:', state.organizing);
-            setOrganizing(prev => ({ ...prev, organizing: state.organizing }));
+            console.log('🏛️ [PublicMatchContext] Total organizing items from state.organizing:', state.organizing?.url_logo?.length || 0);
+            // Only update if no logos were processed from displaySettings.logos
+            setOrganizing(prev => {
+              const currentLogos = prev.organizing?.url_logo?.length || 0;
+              if (currentLogos === 0) {
+                return { ...prev, organizing: state.organizing };
+              }
+              console.log('🏛️ [PublicMatchContext] Skipping organizing update from state - already have', currentLogos, 'logos from displaySettings');
+              return prev;
+            });
           }
 
           if (state.mediaPartners) {
@@ -735,7 +744,7 @@ export const PublicMatchProvider = ({ children }) => {
           }
 
           if (state.liveUnit) {
-            console.log('📡 [PublicMatchContext] Updating liveUnit from join_roomed:', state.liveUnit);
+            console.log('��� [PublicMatchContext] Updating liveUnit from join_roomed:', state.liveUnit);
             setLiveUnit(prev => ({ ...prev, ...state.liveUnit }));
           }
 
