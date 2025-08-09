@@ -265,9 +265,9 @@ const UnifiedDisplayController = () => {
             console.log('📋 [UnifiedDisplayController] About to update socket with params:', params);
 
             if (params && Object.keys(params).length > 0) {
-              // Sử dụng method chờ socket connection mới
-              console.log('⏰ [UnifiedDisplayController] Starting socket wait process...');
-              waitForSocketAndUpdate(params);
+              // Sử dụng method chờ room_joined hoàn tất
+              console.log('⏰ [UnifiedDisplayController] Starting room_joined wait process...');
+              waitForRoomJoinedAndUpdate(params);
             }
           }
         }
