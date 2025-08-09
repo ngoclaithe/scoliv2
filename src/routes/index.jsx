@@ -7,8 +7,7 @@ import { PublicMatchProvider } from '../contexts/PublicMatchContext';
 
 import 'react-toastify/dist/ReactToastify.css';
 import App from '../App';
-import DisplayController from '../components/display/DisplayController';
-import DynamicDisplayController from '../components/display/DynamicDisplayController';
+import UnifiedDisplayController from '../components/display/UnifiedDisplayController';
 import PosterPreviewPage from '../pages/PosterPreviewPage';
 import AdminApp from '../components/admin/AdminApp';
 
@@ -31,10 +30,10 @@ const AppRoutes = () => {
         } />
 
         {/* Dynamic route with multiple parameters - PHẢI ĐẶT TRƯỚC route /:accessCode */}
-        <Route path="/:accessCode/:location/:matchTitle/:liveText/:teamALogoCode/:teamBLogoCode/:teamAName/:teamBName/:teamAKitColor/:teamBKitColor/:teamAScore/:teamBScore" element={
+        <Route path="/:accessCode/:location/:matchTitle/:liveText/:teamALogoCode/:teamBLogoCode/:teamAName/:teamBName/:teamAKitColor/:teamBKitColor/:teamAScore/:teamBScore/:view/:matchTime" element={
           <AuthProvider>
             <PublicMatchProvider>
-              <DynamicDisplayController />
+              <UnifiedDisplayController />
             </PublicMatchProvider>
           </AuthProvider>
         } />
@@ -52,7 +51,7 @@ const AppRoutes = () => {
         <Route path="/:accessCode" element={
           <AuthProvider>
             <PublicMatchProvider>
-              <DisplayController />
+              <UnifiedDisplayController />
             </PublicMatchProvider>
           </AuthProvider>
         } />
