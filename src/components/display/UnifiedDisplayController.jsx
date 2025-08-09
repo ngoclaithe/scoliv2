@@ -145,12 +145,33 @@ const UnifiedDisplayController = () => {
     if (!params) return;
 
     console.log('🔄 [UnifiedDisplayController] updateSocketWithParams called with:', params);
+    console.log('🔗 [UnifiedDisplayController] Socket status:', socketService.getConnectionStatus());
 
     try {
+      let updateCount = 0;
+
       // Cập nhật view nếu có (ưu tiên đầu tiên)
       if (params.view) {
         console.log('👁️ [UnifiedDisplayController] Updating view:', params.view);
-        socketService.emit('view_update', { viewType: params.view });
+        const success = await socketService.emit('view_update', { viewType: params.view });
+        console.log('👁️ [UnifiedDisplayController] View update result:', success);
+        updateCount++;
+      }
+
+      // Cập nhật tên đội trước (để dễ thấy thay đổi)
+      if (params.teamA.name || params.teamB.name) {
+        console.log('📛 [UnifiedDisplayController] Updating team names:', params.teamA.name, params.teamB.name);
+        const success = await socketService.updateTeamNames(params.teamA.name, params.teamB.name);
+        console.log('📛 [UnifiedDisplayController] Team names update result:', success);
+        updateCount++;
+      }
+
+      // Cập nhật tỉ số
+      if (params.teamA.score !== undefined || params.teamB.score !== undefined) {
+        console.log('⚽ [UnifiedDisplayController] Updating scores:', params.teamA.score, params.teamB.score);
+        const success = await socketService.updateScore(params.teamA.score, params.teamB.score);
+        console.log('⚽ [UnifiedDisplayController] Score update result:', success);
+        updateCount++;
       }
 
       // Cập nhật thông tin trận đấu
@@ -162,42 +183,43 @@ const UnifiedDisplayController = () => {
           matchTime: params.matchTime
         };
         console.log('📝 [UnifiedDisplayController] Updating match info:', matchInfo);
-        socketService.updateMatchInfo(matchInfo);
-      }
-
-      // Cập nhật tên đội
-      if (params.teamA.name || params.teamB.name) {
-        console.log('📛 [UnifiedDisplayController] Updating team names:', params.teamA.name, params.teamB.name);
-        socketService.updateTeamNames(params.teamA.name, params.teamB.name);
-      }
-
-      // Cập nhật tỉ số
-      if (params.teamA.score !== undefined || params.teamB.score !== undefined) {
-        console.log('⚽ [UnifiedDisplayController] Updating scores:', params.teamA.score, params.teamB.score);
-        socketService.updateScore(params.teamA.score, params.teamB.score);
+        const success = await socketService.updateMatchInfo(matchInfo);
+        console.log('📝 [UnifiedDisplayController] Match info update result:', success);
+        updateCount++;
       }
 
       // Cập nhật màu áo đội nếu có
-      const matchInfoWithColors = {
-        teamAKitColor: params.teamA.kitColor,
-        teamBKitColor: params.teamB.kitColor
-      };
-      console.log('👕 [UnifiedDisplayController] Updating kit colors:', matchInfoWithColors);
-      socketService.updateMatchInfo(matchInfoWithColors);
+      if (params.teamA.kitColor || params.teamB.kitColor) {
+        const matchInfoWithColors = {
+          teamAKitColor: params.teamA.kitColor,
+          teamBKitColor: params.teamB.kitColor
+        };
+        console.log('👕 [UnifiedDisplayController] Updating kit colors:', matchInfoWithColors);
+        const success = await socketService.updateMatchInfo(matchInfoWithColors);
+        console.log('👕 [UnifiedDisplayController] Kit colors update result:', success);
+        updateCount++;
+      }
 
       // Tìm và cập nhật logo đội dựa trên code
       if (params.teamA.logoCode || params.teamB.logoCode) {
         console.log('🏆 [UnifiedDisplayController] Team logo codes received:', params.teamA.logoCode, params.teamB.logoCode);
         try {
           const { teamALogo, teamBLogo } = await findTeamLogos(params.teamA.logoCode, params.teamB.logoCode);
+          console.log('🏆 [UnifiedDisplayController] Logo search results:', { teamALogo, teamBLogo });
           if (teamALogo || teamBLogo) {
             console.log('🏆 [UnifiedDisplayController] Found team logos, updating...', { teamALogo, teamBLogo });
-            socketService.updateTeamLogos(teamALogo, teamBLogo);
+            const success = await socketService.updateTeamLogos(teamALogo, teamBLogo);
+            console.log('🏆 [UnifiedDisplayController] Logo update result:', success);
+            updateCount++;
+          } else {
+            console.warn('⚠️ [UnifiedDisplayController] No logos found for codes:', params.teamA.logoCode, params.teamB.logoCode);
           }
         } catch (error) {
           console.error('❌ [UnifiedDisplayController] Failed to find team logos:', error);
         }
       }
+
+      console.log(`✅ [UnifiedDisplayController] Sent ${updateCount} updates to server`);
 
     } catch (error) {
       console.error('❌ [UnifiedDisplayController] Failed to update socket with params:', error);
