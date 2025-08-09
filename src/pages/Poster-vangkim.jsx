@@ -173,7 +173,22 @@ export default function DodenMatchIntro() {
     }
   };
 
-  const isMarqueeRunning = scrollData.mode !== 'khong' && scrollData.mode !== 'none' && scrollData.text;
+  // Check if marquee should be running
+  const isMarqueeRunning = scrollData.mode !== 'khong' && scrollData.mode !== 'none' && scrollData.text && showMarquee;
+
+  // Handle interval-based marquee display
+  useEffect(() => {
+    if (scrollData.interval > 0 && (scrollData.mode === 'moi-2' || scrollData.mode === 'moi-5')) {
+      setShowMarquee(true);
+      const intervalId = setInterval(() => {
+        setShowMarquee(prev => !prev);
+      }, scrollData.interval);
+
+      return () => clearInterval(intervalId);
+    } else {
+      setShowMarquee(true);
+    }
+  }, [scrollData.interval, scrollData.mode]);
 
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-1 sm:p-2 md:p-4">
