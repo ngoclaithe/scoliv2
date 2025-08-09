@@ -8,6 +8,7 @@ import { PublicMatchProvider } from '../contexts/PublicMatchContext';
 import 'react-toastify/dist/ReactToastify.css';
 import App from '../App';
 import UnifiedDisplayController from '../components/display/UnifiedDisplayController';
+import DynamicDisplayController from '../components/display/DynamicDisplayController';
 import PosterPreviewPage from '../pages/PosterPreviewPage';
 import AdminApp from '../components/admin/AdminApp';
 
