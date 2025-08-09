@@ -315,7 +315,7 @@ export default function DodenMatchIntro() {
                     />
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-red-600 to-red-800 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-full">
+                <div className="bg-gradient-to-r from-cyan-500 to-blue-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
                   <span
                     className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block truncate"
                     ref={(el) => el && adjustFontSize(el)}
@@ -335,7 +335,6 @@ export default function DodenMatchIntro() {
                 </div>
 
                 <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  {/* Date/Time và Stadium cùng 1 dòng */}
                   <div className="text-[8px] sm:text-[10px] md:text-xs font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
                     {(matchData.showTimer || matchData.showDate) && (
                       <span>
@@ -372,7 +371,7 @@ export default function DodenMatchIntro() {
                     />
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-gray-700 to-black px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-full">
+                <div className="bg-gradient-to-r from-cyan-500 to-blue-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
                   <span
                     className="text-xs sm:text-sm md:text-base lg:text-lg font-bold uppercase tracking-wide text-white text-center block truncate"
                     ref={(el) => el && adjustFontSize(el)}

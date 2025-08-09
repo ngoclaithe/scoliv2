@@ -24,7 +24,6 @@ export default function MatchIntroduction() {
     stadium: contextMatchData.stadium || 'SVĐ THỐNG NHẤT',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '15:30',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
-    // Các biến mới từ context - sử dụng structure đúng như tretrung
     sponsors: getFullLogoUrls(sponsors?.sponsors?.url_logo || []),
     sponsorsTypeDisplay: sponsors?.sponsors?.type_display || [],
     organizing: getFullLogoUrls(organizing?.organizing?.url_logo || []),
@@ -76,7 +75,6 @@ export default function MatchIntroduction() {
     typeDisplay: matchData.mediaPartnersTypeDisplay[index] || 'square'
   })) : [];
 
-  // Sử dụng marquee data từ context
   const marquee = {
     text: marqueeData.text || '',
     isRunning: marqueeData.mode !== 'none'
@@ -84,7 +82,6 @@ export default function MatchIntroduction() {
 
   const marqueeRef = useRef(null);
 
-  // Font size adjustment function
   const adjustFontSize = (element) => {
     if (!element) return;
     let fontSize = parseInt(window.getComputedStyle(element).fontSize);
@@ -153,10 +150,8 @@ export default function MatchIntroduction() {
 
         <div className="relative z-10 h-full flex flex-col p-3 sm:p-6">
 
-          {/* Top section với fixed height để tránh overlap */}
           <div className="flex justify-between items-start mb-1 sm:mb-3 md:mb-5 min-h-[8vh] sm:min-h-[12vh] md:min-h-[14vh]">
 
-            {/* Top-left: Sponsors and Organizing */}
             <div className="flex gap-2 sm:gap-4">
               {hasSponsors && (
                 <div className="flex-shrink-0">
@@ -197,7 +192,6 @@ export default function MatchIntroduction() {
               )}
             </div>
 
-            {/* Top-center: Tournament Logos */}
             <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4`}>
               {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 &&
                 matchData.tournamentLogos.map((logo, index) => (
@@ -211,7 +205,6 @@ export default function MatchIntroduction() {
               }
             </div>
 
-            {/* Top-right: Media Partners and Live Unit */}
             <div className="flex flex-col items-end gap-2">
               {hasMediaPartners && (
                 <div className="flex-shrink-0">
@@ -248,10 +241,8 @@ export default function MatchIntroduction() {
 
           </div>
 
-          {/* Main content section với proper spacing */}
           <div className="flex-1 flex flex-col justify-center min-h-0">
 
-            {/* Title section với margin để tránh overlap */}
             <div className="text-center mb-1 sm:mb-2 md:mb-3">
               <h1
                 className="font-black uppercase text-white text-sm sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl px-1 sm:px-2"
@@ -271,7 +262,6 @@ export default function MatchIntroduction() {
               </div>
             </div>
 
-            {/* Teams section với responsive spacing */}
             <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-1 sm:mb-2 md:mb-4">
 
               <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
@@ -303,7 +293,6 @@ export default function MatchIntroduction() {
                 </div>
 
                 <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  {/* Date/Time và Stadium cùng 1 dòng */}
                   <div className="text-[8px] sm:text-[10px] md:text-xs font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
                     {(matchData.showTimer || matchData.showDate) && (
                       <span>
