@@ -15,7 +15,7 @@ const AccessCodeManagement = () => {
   const tabs = [
     {
       id: 'access-codes',
-      name: 'Mã truy cập',
+      name: 'Danh sách mã',
       icon: KeyIcon,
       component: AccessCodeTab
     },
@@ -27,7 +27,7 @@ const AccessCodeManagement = () => {
     },
     {
       id: 'accounts',
-      name: 'Quản lý tài khoản',
+      name: 'Thông tin tài khoản',
       icon: UserGroupIcon,
       component: AccountTab
     }
@@ -45,7 +45,7 @@ const AccessCodeManagement = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Quản lý hệ thống</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Quản lý</h1>
         <p className="mt-2 text-sm text-gray-700">
           Quản lý mã truy cập, theo dõi hoạt động và quản lý tài khoản người dùng
         </p>
