@@ -120,6 +120,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
                     : 'square';
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
+                    console.log('🔍 MediaPartners typeDisplay for position', targetPosition, ':', typeDisplay);
                     allLogos.push({ url: getFullLogoUrl(logo), alt: 'Media Partner', type: 'media', typeDisplay });
                 }
             });
