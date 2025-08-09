@@ -7,7 +7,7 @@ Hệ thống hỗ trợ dynamic routes cho phép truyền các tham số trận 
 ## Cấu trúc URL Dynamic Route
 
 ```
-/{accessCode}/{location}/{matchTitle}/{liveText}/{teamA.logo.code}/{teamB.logo.code}/{teamAname}/{teamBname}/{teamAKitcolor}/{teamBKitcolor}/{teamA.score}/{teamB.score}
+/{accessCode}/{location}/{matchTitle}/{liveText}/{teamA.logo.code}/{teamB.logo.code}/{teamAname}/{teamBname}/{teamAKitcolor}/{teamBKitcolor}/{teamA.score}/{teamB.score}/{view}/{matchTime}
 ```
 
 ### Các tham số:
@@ -24,6 +24,8 @@ Hệ thống hỗ trợ dynamic routes cho phép truyền các tham số trận 
 10. **teamBKitcolor** - Màu áo đội B (hex không có #, ví dụ: "0000FF")
 11. **teamA.score** - Tỉ số đội A (số nguyên, ví dụ: "2")
 12. **teamB.score** - Tỉ số đội B (số nguyên, ví dụ: "1")
+13. **view** - Loại hiển thị (ví dụ: "poster", "scoreboard", "intro")
+14. **matchTime** - Thời gian trận đấu (ví dụ: "45:00", "Hiep_1")
 
 ## Ví dụ URL
 
@@ -43,7 +45,7 @@ URL này sẽ:
 
 1. **Spaces (khoảng trắng)**: Thay thế bằng dấu gạch dưới `_`
 2. **Special characters**: Sử dụng URL encoding
-3. **Colors**: Chỉ hex code không có dấu # (ví dụ: FF0000 thay vì #FF0000)
+3. **Colors**: Ch��� hex code không có dấu # (ví dụ: FF0000 thay vì #FF0000)
 4. **Numbers**: Số nguyên thuần (ví dụ: 2, không phải 2.0)
 
 ## Xử lý tự động
