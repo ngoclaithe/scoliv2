@@ -44,7 +44,9 @@ const ScoreboardAbove = ({ type = 1 }) => {
     };
 
     const rawLogoShape = displaySettings?.displaySettings?.logoShape || displaySettings?.logoShape || "round";
+    // console.log("giá trị rawLogoShape là", rawLogoShape);
     const logoShape = rawLogoShape === 'round' ? 'round' : rawLogoShape;
+    // console.log("Giá trị logoshape là:", logoShape);
     const showMatchTime = currentData.status === 'live' || currentData.status === 'pause';
 
     const scrollData = {
@@ -86,7 +88,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
                     : 'square';
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
-                    console.log('🔍 Sponsors typeDisplay for position', targetPosition, ':', typeDisplay);
+                    // console.log('🔍 Sponsors typeDisplay for position', targetPosition, ':', typeDisplay);
                     allLogos.push({ url: getFullLogoUrl(logo), alt: 'Sponsor', type: 'sponsor', typeDisplay });
                 }
             });
@@ -103,7 +105,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
                     : 'square';
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
-                    console.log('🔍 Organizing typeDisplay for position', targetPosition, ':', typeDisplay);
+                    // console.log('🔍 Organizing typeDisplay for position', targetPosition, ':', typeDisplay);
                     allLogos.push({ url: getFullLogoUrl(logo), alt: 'Organizing', type: 'organizing', typeDisplay });
                 }
             });

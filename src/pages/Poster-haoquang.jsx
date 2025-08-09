@@ -200,7 +200,7 @@ export default function MatchIntroduction() {
                   <div className="flex gap-1 flex-wrap max-w-[15vw]">
                     {organizingLogos.map((organizing, index) => {
                       const getContainerShape = (typeDisplay) => {
-                        console.log('🔍 Organizing typeDisplay:', typeDisplay);
+                        // console.log('🔍 Organizing typeDisplay:', typeDisplay);
                         switch (typeDisplay) {
                           case 'round': return 'rounded-full';
                           case 'hexagonal': return 'hexagon-shape';

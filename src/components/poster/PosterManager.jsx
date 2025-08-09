@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import PosterSelector from "./PosterSelector";
-import CustomPosterForm from "./CustomPosterForm";
 import PosterLogoManager from "./PosterLogoManager";
 import Modal from "../common/Modal";
 
@@ -113,14 +112,6 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate, onPositionChan
           loading={loading}
         />
       </Modal>
-
-      {/* Custom Poster Form Modal */}
-      <CustomPosterForm
-        isOpen={showCustomForm}
-        onClose={() => setShowCustomForm(false)}
-        onSave={handleCustomPosterSave}
-        matchData={matchData}
-      />
     </div>
   );
 };

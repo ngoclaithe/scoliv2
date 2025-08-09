@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import Button from "../common/Button";
 import LogoAPI from "../../API/apiLogo";
 import DisplaySettingsAPI from "../../API/apiSettingDisplay";
 import RoomSessionAPI from "../../API/apiRoomSession";
@@ -124,10 +123,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       try {
         setLoading(true);
 
-        // Load history matches first
         await loadHistoryMatches();
 
-        // Load initial data if provided (for display options only)
         if (initialData) {
           if (initialData.selectedPoster) {
             setSelectedPoster(initialData.selectedPoster);
@@ -137,7 +134,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           }
         }
 
-        // Load display settings from API only once
         if (accessCode && isMounted) {
           try {
             console.log('🔍 [PosterLogoManager] Loading display settings from API for:', accessCode);
@@ -150,7 +146,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               // Process sponsors
               if (response.data.sponsors && Array.isArray(response.data.sponsors)) {
                 response.data.sponsors.forEach((item) => {
-                  // Parse position từ string "{bottom-left}" thành array
                   let positions = [];
                   if (item.position) {
                     try {
@@ -282,9 +277,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     return () => {
       isMounted = false;
     };
-  }, [accessCode]); // Chỉ depend vào accessCode thôi, không depend vào initialData
+  }, [accessCode]); 
 
-  // Handle initialData separately
   useEffect(() => {
     if (initialData) {
       if (initialData.selectedPoster) {
@@ -296,7 +290,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     }
   }, [initialData]);
 
-  // Update count whenever logo data changes
   useEffect(() => {
     updateSelectedLogosCount();
   }, [updateSelectedLogosCount]);
@@ -305,26 +298,22 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     const file = event.target.files[0];
     if (!file) return;
 
-    // Kiểm tra kích thước file (tối đa 5MB)
     if (file.size > 5 * 1024 * 1024) {
       alert("Kích thước file tối đa là 5MB");
       return;
     }
 
-    // Kiểm tra định dạng file
     const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!validTypes.includes(file.type)) {
       alert("Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WebP)");
       return;
     }
 
-    // Tạo preview ảnh
     const reader = new FileReader();
 
     reader.onload = async (e) => {
       const previewUrl = e.target.result;
 
-      // Cập nhật UI với preview ảnh
       setLogoItems(prev => prev.map(logo =>
         logo.id === item.id
           ? {
@@ -1134,7 +1123,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-sm rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
           >
             <span>📥</span>
-            <span>TẢI LOGO</span>
+            <span>Preview</span>
           </button>
         </div>
       </div>

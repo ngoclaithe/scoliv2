@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { useAuth } from '../contexts/AuthContext';
 import PublicAPI from '../API/apiPublic';
+import html2canvas from 'html2canvas';
 
 // Import các poster templates
 import PosterTretrung from './Poster-tretrung';
@@ -29,6 +30,8 @@ const PosterPreviewPage = () => {
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [downloading, setDownloading] = useState(false);
+  const posterRef = useRef(null);
 
   // Khởi tạo kết nối socket giống như DisplayController
   useEffect(() => {
@@ -72,6 +75,36 @@ const PosterPreviewPage = () => {
       isCleanedUp = true;
     };
   }, [accessCode, initializeSocket, handleExpiredAccess]);
+
+  // Hàm tải ảnh poster
+  const handleDownloadPoster = async () => {
+    if (!posterRef.current) return;
+
+    setDownloading(true);
+    try {
+      const canvas = await html2canvas(posterRef.current, {
+        scale: 2, // Độ phân giải cao hơn
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        width: posterRef.current.offsetWidth,
+        height: posterRef.current.offsetHeight,
+      });
+
+      // Tạo link download
+      const link = document.createElement('a');
+      link.download = `poster_${matchData?.teamA?.name || 'TeamA'}_vs_${matchData?.teamB?.name || 'TeamB'}_${new Date().getTime()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error('Lỗi khi tải ảnh poster:', error);
+      alert('Có lỗi xảy ra khi tải ảnh poster. Vui lòng thử lại!');
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   const renderPosterComponent = () => {
     const posterType = displaySettings?.selectedPoster?.id || displaySettings?.selectedPoster || 'tretrung';
@@ -140,11 +173,25 @@ const PosterPreviewPage = () => {
             </div>
             <div className="flex items-center gap-3">
               <button
-                onClick={() => window.print()}
-                className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium text-sm rounded-lg transition-colors flex items-center gap-2"
+                onClick={handleDownloadPoster}
+                disabled={downloading}
+                className={`px-4 py-2 font-medium text-sm rounded-lg transition-colors flex items-center gap-2 ${
+                  downloading
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-green-500 hover:bg-green-600 text-white'
+                }`}
               >
-                <span>🖨️</span>
-                <span>In poster</span>
+                {downloading ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                    <span>Đang tải...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>📥</span>
+                    <span>Tải ảnh</span>
+                  </>
+                )}
               </button>
               <button
                 onClick={() => window.close()}
@@ -159,37 +206,10 @@ const PosterPreviewPage = () => {
 
       {/* Poster Content */}
       <div className="max-w-4xl mx-auto p-4">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden" ref={posterRef}>
           {renderPosterComponent()}
         </div>
       </div>
-
-      {/* Poster Info */}
-      {/* <div className="max-w-4xl mx-auto p-4">
-        <div className="bg-white rounded-lg shadow p-4">
-          <h3 className="text-lg font-semibold mb-3">Thông tin poster</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div>
-              <strong>Template:</strong> {displaySettings?.selectedPoster || 'tretrung'}
-            </div>
-            <div>
-              <strong>Logo shape:</strong> {displaySettings?.logoShape || 'round'}
-            </div>
-            <div>
-              <strong>Rotate display:</strong> {displaySettings?.rotateDisplay ? 'Có' : 'Không'}
-            </div>
-            <div>
-              <strong>Sponsors:</strong> {sponsors?.sponsors?.url_logo?.length || 0} logo
-            </div>
-            <div>
-              <strong>Organizing:</strong> {organizing?.organizing?.url_logo?.length || 0} logo
-            </div>
-            <div>
-              <strong>Media Partners:</strong> {mediaPartners?.mediaPartners?.url_logo?.length || 0} logo
-            </div>
-          </div>
-        </div>
-      </div> */}
     </div>
   );
 };
