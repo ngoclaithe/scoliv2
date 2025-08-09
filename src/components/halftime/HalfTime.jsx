@@ -1,27 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
-// Audio moved to audioUtils
+import { getFullLogoUrl, getFullLogoUrls } from '../../utils/logoUtils';
 
 const HalftimeBreakPoster = () => {
-    // Sử dụng dữ liệu từ PublicMatchContext
     const { matchData: contextMatchData, marqueeData } = usePublicMatch();
 
     const matchData = {
-        matchTitle: contextMatchData.tournament || "GIẢI BÓNG ĐÁ PHONG TRÀO",
+        matchTitle: contextMatchData.matchTitle || "GIẢI BÓNG ĐÁ PHONG TRÀO",
         stadium: contextMatchData.stadium || "Sân vận động Thiên Trường",
         time: contextMatchData.startTime || contextMatchData.time || "19:30",
         date: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
         team1: contextMatchData.teamA.name || "ĐỘI A",
         team2: contextMatchData.teamB.name || "ĐỘI B",
-        logo1: contextMatchData.teamA.logo || "/images/background-poster/default_logoA.png",
-        logo2: contextMatchData.teamB.logo || "/images/background-poster/default_logoB.png",
+        logo1: getFullLogoUrl(contextMatchData?.teamA?.logo) || "/api/placeholder/90/90",
+        logo2: getFullLogoUrl(contextMatchData?.teamB?.logo) || "/api/placeholder/90/90",
         liveText: contextMatchData.liveText || "FACEBOOK LIVE",
         showMarquee: marqueeData.mode !== 'none',
         marqueeText: marqueeData.text || ""
     };
+    const [windowSize, setWindowSize] = useState({
+        width: typeof window !== 'undefined' ? window.innerWidth : 1200,
+        height: typeof window !== 'undefined' ? window.innerHeight : 800
+    });
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowSize({
+                width: window.innerWidth,
+                height: window.innerHeight
+            });
+        };
 
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
     const [screenSize, setScreenSize] = useState({ width: 0, height: 0 });
+    const isMobile = windowSize.width < 768;
+    const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
 
+    const posterWidth = isMobile ? windowSize.width - 32 : isTablet ? 700 : 900;
+    const posterHeight = isMobile ? windowSize.height * 0.85 : isTablet ? 500 : 580;
+    const logoSize = isMobile ? 120 : isTablet ? 140 : 160;
+    const titleSize = isMobile ? 'text-2xl' : isTablet ? 'text-3xl' : 'text-4xl';
+    const subtitleSize = isMobile ? 'text-lg' : isTablet ? 'text-xl' : 'text-2xl';
+    const vsSize = isMobile ? 'text-4xl' : isTablet ? 'text-5xl' : 'text-6xl';
+    const teamNameSize = isMobile ? 'text-lg' : isTablet ? 'text-xl' : 'text-2xl';
+    const liveSize = isMobile ? 'text-lg' : isTablet ? 'text-xl' : 'text-2xl';
     useEffect(() => {
         const updateScreenSize = () => {
             setScreenSize({
@@ -40,26 +63,22 @@ const HalftimeBreakPoster = () => {
     const showBDPXTLogo = liveTextLower.includes('bdpxt') || liveTextLower.includes('xu thanh');
     const showSCOLogo = !showNSBLogo && !showBDPXTLogo;
 
-    const isMobile = screenSize.width < 768;
-    const isTablet = screenSize.width < 1024;
+    // Đã xóa dòng khai báo trùng lặp isMobile và isTablet ở đây
 
     return (
         <div className="min-h-screen bg-white p-4 flex items-center justify-center">
-            {/* Main container with gradient background and rounded corners */}
             <div className="w-full h-full bg-gradient-to-br from-blue-900 via-blue-800 to-green-700 rounded-3xl shadow-2xl flex items-center justify-center relative overflow-hidden">
-                {/* Animated background elements */}
                 <div className="absolute inset-0 opacity-20">
                     <div className="football-pattern"></div>
                 </div>
 
-                {/* Gradient overlay for better text contrast */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/20"></div>
 
                 {/* Top left logos */}
                 {showNSBLogo && (
-                    <div 
+                    <div
                         className="absolute top-8 left-8 z-50 bg-gradient-to-r from-red-600 to-red-500 rounded-xl flex items-center justify-center text-white font-bold px-4 shadow-lg transform hover:scale-105 transition-transform duration-300"
-                        style={{ 
+                        style={{
                             height: isMobile ? '6vw' : '4vw',
                             minHeight: '32px',
                             fontSize: isMobile ? '3vw' : '2vw',
@@ -71,9 +90,9 @@ const HalftimeBreakPoster = () => {
                 )}
 
                 {showBDPXTLogo && (
-                    <div 
+                    <div
                         className="absolute top-8 left-8 z-50 bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl flex items-center justify-center text-white font-bold px-4 shadow-lg transform hover:scale-105 transition-transform duration-300"
-                        style={{ 
+                        style={{
                             height: isMobile ? '6vw' : '4vw',
                             minHeight: '32px',
                             fontSize: isMobile ? '3vw' : '2vw',
@@ -88,18 +107,16 @@ const HalftimeBreakPoster = () => {
                 <div className="w-full max-w-6xl mx-auto px-8 py-8 relative z-10">
                     <div className="text-white text-center">
                         {/* Title with enhanced glow effect */}
-                        <h1 className={`font-bold text-yellow-400 mb-6 animate-pulse-glow ${
-                            isMobile ? 'text-2xl' : isTablet ? 'text-3xl' : 'text-5xl'
-                        }`} style={{
-                            textShadow: '0 0 20px rgba(255, 235, 59, 0.8), 0 0 40px rgba(255, 235, 59, 0.6), 0 0 60px rgba(255, 235, 59, 0.4)'
-                        }}>
+                        <h1 className={`font-bold text-yellow-400 mb-6 animate-pulse-glow ${isMobile ? 'text-2xl' : isTablet ? 'text-3xl' : 'text-5xl'
+                            }`} style={{
+                                textShadow: '0 0 20px rgba(255, 235, 59, 0.8), 0 0 40px rgba(255, 235, 59, 0.6), 0 0 60px rgba(255, 235, 59, 0.4)'
+                            }}>
                             {matchData.matchTitle}
                         </h1>
 
                         {/* Subtitle with glass morphism effect */}
-                        <div className={`backdrop-blur-sm bg-white/10 rounded-2xl px-6 py-4 mb-8 border border-white/20 shadow-xl ${
-                            isMobile ? 'text-lg' : isTablet ? 'text-2xl' : 'text-4xl'
-                        }`}>
+                        <div className={`backdrop-blur-sm bg-white/10 rounded-2xl px-6 py-4 mb-8 border border-white/20 shadow-xl ${isMobile ? 'text-lg' : isTablet ? 'text-2xl' : 'text-4xl'
+                            }`}>
                             <div className="font-semibold">{matchData.time} - {matchData.date}</div>
                             {matchData.stadium && matchData.stadium !== 'san' && (
                                 <div className={`text-gray-200 ${isMobile ? 'text-base mt-2' : 'mt-1'}`}>
@@ -114,34 +131,35 @@ const HalftimeBreakPoster = () => {
                             <div className="flex-1 flex flex-col items-center max-w-xs">
                                 <div className="relative mb-4">
                                     <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 animate-spin-slow"></div>
-                                    <img
-                                        src={matchData.logo1}
-                                        alt={matchData.team1}
-                                        className={`relative z-10 rounded-full bg-white p-2 object-cover shadow-2xl hover:scale-110 transition-transform duration-500 ${
-                                            isMobile ? 'w-20 h-20' : isTablet ? 'w-32 h-32' : 'w-48 h-48'
-                                        }`}
+                                    <div
+                                        className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                                         style={{
-                                            animation: 'spin 8s linear infinite'
+                                            width: `${logoSize}px`,
+                                            height: `${logoSize}px`
                                         }}
-                                        onError={(e) => {
-                                            e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
-                                        }}
-                                    />
+                                    >
+                                        <img
+                                            src={matchData.logo1}
+                                            alt={matchData.team1}
+                                            className="object-contain w-[85%] h-[85%]"
+                                            onError={(e) => {
+                                                e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
+                                            }}
+                                        />
+                                    </div>
                                 </div>
-                                <div className={`bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-sm px-4 py-2 rounded-xl font-bold text-center w-full shadow-lg border border-white/10 ${
-                                    isMobile ? 'text-sm' : isTablet ? 'text-lg' : 'text-3xl'
-                                }`}>
+                                <div className={`bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-sm px-4 py-2 rounded-xl font-bold text-center w-full shadow-lg border border-white/10 ${isMobile ? 'text-sm' : isTablet ? 'text-lg' : 'text-3xl'
+                                    }`}>
                                     <div className="truncate">{matchData.team1}</div>
                                 </div>
                             </div>
 
                             {/* VS with enhanced animation */}
                             <div className="flex-shrink-0">
-                                <div className={`font-bold text-yellow-400 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-full shadow-2xl animate-bounce-subtle border-4 border-yellow-300 ${
-                                    isMobile ? 'text-2xl' : isTablet ? 'text-4xl' : 'text-6xl'
-                                }`} style={{
-                                    textShadow: '0 0 15px rgba(255, 235, 59, 0.8)'
-                                }}>
+                                <div className={`font-bold text-yellow-400 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-full shadow-2xl animate-bounce-subtle border-4 border-yellow-300 ${isMobile ? 'text-2xl' : isTablet ? 'text-4xl' : 'text-6xl'
+                                    }`} style={{
+                                        textShadow: '0 0 15px rgba(255, 235, 59, 0.8)'
+                                    }}>
                                     VS
                                 </div>
                             </div>
@@ -150,35 +168,36 @@ const HalftimeBreakPoster = () => {
                             <div className="flex-1 flex flex-col items-center max-w-xs">
                                 <div className="relative mb-4">
                                     <div className="absolute inset-0 rounded-full bg-gradient-to-r from-red-400 to-pink-500 animate-spin-slow-reverse"></div>
-                                    <img
-                                        src={matchData.logo2}
-                                        alt={matchData.team2}
-                                        className={`relative z-10 rounded-full bg-white p-2 object-cover shadow-2xl hover:scale-110 transition-transform duration-500 ${
-                                            isMobile ? 'w-20 h-20' : isTablet ? 'w-32 h-32' : 'w-48 h-48'
-                                        }`}
+                                    <div
+                                        className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                                         style={{
-                                            animation: 'spin 8s linear infinite reverse'
+                                            width: `${logoSize}px`,
+                                            height: `${logoSize}px`
                                         }}
-                                        onError={(e) => {
-                                            e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjZGMyNjI2Ii8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBCPC90ZXh0Pgo8L3N2Zz4K';
-                                        }}
-                                    />
+                                    >
+                                        <img
+                                            src={matchData.logo2}
+                                            alt={matchData.team2}
+                                            className="object-contain w-[85%] h-[85%]"
+                                            onError={(e) => {
+                                                e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
+                                            }}
+                                        />
+                                    </div>
                                 </div>
-                                <div className={`bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-sm px-4 py-2 rounded-xl font-bold text-center w-full shadow-lg border border-white/10 ${
-                                    isMobile ? 'text-sm' : isTablet ? 'text-lg' : 'text-3xl'
-                                }`}>
+                                <div className={`bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-sm px-4 py-2 rounded-xl font-bold text-center w-full shadow-lg border border-white/10 ${isMobile ? 'text-sm' : isTablet ? 'text-lg' : 'text-3xl'
+                                    }`}>
                                     <div className="truncate">{matchData.team2}</div>
                                 </div>
                             </div>
                         </div>
 
                         {/* Halftime break message with enhanced styling */}
-                        <div className={`bg-gradient-to-r from-orange-500 via-red-500 to-orange-500 text-white px-8 py-4 inline-block rounded-2xl font-bold shadow-2xl border-4 border-yellow-300 animate-pulse-slow ${
-                            isMobile ? 'text-xl' : isTablet ? 'text-3xl' : 'text-5xl'
-                        }`} style={{
-                            textShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
-                            boxShadow: '0 0 30px rgba(255, 165, 0, 0.6)'
-                        }}>
+                        <div className={`bg-gradient-to-r from-orange-500 via-red-500 to-orange-500 text-white px-8 py-4 inline-block rounded-2xl font-bold shadow-2xl border-4 border-yellow-300 animate-pulse-slow ${isMobile ? 'text-xl' : isTablet ? 'text-3xl' : 'text-5xl'
+                            }`} style={{
+                                textShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
+                                boxShadow: '0 0 30px rgba(255, 165, 0, 0.6)'
+                            }}>
                             ⏱️ NGHỈ GIỮA 2 HIỆP ⏱️
                         </div>
                     </div>
@@ -186,9 +205,9 @@ const HalftimeBreakPoster = () => {
 
                 {/* Bottom left SCO logo */}
                 {showSCOLogo && (
-                    <div 
+                    <div
                         className="absolute bottom-8 left-8 z-50 transform hover:scale-110 transition-transform duration-300"
-                        style={{ 
+                        style={{
                             width: isMobile ? '60px' : '96px',
                             height: isMobile ? '60px' : '96px'
                         }}
@@ -203,7 +222,7 @@ const HalftimeBreakPoster = () => {
                                 e.target.nextSibling.style.display = 'flex';
                             }}
                         />
-                        <div 
+                        <div
                             className="w-full h-full bg-gradient-to-r from-gray-700 to-gray-600 rounded-full items-center justify-center text-white font-bold text-lg hidden shadow-xl"
                             style={{ display: 'none' }}
                         >
@@ -214,16 +233,16 @@ const HalftimeBreakPoster = () => {
 
                 {/* Marquee (if enabled) */}
                 {matchData.showMarquee && matchData.marqueeText && (
-                    <div 
+                    <div
                         className="absolute bottom-0 left-0 w-full bg-gradient-to-r from-black/50 via-black/40 to-black/50 backdrop-blur-sm text-white flex items-center overflow-hidden z-50 border-t border-white/20"
-                        style={{ 
+                        style={{
                             height: isMobile ? '6vw' : '3vw',
                             minHeight: '32px'
                         }}
                     >
-                        <div 
+                        <div
                             className="animate-marquee whitespace-nowrap font-bold"
-                            style={{ 
+                            style={{
                                 fontSize: isMobile ? '4vw' : '2.4vw',
                                 minFontSize: '16px',
                                 paddingBottom: '0.2vw',
