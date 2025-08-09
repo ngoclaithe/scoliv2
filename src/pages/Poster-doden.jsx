@@ -3,7 +3,6 @@ import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
 
 export default function DodenMatchIntro() {
-  // Sử dụng dữ liệu từ PublicMatchContext
   const {
     matchData: contextMatchData,
     marqueeData,
