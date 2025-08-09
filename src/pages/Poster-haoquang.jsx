@@ -44,7 +44,6 @@ export default function HaoQuangMatchIntro() {
     showLiveIndicator: posterSettings?.showLiveIndicator !== false,
     accentColor: posterSettings?.accentColor || '#3b82f6',
     liveText: contextMatchData.liveText || 'FACEBOOK LIVE'
-
   };
 
   const [windowSize, setWindowSize] = useState({
@@ -128,12 +127,13 @@ export default function HaoQuangMatchIntro() {
   const getAnimationDuration = () => {
     if (marqueeWidth && containerWidth) {
       const totalDistance = marqueeWidth + containerWidth;
-      const speed = 100;
+      const speed = 100; 
       return Math.max(10, totalDistance / speed);
     }
-    return 30;
+    return 30; 
   };
 
+  // Font size adjustment function
   const adjustFontSize = (element) => {
     if (!element) return;
     let fontSize = parseInt(window.getComputedStyle(element).fontSize);
@@ -149,29 +149,11 @@ export default function HaoQuangMatchIntro() {
   const hasOrganizing = organizingLogos.length > 0;
   const hasMediaPartners = mediaPartnerLogos.length > 0;
 
-  // Check if marquee should be running
-  const isMarqueeRunning = scrollData.mode !== 'khong' && scrollData.mode !== 'none' && scrollData.text && showMarquee;
-
-  // Handle interval-based marquee display
-  useEffect(() => {
-    if (scrollData.interval > 0 && (scrollData.mode === 'moi-2' || scrollData.mode === 'moi-5')) {
-      setShowMarquee(true);
-      const intervalId = setInterval(() => {
-        setShowMarquee(prev => !prev);
-      }, scrollData.interval);
-
-      return () => clearInterval(intervalId);
-    } else {
-      setShowMarquee(true);
-    }
-  }, [scrollData.interval, scrollData.mode]);
-
   const getDisplayEachLogo = (baseClass) => {
     switch (matchData.logoShape) {
       case 'round':
         return `${baseClass} rounded-full`;
       case 'hexagon':
-        // Hexagon shape with clip-path and optional effects
         return `${baseClass} hexagon-clip hexagon-glow`;
       case 'square':
         return `${baseClass} rounded-none`;
@@ -192,6 +174,23 @@ export default function HaoQuangMatchIntro() {
     }
   };
 
+  // Check if marquee should be running
+  const isMarqueeRunning = scrollData.mode !== 'khong' && scrollData.mode !== 'none' && scrollData.text && showMarquee;
+
+  // Handle interval-based marquee display
+  useEffect(() => {
+    if (scrollData.interval > 0 && (scrollData.mode === 'moi-2' || scrollData.mode === 'moi-5')) {
+      setShowMarquee(true);
+      const intervalId = setInterval(() => {
+        setShowMarquee(prev => !prev);
+      }, scrollData.interval);
+
+      return () => clearInterval(intervalId);
+    } else {
+      setShowMarquee(true);
+    }
+  }, [scrollData.interval, scrollData.mode]);
+
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
       <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
@@ -207,6 +206,7 @@ export default function HaoQuangMatchIntro() {
         <div className="relative z-10 h-full flex flex-col p-3 sm:p-6">
 
           <div className="flex justify-between items-start mb-1 sm:mb-3 md:mb-5 min-h-[8vh] sm:min-h-[12vh] md:min-h-[14vh]">
+
             {/* Top-left: Sponsors and Organizing */}
             <div className="flex items-start gap-2 sm:gap-4 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '35%' }}>
               {hasSponsors && (
@@ -232,7 +232,6 @@ export default function HaoQuangMatchIntro() {
                 </div>
               )}
 
-
               {hasOrganizing && (
                 <div className="flex-shrink-0">
                   <div className="text-[8px] sm:text-xs font-bold text-blue-400 mb-1 drop-shadow-lg">
@@ -256,6 +255,7 @@ export default function HaoQuangMatchIntro() {
                 </div>
               )}
             </div>
+
             {/* Top-center: Tournament Logos */}
             <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4 px-4`}>
               {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 &&
@@ -269,6 +269,7 @@ export default function HaoQuangMatchIntro() {
                 ))
               }
             </div>
+
             {/* Top-right: Media Partners and Live Unit */}
             <div className="flex flex-col items-end gap-2 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '30%' }}>
               {hasMediaPartners && (
@@ -308,8 +309,10 @@ export default function HaoQuangMatchIntro() {
 
           </div>
 
+          {/* Main content section */}
           <div className="flex-1 flex flex-col justify-center min-h-0">
 
+            {/* Title section */}
             <div className="text-center mb-1 sm:mb-2 md:mb-3">
               <h1
                 className="font-black uppercase text-white text-xs sm:text-sm md:text-lg lg:text-2xl xl:text-3xl px-1 sm:px-2"
@@ -328,30 +331,29 @@ export default function HaoQuangMatchIntro() {
                 <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
               </div>
             </div>
-            {/* Teams section - USING TEAM LOGO SHAPE HERE */}
+
+            {/* Teams section */}
             <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-1 sm:mb-2 md:mb-4">
+
               {/* Team A */}
               <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-                    <div
-                      className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
-                      style={{
-                        width: `${logoSize}px`,
-                        height: `${logoSize}px`
+                  <div
+                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    style={{
+                      width: `${logoSize}px`,
+                      height: `${logoSize}px`
+                    }}
+                  >
+                    <img
+                      src={matchData.logo1}
+                      alt={matchData.team1}
+                      className="object-contain w-[100%] h-[100%]"
+                      onError={(e) => {
+                        e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
                       }}
-                    >
-                      <img
-                        src={matchData.logo1}
-                        alt={matchData.team1}
-                        className="object-contain w-[100%] h-[100%]"
-                        onError={(e) => {
-                          e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
-                        }}
-                      />
-                    </div>
+                    />
                   </div>
                 </div>
                 <div className="bg-gradient-to-r from-cyan-500 to-blue-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
@@ -363,6 +365,7 @@ export default function HaoQuangMatchIntro() {
                   </span>
                 </div>
               </div>
+
               {/* VS Section */}
               <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative flex flex-col items-center">
@@ -395,28 +398,26 @@ export default function HaoQuangMatchIntro() {
                   )}
                 </div>
               </div>
+
               {/* Team B */}
               <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-                    <div
-                      className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
-                      style={{
-                        width: `${logoSize}px`,
-                        height: `${logoSize}px`
+                  <div
+                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    style={{
+                      width: `${logoSize}px`,
+                      height: `${logoSize}px`
+                    }}
+                  >
+                    <img
+                      src={matchData.logo2}
+                      alt={matchData.team2}
+                      className="object-contain w-[100%] h-[100%]"
+                      onError={(e) => {
+                        e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBCPC90ZXh0Pgo8L3N2Zz4K';
                       }}
-                    >
-                      <img
-                        src={matchData.logo2}
-                        alt={matchData.team2}
-                        className="object-contain w-[100%] h-[100%]"
-                        onError={(e) => {
-                          e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBCPC90ZXh0Pgo8L3N2Zz4K';
-                        }}
-                      />
-                    </div>
+                    />
                   </div>
                 </div>
                 <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
@@ -430,16 +431,15 @@ export default function HaoQuangMatchIntro() {
               </div>
             </div>
 
-
           </div>
 
-          {/* Bottom spacer để marquee không đè lên content */}
+          {/* Bottom spacer */}
           <div className="h-3 sm:h-4 md:h-6 flex-shrink-0"></div>
         </div>
 
         {/* Fixed Marquee Section */}
         {isMarqueeRunning && scrollData.text && (
-          <div
+          <div 
             ref={marqueeContainerRef}
             className="absolute bottom-0 left-0 w-full h-3 sm:h-4 md:h-6 border-t-2 overflow-hidden z-20"
             style={{
@@ -455,8 +455,8 @@ export default function HaoQuangMatchIntro() {
                 color: scrollData.color,
                 left: containerWidth ? `${containerWidth}px` : '100%',
                 transform: 'translateY(-50%)',
-                animation: containerWidth && marqueeWidth ?
-                  `marquee-scroll-fixed ${getAnimationDuration()}s linear infinite` :
+                animation: containerWidth && marqueeWidth ? 
+                  `marquee-scroll-fixed ${getAnimationDuration()}s linear infinite` : 
                   'none'
               }}
             >
@@ -481,10 +481,10 @@ export default function HaoQuangMatchIntro() {
 
         <style>{`
           @keyframes marquee-scroll-fixed {
-            0% {
+            0% { 
               left: 100%;
             }
-            100% {
+            100% { 
               left: -100%;
             }
           }
