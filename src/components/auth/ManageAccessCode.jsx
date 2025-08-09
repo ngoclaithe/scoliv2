@@ -106,6 +106,98 @@ const ManageAccessCode = ({ onNavigate }) => {
     }
   };
 
+  const loadActivities = async () => {
+    try {
+      setLoading(true);
+      // Tạm thời sử dụng getUsers để mô phỏng activities
+      const response = await UserAPI.getUsers({ page: 1, limit: 10 });
+      if (response.success) {
+        const activityData = response.data.map(user => ({
+          id: user.id,
+          type: 'user_login',
+          description: `Hoạt động của ${user.name}`,
+          user: user,
+          timestamp: new Date().toISOString()
+        }));
+        setActivities(activityData);
+      }
+    } catch (error) {
+      console.error('Error loading activities:', error);
+      setActivities([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadCurrentUser = async () => {
+    try {
+      setLoading(true);
+      // Giả sử user hiện tại có id = 1
+      const response = await UserAPI.getUser('1');
+      if (response.success) {
+        setCurrentUser(response.data);
+        setProfileData({
+          name: response.data.name || '',
+          email: response.data.email || ''
+        });
+      }
+    } catch (error) {
+      console.error('Error loading current user:', error);
+      // Tạo user giả lập
+      setCurrentUser({
+        id: '1',
+        name: 'Người dùng',
+        email: 'user@example.com',
+        role: 'user',
+        createdAt: new Date().toISOString()
+      });
+      setProfileData({
+        name: 'Người dùng',
+        email: 'user@example.com'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateProfile = async () => {
+    try {
+      setLoading(true);
+      const response = await UserAPI.updateUser(currentUser.id, profileData);
+      if (response.success) {
+        setCurrentUser(prev => ({ ...prev, ...profileData }));
+        setShowEditProfileModal(false);
+        console.log('Cập nhật thông tin thành công!');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    try {
+      if (passwordData.newPassword !== passwordData.confirmPassword) {
+        console.error('Mật khẩu mới và xác nhận mật khẩu không khớp!');
+        return;
+      }
+      if (passwordData.newPassword.length < 6) {
+        console.error('Mật khẩu mới phải có ít nhất 6 ký tự!');
+        return;
+      }
+      setLoading(true);
+      // Giả lập API change password
+      setShowChangePasswordModal(false);
+      setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      console.log('Đổi mật khẩu thành công!');
+    } catch (error) {
+      console.error('Error changing password:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleString('vi-VN');
   };
@@ -183,7 +275,7 @@ const ManageAccessCode = ({ onNavigate }) => {
   const handleEnterCode = async (e) => {
     e.preventDefault();
     if (!matchCode.trim()) {
-      console.error('Vui l��ng nhập mã trận đấu');
+      console.error('Vui lòng nhập mã trận đấu');
       return;
     }
 
@@ -247,7 +339,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                   className="flex items-center bg-white/10 hover:bg-white/20 rounded-full px-3 py-2 transition-colors"
                   title="Về trang chủ (cần nhập code)"
                 >
-                  <span className="text-white text-sm">🚀Vào trận</span>
+                  <span className="text-white text-sm">��Vào trận</span>
                 </button>
               )}
               <button
