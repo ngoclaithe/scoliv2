@@ -29,9 +29,7 @@ import Stat from '../sections/Stat';
 
 const UnifiedDisplayController = () => {
   const params = useParams();
-  console.log('🌐 [UnifiedDisplayController] Route params:', params);
-
-  // Destructure all possible params
+  // console.log('🌐 [UnifiedDisplayController] Route params:', params);
   const {
     accessCode,
     location,
@@ -71,7 +69,7 @@ const UnifiedDisplayController = () => {
       view || matchTime
     );
     
-    console.log('🔍 [UnifiedDisplayController] Dynamic route check:', hasDynamicParams);
+    // console.log('🔍 [UnifiedDisplayController] Dynamic route check:', hasDynamicParams);
     return hasDynamicParams;
   }, [location, matchTitle, liveText, teamALogoCode, teamBLogoCode, teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore, view, matchTime]);
 
@@ -79,11 +77,11 @@ const UnifiedDisplayController = () => {
   const parseUrlParams = useCallback(() => {
     if (!isDynamicRoute) return null;
 
-    console.log('🔍 [UnifiedDisplayController] Raw URL params:', {
-      location, matchTitle, liveText, teamALogoCode, teamBLogoCode,
-      teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore,
-      view, matchTime
-    });
+    // console.log('🔍 [UnifiedDisplayController] Raw URL params:', {
+    //   location, matchTitle, liveText, teamALogoCode, teamBLogoCode,
+    //   teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore,
+    //   view, matchTime
+    // });
 
     const params = {
       location: parseTextParam(location),
@@ -191,7 +189,7 @@ const UnifiedDisplayController = () => {
         const isDynamic = checkIfDynamicRoute();
         setIsDynamicRoute(isDynamic);
         
-        console.log(`🎯 [UnifiedDisplayController] Route type: ${isDynamic ? 'Dynamic' : 'Standard'}`);
+        // console.log(`🎯 [UnifiedDisplayController] Route type: ${isDynamic ? 'Dynamic' : 'Standard'}`);
 
         const verifyResult = await PublicAPI.verifyAccessCode(accessCode);
 
@@ -204,33 +202,27 @@ const UnifiedDisplayController = () => {
 
         if (!isCleanedUp) {
           setIsInitialized(true);
-          console.log('✅ [UnifiedDisplayController] Initialized successfully');
+          // console.log('✅ [UnifiedDisplayController] Initialized successfully');
 
-          // Chỉ xử lý parameters nếu là dynamic route
           if (isDynamic) {
             const params = parseUrlParams();
-            console.log('📋 [UnifiedDisplayController] About to update socket with params:', params);
+            // console.log('📋 [UnifiedDisplayController] About to update socket with params:', params);
 
             if (params && Object.keys(params).length > 0) {
-              // Delay một chút để đảm bảo socket đã kết nối hoàn toàn
-              console.log('⏰ [UnifiedDisplayController] Setting timeout to update socket params...');
+              // console.log('⏰ [UnifiedDisplayController] Setting timeout to update socket params...');
 
-              // Thử sau 1 giây
               setTimeout(() => {
-                console.log('🚀 [UnifiedDisplayController] First attempt to update socket params...');
+                // console.log('🚀 [UnifiedDisplayController] First attempt to update socket params...');
                 updateSocketWithParams(params);
               }, 1000);
 
-              // Fallback: thử lại sau 3 giây nếu lần đầu thất bại
               setTimeout(() => {
-                console.log('🔄 [UnifiedDisplayController] Fallback attempt to update socket params...');
                 updateSocketWithParams(params);
               }, 3000);
             }
           }
         }
       } catch (err) {
-        console.error('❌ [UnifiedDisplayController] Failed to initialize display:', err);
         if (!isCleanedUp) {
           if (handleExpiredAccess && handleExpiredAccess(err)) {
             return;
