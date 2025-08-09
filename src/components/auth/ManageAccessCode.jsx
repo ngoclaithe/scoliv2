@@ -115,18 +115,46 @@ const ManageAccessCode = ({ onNavigate }) => {
   const loadActivities = async () => {
     try {
       setLoading(true);
-      // Tạm thời sử dụng getUsers để mô phỏng activities
-      const response = await UserAPI.getUsers({ page: 1, limit: 10 });
-      if (response.success) {
-        const activityData = response.data.map(user => ({
-          id: user.id,
-          type: 'user_login',
-          description: `Hoạt động của ${user.name}`,
-          user: user,
-          timestamp: new Date().toISOString()
-        }));
-        setActivities(activityData);
-      }
+      // Tạo dữ liệu hoạt động giả lập vì user không có quyền truy cập getUsers
+      const mockActivities = [
+        {
+          id: '1',
+          type: 'code_created',
+          description: 'Tạo mã truy cập mới cho bóng đá',
+          timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(), // 5 phút trước
+          details: { code: 'SOCCER123' }
+        },
+        {
+          id: '2',
+          type: 'code_used',
+          description: 'Sử dụng mã truy cập để vào trận',
+          timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 phút trước
+          details: { code: 'FUTSAL456' }
+        },
+        {
+          id: '3',
+          type: 'profile_updated',
+          description: 'Cập nhật thông tin tài khoản',
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 giờ trước
+          details: { field: 'name' }
+        },
+        {
+          id: '4',
+          type: 'payment_completed',
+          description: 'Thanh toán mã truy cập thành công',
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // 1 ngày trước
+          details: { amount: '10000 VNĐ' }
+        },
+        {
+          id: '5',
+          type: 'login',
+          description: 'Đăng nhập vào hệ thống',
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(), // 2 ngày trước
+          details: { device: 'Chrome Browser' }
+        }
+      ];
+
+      setActivities(mockActivities);
     } catch (error) {
       console.error('Error loading activities:', error);
       setActivities([]);
@@ -729,7 +757,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                   <div className="mt-1">{formatDate(selectedCode.expiresAt)}</div>
                 </div>
                 <div>
-                  <span className="font-medium text-gray-600">Đã s��� dụng:</span>
+                  <span className="font-medium text-gray-600">Đã s��� d��ng:</span>
                   <div className="mt-1">{selectedCode.usageCount}/{selectedCode.maxUsage}</div>
                 </div>
                 <div>
@@ -754,7 +782,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                   setSelectedCode(null);
                 }}
               >
-                Đ��ng
+                Đóng
               </Button>
             </div>
           </div>
