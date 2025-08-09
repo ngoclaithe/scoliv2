@@ -224,20 +224,9 @@ const UnifiedDisplayController = () => {
             console.log('📋 [UnifiedDisplayController] About to update socket with params:', params);
 
             if (params && Object.keys(params).length > 0) {
-              // Delay một chút để đảm bảo socket đã kết nối hoàn toàn
-              console.log('⏰ [UnifiedDisplayController] Setting timeout to update socket params...');
-
-              // Thử sau 1 giây
-              setTimeout(() => {
-                console.log('🚀 [UnifiedDisplayController] First attempt to update socket params...');
-                updateSocketWithParams(params);
-              }, 1000);
-
-              // Fallback: thử lại sau 3 giây nếu lần đầu thất bại
-              setTimeout(() => {
-                console.log('🔄 [UnifiedDisplayController] Fallback attempt to update socket params...');
-                updateSocketWithParams(params);
-              }, 3000);
+              // Sử dụng method chờ socket connection mới
+              console.log('⏰ [UnifiedDisplayController] Starting socket wait process...');
+              waitForSocketAndUpdate(params);
             }
           }
         }
@@ -320,7 +309,7 @@ const UnifiedDisplayController = () => {
     return (
       <div className="fixed inset-0 bg-gradient-to-br from-blue-900 to-purple-900 text-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin text-6xl mb-4">⚽</div>
+          <div className="animate-spin text-6xl mb-4">��</div>
           <h1 className="text-2xl font-bold mb-2">Đang kết nối...</h1>
           <p className="text-gray-300">Mã truy cập: {accessCode}</p>
           <div className="mt-4 w-48 h-2 bg-gray-700 rounded-full overflow-hidden">
@@ -352,7 +341,7 @@ const UnifiedDisplayController = () => {
             onClick={() => window.location.reload()}
             className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
-            🔄 Thử lại
+            🔄 Th��� lại
           </button>
         </div>
       </div>
