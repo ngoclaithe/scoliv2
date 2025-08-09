@@ -34,7 +34,7 @@ const ScoreboardLogos = ({ allLogos, logoShape, rotateDisplay }) => {
         );
     } else {
         return (
-            <div className="flex gap-1 sm:gap-2 flex-wrap max-w-[200px] sm:max-w-[250px] md:max-w-[300px]">
+            <div className="flex gap-0.5 sm:gap-1 md:gap-2 flex-wrap w-full">
                 {allLogos.map((logo, index) => (
                     <div key={index} className="flex-shrink-0">
                         <div
