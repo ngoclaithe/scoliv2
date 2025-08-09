@@ -178,11 +178,11 @@ const ScoreboardAbove = ({ type = 1 }) => {
                 )}
 
                 {/* Main Scoreboard - Top Right for all types including pickleball */}
-                <div className="absolute top-4 right-4 z-30 origin-top-right
+                <div className="absolute top-2 right-2 z-30 origin-top-right
                     md:top-4 md:right-4 md:scale-100
-                    sm:top-3 sm:right-3 sm:scale-75
-                    max-[480px]:top-2 max-[480px]:right-2 max-[480px]:scale-[0.6]
-                    max-[360px]:top-1.5 max-[360px]:right-1.5 max-[360px]:scale-50">
+                    sm:top-2 sm:right-2 sm:scale-90
+                    max-[480px]:top-1 max-[480px]:right-1 max-[480px]:scale-75
+                    max-[360px]:top-0.5 max-[360px]:right-0.5 max-[360px]:scale-[0.65]">
                     <div className="bg-transparent rounded-lg shadow-2xl">
                         {renderScoreboard()}
                     </div>
