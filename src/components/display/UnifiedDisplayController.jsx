@@ -221,7 +221,7 @@ const UnifiedDisplayController = () => {
 
       console.log(`✅ [UnifiedDisplayController] Sent ${updateCount} updates to server`);
 
-      // Request state hiện tại để verify data đã được cập nhật
+      // Request state hi���n tại để verify data đã được cập nhật
       if (updateCount > 0) {
         setTimeout(() => {
           console.log('🔄 [UnifiedDisplayController] Requesting current state to verify updates...');
@@ -289,7 +289,7 @@ const UnifiedDisplayController = () => {
     return () => {
       isCleanedUp = true;
     };
-  }, [accessCode, initializeSocket, handleExpiredAccess, checkIfDynamicRoute, parseUrlParams, waitForSocketAndUpdate]);
+  }, [accessCode, initializeSocket, handleExpiredAccess, checkIfDynamicRoute, parseUrlParams, waitForRoomJoinedAndUpdate]);
 
   // Render poster component theo type
   const renderPoster = (posterType) => {
