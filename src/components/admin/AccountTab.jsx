@@ -121,26 +121,25 @@ const AccountTab = () => {
   };
 
   const resetFormData = () => {
-    setFormData({
-      name: '',
-      email: '',
-      role: 'user'
-    });
+    if (currentUser) {
+      setFormData({
+        name: currentUser.name || '',
+        email: currentUser.email || ''
+      });
+    }
   };
 
-  const openEditModal = (user) => {
-    setSelectedUser(user);
+  const openEditProfileModal = () => {
     setFormData({
-      name: user.name || '',
-      email: user.email || '',
-      role: user.role || 'user'
+      name: currentUser.name || '',
+      email: currentUser.email || ''
     });
-    setShowEditModal(true);
+    setShowEditProfileModal(true);
   };
 
-  const openDeleteModal = (user) => {
-    setSelectedUser(user);
-    setShowDeleteModal(true);
+  const openChangePasswordModal = () => {
+    setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    setShowChangePasswordModal(true);
   };
 
   const formatDate = (dateString) => {
@@ -159,19 +158,21 @@ const AccountTab = () => {
     }
   };
 
-  const getStatusText = (user) => {
-    // Giả sử có logic để xác định trạng thái người dùng
-    if (user.lastLoginAt) {
-      const lastLogin = new Date(user.lastLoginAt);
-      const now = new Date();
-      const diffDays = Math.floor((now - lastLogin) / (1000 * 60 * 60 * 24));
-      
-      if (diffDays === 0) return 'Đang hoạt động';
-      if (diffDays <= 7) return `Hoạt động ${diffDays} ngày trước`;
-      return 'Không hoạt động';
-    }
-    return 'Chưa đăng nhập';
-  };
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loading size="lg" />
+      </div>
+    );
+  }
+
+  if (!currentUser) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-500">Không thể tải thông tin tài khoản</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
