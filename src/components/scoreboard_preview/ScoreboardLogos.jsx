@@ -5,11 +5,13 @@ const ScoreboardLogos = ({ allLogos, logoShape, rotateDisplay }) => {
     if (allLogos.length === 0) return null;
 
     const getContainerShape = (typeDisplay) => {
+        console.log('🔍 ScoreboardLogos typeDisplay:', typeDisplay);
         switch (typeDisplay) {
             case 'round': return 'rounded-full';
             case 'hexagonal':
                 return 'hexagon-shape'; // Custom hexagon class
             case 'square':
+                return 'rounded-lg';
             default: return 'rounded-lg';
         }
     };
