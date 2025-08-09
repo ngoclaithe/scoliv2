@@ -109,22 +109,41 @@ const UnifiedDisplayController = () => {
     return params;
   }, [isDynamicRoute, location, matchTitle, liveText, teamALogoCode, teamBLogoCode, teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore, view, matchTime]);
 
+  // Chờ socket connection và gửi cập nhật
+  const waitForSocketAndUpdate = useCallback(async (params, maxAttempts = 10) => {
+    if (!params) return;
+
+    console.log('⏳ [UnifiedDisplayController] Waiting for socket connection...');
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      if (socketService.getConnectionStatus().isConnected) {
+        console.log(`✅ [UnifiedDisplayController] Socket connected on attempt ${attempt}, updating params...`);
+        await updateSocketWithParams(params);
+        return;
+      }
+
+      console.log(`⏳ [UnifiedDisplayController] Attempt ${attempt}/${maxAttempts}, socket not ready yet...`);
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+
+    console.error('❌ [UnifiedDisplayController] Socket connection timeout after', maxAttempts, 'attempts');
+  }, []);
+
   // Gửi cập nhật lên socket khi có tham số từ URL
   const updateSocketWithParams = useCallback(async (params) => {
     if (!params) return;
-    
+
     console.log('🔄 [UnifiedDisplayController] updateSocketWithParams called with:', params);
 
-    if (!socketService.getConnectionStatus().isConnected) {
-      console.warn('⚠️ [UnifiedDisplayController] Socket not connected, cannot update parameters');
-      return;
-    }
-
-    console.log('✅ [UnifiedDisplayController] Socket is connected, proceeding with updates...');
-
     try {
+      // Cập nhật view nếu có (ưu tiên đầu tiên)
+      if (params.view) {
+        console.log('👁️ [UnifiedDisplayController] Updating view:', params.view);
+        socketService.emit('view_update', { viewType: params.view });
+      }
+
       // Cập nhật thông tin trận đấu
-      if (params.matchTitle || params.location || params.matchTime) {
+      if (params.matchTitle || params.location || params.liveText || params.matchTime) {
         const matchInfo = {
           matchTitle: params.matchTitle,
           stadium: params.location,
@@ -133,12 +152,6 @@ const UnifiedDisplayController = () => {
         };
         console.log('📝 [UnifiedDisplayController] Updating match info:', matchInfo);
         socketService.updateMatchInfo(matchInfo);
-      }
-
-      // Cập nhật view nếu có
-      if (params.view) {
-        console.log('👁️ [UnifiedDisplayController] Updating view:', params.view);
-        socketService.emit('view_update', { viewType: params.view });
       }
 
       // Cập nhật tên đội
