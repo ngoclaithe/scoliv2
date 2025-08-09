@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
+import ScoreboardLogos from '../components/scoreboard_preview/ScoreboardLogos';
 
 export default function MatchIntroduction() {
   const {
@@ -159,35 +160,11 @@ export default function MatchIntroduction() {
                     Nhà tài trợ
                   </div>
                   <div className="flex gap-1 flex-wrap max-w-[15vw]">
-                    {sponsorLogos.map((sponsor, index) => {
-                      const getContainerShape = (typeDisplay) => {
-                        console.log('🔍 Sponsor typeDisplay:', typeDisplay);
-                        switch (typeDisplay) {
-                          case 'round': return 'rounded-full';
-                          case 'hexagonal': return 'hexagon-shape';
-                          case 'square': return 'rounded-lg';
-                          default: return 'rounded-lg';
-                        }
-                      };
-                      const shapeClass = getContainerShape(sponsor.typeDisplay);
-                      console.log('🔍 Sponsor shapeClass:', shapeClass);
-                      return (
-                        <div
-                          key={index}
-                          className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${shapeClass}
-                            w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12`}
-                        >
-                          <img
-                            src={sponsor.logo}
-                            alt={sponsor.name}
-                            className="object-contain w-full h-full"
-                            onError={(e) => {
-                              e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TG9nbzwvdGV4dD4KPHN2Zz4K';
-                            }}
-                          />
-                        </div>
-                      );
-                    })}
+                    <ScoreboardLogos
+                      allLogos={sponsorLogos.map(s => ({url: s.logo, alt: s.name}))}
+                      logoShape={getLogoShape(sponsorLogos[0]?.typeDisplay || 'square')}
+                      rotateDisplay={false}
+                    />
                   </div>
                 </div>
               )}
@@ -198,34 +175,11 @@ export default function MatchIntroduction() {
                     Đơn vị tổ chức
                   </div>
                   <div className="flex gap-1 flex-wrap max-w-[15vw]">
-                    {organizingLogos.map((organizing, index) => {
-                      const getContainerShape = (typeDisplay) => {
-                        // console.log('🔍 Organizing typeDisplay:', typeDisplay);
-                        switch (typeDisplay) {
-                          case 'round': return 'rounded-full';
-                          case 'hexagonal': return 'hexagon-shape';
-                          case 'square': return 'rounded-lg';
-                          default: return 'rounded-lg';
-                        }
-                      };
-                      const shapeClass = getContainerShape(organizing.typeDisplay);
-                      return (
-                        <div
-                          key={index}
-                          className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${shapeClass}
-                            w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12`}
-                        >
-                          <img
-                            src={organizing.logo}
-                            alt={organizing.name}
-                            className="object-contain w-full h-full"
-                            onError={(e) => {
-                              e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TG9nbzwvdGV4dD4KPHN2Zz4K';
-                            }}
-                          />
-                        </div>
-                      );
-                    })}
+                    <ScoreboardLogos
+                      allLogos={organizingLogos.map(o => ({url: o.logo, alt: o.name}))}
+                      logoShape={getLogoShape(organizingLogos[0]?.typeDisplay || 'square')}
+                      rotateDisplay={false}
+                    />
                   </div>
                 </div>
               )}
@@ -251,34 +205,11 @@ export default function MatchIntroduction() {
                     Đơn vị truyền thông
                   </div>
                   <div className="flex gap-1 flex-wrap justify-end max-w-[15vw]">
-                    {mediaPartnerLogos.map((media, index) => {
-                      const getContainerShape = (typeDisplay) => {
-                        console.log('🔍 Media typeDisplay:', typeDisplay);
-                        switch (typeDisplay) {
-                          case 'round': return 'rounded-full';
-                          case 'hexagonal': return 'hexagon-shape';
-                          case 'square': return 'rounded-lg';
-                          default: return 'rounded-lg';
-                        }
-                      };
-                      const shapeClass = getContainerShape(media.typeDisplay);
-                      return (
-                        <div
-                          key={index}
-                          className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${shapeClass}
-                            w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12`}
-                        >
-                          <img
-                            src={media.logo}
-                            alt={media.name}
-                            className="object-contain w-full h-full"
-                            onError={(e) => {
-                              e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZUu+TG9nbzwvdGV4dD4KPHN2Zz4K';
-                            }}
-                          />
-                        </div>
-                      );
-                    })}
+                    <ScoreboardLogos
+                      allLogos={mediaPartnerLogos.map(m => ({url: m.logo, alt: m.name}))}
+                      logoShape={getLogoShape(mediaPartnerLogos[0]?.typeDisplay || 'square')}
+                      rotateDisplay={false}
+                    />
                   </div>
                 </div>
               )}
@@ -303,7 +234,7 @@ export default function MatchIntroduction() {
 
             <div className="text-center mb-1 sm:mb-2 md:mb-3">
               <h1
-                className="font-black uppercase text-white text-sm sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl px-1 sm:px-2"
+                className="font-black uppercase text-white text-xs sm:text-sm md:text-lg lg:text-2xl xl:text-3xl px-1 sm:px-2"
                 style={{
                   textShadow: '#0006 2px 2px 4px',
                 }}
@@ -365,7 +296,7 @@ export default function MatchIntroduction() {
                 </div>
 
                 <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  <div className="text-[8px] sm:text-[10px] md:text-xs font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
+                  <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
                     {(matchData.showTimer || matchData.showDate) && (
                       <span>
                         {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
@@ -378,6 +309,17 @@ export default function MatchIntroduction() {
                       <span>📍 {matchData.stadium}</span>
                     )}
                   </div>
+                  {matchData.liveUnit && (
+                    <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-semibold bg-red-600/80 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap flex items-center space-x-1">
+                      <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full animate-pulse"></div>
+                      <img
+                        src={matchData.liveUnit}
+                        alt="Live Unit"
+                        className="h-2 sm:h-3 md:h-4 object-contain"
+                      />
+                      <span>LIVE</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
