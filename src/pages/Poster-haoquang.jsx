@@ -1,7 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
-import ScoreboardLogos from '../components/scoreboard_preview/ScoreboardLogos';
 
 export default function MatchIntroduction() {
   const {
@@ -15,7 +14,7 @@ export default function MatchIntroduction() {
     displaySettings,
     posterSettings
   } = usePublicMatch();
-  
+
   const matchData = {
     matchTitle: contextMatchData.matchTitle || 'TRỰC TIẾP TRẬN BÓNG ĐÁ',
     team1: contextMatchData.teamA.name || 'TEAM ALPHA',
@@ -34,7 +33,7 @@ export default function MatchIntroduction() {
     tournamentLogos: getFullLogoUrls(tournamentLogo?.url_logo || []),
     tournamentPosition: displaySettings?.tournamentPosition || 'top-center',
     liveUnit: getFullLogoUrl(liveUnit?.url_logo?.[0]) || null,
-    logoShape: displaySettings?.logoShape || 'circle',
+    logoShape: displaySettings?.displaySettings?.logoShape || 'round',
     showTournamentLogo: displaySettings?.showTournamentLogo !== false,
     showSponsors: displaySettings?.showSponsors !== false,
     showOrganizing: displaySettings?.showOrganizing !== false,
@@ -43,17 +42,31 @@ export default function MatchIntroduction() {
     showDate: posterSettings?.showDate !== false,
     showStadium: posterSettings?.showStadium !== false,
     showLiveIndicator: posterSettings?.showLiveIndicator !== false,
-    accentColor: posterSettings?.accentColor || '#3b82f6'
+    accentColor: posterSettings?.accentColor || '#3b82f6',
+    liveText: contextMatchData.liveText || 'FACEBOOK LIVE'
+
   };
 
-  const getLogoShape = (typeDisplay) => {
-    switch (typeDisplay) {
-      case 'round': return 'circle';
-      case 'hexagonal': return 'hexagon';
-      case 'square':
-      default: return 'square';
-    }
-  };
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 1200,
+    height: typeof window !== 'undefined' ? window.innerHeight : 800
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = windowSize.width < 768;
+  const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
+  const logoSize = isMobile ? 40 : isTablet ? 56 : 72;
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
@@ -87,7 +100,7 @@ export default function MatchIntroduction() {
     if (!element) return;
     let fontSize = parseInt(window.getComputedStyle(element).fontSize);
     const minFontSize = 14;
-    
+
     while (element.scrollWidth > element.offsetWidth && fontSize > minFontSize) {
       fontSize -= 1;
       element.style.fontSize = fontSize + "px";
@@ -98,28 +111,15 @@ export default function MatchIntroduction() {
   const hasOrganizing = organizingLogos.length > 0;
   const hasMediaPartners = mediaPartnerLogos.length > 0;
 
-  const getLogoShapeClass = (baseClass) => {
+  const getDisplayEachLogo = (baseClass) => {
     switch (matchData.logoShape) {
-      case 'square':
-        return `${baseClass} rounded-lg`;
+      case 'round':
+        return `${baseClass} rounded-full`;
       case 'hexagon':
-        return `${baseClass} rounded-full`;
-      case 'shield':
-        return `${baseClass} rounded-lg`;
-      case 'circle':
-      default:
-        return `${baseClass} rounded-full`;
-    }
-  };
-
-  const getPartnerLogoShapeClass = (baseClass, typeDisplay) => {
-    const shape = getLogoShape(typeDisplay);
-    switch (shape) {
+        // Hexagon shape with clip-path and optional effects
+        return `${baseClass} hexagon-clip hexagon-glow`;
       case 'square':
-        return `${baseClass} rounded-lg`;
-      case 'hexagon':
-        return `${baseClass} rounded-full`;
-      case 'circle':
+        return `${baseClass} rounded-none`;
       default:
         return `${baseClass} rounded-full`;
     }
@@ -140,8 +140,8 @@ export default function MatchIntroduction() {
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
       <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
-        
-        <div 
+
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url('/images/background-poster/bg2.jpg')"
@@ -152,64 +152,87 @@ export default function MatchIntroduction() {
         <div className="relative z-10 h-full flex flex-col p-3 sm:p-6">
 
           <div className="flex justify-between items-start mb-1 sm:mb-3 md:mb-5 min-h-[8vh] sm:min-h-[12vh] md:min-h-[14vh]">
-
-            <div className="flex gap-2 sm:gap-4">
+            {/* Top-left: Sponsors and Organizing */}
+            <div className="flex items-start gap-2 sm:gap-4 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '35%' }}>
               {hasSponsors && (
                 <div className="flex-shrink-0">
-                  <div className="text-xs font-bold text-green-400 mb-1 drop-shadow-lg">
+                  <div className="text-[8px] sm:text-xs font-bold text-green-400 mb-1 drop-shadow-lg">
                     Nhà tài trợ
                   </div>
-                  <div className="flex gap-1 flex-wrap max-w-[15vw]">
-                    <ScoreboardLogos
-                      allLogos={sponsorLogos.map(s => ({url: s.logo, alt: s.name}))}
-                      logoShape={getLogoShape(sponsorLogos[0]?.typeDisplay || 'square')}
-                      rotateDisplay={false}
-                    />
+                  <div className="flex flex-col gap-1">
+                    {Array.from({ length: Math.ceil(Math.min(sponsorLogos.length, 6) / 3) }, (_, rowIndex) => (
+                      <div key={`sponsor-row-${rowIndex}`} className="flex gap-1 flex-nowrap">
+                        {sponsorLogos.slice(rowIndex * 3, (rowIndex + 1) * 3).slice(0, 3).map((sponsor, index) => (
+                          <div key={`sponsor-${rowIndex}-${index}`} className="flex-shrink-0">
+                            <img
+                              src={sponsor.logo}
+                              alt={sponsor.name}
+                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 p-0.5 sm:p-1`}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
 
+
               {hasOrganizing && (
                 <div className="flex-shrink-0">
-                  <div className="text-xs font-bold text-blue-400 mb-1 drop-shadow-lg">
+                  <div className="text-[8px] sm:text-xs font-bold text-blue-400 mb-1 drop-shadow-lg">
                     Đơn vị tổ chức
                   </div>
-                  <div className="flex gap-1 flex-wrap max-w-[15vw]">
-                    <ScoreboardLogos
-                      allLogos={organizingLogos.map(o => ({url: o.logo, alt: o.name}))}
-                      logoShape={getLogoShape(organizingLogos[0]?.typeDisplay || 'square')}
-                      rotateDisplay={false}
-                    />
+                  <div className="flex flex-col gap-1">
+                    {Array.from({ length: Math.ceil(Math.min(organizingLogos.length, 6) / 3) }, (_, rowIndex) => (
+                      <div key={`organizing-row-${rowIndex}`} className="flex gap-1 flex-nowrap">
+                        {organizingLogos.slice(rowIndex * 3, (rowIndex + 1) * 3).slice(0, 3).map((organizing, index) => (
+                          <div key={`organizing-${rowIndex}-${index}`} className="flex-shrink-0">
+                            <img
+                              src={organizing.logo}
+                              alt={organizing.name}
+                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 p-0.5 sm:p-1`}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
             </div>
-
-            <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4`}>
+            {/* Top-center: Tournament Logos */}
+            <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4 px-4`}>
               {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 &&
                 matchData.tournamentLogos.map((logo, index) => (
                   <img
                     key={index}
                     src={logo}
                     alt={`Tournament Logo ${index + 1}`}
-                    className="object-contain h-6 sm:h-8 md:h-12 lg:h-16 max-w-16 sm:max-w-24 md:max-w-32"
+                    className="object-contain h-6 sm:h-8 md:h-12 lg:h-16 max-w-16 sm:max-w-24 md:max-w-32 flex-shrink-0"
                   />
                 ))
               }
             </div>
-
-            <div className="flex flex-col items-end gap-2">
+            {/* Top-right: Media Partners and Live Unit */}
+            <div className="flex flex-col items-end gap-2 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '30%' }}>
               {hasMediaPartners && (
-                <div className="flex-shrink-0">
-                  <div className="text-xs font-bold text-purple-400 mb-1 drop-shadow-lg text-right">
+                <div className="flex-shrink-0 w-full">
+                  <div className="text-[8px] sm:text-xs font-bold text-purple-400 mb-1 drop-shadow-lg text-right">
                     Đơn vị truyền thông
                   </div>
-                  <div className="flex gap-1 flex-wrap justify-end max-w-[15vw]">
-                    <ScoreboardLogos
-                      allLogos={mediaPartnerLogos.map(m => ({url: m.logo, alt: m.name}))}
-                      logoShape={getLogoShape(mediaPartnerLogos[0]?.typeDisplay || 'square')}
-                      rotateDisplay={false}
-                    />
+                  <div className="flex gap-1 justify-end overflow-x-auto scrollbar-hide">
+                    <div className="flex gap-1 flex-nowrap">
+                      {mediaPartnerLogos.map((media, index) => (
+                        <div key={index} className="flex-shrink-0">
+                          <img
+                            src={media.logo}
+                            alt={media.name}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-1`}
+                          />
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
@@ -250,31 +273,31 @@ export default function MatchIntroduction() {
                 <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
               </div>
             </div>
-
+            {/* Teams section - USING TEAM LOGO SHAPE HERE */}
             <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-1 sm:mb-2 md:mb-4">
-
+              {/* Team A */}
               <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-                  <div
-                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
-                    style={{
-                      width: '72px',
-                      height: '72px'
-                    }}
-                  >
-                    <img
-                      src={matchData.logo1}
-                      alt={matchData.team1}
-                      className="object-contain w-[100%] h-[100%]"
-                      onError={(e) => {
-                        e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                    <div
+                      className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                      style={{
+                        width: `${logoSize}px`,
+                        height: `${logoSize}px`
                       }}
-                    />
+                    >
+                      <img
+                        src={matchData.logo1}
+                        alt={matchData.team1}
+                        className="object-contain w-[100%] h-[100%]"
+                        onError={(e) => {
+                          e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
                 </div>
                 <div className="bg-gradient-to-r from-cyan-500 to-blue-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
                   <span
@@ -285,7 +308,7 @@ export default function MatchIntroduction() {
                   </span>
                 </div>
               </div>
-
+              {/* VS Section */}
               <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative flex flex-col items-center">
                   <img
@@ -309,42 +332,37 @@ export default function MatchIntroduction() {
                       <span>📍 {matchData.stadium}</span>
                     )}
                   </div>
-                  {matchData.liveUnit && (
+                  {matchData.liveText && (
                     <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-semibold bg-red-600/80 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap flex items-center space-x-1">
                       <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full animate-pulse"></div>
-                      <img
-                        src={matchData.liveUnit}
-                        alt="Live Unit"
-                        className="h-2 sm:h-3 md:h-4 object-contain"
-                      />
-                      <span>LIVE</span>
+                      <span>Đơn vị Live: {matchData.liveText}</span>
                     </div>
                   )}
                 </div>
               </div>
-
+              {/* Team B */}
               <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-                  <div
-                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
-                    style={{
-                      width: '72px',
-                      height: '72px'
-                    }}
-                  >
-                    <img
-                      src={matchData.logo2}
-                      alt={matchData.team2}
-                      className="object-contain w-[100%] h-[100%]"
-                      onError={(e) => {
-                        e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBCPC90ZXh0Pgo8L3N2Zz4K';
+                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                    <div
+                      className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                      style={{
+                        width: `${logoSize}px`,
+                        height: `${logoSize}px`
                       }}
-                    />
+                    >
+                      <img
+                        src={matchData.logo2}
+                        alt={matchData.team2}
+                        className="object-contain w-[100%] h-[100%]"
+                        onError={(e) => {
+                          e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBCPC90ZXh0Pgo8L3N2Zz4K';
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
                 </div>
                 <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
                   <span
@@ -365,11 +383,11 @@ export default function MatchIntroduction() {
         </div>
 
         {marquee.isRunning && marquee.text && (
-          <div className="absolute bottom-0 left-0 w-full h-3 sm:h-4 md:h-6 bg-gradient-to-r from-purple-900 via-blue-900 to-indigo-900 border-t-2 border-yellow-400 overflow-hidden z-20">
+          <div className="absolute bottom-0 left-0 w-full h-3 sm:h-4 md:h-6 bg-gradient-to-r from-red-900 via-black to-red-900 border-t-2 border-red-500 overflow-hidden z-20">
             <div className="absolute inset-0 bg-black/50"></div>
             <div
               ref={marqueeRef}
-              className="absolute top-1/2 transform -translate-y-1/2 whitespace-nowrap text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-bold text-yellow-300 drop-shadow-lg"
+              className="absolute top-1/2 transform -translate-y-1/2 whitespace-nowrap text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-bold text-red-300 drop-shadow-lg"
               style={{
                 animation: 'marquee 30s linear infinite'
               }}
@@ -380,16 +398,14 @@ export default function MatchIntroduction() {
         )}
 
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(16)].map((_, i) => (
+          {[...Array(15)].map((_, i) => (
             <div
               key={i}
-              className="absolute bg-gradient-to-r from-cyan-300 to-blue-400 rounded-full opacity-60"
+              className="absolute w-2 h-2 bg-gradient-to-r from-red-400 to-orange-500 rounded-full opacity-80"
               style={{
-                width: `${8 + Math.random() * 16}px`,
-                height: `${8 + Math.random() * 16}px`,
                 left: `${Math.random() * 100}%`,
-                bottom: '-20px',
-                animation: `floatUp ${8 + Math.random() * 12}s ease-in-out infinite`
+                top: `${Math.random() * 100}%`,
+                animation: `sparkle ${2 + Math.random() * 3}s ease-in-out infinite`
               }}
             />
           ))}
@@ -400,26 +416,49 @@ export default function MatchIntroduction() {
             0% { transform: translateX(100%) translateY(-50%); }
             100% { transform: translateX(-100%) translateY(-50%); }
           }
-          @keyframes floatUp {
-            0% {
-              transform: translateY(0) translateX(0) scale(0);
+          @keyframes sparkle {
+            0%, 100% {
+              transform: scale(0) rotate(0deg);
               opacity: 0;
             }
-            10% {
-              opacity: 0.6;
-              transform: scale(1);
-            }
-            90% {
-              opacity: 0.6;
-            }
-            100% {
-              transform: translateY(-100vh) translateX(${Math.random() * 200 - 100}px) scale(0);
-              opacity: 0;
+            50% {
+              transform: scale(1.5) rotate(180deg);
+              opacity: 1;
             }
           }
-          .hexagon-shape {
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            background: white;
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+          
+          /* Hexagon styles */
+          .hexagon-clip {
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            position: relative;
+          }
+          
+          .hexagon-border {
+            position: relative;
+            margin: 2px;
+          }
+          
+          .hexagon-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ef4444, #f97316, #eab308);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            z-index: -1;
+          }
+          
+          .hexagon-glow {
+            filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.4));
           }
         `}</style>
       </div>

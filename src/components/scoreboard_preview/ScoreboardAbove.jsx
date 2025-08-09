@@ -44,9 +44,8 @@ const ScoreboardAbove = ({ type = 1 }) => {
     };
 
     const rawLogoShape = displaySettings?.displaySettings?.logoShape || displaySettings?.logoShape || "round";
-    // console.log("giá trị rawLogoShape là", rawLogoShape);
     const logoShape = rawLogoShape === 'round' ? 'round' : rawLogoShape;
-    // console.log("Giá trị logoshape là:", logoShape);
+
     const showMatchTime = currentData.status === 'live' || currentData.status === 'pause';
 
     const scrollData = {

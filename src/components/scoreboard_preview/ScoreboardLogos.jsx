@@ -3,7 +3,7 @@ import { getFullLogoUrl } from '../../utils/logoUtils';
 
 const ScoreboardLogos = ({ allLogos, logoShape, rotateDisplay }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    console.log('Giá trị logoShape trong Scoreboard là:', logoShape);
+    // console.log('Giá trị logoShape trong Scoreboard là:', logoShape);
     const shouldRotate = rotateDisplay || allLogos.length >= 4;
 
     useEffect(() => {
@@ -19,21 +19,20 @@ const ScoreboardLogos = ({ allLogos, logoShape, rotateDisplay }) => {
     if (allLogos.length === 0) return null;
 
     const getContainerShape = (shape) => {
-        console.log('🔍 Getting container shape for:', shape);
+        // console.log('🔍 Getting container shape for:', shape);
         switch (shape) {
             case 'round': return 'rounded-full';
-            case 'hexagon': return 'rounded-none'; // Không dùng border-radius cho hexagon
+            case 'hexagon': return 'rounded-none'; 
             case 'square': return 'rounded-lg';
             default: return 'rounded-lg';
         }
     };
 
     const getContainerStyle = (shape) => {
-        console.log('🎨 Getting container style for:', shape);
+        // console.log('🎨 Getting container style for:', shape);
         if (shape === 'hexagon') {
             return {
                 clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-                // Loại bỏ border và shadow cho hexagon vì chúng không hoạt động tốt với clip-path
             };
         }
         return {};
@@ -82,7 +81,7 @@ const ScoreboardLogos = ({ allLogos, logoShape, rotateDisplay }) => {
     };
 
     const effectiveLogoShape = logoShape || 'square';
-    console.log('🔧 Effective logo shape:', effectiveLogoShape);
+    // console.log('🔧 Effective logo shape:', effectiveLogoShape);
 
     // Render function cho từng logo
     const renderLogo = (logo, index, keyPrefix = '') => (
