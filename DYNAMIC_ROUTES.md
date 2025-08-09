@@ -81,9 +81,11 @@ const url = buildDynamicRoute({
   teamAKitColor: '#FF0000',
   teamBKitColor: '#0000FF',
   teamAScore: 2,
-  teamBScore: 1
+  teamBScore: 1,
+  view: 'scoreboard',
+  matchTime: '45:00'
 });
-// Kết quả: "/ABC123/My_Dinh_Stadium/V_League_2024/LIVE_STREAMING/HN/TPHCM/Ha_Noi_FC/Ho_Chi_Minh_City/FF0000/0000FF/2/1"
+// Kết quả: "/ABC123/My_Dinh_Stadium/V_League_2024/LIVE_STREAMING/HN/TPHCM/Ha_Noi_FC/Ho_Chi_Minh_City/FF0000/0000FF/2/1/scoreboard/45:00"
 ```
 
 ### `findTeamLogos(teamACode, teamBCode)`
