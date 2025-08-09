@@ -13,6 +13,19 @@ import UserAPI from '../../API/apiUser';
 const ManageAccessCode = ({ onNavigate }) => {
   const { user, logout, enterMatchCode, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState('list');
+  const [activities, setActivities] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [profileData, setProfileData] = useState({
+    name: '',
+    email: ''
+  });
   const [showCodeEntry, setShowCodeEntry] = useState(false);
   const [matchCode, setMatchCode] = useState('');
   const [loading, setLoading] = useState(false);
@@ -117,7 +130,7 @@ const ManageAccessCode = ({ onNavigate }) => {
       case 'active': return '🟢 Sẵn sàng';
       case 'expired': return '🔴 Hết hạn';
       case 'inactive': return '⚪ Chưa kích hoạt';
-      case 'used': return '��� Đang sử dụng';
+      case 'used': return '🟡 Đang sử dụng';
       default: return '❓ Không xác định';
     }
   };
@@ -170,7 +183,7 @@ const ManageAccessCode = ({ onNavigate }) => {
   const handleEnterCode = async (e) => {
     e.preventDefault();
     if (!matchCode.trim()) {
-      console.error('Vui lòng nhập mã trận đấu');
+      console.error('Vui l��ng nhập mã trận đấu');
       return;
     }
 
