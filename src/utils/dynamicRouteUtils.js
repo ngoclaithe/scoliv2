@@ -134,7 +134,9 @@ export const buildDynamicRoute = (params) => {
     teamAKitColor = 'FF0000',
     teamBKitColor = '0000FF',
     teamAScore = 0,
-    teamBScore = 0
+    teamBScore = 0,
+    view = 'poster',
+    matchTime = '00:00'
   } = params;
 
   // Encode các tham số text
@@ -143,12 +145,14 @@ export const buildDynamicRoute = (params) => {
   const encodedLiveText = encodeURIComponent(liveText.replace(/ /g, '_'));
   const encodedTeamAName = encodeURIComponent(teamAName.replace(/ /g, '_'));
   const encodedTeamBName = encodeURIComponent(teamBName.replace(/ /g, '_'));
+  const encodedView = encodeURIComponent(view.replace(/ /g, '_'));
+  const encodedMatchTime = encodeURIComponent(matchTime.replace(/ /g, '_'));
 
   // Loại bỏ # khỏi màu
   const cleanTeamAColor = teamAKitColor.replace('#', '');
   const cleanTeamBColor = teamBKitColor.replace('#', '');
 
-  return `/${accessCode}/${encodedLocation}/${encodedMatchTitle}/${encodedLiveText}/${teamALogoCode}/${teamBLogoCode}/${encodedTeamAName}/${encodedTeamBName}/${cleanTeamAColor}/${cleanTeamBColor}/${teamAScore}/${teamBScore}`;
+  return `/${accessCode}/${encodedLocation}/${encodedMatchTitle}/${encodedLiveText}/${teamALogoCode}/${teamBLogoCode}/${encodedTeamAName}/${encodedTeamBName}/${cleanTeamAColor}/${cleanTeamBColor}/${teamAScore}/${teamBScore}/${encodedView}/${encodedMatchTime}`;
 };
 
 export default {
