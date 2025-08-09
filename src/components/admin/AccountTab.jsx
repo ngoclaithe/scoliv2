@@ -13,21 +13,20 @@ import Button from '../common/Button';
 import Input from '../common/Input';
 
 const AccountTab = () => {
-  const [users, setUsers] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [roleFilter, setRoleFilter] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalItems, setTotalItems] = useState(0);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
-    role: 'user'
+    email: ''
+  });
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
   });
 
   useEffect(() => {
@@ -176,8 +175,8 @@ const AccountTab = () => {
 
       <div className="sm:flex sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Quản lý tài khoản</h2>
-          <p className="mt-1 text-sm text-gray-700">Quản lý và theo dõi tài khoản người dùng trong hệ thống ({totalItems} người dùng)</p>
+          <h2 className="text-xl font-bold text-gray-900">Thông tin tài khoản</h2>
+          <p className="mt-1 text-sm text-gray-700">Xem và cập nhật thông tin tài khoản của bạn</p>
         </div>
       </div>
 
