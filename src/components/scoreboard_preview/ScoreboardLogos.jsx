@@ -40,9 +40,9 @@ const ScoreboardLogos = ({ allLogos, logoShape, rotateDisplay }) => {
                         <div
                             className={`relative bg-white shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${getContainerShape(logo.typeDisplay)}`}
                             style={{
-                                width: '40px',
-                                height: '40px',
-                                padding: '4px'
+                                width: '56px',
+                                height: '56px',
+                                padding: '6px'
                             }}
                         >
                             <img
