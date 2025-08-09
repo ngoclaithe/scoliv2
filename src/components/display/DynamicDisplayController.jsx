@@ -1,9 +1,6 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { usePublicMatch } from '../../contexts/PublicMatchContext';
-import { useAuth } from '../../contexts/AuthContext';
 import PublicAPI from '../../API/apiPublic';
-import socketService from '../../services/socketService';
 import {
   findTeamLogos,
   parseColorParam,
@@ -31,6 +28,7 @@ const DynamicDisplayController = () => {
   const params = useParams();
   console.log('🌐 [DynamicDisplayController] Route params:', params);
 
+  // Destructure all params
   const {
     accessCode,
     location,
@@ -43,236 +41,171 @@ const DynamicDisplayController = () => {
     teamAKitColor,
     teamBKitColor,
     teamAScore,
-    teamBScore
+    teamBScore,
+    view,
+    matchTime
   } = params;
 
-  const {
-    initializeSocket,
-    displaySettings,
-    currentView
-  } = usePublicMatch();
-  const { handleExpiredAccess } = useAuth();
+  // State riêng cho dynamic data
+  const [dynamicData, setDynamicData] = useState({
+    teamA: {
+      name: "ĐỘI-A",
+      score: 0,
+      logo: null,
+      kitColor: "#FF0000"
+    },
+    teamB: {
+      name: "ĐỘI-B", 
+      score: 0,
+      logo: null,
+      kitColor: "#0000FF"
+    },
+    matchTitle: "",
+    stadium: "",
+    liveText: "",
+    matchTime: "00:00",
+    view: "poster"
+  });
 
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Parse và validate parameters từ URL
-  const parseUrlParams = useCallback(() => {
-    console.log('🔍 [DynamicDisplayController] Raw URL params:', {
-      location, matchTitle, liveText, teamALogoCode, teamBLogoCode,
-      teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore
-    });
-
-    const params = {
-      location: parseTextParam(location),
-      matchTitle: parseTextParam(matchTitle),
-      liveText: parseTextParam(liveText),
-      teamA: {
-        name: parseTeamName(teamAName, 'ĐỘI-A'),
-        score: parseNumberParam(teamAScore, 0),
-        logoCode: teamALogoCode || '',
-        kitColor: parseColorParam(teamAKitColor) || '#FF0000'
-      },
-      teamB: {
-        name: parseTeamName(teamBName, 'ĐỘI-B'),
-        score: parseNumberParam(teamBScore, 0),
-        logoCode: teamBLogoCode || '',
-        kitColor: parseColorParam(teamBKitColor) || '#0000FF'
-      }
-    };
-
-    console.log('🌐 [DynamicDisplayController] Parsed URL params:', params);
-    return params;
-  }, [location, matchTitle, liveText, teamALogoCode, teamBLogoCode, teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore]);
-
-  // Gửi cập nhật lên socket khi có tham số từ URL
-  const updateSocketWithParams = useCallback(async (params) => {
-    console.log('🔄 [DynamicDisplayController] updateSocketWithParams called with:', params);
-
-    if (!socketService.getConnectionStatus().isConnected) {
-      console.warn('⚠️ [DynamicDisplayController] Socket not connected, cannot update parameters');
-      return;
-    }
-
-    console.log('✅ [DynamicDisplayController] Socket is connected, proceeding with updates...');
-
-    try {
-      // Cập nhật thông tin trận đấu
-      if (params.matchTitle || params.location) {
-        const matchInfo = {
-          matchTitle: params.matchTitle,
-          stadium: params.location,
-          liveText: params.liveText
-        };
-        console.log('📝 [DynamicDisplayController] Updating match info:', matchInfo);
-        socketService.updateMatchInfo(matchInfo);
-      }
-
-      // Cập nhật tên đội
-      if (params.teamA.name || params.teamB.name) {
-        console.log('📛 [DynamicDisplayController] Updating team names:', params.teamA.name, params.teamB.name);
-        socketService.updateTeamNames(params.teamA.name, params.teamB.name);
-      }
-
-      // Cập nhật tỉ số
-      if (params.teamA.score !== undefined || params.teamB.score !== undefined) {
-        console.log('⚽ [DynamicDisplayController] Updating scores:', params.teamA.score, params.teamB.score);
-        socketService.updateScore(params.teamA.score, params.teamB.score);
-      }
-
-      // Cập nhật màu áo đội nếu có
-      const matchInfoWithColors = {
-        teamAKitColor: params.teamA.kitColor,
-        teamBKitColor: params.teamB.kitColor
-      };
-      console.log('👕 [DynamicDisplayController] Updating kit colors:', matchInfoWithColors);
-      socketService.updateMatchInfo(matchInfoWithColors);
-
-      // Tìm và cập nhật logo đội dựa trên code
-      if (params.teamA.logoCode || params.teamB.logoCode) {
-        console.log('🏆 [DynamicDisplayController] Team logo codes received:', params.teamA.logoCode, params.teamB.logoCode);
-        try {
-          const { teamALogo, teamBLogo } = await findTeamLogos(params.teamA.logoCode, params.teamB.logoCode);
-          if (teamALogo || teamBLogo) {
-            console.log('🏆 [DynamicDisplayController] Found team logos, updating...', { teamALogo, teamBLogo });
-            socketService.updateTeamLogos(teamALogo, teamBLogo);
-          }
-        } catch (error) {
-          console.error('❌ [DynamicDisplayController] Failed to find team logos:', error);
-        }
-      }
-
-    } catch (error) {
-      console.error('❌ [DynamicDisplayController] Failed to update socket with params:', error);
-    }
-  }, []);
-
-  // Khởi tạo kết nối socket và cập nhật parameters
+  // Parse và load data từ URL
   useEffect(() => {
-    let isCleanedUp = false;
-
-    const initializeDisplay = async () => {
+    const loadDynamicData = async () => {
       try {
+        setIsLoading(true);
+        
+        // Verify access code
         const verifyResult = await PublicAPI.verifyAccessCode(accessCode);
-
         if (!verifyResult.success || !verifyResult.isValid) {
           setError(`Mã truy cập không hợp lệ: ${accessCode}`);
           return;
         }
 
-        await initializeSocket(accessCode);
+        // Parse URL params
+        const parsedData = {
+          teamA: {
+            name: parseTeamName(teamAName, 'ĐỘI-A'),
+            score: parseNumberParam(teamAScore, 0),
+            logo: null, // Sẽ được load sau
+            kitColor: parseColorParam(teamAKitColor) || '#FF0000'
+          },
+          teamB: {
+            name: parseTeamName(teamBName, 'ĐỘI-B'),
+            score: parseNumberParam(teamBScore, 0),
+            logo: null, // Sẽ được load sau
+            kitColor: parseColorParam(teamBKitColor) || '#0000FF'
+          },
+          matchTitle: parseTextParam(matchTitle),
+          stadium: parseTextParam(location),
+          liveText: parseTextParam(liveText),
+          matchTime: parseTextParam(matchTime),
+          view: parseTextParam(view) || 'poster'
+        };
 
-        if (!isCleanedUp) {
-          setIsInitialized(true);
-          console.log('✅ [DynamicDisplayController] Initialized successfully');
+        console.log('📊 [DynamicDisplayController] Parsed data:', parsedData);
 
-          // Parse parameters từ URL và gửi lên socket
-          const params = parseUrlParams();
-          console.log('📋 [DynamicDisplayController] About to update socket with params:', params);
-
-          if (Object.keys(params).length > 0) {
-            // Delay một chút để đảm bảo socket đã kết nối hoàn toàn
-            console.log('⏰ [DynamicDisplayController] Setting timeout to update socket params...');
-
-            // Thử sau 1 giây
-            setTimeout(() => {
-              console.log('🚀 [DynamicDisplayController] First attempt to update socket params...');
-              updateSocketWithParams(params);
-            }, 1000);
-
-            // Fallback: thử lại sau 3 giây nếu lần đầu thất bại
-            setTimeout(() => {
-              console.log('🔄 [DynamicDisplayController] Fallback attempt to update socket params...');
-              updateSocketWithParams(params);
-            }, 3000);
+        // Load team logos
+        if (teamALogoCode || teamBLogoCode) {
+          try {
+            const { teamALogo, teamBLogo } = await findTeamLogos(teamALogoCode, teamBLogoCode);
+            parsedData.teamA.logo = teamALogo;
+            parsedData.teamB.logo = teamBLogo;
+            console.log('🏆 [DynamicDisplayController] Loaded logos:', { teamALogo, teamBLogo });
+          } catch (error) {
+            console.error('❌ [DynamicDisplayController] Failed to load logos:', error);
           }
         }
+
+        setDynamicData(parsedData);
+        setIsLoading(false);
+
+        console.log('✅ [DynamicDisplayController] Dynamic data loaded successfully');
+
       } catch (err) {
-        console.error('❌ [DynamicDisplayController] Failed to initialize display:', err);
-        if (!isCleanedUp) {
-          if (handleExpiredAccess && handleExpiredAccess(err)) {
-            return;
-          }
-          setError('Không thể kết nối đến hệ thống');
-        }
+        console.error('❌ [DynamicDisplayController] Failed to load dynamic data:', err);
+        setError('Không thể tải dữ liệu trận đấu');
+        setIsLoading(false);
       }
     };
 
-    if (accessCode && !isCleanedUp) {
-      initializeDisplay();
+    if (accessCode) {
+      loadDynamicData();
     }
-
-    return () => {
-      isCleanedUp = true;
-    };
-  }, [accessCode, initializeSocket, handleExpiredAccess, parseUrlParams, updateSocketWithParams]);
+  }, [accessCode, location, matchTitle, liveText, teamALogoCode, teamBLogoCode, teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore, view, matchTime]);
 
   // Render poster component theo type
   const renderPoster = (posterType) => {
+    // Tạo props cho poster components
+    const posterProps = {
+      accessCode: accessCode,
+      // Override data with dynamic data
+      dynamicData: dynamicData
+    };
+
     switch (posterType) {
       case 'haoquang':
-        return <PosterHaoQuang accessCode={accessCode} />;
+        return <PosterHaoQuang {...posterProps} />;
       case 'tretrung':
-        return <PosterTreTrung accessCode={accessCode} />;
+        return <PosterTreTrung {...posterProps} />;
       case 'doden':
-        return <PosterDoDen accessCode={accessCode} />;
+        return <PosterDoDen {...posterProps} />;
       case 'vangkim':
-        return <PosterVangKim accessCode={accessCode} />;
+        return <PosterVangKim {...posterProps} />;
       case 'vangxanh':
-        return <PosterVangXanh accessCode={accessCode} />;
+        return <PosterVangXanh {...posterProps} />;
       case 'xanhduong':
-        return <PosterXanhDuong accessCode={accessCode} />;
+        return <PosterXanhDuong {...posterProps} />;
       default:
-        return <PosterHaoQuang accessCode={accessCode} />;
+        return <PosterHaoQuang {...posterProps} />;
     }
   };
 
-  // Render component theo currentView
+  // Render component theo view
   const renderCurrentView = () => {
-    switch (currentView) {
+    const viewProps = {
+      accessCode: accessCode,
+      dynamicData: dynamicData
+    };
+
+    console.log('🎯 [DynamicDisplayController] Rendering view:', dynamicData.view);
+
+    switch (dynamicData.view) {
       case 'intro':
-        return <Intro accessCode={accessCode} />;
+        return <Intro {...viewProps} />;
       case 'halftime':
-        return <HalfTime accessCode={accessCode} />;
+        return <HalfTime {...viewProps} />;
       case 'scoreboard':
-        return <ScoreboardAbove accessCode={accessCode} />;
+        return <ScoreboardAbove {...viewProps} />;
       case 'scoreboard_below':
-        return <ScoreboardBelowNew
-          accessCode={accessCode}
-          type={displaySettings.selectedSkin || 1}
-        />;
+        return <ScoreboardBelowNew {...viewProps} type={1} />;
       case 'penalty_scoreboard':
-        return <PenaltyScoreboard
-          accessCode={accessCode}
-          type={displaySettings.selectedSkin || 1}
-        />;
+        return <PenaltyScoreboard {...viewProps} type={1} />;
       case 'player_list':
-        return <PlayerList accessCode={accessCode} />;
+        return <PlayerList {...viewProps} />;
       case 'stat':
-        return <Stat accessCode={accessCode} />;
+        return <Stat {...viewProps} />;
       case 'poster':
       default:
-        const posterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;
-        return renderPoster(posterType);
+        return renderPoster('tretrung'); // Default poster
     }
   };
 
   // Render loading state
-  if (!isInitialized) {
+  if (isLoading) {
     return (
       <div className="fixed inset-0 bg-gradient-to-br from-blue-900 to-purple-900 text-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin text-6xl mb-4">⚽</div>
-          <h1 className="text-2xl font-bold mb-2">Đang kết nối...</h1>
+          <h1 className="text-2xl font-bold mb-2">Đang tải dữ liệu động...</h1>
           <p className="text-gray-300">Mã truy cập: {accessCode}</p>
-          <div className="mt-4 w-48 h-2 bg-gray-700 rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-blue-500 to-purple-500 animate-pulse"></div>
-          </div>
-          {(teamAName || teamBName) && (
-            <p className="text-gray-400 mt-2 text-sm">
-              {teamAName ? decodeURIComponent(teamAName) : 'ĐỘI-A'} vs {teamBName ? decodeURIComponent(teamBName) : 'ĐỘI-B'}
+          <div className="mt-4">
+            <p className="text-gray-400 text-sm">
+              {teamAName ? decodeURIComponent(teamAName.replace(/_/g, ' ')) : 'ĐỘI-A'} vs {teamBName ? decodeURIComponent(teamBName.replace(/_/g, ' ')) : 'ĐỘI-B'}
             </p>
-          )}
+            <p className="text-gray-500 text-xs">View: {view} | Time: {matchTime}</p>
+          </div>
         </div>
       </div>
     );
@@ -284,7 +217,7 @@ const DynamicDisplayController = () => {
       <div className="fixed inset-0 bg-red-900 text-white flex items-center justify-center">
         <div className="text-center">
           <div className="text-6xl mb-4">❌</div>
-          <h1 className="text-2xl font-bold mb-2">Lỗi kết nối</h1>
+          <h1 className="text-2xl font-bold mb-2">Lỗi tải dữ liệu</h1>
           <p className="text-gray-300">{error}</p>
           <button 
             onClick={() => window.location.reload()}
@@ -299,19 +232,15 @@ const DynamicDisplayController = () => {
 
   return (
     <div className="relative min-h-screen bg-white">
-      {/* Debug info - chỉ hiển thị trong development */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="fixed top-0 left-0 bg-black bg-opacity-75 text-white p-2 text-xs z-50">
-          <div>Dynamic Route Active</div>
-          <div>Access: {accessCode}</div>
-          <div>Teams: {teamAName} vs {teamBName}</div>
-          <div>Score: {teamAScore}-{teamBScore}</div>
-          <div>View: {currentView}</div>
-        </div>
-      )}
-
       <div className="w-full h-full">
         {renderCurrentView()}
+      </div>
+      
+      {/* Debug info */}
+      <div className="fixed bottom-2 left-2 bg-black bg-opacity-50 text-white text-xs p-2 rounded opacity-20 hover:opacity-100 transition-opacity">
+        <div>Dynamic Mode | View: {dynamicData.view}</div>
+        <div>{dynamicData.teamA.name} {dynamicData.teamA.score} - {dynamicData.teamB.score} {dynamicData.teamB.name}</div>
+        <div>{dynamicData.stadium} | {dynamicData.matchTime}</div>
       </div>
     </div>
   );
