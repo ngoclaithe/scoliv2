@@ -110,36 +110,35 @@ const UnifiedDisplayController = () => {
     return params;
   }, [isDynamicRoute, location, matchTitle, liveText, teamALogoCode, teamBLogoCode, teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore, view, matchTime]);
 
-  // Chờ socket connection và gửi cập nhật
-  const waitForSocketAndUpdate = useCallback(async (params, maxAttempts = 20) => {
+  // Chờ room_joined hoàn tất trước khi gửi updates
+  const waitForRoomJoinedAndUpdate = useCallback(async (params, maxAttempts = 30) => {
     if (!params) return;
 
-    console.log('⏳ [UnifiedDisplayController] Waiting for socket connection...');
+    console.log('⏳ [UnifiedDisplayController] Waiting for room_joined to complete...');
     console.log('📊 [UnifiedDisplayController] Params to update:', params);
+
+    const startTime = lastUpdateTime;
 
     for (let attempt = 1; attempt <= maxAttempts; attempt++) {
       const status = socketService.getConnectionStatus();
-      console.log(`🔍 [UnifiedDisplayController] Attempt ${attempt}/${maxAttempts}, Socket status:`, status);
 
-      if (status.isConnected && status.socketId) {
-        console.log(`✅ [UnifiedDisplayController] Socket connected on attempt ${attempt}, updating params...`);
+      // Đợi socket connected VÀ room_joined hoàn tất (lastUpdateTime thay đổi)
+      if (status.isConnected && status.socketId && lastUpdateTime > startTime) {
+        console.log(`✅ [UnifiedDisplayController] Room joined completed on attempt ${attempt}, now updating params...`);
+
+        // Delay thêm 500ms để đảm bảo room_joined hoàn toàn xong
+        await new Promise(resolve => setTimeout(resolve, 500));
+
         await updateSocketWithParams(params);
-
-        // Thử gửi lại sau 2 giây để đảm bảo
-        setTimeout(() => {
-          console.log('🔄 [UnifiedDisplayController] Backup attempt to update params...');
-          updateSocketWithParams(params);
-        }, 2000);
-
         return;
       }
 
-      console.log(`⏳ [UnifiedDisplayController] Attempt ${attempt}/${maxAttempts}, socket not ready yet...`);
+      console.log(`⏳ [UnifiedDisplayController] Attempt ${attempt}/${maxAttempts}, waiting for room_joined... (socket: ${status.isConnected}, lastUpdate: ${lastUpdateTime > startTime})`);
       await new Promise(resolve => setTimeout(resolve, 500));
     }
 
-    console.error('❌ [UnifiedDisplayController] Socket connection timeout after', maxAttempts, 'attempts');
-  }, []);
+    console.error('❌ [UnifiedDisplayController] Room join timeout after', maxAttempts, 'attempts');
+  }, [lastUpdateTime]);
 
   // Gửi cập nhật lên socket khi có tham số từ URL
   const updateSocketWithParams = useCallback(async (params) => {
