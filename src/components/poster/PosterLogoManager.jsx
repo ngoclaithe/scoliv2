@@ -1101,11 +1101,17 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-1">
         <span className="text-xs font-medium text-gray-700">Copy poster trận trước:</span>
-        <select className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white">
+        <select
+          className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white"
+          value={selectedHistoryMatch}
+          onChange={(e) => handleHistoryMatchSelect(e.target.value)}
+        >
           <option value="">Chọn trận</option>
-          <option value="match1">Hà Nội vs TPHCM (15/01)</option>
-          <option value="match2">Viettel vs HAGL (12/01)</option>
-          <option value="match3">SHB vs Thanh Hóa (10/01)</option>
+          {historyMatches.map((match) => (
+            <option key={match.id} value={match.id}>
+              {match.accessCode} ({match.status === 'expired' ? 'Đã kết thúc' : match.status})
+            </option>
+          ))}
         </select>
       </div>
 
