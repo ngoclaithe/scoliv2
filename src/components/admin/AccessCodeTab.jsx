@@ -12,7 +12,7 @@ import Modal from '../common/Modal';
 import Button from '../common/Button';
 import Input from '../common/Input';
 
-const AccessCodeManagement = () => {
+const AccessCodeTab = () => {
   const [accessCodes, setAccessCodes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -181,7 +181,7 @@ const AccessCodeManagement = () => {
       case 'revoked':
         return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Đã thu hồi</span>;
       case 'inactive':
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Chưa kích hoạt</span>;
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">Chưa kích ho��t</span>;
       default:
         return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">{code.status}</span>;
     }
@@ -555,4 +555,4 @@ const AccessCodeManagement = () => {
   );
 };
 
-export default AccessCodeManagement;
+export default AccessCodeTab;

@@ -1,7 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
-import ScoreboardLogos from '../components/scoreboard_preview/ScoreboardLogos';
 
 export default function TreTrungMatchIntro() {
   const {
@@ -34,7 +33,7 @@ export default function TreTrungMatchIntro() {
     tournamentLogos: getFullLogoUrls(tournamentLogo?.url_logo || []),
     tournamentPosition: displaySettings?.tournamentPosition || 'top-center',
     liveUnit: getFullLogoUrl(liveUnit?.url_logo?.[0]) || null,
-    logoShape: displaySettings?.logoShape || 'circle',
+    logoShape: displaySettings?.displaySettings?.logoShape || 'round',
     showTournamentLogo: displaySettings?.showTournamentLogo !== false,
     showSponsors: displaySettings?.showSponsors !== false,
     showOrganizing: displaySettings?.showOrganizing !== false,
@@ -43,17 +42,43 @@ export default function TreTrungMatchIntro() {
     showDate: posterSettings?.showDate !== false,
     showStadium: posterSettings?.showStadium !== false,
     showLiveIndicator: posterSettings?.showLiveIndicator !== false,
-    accentColor: posterSettings?.accentColor || '#10b981'
+    accentColor: posterSettings?.accentColor || '#10b981',
+    liveText: contextMatchData.liveText || 'FACEBOOK LIVE'
   };
 
-  const getLogoShape = (typeDisplay) => {
-    switch (typeDisplay) {
-      case 'round': return 'circle';
-      case 'hexagonal': return 'hexagon';
-      case 'square':
-      default: return 'square';
+  const [windowSize, setWindowSize] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 1200,
+    height: typeof window !== 'undefined' ? window.innerHeight : 800
+  });
+
+  const [marqueeWidth, setMarqueeWidth] = useState(0);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [showMarquee, setShowMarquee] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (marqueeRef.current && marqueeContainerRef.current) {
+      const textWidth = marqueeRef.current.scrollWidth;
+      const containerWidth = marqueeContainerRef.current.offsetWidth;
+      setMarqueeWidth(textWidth);
+      setContainerWidth(containerWidth);
     }
-  };
+  }, [marqueeData?.text, windowSize.width]);
+
+  const isMobile = windowSize.width < 768;
+  const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
+  const logoSize = isMobile ? 40 : isTablet ? 56 : 72;
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
@@ -76,13 +101,39 @@ export default function TreTrungMatchIntro() {
     typeDisplay: matchData.mediaPartnersTypeDisplay[index] || 'square'
   })) : [];
 
-  const marquee = {
-    text: marqueeData.text || '',
-    isRunning: marqueeData.mode !== 'none'
+  const scrollData = {
+    text: marqueeData?.text || "TRỰC TIẾP BÓNG ĐÁ",
+    color: marqueeData?.color === 'white-black' ? '#FFFFFF' :
+        marqueeData?.color === 'black-white' ? '#000000' :
+            marqueeData?.color === 'white-blue' ? '#FFFFFF' :
+                marqueeData?.color === 'white-red' ? '#FFFFFF' :
+                    marqueeData?.color === 'white-green' ? '#FFFFFF' : "#FFFFFF",
+    bgColor: marqueeData?.color === 'white-black' ? '#000000' :
+        marqueeData?.color === 'black-white' ? '#FFFFFF' :
+            marqueeData?.color === 'white-blue' ? '#2563eb' :
+                marqueeData?.color === 'white-red' ? '#dc2626' :
+                    marqueeData?.color === 'white-green' ? '#16a34a' : "#10b981",
+    repeat: 1,
+    mode: marqueeData?.mode || 'khong',
+    interval: marqueeData?.mode === 'moi-2' ? 120000 :
+        marqueeData?.mode === 'moi-5' ? 300000 :
+            marqueeData?.mode === 'lien-tuc' ? 30000 : 0
   };
 
   const marqueeRef = useRef(null);
+  const marqueeContainerRef = useRef(null);
 
+  // Calculate proper animation duration based on text length
+  const getAnimationDuration = () => {
+    if (marqueeWidth && containerWidth) {
+      const totalDistance = marqueeWidth + containerWidth;
+      const speed = 100; 
+      return Math.max(10, totalDistance / speed);
+    }
+    return 30; 
+  };
+
+  // Font size adjustment function
   const adjustFontSize = (element) => {
     if (!element) return;
     let fontSize = parseInt(window.getComputedStyle(element).fontSize);
@@ -98,28 +149,14 @@ export default function TreTrungMatchIntro() {
   const hasOrganizing = organizingLogos.length > 0;
   const hasMediaPartners = mediaPartnerLogos.length > 0;
 
-  const getLogoShapeClass = (baseClass) => {
+  const getDisplayEachLogo = (baseClass) => {
     switch (matchData.logoShape) {
-      case 'square':
-        return `${baseClass} rounded-lg`;
+      case 'round':
+        return `${baseClass} rounded-full`;
       case 'hexagon':
-        return `${baseClass} rounded-full`;
-      case 'shield':
-        return `${baseClass} rounded-lg`;
-      case 'circle':
-      default:
-        return `${baseClass} rounded-full`;
-    }
-  };
-
-  const getPartnerLogoShapeClass = (baseClass, typeDisplay) => {
-    const shape = getLogoShape(typeDisplay);
-    switch (shape) {
+        return `${baseClass} hexagon-clip hexagon-glow`;
       case 'square':
-        return `${baseClass} rounded-lg`;
-      case 'hexagon':
-        return `${baseClass} rounded-full`;
-      case 'circle':
+        return `${baseClass} rounded-none`;
       default:
         return `${baseClass} rounded-full`;
     }
@@ -137,11 +174,28 @@ export default function TreTrungMatchIntro() {
     }
   };
 
+  // Check if marquee should be running
+  const isMarqueeRunning = scrollData.mode !== 'khong' && scrollData.mode !== 'none' && scrollData.text && showMarquee;
+
+  // Handle interval-based marquee display
+  useEffect(() => {
+    if (scrollData.interval > 0 && (scrollData.mode === 'moi-2' || scrollData.mode === 'moi-5')) {
+      setShowMarquee(true);
+      const intervalId = setInterval(() => {
+        setShowMarquee(prev => !prev);
+      }, scrollData.interval);
+
+      return () => clearInterval(intervalId);
+    } else {
+      setShowMarquee(true);
+    }
+  }, [scrollData.interval, scrollData.mode]);
+
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
       <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
-        
-        <div 
+
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: "url('/images/background-poster/bg1.jpg')"
@@ -153,63 +207,88 @@ export default function TreTrungMatchIntro() {
 
           <div className="flex justify-between items-start mb-1 sm:mb-3 md:mb-5 min-h-[8vh] sm:min-h-[12vh] md:min-h-[14vh]">
 
-            <div className="flex gap-2 sm:gap-4">
+            {/* Top-left: Sponsors and Organizing */}
+            <div className="flex items-start gap-2 sm:gap-4 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '35%' }}>
               {hasSponsors && (
                 <div className="flex-shrink-0">
-                  <div className="text-xs font-bold text-green-400 mb-1 drop-shadow-lg">
+                  <div className="text-[8px] sm:text-xs font-bold text-green-400 mb-1 drop-shadow-lg">
                     Nhà tài trợ
                   </div>
-                  <div className="flex gap-1 flex-wrap max-w-[15vw]">
-                    <ScoreboardLogos
-                      allLogos={sponsorLogos.map(s => ({url: s.logo, alt: s.name}))}
-                      logoShape={getLogoShape(sponsorLogos[0]?.typeDisplay || 'square')}
-                      rotateDisplay={false}
-                    />
+                  <div className="flex flex-col gap-1">
+                    {Array.from({ length: Math.ceil(Math.min(sponsorLogos.length, 6) / 3) }, (_, rowIndex) => (
+                      <div key={`sponsor-row-${rowIndex}`} className="flex gap-1 flex-nowrap">
+                        {sponsorLogos.slice(rowIndex * 3, (rowIndex + 1) * 3).slice(0, 3).map((sponsor, index) => (
+                          <div key={`sponsor-${rowIndex}-${index}`} className="flex-shrink-0">
+                            <img
+                              src={sponsor.logo}
+                              alt={sponsor.name}
+                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 p-0.5 sm:p-1`}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
 
               {hasOrganizing && (
                 <div className="flex-shrink-0">
-                  <div className="text-xs font-bold text-blue-400 mb-1 drop-shadow-lg">
+                  <div className="text-[8px] sm:text-xs font-bold text-blue-400 mb-1 drop-shadow-lg">
                     Đơn vị tổ chức
                   </div>
-                  <div className="flex gap-1 flex-wrap max-w-[15vw]">
-                    <ScoreboardLogos
-                      allLogos={organizingLogos.map(o => ({url: o.logo, alt: o.name}))}
-                      logoShape={getLogoShape(organizingLogos[0]?.typeDisplay || 'square')}
-                      rotateDisplay={false}
-                    />
+                  <div className="flex flex-col gap-1">
+                    {Array.from({ length: Math.ceil(Math.min(organizingLogos.length, 6) / 3) }, (_, rowIndex) => (
+                      <div key={`organizing-row-${rowIndex}`} className="flex gap-1 flex-nowrap">
+                        {organizingLogos.slice(rowIndex * 3, (rowIndex + 1) * 3).slice(0, 3).map((organizing, index) => (
+                          <div key={`organizing-${rowIndex}-${index}`} className="flex-shrink-0">
+                            <img
+                              src={organizing.logo}
+                              alt={organizing.name}
+                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 p-0.5 sm:p-1`}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}
             </div>
 
-            <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4`}>
+            {/* Top-center: Tournament Logos */}
+            <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4 px-4`}>
               {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 &&
                 matchData.tournamentLogos.map((logo, index) => (
                   <img
                     key={index}
                     src={logo}
                     alt={`Tournament Logo ${index + 1}`}
-                    className="object-contain h-6 sm:h-8 md:h-12 lg:h-16 max-w-16 sm:max-w-24 md:max-w-32"
+                    className="object-contain h-6 sm:h-8 md:h-12 lg:h-16 max-w-16 sm:max-w-24 md:max-w-32 flex-shrink-0"
                   />
                 ))
               }
             </div>
 
-            <div className="flex flex-col items-end gap-2">
+            {/* Top-right: Media Partners and Live Unit */}
+            <div className="flex flex-col items-end gap-2 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '30%' }}>
               {hasMediaPartners && (
-                <div className="flex-shrink-0">
-                  <div className="text-xs font-bold text-purple-400 mb-1 drop-shadow-lg text-right">
+                <div className="flex-shrink-0 w-full">
+                  <div className="text-[8px] sm:text-xs font-bold text-purple-400 mb-1 drop-shadow-lg text-right">
                     Đơn vị truyền thông
                   </div>
-                  <div className="flex gap-1 flex-wrap justify-end max-w-[15vw]">
-                    <ScoreboardLogos
-                      allLogos={mediaPartnerLogos.map(m => ({url: m.logo, alt: m.name}))}
-                      logoShape={getLogoShape(mediaPartnerLogos[0]?.typeDisplay || 'square')}
-                      rotateDisplay={false}
-                    />
+                  <div className="flex gap-1 justify-end overflow-x-auto scrollbar-hide">
+                    <div className="flex gap-1 flex-nowrap">
+                      {mediaPartnerLogos.map((media, index) => (
+                        <div key={index} className="flex-shrink-0">
+                          <img
+                            src={media.logo}
+                            alt={media.name}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-1`}
+                          />
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
@@ -230,8 +309,10 @@ export default function TreTrungMatchIntro() {
 
           </div>
 
+          {/* Main content section */}
           <div className="flex-1 flex flex-col justify-center min-h-0">
 
+            {/* Title section */}
             <div className="text-center mb-1 sm:mb-2 md:mb-3">
               <h1
                 className="font-black uppercase text-white text-xs sm:text-sm md:text-lg lg:text-2xl xl:text-3xl px-1 sm:px-2"
@@ -251,18 +332,18 @@ export default function TreTrungMatchIntro() {
               </div>
             </div>
 
+            {/* Teams section */}
             <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-1 sm:mb-2 md:mb-4">
 
+              {/* Team A */}
               <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-                  <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
                     className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
-                      width: '72px',
-                      height: '72px'
+                      width: `${logoSize}px`,
+                      height: `${logoSize}px`
                     }}
                   >
                     <img
@@ -275,7 +356,6 @@ export default function TreTrungMatchIntro() {
                     />
                   </div>
                 </div>
-                </div>
                 <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
                   <span
                     className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-white text-center block truncate"
@@ -286,6 +366,7 @@ export default function TreTrungMatchIntro() {
                 </div>
               </div>
 
+              {/* VS Section */}
               <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative flex flex-col items-center">
                   <img
@@ -309,30 +390,24 @@ export default function TreTrungMatchIntro() {
                       <span>📍 {matchData.stadium}</span>
                     )}
                   </div>
-                  {matchData.liveUnit && (
+                  {matchData.liveText && (
                     <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-semibold bg-red-600/80 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap flex items-center space-x-1">
                       <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full animate-pulse"></div>
-                      <img
-                        src={matchData.liveUnit}
-                        alt="Live Unit"
-                        className="h-2 sm:h-3 md:h-4 object-contain"
-                      />
-                      <span>LIVE</span>
+                      <span>Đơn vị Live: {matchData.liveText}</span>
                     </div>
                   )}
                 </div>
               </div>
 
+              {/* Team B */}
               <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-                  <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
                     className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
-                      width: '72px',
-                      height: '72px'
+                      width: `${logoSize}px`,
+                      height: `${logoSize}px`
                     }}
                   >
                     <img
@@ -344,7 +419,6 @@ export default function TreTrungMatchIntro() {
                       }}
                     />
                   </div>
-                </div>
                 </div>
                 <div className="bg-gradient-to-r from-yellow-500 to-orange-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
                   <span
@@ -359,20 +433,34 @@ export default function TreTrungMatchIntro() {
 
           </div>
 
+          {/* Bottom spacer */}
           <div className="h-3 sm:h-4 md:h-6 flex-shrink-0"></div>
         </div>
 
-        {marquee.isRunning && marquee.text && (
-          <div className="absolute bottom-0 left-0 w-full h-3 sm:h-4 md:h-6 bg-gradient-to-r from-green-900 via-emerald-900 to-green-900 border-t-2 border-green-400 overflow-hidden z-20">
-            <div className="absolute inset-0 bg-black/50"></div>
+        {/* Fixed Marquee Section */}
+        {isMarqueeRunning && scrollData.text && (
+          <div 
+            ref={marqueeContainerRef}
+            className="absolute bottom-0 left-0 w-full h-3 sm:h-4 md:h-6 border-t-2 overflow-hidden z-20"
+            style={{
+              backgroundColor: scrollData.bgColor,
+              borderTopColor: scrollData.color === '#FFFFFF' ? '#16a34a' : scrollData.bgColor
+            }}
+          >
+            <div className="absolute inset-0 bg-black/20"></div>
             <div
               ref={marqueeRef}
-              className="absolute top-1/2 transform -translate-y-1/2 whitespace-nowrap text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-bold text-green-300 drop-shadow-lg"
+              className="absolute top-1/2 whitespace-nowrap text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-bold drop-shadow-lg"
               style={{
-                animation: 'marquee 30s linear infinite'
+                color: scrollData.color,
+                left: containerWidth ? `${containerWidth}px` : '100%',
+                transform: 'translateY(-50%)',
+                animation: containerWidth && marqueeWidth ? 
+                  `marquee-scroll-fixed ${getAnimationDuration()}s linear infinite` : 
+                  'none'
               }}
             >
-              {marquee.text}
+              {scrollData.text.repeat(scrollData.repeat)}
             </div>
           </div>
         )}
@@ -395,9 +483,13 @@ export default function TreTrungMatchIntro() {
         </div>
 
         <style>{`
-          @keyframes marquee {
-            0% { transform: translateX(100%) translateY(-50%); }
-            100% { transform: translateX(-100%) translateY(-50%); }
+          @keyframes marquee-scroll-fixed {
+            0% { 
+              left: 100%;
+            }
+            100% { 
+              left: -100%;
+            }
           }
           @keyframes bouncingLeaves {
             0%, 100% {
@@ -417,9 +509,39 @@ export default function TreTrungMatchIntro() {
               opacity: 0.9;
             }
           }
-          .hexagon-shape {
-            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            background: white;
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+          
+          /* Hexagon styles */
+          .hexagon-clip {
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            position: relative;
+          }
+          
+          .hexagon-border {
+            position: relative;
+            margin: 2px;
+          }
+          
+          .hexagon-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #ef4444, #f97316, #eab308);
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            z-index: -1;
+          }
+          
+          .hexagon-glow {
+            filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.4));
           }
         `}</style>
       </div>

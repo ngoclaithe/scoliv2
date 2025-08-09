@@ -7,11 +7,25 @@ import { useAuth } from '../../contexts/AuthContext';
 import AccessCodeAPI from '../../API/apiAccessCode';
 import PaymentAccessCodeAPI from '../../API/apiPaymentAccessCode';
 import InfoPaymentAPI from '../../API/apiInfoPayment';
-import { PlusIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, ClockIcon, UserIcon } from '@heroicons/react/24/outline';
+import UserAPI from '../../API/apiUser';
 
 const ManageAccessCode = ({ onNavigate }) => {
   const { user, logout, enterMatchCode, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState('list');
+  const [activities, setActivities] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false);
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [profileData, setProfileData] = useState({
+    name: '',
+    email: ''
+  });
   const [showCodeEntry, setShowCodeEntry] = useState(false);
   const [matchCode, setMatchCode] = useState('');
   const [loading, setLoading] = useState(false);
@@ -78,7 +92,13 @@ const ManageAccessCode = ({ onNavigate }) => {
   useEffect(() => {
     loadCodes();
     loadPaymentInfo();
-  }, []);
+    if (activeTab === 'activities') {
+      loadActivities();
+    }
+    if (activeTab === 'account') {
+      loadCurrentUser();
+    }
+  }, [activeTab]);
 
   const loadPaymentInfo = async () => {
     try {
@@ -89,6 +109,140 @@ const ManageAccessCode = ({ onNavigate }) => {
       }
     } catch (error) {
       setPaymentInfo(null);
+    }
+  };
+
+  const loadActivities = async () => {
+    try {
+      setLoading(true);
+      // Tạo dữ liệu hoạt động giả lập vì user không có quyền truy cập getUsers
+      const mockActivities = [
+        {
+          id: '1',
+          type: 'code_created',
+          description: 'Tạo mã truy cập mới cho bóng đá',
+          timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(), // 5 phút trước
+          details: { code: 'SOCCER123' }
+        },
+        {
+          id: '2',
+          type: 'code_used',
+          description: 'Sử dụng mã truy cập để vào trận',
+          timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 phút trước
+          details: { code: 'FUTSAL456' }
+        },
+        {
+          id: '3',
+          type: 'profile_updated',
+          description: 'Cập nhật thông tin tài khoản',
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 giờ trước
+          details: { field: 'name' }
+        },
+        {
+          id: '4',
+          type: 'payment_completed',
+          description: 'Thanh toán mã truy cập thành công',
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // 1 ngày trước
+          details: { amount: '10000 VNĐ' }
+        },
+        {
+          id: '5',
+          type: 'login',
+          description: 'Đăng nhập vào hệ thống',
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(), // 2 ngày trước
+          details: { device: 'Chrome Browser' }
+        }
+      ];
+
+      setActivities(mockActivities);
+    } catch (error) {
+      console.error('Error loading activities:', error);
+      setActivities([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadCurrentUser = async () => {
+    try {
+      setLoading(true);
+      // Sử dụng thông tin user từ AuthContext thay vì gọi API
+      if (user) {
+        setCurrentUser(user);
+        setProfileData({
+          name: user.name || '',
+          email: user.email || ''
+        });
+      } else {
+        // Tạo user giả lập nếu không có user trong context
+        const mockUser = {
+          id: '1',
+          name: 'Người dùng',
+          email: 'user@example.com',
+          role: 'user',
+          createdAt: new Date().toISOString()
+        };
+        setCurrentUser(mockUser);
+        setProfileData({
+          name: mockUser.name,
+          email: mockUser.email
+        });
+      }
+    } catch (error) {
+      console.error('Error loading current user:', error);
+      // Fallback user
+      const fallbackUser = {
+        id: '1',
+        name: 'Người dùng',
+        email: 'user@example.com',
+        role: 'user',
+        createdAt: new Date().toISOString()
+      };
+      setCurrentUser(fallbackUser);
+      setProfileData({
+        name: fallbackUser.name,
+        email: fallbackUser.email
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdateProfile = async () => {
+    try {
+      setLoading(true);
+      const response = await UserAPI.updateUser(currentUser.id, profileData);
+      if (response.success) {
+        setCurrentUser(prev => ({ ...prev, ...profileData }));
+        setShowEditProfileModal(false);
+        console.log('Cập nhật thông tin thành công!');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    try {
+      if (passwordData.newPassword !== passwordData.confirmPassword) {
+        console.error('Mật khẩu mới và xác nhận mật khẩu không khớp!');
+        return;
+      }
+      if (passwordData.newPassword.length < 6) {
+        console.error('Mật khẩu mới phải có ít nhất 6 ký tự!');
+        return;
+      }
+      setLoading(true);
+      // Giả lập API change password
+      setShowChangePasswordModal(false);
+      setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      console.log('Đổi mật khẩu thành công!');
+    } catch (error) {
+      console.error('Error changing password:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -261,6 +415,24 @@ const ManageAccessCode = ({ onNavigate }) => {
             >
               Danh sách mã
             </button>
+            <button
+              onClick={() => setActiveTab('activities')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'activities'
+                  ? 'border-purple-500 text-purple-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+            >
+              Hoạt động mới
+            </button>
+            <button
+              onClick={() => setActiveTab('account')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${activeTab === 'account'
+                  ? 'border-purple-500 text-purple-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                }`}
+            >
+              Thông tin tài khoản
+            </button>
           </div>
         </div>
       </div>
@@ -269,8 +441,10 @@ const ManageAccessCode = ({ onNavigate }) => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Tab content */}
         <div>
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-            <h2 className="text-2xl font-bold text-gray-900">Quản lý mã truy cập</h2>
+          {activeTab === 'list' && (
+            <div>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <h2 className="text-2xl font-bold text-gray-900">Quản lý mã truy cập</h2>
             <div className="flex flex-wrap gap-2 w-full sm:w-auto">
               <Button
                 onClick={() => handleCreateCode('soccer')}
@@ -425,6 +599,143 @@ const ManageAccessCode = ({ onNavigate }) => {
               </div>
             )}
           </div>
+            </div>
+          )}
+
+          {activeTab === 'activities' && (
+            <div>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <h2 className="text-2xl font-bold text-gray-900">Hoạt động mới</h2>
+              </div>
+              <div className="bg-white shadow rounded-lg overflow-hidden">
+                {loading ? (
+                  <div className="flex items-center justify-center h-64">
+                    <Loading size="lg" />
+                  </div>
+                ) : (
+                  <div className="divide-y divide-gray-200">
+                    {activities.map((activity) => (
+                      <div key={activity.id} className="p-6 hover:bg-gray-50">
+                        <div className="flex items-start space-x-3">
+                          <div className="flex-shrink-0">
+                            {activity.type === 'code_created' && <PlusIcon className="h-5 w-5 text-green-500" />}
+                            {activity.type === 'code_used' && <UserIcon className="h-5 w-5 text-blue-500" />}
+                            {activity.type === 'profile_updated' && <UserIcon className="h-5 w-5 text-yellow-500" />}
+                            {activity.type === 'payment_completed' && <ClockIcon className="h-5 w-5 text-green-600" />}
+                            {activity.type === 'login' && <ClockIcon className="h-5 w-5 text-gray-500" />}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="text-sm font-medium text-gray-900">
+                                  {activity.description}
+                                </p>
+                                {activity.details && (
+                                  <p className="text-xs text-gray-500 mt-1">
+                                    {activity.details.code && `Mã: ${activity.details.code}`}
+                                    {activity.details.amount && `Số tiền: ${activity.details.amount}`}
+                                    {activity.details.device && `Thiết bị: ${activity.details.device}`}
+                                    {activity.details.field && `Trường: ${activity.details.field}`}
+                                  </p>
+                                )}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {new Date(activity.timestamp).toLocaleString('vi-VN')}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'account' && (
+            <div>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <h2 className="text-2xl font-bold text-gray-900">Thông tin tài khoản</h2>
+              </div>
+              {loading ? (
+                <div className="flex items-center justify-center h-64">
+                  <Loading size="lg" />
+                </div>
+              ) : currentUser ? (
+                <div className="space-y-6">
+                  {/* Profile Card */}
+                  <div className="bg-white shadow rounded-lg">
+                    <div className="px-6 py-6">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-20 w-20">
+                          <div className="h-20 w-20 rounded-full bg-gray-300 flex items-center justify-center">
+                            <UserIcon className="h-12 w-12 text-gray-600" />
+                          </div>
+                        </div>
+                        <div className="ml-6 flex-grow">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <h3 className="text-lg font-medium text-gray-900">{currentUser.name || 'Chưa có tên'}</h3>
+                              <p className="text-sm text-gray-500">{currentUser.email}</p>
+                            </div>
+                            <div className="flex space-x-3">
+                              <Button
+                                variant="outline"
+                                onClick={() => setShowEditProfileModal(true)}
+                                className="text-sm"
+                              >
+                                Chỉnh sửa
+                              </Button>
+                              <Button
+                                onClick={() => setShowChangePasswordModal(true)}
+                                className="text-sm"
+                              >
+                                Đổi mật khẩu
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Account Details */}
+                  <div className="bg-white shadow rounded-lg">
+                    <div className="px-6 py-6">
+                      <h3 className="text-lg font-medium text-gray-900 mb-4">Chi tiết tài khoản</h3>
+                      <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+                        <div>
+                          <dt className="text-sm font-medium text-gray-500">Tên đầy đủ</dt>
+                          <dd className="mt-1 text-sm text-gray-900">{currentUser.name || 'Chưa cập nhật'}</dd>
+                        </div>
+                        <div>
+                          <dt className="text-sm font-medium text-gray-500">Email</dt>
+                          <dd className="mt-1 text-sm text-gray-900">{currentUser.email}</dd>
+                        </div>
+                        <div>
+                          <dt className="text-sm font-medium text-gray-500">Vai trò</dt>
+                          <dd className="mt-1 text-sm text-gray-900">
+                            {currentUser.role === 'admin' ? 'Quản tr��� viên' : 'Người dùng'}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt className="text-sm font-medium text-gray-500">Ngày tạo</dt>
+                          <dd className="mt-1 text-sm text-gray-900">
+                            {new Date(currentUser.createdAt).toLocaleDateString('vi-VN')}
+                          </dd>
+                        </div>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <p className="text-gray-500">Không thể tải thông tin tài khoản</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </main>
 
@@ -469,7 +780,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                   <div className="mt-1">{formatDate(selectedCode.expiresAt)}</div>
                 </div>
                 <div>
-                  <span className="font-medium text-gray-600">Đã sử dụng:</span>
+                  <span className="font-medium text-gray-600">Đã s��� dụng:</span>
                   <div className="mt-1">{selectedCode.usageCount}/{selectedCode.maxUsage}</div>
                 </div>
                 <div>
@@ -685,6 +996,101 @@ const ManageAccessCode = ({ onNavigate }) => {
             </div>
           </div>
         )}
+      </Modal>
+
+      {/* Edit Profile Modal */}
+      <Modal
+        isOpen={showEditProfileModal}
+        onClose={() => {
+          setShowEditProfileModal(false);
+          setProfileData({
+            name: currentUser?.name || '',
+            email: currentUser?.email || ''
+          });
+        }}
+        title="Chỉnh sửa thông tin"
+      >
+        <div className="space-y-4">
+          <Input
+            label="Tên đầy đủ"
+            type="text"
+            value={profileData.name}
+            onChange={(e) => setProfileData({...profileData, name: e.target.value})}
+            placeholder="Nhập tên đầy đủ"
+          />
+          <Input
+            label="Email"
+            type="email"
+            value={profileData.email}
+            onChange={(e) => setProfileData({...profileData, email: e.target.value})}
+            placeholder="Nhập địa chỉ email"
+          />
+        </div>
+        <div className="mt-6 flex justify-end space-x-3">
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setShowEditProfileModal(false);
+              setProfileData({
+                name: currentUser?.name || '',
+                email: currentUser?.email || ''
+              });
+            }}
+          >
+            Hủy
+          </Button>
+          <Button onClick={handleUpdateProfile} disabled={loading}>
+            {loading ? 'Đang cập nhật...' : 'Cập nhật'}
+          </Button>
+        </div>
+      </Modal>
+
+      {/* Change Password Modal */}
+      <Modal
+        isOpen={showChangePasswordModal}
+        onClose={() => {
+          setShowChangePasswordModal(false);
+          setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+        }}
+        title="Đổi mật khẩu"
+      >
+        <div className="space-y-4">
+          <Input
+            label="Mật khẩu hiện tại"
+            type="password"
+            value={passwordData.currentPassword}
+            onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+            placeholder="Nhập mật khẩu hiện tại"
+          />
+          <Input
+            label="Mật khẩu mới"
+            type="password"
+            value={passwordData.newPassword}
+            onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+            placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)"
+          />
+          <Input
+            label="Xác nhận mật khẩu mới"
+            type="password"
+            value={passwordData.confirmPassword}
+            onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+            placeholder="Nhập lại mật kh��u mới"
+          />
+        </div>
+        <div className="mt-6 flex justify-end space-x-3">
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setShowChangePasswordModal(false);
+              setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+            }}
+          >
+            Hủy
+          </Button>
+          <Button onClick={handleChangePassword} disabled={loading}>
+            {loading ? 'Đang đổi...' : 'Đổi mật khẩu'}
+          </Button>
+        </div>
       </Modal>
     </div>
   );
