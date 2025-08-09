@@ -11,7 +11,7 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
     };
 
     return (
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
             <div className="relative w-full flex justify-center items-center max-w-sm">
                 {/* Logo A - Positioned outside left */}
                 <div className="absolute left-0 top-1/2 transform -translate-y-1/2 z-30">
