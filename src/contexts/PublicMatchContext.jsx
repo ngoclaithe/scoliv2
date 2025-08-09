@@ -214,11 +214,16 @@ export const PublicMatchProvider = ({ children }) => {
     });
 
     socketService.on('team_logos_updated', (data) => {
-      setMatchData(prev => ({
-        ...prev,
-        teamA: { ...prev.teamA, logo: data.logos.teamA || data.logos.home },
-        teamB: { ...prev.teamB, logo: data.logos.teamB || data.logos.away }
-      }));
+      console.log('🏆 [PublicMatchContext] team_logos_updated received:', data);
+      setMatchData(prev => {
+        const updated = {
+          ...prev,
+          teamA: { ...prev.teamA, logo: data.logos.teamA || data.logos.home },
+          teamB: { ...prev.teamB, logo: data.logos.teamB || data.logos.away }
+        };
+        console.log('🏆 [PublicMatchContext] Updated matchData with logos:', updated);
+        return updated;
+      });
       setLastUpdateTime(Date.now());
     });
 
