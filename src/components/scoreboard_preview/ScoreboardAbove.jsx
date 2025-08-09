@@ -224,6 +224,15 @@ const ScoreboardAbove = ({ type = 1 }) => {
                     0% { transform: translateX(100%); }
                     100% { transform: translateX(-100%); }
                 }
+                .hexagon-shape {
+                    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+                    background: white;
+                }
+                @media (max-width: 640px) {
+                    .hexagon-shape {
+                        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+                    }
+                }
             `}</style>
         </div>
     );
