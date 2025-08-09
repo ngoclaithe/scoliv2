@@ -399,8 +399,10 @@ const ManageAccessCode = ({ onNavigate }) => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Tab content */}
         <div>
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-            <h2 className="text-2xl font-bold text-gray-900">Quản lý mã truy cập</h2>
+          {activeTab === 'list' && (
+            <div>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <h2 className="text-2xl font-bold text-gray-900">Quản lý mã truy cập</h2>
             <div className="flex flex-wrap gap-2 w-full sm:w-auto">
               <Button
                 onClick={() => handleCreateCode('soccer')}
@@ -555,6 +557,134 @@ const ManageAccessCode = ({ onNavigate }) => {
               </div>
             )}
           </div>
+            </div>
+          )}
+
+          {activeTab === 'activities' && (
+            <div>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <h2 className="text-2xl font-bold text-gray-900">Hoạt động mới</h2>
+              </div>
+              <div className="bg-white shadow rounded-lg overflow-hidden">
+                {loading ? (
+                  <div className="flex items-center justify-center h-64">
+                    <Loading size="lg" />
+                  </div>
+                ) : (
+                  <div className="divide-y divide-gray-200">
+                    {activities.map((activity) => (
+                      <div key={activity.id} className="p-6 hover:bg-gray-50">
+                        <div className="flex items-start space-x-3">
+                          <div className="flex-shrink-0">
+                            <ClockIcon className="h-5 w-5 text-blue-500" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="text-sm font-medium text-gray-900">
+                                  {activity.description}
+                                </p>
+                                <p className="text-xs text-gray-500 mt-1">
+                                  Email: {activity.user?.email}
+                                </p>
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {new Date(activity.timestamp).toLocaleString('vi-VN')}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'account' && (
+            <div>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                <h2 className="text-2xl font-bold text-gray-900">Thông tin tài khoản</h2>
+              </div>
+              {loading ? (
+                <div className="flex items-center justify-center h-64">
+                  <Loading size="lg" />
+                </div>
+              ) : currentUser ? (
+                <div className="space-y-6">
+                  {/* Profile Card */}
+                  <div className="bg-white shadow rounded-lg">
+                    <div className="px-6 py-6">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-20 w-20">
+                          <div className="h-20 w-20 rounded-full bg-gray-300 flex items-center justify-center">
+                            <UserIcon className="h-12 w-12 text-gray-600" />
+                          </div>
+                        </div>
+                        <div className="ml-6 flex-grow">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <h3 className="text-lg font-medium text-gray-900">{currentUser.name || 'Chưa có tên'}</h3>
+                              <p className="text-sm text-gray-500">{currentUser.email}</p>
+                            </div>
+                            <div className="flex space-x-3">
+                              <Button
+                                variant="outline"
+                                onClick={() => setShowEditProfileModal(true)}
+                                className="text-sm"
+                              >
+                                Chỉnh sửa
+                              </Button>
+                              <Button
+                                onClick={() => setShowChangePasswordModal(true)}
+                                className="text-sm"
+                              >
+                                Đổi mật khẩu
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Account Details */}
+                  <div className="bg-white shadow rounded-lg">
+                    <div className="px-6 py-6">
+                      <h3 className="text-lg font-medium text-gray-900 mb-4">Chi tiết tài khoản</h3>
+                      <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+                        <div>
+                          <dt className="text-sm font-medium text-gray-500">Tên đầy đủ</dt>
+                          <dd className="mt-1 text-sm text-gray-900">{currentUser.name || 'Chưa cập nhật'}</dd>
+                        </div>
+                        <div>
+                          <dt className="text-sm font-medium text-gray-500">Email</dt>
+                          <dd className="mt-1 text-sm text-gray-900">{currentUser.email}</dd>
+                        </div>
+                        <div>
+                          <dt className="text-sm font-medium text-gray-500">Vai trò</dt>
+                          <dd className="mt-1 text-sm text-gray-900">
+                            {currentUser.role === 'admin' ? 'Quản trị viên' : 'Người dùng'}
+                          </dd>
+                        </div>
+                        <div>
+                          <dt className="text-sm font-medium text-gray-500">Ngày tạo</dt>
+                          <dd className="mt-1 text-sm text-gray-900">
+                            {new Date(currentUser.createdAt).toLocaleDateString('vi-VN')}
+                          </dd>
+                        </div>
+                      </dl>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <p className="text-gray-500">Không thể tải thông tin tài khoản</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </main>
 
