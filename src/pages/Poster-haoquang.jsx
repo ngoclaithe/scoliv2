@@ -163,18 +163,21 @@ export default function MatchIntroduction() {
                       const getContainerShape = (typeDisplay) => {
                         switch (typeDisplay) {
                           case 'round': return 'rounded-full';
-                          case 'hexagonal': return 'rounded-full';
+                          case 'hexagonal': return 'hexagon-shape';
                           case 'square':
                           default: return 'rounded-lg';
                         }
                       };
-                      const logoSize = Math.max(20, Math.min(35, window.innerWidth * 0.025));
                       return (
-                        <div key={index} className={`relative bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden ${getContainerShape(sponsor.typeDisplay)}`} style={{width: `${logoSize}px`, height: `${logoSize}px`}}>
+                        <div
+                          key={index}
+                          className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${getContainerShape(sponsor.typeDisplay)}`}
+                          style={{width: '32px', height: '32px'}}
+                        >
                           <img
                             src={sponsor.logo}
                             alt={sponsor.name}
-                            className="object-contain w-[100%] h-[100%]"
+                            className="object-contain w-full h-full"
                             onError={(e) => {
                               e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TG9nbzwvdGV4dD4KPHN2Zz4K';
                             }}
