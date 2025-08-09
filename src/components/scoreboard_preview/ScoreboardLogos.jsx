@@ -38,12 +38,8 @@ const ScoreboardLogos = ({ allLogos, logoShape, rotateDisplay }) => {
                 {allLogos.map((logo, index) => (
                     <div key={index} className="flex-shrink-0">
                         <div
-                            className={`relative bg-white shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${getContainerShape(logo.typeDisplay)}`}
-                            style={{
-                                width: '56px',
-                                height: '56px',
-                                padding: '6px'
-                            }}
+                            className={`relative bg-white shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${getContainerShape(logo.typeDisplay)}
+                                w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 p-1 sm:p-1.5 md:p-2`}
                         >
                             <img
                                 src={logo.url}
