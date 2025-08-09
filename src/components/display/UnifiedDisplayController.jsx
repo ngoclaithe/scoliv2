@@ -52,7 +52,8 @@ const UnifiedDisplayController = () => {
   const {
     initializeSocket,
     displaySettings,
-    currentView
+    currentView,
+    lastUpdateTime
   } = usePublicMatch();
   const { handleExpiredAccess } = useAuth();
 
