@@ -680,6 +680,7 @@ export const PublicMatchProvider = ({ children }) => {
                   behavior: 'add'
                 };
                 console.log('🏛️ [PublicMatchContext] Setting organizing from logos:', organizingData);
+                console.log('🏛️ [PublicMatchContext] Total organizing logos found:', organizingLogos.length);
                 setOrganizing({ organizing: organizingData });
               }
 
