@@ -248,7 +248,7 @@ const UnifiedDisplayController = () => {
     return () => {
       isCleanedUp = true;
     };
-  }, [accessCode, initializeSocket, handleExpiredAccess, checkIfDynamicRoute, parseUrlParams, updateSocketWithParams]);
+  }, [accessCode, initializeSocket, handleExpiredAccess, checkIfDynamicRoute, parseUrlParams, waitForSocketAndUpdate]);
 
   // Render poster component theo type
   const renderPoster = (posterType) => {
@@ -309,7 +309,7 @@ const UnifiedDisplayController = () => {
     return (
       <div className="fixed inset-0 bg-gradient-to-br from-blue-900 to-purple-900 text-white flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin text-6xl mb-4">��</div>
+          <div className="animate-spin text-6xl mb-4">⚽</div>
           <h1 className="text-2xl font-bold mb-2">Đang kết nối...</h1>
           <p className="text-gray-300">Mã truy cập: {accessCode}</p>
           <div className="mt-4 w-48 h-2 bg-gray-700 rounded-full overflow-hidden">
@@ -341,7 +341,7 @@ const UnifiedDisplayController = () => {
             onClick={() => window.location.reload()}
             className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
-            🔄 Th��� lại
+            🔄 Thử lại
           </button>
         </div>
       </div>
