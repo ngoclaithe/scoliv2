@@ -30,7 +30,7 @@ Hệ thống hỗ trợ dynamic routes cho phép truyền các tham số trận 
 ## Ví dụ URL
 
 ```
-/ABC123/My_Dinh_Stadium/V_League_2024/LIVE_STREAMING/HN/TPHCM/Ha_Noi_FC/Ho_Chi_Minh_City/FF0000/0000FF/2/1
+/ABC123/My_Dinh_Stadium/V_League_2024/LIVE_STREAMING/HN/TPHCM/Ha_Noi_FC/Ho_Chi_Minh_City/FF0000/0000FF/2/1/scoreboard/45:00
 ```
 
 URL này sẽ:
@@ -40,12 +40,14 @@ URL này sẽ:
 - Text live: "LIVE STREAMING"
 - Đội A: "Ha Noi FC" với màu áo đỏ (#FF0000), tỉ số 2, logo code "HN"
 - Đội B: "Ho Chi Minh City" với màu áo xanh (#0000FF), tỉ số 1, logo code "TPHCM"
+- Hiển thị view: "scoreboard"
+- Thời gian: "45:00"
 
 ## Quy tắc encode
 
 1. **Spaces (khoảng trắng)**: Thay thế bằng dấu gạch dưới `_`
 2. **Special characters**: Sử dụng URL encoding
-3. **Colors**: Ch��� hex code không có dấu # (ví dụ: FF0000 thay vì #FF0000)
+3. **Colors**: Chỉ hex code không có dấu # (ví dụ: FF0000 thay vì #FF0000)
 4. **Numbers**: Số nguyên thuần (ví dụ: 2, không phải 2.0)
 
 ## Xử lý tự động
