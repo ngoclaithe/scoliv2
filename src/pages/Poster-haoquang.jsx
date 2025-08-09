@@ -161,18 +161,21 @@ export default function MatchIntroduction() {
                   <div className="flex gap-1 flex-wrap max-w-[15vw]">
                     {sponsorLogos.map((sponsor, index) => {
                       const getContainerShape = (typeDisplay) => {
+                        console.log('🔍 Sponsor typeDisplay:', typeDisplay);
                         switch (typeDisplay) {
                           case 'round': return 'rounded-full';
                           case 'hexagonal': return 'hexagon-shape';
-                          case 'square':
+                          case 'square': return 'rounded-lg';
                           default: return 'rounded-lg';
                         }
                       };
+                      const shapeClass = getContainerShape(sponsor.typeDisplay);
+                      console.log('���� Sponsor shapeClass:', shapeClass);
                       return (
                         <div
                           key={index}
-                          className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${getContainerShape(sponsor.typeDisplay)}`}
-                          style={{width: '48px', height: '48px'}}
+                          className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${shapeClass}
+                            w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12`}
                         >
                           <img
                             src={sponsor.logo}
