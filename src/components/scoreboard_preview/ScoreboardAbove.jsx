@@ -103,6 +103,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
                     : 'square';
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
+                    console.log('🔍 Organizing typeDisplay for position', targetPosition, ':', typeDisplay);
                     allLogos.push({ url: getFullLogoUrl(logo), alt: 'Organizing', type: 'organizing', typeDisplay });
                 }
             });
