@@ -138,8 +138,7 @@ const UnifiedDisplayController = () => {
       // Cập nhật view nếu có
       if (params.view) {
         console.log('👁️ [UnifiedDisplayController] Updating view:', params.view);
-        // Có thể cần thêm socket method để update view
-        // socketService.updateView(params.view);
+        socketService.emit('view_update', { viewType: params.view });
       }
 
       // Cập nhật tên đội
@@ -271,7 +270,11 @@ const UnifiedDisplayController = () => {
 
   // Render component theo currentView
   const renderCurrentView = () => {
-    switch (currentView) {
+    // Ưu tiên view từ URL params nếu có (cho dynamic route)
+    const viewToRender = (isDynamicRoute && view) ? view : currentView;
+    console.log('🎯 [UnifiedDisplayController] Rendering view:', viewToRender, '(isDynamic:', isDynamicRoute, ', urlView:', view, ', contextView:', currentView, ')');
+
+    switch (viewToRender) {
       case 'intro':
         return <Intro accessCode={accessCode} />;
       case 'halftime':
