@@ -150,10 +150,8 @@ export default function TreTrungMatchIntro() {
 
         <div className="relative z-10 h-full flex flex-col p-3 sm:p-6">
 
-          {/* Top section với fixed height để tránh overlap */}
           <div className="flex justify-between items-start mb-1 sm:mb-3 md:mb-5 min-h-[8vh] sm:min-h-[12vh] md:min-h-[14vh]">
 
-            {/* Top-left: Sponsors and Organizing */}
             <div className="flex gap-2 sm:gap-4">
               {hasSponsors && (
                 <div className="flex-shrink-0">
@@ -161,15 +159,32 @@ export default function TreTrungMatchIntro() {
                     Nhà tài trợ
                   </div>
                   <div className="flex gap-1 flex-wrap max-w-[15vw]">
-                    {sponsorLogos.map((sponsor, index) => (
-                      <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", sponsor.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
-                        <img
-                          src={sponsor.logo}
-                          alt={sponsor.name}
-                          className="max-h-full max-w-full object-contain"
-                        />
-                      </div>
-                    ))}
+                    {sponsorLogos.map((sponsor, index) => {
+                      const getContainerShape = (typeDisplay) => {
+                        switch (typeDisplay) {
+                          case 'round': return 'rounded-full';
+                          case 'hexagonal': return 'hexagon-shape';
+                          case 'square':
+                          default: return 'rounded-lg';
+                        }
+                      };
+                      return (
+                        <div
+                          key={index}
+                          className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${getContainerShape(sponsor.typeDisplay)}`}
+                          style={{width: '32px', height: '32px'}}
+                        >
+                          <img
+                            src={sponsor.logo}
+                            alt={sponsor.name}
+                            className="object-contain w-full h-full"
+                            onError={(e) => {
+                              e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TG9nbzwvdGV4dD4KPHN2Zz4K';
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -180,21 +195,37 @@ export default function TreTrungMatchIntro() {
                     Đơn vị tổ chức
                   </div>
                   <div className="flex gap-1 flex-wrap max-w-[15vw]">
-                    {organizingLogos.map((organizing, index) => (
-                      <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", organizing.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
-                        <img
-                          src={organizing.logo}
-                          alt={organizing.name}
-                          className="max-h-full max-w-full object-contain"
-                        />
-                      </div>
-                    ))}
+                    {organizingLogos.map((organizing, index) => {
+                      const getContainerShape = (typeDisplay) => {
+                        switch (typeDisplay) {
+                          case 'round': return 'rounded-full';
+                          case 'hexagonal': return 'hexagon-shape';
+                          case 'square':
+                          default: return 'rounded-lg';
+                        }
+                      };
+                      return (
+                        <div
+                          key={index}
+                          className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${getContainerShape(organizing.typeDisplay)}`}
+                          style={{width: '32px', height: '32px'}}
+                        >
+                          <img
+                            src={organizing.logo}
+                            alt={organizing.name}
+                            className="object-contain w-full h-full"
+                            onError={(e) => {
+                              e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TG9nbzwvdGV4dD4KPHN2Zz4K';
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Top-center: Tournament Logos */}
             <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4`}>
               {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 &&
                 matchData.tournamentLogos.map((logo, index) => (
@@ -208,7 +239,6 @@ export default function TreTrungMatchIntro() {
               }
             </div>
 
-            {/* Top-right: Media Partners and Live Unit */}
             <div className="flex flex-col items-end gap-2">
               {hasMediaPartners && (
                 <div className="flex-shrink-0">
@@ -216,15 +246,32 @@ export default function TreTrungMatchIntro() {
                     Đơn vị truyền thông
                   </div>
                   <div className="flex gap-1 flex-wrap justify-end max-w-[15vw]">
-                    {mediaPartnerLogos.map((media, index) => (
-                      <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", media.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
-                        <img
-                          src={media.logo}
-                          alt={media.name}
-                          className="max-h-full max-w-full object-contain"
-                        />
-                      </div>
-                    ))}
+                    {mediaPartnerLogos.map((media, index) => {
+                      const getContainerShape = (typeDisplay) => {
+                        switch (typeDisplay) {
+                          case 'round': return 'rounded-full';
+                          case 'hexagonal': return 'hexagon-shape';
+                          case 'square':
+                          default: return 'rounded-lg';
+                        }
+                      };
+                      return (
+                        <div
+                          key={index}
+                          className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${getContainerShape(media.typeDisplay)}`}
+                          style={{width: '32px', height: '32px'}}
+                        >
+                          <img
+                            src={media.logo}
+                            alt={media.name}
+                            className="object-contain w-full h-full"
+                            onError={(e) => {
+                              e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TG9nbzwvdGV4dD4KPHN2Zz4K';
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -245,10 +292,8 @@ export default function TreTrungMatchIntro() {
 
           </div>
 
-          {/* Main content section với proper spacing */}
           <div className="flex-1 flex flex-col justify-center min-h-0">
 
-            {/* Title section với margin để tránh overlap */}
             <div className="text-center mb-1 sm:mb-2 md:mb-3">
               <h1
                 className="font-black uppercase text-white text-sm sm:text-lg md:text-2xl lg:text-3xl xl:text-4xl px-1 sm:px-2"
@@ -268,17 +313,30 @@ export default function TreTrungMatchIntro() {
               </div>
             </div>
 
-            {/* Teams section với responsive spacing */}
             <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-1 sm:mb-2 md:mb-4">
 
               <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-                  <img
-                    src={matchData.logo1}
-                    alt={matchData.team1}
-                    className={getLogoShapeClass("relative w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 lg:w-22 lg:h-22 xl:w-26 xl:h-26 object-cover border-2 sm:border-3 md:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300")}
-                  />
+                  <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div
+                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    style={{
+                      width: '72px',
+                      height: '72px'
+                    }}
+                  >
+                    <img
+                      src={matchData.logo1}
+                      alt={matchData.team1}
+                      className="object-contain w-[100%] h-[100%]"
+                      onError={(e) => {
+                        e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
+                      }}
+                    />
+                  </div>
+                </div>
                 </div>
                 <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
                   <span
@@ -300,7 +358,6 @@ export default function TreTrungMatchIntro() {
                 </div>
 
                 <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  {/* Date/Time và Stadium cùng 1 dòng */}
                   <div className="text-[8px] sm:text-[10px] md:text-xs font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
                     {(matchData.showTimer || matchData.showDate) && (
                       <span>
@@ -320,11 +377,25 @@ export default function TreTrungMatchIntro() {
               <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-                  <img
-                    src={matchData.logo2}
-                    alt={matchData.team2}
-                    className={getLogoShapeClass("relative w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 lg:w-22 lg:h-22 xl:w-26 xl:h-26 object-cover border-2 sm:border-3 md:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300")}
-                  />
+                  <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div
+                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    style={{
+                      width: '72px',
+                      height: '72px'
+                    }}
+                  >
+                    <img
+                      src={matchData.logo2}
+                      alt={matchData.team2}
+                      className="object-contain w-[100%] h-[100%]"
+                      onError={(e) => {
+                        e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBCPC90ZXh0Pgo8L3N2Zz4K';
+                      }}
+                    />
+                  </div>
+                </div>
                 </div>
                 <div className="bg-gradient-to-r from-yellow-500 to-orange-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
                   <span
@@ -337,14 +408,8 @@ export default function TreTrungMatchIntro() {
               </div>
             </div>
 
-            {/* Bottom section với proper spacing để tránh overlap */}
-            <div className="space-y-2 sm:space-y-3">
-
-            </div>
-
           </div>
 
-          {/* Bottom spacer để marquee không đè lên content */}
           <div className="h-3 sm:h-4 md:h-6 flex-shrink-0"></div>
         </div>
 
@@ -402,6 +467,10 @@ export default function TreTrungMatchIntro() {
               transform: translateY(-30px) rotate(20deg);
               opacity: 0.9;
             }
+          }
+          .hexagon-shape {
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            background: white;
           }
         `}</style>
       </div>

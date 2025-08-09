@@ -8,13 +8,18 @@ const ScoreboardType4 = ({ currentData, logoShape, showMatchTime, tournamentLogo
 
                 {/* Team A logo */}
                 <div className="w-[32px] h-[32px] sm:w-[56px] sm:h-[56px] mr-[4px] sm:mr-[8px] shrink-0 flex items-center justify-center z-10">
-                    <DisplayLogo
-                        logos={[currentData.teamALogo]}
-                        alt={currentData.teamAName}
-                        className="w-full h-full"
-                        type_play={logoShape}
-                        logoSize="w-[32px] h-[32px] sm:w-[56px] sm:h-[56px]"
-                    />
+                    <div
+                        className="w-[32px] h-[32px] sm:w-[56px] sm:h-[56px] relative rounded-full bg-white p-1 sm:p-2 shadow-xl border-2 sm:border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    >
+                        <img
+                            src={currentData.teamALogo}
+                            alt={currentData.teamAName}
+                            className="object-contain w-[100%] h-[100%]"
+                            onError={(e) => {
+                                e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
+                            }}
+                        />
+                    </div>
                 </div>
 
                 {/* Các box chính */}
@@ -106,13 +111,18 @@ const ScoreboardType4 = ({ currentData, logoShape, showMatchTime, tournamentLogo
 
                 {/* Team B logo */}
                 <div className="w-[32px] h-[32px] sm:w-[56px] sm:h-[56px] ml-[4px] sm:ml-[8px] shrink-0 flex items-center justify-center z-10">
-                    <DisplayLogo
-                        logos={[currentData.teamBLogo]}
-                        alt={currentData.teamBName}
-                        className="w-full h-full"
-                        type_play={logoShape}
-                        logoSize="w-[32px] h-[32px] sm:w-[56px] sm:h-[56px]"
-                    />
+                    <div
+                        className="w-[32px] h-[32px] sm:w-[56px] sm:h-[56px] relative rounded-full bg-white p-1 sm:p-2 shadow-xl border-2 sm:border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    >
+                        <img
+                            src={currentData.teamBLogo}
+                            alt={currentData.teamBName}
+                            className="object-contain w-[100%] h-[100%]"
+                            onError={(e) => {
+                                e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBCPC90ZXh0Pgo8L3N2Zz4K';
+                            }}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

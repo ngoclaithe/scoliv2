@@ -159,15 +159,35 @@ export default function MatchIntroduction() {
                     Nhà tài trợ
                   </div>
                   <div className="flex gap-1 flex-wrap max-w-[15vw]">
-                    {sponsorLogos.map((sponsor, index) => (
-                      <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", sponsor.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
-                        <img
-                          src={sponsor.logo}
-                          alt={sponsor.name}
-                          className="max-h-full max-w-full object-contain"
-                        />
-                      </div>
-                    ))}
+                    {sponsorLogos.map((sponsor, index) => {
+                      const getContainerShape = (typeDisplay) => {
+                        console.log('🔍 Sponsor typeDisplay:', typeDisplay);
+                        switch (typeDisplay) {
+                          case 'round': return 'rounded-full';
+                          case 'hexagonal': return 'hexagon-shape';
+                          case 'square': return 'rounded-lg';
+                          default: return 'rounded-lg';
+                        }
+                      };
+                      const shapeClass = getContainerShape(sponsor.typeDisplay);
+                      console.log('🔍 Sponsor shapeClass:', shapeClass);
+                      return (
+                        <div
+                          key={index}
+                          className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${shapeClass}
+                            w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12`}
+                        >
+                          <img
+                            src={sponsor.logo}
+                            alt={sponsor.name}
+                            className="object-contain w-full h-full"
+                            onError={(e) => {
+                              e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TG9nbzwvdGV4dD4KPHN2Zz4K';
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -178,15 +198,34 @@ export default function MatchIntroduction() {
                     Đơn vị tổ chức
                   </div>
                   <div className="flex gap-1 flex-wrap max-w-[15vw]">
-                    {organizingLogos.map((organizing, index) => (
-                      <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", organizing.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
-                        <img
-                          src={organizing.logo}
-                          alt={organizing.name}
-                          className="max-h-full max-w-full object-contain"
-                        />
-                      </div>
-                    ))}
+                    {organizingLogos.map((organizing, index) => {
+                      const getContainerShape = (typeDisplay) => {
+                        console.log('🔍 Organizing typeDisplay:', typeDisplay);
+                        switch (typeDisplay) {
+                          case 'round': return 'rounded-full';
+                          case 'hexagonal': return 'hexagon-shape';
+                          case 'square': return 'rounded-lg';
+                          default: return 'rounded-lg';
+                        }
+                      };
+                      const shapeClass = getContainerShape(organizing.typeDisplay);
+                      return (
+                        <div
+                          key={index}
+                          className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${shapeClass}
+                            w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12`}
+                        >
+                          <img
+                            src={organizing.logo}
+                            alt={organizing.name}
+                            className="object-contain w-full h-full"
+                            onError={(e) => {
+                              e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TG9nbzwvdGV4dD4KPHN2Zz4K';
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -212,15 +251,34 @@ export default function MatchIntroduction() {
                     Đơn vị truyền thông
                   </div>
                   <div className="flex gap-1 flex-wrap justify-end max-w-[15vw]">
-                    {mediaPartnerLogos.map((media, index) => (
-                      <div key={index} className={getPartnerLogoShapeClass("flex justify-center items-center bg-white p-0.5 shadow-lg", media.typeDisplay)} style={{width: '2.5vw', height: '2.5vw', minWidth: '20px', minHeight: '20px', maxWidth: '35px', maxHeight: '35px'}}>
-                        <img
-                          src={media.logo}
-                          alt={media.name}
-                          className="max-h-full max-w-full object-contain"
-                        />
-                      </div>
-                    ))}
+                    {mediaPartnerLogos.map((media, index) => {
+                      const getContainerShape = (typeDisplay) => {
+                        console.log('🔍 Media typeDisplay:', typeDisplay);
+                        switch (typeDisplay) {
+                          case 'round': return 'rounded-full';
+                          case 'hexagonal': return 'hexagon-shape';
+                          case 'square': return 'rounded-lg';
+                          default: return 'rounded-lg';
+                        }
+                      };
+                      const shapeClass = getContainerShape(media.typeDisplay);
+                      return (
+                        <div
+                          key={index}
+                          className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${shapeClass}
+                            w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 lg:w-12 lg:h-12`}
+                        >
+                          <img
+                            src={media.logo}
+                            alt={media.name}
+                            className="object-contain w-full h-full"
+                            onError={(e) => {
+                              e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZUu+TG9nbzwvdGV4dD4KPHN2Zz4K';
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -267,11 +325,25 @@ export default function MatchIntroduction() {
               <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-                  <img
-                    src={matchData.logo1}
-                    alt={matchData.team1}
-                    className={getLogoShapeClass("relative w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 lg:w-22 lg:h-22 xl:w-26 xl:h-26 object-cover border-2 sm:border-3 md:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300")}
-                  />
+                  <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div
+                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    style={{
+                      width: '72px',
+                      height: '72px'
+                    }}
+                  >
+                    <img
+                      src={matchData.logo1}
+                      alt={matchData.team1}
+                      className="object-contain w-[100%] h-[100%]"
+                      onError={(e) => {
+                        e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
+                      }}
+                    />
+                  </div>
+                </div>
                 </div>
                 <div className="bg-gradient-to-r from-cyan-500 to-blue-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
                   <span
@@ -312,11 +384,25 @@ export default function MatchIntroduction() {
               <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
-                  <img
-                    src={matchData.logo2}
-                    alt={matchData.team2}
-                    className={getLogoShapeClass("relative w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 lg:w-22 lg:h-22 xl:w-26 xl:h-26 object-cover border-2 sm:border-3 md:border-4 border-white shadow-2xl transform hover:scale-110 transition duration-300")}
-                  />
+                  <div className="relative group">
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div
+                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    style={{
+                      width: '72px',
+                      height: '72px'
+                    }}
+                  >
+                    <img
+                      src={matchData.logo2}
+                      alt={matchData.team2}
+                      className="object-contain w-[100%] h-[100%]"
+                      onError={(e) => {
+                        e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBCPC90ZXh0Pgo8L3N2Zz4K';
+                      }}
+                    />
+                  </div>
+                </div>
                 </div>
                 <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
                   <span
@@ -388,6 +474,10 @@ export default function MatchIntroduction() {
               transform: translateY(-100vh) translateX(${Math.random() * 200 - 100}px) scale(0);
               opacity: 0;
             }
+          }
+          .hexagon-shape {
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            background: white;
           }
         `}</style>
       </div>

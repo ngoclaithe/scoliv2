@@ -4,39 +4,52 @@ import DisplayLogo from '../common/DisplayLogo';
 const ScoreboardLogos = ({ allLogos, logoShape, rotateDisplay }) => {
     if (allLogos.length === 0) return null;
 
-    const getLogoShape = (typeDisplay) => {
+    const getContainerShape = (typeDisplay) => {
+        console.log('🔍 ScoreboardLogos typeDisplay:', typeDisplay);
         switch (typeDisplay) {
-            case 'round': return 'round';
-            case 'hexagonal': return 'hexagon';
+            case 'round': return 'rounded-full';
+            case 'hexagonal':
+                return 'hexagon-shape'; // Custom hexagon class
             case 'square':
-            default: return 'square';
+                return 'rounded-lg';
+            default: return 'rounded-lg';
         }
     };
 
-    if (rotateDisplay && allLogos.length > 1) {
+    // Tự động bật rotate khi có ≥4 logos
+    const shouldRotate = rotateDisplay || allLogos.length >= 4;
+
+    if (shouldRotate && allLogos.length > 1) {
+        // For rotating display, use DisplayLogo component
         return (
             <DisplayLogo
                 logos={allLogos.map(logo => logo.url)}
                 alt="Sponsors & Partners"
-                className="w-full h-full"
+                className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16"
                 type_play={logoShape}
                 slideMode={true}
                 maxVisible={3}
-                slideInterval={5000}
+                slideInterval={3000}
             />
         );
     } else {
         return (
-            <div className="flex gap-2 flex-wrap max-w-sm">
+            <div className="flex gap-0.5 sm:gap-1 md:gap-2 flex-wrap w-full">
                 {allLogos.map((logo, index) => (
                     <div key={index} className="flex-shrink-0">
-                        <DisplayLogo
-                            logos={[logo.url]}
-                            alt={logo.alt}
-                            className="w-14 h-14"
-                            type_play={getLogoShape(logo.typeDisplay)}
-                            slideMode={false}
-                        />
+                        <div
+                            className={`relative bg-white shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${getContainerShape(logo.typeDisplay)}
+                                w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 p-1 sm:p-1.5 md:p-2`}
+                        >
+                            <img
+                                src={logo.url}
+                                alt={logo.alt}
+                                className="object-contain w-full h-full"
+                                onError={(e) => {
+                                    e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+TG9nbzwvdGV4dD4KPHN2Zz4K';
+                                }}
+                            />
+                        </div>
                     </div>
                 ))}
             </div>

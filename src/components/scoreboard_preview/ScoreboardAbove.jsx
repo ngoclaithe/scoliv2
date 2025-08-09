@@ -86,6 +86,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
                     : 'square';
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
+                    console.log('🔍 Sponsors typeDisplay for position', targetPosition, ':', typeDisplay);
                     allLogos.push({ url: getFullLogoUrl(logo), alt: 'Sponsor', type: 'sponsor', typeDisplay });
                 }
             });
@@ -102,6 +103,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
                     : 'square';
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
+                    console.log('🔍 Organizing typeDisplay for position', targetPosition, ':', typeDisplay);
                     allLogos.push({ url: getFullLogoUrl(logo), alt: 'Organizing', type: 'organizing', typeDisplay });
                 }
             });
@@ -118,6 +120,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
                     : 'square';
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
+                    console.log('🔍 MediaPartners typeDisplay for position', targetPosition, ':', typeDisplay);
                     allLogos.push({ url: getFullLogoUrl(logo), alt: 'Media Partner', type: 'media', typeDisplay });
                 }
             });
@@ -148,68 +151,71 @@ const ScoreboardAbove = ({ type = 1 }) => {
         <div className="w-full h-screen relative overflow-hidden">
             <div className="w-full h-full relative bg-transparent">
                 {/* Top Left Position */}
-                <div className="absolute top-4 left-4 z-40
+                <div className="absolute top-2 left-2 z-40
                     md:top-4 md:left-4
-                    sm:top-3 sm:left-1 sm:scale-75
-                    max-[480px]:top-2 max-[480px]:left-0.5 max-[480px]:scale-[0.6]
-                    max-[360px]:top-1.5 max-[360px]:left-0 max-[360px]:scale-50">
-                    <ScoreboardLogos 
-                        allLogos={collectLogosForPosition('top-left')} 
-                        logoShape={logoShape} 
-                        rotateDisplay={displaySettings?.displaySettings?.rotateDisplay || displaySettings?.rotateDisplay} 
+                    sm:top-2 sm:left-2
+                    max-[480px]:top-1 max-[480px]:left-1
+                    max-[360px]:top-0.5 max-[360px]:left-0.5
+                    max-w-[120px] sm:max-w-[150px] md:max-w-[200px] lg:max-w-[250px] xl:max-w-[300px]">
+                    <ScoreboardLogos
+                        allLogos={collectLogosForPosition('top-left')}
+                        logoShape={logoShape}
+                        rotateDisplay={displaySettings?.displaySettings?.rotateDisplay || displaySettings?.rotateDisplay}
                     />
                 </div>
 
                 {/* Tournament Logo - Top Left (if no sponsors) */}
                 {collectLogosForPosition('top-left').length === 0 && tournamentLogo?.url_logo && tournamentLogo.url_logo.length > 0 && (
-                    <div className="absolute top-4 left-4 z-40
+                    <div className="absolute top-2 left-2 z-40
                         md:top-4 md:left-4
-                        sm:top-3 sm:left-1 sm:scale-75
-                        max-[480px]:top-2 max-[480px]:left-0.5 max-[480px]:scale-[0.6]
-                        max-[360px]:top-1.5 max-[360px]:left-0 max-[360px]:scale-50">
+                        sm:top-2 sm:left-2
+                        max-[480px]:top-1 max-[480px]:left-1
+                        max-[360px]:top-0.5 max-[360px]:left-0.5">
                         <DisplayLogo
                             logos={getFullLogoUrls(tournamentLogo.url_logo)}
                             alt="Tournament"
-                            className="w-16 h-16"
+                            className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16"
                             type_play={logoShape}
                         />
                     </div>
                 )}
 
                 {/* Main Scoreboard - Top Right for all types including pickleball */}
-                <div className="absolute top-4 right-4 z-30 origin-top-right
+                <div className="absolute top-2 right-2 z-30 origin-top-right
                     md:top-4 md:right-4 md:scale-100
-                    sm:top-3 sm:right-3 sm:scale-75
-                    max-[480px]:top-2 max-[480px]:right-2 max-[480px]:scale-[0.6]
-                    max-[360px]:top-1.5 max-[360px]:right-1.5 max-[360px]:scale-50">
+                    sm:top-2 sm:right-2 sm:scale-90
+                    max-[480px]:top-1 max-[480px]:right-1 max-[480px]:scale-75
+                    max-[360px]:top-0.5 max-[360px]:right-0.5 max-[360px]:scale-[0.65]">
                     <div className="bg-transparent rounded-lg shadow-2xl">
                         {renderScoreboard()}
                     </div>
                 </div>
 
                 {/* Bottom Left Position */}
-                <div className="absolute bottom-8 left-4 z-40 origin-center
-                    md:bottom-8 md:left-4 md:scale-100
-                    sm:bottom-6 sm:left-3 sm:scale-75
-                    max-[480px]:bottom-5 max-[480px]:left-2 max-[480px]:scale-[0.6]
-                    max-[360px]:bottom-4 max-[360px]:left-1.5 max-[360px]:scale-50">
-                    <ScoreboardLogos 
-                        allLogos={collectLogosForPosition('bottom-left')} 
-                        logoShape={logoShape} 
-                        rotateDisplay={displaySettings?.displaySettings?.rotateDisplay || displaySettings?.rotateDisplay} 
+                <div className="absolute bottom-6 left-2 z-40
+                    md:bottom-8 md:left-4
+                    sm:bottom-6 sm:left-2
+                    max-[480px]:bottom-4 max-[480px]:left-1
+                    max-[360px]:bottom-3 max-[360px]:left-0.5
+                    max-w-[120px] sm:max-w-[150px] md:max-w-[200px] lg:max-w-[250px] xl:max-w-[300px]">
+                    <ScoreboardLogos
+                        allLogos={collectLogosForPosition('bottom-left')}
+                        logoShape={logoShape}
+                        rotateDisplay={displaySettings?.displaySettings?.rotateDisplay || displaySettings?.rotateDisplay}
                     />
                 </div>
 
                 {/* Bottom Right Position */}
-                <div className="absolute bottom-8 right-4 z-40 origin-center
-                    md:bottom-8 md:right-4 md:scale-100
-                    sm:bottom-6 sm:right-3 sm:scale-75
-                    max-[480px]:bottom-5 max-[480px]:right-2 max-[480px]:scale-[0.6]
-                    max-[360px]:bottom-4 max-[360px]:right-1.5 max-[360px]:scale-50">
-                    <ScoreboardLogos 
-                        allLogos={collectLogosForPosition('bottom-right')} 
-                        logoShape={logoShape} 
-                        rotateDisplay={displaySettings?.displaySettings?.rotateDisplay || displaySettings?.rotateDisplay} 
+                <div className="absolute bottom-6 right-2 z-40
+                    md:bottom-8 md:right-4
+                    sm:bottom-6 sm:right-2
+                    max-[480px]:bottom-4 max-[480px]:right-1
+                    max-[360px]:bottom-3 max-[360px]:right-0.5
+                    max-w-[120px] sm:max-w-[150px] md:max-w-[200px] lg:max-w-[250px] xl:max-w-[300px]">
+                    <ScoreboardLogos
+                        allLogos={collectLogosForPosition('bottom-right')}
+                        logoShape={logoShape}
+                        rotateDisplay={displaySettings?.displaySettings?.rotateDisplay || displaySettings?.rotateDisplay}
                     />
                 </div>
 
@@ -220,6 +226,15 @@ const ScoreboardAbove = ({ type = 1 }) => {
                 @keyframes scroll {
                     0% { transform: translateX(100%); }
                     100% { transform: translateX(-100%); }
+                }
+                .hexagon-shape {
+                    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+                    background: white;
+                }
+                @media (max-width: 640px) {
+                    .hexagon-shape {
+                        clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+                    }
                 }
             `}</style>
         </div>

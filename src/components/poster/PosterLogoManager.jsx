@@ -12,6 +12,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   const [activeLogoCategory, setActiveLogoCategory] = useState("sponsor");
   const [loading, setLoading] = useState(true);
   const [selectedLogosCount, setSelectedLogosCount] = useState({ sponsor: 0, organizing: 0, media: 0, tournament: 0 });
+  const [historyMatches, setHistoryMatches] = useState([]);
+  const [selectedHistoryMatch, setSelectedHistoryMatch] = useState("");
 
   const [logoDisplayOptions, setLogoDisplayOptions] = useState({
     shape: "round",
@@ -86,12 +88,44 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     setSelectedLogosCount(counts);
   }, [apiLogos, logoItems]);
 
+  const loadHistoryMatches = async () => {
+    try {
+      console.log('🔍 [PosterLogoManager] Loading history matches from API...');
+      const response = await RoomSessionAPI.getHistoryMatches();
+      console.log('📋 [PosterLogoManager] History matches response:', response);
+
+      if (response?.success && response?.data && Array.isArray(response.data)) {
+        const transformedMatches = response.data.map(match => {
+          const displaySettings = match.accessCodeInfo?.displaySettings || [];
+          return {
+            id: match.id,
+            accessCode: match.accessCode,
+            status: match.status,
+            expiredAt: match.expiredAt,
+            displaySettings: displaySettings
+          };
+        });
+        setHistoryMatches(transformedMatches);
+        console.log(`✅ [PosterLogoManager] Loaded ${transformedMatches.length} history matches`);
+      } else {
+        console.warn('⚠️ [PosterLogoManager] Invalid history matches response format');
+        setHistoryMatches([]);
+      }
+    } catch (error) {
+      console.error('❌ [PosterLogoManager] Failed to load history matches:', error);
+      setHistoryMatches([]);
+    }
+  };
+
   useEffect(() => {
     let isMounted = true;
 
     const loadLogos = async () => {
       try {
         setLoading(true);
+
+        // Load history matches first
+        await loadHistoryMatches();
 
         // Load initial data if provided (for display options only)
         if (initialData) {
@@ -690,6 +724,67 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     }
   }, [apiLogos]);
 
+  const handleHistoryMatchSelect = useCallback(async (matchId) => {
+    console.log('🔄 [PosterLogoManager] Selecting history match:', matchId);
+    setSelectedHistoryMatch(matchId);
+
+    if (!matchId) return;
+
+    try {
+      const selectedMatch = historyMatches.find(match => match.id.toString() === matchId);
+      if (!selectedMatch) {
+        console.warn('⚠️ [PosterLogoManager] Selected match not found');
+        return;
+      }
+
+      console.log('📋 [PosterLogoManager] Selected match data:', selectedMatch);
+
+      // Clear current logos
+      setApiLogos([]);
+      setLogoItems([]);
+
+      // Load logos from selected match's display settings
+      const loadedLogos = [];
+
+      selectedMatch.displaySettings.forEach((setting) => {
+        let category = 'sponsor'; // default
+
+        // Determine category based on setting type
+        if (setting.type === 'sponsors') category = 'sponsor';
+        else if (setting.type === 'organizing') category = 'organizing';
+        else if (setting.type === 'media_partners') category = 'media';
+        else if (setting.type === 'tournament_logo') category = 'tournament';
+
+        // Parse position
+        let positions = [];
+        if (setting.position) {
+          try {
+            positions = [setting.position.replace(/[{}]/g, '')];
+          } catch (e) {
+            console.warn('Failed to parse position:', setting.position);
+            positions = [];
+          }
+        }
+
+        loadedLogos.push({
+          id: `history-${setting.id}`,
+          unitName: setting.code_logo || `Item ${setting.id}`,
+          code: setting.code_logo || `HIST${setting.id}`,
+          type: setting.type_display || 'logo',
+          category: category,
+          url: getFullLogoUrl(setting.url_logo),
+          displayPositions: positions
+        });
+      });
+
+      setApiLogos(loadedLogos);
+      console.log(`✅ [PosterLogoManager] Loaded ${loadedLogos.length} logos from history match`);
+
+    } catch (error) {
+      console.error('❌ [PosterLogoManager] Error loading history match:', error);
+    }
+  }, [historyMatches]);
+
   const handleItemRemove = useCallback(async (itemId) => {
     console.log('🗑️ [PosterLogoManager] Removing item:', itemId);
 
@@ -1006,11 +1101,17 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-1">
         <span className="text-xs font-medium text-gray-700">Copy poster trận trước:</span>
-        <select className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white">
+        <select
+          className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white"
+          value={selectedHistoryMatch}
+          onChange={(e) => handleHistoryMatchSelect(e.target.value)}
+        >
           <option value="">Chọn trận</option>
-          <option value="match1">Hà Nội vs TPHCM (15/01)</option>
-          <option value="match2">Viettel vs HAGL (12/01)</option>
-          <option value="match3">SHB vs Thanh Hóa (10/01)</option>
+          {historyMatches.map((match) => (
+            <option key={match.id} value={match.id}>
+              {match.accessCode} ({match.status === 'expired' ? 'Đã kết thúc' : match.status})
+            </option>
+          ))}
         </select>
       </div>
 
