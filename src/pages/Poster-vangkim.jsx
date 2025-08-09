@@ -53,6 +53,7 @@ export default function DodenMatchIntro() {
 
   const [marqueeWidth, setMarqueeWidth] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
+  const [showMarquee, setShowMarquee] = useState(true);
 
   useEffect(() => {
     const handleResize = () => {
