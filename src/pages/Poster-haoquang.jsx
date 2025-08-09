@@ -468,6 +468,10 @@ export default function MatchIntroduction() {
               opacity: 0;
             }
           }
+          .hexagon-shape {
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            background: white;
+          }
         `}</style>
       </div>
     </div>
