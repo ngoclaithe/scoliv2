@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo, useRef } from "react"
 import Button from "../common/Button";
 import LogoAPI from "../../API/apiLogo";
 import DisplaySettingsAPI from "../../API/apiSettingDisplay";
+import RoomSessionAPI from "../../API/apiRoomSession";
 import { getFullLogoUrl } from "../../utils/logoUtils";
 
 const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialData, accessCode }) => {
@@ -73,7 +74,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     },
   ];
 
-  // Function to update selected logos count
   const updateSelectedLogosCount = useCallback(() => {
     const counts = { sponsor: 0, organizing: 0, media: 0, tournament: 0 };
 

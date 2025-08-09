@@ -31,6 +31,14 @@ const RoomSessionAPI = {
       throw RoomSessionAPI.handleError(error);
     }
   },
+  getHistoryMatches: async () => {
+    try {
+      const response = await api.get('/room-sessions/history');
+      return response.data;
+    } catch (error) {
+      throw RoomSessionAPI.handleError(error);
+    }
+  },
 
   getRoomSessionById: async (id) => {
     try {
