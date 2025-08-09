@@ -178,11 +178,11 @@ const DynamicDisplayController = () => {
       case 'halftime':
         return <HalfTime {...viewProps} />;
       case 'scoreboard':
-        return <ScoreboardAbove {...viewProps} />;
+        return <DynamicScoreboard dynamicData={dynamicData} type={1} />;
       case 'scoreboard_below':
-        return <ScoreboardBelowNew {...viewProps} type={1} />;
+        return <DynamicScoreboard dynamicData={dynamicData} type={2} />;
       case 'penalty_scoreboard':
-        return <PenaltyScoreboard {...viewProps} type={1} />;
+        return <DynamicScoreboard dynamicData={dynamicData} type={3} />;
       case 'player_list':
         return <PlayerList {...viewProps} />;
       case 'stat':
