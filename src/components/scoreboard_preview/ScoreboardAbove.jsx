@@ -189,28 +189,30 @@ const ScoreboardAbove = ({ type = 1 }) => {
                 </div>
 
                 {/* Bottom Left Position */}
-                <div className="absolute bottom-8 left-4 z-40 origin-center
-                    md:bottom-8 md:left-4 md:scale-100
-                    sm:bottom-6 sm:left-3 sm:scale-75
-                    max-[480px]:bottom-5 max-[480px]:left-2 max-[480px]:scale-[0.6]
-                    max-[360px]:bottom-4 max-[360px]:left-1.5 max-[360px]:scale-50">
-                    <ScoreboardLogos 
-                        allLogos={collectLogosForPosition('bottom-left')} 
-                        logoShape={logoShape} 
-                        rotateDisplay={displaySettings?.displaySettings?.rotateDisplay || displaySettings?.rotateDisplay} 
+                <div className="absolute bottom-6 left-2 z-40
+                    md:bottom-8 md:left-4
+                    sm:bottom-6 sm:left-2
+                    max-[480px]:bottom-4 max-[480px]:left-1
+                    max-[360px]:bottom-3 max-[360px]:left-0.5
+                    max-w-[200px] sm:max-w-[250px] md:max-w-[300px]">
+                    <ScoreboardLogos
+                        allLogos={collectLogosForPosition('bottom-left')}
+                        logoShape={logoShape}
+                        rotateDisplay={displaySettings?.displaySettings?.rotateDisplay || displaySettings?.rotateDisplay}
                     />
                 </div>
 
                 {/* Bottom Right Position */}
-                <div className="absolute bottom-8 right-4 z-40 origin-center
-                    md:bottom-8 md:right-4 md:scale-100
-                    sm:bottom-6 sm:right-3 sm:scale-75
-                    max-[480px]:bottom-5 max-[480px]:right-2 max-[480px]:scale-[0.6]
-                    max-[360px]:bottom-4 max-[360px]:right-1.5 max-[360px]:scale-50">
-                    <ScoreboardLogos 
-                        allLogos={collectLogosForPosition('bottom-right')} 
-                        logoShape={logoShape} 
-                        rotateDisplay={displaySettings?.displaySettings?.rotateDisplay || displaySettings?.rotateDisplay} 
+                <div className="absolute bottom-6 right-2 z-40
+                    md:bottom-8 md:right-4
+                    sm:bottom-6 sm:right-2
+                    max-[480px]:bottom-4 max-[480px]:right-1
+                    max-[360px]:bottom-3 max-[360px]:right-0.5
+                    max-w-[200px] sm:max-w-[250px] md:max-w-[300px]">
+                    <ScoreboardLogos
+                        allLogos={collectLogosForPosition('bottom-right')}
+                        logoShape={logoShape}
+                        rotateDisplay={displaySettings?.displaySettings?.rotateDisplay || displaySettings?.rotateDisplay}
                     />
                 </div>
 
