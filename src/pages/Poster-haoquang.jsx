@@ -172,7 +172,7 @@ export default function MatchIntroduction() {
                         <div
                           key={index}
                           className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${getContainerShape(sponsor.typeDisplay)}`}
-                          style={{width: '32px', height: '32px'}}
+                          style={{width: '48px', height: '48px'}}
                         >
                           <img
                             src={sponsor.logo}
@@ -208,7 +208,7 @@ export default function MatchIntroduction() {
                         <div
                           key={index}
                           className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${getContainerShape(organizing.typeDisplay)}`}
-                          style={{width: '32px', height: '32px'}}
+                          style={{width: '48px', height: '48px'}}
                         >
                           <img
                             src={organizing.logo}
@@ -259,7 +259,7 @@ export default function MatchIntroduction() {
                         <div
                           key={index}
                           className={`relative bg-white p-1 shadow-lg border-2 border-white/40 flex items-center justify-center overflow-hidden ${getContainerShape(media.typeDisplay)}`}
-                          style={{width: '32px', height: '32px'}}
+                          style={{width: '48px', height: '48px'}}
                         >
                           <img
                             src={media.logo}
