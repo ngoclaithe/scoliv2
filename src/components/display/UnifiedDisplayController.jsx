@@ -219,15 +219,7 @@ const UnifiedDisplayController = () => {
         }
       }
 
-      console.log(`✅ [UnifiedDisplayController] Sent ${updateCount} updates to server`);
-
-      // Request state hi���n tại để verify data đã được cập nhật
-      if (updateCount > 0) {
-        setTimeout(() => {
-          console.log('🔄 [UnifiedDisplayController] Requesting current state to verify updates...');
-          socketService.requestCurrentState();
-        }, 1000);
-      }
+      console.log(`✅ [UnifiedDisplayController] Sent ${updateCount} updates to server, waiting for server response...`);
 
     } catch (error) {
       console.error('❌ [UnifiedDisplayController] Failed to update socket with params:', error);
