@@ -189,6 +189,21 @@ const AccountTab = () => {
         </div>
       )}
 
+      {success && (
+        <div className="bg-green-50 border border-green-200 rounded-md p-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-green-800">{success}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="sm:flex sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-bold text-gray-900">Thông tin tài khoản</h2>
@@ -196,176 +211,70 @@ const AccountTab = () => {
         </div>
       </div>
 
-      <div className="bg-white shadow rounded-lg p-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="md:col-span-2">
-            <div className="relative">
-              <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Tìm kiếm theo tên hoặc email..."
-                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+      {/* Profile Card */}
+      <div className="bg-white shadow rounded-lg">
+        <div className="px-6 py-6">
+          <div className="flex items-center">
+            <div className="flex-shrink-0 h-20 w-20">
+              <div className="h-20 w-20 rounded-full bg-gray-300 flex items-center justify-center">
+                <UserIcon className="h-12 w-12 text-gray-600" />
+              </div>
             </div>
-          </div>
-          <div>
-            <select 
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
-              value={roleFilter}
-              onChange={(e) => setRoleFilter(e.target.value)}
-            >
-              <option value="">Tất cả vai trò</option>
-              <option value="admin">Quản trị viên</option>
-              <option value="user">Người dùng</option>
-            </select>
+            <div className="ml-6 flex-grow">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-medium text-gray-900">{currentUser.name || 'Chưa có tên'}</h3>
+                  <p className="text-sm text-gray-500">{currentUser.email}</p>
+                  <div className="mt-2">{getRoleBadge(currentUser.role)}</div>
+                </div>
+                <div className="flex space-x-3">
+                  <Button variant="outline" onClick={openEditProfileModal}>
+                    <PencilIcon className="h-4 w-4 mr-2" />
+                    Chỉnh sửa
+                  </Button>
+                  <Button onClick={openChangePasswordModal}>
+                    Đổi mật khẩu
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-white shadow rounded-lg overflow-hidden">
-        {loading ? (
-          <div className="flex items-center justify-center h-64">
-            <Loading size="lg" />
-          </div>
-        ) : (
-          <>
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Người dùng
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Vai trò
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Trạng thái
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Ngày tạo
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Thao tác
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {users.map((user) => (
-                    <tr key={user.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 h-10 w-10">
-                            <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center">
-                              <UserIcon className="h-6 w-6 text-gray-600" />
-                            </div>
-                          </div>
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">{user.name || 'Chưa có tên'}</div>
-                            <div className="text-sm text-gray-500">{user.email}</div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {getRoleBadge(user.role)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">
-                          {getStatusText(user)}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        {formatDate(user.createdAt)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
-                          <button
-                            onClick={() => openEditModal(user)}
-                            className="text-primary-600 hover:text-primary-900"
-                          >
-                            <PencilIcon className="h-4 w-4" />
-                          </button>
-                          <button
-                            onClick={() => openDeleteModal(user)}
-                            className="text-red-600 hover:text-red-900"
-                          >
-                            <TrashIcon className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+      {/* Account Details */}
+      <div className="bg-white shadow rounded-lg">
+        <div className="px-6 py-6">
+          <h3 className="text-lg font-medium text-gray-900 mb-4">Chi tiết tài khoản</h3>
+          <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Tên đầy đủ</dt>
+              <dd className="mt-1 text-sm text-gray-900">{currentUser.name || 'Chưa cập nhật'}</dd>
             </div>
-
-            {totalPages > 1 && (
-              <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                <div className="flex-1 flex justify-between sm:hidden">
-                  <button
-                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                    disabled={currentPage === 1}
-                    className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
-                  >
-                    Trước
-                  </button>
-                  <button
-                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                    disabled={currentPage === totalPages}
-                    className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
-                  >
-                    Sau
-                  </button>
-                </div>
-                <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                  <div>
-                    <p className="text-sm text-gray-700">
-                      Hiển thị <span className="font-medium">{((currentPage - 1) * 10) + 1}</span> đến{' '}
-                      <span className="font-medium">{Math.min(currentPage * 10, totalItems)}</span> trong{' '}
-                      <span className="font-medium">{totalItems}</span> kết quả
-                    </p>
-                  </div>
-                  <div>
-                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                      <button
-                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-                        disabled={currentPage === 1}
-                        className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
-                      >
-                        Trước
-                      </button>
-                      {[...Array(Math.min(totalPages, 10))].map((_, index) => {
-                        const pageNumber = index + 1;
-                        return (
-                          <button
-                            key={pageNumber}
-                            onClick={() => setCurrentPage(pageNumber)}
-                            className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                              currentPage === pageNumber
-                                ? 'z-10 bg-primary-50 border-primary-500 text-primary-600'
-                                : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
-                            }`}
-                          >
-                            {pageNumber}
-                          </button>
-                        );
-                      })}
-                      <button
-                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                        disabled={currentPage === totalPages}
-                        className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50"
-                      >
-                        Sau
-                      </button>
-                    </nav>
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
-        )}
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Email</dt>
+              <dd className="mt-1 text-sm text-gray-900">{currentUser.email}</dd>
+            </div>
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Vai trò</dt>
+              <dd className="mt-1 text-sm text-gray-900">
+                {currentUser.role === 'admin' ? 'Quản trị viên' : 'Người dùng'}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Ngày tạo</dt>
+              <dd className="mt-1 text-sm text-gray-900">{formatDate(currentUser.createdAt)}</dd>
+            </div>
+            <div>
+              <dt className="text-sm font-medium text-gray-500">Lần đăng nhập cuối</dt>
+              <dd className="mt-1 text-sm text-gray-900">{formatDate(currentUser.lastLoginAt)}</dd>
+            </div>
+            <div>
+              <dt className="text-sm font-medium text-gray-500">ID tài khoản</dt>
+              <dd className="mt-1 text-sm text-gray-900">{currentUser.id}</dd>
+            </div>
+          </dl>
+        </div>
       </div>
 
       {/* Edit Modal */}
