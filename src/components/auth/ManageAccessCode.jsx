@@ -166,28 +166,42 @@ const ManageAccessCode = ({ onNavigate }) => {
   const loadCurrentUser = async () => {
     try {
       setLoading(true);
-      // Giả sử user hiện tại có id = 1
-      const response = await UserAPI.getUser('1');
-      if (response.success) {
-        setCurrentUser(response.data);
+      // Sử dụng thông tin user từ AuthContext thay vì gọi API
+      if (user) {
+        setCurrentUser(user);
         setProfileData({
-          name: response.data.name || '',
-          email: response.data.email || ''
+          name: user.name || '',
+          email: user.email || ''
+        });
+      } else {
+        // Tạo user giả lập nếu không có user trong context
+        const mockUser = {
+          id: '1',
+          name: 'Người dùng',
+          email: 'user@example.com',
+          role: 'user',
+          createdAt: new Date().toISOString()
+        };
+        setCurrentUser(mockUser);
+        setProfileData({
+          name: mockUser.name,
+          email: mockUser.email
         });
       }
     } catch (error) {
       console.error('Error loading current user:', error);
-      // Tạo user giả lập
-      setCurrentUser({
+      // Fallback user
+      const fallbackUser = {
         id: '1',
         name: 'Người dùng',
         email: 'user@example.com',
         role: 'user',
         createdAt: new Date().toISOString()
-      });
+      };
+      setCurrentUser(fallbackUser);
       setProfileData({
-        name: 'Người dùng',
-        email: 'user@example.com'
+        name: fallbackUser.name,
+        email: fallbackUser.email
       });
     } finally {
       setLoading(false);
@@ -702,7 +716,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                         <div>
                           <dt className="text-sm font-medium text-gray-500">Vai trò</dt>
                           <dd className="mt-1 text-sm text-gray-900">
-                            {currentUser.role === 'admin' ? 'Quản trị viên' : 'Người dùng'}
+                            {currentUser.role === 'admin' ? 'Quản tr��� viên' : 'Người dùng'}
                           </dd>
                         </div>
                         <div>
@@ -1060,7 +1074,7 @@ const ManageAccessCode = ({ onNavigate }) => {
             type="password"
             value={passwordData.confirmPassword}
             onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
-            placeholder="Nhập lại mật khẩu mới"
+            placeholder="Nhập lại mật kh��u mới"
           />
         </div>
         <div className="mt-6 flex justify-end space-x-3">
