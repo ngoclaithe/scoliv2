@@ -47,7 +47,7 @@ URL này sẽ:
 
 1. **Spaces (khoảng trắng)**: Thay thế bằng dấu gạch dưới `_`
 2. **Special characters**: Sử dụng URL encoding
-3. **Colors**: Chỉ hex code không có dấu # (ví dụ: FF0000 thay vì #FF0000)
+3. **Colors**: Chỉ hex code không có dấu # (v�� dụ: FF0000 thay vì #FF0000)
 4. **Numbers**: Số nguyên thuần (ví dụ: 2, không phải 2.0)
 
 ## Xử lý tự động
@@ -127,9 +127,12 @@ Dynamic route sẽ hiển thị view dựa trên `currentView` từ backend:
 ## Ví dụ thực tế
 
 ```bash
-# URL với tất cả tham số
-http://localhost:3000/DEMO123/My_Dinh_Stadium/V_League_2024/LIVE_NOW/HN/TPHCM/Ha_Noi_FC/Ho_Chi_Minh_City/FF0000/0000FF/2/1
+# URL với tất cả tham số - hiển thị scoreboard
+http://localhost:3000/DEMO123/My_Dinh_Stadium/V_League_2024/LIVE_NOW/HN/TPHCM/Ha_Noi_FC/Ho_Chi_Minh_City/FF0000/0000FF/2/1/scoreboard/45:00
 
-# URL với tên đội có dấu (encode UTF-8)
-http://localhost:3000/DEMO123/San_My_Dinh/V_League_2024/TRUC_TIEP/HN/TPHCM/H%C3%A0_N%E1%BB%99i_FC/TP_H%E1%BB%93_Ch%C3%AD_Minh/FF0000/0000FF/3/2
+# URL với tên đội có dấu (encode UTF-8) - hiển thị poster
+http://localhost:3000/DEMO123/San_My_Dinh/V_League_2024/TRUC_TIEP/HN/TPHCM/H%C3%A0_N%E1%BB%99i_FC/TP_H%E1%BB%93_Ch%C3%AD_Minh/FF0000/0000FF/3/2/poster/90:00
+
+# URL hiển thị intro
+http://localhost:3000/DEMO123/My_Dinh_Stadium/V_League_2024/LIVE_NOW/HN/TPHCM/Ha_Noi_FC/Ho_Chi_Minh_City/FF0000/0000FF/0/0/intro/00:00
 ```
