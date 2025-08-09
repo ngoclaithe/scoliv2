@@ -18,6 +18,7 @@ import PosterVangXanh from '../../pages/Poster-vangxanh';
 import PosterXanhDuong from '../../pages/Poster-xanhduong';
 import Intro from '../introduce/Intro';
 import HalfTime from '../halftime/HalfTime';
+import DynamicScoreboard from './DynamicScoreboard';
 import ScoreboardAbove from '../scoreboard_preview/ScoreboardAbove';
 import ScoreboardBelowNew from '../scoreboard_preview/ScoreboardBelowNew';
 import PenaltyScoreboard from '../scoreboard_preview/PenaltyScoreboard';
