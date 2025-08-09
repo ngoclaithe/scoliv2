@@ -647,6 +647,55 @@ export const PublicMatchProvider = ({ children }) => {
           if (state.displaySettings) {
             console.log('🎨 [PublicMatchContext] Updating displaySettings from join_roomed:', state.displaySettings);
             setDisplaySettings(prev => ({ ...prev, ...state.displaySettings }));
+
+            // Process logos from displaySettings.logos if they exist
+            if (state.displaySettings.logos && Array.isArray(state.displaySettings.logos)) {
+              console.log('🔄 [PublicMatchContext] Processing logos from displaySettings:', state.displaySettings.logos);
+
+              // Separate logos by type
+              const sponsorLogos = state.displaySettings.logos.filter(logo => logo.type === 'sponsors');
+              const organizingLogos = state.displaySettings.logos.filter(logo => logo.type === 'organizing');
+              const mediaPartnerLogos = state.displaySettings.logos.filter(logo => logo.type === 'media_partners');
+
+              // Update sponsors if found
+              if (sponsorLogos.length > 0) {
+                const sponsorData = {
+                  url_logo: sponsorLogos.map(logo => logo.urlLogo),
+                  code_logo: sponsorLogos.map(logo => logo.codelogo),
+                  position: sponsorLogos.map(logo => logo.position),
+                  type_display: sponsorLogos.map(logo => logo.typeDisplay || 'square'),
+                  behavior: 'add'
+                };
+                console.log('🏢 [PublicMatchContext] Setting sponsors from logos:', sponsorData);
+                setSponsors({ sponsors: sponsorData });
+              }
+
+              // Update organizing if found
+              if (organizingLogos.length > 0) {
+                const organizingData = {
+                  url_logo: organizingLogos.map(logo => logo.urlLogo),
+                  code_logo: organizingLogos.map(logo => logo.codelogo),
+                  position: organizingLogos.map(logo => logo.position),
+                  type_display: organizingLogos.map(logo => logo.typeDisplay || 'square'),
+                  behavior: 'add'
+                };
+                console.log('🏛️ [PublicMatchContext] Setting organizing from logos:', organizingData);
+                setOrganizing({ organizing: organizingData });
+              }
+
+              // Update media partners if found
+              if (mediaPartnerLogos.length > 0) {
+                const mediaPartnerData = {
+                  url_logo: mediaPartnerLogos.map(logo => logo.urlLogo),
+                  code_logo: mediaPartnerLogos.map(logo => logo.codelogo),
+                  position: mediaPartnerLogos.map(logo => logo.position),
+                  type_display: mediaPartnerLogos.map(logo => logo.typeDisplay || 'square'),
+                  behavior: 'add'
+                };
+                console.log('📺 [PublicMatchContext] Setting mediaPartners from logos:', mediaPartnerData);
+                setMediaPartners({ mediaPartners: mediaPartnerData });
+              }
+            }
           }
 
           if (state.marqueeData) {
