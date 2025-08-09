@@ -577,6 +577,12 @@ export const PublicMatchProvider = ({ children }) => {
     });
 
     socketService.on('view_updated', (data) => {
+      console.log('👁️ [PublicMatchContext] view_updated received:', data);
+      setCurrentView(data.viewType);
+    });
+
+    socketService.on('view_update', (data) => {
+      console.log('👁️ [PublicMatchContext] view_update received:', data);
       setCurrentView(data.viewType);
     });
 
