@@ -88,12 +88,44 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     setSelectedLogosCount(counts);
   }, [apiLogos, logoItems]);
 
+  const loadHistoryMatches = async () => {
+    try {
+      console.log('🔍 [PosterLogoManager] Loading history matches from API...');
+      const response = await RoomSessionAPI.getHistoryMatches();
+      console.log('📋 [PosterLogoManager] History matches response:', response);
+
+      if (response?.success && response?.data && Array.isArray(response.data)) {
+        const transformedMatches = response.data.map(match => {
+          const displaySettings = match.accessCodeInfo?.displaySettings || [];
+          return {
+            id: match.id,
+            accessCode: match.accessCode,
+            status: match.status,
+            expiredAt: match.expiredAt,
+            displaySettings: displaySettings
+          };
+        });
+        setHistoryMatches(transformedMatches);
+        console.log(`✅ [PosterLogoManager] Loaded ${transformedMatches.length} history matches`);
+      } else {
+        console.warn('⚠️ [PosterLogoManager] Invalid history matches response format');
+        setHistoryMatches([]);
+      }
+    } catch (error) {
+      console.error('❌ [PosterLogoManager] Failed to load history matches:', error);
+      setHistoryMatches([]);
+    }
+  };
+
   useEffect(() => {
     let isMounted = true;
 
     const loadLogos = async () => {
       try {
         setLoading(true);
+
+        // Load history matches first
+        await loadHistoryMatches();
 
         // Load initial data if provided (for display options only)
         if (initialData) {
@@ -836,7 +868,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       return true;
     }
 
-    // Nếu chỉ chọn logo thì cho phép tất cả shapes
+    // Nếu chỉ chọn logo thì cho phép t��t cả shapes
     return false;
   };
 
