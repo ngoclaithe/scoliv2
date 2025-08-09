@@ -724,6 +724,67 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     }
   }, [apiLogos]);
 
+  const handleHistoryMatchSelect = useCallback(async (matchId) => {
+    console.log('🔄 [PosterLogoManager] Selecting history match:', matchId);
+    setSelectedHistoryMatch(matchId);
+
+    if (!matchId) return;
+
+    try {
+      const selectedMatch = historyMatches.find(match => match.id.toString() === matchId);
+      if (!selectedMatch) {
+        console.warn('⚠️ [PosterLogoManager] Selected match not found');
+        return;
+      }
+
+      console.log('📋 [PosterLogoManager] Selected match data:', selectedMatch);
+
+      // Clear current logos
+      setApiLogos([]);
+      setLogoItems([]);
+
+      // Load logos from selected match's display settings
+      const loadedLogos = [];
+
+      selectedMatch.displaySettings.forEach((setting) => {
+        let category = 'sponsor'; // default
+
+        // Determine category based on setting type
+        if (setting.type === 'sponsors') category = 'sponsor';
+        else if (setting.type === 'organizing') category = 'organizing';
+        else if (setting.type === 'media_partners') category = 'media';
+        else if (setting.type === 'tournament_logo') category = 'tournament';
+
+        // Parse position
+        let positions = [];
+        if (setting.position) {
+          try {
+            positions = [setting.position.replace(/[{}]/g, '')];
+          } catch (e) {
+            console.warn('Failed to parse position:', setting.position);
+            positions = [];
+          }
+        }
+
+        loadedLogos.push({
+          id: `history-${setting.id}`,
+          unitName: setting.code_logo || `Item ${setting.id}`,
+          code: setting.code_logo || `HIST${setting.id}`,
+          type: setting.type_display || 'logo',
+          category: category,
+          url: getFullLogoUrl(setting.url_logo),
+          displayPositions: positions
+        });
+      });
+
+      setApiLogos(loadedLogos);
+      console.log(`✅ [PosterLogoManager] Loaded ${loadedLogos.length} logos from history match`);
+
+    } catch (error) {
+      console.error('❌ [PosterLogoManager] Error loading history match:', error);
+    }
+  }, [historyMatches]);
+
   const handleItemRemove = useCallback(async (itemId) => {
     console.log('🗑️ [PosterLogoManager] Removing item:', itemId);
 
@@ -868,7 +929,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       return true;
     }
 
-    // Nếu chỉ chọn logo thì cho phép t��t cả shapes
+    // Nếu chỉ chọn logo thì cho phép tất cả shapes
     return false;
   };
 
