@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
 
-export default function MatchIntroduction() {
+export default function HaoQuangMatchIntro() {
   const {
     matchData: contextMatchData,
     marqueeData,
@@ -52,6 +52,10 @@ export default function MatchIntroduction() {
     height: typeof window !== 'undefined' ? window.innerHeight : 800
   });
 
+  const [marqueeWidth, setMarqueeWidth] = useState(0);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const [showMarquee, setShowMarquee] = useState(true);
+
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -63,6 +67,15 @@ export default function MatchIntroduction() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    if (marqueeRef.current && marqueeContainerRef.current) {
+      const textWidth = marqueeRef.current.scrollWidth;
+      const containerWidth = marqueeContainerRef.current.offsetWidth;
+      setMarqueeWidth(textWidth);
+      setContainerWidth(containerWidth);
+    }
+  }, [marqueeData?.text, windowSize.width]);
 
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
@@ -89,12 +102,37 @@ export default function MatchIntroduction() {
     typeDisplay: matchData.mediaPartnersTypeDisplay[index] || 'square'
   })) : [];
 
-  const marquee = {
-    text: marqueeData.text || '',
-    isRunning: marqueeData.mode !== 'none'
+  const scrollData = {
+    text: marqueeData?.text || "TRỰC TIẾP BÓNG ĐÁ",
+    color: marqueeData?.color === 'white-black' ? '#FFFFFF' :
+        marqueeData?.color === 'black-white' ? '#000000' :
+            marqueeData?.color === 'white-blue' ? '#FFFFFF' :
+                marqueeData?.color === 'white-red' ? '#FFFFFF' :
+                    marqueeData?.color === 'white-green' ? '#FFFFFF' : "#FFFFFF",
+    bgColor: marqueeData?.color === 'white-black' ? '#000000' :
+        marqueeData?.color === 'black-white' ? '#FFFFFF' :
+            marqueeData?.color === 'white-blue' ? '#2563eb' :
+                marqueeData?.color === 'white-red' ? '#dc2626' :
+                    marqueeData?.color === 'white-green' ? '#16a34a' : "#dc2626",
+    repeat: 1,
+    mode: marqueeData?.mode || 'khong',
+    interval: marqueeData?.mode === 'moi-2' ? 120000 :
+        marqueeData?.mode === 'moi-5' ? 300000 :
+            marqueeData?.mode === 'lien-tuc' ? 30000 : 0
   };
 
   const marqueeRef = useRef(null);
+  const marqueeContainerRef = useRef(null);
+
+  // Calculate proper animation duration based on text length
+  const getAnimationDuration = () => {
+    if (marqueeWidth && containerWidth) {
+      const totalDistance = marqueeWidth + containerWidth;
+      const speed = 100;
+      return Math.max(10, totalDistance / speed);
+    }
+    return 30;
+  };
 
   const adjustFontSize = (element) => {
     if (!element) return;
@@ -110,6 +148,23 @@ export default function MatchIntroduction() {
   const hasSponsors = sponsorLogos.length > 0;
   const hasOrganizing = organizingLogos.length > 0;
   const hasMediaPartners = mediaPartnerLogos.length > 0;
+
+  // Check if marquee should be running
+  const isMarqueeRunning = scrollData.mode !== 'khong' && scrollData.mode !== 'none' && scrollData.text && showMarquee;
+
+  // Handle interval-based marquee display
+  useEffect(() => {
+    if (scrollData.interval > 0 && (scrollData.mode === 'moi-2' || scrollData.mode === 'moi-5')) {
+      setShowMarquee(true);
+      const intervalId = setInterval(() => {
+        setShowMarquee(prev => !prev);
+      }, scrollData.interval);
+
+      return () => clearInterval(intervalId);
+    } else {
+      setShowMarquee(true);
+    }
+  }, [scrollData.interval, scrollData.mode]);
 
   const getDisplayEachLogo = (baseClass) => {
     switch (matchData.logoShape) {
@@ -382,17 +437,30 @@ export default function MatchIntroduction() {
           <div className="h-3 sm:h-4 md:h-6 flex-shrink-0"></div>
         </div>
 
-        {marquee.isRunning && marquee.text && (
-          <div className="absolute bottom-0 left-0 w-full h-3 sm:h-4 md:h-6 bg-gradient-to-r from-red-900 via-black to-red-900 border-t-2 border-red-500 overflow-hidden z-20">
-            <div className="absolute inset-0 bg-black/50"></div>
+        {/* Fixed Marquee Section */}
+        {isMarqueeRunning && scrollData.text && (
+          <div
+            ref={marqueeContainerRef}
+            className="absolute bottom-0 left-0 w-full h-3 sm:h-4 md:h-6 border-t-2 overflow-hidden z-20"
+            style={{
+              backgroundColor: scrollData.bgColor,
+              borderTopColor: scrollData.color === '#FFFFFF' ? '#dc2626' : scrollData.bgColor
+            }}
+          >
+            <div className="absolute inset-0 bg-black/20"></div>
             <div
               ref={marqueeRef}
-              className="absolute top-1/2 transform -translate-y-1/2 whitespace-nowrap text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-bold text-red-300 drop-shadow-lg"
+              className="absolute top-1/2 whitespace-nowrap text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-bold drop-shadow-lg"
               style={{
-                animation: 'marquee 30s linear infinite'
+                color: scrollData.color,
+                left: containerWidth ? `${containerWidth}px` : '100%',
+                transform: 'translateY(-50%)',
+                animation: containerWidth && marqueeWidth ?
+                  `marquee-scroll-fixed ${getAnimationDuration()}s linear infinite` :
+                  'none'
               }}
             >
-              {marquee.text}
+              {scrollData.text.repeat(scrollData.repeat)}
             </div>
           </div>
         )}
@@ -412,9 +480,13 @@ export default function MatchIntroduction() {
         </div>
 
         <style>{`
-          @keyframes marquee {
-            0% { transform: translateX(100%) translateY(-50%); }
-            100% { transform: translateX(-100%) translateY(-50%); }
+          @keyframes marquee-scroll-fixed {
+            0% {
+              left: 100%;
+            }
+            100% {
+              left: -100%;
+            }
           }
           @keyframes sparkle {
             0%, 100% {
