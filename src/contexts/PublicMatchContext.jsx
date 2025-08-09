@@ -218,11 +218,16 @@ export const PublicMatchProvider = ({ children }) => {
     });
 
     socketService.on('team_names_updated', (data) => {
-      setMatchData(prev => ({
-        ...prev,
-        teamA: { ...prev.teamA, name: data.names.teamA || data.names.home },
-        teamB: { ...prev.teamB, name: data.names.teamB || data.names.away }
-      }));
+      console.log('📛 [PublicMatchContext] team_names_updated received:', data);
+      setMatchData(prev => {
+        const updated = {
+          ...prev,
+          teamA: { ...prev.teamA, name: data.names.teamA || data.names.home },
+          teamB: { ...prev.teamB, name: data.names.teamB || data.names.away }
+        };
+        console.log('📛 [PublicMatchContext] Updated matchData with team names:', updated);
+        return updated;
+      });
       setLastUpdateTime(Date.now());
     });
 
