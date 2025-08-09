@@ -32,11 +32,7 @@ const AppRoutes = () => {
 
         {/* Dynamic route with multiple parameters - PHẢI ĐẶT TRƯỚC route /:accessCode */}
         <Route path="/:accessCode/:location/:matchTitle/:liveText/:teamALogoCode/:teamBLogoCode/:teamAName/:teamBName/:teamAKitColor/:teamBKitColor/:teamAScore/:teamBScore/:view/:matchTime" element={
-          <AuthProvider>
-            <PublicMatchProvider>
-              <UnifiedDisplayController />
-            </PublicMatchProvider>
-          </AuthProvider>
+          <DynamicDisplayController />
         } />
 
         {/* Preview route for posters */}
