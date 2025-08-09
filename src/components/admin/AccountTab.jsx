@@ -277,91 +277,95 @@ const AccountTab = () => {
         </div>
       </div>
 
-      {/* Edit Modal */}
+      {/* Edit Profile Modal */}
       <Modal
-        isOpen={showEditModal}
+        isOpen={showEditProfileModal}
         onClose={() => {
-          setShowEditModal(false);
-          setSelectedUser(null);
+          setShowEditProfileModal(false);
           resetFormData();
           setError('');
         }}
-        title="Chỉnh sửa tài khoản"
+        title="Chỉnh sửa thông tin"
       >
         <div className="space-y-4">
           <Input
-            label="Tên"
+            label="Tên đầy đủ"
             type="text"
             value={formData.name}
             onChange={(e) => setFormData({...formData, name: e.target.value})}
-            placeholder="Nhập tên người dùng"
+            placeholder="Nhập tên đầy đủ"
           />
           <Input
             label="Email"
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({...formData, email: e.target.value})}
-            placeholder="Nhập email"
+            placeholder="Nhập địa chỉ email"
           />
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Vai trò
-            </label>
-            <select
-              value={formData.role}
-              onChange={(e) => setFormData({...formData, role: e.target.value})}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
-            >
-              <option value="user">Người dùng</option>
-              <option value="admin">Quản trị viên</option>
-            </select>
-          </div>
         </div>
         <div className="mt-6 flex justify-end space-x-3">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => {
-              setShowEditModal(false);
-              setSelectedUser(null);
+              setShowEditProfileModal(false);
               resetFormData();
               setError('');
             }}
           >
             Hủy
           </Button>
-          <Button onClick={handleEdit} disabled={loading}>
+          <Button onClick={handleUpdateProfile} disabled={loading}>
             {loading ? 'Đang cập nhật...' : 'Cập nhật'}
           </Button>
         </div>
       </Modal>
 
-      {/* Delete Modal */}
+      {/* Change Password Modal */}
       <Modal
-        isOpen={showDeleteModal}
+        isOpen={showChangePasswordModal}
         onClose={() => {
-          setShowDeleteModal(false);
-          setSelectedUser(null);
+          setShowChangePasswordModal(false);
+          setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
           setError('');
         }}
-        title="Xóa tài khoản"
+        title="Đổi mật khẩu"
       >
-        <p className="text-sm text-gray-500">
-          Bạn có chắc chắn muốn xóa tài khoản <span className="font-medium">{selectedUser?.name || selectedUser?.email}</span>? 
-          Hành động này không thể hoàn tác.
-        </p>
+        <div className="space-y-4">
+          <Input
+            label="Mật khẩu hiện tại"
+            type="password"
+            value={passwordData.currentPassword}
+            onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
+            placeholder="Nhập mật khẩu hiện tại"
+          />
+          <Input
+            label="Mật khẩu mới"
+            type="password"
+            value={passwordData.newPassword}
+            onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
+            placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)"
+          />
+          <Input
+            label="Xác nhận mật khẩu mới"
+            type="password"
+            value={passwordData.confirmPassword}
+            onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
+            placeholder="Nhập lại mật khẩu mới"
+          />
+        </div>
         <div className="mt-6 flex justify-end space-x-3">
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             onClick={() => {
-              setShowDeleteModal(false);
-              setSelectedUser(null);
+              setShowChangePasswordModal(false);
+              setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
               setError('');
             }}
           >
             Hủy
           </Button>
-          <Button variant="danger" onClick={handleDelete} disabled={loading}>
-            {loading ? 'Đang xóa...' : 'Xóa'}
+          <Button onClick={handleChangePassword} disabled={loading}>
+            {loading ? 'Đang đổi...' : 'Đổi mật khẩu'}
           </Button>
         </div>
       </Modal>
