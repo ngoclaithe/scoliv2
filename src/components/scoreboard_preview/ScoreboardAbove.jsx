@@ -148,15 +148,16 @@ const ScoreboardAbove = ({ type = 1 }) => {
         <div className="w-full h-screen relative overflow-hidden">
             <div className="w-full h-full relative bg-transparent">
                 {/* Top Left Position */}
-                <div className="absolute top-4 left-4 z-40
+                <div className="absolute top-2 left-2 z-40
                     md:top-4 md:left-4
-                    sm:top-3 sm:left-1 sm:scale-75
-                    max-[480px]:top-2 max-[480px]:left-0.5 max-[480px]:scale-[0.6]
-                    max-[360px]:top-1.5 max-[360px]:left-0 max-[360px]:scale-50">
-                    <ScoreboardLogos 
-                        allLogos={collectLogosForPosition('top-left')} 
-                        logoShape={logoShape} 
-                        rotateDisplay={displaySettings?.displaySettings?.rotateDisplay || displaySettings?.rotateDisplay} 
+                    sm:top-2 sm:left-2
+                    max-[480px]:top-1 max-[480px]:left-1
+                    max-[360px]:top-0.5 max-[360px]:left-0.5
+                    max-w-[200px] sm:max-w-[250px] md:max-w-[300px]">
+                    <ScoreboardLogos
+                        allLogos={collectLogosForPosition('top-left')}
+                        logoShape={logoShape}
+                        rotateDisplay={displaySettings?.displaySettings?.rotateDisplay || displaySettings?.rotateDisplay}
                     />
                 </div>
 
