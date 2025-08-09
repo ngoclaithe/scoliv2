@@ -604,7 +604,11 @@ const ManageAccessCode = ({ onNavigate }) => {
                       <div key={activity.id} className="p-6 hover:bg-gray-50">
                         <div className="flex items-start space-x-3">
                           <div className="flex-shrink-0">
-                            <ClockIcon className="h-5 w-5 text-blue-500" />
+                            {activity.type === 'code_created' && <PlusIcon className="h-5 w-5 text-green-500" />}
+                            {activity.type === 'code_used' && <UserIcon className="h-5 w-5 text-blue-500" />}
+                            {activity.type === 'profile_updated' && <UserIcon className="h-5 w-5 text-yellow-500" />}
+                            {activity.type === 'payment_completed' && <ClockIcon className="h-5 w-5 text-green-600" />}
+                            {activity.type === 'login' && <ClockIcon className="h-5 w-5 text-gray-500" />}
                           </div>
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center justify-between">
@@ -612,9 +616,14 @@ const ManageAccessCode = ({ onNavigate }) => {
                                 <p className="text-sm font-medium text-gray-900">
                                   {activity.description}
                                 </p>
-                                <p className="text-xs text-gray-500 mt-1">
-                                  Email: {activity.user?.email}
-                                </p>
+                                {activity.details && (
+                                  <p className="text-xs text-gray-500 mt-1">
+                                    {activity.details.code && `Mã: ${activity.details.code}`}
+                                    {activity.details.amount && `Số tiền: ${activity.details.amount}`}
+                                    {activity.details.device && `Thiết bị: ${activity.details.device}`}
+                                    {activity.details.field && `Trường: ${activity.details.field}`}
+                                  </p>
+                                )}
                               </div>
                               <div className="text-xs text-gray-500">
                                 {new Date(activity.timestamp).toLocaleString('vi-VN')}
@@ -757,7 +766,7 @@ const ManageAccessCode = ({ onNavigate }) => {
                   <div className="mt-1">{formatDate(selectedCode.expiresAt)}</div>
                 </div>
                 <div>
-                  <span className="font-medium text-gray-600">Đã s��� d��ng:</span>
+                  <span className="font-medium text-gray-600">Đã s��� dụng:</span>
                   <div className="mt-1">{selectedCode.usageCount}/{selectedCode.maxUsage}</div>
                 </div>
                 <div>
