@@ -23,20 +23,22 @@ export const MatchProvider = ({ children }) => {
       name: "ĐỘI-A",
       score: 0,
       logo: null,
-      scoreSet: 0 // For pickleball
+      scoreSet: 0, // For pickleball
+      teamAScorers: [] // Danh sách cầu thủ ghi bàn
     },
     teamB: {
       name: "ĐỘI-B",
       score: 0,
       logo: null,
-      scoreSet: 0 
+      scoreSet: 0,
+      teamBScorers: [] // Danh sách cầu thủ ghi bàn
     },
     tournament: "",
     stadium: "",
     matchDate: "",
     liveText: "",
     matchTitle: "",
-    typeMatch: "soccer" 
+    typeMatch: "soccer"
   });
 
   // State cho thống kê trận đấu
@@ -320,7 +322,7 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật đơn vị live
+    // Lắng nghe c���p nhật đơn vị live
     socketService.on('live_unit_updated', (data) => {
       console.log('📝 [MatchContext] live_unit_updated received:', data);
       if (data.liveUnit && (data.liveUnit.text)) {
