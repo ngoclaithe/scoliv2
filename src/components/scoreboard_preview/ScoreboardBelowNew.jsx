@@ -17,7 +17,6 @@ const ScoreboardBelowNew = ({
     
     const [currentType, setCurrentType] = useState(type);
 
-    // Get real data from context with fallbacks
     const currentData = {
         teamAName: matchData?.teamA?.name || "ĐỘI A",
         teamBName: matchData?.teamB?.name || "ĐỘI B",
@@ -28,15 +27,15 @@ const ScoreboardBelowNew = ({
         matchTime: matchData?.matchTime || "00:00",
         period: matchData?.period || "Chưa bắt đầu",
         status: matchData?.status || "waiting",
-        teamAKitColor: matchData?.teamAKitColor || "#FF0000",
-        teamBKitColor: matchData?.teamBKitColor || "#0000FF",
+        teamAKitColor: matchData?.teamA?.teamAKitColor || "#FF0000",
+        teamBKitColor: matchData?.teamB?.teamBKitColor || "#0000FF",
+        teamA2KitColor: matchData?.teamA?.teamA2KitColor || "#FF0000",
+        teamB2KitColor: matchData?.teamB?.teamB2KitColor || "#0000FF",
         leagueLogo: "https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/1200px-FC_Barcelona_logo.svg.png"
     };
-
-    // State for scrolling text visibility control
+    console.log("Giá trị teamAKitcolor là", currentData.teamA2KitColor);
     const [showScrollingText, setShowScrollingText] = useState(false);
 
-    // Get marquee data from context (updated via Clock Settings)
     const scrollData = {
         text: marqueeData?.text || "TRỰC TIẾP BÓNG ĐÁ",
         color: marqueeData?.color === 'white-black' ? '#FFFFFF' :
@@ -51,40 +50,33 @@ const ScoreboardBelowNew = ({
                  marqueeData?.color === 'white-green' ? '#16a34a' : "#FF0000",
         repeat: 1,
         mode: marqueeData?.mode || 'khong',
-        interval: marqueeData?.mode === 'moi-2' ? 120000 : // 2 minutes = 120 seconds
-                  marqueeData?.mode === 'moi-5' ? 300000 : // 5 minutes = 300 seconds
-                  marqueeData?.mode === 'lien-tuc' ? 30000 : 0 // liên tục = 30 seconds
+        interval: marqueeData?.mode === 'moi-2' ? 120000 : 
+                  marqueeData?.mode === 'moi-5' ? 300000 : 
+                  marqueeData?.mode === 'lien-tuc' ? 30000 : 0 
     };
 
-    // Determine if we should show match time based on status
     const showMatchTime = currentData.status === 'live' || currentData.status === 'pause';
-
-    // Update current type based on display settings
     useEffect(() => {
         if (displaySettings?.selectedSkin) {
             setCurrentType(displaySettings.selectedSkin);
         }
     }, [displaySettings?.selectedSkin]);
 
-    // Handle scrolling text visibility based on mode and timing
     useEffect(() => {
         let timer;
 
         if (scrollData.mode === 'khong') {
-            // Hide scrolling text for 'KHÔNG' mode
             setShowScrollingText(false);
         } else if (scrollData.mode === 'lien-tuc') {
-            // Show every 30 seconds for 'LIÊN TỤC' mode
             setShowScrollingText(true);
             timer = setInterval(() => {
                 setShowScrollingText(false);
-                setTimeout(() => setShowScrollingText(true), 2000); // Hide for 2 seconds then show again
+                setTimeout(() => setShowScrollingText(true), 2000); 
             }, scrollData.interval);
         } else if (scrollData.mode === 'moi-2' || scrollData.mode === 'moi-5') {
-            // Show at specified intervals for 'MỖI 2\'' and 'MỖI 5\'' modes
             timer = setInterval(() => {
                 setShowScrollingText(true);
-                setTimeout(() => setShowScrollingText(false), 5000); // Show for 5 seconds
+                setTimeout(() => setShowScrollingText(false), 5000); 
             }, scrollData.interval);
         }
 
@@ -94,8 +86,6 @@ const ScoreboardBelowNew = ({
             }
         };
     }, [scrollData.mode, scrollData.interval]);
-
-    // Hàm tính độ sáng của màu để chọn màu chữ phù hợp
     const getTextColor = (backgroundColor) => {
         const hex = backgroundColor.replace('#', '');
         const r = parseInt(hex.substr(0, 2), 16);
@@ -105,7 +95,6 @@ const ScoreboardBelowNew = ({
         return brightness > 128 ? '#000000' : '#FFFFFF';
     };
 
-    // Get logo shape from display settings, default to square to preserve original logo shape
     const logoShape = displaySettings?.logoShape || "square";
 
     const renderScoreboardType1 = () => (
@@ -137,7 +126,6 @@ const ScoreboardBelowNew = ({
                     </div>
                 </div>
 
-                {/* Thời gian trận đấu (nếu có) */}
                 {showMatchTime && (
                     <div className="bg-black text-white px-2 py-1 text-sm font-bold whitespace-nowrap">
                         {currentData.matchTime}
@@ -222,7 +210,6 @@ const ScoreboardBelowNew = ({
                         {currentData.teamAScore}
                     </div>
 
-                    {/* Nếu có thời gian thì hiển thị */}
                     {showMatchTime && (
                         <div className="bg-yellow-400 text-black text-xs font-bold rounded m-0"
                             style={{
@@ -265,7 +252,6 @@ const ScoreboardBelowNew = ({
                     </div>
                 </div>
 
-                {/* Logo Team A – đè lên phía ngoài teamAName */}
                 <div
                     className="absolute z-20"
                     style={{
@@ -291,7 +277,6 @@ const ScoreboardBelowNew = ({
                     </div>
                 </div>
 
-                {/* Logo Team B – đè lên phía ngoài teamBName */}
                 <div
                     className="absolute z-20"
                     style={{
@@ -318,7 +303,6 @@ const ScoreboardBelowNew = ({
                 </div>
             </div>
 
-            {/* Live Match Label cho Type 2 */}
             {!showMatchTime && (
                 <div className="text-center mt-2">
                     <span className="bg-green-600 text-white px-4 py-1 text-sm font-bold rounded animate-pulse">
@@ -404,7 +388,6 @@ const ScoreboardBelowNew = ({
                 />
 
                 <div className="flex items-center z-20">
-                    {/* Hình thang cân xuôi cho tên đội A */}
                     <div
                         className="text-white text-sm font-semibold relative flex items-center justify-center w-24 h-8 sm:w-32 md:w-40 z-10 -mr-6"
                         style={{
@@ -414,7 +397,6 @@ const ScoreboardBelowNew = ({
                     >
                         <span className="truncate text-center">{currentData.teamAName}</span>
                     </div>
-                    {/* Màu áo đội A - hình bình hành khít vào hình thang xuôi */}
                     <div
                         className="w-12 h-8 -ml-3 z-0 mr-2.5"
                         style={{
@@ -424,7 +406,6 @@ const ScoreboardBelowNew = ({
                     />
                 </div>
 
-                {/* Hình thang cân xuôi cho phần tỉ số */}
                 <div className="flex flex-col items-center -mr-12 -ml-12">
                     <div
                         className="hex-logo flex items-center justify-center sm:px-3 md:px-4 relative py-1"
@@ -438,7 +419,6 @@ const ScoreboardBelowNew = ({
                             {currentData.teamAScore}
                         </div>
 
-                        {/* Tournament/League Logo - đặt vào container riêng để không bị cắt */}
                         <div className="mx-2 sm:mx-3 relative" style={{ top: '-6px' }}>
                             <DisplayLogo
                                 logos={[getFullLogoUrl(tournamentLogo?.url_logo?.[0]) || currentData.leagueLogo]}
@@ -459,7 +439,6 @@ const ScoreboardBelowNew = ({
                 </div>
 
                 <div className="flex items-center z-20">
-                    {/* Màu áo đội B - hình bình hành khít vào hình thang xuôi */}
                     <div
                         className="w-12 h-8 -mr-3 z-0 ml-2.5"
                         style={{
@@ -467,7 +446,6 @@ const ScoreboardBelowNew = ({
                             clipPath: 'polygon(45% 0%, 100% 0%, 55% 100%, 0% 100%)'
                         }}
                     />
-                    {/* Hình thang cân xuôi cho tên đội B */}
                     <div
                         className="text-white text-sm font-semibold relative flex items-center justify-center w-24 h-8 sm:w-32 md:w-40 z-10 -ml-6"
                         style={{
@@ -504,7 +482,6 @@ const ScoreboardBelowNew = ({
         <div className="w-full h-screen relative overflow-hidden">
             {/* Container for all elements */}
             <div className="w-full h-full relative bg-transparent">
-                {/* ScoLiv Logo - Responsive cho desktop và mobile */}
                 <div className="absolute bottom-4 left-4 sm:left-16 z-40">
                     <img
                         src="/images/basic/ScoLivLogo.png"
@@ -523,7 +500,6 @@ const ScoreboardBelowNew = ({
                     </div>
                 </div>
 
-                {/* Scrolling Text - only show if mode is not 'khong' and visibility is true */}
                 {scrollData.mode !== 'khong' && showScrollingText && (
                     <div className="absolute bottom-0 left-0 w-full z-20 overflow-hidden" style={{ backgroundColor: scrollData.bgColor }}>
                         <div
