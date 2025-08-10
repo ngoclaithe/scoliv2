@@ -58,7 +58,8 @@ export const PublicMatchProvider = ({ children }) => {
       logo: null,
       teamAKitColor: "#FF0000",
       teamBKitColor: "#0000FF",
-      scoreSet: 0 
+      scoreSet: 0,
+      teamAScorers: [],
     },
     teamB: {
       name: "ĐỘI-B",
@@ -66,7 +67,8 @@ export const PublicMatchProvider = ({ children }) => {
       logo: null,
       teamA2KitColor: "#FF0000",
       teamB2KitColor: "#0000FF",
-      scoreSet: 0 
+      scoreSet: 0,
+      teamBScorers: [], 
     },
     matchTime: "00:00",
     period: "Chưa bắt đầu",

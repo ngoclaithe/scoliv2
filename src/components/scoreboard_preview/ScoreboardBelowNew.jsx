@@ -24,6 +24,8 @@ const ScoreboardBelowNew = ({
         teamBLogo: matchData?.teamB?.logo || "https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/1200px-FC_Barcelona_logo.svg.png",
         teamAScore: matchData?.teamA?.score || 0,
         teamBScore: matchData?.teamB?.score || 0,
+        teamAScorers: matchData?.teamA?.teamAScorers || [],
+        teamBScorers: matchData?.teamB?.teamBScorers || [],
         matchTime: matchData?.matchTime || "00:00",
         period: matchData?.period || "Chưa bắt đầu",
         status: matchData?.status || "waiting",
@@ -31,9 +33,9 @@ const ScoreboardBelowNew = ({
         teamBKitColor: matchData?.teamB?.teamBKitColor || "#0000FF",
         teamA2KitColor: matchData?.teamA?.teamA2KitColor || "#FF0000",
         teamB2KitColor: matchData?.teamB?.teamB2KitColor || "#0000FF",
-        leagueLogo: "https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/1200px-FC_Barcelona_logo.svg.png"
+        leagueLogo: "https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/1200px-FC_Barcelona_logo.svg.png",
+        typeMatch: matchData?.typeMatch || "soccer"
     };
-    console.log("Giá trị teamAKitcolor là", currentData.teamA2KitColor);
     const [showScrollingText, setShowScrollingText] = useState(false);
 
     const scrollData = {
@@ -96,7 +98,7 @@ const ScoreboardBelowNew = ({
     };
 
     const logoShape = displaySettings?.logoShape || "square";
-
+    
     const renderScoreboardType1 = () => (
         <div className="flex flex-col items-center">
             <div className="flex items-center justify-center w-full px-2 gap-0">
@@ -108,7 +110,6 @@ const ScoreboardBelowNew = ({
                     type_play={logoShape}
                     logoSize="w-14 h-14"
                 />
-
                 {/* Score + team A name */}
                 <div className="flex items-center gap-0">
                     <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 min-w-[2.2rem] text-center"
@@ -123,15 +124,29 @@ const ScoreboardBelowNew = ({
                             className="w-full h-3"
                             style={{ backgroundColor: currentData.teamAKitColor }}
                         />
+                        {/* Goal scorers for Team A */}
+                        {currentData.teamAScorers && currentData.teamAScorers.length > 0 && (
+                            <div className="w-full text-[10px] text-gray-700 px-1 py-0.5 text-center leading-tight overflow-hidden max-h-[40px]">
+                                {currentData.teamAScorers.map((scorer, index) => (
+                                    <div key={index} className="truncate">
+                                        {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
+                                    </div>
+                                )).slice(0, 4)}
+                            </div>
+                        )}
+                        {/* Fouls for Team A (futsal only) */}
+                        {currentData.sportType === 'futsal' && currentData.teamAFouls !== undefined && (
+                            <div className="w-full text-[10px] text-red-600 px-1 py-0.5 text-center leading-tight">
+                                Lỗi: {currentData.teamAFouls}
+                            </div>
+                        )}
                     </div>
                 </div>
-
                 {showMatchTime && (
                     <div className="bg-black text-white px-2 py-1 text-sm font-bold whitespace-nowrap">
                         {currentData.matchTime}
                     </div>
                 )}
-
                 {/* Score + team B name */}
                 <div className="flex items-center gap-0">
                     <div className="container-name-color-right flex flex-col items-center w-[90px]">
@@ -142,13 +157,28 @@ const ScoreboardBelowNew = ({
                             className="w-full h-3"
                             style={{ backgroundColor: currentData.teamBKitColor }}
                         />
+                        {/* Goal scorers for Team B */}
+                        {currentData.teamBScorers && currentData.teamBScorers.length > 0 && (
+                            <div className="w-full text-[10px] text-gray-700 px-1 py-0.5 text-center leading-tight overflow-hidden max-h-[40px]">
+                                {currentData.teamBScorers.map((scorer, index) => (
+                                    <div key={index} className="truncate">
+                                        {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
+                                    </div>
+                                )).slice(0, 4)}
+                            </div>
+                        )}
+                        {/* Fouls for Team B (futsal only) */}
+                        {currentData.sportType === 'futsal' && currentData.teamBFouls !== undefined && (
+                            <div className="w-full text-[10px] text-red-600 px-1 py-0.5 text-center leading-tight">
+                                Lỗi: {currentData.teamBFouls}
+                            </div>
+                        )}
                     </div>
                     <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 min-w-[2.2rem] text-center"
                         style={{ clipPath: 'polygon(0% 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 0% 100%)' }}>
                         {currentData.teamBScore}
                     </div>
                 </div>
-
                 {/* Logo team B */}
                 <DisplayLogo
                     logos={[currentData.teamBLogo]}
@@ -158,7 +188,6 @@ const ScoreboardBelowNew = ({
                     logoSize="w-14 h-14"
                 />
             </div>
-
             {/* Live Match Label cho Type 1 */}
             {!showMatchTime && (
                 <div className="text-center mt-2">
