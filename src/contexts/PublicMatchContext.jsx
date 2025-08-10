@@ -24,7 +24,6 @@ export const PublicMatchProvider = ({ children }) => {
   // Kiểm tra xem có phải dynamic route với nhiều tham số không
   const hasUrlParams = useCallback(() => {
     const {
-      accessCode,
       location: routeLocation,
       matchTitle,
       liveText,
