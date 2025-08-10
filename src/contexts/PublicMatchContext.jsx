@@ -624,16 +624,13 @@ export const PublicMatchProvider = ({ children }) => {
       if (data.target === 'display' && data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
         const { audioData, mimeType } = data.payload;
         try {
-          let isValidData = false;
           let audioBlob = null;
-    
+
           if (audioData instanceof ArrayBuffer && audioData.byteLength > 0) {
             audioBlob = new Blob([audioData], { type: mimeType || 'audio/webm' });
-            isValidData = true;
           } else if (Array.isArray(audioData) && audioData.length > 0) {
             const uint8Array = new Uint8Array(audioData);
             audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
-            isValidData = true;
           } else {
             return;
           }
