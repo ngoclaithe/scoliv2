@@ -795,6 +795,11 @@ export const PublicMatchProvider = ({ children }) => {
             setLineupData(state.lineupData);
           }
 
+          if (state.futsalErrors) {
+            console.log('🚫 [PublicMatchContext] Updating futsalErrors from join_roomed:', state.futsalErrors);
+            setFutsalErrors(prev => ({ ...prev, ...state.futsalErrors }));
+          }
+
           if (state.sponsors) {
             console.log('🏢 [PublicMatchContext] Updating sponsors from join_roomed:', state.sponsors);
             setSponsors(prev => ({ ...prev, sponsors: state.sponsors }));
