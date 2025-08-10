@@ -108,7 +108,11 @@ const MatchStatsEdit = ({
     const scorer = goalScorers[team];
     if (scorer.player.trim() && scorer.minute.trim()) {
       // Emit socket để thêm cầu thủ ghi bàn
-      console.log(`Thêm cầu thủ ghi bàn ${team}:`, scorer);
+      onUpdateGoalScorers(team, {
+        player: scorer.player.trim(),
+        minute: parseInt(scorer.minute)
+      });
+
       // Reset input
       setGoalScorers(prev => ({
         ...prev,
