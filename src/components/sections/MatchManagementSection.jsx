@@ -633,6 +633,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           futsalErrors={futsalErrors}
           onUpdateStats={updateStats}
           onUpdateFutsalErrors={updateFutsalErrors}
+          onUpdateGoalScorers={updateGoalScorers}
           onUpdateView={updateView}
           onPlayAudio={playAudioForAction}
         />
