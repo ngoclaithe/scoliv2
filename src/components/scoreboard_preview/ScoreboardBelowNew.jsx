@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { getFullLogoUrl } from '../../utils/logoUtils';
 import DisplayLogo from '../common/DisplayLogo';
+import { FoulsDisplay } from '../../utils/futsalUtils';
 
 const ScoreboardBelowNew = ({
     type = 1
@@ -378,7 +379,7 @@ const ScoreboardBelowNew = ({
                     )}
                     {!showMatchTime && (
                         <div className="bg-green-600 text-white px-2 py-0.5 text-[10px] font-medium rounded-sm mt-1 animate-pulse whitespace-nowrap">
-                            ● TRỰC TIẾP
+                            ● TRỰC TI��P
                         </div>
                     )}
                 </div>
