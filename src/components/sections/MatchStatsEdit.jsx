@@ -6,6 +6,7 @@ const MatchStatsEdit = ({
   futsalErrors,
   onUpdateStats,
   onUpdateFutsalErrors,
+  onUpdateGoalScorers,
   onUpdateView,
   onPlayAudio
 }) => {
