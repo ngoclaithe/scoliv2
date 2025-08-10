@@ -7,8 +7,10 @@ import { useAuth } from '../../contexts/AuthContext';
 import AccessCodeAPI from '../../API/apiAccessCode';
 import PaymentAccessCodeAPI from '../../API/apiPaymentAccessCode';
 import InfoPaymentAPI from '../../API/apiInfoPayment';
-import { PlusIcon, ClockIcon, UserIcon } from '@heroicons/react/24/outline';
 import UserAPI from '../../API/apiUser';
+import AccessCodeList from './AccessCodeList';
+import ActivityList from './ActivityList';
+import UserProfileSection from './UserProfileSection';
 
 const ManageAccessCode = ({ onNavigate }) => {
   const { user, logout, enterMatchCode, loading: authLoading } = useAuth();
@@ -115,41 +117,40 @@ const ManageAccessCode = ({ onNavigate }) => {
   const loadActivities = async () => {
     try {
       setLoading(true);
-      // Tạo dữ liệu hoạt động giả lập vì user không có quyền truy cập getUsers
       const mockActivities = [
         {
           id: '1',
           type: 'code_created',
           description: 'Tạo mã truy cập mới cho bóng đá',
-          timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(), // 5 phút trước
+          timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
           details: { code: 'SOCCER123' }
         },
         {
           id: '2',
           type: 'code_used',
           description: 'Sử dụng mã truy cập để vào trận',
-          timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 phút trước
+          timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
           details: { code: 'FUTSAL456' }
         },
         {
           id: '3',
           type: 'profile_updated',
           description: 'Cập nhật thông tin tài khoản',
-          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 giờ trước
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
           details: { field: 'name' }
         },
         {
           id: '4',
           type: 'payment_completed',
           description: 'Thanh toán mã truy cập thành công',
-          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // 1 ngày trước
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
           details: { amount: '10000 VNĐ' }
         },
         {
           id: '5',
           type: 'login',
           description: 'Đăng nhập vào hệ thống',
-          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(), // 2 ngày trước
+          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
           details: { device: 'Chrome Browser' }
         }
       ];
@@ -166,7 +167,6 @@ const ManageAccessCode = ({ onNavigate }) => {
   const loadCurrentUser = async () => {
     try {
       setLoading(true);
-      // Sử dụng thông tin user từ AuthContext thay vì gọi API
       if (user) {
         setCurrentUser(user);
         setProfileData({
@@ -174,7 +174,6 @@ const ManageAccessCode = ({ onNavigate }) => {
           email: user.email || ''
         });
       } else {
-        // Tạo user giả lập nếu không có user trong context
         const mockUser = {
           id: '1',
           name: 'Người dùng',
@@ -190,7 +189,6 @@ const ManageAccessCode = ({ onNavigate }) => {
       }
     } catch (error) {
       console.error('Error loading current user:', error);
-      // Fallback user
       const fallbackUser = {
         id: '1',
         name: 'Người dùng',
@@ -235,7 +233,6 @@ const ManageAccessCode = ({ onNavigate }) => {
         return;
       }
       setLoading(true);
-      // Giả lập API change password
       setShowChangePasswordModal(false);
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
       console.log('Đổi mật khẩu thành công!');
@@ -244,48 +241,6 @@ const ManageAccessCode = ({ onNavigate }) => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleString('vi-VN');
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'active':
-        return 'text-green-600 bg-green-100';
-      case 'used':
-        return 'text-yellow-600 bg-yellow-100';
-      case 'expired':
-        return 'text-red-600 bg-red-100';
-      case 'inactive':
-        return 'text-gray-600 bg-gray-100';
-      default:
-        return 'text-gray-600 bg-gray-100';
-    }
-  };
-
-  const getStatusText = (status) => {
-    switch (status) {
-      case 'active': return '🟢 Sẵn sàng';
-      case 'expired': return '🔴 Hết hạn';
-      case 'inactive': return '⚪ Chưa kích hoạt';
-      case 'used': return '🟡 Đang sử dụng';
-      default: return '❓ Không xác định';
-    }
-  };
-
-  const generateSepayQRUrl = (paymentData) => {
-    const baseUrl = 'https://qr.sepay.vn/img';
-    const params = new URLSearchParams({
-      acc: paymentData.accountNumber,
-      name: paymentData.name,
-      bank: paymentData.bank,
-      amount: paymentData.amount,
-      des: paymentData.code_pay,
-      template: 'compact'
-    });
-    return `${baseUrl}?${params.toString()}`;
   };
 
   const handlePurchaseCode = async (accessCode) => {
@@ -442,375 +397,53 @@ const ManageAccessCode = ({ onNavigate }) => {
         {/* Tab content */}
         <div>
           {activeTab === 'list' && (
-            <div>
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                <h2 className="text-2xl font-bold text-gray-900">Quản lý mã truy cập</h2>
-            <div className="flex flex-wrap gap-2 w-full sm:w-auto">
-              <Button
-                onClick={() => handleCreateCode('soccer')}
-                disabled={createLoading}
-                className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
-              >
-                <PlusIcon className="h-5 w-5" />
-                Bóng đá
-              </Button>
-              <Button
-                onClick={() => handleCreateCode('futsal')}
-                disabled={createLoading}
-                className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition-colors"
-              >
-                <PlusIcon className="h-5 w-5" />
-                Futsal
-              </Button>
-              <Button
-                onClick={() => handleCreateCode('pickleball')}
-                disabled={createLoading}
-                className="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md transition-colors"
-              >
-                <PlusIcon className="h-5 w-5" />
-                Pickleball
-              </Button>
-            </div>
-          </div>
-
-          <div className="bg-white shadow rounded-lg overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Mã / Tên
-                    </th>
-                    <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden sm:table-cell">
-                      Trạng thái
-                    </th>
-                    <th className="px-2 sm:px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Thao tác
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {codes.map((code) => (
-                    <tr key={code.id} className="hover:bg-gray-50">
-                      <td className="px-2 sm:px-4 py-3 whitespace-nowrap">
-                        <div>
-                          <div className="text-sm font-medium text-gray-900 font-mono bg-gray-100 px-2 py-1 rounded inline-block">
-                            {code.code}
-                          </div>
-                          <div className="text-xs text-gray-600 mt-1">{code.name}</div>
-                          {/* Show status on mobile */}
-                          <div className="sm:hidden mt-1">
-                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(code.status)}`}>
-                              {getStatusText(code.status)}
-                            </span>
-                          </div>
-                        </div>
-                      </td>
-                      {/* Hide status column on mobile */}
-                      <td className="px-2 sm:px-4 py-3 whitespace-nowrap hidden sm:table-cell">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(code.status)}`}>
-                          {getStatusText(code.status)}
-                        </span>
-                      </td>
-                      <td className="px-2 sm:px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
-                        <div className="flex flex-col sm:flex-row gap-1 sm:gap-2 justify-end">
-                          {/* Quick Enter Button */}
-                          {onNavigate && (code.status === 'active' || code.status === 'used') && (
-                            <button
-                              onClick={() => handleQuickEnter(code.code)}
-                              className="text-purple-600 hover:text-purple-900 bg-purple-50 hover:bg-purple-100 px-2 py-1 rounded text-xs transition-colors"
-                              title="Vào trận nhanh với mã này"
-                            >
-                              🚀 Vào trận
-                            </button>
-                          )}
-                          {/* Purchase Button for inactive codes */}
-                          {code.status === 'inactive' && (
-                            <button
-                              onClick={() => handlePurchaseCode(code.code)}
-                              disabled={paymentLoading}
-                              className="text-green-600 hover:text-green-900 bg-green-50 hover:bg-green-100 px-2 py-1 rounded text-xs transition-colors disabled:opacity-50"
-                              title="Mua mã truy cập này"
-                            >
-                              💳 Mua
-                            </button>
-                          )}
-                          <button
-                            onClick={() => {
-                              setSelectedCode(code);
-                              setShowDetailModal(true);
-                            }}
-                            className="text-blue-600 hover:text-blue-900 hover:bg-blue-50 px-2 py-1 rounded text-xs transition-colors"
-                          >
-                            👁️
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Pagination */}
-            {pagination.pages > 1 && (
-              <div className="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6 mt-6 rounded-lg shadow">
-                <div className="flex-1 flex justify-between sm:hidden">
-                  <button
-                    onClick={() => loadCodes(pagination.page - 1)}
-                    disabled={pagination.page === 1}
-                    className="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
-                  >
-                    Trước
-                  </button>
-                  <button
-                    onClick={() => loadCodes(pagination.page + 1)}
-                    disabled={pagination.page === pagination.pages}
-                    className="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50"
-                  >
-                    Sau
-                  </button>
-                </div>
-                <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                  <div>
-                    <p className="text-sm text-gray-700">
-                      Hiển thị <span className="font-medium">{((pagination.page - 1) * pagination.limit) + 1}</span> đến{' '}
-                      <span className="font-medium">{Math.min(pagination.page * pagination.limit, pagination.total)}</span> trong{' '}
-                      <span className="font-medium">{pagination.total}</span> kết quả
-                    </p>
-                  </div>
-                  <div>
-                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
-                      {[...Array(pagination.pages)].map((_, i) => (
-                        <button
-                          key={i + 1}
-                          onClick={() => loadCodes(i + 1)}
-                          className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${pagination.page === i + 1
-                              ? 'z-10 bg-purple-50 border-purple-500 text-purple-600'
-                              : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50'
-                            }`}
-                        >
-                          {i + 1}
-                        </button>
-                      ))}
-                    </nav>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-            </div>
+            <AccessCodeList
+              codes={codes}
+              pagination={pagination}
+              loading={loading}
+              createLoading={createLoading}
+              paymentLoading={paymentLoading}
+              selectedCode={selectedCode}
+              showDetailModal={showDetailModal}
+              setShowDetailModal={setShowDetailModal}
+              setSelectedCode={setSelectedCode}
+              showPaymentModal={showPaymentModal}
+              setShowPaymentModal={setShowPaymentModal}
+              paymentData={paymentData}
+              setPaymentData={setPaymentData}
+              onCreateCode={handleCreateCode}
+              onPurchaseCode={handlePurchaseCode}
+              onQuickEnter={handleQuickEnter}
+              onNavigate={onNavigate}
+              onLoadCodes={loadCodes}
+            />
           )}
 
           {activeTab === 'activities' && (
-            <div>
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                <h2 className="text-2xl font-bold text-gray-900">Hoạt động mới</h2>
-              </div>
-              <div className="bg-white shadow rounded-lg overflow-hidden">
-                {loading ? (
-                  <div className="flex items-center justify-center h-64">
-                    <Loading size="lg" />
-                  </div>
-                ) : (
-                  <div className="divide-y divide-gray-200">
-                    {activities.map((activity) => (
-                      <div key={activity.id} className="p-6 hover:bg-gray-50">
-                        <div className="flex items-start space-x-3">
-                          <div className="flex-shrink-0">
-                            {activity.type === 'code_created' && <PlusIcon className="h-5 w-5 text-green-500" />}
-                            {activity.type === 'code_used' && <UserIcon className="h-5 w-5 text-blue-500" />}
-                            {activity.type === 'profile_updated' && <UserIcon className="h-5 w-5 text-yellow-500" />}
-                            {activity.type === 'payment_completed' && <ClockIcon className="h-5 w-5 text-green-600" />}
-                            {activity.type === 'login' && <ClockIcon className="h-5 w-5 text-gray-500" />}
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <p className="text-sm font-medium text-gray-900">
-                                  {activity.description}
-                                </p>
-                                {activity.details && (
-                                  <p className="text-xs text-gray-500 mt-1">
-                                    {activity.details.code && `Mã: ${activity.details.code}`}
-                                    {activity.details.amount && `Số tiền: ${activity.details.amount}`}
-                                    {activity.details.device && `Thiết bị: ${activity.details.device}`}
-                                    {activity.details.field && `Trường: ${activity.details.field}`}
-                                  </p>
-                                )}
-                              </div>
-                              <div className="text-xs text-gray-500">
-                                {new Date(activity.timestamp).toLocaleString('vi-VN')}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
+            <ActivityList
+              activities={activities}
+              loading={loading}
+            />
           )}
 
           {activeTab === 'account' && (
-            <div>
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                <h2 className="text-2xl font-bold text-gray-900">Thông tin tài khoản</h2>
-              </div>
-              {loading ? (
-                <div className="flex items-center justify-center h-64">
-                  <Loading size="lg" />
-                </div>
-              ) : currentUser ? (
-                <div className="space-y-6">
-                  {/* Profile Card */}
-                  <div className="bg-white shadow rounded-lg">
-                    <div className="px-6 py-6">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-20 w-20">
-                          <div className="h-20 w-20 rounded-full bg-gray-300 flex items-center justify-center">
-                            <UserIcon className="h-12 w-12 text-gray-600" />
-                          </div>
-                        </div>
-                        <div className="ml-6 flex-grow">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <h3 className="text-lg font-medium text-gray-900">{currentUser.name || 'Chưa có tên'}</h3>
-                              <p className="text-sm text-gray-500">{currentUser.email}</p>
-                            </div>
-                            <div className="flex space-x-3">
-                              <Button
-                                variant="outline"
-                                onClick={() => setShowEditProfileModal(true)}
-                                className="text-sm"
-                              >
-                                Chỉnh sửa
-                              </Button>
-                              <Button
-                                onClick={() => setShowChangePasswordModal(true)}
-                                className="text-sm"
-                              >
-                                Đổi mật khẩu
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Account Details */}
-                  <div className="bg-white shadow rounded-lg">
-                    <div className="px-6 py-6">
-                      <h3 className="text-lg font-medium text-gray-900 mb-4">Chi tiết tài khoản</h3>
-                      <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
-                        <div>
-                          <dt className="text-sm font-medium text-gray-500">Tên đầy đủ</dt>
-                          <dd className="mt-1 text-sm text-gray-900">{currentUser.name || 'Chưa cập nhật'}</dd>
-                        </div>
-                        <div>
-                          <dt className="text-sm font-medium text-gray-500">Email</dt>
-                          <dd className="mt-1 text-sm text-gray-900">{currentUser.email}</dd>
-                        </div>
-                        <div>
-                          <dt className="text-sm font-medium text-gray-500">Vai trò</dt>
-                          <dd className="mt-1 text-sm text-gray-900">
-                            {currentUser.role === 'admin' ? 'Quản tr��� viên' : 'Người dùng'}
-                          </dd>
-                        </div>
-                        <div>
-                          <dt className="text-sm font-medium text-gray-500">Ngày tạo</dt>
-                          <dd className="mt-1 text-sm text-gray-900">
-                            {new Date(currentUser.createdAt).toLocaleDateString('vi-VN')}
-                          </dd>
-                        </div>
-                      </dl>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <p className="text-gray-500">Không thể tải thông tin tài khoản</p>
-                </div>
-              )}
-            </div>
+            <UserProfileSection
+              currentUser={currentUser}
+              loading={loading}
+              showEditProfileModal={showEditProfileModal}
+              setShowEditProfileModal={setShowEditProfileModal}
+              showChangePasswordModal={showChangePasswordModal}
+              setShowChangePasswordModal={setShowChangePasswordModal}
+              profileData={profileData}
+              setProfileData={setProfileData}
+              passwordData={passwordData}
+              setPasswordData={setPasswordData}
+              onUpdateProfile={handleUpdateProfile}
+              onChangePassword={handleChangePassword}
+            />
           )}
         </div>
       </main>
-
-      {/* Code Detail Modal */}
-      {selectedCode && (
-        <Modal
-          isOpen={showDetailModal}
-          onClose={() => {
-            setShowDetailModal(false);
-            setSelectedCode(null);
-          }}
-          title="Chi tiết mã truy cập"
-          size="lg"
-        >
-          <div className="space-y-4">
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <div className="text-center mb-4">
-                <div className="text-2xl font-mono font-bold text-purple-600 bg-white px-4 py-2 rounded border inline-block">
-                  {selectedCode.code}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="font-medium text-gray-600">Tên:</span>
-                  <div className="mt-1">{selectedCode.name}</div>
-                </div>
-                <div>
-                  <span className="font-medium text-gray-600">Trạng thái:</span>
-                  <div className="mt-1">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(selectedCode.status)}`}>
-                      {getStatusText(selectedCode.status)}
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <span className="font-medium text-gray-600">Tạo lúc:</span>
-                  <div className="mt-1">{formatDate(selectedCode.createdAt)}</div>
-                </div>
-                <div>
-                  <span className="font-medium text-gray-600">Hết hạn:</span>
-                  <div className="mt-1">{formatDate(selectedCode.expiresAt)}</div>
-                </div>
-                <div>
-                  <span className="font-medium text-gray-600">Đã s��� dụng:</span>
-                  <div className="mt-1">{selectedCode.usageCount}/{selectedCode.maxUsage}</div>
-                </div>
-                <div>
-                  <span className="font-medium text-gray-600">Sử dụng cuối:</span>
-                  <div className="mt-1">{selectedCode.lastUsed ? formatDate(selectedCode.lastUsed) : 'Chưa sử dụng'}</div>
-                </div>
-              </div>
-
-              {selectedCode.description && (
-                <div className="mt-4">
-                  <span className="font-medium text-gray-600">Mô tả:</span>
-                  <div className="mt-1 text-gray-800">{selectedCode.description}</div>
-                </div>
-              )}
-            </div>
-
-            <div className="flex justify-end space-x-3">
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setShowDetailModal(false);
-                  setSelectedCode(null);
-                }}
-              >
-                Đóng
-              </Button>
-            </div>
-          </div>
-        </Modal>
-      )}
 
       {/* Code Entry Modal để vào Home */}
       <Modal
@@ -864,233 +497,6 @@ const ManageAccessCode = ({ onNavigate }) => {
             </Button>
           </div>
         </form>
-      </Modal>
-
-      {/* Payment Modal */}
-      <Modal
-        isOpen={showPaymentModal}
-        onClose={() => {
-          setShowPaymentModal(false);
-          setPaymentData(null);
-        }}
-        title="Thanh toán mã truy cập"
-        size="lg"
-      >
-        {paymentData && (
-          <div className="space-y-6">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <span className="text-2xl">💳</span>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                Thanh toán cho mã: {paymentData.accessCode}
-              </h3>
-              <p className="text-sm text-gray-600">
-                Mã giao dịch: <span className="font-mono font-bold">{paymentData.code_pay}</span>
-              </p>
-            </div>
-
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* QR Code using Sepay */}
-                <div className="text-center">
-                  <h4 className="font-semibold text-gray-900 mb-3">Quét mã QR để thanh toán</h4>
-                  <div className="bg-white p-4 rounded-lg inline-block shadow-sm border-2 border-gray-200">
-                    <img
-                      src={generateSepayQRUrl(paymentData)}
-                      alt="Sepay QR Code"
-                      className="mx-auto"
-                      style={{ width: '220px', height: '220px' }}
-                      onError={(e) => {
-                        console.error('Error loading Sepay QR code');
-                        e.target.style.display = 'none';
-                      }}
-                    />
-                  </div>
-                  <p className="text-xs text-gray-500 mt-2">
-                    Quét bằng app ngân hàng Việt Nam
-                  </p>
-                </div>
-
-                {/* Payment Info */}
-                <div className="space-y-3">
-                  <h4 className="font-semibold text-gray-900 mb-3">Thông tin chuyển khoản</h4>
-
-                  <div className="bg-white p-3 rounded border">
-                    <div className="text-sm text-gray-600">Ngân hàng</div>
-                    <div className="font-semibold">{paymentData.bank}</div>
-                  </div>
-
-                  <div className="bg-white p-3 rounded border">
-                    <div className="text-sm text-gray-600">Số tài khoản</div>
-                    <div className="font-mono font-semibold">{paymentData.accountNumber}</div>
-                  </div>
-
-                  {paymentData?.name && (
-                    <div className="bg-white p-3 rounded border">
-                      <div className="text-sm text-gray-600">Chủ tài khoản</div>
-                      <div className="font-semibold">{paymentData.name}</div>
-                    </div>
-                  )}
-
-                  <div className="bg-white p-3 rounded border">
-                    <div className="text-sm text-gray-600">Số tiền</div>
-                    <div className="font-semibold text-green-600">
-                      {parseInt(paymentData.amount).toLocaleString('vi-VN')} VNĐ
-                    </div>
-                  </div>
-
-                  <div className="bg-white p-3 rounded border">
-                    <div className="text-sm text-gray-600">Nội dung chuyển khoản</div>
-                    <div className="font-mono text-sm break-all">
-                      {paymentData.code_pay}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <div className="flex items-start space-x-3">
-                <div className="text-blue-500 mt-0.5">
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                  </svg>
-                </div>
-                <div className="text-sm text-blue-800">
-                  <p className="font-semibold mb-1">Lưu ý quan trọng:</p>
-                  <ul className="list-disc list-inside space-y-1">
-                    <li>Vui lòng chuyển khoản đúng số tiền và nội dung</li>
-                    <li>Mã truy cập sẽ được kích hoạt sau khi thanh toán thành công</li>
-                    <li>Thời gian xử lý: 1-5 phút sau khi chuyển khoản</li>
-                    <li>Nếu có vấn đề, vui lòng liên hệ hỗ trợ với mã giao dịch: {paymentData.code_pay}</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-center space-x-3">
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setShowPaymentModal(false);
-                  setPaymentData(null);
-                }}
-              >
-                Đóng
-              </Button>
-              <Button
-                variant="primary"
-                onClick={() => {
-                  const paymentInfo = `Ngân hàng: ${paymentData.bankName}\nSố TK: ${paymentData.bankAccountNumber}\nSố tiền: ${parseInt(paymentData.amount).toLocaleString('vi-VN')} VNĐ\nNội dung: ${paymentData.code_pay}`;
-                  navigator.clipboard.writeText(paymentInfo).then(() => {
-                    console.log('Đã sao chép thông tin thanh toán!');
-                  }).catch(() => {
-                    console.error('Không thể sao chép. Vui lòng sao chép thủ công.');
-                  });
-                }}
-                className="bg-green-600 hover:bg-green-700"
-              >
-                📋 Sao chép thông tin
-              </Button>
-            </div>
-          </div>
-        )}
-      </Modal>
-
-      {/* Edit Profile Modal */}
-      <Modal
-        isOpen={showEditProfileModal}
-        onClose={() => {
-          setShowEditProfileModal(false);
-          setProfileData({
-            name: currentUser?.name || '',
-            email: currentUser?.email || ''
-          });
-        }}
-        title="Chỉnh sửa thông tin"
-      >
-        <div className="space-y-4">
-          <Input
-            label="Tên đầy đủ"
-            type="text"
-            value={profileData.name}
-            onChange={(e) => setProfileData({...profileData, name: e.target.value})}
-            placeholder="Nhập tên đầy đủ"
-          />
-          <Input
-            label="Email"
-            type="email"
-            value={profileData.email}
-            onChange={(e) => setProfileData({...profileData, email: e.target.value})}
-            placeholder="Nhập địa chỉ email"
-          />
-        </div>
-        <div className="mt-6 flex justify-end space-x-3">
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setShowEditProfileModal(false);
-              setProfileData({
-                name: currentUser?.name || '',
-                email: currentUser?.email || ''
-              });
-            }}
-          >
-            Hủy
-          </Button>
-          <Button onClick={handleUpdateProfile} disabled={loading}>
-            {loading ? 'Đang cập nhật...' : 'Cập nhật'}
-          </Button>
-        </div>
-      </Modal>
-
-      {/* Change Password Modal */}
-      <Modal
-        isOpen={showChangePasswordModal}
-        onClose={() => {
-          setShowChangePasswordModal(false);
-          setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-        }}
-        title="Đổi mật khẩu"
-      >
-        <div className="space-y-4">
-          <Input
-            label="Mật khẩu hiện tại"
-            type="password"
-            value={passwordData.currentPassword}
-            onChange={(e) => setPasswordData({...passwordData, currentPassword: e.target.value})}
-            placeholder="Nhập mật khẩu hiện tại"
-          />
-          <Input
-            label="Mật khẩu mới"
-            type="password"
-            value={passwordData.newPassword}
-            onChange={(e) => setPasswordData({...passwordData, newPassword: e.target.value})}
-            placeholder="Nhập mật khẩu mới (tối thiểu 6 ký tự)"
-          />
-          <Input
-            label="Xác nhận mật khẩu mới"
-            type="password"
-            value={passwordData.confirmPassword}
-            onChange={(e) => setPasswordData({...passwordData, confirmPassword: e.target.value})}
-            placeholder="Nhập lại mật kh��u mới"
-          />
-        </div>
-        <div className="mt-6 flex justify-end space-x-3">
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setShowChangePasswordModal(false);
-              setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-            }}
-          >
-            Hủy
-          </Button>
-          <Button onClick={handleChangePassword} disabled={loading}>
-            {loading ? 'Đang đổi...' : 'Đổi mật khẩu'}
-          </Button>
-        </div>
       </Modal>
     </div>
   );
