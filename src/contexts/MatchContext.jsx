@@ -798,6 +798,7 @@ export const MatchProvider = ({ children }) => {
     updatePenalty,
     updateLineup,
     updateFutsalErrors,
+    updateGoalScorers,
     updateView,
     resetMatch,
     updateMatchTitle,
