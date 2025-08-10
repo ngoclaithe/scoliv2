@@ -674,6 +674,49 @@ export const MatchProvider = ({ children }) => {
     }
   }, [futsalErrors, socketConnected]);
 
+  // Cập nhật cầu thủ ghi bàn
+  const updateGoalScorers = useCallback((team, scorer) => {
+    const teamKey = team === 'teamA' ? 'teamAScorers' : 'teamBScorers';
+
+    setMatchData(prev => {
+      const newScorers = [...(prev[team][teamKey] || [])];
+
+      // Tìm cầu thủ đã có chưa
+      const existingPlayerIndex = newScorers.findIndex(s => s.player === scorer.player);
+
+      if (existingPlayerIndex >= 0) {
+        // Nếu đã có, thêm phút vào danh sách times
+        newScorers[existingPlayerIndex] = {
+          ...newScorers[existingPlayerIndex],
+          times: [...newScorers[existingPlayerIndex].times, scorer.minute].sort((a, b) => a - b)
+        };
+      } else {
+        // Nếu chưa có, thêm cầu thủ mới
+        newScorers.push({
+          player: scorer.player,
+          times: [scorer.minute]
+        });
+      }
+
+      const newMatchData = {
+        ...prev,
+        [team]: {
+          ...prev[team],
+          [teamKey]: newScorers
+        }
+      };
+
+      return newMatchData;
+    });
+
+    if (socketConnected) {
+      socketService.emit('goal_scorers_updated', {
+        team,
+        scorer
+      });
+    }
+  }, [socketConnected]);
+
   // Cập nhật view hiện tại cho route dynamic (MỚI)
   const updateView = useCallback((viewType) => {
     console.log('🎯 [MatchContext] updateView called with:', viewType);
