@@ -28,6 +28,8 @@ const ScoreboardBelowNew = ({
         teamBScore: matchData?.teamB?.score || 0,
         teamAScorers: matchData?.teamA?.teamAScorers || [],
         teamBScorers: matchData?.teamB?.teamBScorers || [],
+        teamAFouls: futsalErrors?.teamA || 0,
+        teamBFouls: futsalErrors?.teamB || 0,
         matchTime: matchData?.matchTime || "00:00",
         period: matchData?.period || "Chưa bắt đầu",
         status: matchData?.status || "waiting",
