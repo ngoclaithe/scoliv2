@@ -7,10 +7,9 @@ class SocketService {
     this.currentAccessCode = null;
     this.listeners = new Map();
     this.connectionPromise = null;
-    this.clientType = null; // Lưu loại client: "client", "admin", "display"
+    this.clientType = null; 
   }
 
-  // Khởi tạo kết nối socket với access code
   async connect(accessCode, clientType = 'client') {
     if (this.socket && this.currentAccessCode === accessCode && this.clientType === clientType) {
       return this.socket;

@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '../common/Button';
+import PlayerListAPI from '../../API/apiPlayerList';
 
 const MatchStatsEdit = ({
   matchStats,
@@ -8,15 +9,46 @@ const MatchStatsEdit = ({
   onUpdateFutsalErrors,
   onUpdateGoalScorers,
   onUpdateView,
-  onPlayAudio
+  onPlayAudio,
+  accessCode 
 }) => {
   const [isEditingStats, setIsEditingStats] = useState(false);
   const [goalScorers, setGoalScorers] = useState({
     teamA: { player: '', minute: '' },
     teamB: { player: '', minute: '' }
   });
+  const [playersTeamA, setPlayersTeamA] = useState([]);
+  const [playersTeamB, setPlayersTeamB] = useState([]);
+  const [loadingPlayers, setLoadingPlayers] = useState(false);
+  const [showDropdownA, setShowDropdownA] = useState(false);
+  const [showDropdownB, setShowDropdownB] = useState(false);
 
-  // Hàm cập nhật thống kê với nút +/-
+  // Fetch danh sách cầu thủ khi component mount
+  useEffect(() => {
+    const fetchPlayers = async () => {
+      if (!accessCode) return;
+      
+      setLoadingPlayers(true);
+      try {
+        const [teamAResponse, teamBResponse] = await Promise.all([
+          PlayerListAPI.getPlayerListByAccessCode(accessCode, 'A'),
+          PlayerListAPI.getPlayerListByAccessCode(accessCode, 'B')
+        ]);
+        
+        setPlayersTeamA(teamAResponse.data?.players || []);
+        setPlayersTeamB(teamBResponse.data?.players || []);
+      } catch (error) {
+        console.error('Error fetching players:', error);
+        setPlayersTeamA([]);
+        setPlayersTeamB([]);
+      } finally {
+        setLoadingPlayers(false);
+      }
+    };
+
+    fetchPlayers();
+  }, [accessCode]);
+
   const updateStat = (statKey, team, increment) => {
     const currentValue = matchStats[statKey][team] || 0;
     const newValue = Math.max(0, currentValue + increment);
@@ -107,9 +139,14 @@ const MatchStatsEdit = ({
   const handleAddGoalScorer = (team) => {
     const scorer = goalScorers[team];
     if (scorer.player.trim() && scorer.minute.trim()) {
-      // Emit socket để thêm cầu thủ ghi bàn
+      // Tìm thông tin chi tiết của cầu thủ
+      const players = team === 'teamA' ? playersTeamA : playersTeamB;
+      const playerInfo = players.find(p => p._id === scorer.player) || 
+                        players.find(p => p.name === scorer.player);
+      
       onUpdateGoalScorers(team, {
-        player: scorer.player.trim(),
+        playerId: playerInfo?._id || scorer.player,
+        player: playerInfo?.name || scorer.player,
         minute: parseInt(scorer.minute)
       });
 
@@ -118,12 +155,80 @@ const MatchStatsEdit = ({
         ...prev,
         [team]: { player: '', minute: '' }
       }));
+      
+      // Đóng dropdown
+      if (team === 'teamA') setShowDropdownA(false);
+      if (team === 'teamB') setShowDropdownB(false);
     }
   };
 
+  const handlePlayerSelect = (team, playerId, playerName) => {
+    setGoalScorers(prev => ({
+      ...prev,
+      [team]: { ...prev[team], player: playerId }
+    }));
+    
+    if (team === 'teamA') setShowDropdownA(false);
+    if (team === 'teamB') setShowDropdownB(false);
+  };
+
+  const getSelectedPlayerName = (team, playerId) => {
+    const players = team === 'teamA' ? playersTeamA : playersTeamB;
+    const player = players.find(p => p._id === playerId);
+    return player?.name || '';
+  };
+
+  const PlayerDropdown = ({ team, players, selectedPlayerId, onSelect, show, onToggle }) => (
+    <div className="relative flex-1">
+      <div
+        className="flex items-center justify-between px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 focus:outline-none cursor-pointer bg-white"
+        onClick={onToggle}
+      >
+        <span className={selectedPlayerId ? "text-gray-900" : "text-gray-500"}>
+          {selectedPlayerId ? getSelectedPlayerName(team, selectedPlayerId) : "Chọn cầu thủ"}
+        </span>
+        <span className="text-gray-400">▼</span>
+      </div>
+      
+      {show && (
+        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded shadow-lg max-h-32 overflow-y-auto z-10">
+          {loadingPlayers ? (
+            <div className="px-2 py-1 text-xs text-gray-500">Đang tải...</div>
+          ) : players.length === 0 ? (
+            <div className="px-2 py-1 text-xs text-gray-500">Không có cầu thủ</div>
+          ) : (
+            players.map((player) => (
+              <div
+                key={player._id}
+                className="px-2 py-1 text-xs hover:bg-gray-100 cursor-pointer"
+                onClick={() => onSelect(team, player._id, player.name)}
+              >
+                {player.name} {player.jerseyNumber && `(#${player.jerseyNumber})`}
+              </div>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+
+  // Click outside handler để đóng dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest('.player-dropdown')) {
+        setShowDropdownA(false);
+        setShowDropdownB(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="bg-white rounded-lg p-2 border border-gray-200 shadow-sm">
-      {/* Header với nút chỉnh sửa và thống kê */}
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-base font-semibold text-gray-900">Thông số trận đấu</h3>
         <div className="flex items-center gap-2">
@@ -262,16 +367,14 @@ const MatchStatsEdit = ({
           {/* Đội A */}
           <div className="mb-2">
             <div className="text-xs text-red-600 mb-1">Đội A:</div>
-            <div className="flex items-center gap-1">
-              <input
-                type="text"
-                placeholder="Tên cầu thủ"
-                value={goalScorers.teamA.player}
-                onChange={(e) => setGoalScorers(prev => ({
-                  ...prev,
-                  teamA: { ...prev.teamA, player: e.target.value }
-                }))}
-                className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:border-red-500 focus:outline-none"
+            <div className="flex items-center gap-1 player-dropdown">
+              <PlayerDropdown
+                team="teamA"
+                players={playersTeamA}
+                selectedPlayerId={goalScorers.teamA.player}
+                onSelect={handlePlayerSelect}
+                show={showDropdownA}
+                onToggle={() => setShowDropdownA(!showDropdownA)}
               />
               <input
                 type="number"
@@ -300,16 +403,14 @@ const MatchStatsEdit = ({
           {/* Đội B */}
           <div>
             <div className="text-xs text-gray-800 mb-1">Đội B:</div>
-            <div className="flex items-center gap-1">
-              <input
-                type="text"
-                placeholder="Tên cầu thủ"
-                value={goalScorers.teamB.player}
-                onChange={(e) => setGoalScorers(prev => ({
-                  ...prev,
-                  teamB: { ...prev.teamB, player: e.target.value }
-                }))}
-                className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 focus:outline-none"
+            <div className="flex items-center gap-1 player-dropdown">
+              <PlayerDropdown
+                team="teamB"
+                players={playersTeamB}
+                selectedPlayerId={goalScorers.teamB.player}
+                onSelect={handlePlayerSelect}
+                show={showDropdownB}
+                onToggle={() => setShowDropdownB(!showDropdownB)}
               />
               <input
                 type="number"

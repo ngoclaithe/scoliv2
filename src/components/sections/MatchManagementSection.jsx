@@ -333,7 +333,6 @@ const MatchManagementSection = ({ isActive = true }) => {
       }
     }
 
-    // Handle bulk update (fallback cho compatibility)
     if (logoData && logoData.logoItems && !logoData.changedItem) {
       const logosByCategory = logoData.logoItems.reduce((acc, item) => {
         if (!acc[item.category]) {
@@ -389,7 +388,6 @@ const MatchManagementSection = ({ isActive = true }) => {
       }
     }
 
-    // Cập nhật display options nếu có
     if (logoData && logoData.displayOptions) {
       console.log("[MatchManagementSection] Calling updateDisplaySettings");
       const displayOptions = {
@@ -401,7 +399,6 @@ const MatchManagementSection = ({ isActive = true }) => {
     }
   }, [updateSponsors, updateOrganizing, updateMediaPartners, updateTournamentLogo, updateDisplaySettings]);
 
-  // Assign stable callbacks to refs
   onLogoUpdateRef.current = handleLogoUpdate;
   onPosterUpdateRef.current = useCallback((poster) => {
     if (poster) {
@@ -476,7 +473,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           <ScoreboardPreview
             matchData={{
               ...matchData,
-              ...timerData, // Thêm timer data từ TimerContext
+              ...timerData, 
               teamA: {
                 ...matchData.teamA,
                 name: teamAInfo.name || matchData.teamA.name,
@@ -676,6 +673,11 @@ const MatchManagementSection = ({ isActive = true }) => {
         <TeamLineupModal
           isOpen={showLineupModal}
           onClose={() => setShowLineupModal(false)}
+          onSave={(lineupData) => {
+            console.log("Saved lineup data:", lineupData);
+            setShowLineupModal(false);
+          }}
+          matchData={{ ...matchData, ...timerData }}
         />
       )}
 

@@ -345,36 +345,40 @@ export const PublicMatchProvider = ({ children }) => {
     });
 
     socketService.on('goal_scorers_updated', (data) => {
-      console.log('⚽ [PublicMatchContext] goal_scorers_updated received:', data);
       const { team, scorer } = data;
-      const teamKey = team === 'teamA' ? 'teamAScorers' : 'teamBScorers';
-
+      
+      // Xác định đúng teamKey dựa trên cấu trúc state
+      const teamKey = team === 'teamA' ? 'teamA' : 'teamB';
+      const scorersKey = team === 'teamA' ? 'teamAScorers' : 'teamBScorers';
+      
       setMatchData(prev => {
-        const newScorers = [...(prev[team][teamKey] || [])];
-
-        const existingPlayerIndex = newScorers.findIndex(s => s.player === scorer.player);
-
+        const newState = { ...prev };
+        
+        if (!newState[teamKey][scorersKey]) {
+          newState[teamKey][scorersKey] = [];
+        }
+        
+        const currentScorers = [...newState[teamKey][scorersKey]];
+        const existingPlayerIndex = currentScorers.findIndex(s => s.player === scorer.player);
+        
         if (existingPlayerIndex >= 0) {
-          newScorers[existingPlayerIndex] = {
-            ...newScorers[existingPlayerIndex],
-            times: [...newScorers[existingPlayerIndex].times, scorer.minute].sort((a, b) => a - b)
-          };
+          const existingTimes = currentScorers[existingPlayerIndex].times || [];
+          if (!existingTimes.includes(scorer.minute)) {
+            currentScorers[existingPlayerIndex] = {
+              ...currentScorers[existingPlayerIndex],
+              times: [...existingTimes, scorer.minute].sort((a, b) => a - b)
+            };
+          }
         } else {
-          newScorers.push({
+          currentScorers.push({
             player: scorer.player,
             times: [scorer.minute]
           });
         }
-
-        return {
-          ...prev,
-          [team]: {
-            ...prev[team],
-            [teamKey]: newScorers
-          }
-        };
+        
+        newState[teamKey][scorersKey] = currentScorers;
+        return newState;
       });
-      setLastUpdateTime(Date.now());
     });
 
     socketService.on('lineup_updated', (data) => {
@@ -957,16 +961,13 @@ export const PublicMatchProvider = ({ children }) => {
     liveUnit: liveUnit || { code_logo: [], url_logo: [], name: 'LIVE STREAMING', position: 'top-right' },
     posterSettings: posterSettings || { showTimer: true, showDate: true, showStadium: true, showLiveIndicator: true, backgroundOpacity: 0.8, textColor: '#ffffff', accentColor: '#3b82f6' },
 
-    // ===== CONNECTION FUNCTIONS =====
     initializeSocket,
     disconnectSocket,
 
-    // ===== SETTER FUNCTIONS (ALWAYS AVAILABLE) =====
     setLiveUnit,
     setPosterSettings,
     setDisplaySettings,
 
-    // ===== SENDING FUNCTIONS (CHỈ KHI CÓ URL PARAMS) =====
     canSendToSocket,
     hasUrlParams: hasUrlParams(),
     updateMatchInfo,
