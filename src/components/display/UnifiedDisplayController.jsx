@@ -142,7 +142,7 @@ const UnifiedDisplayController = () => {
 
       // Cập nhật view nếu có
       if (params.view) {
-        console.log('��️ [UnifiedDisplayController] Updating view via context:', params.view);
+        console.log('👁️ [UnifiedDisplayController] Updating view via context:', params.view);
         updateView(params.view);
       }
 
@@ -339,6 +339,8 @@ const UnifiedDisplayController = () => {
 
   return (
     <div className="relative min-h-screen bg-white">
+      {/* Debug component - chỉ hiện khi development */}
+      {process.env.NODE_ENV === 'development' && <PublicContextTest />}
 
       <div className="w-full h-full">
         {renderCurrentView()}
