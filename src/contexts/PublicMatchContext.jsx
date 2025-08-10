@@ -857,29 +857,29 @@ export const PublicMatchProvider = ({ children }) => {
   }, [canSendToSocket, socketConnected]);
 
   const updateScore = useCallback((teamAScore, teamBScore) => {
+    logSocketOperation('updateScore', { teamAScore, teamBScore }, canSendToSocket, socketConnected);
     if (canSendToSocket && socketConnected) {
-      console.log('⚽ [PublicMatchContext] Sending score update:', teamAScore, teamBScore);
       socketService.updateScore(teamAScore, teamBScore);
     }
   }, [canSendToSocket, socketConnected]);
 
   const updateTeamNames = useCallback((teamAName, teamBName) => {
+    logSocketOperation('updateTeamNames', { teamAName, teamBName }, canSendToSocket, socketConnected);
     if (canSendToSocket && socketConnected) {
-      console.log('📛 [PublicMatchContext] Sending team names update:', teamAName, teamBName);
       socketService.updateTeamNames(teamAName, teamBName);
     }
   }, [canSendToSocket, socketConnected]);
 
   const updateTeamLogos = useCallback((teamALogo, teamBLogo) => {
+    logSocketOperation('updateTeamLogos', { teamALogo, teamBLogo }, canSendToSocket, socketConnected);
     if (canSendToSocket && socketConnected) {
-      console.log('🏆 [PublicMatchContext] Sending team logos update:', teamALogo, teamBLogo);
       socketService.updateTeamLogos(teamALogo, teamBLogo);
     }
   }, [canSendToSocket, socketConnected]);
 
   const updateView = useCallback((viewType) => {
+    logSocketOperation('updateView', { viewType }, canSendToSocket, socketConnected);
     if (canSendToSocket && socketConnected) {
-      console.log('👁️ [PublicMatchContext] Sending view update:', viewType);
       socketService.emit('view_update', { viewType });
     }
   }, [canSendToSocket, socketConnected]);
