@@ -48,7 +48,7 @@ const AppRoutes = () => {
           </AuthProvider>
         } />
 
-        {/* Public dynamic routes for access codes - cần AuthProvider để tránh lỗi useAuth */}
+        {/* Public dynamic routes for access codes - CHỈ NGHE socket */}
         <Route path="/:accessCode" element={
           <AuthProvider>
             <PublicMatchProvider>
