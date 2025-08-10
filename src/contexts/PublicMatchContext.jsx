@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useCallback } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import socketService from '../services/socketService';
 import audioUtils from '../utils/audioUtils';
+import { logRouteInfo, logSocketOperation } from '../utils/contextDebug';
 
 const PublicMatchContext = createContext();
 
@@ -874,7 +875,7 @@ export const PublicMatchProvider = ({ children }) => {
 
   const updateView = useCallback((viewType) => {
     if (canSendToSocket && socketConnected) {
-      console.log('👁️ [PublicMatchContext] Sending view update:', viewType);
+      console.log('���️ [PublicMatchContext] Sending view update:', viewType);
       socketService.emit('view_update', { viewType });
     }
   }, [canSendToSocket, socketConnected]);
