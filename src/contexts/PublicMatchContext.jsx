@@ -850,11 +850,9 @@ export const PublicMatchProvider = ({ children }) => {
   // ===== SENDING FUNCTIONS (CHỈ KHI CÓ URL PARAMS) =====
 
   const updateMatchInfo = useCallback((newMatchInfo) => {
+    logSocketOperation('updateMatchInfo', newMatchInfo, canSendToSocket, socketConnected);
     if (canSendToSocket && socketConnected) {
-      console.log('📝 [PublicMatchContext] Sending match info update:', newMatchInfo);
       socketService.updateMatchInfo(newMatchInfo);
-    } else {
-      console.log('⚠️ [PublicMatchContext] Cannot send match info - canSend:', canSendToSocket, 'connected:', socketConnected);
     }
   }, [canSendToSocket, socketConnected]);
 
