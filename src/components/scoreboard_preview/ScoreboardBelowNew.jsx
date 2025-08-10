@@ -167,20 +167,26 @@ const ScoreboardBelowNew = ({
                             className="w-full h-3"
                             style={{ backgroundColor: currentData.teamBKitColor }}
                         />
-                        {/* Goal scorers for Team B */}
-                        {currentData.teamBScorers && currentData.teamBScorers.length > 0 && (
-                            <div className="w-full text-[10px] text-gray-700 px-1 py-0.5 text-center leading-tight overflow-hidden max-h-[40px]">
-                                {currentData.teamBScorers.map((scorer, index) => (
-                                    <div key={index} className="truncate">
-                                        {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
-                                    </div>
-                                )).slice(0, 4)}
-                            </div>
-                        )}
-                        {/* Fouls for Team B (futsal only) */}
-                        {currentData.sportType === 'futsal' && currentData.teamBFouls !== undefined && (
-                            <div className="w-full text-[10px] text-red-600 px-1 py-0.5 text-center leading-tight">
-                                Lỗi: {currentData.teamBFouls}
+                        {/* Goal scorers and Fouls row for Team B */}
+                        {!showMatchTime && (
+                            <div className="w-full flex justify-between items-center px-1 py-0.5">
+                                {/* Fouls for Team B */}
+                                <div className="flex-shrink-0 mr-2">
+                                    <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[10px]" />
+                                </div>
+
+                                {/* Goal scorers for Team B */}
+                                <div className="flex-1 text-[10px] text-gray-700 leading-tight overflow-hidden max-h-[40px] text-right">
+                                    {currentData.teamBScorers && currentData.teamBScorers.length > 0 ? (
+                                        currentData.teamBScorers.slice(0, 2).map((scorer, index) => (
+                                            <div key={index} className="truncate">
+                                                {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="text-transparent">-</div>
+                                    )}
+                                </div>
                             </div>
                         )}
                     </div>
