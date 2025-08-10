@@ -276,6 +276,47 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
+    // Lắng nghe cập nhật cầu thủ ghi bàn
+    socketService.on('goal_scorers_updated', (data) => {
+      console.log('⚽ [MatchContext] Received goal_scorers_updated:', data);
+      const { team, scorer } = data;
+      const teamKey = team === 'teamA' ? 'teamAScorers' : 'teamBScorers';
+
+      setMatchData(prev => {
+        const newScorers = [...(prev[team][teamKey] || [])];
+
+        const existingPlayerIndex = newScorers.findIndex(s => s.player === scorer.player);
+
+        if (existingPlayerIndex >= 0) {
+          newScorers[existingPlayerIndex] = {
+            ...newScorers[existingPlayerIndex],
+            times: [...newScorers[existingPlayerIndex].times, scorer.minute].sort((a, b) => a - b)
+          };
+        } else {
+          newScorers.push({
+            player: scorer.player,
+            times: [scorer.minute]
+          });
+        }
+
+        return {
+          ...prev,
+          [team]: {
+            ...prev[team],
+            [teamKey]: newScorers
+          }
+        };
+      });
+      setLastUpdateTime(Date.now());
+    });
+
+    // Lắng nghe cập nhật lỗi futsal
+    socketService.on('futsal_errors_updated', (data) => {
+      console.log('🚫 [MatchContext] Received futsal_errors_updated:', data);
+      setFutsalErrors(prev => ({ ...prev, ...data.futsalErrors }));
+      setLastUpdateTime(Date.now());
+    });
+
     // Lắng nghe cập nhật template
     socketService.on('template_updated', (data) => {
       setDisplaySettings(prev => ({ ...prev, selectedSkin: data.templateId }));
