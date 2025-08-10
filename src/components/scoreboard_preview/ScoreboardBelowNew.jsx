@@ -349,10 +349,48 @@ const ScoreboardBelowNew = ({
             </div>
 
             {!showMatchTime && (
-                <div className="text-center mt-2">
-                    <span className="bg-green-600 text-white px-4 py-1 text-sm font-bold rounded animate-pulse">
-                        ● TRỰC TIẾP
-                    </span>
+                <div className="space-y-2 mt-2">
+                    {/* Goal scorers and fouls row */}
+                    <div className="flex justify-between items-center px-4">
+                        {/* Team A scorers and fouls */}
+                        <div className="flex items-center space-x-4 flex-1">
+                            <div className="text-[10px] text-gray-700 max-w-[120px] overflow-hidden">
+                                {currentData.teamAScorers && currentData.teamAScorers.length > 0 ? (
+                                    currentData.teamAScorers.slice(0, 2).map((scorer, index) => (
+                                        <div key={index} className="truncate">
+                                            {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-transparent">-</div>
+                                )}
+                            </div>
+                            <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[10px]" />
+                        </div>
+
+                        {/* Center live indicator */}
+                        <div className="text-center">
+                            <span className="bg-green-600 text-white px-4 py-1 text-sm font-bold rounded animate-pulse">
+                                ● TRỰC TIẾP
+                            </span>
+                        </div>
+
+                        {/* Team B fouls and scorers */}
+                        <div className="flex items-center space-x-4 flex-1 justify-end">
+                            <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[10px]" />
+                            <div className="text-[10px] text-gray-700 max-w-[120px] overflow-hidden text-right">
+                                {currentData.teamBScorers && currentData.teamBScorers.length > 0 ? (
+                                    currentData.teamBScorers.slice(0, 2).map((scorer, index) => (
+                                        <div key={index} className="truncate">
+                                            {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-transparent">-</div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
