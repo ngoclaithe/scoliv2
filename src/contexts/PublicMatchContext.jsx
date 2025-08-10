@@ -338,6 +338,45 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
+    socketService.on('futsal_errors_updated', (data) => {
+      console.log('🚫 [PublicMatchContext] futsal_errors_updated received:', data);
+      setFutsalErrors(prev => ({ ...prev, ...data.futsalErrors }));
+      setLastUpdateTime(Date.now());
+    });
+
+    socketService.on('goal_scorers_updated', (data) => {
+      console.log('⚽ [PublicMatchContext] goal_scorers_updated received:', data);
+      const { team, scorer } = data;
+      const teamKey = team === 'teamA' ? 'teamAScorers' : 'teamBScorers';
+
+      setMatchData(prev => {
+        const newScorers = [...(prev[team][teamKey] || [])];
+
+        const existingPlayerIndex = newScorers.findIndex(s => s.player === scorer.player);
+
+        if (existingPlayerIndex >= 0) {
+          newScorers[existingPlayerIndex] = {
+            ...newScorers[existingPlayerIndex],
+            times: [...newScorers[existingPlayerIndex].times, scorer.minute].sort((a, b) => a - b)
+          };
+        } else {
+          newScorers.push({
+            player: scorer.player,
+            times: [scorer.minute]
+          });
+        }
+
+        return {
+          ...prev,
+          [team]: {
+            ...prev[team],
+            [teamKey]: newScorers
+          }
+        };
+      });
+      setLastUpdateTime(Date.now());
+    });
+
     socketService.on('lineup_updated', (data) => {
       setLineupData({
         teamA: data.lineupData.teamA || [],
