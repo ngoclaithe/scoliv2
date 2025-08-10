@@ -18,10 +18,8 @@ export const PublicMatchProvider = ({ children }) => {
   const params = useParams();
   const location = useLocation();
 
-  // Debug route info
   logRouteInfo(params, location);
 
-  // Kiểm tra xem có phải dynamic route với nhiều tham số không
   const hasUrlParams = useCallback(() => {
     const {
       location: routeLocation,

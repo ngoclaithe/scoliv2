@@ -25,7 +25,6 @@ import ScoreboardBelowNew from '../scoreboard_preview/ScoreboardBelowNew';
 import PenaltyScoreboard from '../scoreboard_preview/PenaltyScoreboard';
 import PlayerList from '../lineup/PlayerList';
 import Stat from '../sections/Stat';
-import PublicContextTest from '../debug/PublicContextTest';
 
 const UnifiedDisplayController = () => {
   const params = useParams();
@@ -338,9 +337,6 @@ const UnifiedDisplayController = () => {
 
   return (
     <div className="relative min-h-screen bg-white">
-      {/* Debug component - chỉ hiện khi development */}
-      {process.env.NODE_ENV === 'development' && <PublicContextTest />}
-
       <div className="w-full h-full">
         {renderCurrentView()}
       </div>
