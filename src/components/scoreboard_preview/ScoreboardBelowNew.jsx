@@ -128,20 +128,26 @@ const ScoreboardBelowNew = ({
                             className="w-full h-3"
                             style={{ backgroundColor: currentData.teamAKitColor }}
                         />
-                        {/* Goal scorers for Team A */}
-                        {currentData.teamAScorers && currentData.teamAScorers.length > 0 && (
-                            <div className="w-full text-[10px] text-gray-700 px-1 py-0.5 text-center leading-tight overflow-hidden max-h-[40px]">
-                                {currentData.teamAScorers.map((scorer, index) => (
-                                    <div key={index} className="truncate">
-                                        {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
-                                    </div>
-                                )).slice(0, 4)}
-                            </div>
-                        )}
-                        {/* Fouls for Team A (futsal only) */}
-                        {currentData.sportType === 'futsal' && currentData.teamAFouls !== undefined && (
-                            <div className="w-full text-[10px] text-red-600 px-1 py-0.5 text-center leading-tight">
-                                Lỗi: {currentData.teamAFouls}
+                        {/* Goal scorers and Fouls row for Team A */}
+                        {!showMatchTime && (
+                            <div className="w-full flex justify-between items-center px-1 py-0.5">
+                                {/* Goal scorers for Team A */}
+                                <div className="flex-1 text-[10px] text-gray-700 leading-tight overflow-hidden max-h-[40px]">
+                                    {currentData.teamAScorers && currentData.teamAScorers.length > 0 ? (
+                                        currentData.teamAScorers.slice(0, 2).map((scorer, index) => (
+                                            <div key={index} className="truncate">
+                                                {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="text-transparent">-</div>
+                                    )}
+                                </div>
+
+                                {/* Fouls for Team A */}
+                                <div className="flex-shrink-0 ml-2">
+                                    <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[10px]" />
+                                </div>
                             </div>
                         )}
                     </div>
