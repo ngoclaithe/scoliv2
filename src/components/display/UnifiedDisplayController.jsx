@@ -50,7 +50,14 @@ const UnifiedDisplayController = () => {
   const {
     initializeSocket,
     displaySettings,
-    currentView
+    currentView,
+    canSendToSocket,
+    hasUrlParams,
+    updateMatchInfo,
+    updateScore,
+    updateTeamNames,
+    updateTeamLogos,
+    updateView
   } = usePublicMatch();
   const { handleExpiredAccess } = useAuth();
 
@@ -107,58 +114,48 @@ const UnifiedDisplayController = () => {
     return params;
   }, [isDynamicRoute, location, matchTitle, liveText, teamALogoCode, teamBLogoCode, teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore, view, matchTime]);
 
-  // Gửi cập nhật lên socket khi có tham số từ URL
+  // Gửi cập nhật lên socket khi có tham số từ URL (sử dụng PublicMatchContext)
   const updateSocketWithParams = useCallback(async (params) => {
-    if (!params) return;
-    
-    console.log('🔄 [UnifiedDisplayController] updateSocketWithParams called with:', params);
-
-    if (!socketService.getConnectionStatus().isConnected) {
-      console.warn('⚠️ [UnifiedDisplayController] Socket not connected, cannot update parameters');
+    if (!params || !canSendToSocket) {
+      console.log('⚠️ [UnifiedDisplayController] Cannot send params - canSend:', canSendToSocket);
       return;
     }
 
-    console.log('✅ [UnifiedDisplayController] Socket is connected, proceeding with updates...');
+    console.log('🔄 [UnifiedDisplayController] updateSocketWithParams called with:', params);
+    console.log('✅ [UnifiedDisplayController] Using PublicMatchContext sending functions...');
 
     try {
       // Cập nhật thông tin trận đấu
-      if (params.matchTitle || params.location || params.matchTime) {
+      if (params.matchTitle || params.location || params.matchTime || params.liveText) {
         const matchInfo = {
           matchTitle: params.matchTitle,
           stadium: params.location,
           liveText: params.liveText,
-          matchTime: params.matchTime
+          matchTime: params.matchTime,
+          teamAKitColor: params.teamA.kitColor,
+          teamBKitColor: params.teamB.kitColor
         };
-        console.log('📝 [UnifiedDisplayController] Updating match info:', matchInfo);
-        socketService.updateMatchInfo(matchInfo);
+        console.log('📝 [UnifiedDisplayController] Updating match info via context:', matchInfo);
+        updateMatchInfo(matchInfo);
       }
 
       // Cập nhật view nếu có
       if (params.view) {
-        console.log('👁️ [UnifiedDisplayController] Updating view:', params.view);
-        // Có thể cần thêm socket method để update view
-        // socketService.updateView(params.view);
+        console.log('👁️ [UnifiedDisplayController] Updating view via context:', params.view);
+        updateView(params.view);
       }
 
       // Cập nhật tên đội
       if (params.teamA.name || params.teamB.name) {
-        console.log('📛 [UnifiedDisplayController] Updating team names:', params.teamA.name, params.teamB.name);
-        socketService.updateTeamNames(params.teamA.name, params.teamB.name);
+        console.log('📛 [UnifiedDisplayController] Updating team names via context:', params.teamA.name, params.teamB.name);
+        updateTeamNames(params.teamA.name, params.teamB.name);
       }
 
       // Cập nhật tỉ số
       if (params.teamA.score !== undefined || params.teamB.score !== undefined) {
-        console.log('⚽ [UnifiedDisplayController] Updating scores:', params.teamA.score, params.teamB.score);
-        socketService.updateScore(params.teamA.score, params.teamB.score);
+        console.log('⚽ [UnifiedDisplayController] Updating scores via context:', params.teamA.score, params.teamB.score);
+        updateScore(params.teamA.score, params.teamB.score);
       }
-
-      // Cập nhật màu áo đội nếu có
-      const matchInfoWithColors = {
-        teamAKitColor: params.teamA.kitColor,
-        teamBKitColor: params.teamB.kitColor
-      };
-      console.log('👕 [UnifiedDisplayController] Updating kit colors:', matchInfoWithColors);
-      socketService.updateMatchInfo(matchInfoWithColors);
 
       // Tìm và cập nhật logo đội dựa trên code
       if (params.teamA.logoCode || params.teamB.logoCode) {
@@ -166,8 +163,8 @@ const UnifiedDisplayController = () => {
         try {
           const { teamALogo, teamBLogo } = await findTeamLogos(params.teamA.logoCode, params.teamB.logoCode);
           if (teamALogo || teamBLogo) {
-            console.log('🏆 [UnifiedDisplayController] Found team logos, updating...', { teamALogo, teamBLogo });
-            socketService.updateTeamLogos(teamALogo, teamBLogo);
+            console.log('🏆 [UnifiedDisplayController] Found team logos, updating via context...', { teamALogo, teamBLogo });
+            updateTeamLogos(teamALogo, teamBLogo);
           }
         } catch (error) {
           console.error('❌ [UnifiedDisplayController] Failed to find team logos:', error);
@@ -177,7 +174,7 @@ const UnifiedDisplayController = () => {
     } catch (error) {
       console.error('❌ [UnifiedDisplayController] Failed to update socket with params:', error);
     }
-  }, []);
+  }, [canSendToSocket, updateMatchInfo, updateView, updateTeamNames, updateScore, updateTeamLogos]);
 
   // Khởi tạo kết nối socket và cập nhật parameters
   useEffect(() => {
@@ -189,7 +186,7 @@ const UnifiedDisplayController = () => {
         const isDynamic = checkIfDynamicRoute();
         setIsDynamicRoute(isDynamic);
         
-        // console.log(`🎯 [UnifiedDisplayController] Route type: ${isDynamic ? 'Dynamic' : 'Standard'}`);
+        console.log(`🎯 [UnifiedDisplayController] Route type: ${isDynamic ? 'Dynamic' : 'Standard'}, hasUrlParams:`, hasUrlParams);
 
         const verifyResult = await PublicAPI.verifyAccessCode(accessCode);
 
@@ -204,19 +201,23 @@ const UnifiedDisplayController = () => {
           setIsInitialized(true);
           // console.log('✅ [UnifiedDisplayController] Initialized successfully');
 
-          if (isDynamic) {
+          if (isDynamic && hasUrlParams) {
             const params = parseUrlParams();
-            // console.log('📋 [UnifiedDisplayController] About to update socket with params:', params);
+            console.log('📋 [UnifiedDisplayController] About to update socket with params:', params);
+            console.log('🔧 [UnifiedDisplayController] canSendToSocket:', canSendToSocket);
 
             if (params && Object.keys(params).length > 0) {
-              // console.log('⏰ [UnifiedDisplayController] Setting timeout to update socket params...');
+              console.log('⏰ [UnifiedDisplayController] Setting timeout to update socket params...');
 
+              // Đợi socket connect và context setup xong
               setTimeout(() => {
-                // console.log('🚀 [UnifiedDisplayController] First attempt to update socket params...');
+                console.log('🚀 [UnifiedDisplayController] First attempt to update socket params...');
                 updateSocketWithParams(params);
-              }, 1000);
+              }, 1500);
 
+              // Retry để đảm bảo
               setTimeout(() => {
+                console.log('🔄 [UnifiedDisplayController] Retry attempt to update socket params...');
                 updateSocketWithParams(params);
               }, 3000);
             }
