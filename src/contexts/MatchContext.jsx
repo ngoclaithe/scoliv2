@@ -322,7 +322,7 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe c���p nhật đơn vị live
+    // Lắng nghe cập nhật đơn vị live
     socketService.on('live_unit_updated', (data) => {
       console.log('📝 [MatchContext] live_unit_updated received:', data);
       if (data.liveUnit && (data.liveUnit.text)) {
@@ -660,11 +660,19 @@ export const MatchProvider = ({ children }) => {
 
   // Cập nhật lỗi futsal
   const updateFutsalErrors = useCallback((team, increment) => {
-    setFutsalErrors(prev => ({
-      ...prev,
-      [team]: Math.max(0, prev[team] + increment)
-    }));
-  }, []);
+    const newFutsalErrors = {
+      ...futsalErrors,
+      [team]: Math.max(0, futsalErrors[team] + increment)
+    };
+
+    setFutsalErrors(newFutsalErrors);
+
+    if (socketConnected) {
+      socketService.emit('futsal_errors_updated', {
+        futsalErrors: newFutsalErrors
+      });
+    }
+  }, [futsalErrors, socketConnected]);
 
   // Cập nhật view hiện tại cho route dynamic (MỚI)
   const updateView = useCallback((viewType) => {
