@@ -18,6 +18,9 @@ export const PublicMatchProvider = ({ children }) => {
   const params = useParams();
   const location = useLocation();
 
+  // Debug route info
+  logRouteInfo(params, location);
+
   // Kiểm tra xem có phải dynamic route với nhiều tham số không
   const hasUrlParams = useCallback(() => {
     const {
@@ -37,7 +40,7 @@ export const PublicMatchProvider = ({ children }) => {
       matchTime
     } = params;
 
-    return Boolean(
+    const hasParams = Boolean(
       routeLocation || matchTitle || liveText ||
       teamALogoCode || teamBLogoCode ||
       teamAName || teamBName ||
@@ -45,6 +48,9 @@ export const PublicMatchProvider = ({ children }) => {
       teamAScore || teamBScore ||
       view || matchTime
     );
+
+    console.log('🔍 [PublicMatchContext] hasUrlParams result:', hasParams);
+    return hasParams;
   }, [params]);
 
   const [canSendToSocket, setCanSendToSocket] = useState(false);
@@ -875,7 +881,7 @@ export const PublicMatchProvider = ({ children }) => {
 
   const updateView = useCallback((viewType) => {
     if (canSendToSocket && socketConnected) {
-      console.log('���️ [PublicMatchContext] Sending view update:', viewType);
+      console.log('👁️ [PublicMatchContext] Sending view update:', viewType);
       socketService.emit('view_update', { viewType });
     }
   }, [canSendToSocket, socketConnected]);
