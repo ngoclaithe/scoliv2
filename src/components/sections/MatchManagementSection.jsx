@@ -40,6 +40,7 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateTeamNames,
     updateTeamLogos,
     updateFutsalErrors,
+    updateGoalScorers,
     updatePenalty,
 
     updateView,
