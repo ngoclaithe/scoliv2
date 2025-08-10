@@ -99,6 +99,11 @@ export const PublicMatchProvider = ({ children }) => {
     lastUpdated: null
   });
 
+  const [futsalErrors, setFutsalErrors] = useState({
+    teamA: 0,
+    teamB: 0
+  });
+
   const [marqueeData, setMarqueeData] = useState({
     text: '',
     mode: 'none',
