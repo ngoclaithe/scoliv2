@@ -936,6 +936,7 @@ export const PublicMatchProvider = ({ children }) => {
     // ===== STATE DATA =====
     matchData,
     matchStats,
+    futsalErrors,
     penaltyData,
     marqueeData,
     displaySettings,
