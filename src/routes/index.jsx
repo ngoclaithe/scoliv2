@@ -39,7 +39,7 @@ const AppRoutes = () => {
           </AuthProvider>
         } />
 
-        {/* Preview route for posters */}
+        {/* Preview route for posters - CHỈ NGHE socket */}
         <Route path="/:accessCode/preview" element={
           <AuthProvider>
             <PublicMatchProvider>
