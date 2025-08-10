@@ -26,6 +26,7 @@ import ScoreboardBelowNew from '../scoreboard_preview/ScoreboardBelowNew';
 import PenaltyScoreboard from '../scoreboard_preview/PenaltyScoreboard';
 import PlayerList from '../lineup/PlayerList';
 import Stat from '../sections/Stat';
+import PublicContextTest from '../debug/PublicContextTest';
 
 const UnifiedDisplayController = () => {
   const params = useParams();
@@ -141,7 +142,7 @@ const UnifiedDisplayController = () => {
 
       // Cập nhật view nếu có
       if (params.view) {
-        console.log('👁️ [UnifiedDisplayController] Updating view via context:', params.view);
+        console.log('��️ [UnifiedDisplayController] Updating view via context:', params.view);
         updateView(params.view);
       }
 
