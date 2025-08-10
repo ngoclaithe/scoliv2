@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
+import { useParams, useLocation } from 'react-router-dom';
 import socketService from '../services/socketService';
 import audioUtils from '../utils/audioUtils';
+import { logRouteInfo, logSocketOperation } from '../utils/contextDebug';
 
 const PublicMatchContext = createContext();
 
@@ -13,6 +15,44 @@ export const usePublicMatch = () => {
 };
 
 export const PublicMatchProvider = ({ children }) => {
+  const params = useParams();
+  const location = useLocation();
+
+  // Debug route info
+  logRouteInfo(params, location);
+
+  // Kiểm tra xem có phải dynamic route với nhiều tham số không
+  const hasUrlParams = useCallback(() => {
+    const {
+      location: routeLocation,
+      matchTitle,
+      liveText,
+      teamALogoCode,
+      teamBLogoCode,
+      teamAName,
+      teamBName,
+      teamAKitColor,
+      teamBKitColor,
+      teamAScore,
+      teamBScore,
+      view,
+      matchTime
+    } = params;
+
+    const hasParams = Boolean(
+      routeLocation || matchTitle || liveText ||
+      teamALogoCode || teamBLogoCode ||
+      teamAName || teamBName ||
+      teamAKitColor || teamBKitColor ||
+      teamAScore || teamBScore ||
+      view || matchTime
+    );
+
+    console.log('🔍 [PublicMatchContext] hasUrlParams result:', hasParams);
+    return hasParams;
+  }, [params]);
+
+  const [canSendToSocket, setCanSendToSocket] = useState(false);
   const [matchData, setMatchData] = useState({
     teamA: {
       name: "ĐỘI-A",
@@ -584,16 +624,13 @@ export const PublicMatchProvider = ({ children }) => {
       if (data.target === 'display' && data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
         const { audioData, mimeType } = data.payload;
         try {
-          let isValidData = false;
           let audioBlob = null;
-    
+
           if (audioData instanceof ArrayBuffer && audioData.byteLength > 0) {
             audioBlob = new Blob([audioData], { type: mimeType || 'audio/webm' });
-            isValidData = true;
           } else if (Array.isArray(audioData) && audioData.length > 0) {
             const uint8Array = new Uint8Array(audioData);
             audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
-            isValidData = true;
           } else {
             return;
           }
@@ -769,23 +806,36 @@ export const PublicMatchProvider = ({ children }) => {
     });
   }, []);
 
-  const initializeSocket = useCallback(async (accessCode) => {
+  const initializeSocket = useCallback(async (accessCode, clientType = null) => {
     try {
       if (currentAccessCode === accessCode && socketConnected) {
         return;
       }
 
-      await socketService.connect(accessCode, 'display');
+      // Xác định clientType dựa trên URL params
+      const hasDynamicParams = hasUrlParams();
+      const finalClientType = clientType || (hasDynamicParams ? 'admin' : 'display');
+
+      console.log('🔌 [PublicMatchContext] Connecting with clientType:', finalClientType, 'hasDynamicParams:', hasDynamicParams);
+
+      await socketService.connect(accessCode, finalClientType);
       setSocketConnected(true);
       setCurrentAccessCode(accessCode);
+      setCanSendToSocket(hasDynamicParams);
 
       setupSocketListeners();
-
       setupRoomStatusListener();
+
+      console.log('✅ [PublicMatchContext] Socket initialized successfully', {
+        accessCode,
+        clientType: finalClientType,
+        canSend: hasDynamicParams
+      });
     } catch (error) {
+      console.error('❌ [PublicMatchContext] Failed to initialize socket:', error);
       setSocketConnected(false);
     }
-  }, [currentAccessCode, socketConnected, setupSocketListeners]);
+  }, [currentAccessCode, socketConnected, setupSocketListeners, hasUrlParams]);
 
   const disconnectSocket = useCallback(() => {
     socketService.disconnect();
@@ -793,7 +843,53 @@ export const PublicMatchProvider = ({ children }) => {
     setCurrentAccessCode(null);
   }, []);
 
+  // ===== SENDING FUNCTIONS (CHỈ KHI CÓ URL PARAMS) =====
+
+  const updateMatchInfo = useCallback((newMatchInfo) => {
+    logSocketOperation('updateMatchInfo', newMatchInfo, canSendToSocket, socketConnected);
+    if (canSendToSocket && socketConnected) {
+      socketService.updateMatchInfo(newMatchInfo);
+    }
+  }, [canSendToSocket, socketConnected]);
+
+  const updateScore = useCallback((teamAScore, teamBScore) => {
+    logSocketOperation('updateScore', { teamAScore, teamBScore }, canSendToSocket, socketConnected);
+    if (canSendToSocket && socketConnected) {
+      socketService.updateScore(teamAScore, teamBScore);
+    }
+  }, [canSendToSocket, socketConnected]);
+
+  const updateTeamNames = useCallback((teamAName, teamBName) => {
+    logSocketOperation('updateTeamNames', { teamAName, teamBName }, canSendToSocket, socketConnected);
+    if (canSendToSocket && socketConnected) {
+      socketService.updateTeamNames(teamAName, teamBName);
+    }
+  }, [canSendToSocket, socketConnected]);
+
+  const updateTeamLogos = useCallback((teamALogo, teamBLogo) => {
+    logSocketOperation('updateTeamLogos', { teamALogo, teamBLogo }, canSendToSocket, socketConnected);
+    if (canSendToSocket && socketConnected) {
+      socketService.updateTeamLogos(teamALogo, teamBLogo);
+    }
+  }, [canSendToSocket, socketConnected]);
+
+  const updateView = useCallback((viewType) => {
+    logSocketOperation('updateView', { viewType }, canSendToSocket, socketConnected);
+    if (canSendToSocket && socketConnected) {
+      socketService.emit('view_update', { viewType });
+    }
+  }, [canSendToSocket, socketConnected]);
+
+  const updateDisplaySettings = useCallback((newDisplaySettings) => {
+    setDisplaySettings(prev => ({ ...prev, ...newDisplaySettings }));
+    if (canSendToSocket && socketConnected) {
+      console.log('🎨 [PublicMatchContext] Sending display settings update:', newDisplaySettings);
+      socketService.updateDisplaySettings(newDisplaySettings);
+    }
+  }, [canSendToSocket, socketConnected]);
+
   const value = {
+    // ===== STATE DATA =====
     matchData,
     matchStats,
     penaltyData,
@@ -811,12 +907,24 @@ export const PublicMatchProvider = ({ children }) => {
     liveUnit: liveUnit || { code_logo: [], url_logo: [], name: 'LIVE STREAMING', position: 'top-right' },
     posterSettings: posterSettings || { showTimer: true, showDate: true, showStadium: true, showLiveIndicator: true, backgroundOpacity: 0.8, textColor: '#ffffff', accentColor: '#3b82f6' },
 
+    // ===== CONNECTION FUNCTIONS =====
     initializeSocket,
     disconnectSocket,
 
+    // ===== SETTER FUNCTIONS (ALWAYS AVAILABLE) =====
     setLiveUnit,
     setPosterSettings,
-    setDisplaySettings
+    setDisplaySettings,
+
+    // ===== SENDING FUNCTIONS (CHỈ KHI CÓ URL PARAMS) =====
+    canSendToSocket,
+    hasUrlParams: hasUrlParams(),
+    updateMatchInfo,
+    updateScore,
+    updateTeamNames,
+    updateTeamLogos,
+    updateView,
+    updateDisplaySettings
   };
 
   return (
