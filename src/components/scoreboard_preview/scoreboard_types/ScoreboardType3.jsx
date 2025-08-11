@@ -105,7 +105,7 @@ const ScoreboardType3 = ({ currentData, logoShape, showMatchTime }) => {
             </div>
 
             {/* Goal scorers và fouls - NẰM DƯỚI, không ngang cấp */}
-            <div className="mt-3 flex justify-between items-center px-2 w-full max-w-xs mx-auto">
+            <div className="mt-1.5 flex justify-between items-center px-2 w-full max-w-xs mx-auto">
                 {/* Team A scorers and fouls */}
                 <div className="flex items-center space-x-2 flex-1 min-w-0">
                     <div className="text-[10px] text-gray-700 max-w-[140px] overflow-hidden max-h-[60px]">
