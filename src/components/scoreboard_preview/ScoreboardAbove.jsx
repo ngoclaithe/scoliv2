@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../../utils/logoUtils';
+import { FoulsDisplay } from '../../utils/futsalUtils';
 import ScoreboardType1 from './scoreboard_types/ScoreboardType1';
 import ScoreboardType2 from './scoreboard_types/ScoreboardType2';
 import ScoreboardType3 from './scoreboard_types/ScoreboardType3';
@@ -13,6 +14,7 @@ import ScoreboardTypePickleBall from './scoreboard_types/ScoreboardTypePickleBal
 const ScoreboardAbove = ({ type = 1 }) => {
     const {
         matchData,
+        futsalErrors,
         displaySettings,
         marqueeData,
         sponsors,
@@ -32,6 +34,10 @@ const ScoreboardAbove = ({ type = 1 }) => {
         teamBScore: matchData?.teamB?.score || 0,
         teamAScoreSet: matchData?.teamA?.scoreSet || 0,
         teamBScoreSet: matchData?.teamB?.scoreSet || 0,
+        teamAScorers: matchData?.teamA?.teamAScorers || [],
+        teamBScorers: matchData?.teamB?.teamBScorers || [],
+        teamAFouls: futsalErrors?.teamA || 0,
+        teamBFouls: futsalErrors?.teamB || 0,
         matchTime: matchData?.matchTime || "00:00",
         period: matchData?.period || "Chưa bắt đầu",
         status: matchData?.status || "waiting",

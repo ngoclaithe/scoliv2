@@ -1,4 +1,5 @@
 import React from 'react';
+import { FoulsDisplay } from '../../../utils/futsalUtils';
 
 const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
     return (
@@ -92,6 +93,70 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                         }}
                     />
                 </div>
+            </div>
+
+            {/* Goal scorers and fouls row */}
+            <div className="flex items-start justify-center w-full gap-0 mt-1">
+                {/* Spacer for logo A */}
+                <div className="w-14"></div>
+
+                {/* Team A stats section */}
+                <div className="flex items-start gap-0">
+                    {/* Spacer for score */}
+                    <div className="min-w-[2.2rem]"></div>
+                    <div className="w-[90px] flex justify-between items-start">
+                        {/* Goal scorers for Team A */}
+                        <div className="flex-1 text-[10px] text-gray-700 leading-tight overflow-hidden max-h-[60px]">
+                            {currentData.teamAScorers && currentData.teamAScorers.length > 0 ? (
+                                currentData.teamAScorers.slice(0, 4).map((scorer, index) => (
+                                    <div key={index} className="truncate">
+                                        {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-transparent">-</div>
+                            )}
+                        </div>
+
+                        {/* Fouls for Team A */}
+                        <div className="flex-shrink-0">
+                            <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[10px]" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Spacer for match time */}
+                <div className="opacity-0 px-2">
+                    {currentData.matchTime}
+                </div>
+
+                {/* Team B stats section */}
+                <div className="flex items-start gap-0">
+                    <div className="w-[90px] flex justify-between items-start">
+                        {/* Fouls for Team B */}
+                        <div className="flex-shrink-0">
+                            <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[10px]" />
+                        </div>
+
+                        {/* Goal scorers for Team B */}
+                        <div className="flex-1 text-[10px] text-gray-700 leading-tight overflow-hidden max-h-[60px] text-right">
+                            {currentData.teamBScorers && currentData.teamBScorers.length > 0 ? (
+                                currentData.teamBScorers.slice(0, 4).map((scorer, index) => (
+                                    <div key={index} className="truncate">
+                                        {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '} {scorer.player}
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-transparent">-</div>
+                            )}
+                        </div>
+                    </div>
+                    {/* Spacer for score */}
+                    <div className="min-w-[2.2rem]"></div>
+                </div>
+
+                {/* Spacer for logo B */}
+                <div className="w-14"></div>
             </div>
 
             {!showMatchTime && (
