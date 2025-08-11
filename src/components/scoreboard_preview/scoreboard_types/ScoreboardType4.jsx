@@ -1,5 +1,6 @@
 import React from 'react';
 import DisplayLogo from '../../common/DisplayLogo';
+import { FoulsDisplay } from '../../../utils/futsalUtils';
 
 const ScoreboardType4 = ({ currentData, logoShape, showMatchTime, tournamentLogo }) => {
     return (
