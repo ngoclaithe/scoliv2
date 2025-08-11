@@ -43,7 +43,7 @@ const PlayerList = () => {
         const cardHeight = totalPlayers > 10 ? 'h-6' : totalPlayers > 8 ? 'h-7' : 'h-8';
         
         return (
-            <div className={`relative bg-white/5 hover:bg-white/8 backdrop-blur-sm rounded-md border border-white/10 hover:border-white/20 transition-all duration-300 p-1.5 ${cardHeight} flex items-center`}>
+            <div className={`relative bg-white/5 backdrop-blur-sm rounded-md border border-white/10 p-1.5 ${cardHeight} flex items-center`}>
                 <div className="flex items-center gap-2 w-full">
                     <div className="relative flex-shrink-0">
                         <div 
@@ -248,7 +248,7 @@ const PlayerList = () => {
                 }
             `}</style>
             
-            {/* Background với gradient mới đẹp hơn */}
+            {/* Background với gradient mới ��ẹp hơn */}
             <div className="w-full h-full bg-gradient-to-br from-slate-800 via-blue-900 to-purple-900 relative overflow-hidden">
                 {/* Enhanced Background Pattern */}
                 <div className="absolute inset-0 opacity-30">
