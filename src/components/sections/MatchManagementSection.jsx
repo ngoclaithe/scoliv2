@@ -670,6 +670,21 @@ const MatchManagementSection = ({ isActive = true }) => {
                     className="w-8 h-8 border border-gray-300 rounded cursor-pointer"
                     title="Màu ticker"
                   />
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => {
+                      updateMarquee({
+                        text: clockText || "TRỰC TIẾP BÓNG ĐÁ",
+                        color: 'white-red',
+                        mode: 'lien-tuc'
+                      });
+                      updateView('scoreboard_below');
+                    }}
+                    className="px-3 py-1 text-xs"
+                  >
+                    Áp dụng
+                  </Button>
                 </div>
               )}
 
