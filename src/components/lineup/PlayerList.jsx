@@ -90,7 +90,7 @@ const PlayerList = () => {
             <div className="flex flex-col items-center justify-center">
                 {/* Kit Preview */}
                 <div className="relative">
-                    {/* T-Shirt với tay áo thật */}
+                    {/* T-Shirt với tay áo dài hơn */}
                     <div className="relative w-28 h-32 sm:w-32 sm:h-36 mx-auto">
                         {/* Main body của t-shirt */}
                         <div
@@ -101,12 +101,11 @@ const PlayerList = () => {
                                 borderRadius: '8px 8px 4px 4px'
                             }}
                         >
-                            {/* Round neck collar */}
+                            {/* Round neck collar - KHÔNG màu sắc */}
                             <div className="absolute top-0 left-1/2 transform -translate-x-1/2">
                                 <div
-                                    className="w-8 h-4 sm:w-10 sm:h-5 rounded-b-full border-2"
+                                    className="w-8 h-4 sm:w-10 sm:h-5 rounded-b-full border-2 bg-white"
                                     style={{
-                                        background: `linear-gradient(180deg, ${kitColor2} 0%, ${kitColor2}dd 100%)`,
                                         borderColor: `${kitColor}cc`
                                     }}
                                 />
@@ -134,18 +133,18 @@ const PlayerList = () => {
                             <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/10 rounded-b"></div>
                         </div>
 
-                        {/* Left sleeve của t-shirt */}
+                        {/* Left sleeve của t-shirt - DÀI HỚN */}
                         <div
-                            className="absolute left-0 top-1 w-6 h-12 sm:w-7 sm:h-14 rounded-lg shadow-md"
+                            className="absolute left-0 top-1 w-6 h-16 sm:w-7 sm:h-18 rounded-lg shadow-md"
                             style={{
                                 background: `linear-gradient(90deg, ${kitColor} 0%, ${kitColor}dd 100%)`,
                                 boxShadow: `-2px 2px 6px rgba(0,0,0,0.15)`
                             }}
                         />
 
-                        {/* Right sleeve của t-shirt */}
+                        {/* Right sleeve của t-shirt - DÀI HỚN */}
                         <div
-                            className="absolute right-0 top-1 w-6 h-12 sm:w-7 sm:h-14 rounded-lg shadow-md"
+                            className="absolute right-0 top-1 w-6 h-16 sm:w-7 sm:h-18 rounded-lg shadow-md"
                             style={{
                                 background: `linear-gradient(-90deg, ${kitColor} 0%, ${kitColor}dd 100%)`,
                                 boxShadow: `2px 2px 6px rgba(0,0,0,0.15)`
@@ -153,30 +152,41 @@ const PlayerList = () => {
                         />
                     </div>
 
-                    {/* Shorts thể thao thật */}
+                    {/* Shorts với 2 ống chân riêng biệt */}
                     <div className="mt-2 relative">
+                        {/* Waistband */}
                         <div
-                            className="w-20 h-10 sm:w-24 sm:h-12 mx-auto shadow-md relative"
+                            className="w-20 h-2 sm:w-24 sm:h-2.5 mx-auto rounded-t-md shadow-sm"
                             style={{
-                                background: `linear-gradient(135deg, ${kitColor2} 0%, ${kitColor2}dd 70%, ${kitColor2}bb 100%)`,
-                                boxShadow: `0 4px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1)`,
-                                borderRadius: '6px 6px 8px 8px'
+                                background: `linear-gradient(90deg, ${kitColor}cc 0%, ${kitColor} 50%, ${kitColor}cc 100%)`
                             }}
-                        >
-                            {/* Elastic waistband */}
+                        />
+
+                        {/* 2 ống chân riêng biệt */}
+                        <div className="flex justify-center space-x-1">
+                            {/* Chân trái */}
                             <div
-                                className="absolute top-0 left-0 right-0 h-2 rounded-t-md"
+                                className="w-8 h-8 sm:w-10 sm:h-10 shadow-md rounded-b-lg"
                                 style={{
-                                    background: `linear-gradient(90deg, ${kitColor}cc 0%, ${kitColor} 50%, ${kitColor}cc 100%)`
+                                    background: `linear-gradient(135deg, ${kitColor2} 0%, ${kitColor2}dd 70%, ${kitColor2}bb 100%)`,
+                                    boxShadow: `0 4px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1)`
                                 }}
-                            />
+                            >
+                                {/* Seam chân trái */}
+                                <div className="absolute right-0 top-1 bottom-1 w-px bg-white/20"></div>
+                            </div>
 
-                            {/* Side splits của shorts */}
-                            <div className="absolute left-1 bottom-0 w-0.5 h-4 bg-white/20 rounded-full"></div>
-                            <div className="absolute right-1 bottom-0 w-0.5 h-4 bg-white/20 rounded-full"></div>
-
-                            {/* Inner shorts line */}
-                            <div className="absolute bottom-2 left-2 right-2 h-px bg-white/15"></div>
+                            {/* Chân phải */}
+                            <div
+                                className="w-8 h-8 sm:w-10 sm:h-10 shadow-md rounded-b-lg"
+                                style={{
+                                    background: `linear-gradient(135deg, ${kitColor2} 0%, ${kitColor2}dd 70%, ${kitColor2}bb 100%)`,
+                                    boxShadow: `0 4px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1)`
+                                }}
+                            >
+                                {/* Seam chân phải */}
+                                <div className="absolute left-0 top-1 bottom-1 w-px bg-white/20"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
