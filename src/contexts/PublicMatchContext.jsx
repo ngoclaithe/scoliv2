@@ -665,6 +665,8 @@ export const PublicMatchProvider = ({ children }) => {
     });
 
     socketService.on('view_updated', (data) => {
+      
+        console.log("Giá trị currentView", data.viewType);
       setCurrentView(data.viewType);
     });
 
@@ -865,7 +867,7 @@ export const PublicMatchProvider = ({ children }) => {
           }
 
           if (state.liveUnit) {
-            console.log('��� [PublicMatchContext] Updating liveUnit from join_roomed:', state.liveUnit);
+            console.log('[PublicMatchContext] Updating liveUnit from join_roomed:', state.liveUnit);
             setLiveUnit(prev => ({ ...prev, ...state.liveUnit }));
           }
 

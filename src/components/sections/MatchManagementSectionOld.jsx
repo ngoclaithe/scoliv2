@@ -1044,7 +1044,6 @@ const MatchManagementSection = ({ isActive = true }) => {
               : "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300"
               }`}
           >
-            {/* <span className="mr-0.5 text-xs">���</span> */}
             <span className="hidden sm:inline">THÔNG SỐ</span>
             <span className="sm:hidden">Thông Số</span>
             </button>
@@ -1434,7 +1433,6 @@ const MatchManagementSection = ({ isActive = true }) => {
               }}
               className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
             >
-              {/* <span className="text-sm mr-1">���</span> */}
               <span className="text-xs font-bold text-center">TỈ SỐ DƯỚI</span>
             </button>
             )}

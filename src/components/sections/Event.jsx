@@ -61,7 +61,7 @@ const Event = () => {
   };
 
   const teamBData = {
-    name: matchData.teamB?.name || "��ỘI B",
+    name: matchData.teamB?.name || "ĐỘI B",
     logo: matchData.teamB?.logo || "https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/1200px-FC_Barcelona_logo.svg.png",
     score: matchData.teamB?.score || 0,
     color: matchData.teamB?.teamBKitColor || "#0000FF"

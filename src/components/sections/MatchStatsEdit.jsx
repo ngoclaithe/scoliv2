@@ -34,6 +34,26 @@ const MatchStatsEdit = ({
   const [totalPossessionA, setTotalPossessionA] = useState(0); // tính bằng ms
   const [totalPossessionB, setTotalPossessionB] = useState(0); // tính bằng ms
 
+  // Local state cho các chỉ số cần manual update
+  const [localStats, setLocalStats] = useState({
+    possession: { team1: 50, team2: 50 },
+    totalShots: { team1: 0, team2: 0 },
+    shotsOnTarget: { team1: 0, team2: 0 },
+    corners: { team1: 0, team2: 0 },
+    fouls: { team1: 0, team2: 0 }
+  });
+
+  // Khởi tạo localStats từ matchStats khi component mount
+  useEffect(() => {
+    setLocalStats({
+      possession: matchStats.possession || { team1: 50, team2: 50 },
+      totalShots: matchStats.totalShots || { team1: 0, team2: 0 },
+      shotsOnTarget: matchStats.shotsOnTarget || { team1: 0, team2: 0 },
+      corners: matchStats.corners || { team1: 0, team2: 0 },
+      fouls: matchStats.fouls || { team1: 0, team2: 0 }
+    });
+  }, [matchStats]);
+
   // Fetch danh sách cầu thủ khi component mount
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -54,7 +74,7 @@ const MatchStatsEdit = ({
         const processPlayers = (players) => {
           if (!Array.isArray(players)) return [];
           return players.map((player, index) => ({
-            _id: player._id || `${player.name}_${index}`, // T��o _id nếu không có
+            _id: player._id || `${player.name}_${index}`,
             name: player.name || '',
             jerseyNumber: player.number || player.jerseyNumber || ''
           }));
@@ -77,32 +97,45 @@ const MatchStatsEdit = ({
     fetchPlayers();
   }, [accessCode]);
 
-  const updateStat = (statKey, team, increment) => {
-    const currentValue = matchStats[statKey][team] || 0;
-    const newValue = Math.max(0, currentValue + increment);
-    
-    const newStats = {
-      ...matchStats,
-      [statKey]: {
-        ...matchStats[statKey],
-        [team]: newValue
-      }
-    };
-    onUpdateStats(newStats);
+  // Hàm update local stats (không gọi onUpdateStats)
+  const updateLocalStat = (statKey, team, increment) => {
+    setLocalStats(prev => {
+      const currentValue = prev[statKey][team] || 0;
+      const newValue = Math.max(0, currentValue + increment);
+      
+      return {
+        ...prev,
+        [statKey]: {
+          ...prev[statKey],
+          [team]: newValue
+        }
+      };
+    });
   };
 
-  const updatePossession = (team, increment) => {
-    const currentValue = matchStats.possession[team] || 0;
-    const newValue = Math.max(0, Math.min(100, currentValue + increment));
-    const otherTeam = team === 'team1' ? 'team2' : 'team1';
-    const otherValue = 100 - newValue;
+  // Hàm update local possession (không gọi onUpdateStats)
+  const updateLocalPossession = (team, increment) => {
+    setLocalStats(prev => {
+      const currentValue = prev.possession[team] || 0;
+      const newValue = Math.max(0, Math.min(100, currentValue + increment));
+      const otherTeam = team === 'team1' ? 'team2' : 'team1';
+      const otherValue = 100 - newValue;
 
+      return {
+        ...prev,
+        possession: {
+          [team]: newValue,
+          [otherTeam]: otherValue
+        }
+      };
+    });
+  };
+
+  // Hàm manual update - gửi tất cả local stats lên backend
+  const handleManualUpdate = () => {
     const newStats = {
       ...matchStats,
-      possession: {
-        [team]: newValue,
-        [otherTeam]: otherValue
-      }
+      ...localStats
     };
     onUpdateStats(newStats);
   };
@@ -175,21 +208,20 @@ const MatchStatsEdit = ({
     return { team1: percentageA, team2: percentageB };
   };
 
-  // Cập nhật possession stats theo thời gian thực
+  // Cập nhật local possession stats theo thời gian thực (không gọi onUpdateStats)
   useEffect(() => {
     if (!matchStarted) return;
 
     const interval = setInterval(() => {
       const newPossession = calculatePossessionPercentage();
-      const newStats = {
-        ...matchStats,
+      setLocalStats(prev => ({
+        ...prev,
         possession: newPossession
-      };
-      onUpdateStats(newStats);
+      }));
     }, 1000); // Cập nhật mỗi giây
 
     return () => clearInterval(interval);
-  }, [matchStarted, currentController, possessionStartTime, totalPossessionA, totalPossessionB, matchStats, onUpdateStats]);
+  }, [matchStarted, currentController, possessionStartTime, totalPossessionA, totalPossessionB]);
 
   const StatControl = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => (
     <div className="py-0.5">
@@ -296,10 +328,20 @@ const MatchStatsEdit = ({
         socketService.emit('update_card', cardData);
       }
 
-      // Cập nhật local state cho thẻ vàng
+      // Cập nhật local state cho thẻ vàng - vẫn update ngay lập tức
       if (cardType === 'yellow') {
         const teamKey = team === 'teamA' ? 'team1' : 'team2';
-        updateStat('yellowCards', teamKey, 1);
+        const currentValue = matchStats.yellowCards[teamKey] || 0;
+        const newValue = Math.max(0, currentValue + 1);
+        
+        const newStats = {
+          ...matchStats,
+          yellowCards: {
+            ...matchStats.yellowCards,
+            [teamKey]: newValue
+          }
+        };
+        onUpdateStats(newStats);
       }
 
       // Reset input
@@ -384,7 +426,13 @@ const MatchStatsEdit = ({
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-base font-semibold text-gray-900">Thông số trận đấu</h3>
         <div className="flex items-center gap-2">
-        <button
+          <button
+            onClick={handleManualUpdate}
+            className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+          >
+            <span className="text-xs font-bold text-center">Cập nhật</span>
+          </button>
+          <button
             onClick={() => {
               onUpdateView('event');
               onPlayAudio('poster');
@@ -441,17 +489,17 @@ const MatchStatsEdit = ({
             </select>
           </div>
 
-          {/* Hiển thị % kiểm soát */}
+          {/* Hiển thị % kiểm soát - sử dụng localStats */}
           <div className="flex items-center gap-2 mb-2">
             <div className="flex-1">
               <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-8 text-center border border-red-300 rounded">
-                {matchStats.possession.team1}%
+                {localStats.possession.team1}%
               </div>
             </div>
             <div className="text-gray-400 text-xs">vs</div>
             <div className="flex-1">
               <div className="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold min-w-8 text-center border border-gray-300 rounded">
-                {matchStats.possession.team2}%
+                {localStats.possession.team2}%
               </div>
             </div>
           </div>
@@ -485,34 +533,34 @@ const MatchStatsEdit = ({
           </div>
         </div>
 
-        {/* Tổng số cú sút */}
+        {/* Tổng số cú sút - sử dụng local stats */}
         <StatControl
           label="Tổng số cú sút"
           statKey="totalShots"
-          team1Value={matchStats.totalShots.team1}
-          team2Value={matchStats.totalShots.team2}
-          onUpdate={(team, increment) => updateStat('totalShots', team, increment)}
+          team1Value={localStats.totalShots.team1}
+          team2Value={localStats.totalShots.team2}
+          onUpdate={(team, increment) => updateLocalStat('totalShots', team, increment)}
         />
 
-        {/* Sút trúng đích */}
+        {/* Sút trúng đích - sử dụng local stats */}
         <StatControl
           label="Sút trúng đích"
           statKey="shotsOnTarget"
-          team1Value={matchStats.shotsOnTarget.team1}
-          team2Value={matchStats.shotsOnTarget.team2}
-          onUpdate={(team, increment) => updateStat('shotsOnTarget', team, increment)}
+          team1Value={localStats.shotsOnTarget.team1}
+          team2Value={localStats.shotsOnTarget.team2}
+          onUpdate={(team, increment) => updateLocalStat('shotsOnTarget', team, increment)}
         />
 
-        {/* Phạt góc */}
+        {/* Phạt góc - sử dụng local stats */}
         <StatControl
           label="Phạt góc"
           statKey="corners"
-          team1Value={matchStats.corners.team1}
-          team2Value={matchStats.corners.team2}
-          onUpdate={(team, increment) => updateStat('corners', team, increment)}
+          team1Value={localStats.corners.team1}
+          team2Value={localStats.corners.team2}
+          onUpdate={(team, increment) => updateLocalStat('corners', team, increment)}
         />
 
-        {/* Thẻ vàng - chỉ hiển thị, không cho chỉnh tay */}
+        {/* Thẻ vàng - chỉ hiển thị, không cho chỉnh tay - giữ nguyên */}
         <div className="py-0.5">
           <div className="text-center mb-0.5">
             <span className="font-medium text-gray-700 text-sm">Thẻ vàng</span>
@@ -532,16 +580,16 @@ const MatchStatsEdit = ({
           </div>
         </div>
 
-        {/* Phạm lỗi */}
+        {/* Phạm lỗi - sử dụng local stats */}
         <StatControl
           label="Phạm lỗi"
           statKey="fouls"
-          team1Value={matchStats.fouls.team1}
-          team2Value={matchStats.fouls.team2}
-          onUpdate={(team, increment) => updateStat('fouls', team, increment)}
+          team1Value={localStats.fouls.team1}
+          team2Value={localStats.fouls.team2}
+          onUpdate={(team, increment) => updateLocalStat('fouls', team, increment)}
         />
 
-        {/* Lỗi Futsal */}
+        {/* Lỗi Futsal - giữ nguyên logic update ngay lập tức */}
         <div className="py-0.5">
           <div className="text-center mb-0.5">
             <span className="font-medium text-gray-700 text-sm">Lỗi Futsal</span>
@@ -589,7 +637,7 @@ const MatchStatsEdit = ({
           </div>
         </div>
 
-        {/* Cầu thủ ghi bàn */}
+        {/* Cầu thủ ghi bàn - giữ nguyên logic */}
         <div className="py-0.5 border-t border-gray-200 pt-1">
           <div className="text-center mb-1.5">
             <span className="font-medium text-gray-700 text-sm">Sự kiện</span>

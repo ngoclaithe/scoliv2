@@ -30,7 +30,7 @@ const ScoreboardBelowNew = ({
         teamAFouls: futsalErrors?.teamA || 0,
         teamBFouls: futsalErrors?.teamB || 0,
         matchTime: matchData?.matchTime || "00:00",
-        period: matchData?.period || "Chưa b���t đầu",
+        period: matchData?.period || "Chưa bắt đầu",
         status: matchData?.status || "waiting",
         teamAKitColor: matchData?.teamA?.teamAKitColor || "#FF0000",
         teamBKitColor: matchData?.teamB?.teamBKitColor || "#0000FF",

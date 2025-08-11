@@ -26,7 +26,6 @@ const ActivityTab = () => {
       setLoading(true);
       setError('');
       
-      // T��m thời sử dụng getUsers để mô phỏng activities
       // Trong thực tế, sẽ cần API riêng cho activities
       const params = {
         page: currentPage,

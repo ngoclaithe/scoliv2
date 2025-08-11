@@ -82,7 +82,7 @@ const UserProfileSection = ({
                 <div>
                   <dt className="text-sm font-medium text-gray-500">Vai trò</dt>
                   <dd className="mt-1 text-sm text-gray-900">
-                    {currentUser.role === 'admin' ? 'Quản tr�� viên' : 'Người dùng'}
+                    {currentUser.role === 'admin' ? 'Quản trị viên' : 'Người dùng'}
                   </dd>
                 </div>
                 <div>
