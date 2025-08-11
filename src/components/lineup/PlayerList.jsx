@@ -74,7 +74,7 @@ const PlayerList = () => {
         );
     };
 
-    // Component áo đấu 3D đẹp với background mới
+    // Component áo đấu đơn giản và đẹp
     const Jersey3D = ({ kitColor, kitColor2, teamName, isTeamA }) => {
         // Tạo màu tương phản cho số áo
         const getContrastColor = (hexColor) => {
@@ -86,181 +86,84 @@ const PlayerList = () => {
         };
 
         const numberColor = getContrastColor(kitColor);
-        const shadowColor = numberColor === '#FFFFFF' ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)';
 
         return (
             <div className="flex flex-col items-center justify-center">
-                <div className="relative group">
-                    {/* Spotlight effect background */}
-                    <div className="absolute -inset-8 bg-gradient-radial from-white/5 via-transparent to-transparent rounded-full blur-xl opacity-60 group-hover:opacity-100 transition-opacity duration-500"></div>
-                    
-                    {/* 3D Jersey Container */}
-                    <div className="relative w-32 h-40 sm:w-40 sm:h-48 md:w-48 md:h-56 perspective-1000">
-                        <div className="relative w-full h-full transform-style-preserve-3d transition-all duration-700 group-hover:rotate-y-8 group-hover:scale-105">
-                            
-                            {/* Jersey Shadow Base */}
-                            <div 
-                                className="absolute inset-0 rounded-t-3xl rounded-b-xl transform translate-y-2 translate-x-2 opacity-30 blur-sm"
-                                style={{
-                                    background: `linear-gradient(145deg, #000000, #1a1a1a)`,
-                                }}
-                            ></div>
-
-                            {/* Jersey Main Body */}
-                            <div 
-                                className="absolute inset-0 rounded-t-3xl rounded-b-xl shadow-2xl transform transition-all duration-500 group-hover:shadow-3xl"
-                                style={{
-                                    background: `linear-gradient(145deg, ${kitColor}ff, ${kitColor}ee 50%, ${kitColor}cc)`,
-                                    boxShadow: `
-                                        0 25px 50px rgba(0,0,0,0.4),
-                                        inset 0 2px 4px rgba(255,255,255,0.3),
-                                        inset 0 -2px 4px rgba(0,0,0,0.2)
-                                    `
-                                }}
-                            >
-                                {/* Fabric texture overlay */}
-                                <div 
-                                    className="absolute inset-0 rounded-t-3xl rounded-b-xl opacity-20"
+                <div className="relative">
+                    {/* Jersey Container đơn giản */}
+                    <div className="relative w-32 h-40 sm:w-36 sm:h-44">
+                        {/* Jersey Main Body */}
+                        <div
+                            className="absolute inset-0 rounded-t-2xl rounded-b-lg shadow-lg"
+                            style={{
+                                background: `linear-gradient(145deg, ${kitColor}, ${kitColor}dd)`,
+                                boxShadow: `0 8px 25px rgba(0,0,0,0.2)`
+                            }}
+                        >
+                            {/* Collar đơn giản */}
+                            <div className="absolute top-0 left-1/2 transform -translate-x-1/2">
+                                <div
+                                    className="w-6 h-4 sm:w-8 sm:h-5 rounded-b-lg"
                                     style={{
-                                        backgroundImage: `
-                                            repeating-linear-gradient(
-                                                45deg,
-                                                transparent,
-                                                transparent 2px,
-                                                rgba(255,255,255,0.1) 2px,
-                                                rgba(255,255,255,0.1) 4px
-                                            )
-                                        `
+                                        background: kitColor2
                                     }}
-                                ></div>
-                                
-                                {/* Highlight gradient */}
-                                <div className="absolute inset-0 rounded-t-3xl rounded-b-xl bg-gradient-to-br from-white/20 via-transparent to-transparent"></div>
-                                
-                                {/* Collar - Improved Design */}
-                                <div className="absolute top-0 left-1/2 transform -translate-x-1/2">
-                                    <div 
-                                        className="w-8 h-6 sm:w-10 sm:h-8 rounded-b-full border-2 shadow-inner"
-                                        style={{ 
-                                            background: `linear-gradient(180deg, ${kitColor2}ff, ${kitColor2}dd)`,
-                                            borderColor: `${kitColor}aa`,
-                                            boxShadow: `inset 0 2px 4px rgba(0,0,0,0.3)`
-                                        }}
-                                    >
-                                        {/* V-neck detail */}
-                                        <div 
-                                            className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-2 rounded-t-full"
-                                            style={{ backgroundColor: kitColor2 }}
-                                        ></div>
-                                    </div>
-                                </div>
-                                
-                                {/* Left Sleeve - Enhanced */}
-                                <div 
-                                    className="absolute -left-4 top-4 w-8 h-16 sm:w-10 sm:h-20 rounded-l-2xl shadow-xl transform -rotate-3"
+                                />
+                            </div>
+
+                            {/* Left Sleeve đơn giản */}
+                            <div
+                                className="absolute -left-3 top-3 w-6 h-12 sm:w-7 sm:h-14 rounded-l-lg"
+                                style={{
+                                    background: kitColor
+                                }}
+                            />
+
+                            {/* Right Sleeve đơn giản */}
+                            <div
+                                className="absolute -right-3 top-3 w-6 h-12 sm:w-7 sm:h-14 rounded-r-lg"
+                                style={{
+                                    background: kitColor
+                                }}
+                            />
+
+                            {/* Jersey Number đơn giản */}
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <div
+                                    className="text-3xl sm:text-4xl font-bold text-center leading-none select-none"
                                     style={{
-                                        background: `linear-gradient(90deg, ${kitColor}aa, ${kitColor}ff, ${kitColor}ee)`,
-                                        boxShadow: `
-                                            -5px 5px 15px rgba(0,0,0,0.3),
-                                            inset 1px 1px 3px rgba(255,255,255,0.2)
-                                        `
+                                        color: numberColor,
+                                        textShadow: `2px 2px 4px rgba(0,0,0,0.5)`
                                     }}
                                 >
-                                    <div className="absolute inset-0 rounded-l-2xl bg-gradient-to-r from-black/10 to-white/10"></div>
-                                </div>
-
-                                {/* Right Sleeve - Enhanced */}
-                                <div 
-                                    className="absolute -right-4 top-4 w-8 h-16 sm:w-10 sm:h-20 rounded-r-2xl shadow-xl transform rotate-3"
-                                    style={{
-                                        background: `linear-gradient(-90deg, ${kitColor}aa, ${kitColor}ff, ${kitColor}ee)`,
-                                        boxShadow: `
-                                            5px 5px 15px rgba(0,0,0,0.3),
-                                            inset -1px 1px 3px rgba(255,255,255,0.2)
-                                        `
-                                    }}
-                                >
-                                    <div className="absolute inset-0 rounded-r-2xl bg-gradient-to-l from-black/10 to-white/10"></div>
-                                </div>
-                                
-                                {/* Jersey Number - Improved Typography */}
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                    <div 
-                                        className="text-4xl sm:text-5xl md:text-6xl font-black text-center leading-none select-none transform transition-transform duration-300 group-hover:scale-110"
-                                        style={{ 
-                                            color: numberColor,
-                                            textShadow: `
-                                                3px 3px 0 ${shadowColor},
-                                                -1px -1px 0 ${shadowColor},
-                                                1px -1px 0 ${shadowColor},
-                                                -1px 1px 0 ${shadowColor},
-                                                1px 1px 0 ${shadowColor},
-                                                0 0 10px rgba(0,0,0,0.5)
-                                            `,
-                                            fontFamily: 'Arial Black, sans-serif'
-                                        }}
-                                    >
-                                        {isTeamA ? '10' : '9'}
-                                    </div>
-                                </div>
-                                
-                                {/* Brand/Sponsor Logo */}
-                                <div className="absolute top-3 right-3 w-4 h-4 sm:w-6 sm:h-6 bg-white/30 rounded-full backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                                    <div className="w-2 h-2 sm:w-3 sm:h-3 bg-white/60 rounded-full"></div>
-                                </div>
-
-                                {/* Subtle team logo watermark */}
-                                <div className="absolute bottom-6 left-3 opacity-10">
-                                    <div className="w-8 h-8 bg-white/20 rounded-full"></div>
+                                    {isTeamA ? '10' : '9'}
                                 </div>
                             </div>
                         </div>
-                        
-                        {/* Animated glow effect */}
-                        <div className="absolute -inset-4 bg-gradient-to-r from-transparent via-white/5 to-transparent rounded-full animate-pulse opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
-                    
-                    {/* Shorts - Redesigned */}
-                    <div className="mt-3 relative">
-                        <div 
-                            className="w-20 h-12 sm:w-24 sm:h-14 md:w-28 md:h-16 rounded-xl shadow-xl mx-auto transform transition-all duration-300 group-hover:scale-105"
+
+                    {/* Shorts đơn giản */}
+                    <div className="mt-2 relative">
+                        <div
+                            className="w-20 h-10 sm:w-22 sm:h-12 rounded-lg shadow-md mx-auto"
                             style={{
-                                background: `linear-gradient(145deg, ${kitColor2}ff, ${kitColor2}dd, ${kitColor2}bb)`,
-                                boxShadow: `
-                                    0 15px 25px rgba(0,0,0,0.3),
-                                    inset 0 2px 4px rgba(255,255,255,0.3),
-                                    inset 0 -1px 2px rgba(0,0,0,0.2)
-                                `
+                                background: `linear-gradient(145deg, ${kitColor2}, ${kitColor2}dd)`
                             }}
                         >
-                            {/* Shorts texture */}
-                            <div className="absolute inset-0 rounded-xl bg-gradient-to-b from-white/15 via-transparent to-black/15"></div>
-                            
-                            {/* Side seams */}
-                            <div className="absolute left-1 top-1 bottom-1 w-0.5 bg-white/20 rounded-full"></div>
-                            <div className="absolute right-1 top-1 bottom-1 w-0.5 bg-white/20 rounded-full"></div>
-                            
                             {/* Waistband */}
-                            <div 
-                                className="absolute top-0 left-0 right-0 h-2 rounded-t-xl"
-                                style={{ 
-                                    background: `linear-gradient(90deg, ${kitColor}aa, ${kitColor}ff, ${kitColor}aa)`
+                            <div
+                                className="absolute top-0 left-0 right-0 h-1.5 rounded-t-lg"
+                                style={{
+                                    background: kitColor
                                 }}
-                            ></div>
+                            />
                         </div>
-
-                        {/* Shorts shadow */}
-                        <div 
-                            className="absolute top-1 left-1/2 transform -translate-x-1/2 w-16 h-8 sm:w-20 sm:h-10 md:w-24 md:h-12 rounded-xl opacity-20 blur-md -z-10"
-                            style={{ backgroundColor: '#000000' }}
-                        ></div>
                     </div>
                 </div>
-                
-                {/* Team name with improved styling */}
-                <div className="mt-6 text-center">
-                    <div className="px-4 py-2 rounded-xl bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-md border border-white/20 shadow-lg transform transition-all duration-300 hover:scale-105">
-                        <p className="text-white font-bold text-sm sm:text-base tracking-wide text-stroke">
+
+                {/* Team name đơn giản */}
+                <div className="mt-4 text-center">
+                    <div className="px-3 py-1.5 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
+                        <p className="text-white font-semibold text-sm tracking-wide text-stroke">
                             {teamName}
                         </p>
                     </div>
