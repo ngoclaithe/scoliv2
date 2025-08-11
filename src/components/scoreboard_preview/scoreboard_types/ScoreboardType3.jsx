@@ -3,7 +3,9 @@ import { FoulsDisplay } from '../../../utils/futsalUtils';
 
 const ScoreboardType3 = ({ currentData, logoShape, showMatchTime }) => {
     return (
-        <div className="flex items-center justify-center w-full px-2 max-w-sm mx-auto scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
+        <div className="flex flex-col items-center w-full scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
+            {/* Main scoreboard row */}
+            <div className="flex items-center justify-center w-full px-2 max-w-sm mx-auto">
             {/* Logo đội A */}
             <div className="flex-shrink-0 mr-2 sm:mr-3">
                 <div
@@ -80,8 +82,10 @@ const ScoreboardType3 = ({ currentData, logoShape, showMatchTime }) => {
                 </div>
             </div>
 
+            </div>
+
             {/* Goal scorers and fouls row below main scoreboard - luôn hiển thị */}
-            <div className="w-full flex justify-between items-center px-4 mt-3">
+            <div className="w-full flex justify-between items-center px-4 mt-3 max-w-sm mx-auto">
                 {/* Team A scorers and fouls */}
                 <div className="flex items-center space-x-2 flex-1 min-w-0">
                     <div className="text-[10px] text-gray-700 max-w-[140px] overflow-hidden max-h-[60px]">
