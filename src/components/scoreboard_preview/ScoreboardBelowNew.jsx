@@ -122,7 +122,7 @@ const ScoreboardBelowNew = ({
                         style={{ clipPath: 'polygon(12px 0%, 100% 0%, 100% 100%, 12px 100%, 0% 50%)' }}>
                         {currentData.teamAScore}
                     </div>
-                    <div className="flex flex-col items-center w-[90px]">
+                    <div className="flex flex-col items-center w-[110px]">
                         <div className="w-full bg-blue-600 text-white px-2 py-0.5 text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]">
                             {currentData.teamAName}
                         </div>
@@ -142,7 +142,7 @@ const ScoreboardBelowNew = ({
 
                 {/* Team B section */}
                 <div className="flex items-center gap-0">
-                    <div className="flex flex-col items-center w-[90px]">
+                    <div className="flex flex-col items-center w-[110px]">
                         <div className="w-full bg-blue-600 text-white px-2 py-0.5 text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]">
                             {currentData.teamBName}
                         </div>
@@ -177,11 +177,11 @@ const ScoreboardBelowNew = ({
                 <div className="flex items-start gap-0">
                     {/* Spacer for score */}
                     <div className="min-w-[2.2rem]"></div>
-                    <div className="w-[90px] flex justify-between items-start">
+                    <div className="w-[110px] flex justify-between items-start">
                         {/* Goal scorers for Team A */}
-                        <div className="flex-1 text-[10px] text-gray-700 leading-tight overflow-hidden max-h-[40px]">
+                        <div className="flex-1 text-[10px] text-gray-700 leading-tight overflow-hidden max-h-[60px]">
                             {currentData.teamAScorers && currentData.teamAScorers.length > 0 ? (
-                                currentData.teamAScorers.slice(0, 2).map((scorer, index) => (
+                                currentData.teamAScorers.slice(0, 4).map((scorer, index) => (
                                     <div key={index} className="truncate">
                                         {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
                                     </div>
@@ -205,18 +205,18 @@ const ScoreboardBelowNew = ({
 
                 {/* Team B stats section */}
                 <div className="flex items-start gap-0">
-                    <div className="w-[90px] flex justify-between items-start">
+                    <div className="w-[110px] flex justify-between items-start">
                         {/* Fouls for Team B */}
                         <div className="flex-shrink-0">
                             <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[10px]" />
                         </div>
 
-                        {/* Goal scorers for Team B */}
-                        <div className="flex-1 text-[10px] text-gray-700 leading-tight overflow-hidden max-h-[40px] text-right">
+                        {/* Goal scorers for Team B - phút trước, tên cầu thủ sau */}
+                        <div className="flex-1 text-[10px] text-gray-700 leading-tight overflow-hidden max-h-[60px] text-right">
                             {currentData.teamBScorers && currentData.teamBScorers.length > 0 ? (
-                                currentData.teamBScorers.slice(0, 2).map((scorer, index) => (
+                                currentData.teamBScorers.slice(0, 4).map((scorer, index) => (
                                     <div key={index} className="truncate">
-                                        {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
+                                        {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '} {scorer.player}
                                     </div>
                                 ))
                             ) : (
