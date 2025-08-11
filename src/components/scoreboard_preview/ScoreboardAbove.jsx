@@ -13,6 +13,7 @@ import ScoreboardTypePickleBall from './scoreboard_types/ScoreboardTypePickleBal
 const ScoreboardAbove = ({ type = 1 }) => {
     const {
         matchData,
+        futsalErrors,
         displaySettings,
         marqueeData,
         sponsors,
