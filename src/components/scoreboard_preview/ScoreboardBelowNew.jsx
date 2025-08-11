@@ -484,9 +484,9 @@ const ScoreboardBelowNew = ({
                 <div className="w-full flex justify-between items-center px-2 mt-2">
                     {/* Team A scorers and fouls */}
                     <div className="flex items-center space-x-2 flex-1">
-                        <div className="text-[10px] text-gray-700 max-w-[120px] overflow-hidden">
+                        <div className="text-[10px] text-gray-700 max-w-[140px] overflow-hidden max-h-[60px]">
                             {currentData.teamAScorers && currentData.teamAScorers.length > 0 ? (
-                                currentData.teamAScorers.slice(0, 2).map((scorer, index) => (
+                                currentData.teamAScorers.slice(0, 4).map((scorer, index) => (
                                     <div key={index} className="truncate">
                                         {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
                                     </div>
@@ -501,11 +501,11 @@ const ScoreboardBelowNew = ({
                     {/* Team B fouls and scorers */}
                     <div className="flex items-center space-x-2 flex-1 justify-end">
                         <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[10px]" />
-                        <div className="text-[10px] text-gray-700 max-w-[120px] overflow-hidden text-right">
+                        <div className="text-[10px] text-gray-700 max-w-[140px] overflow-hidden text-right max-h-[60px]">
                             {currentData.teamBScorers && currentData.teamBScorers.length > 0 ? (
-                                currentData.teamBScorers.slice(0, 2).map((scorer, index) => (
+                                currentData.teamBScorers.slice(0, 4).map((scorer, index) => (
                                     <div key={index} className="truncate">
-                                        {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
+                                        {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '} {scorer.player}
                                     </div>
                                 ))
                             ) : (
