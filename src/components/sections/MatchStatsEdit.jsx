@@ -378,14 +378,11 @@ const MatchStatsEdit = ({
           <div className="mb-2">
             <div className="text-xs text-red-600 mb-1">Đội A:</div>
             <div className="flex items-center gap-1 player-dropdown">
-              <PlayerInput
+              <PlayerDropdown
                 team="teamA"
                 players={playersTeamA}
-                value={goalScorers.teamA.player}
-                onChange={(value) => setGoalScorers(prev => ({
-                  ...prev,
-                  teamA: { ...prev.teamA, player: value }
-                }))}
+                selectedPlayerId={goalScorers.teamA.player}
+                onSelect={handlePlayerSelect}
                 show={showDropdownA}
                 onToggle={() => setShowDropdownA(!showDropdownA)}
               />
@@ -417,14 +414,11 @@ const MatchStatsEdit = ({
           <div>
             <div className="text-xs text-gray-800 mb-1">Đội B:</div>
             <div className="flex items-center gap-1 player-dropdown">
-              <PlayerInput
+              <PlayerDropdown
                 team="teamB"
                 players={playersTeamB}
-                value={goalScorers.teamB.player}
-                onChange={(value) => setGoalScorers(prev => ({
-                  ...prev,
-                  teamB: { ...prev.teamB, player: value }
-                }))}
+                selectedPlayerId={goalScorers.teamB.player}
+                onSelect={handlePlayerSelect}
                 show={showDropdownB}
                 onToggle={() => setShowDropdownB(!showDropdownB)}
               />
