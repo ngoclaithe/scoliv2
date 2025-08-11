@@ -593,7 +593,7 @@ const ScoreboardBelowNew = ({
             </div>
 
             {/* Goal scorers and fouls row - thêm cho Type 4 */}
-            <div className="flex items-start justify-center w-full gap-0 mt-1">
+            <div className="flex items-start justify-center w-full gap-0 mt-4">
                 {/* Spacer for logo A */}
                 <div className="w-8 sm:w-10 md:w-12"></div>
 
