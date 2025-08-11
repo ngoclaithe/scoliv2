@@ -388,12 +388,6 @@ const ScoreboardBelowNew = ({
                             <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[10px]" />
                         </div>
 
-                        {/* Center live indicator */}
-                        <div className="text-center">
-                            <span className="bg-green-600 text-white px-4 py-1 text-sm font-bold rounded animate-pulse">
-                                ● TRỰC TIẾP
-                            </span>
-                        </div>
 
                         {/* Team B fouls and scorers */}
                         <div className="flex items-center space-x-4 flex-1 justify-end">
@@ -451,12 +445,7 @@ const ScoreboardBelowNew = ({
                                 {currentData.matchTime}
                             </div>
                         )}
-                        {!showMatchTime && (
-                            <div className="bg-green-600 text-white px-2 py-0.5 text-[10px] font-medium rounded-sm mt-1 animate-pulse whitespace-nowrap">
-                                ● TRỰC TIẾP
-                            </div>
-                        )}
-                    </div>
+                        </div>
 
                     {/* Team B */}
                     <div className="flex items-center">
