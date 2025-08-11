@@ -150,7 +150,7 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
             <div className="space-y-2 mt-3">
                 <div className="flex justify-between items-center px-6">
                     {/* Team A scorers and fouls */}
-                    <div className="flex items-center space-x-3 flex-1 min-w-0">
+                    <div className="flex items-center space-x-6 flex-1 min-w-0">
                         <div className="text-[10px] text-gray-700 max-w-[140px] overflow-hidden max-h-[60px]">
                             {currentData.teamAScorers && currentData.teamAScorers.length > 0 ? (
                                 currentData.teamAScorers.slice(0, 4).map((scorer, index) => (
