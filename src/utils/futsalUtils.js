@@ -27,7 +27,12 @@ export const renderFutsalFouls = (foulsCount) => {
 // Component để hiển thị fouls với màu sắc
 export const FoulsDisplay = ({ foulsCount, className = "" }) => {
   const { redFouls, yellowFouls } = renderFutsalFouls(foulsCount);
-  
+
+  // Nếu chưa có lỗi nào thì không hiển thị gì (trắng tinh)
+  if (foulsCount === 0) {
+    return <div className={`flex items-center ${className}`}></div>;
+  }
+
   return (
     <div className={`flex items-center ${className}`}>
       {redFouls > 0 && (
@@ -39,9 +44,6 @@ export const FoulsDisplay = ({ foulsCount, className = "" }) => {
         <span className="text-yellow-500 font-bold text-sm">
           {'|'.repeat(yellowFouls)}
         </span>
-      )}
-      {foulsCount === 0 && (
-        <span className="text-gray-400 text-xs">0</span>
       )}
     </div>
   );
