@@ -4,7 +4,7 @@ import { FoulsDisplay } from '../../../utils/futsalUtils';
 const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
     return (
         <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
-            <div className="flex items-center justify-center w-full px-2 gap-0">
+            <div className="flex items-end justify-center w-full px-2 gap-0">
                 <div
                     className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
@@ -22,28 +22,39 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                     />
                 </div>
 
-                <div className="flex items-center">
-                    <div
-                        className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 min-w-[2.2rem] text-center"
-                        style={{ clipPath: 'polygon(12px 0%, 100% 0%, 100% 100%, 12px 100%, 0% 50%)' }}
-                    >
-                        {currentData.teamAScore}
-                    </div>
-
-                    <div className="flex flex-col items-center w-[90px]">
-                        <div className="w-full bg-blue-600 text-white text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]">
-                            {currentData.teamAName}
+                <div className="flex">
+                    <div className="flex flex-col items-center">
+                        {/* Fouls for Team A */}
+                        <div className="flex justify-center">
+                            <div className="[&>*]:!w-3 [&>*]:!h-1">
+                                <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[10px]" />
+                            </div>
                         </div>
+                        
+                        <div className="flex items-start">
+                            <div
+                                className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 min-w-[2.2rem] text-center"
+                                style={{ clipPath: 'polygon(12px 0%, 100% 0%, 100% 100%, 12px 100%, 0% 50%)' }}
+                            >
+                                {currentData.teamAScore}
+                            </div>
 
-                        <div className="flex w-full h-3">
-                            <div
-                                className="flex-1 h-full"
-                                style={{ backgroundColor: currentData.teamAKitColor }}
-                            />
-                            <div
-                                className="flex-1 h-full"
-                                style={{ backgroundColor: currentData.teamA2KitColor }}
-                            />
+                            <div className="w-[90px]">
+                                <div className="w-full bg-blue-600 text-white text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]">
+                                    {currentData.teamAName}
+                                </div>
+
+                                <div className="flex w-full h-3">
+                                    <div
+                                        className="flex-1 h-full"
+                                        style={{ backgroundColor: currentData.teamAKitColor }}
+                                    />
+                                    <div
+                                        className="flex-1 h-full"
+                                        style={{ backgroundColor: currentData.teamA2KitColor }}
+                                    />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -54,26 +65,37 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                     </div>
                 )}
 
-                <div className="flex items-center">
-                    <div className="flex flex-col items-center w-[90px]">
-                        <div className="w-full bg-blue-600 text-white text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]">
-                            {currentData.teamBName}
+                <div className="flex">
+                    <div className="flex flex-col items-center">
+                        {/* Fouls for Team B */}
+                        <div className="flex justify-center">
+                            <div className="[&>*]:!w-3 [&>*]:!h-1">
+                                <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[10px]" />
+                            </div>
                         </div>
+                        
+                        <div className="flex items-start">
+                            <div className="w-[90px]">
+                                <div className="w-full bg-blue-600 text-white text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]">
+                                    {currentData.teamBName}
+                                </div>
 
-                        <div className="flex w-full h-3">
-                            <div
-                                className="flex-1 h-full"
-                                style={{ backgroundColor: currentData.teamB2KitColor }}
-                            />
-                            <div
-                                className="flex-1 h-full"
-                                style={{ backgroundColor: currentData.teamBKitColor }}
-                            />
+                                <div className="flex w-full h-3">
+                                    <div
+                                        className="flex-1 h-full"
+                                        style={{ backgroundColor: currentData.teamB2KitColor }}
+                                    />
+                                    <div
+                                        className="flex-1 h-full"
+                                        style={{ backgroundColor: currentData.teamBKitColor }}
+                                    />
+                                </div>
+                            </div>
+                            <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 min-w-[2.2rem] text-center"
+                                style={{ clipPath: 'polygon(0% 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 0% 100%)' }}>
+                                {currentData.teamBScore}
+                            </div>
                         </div>
-                    </div>
-                    <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 min-w-[2.2rem] text-center"
-                        style={{ clipPath: 'polygon(0% 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 0% 100%)' }}>
-                        {currentData.teamBScore}
                     </div>
                 </div>
 
@@ -93,70 +115,6 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                         }}
                     />
                 </div>
-            </div>
-
-            {/* Goal scorers and fouls row */}
-            <div className="flex items-start justify-center w-full gap-0 mt-1">
-                {/* Spacer for logo A */}
-                <div className="w-14"></div>
-
-                {/* Team A stats section */}
-                <div className="flex items-start gap-0">
-                    {/* Spacer for score */}
-                    <div className="min-w-[2.2rem]"></div>
-                    <div className="w-[90px] flex justify-between items-start">
-                        {/* Goal scorers for Team A */}
-                        <div className="flex-1 text-[10px] text-gray-700 leading-tight overflow-hidden max-h-[60px]">
-                            {currentData.teamAScorers && currentData.teamAScorers.length > 0 ? (
-                                currentData.teamAScorers.slice(0, 4).map((scorer, index) => (
-                                    <div key={index} className="truncate">
-                                        {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="text-transparent">-</div>
-                            )}
-                        </div>
-
-                        {/* Fouls for Team A */}
-                        <div className="flex-shrink-0">
-                            <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[10px]" />
-                        </div>
-                    </div>
-                </div>
-
-                {/* Spacer for match time */}
-                <div className="opacity-0 px-2">
-                    {currentData.matchTime}
-                </div>
-
-                {/* Team B stats section */}
-                <div className="flex items-start gap-0">
-                    <div className="w-[90px] flex justify-between items-start">
-                        {/* Fouls for Team B */}
-                        <div className="flex-shrink-0">
-                            <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[10px]" />
-                        </div>
-
-                        {/* Goal scorers for Team B */}
-                        <div className="flex-1 text-[10px] text-gray-700 leading-tight overflow-hidden max-h-[60px] text-right">
-                            {currentData.teamBScorers && currentData.teamBScorers.length > 0 ? (
-                                currentData.teamBScorers.slice(0, 4).map((scorer, index) => (
-                                    <div key={index} className="truncate">
-                                        {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '} {scorer.player}
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="text-transparent">-</div>
-                            )}
-                        </div>
-                    </div>
-                    {/* Spacer for score */}
-                    <div className="min-w-[2.2rem]"></div>
-                </div>
-
-                {/* Spacer for logo B */}
-                <div className="w-14"></div>
             </div>
 
             {!showMatchTime && (

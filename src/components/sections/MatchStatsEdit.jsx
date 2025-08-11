@@ -366,7 +366,7 @@ const MatchStatsEdit = ({
         {/* Cầu thủ ghi bàn */}
         <div className="py-0.5 border-t border-gray-200 pt-1">
           <div className="text-center mb-1.5">
-            <span className="font-medium text-gray-700 text-sm">Cầu thủ ghi bàn</span>
+            <span className="font-medium text-gray-700 text-sm">Sự kiện</span>
           </div>
           
           {/* Đội A */}
@@ -400,7 +400,25 @@ const MatchStatsEdit = ({
                 onClick={() => handleAddGoalScorer('teamA')}
                 disabled={!(goalScorers?.teamA?.player?.trim()) || !(goalScorers?.teamA?.minute?.trim())}
               >
-                OK
+                ⚽
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="px-2 py-1 text-xs border border-red-500 bg-red-500 text-white rounded hover:bg-red-600"
+                onClick={() => handleAddGoalScorer('teamA')}
+                disabled={!(goalScorers?.teamA?.player?.trim()) || !(goalScorers?.teamA?.minute?.trim())}
+              >
+                🟨
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="px-2 py-1 text-xs border border-red-500 bg-red-500 text-white rounded hover:bg-red-600"
+                onClick={() => handleAddGoalScorer('teamA')}
+                disabled={!(goalScorers?.teamA?.player?.trim()) || !(goalScorers?.teamA?.minute?.trim())}
+              >
+                🟥
               </Button>
             </div>
           </div>
@@ -436,7 +454,25 @@ const MatchStatsEdit = ({
                 onClick={() => handleAddGoalScorer('teamB')}
                 disabled={!(goalScorers?.teamB?.player?.trim()) || !(goalScorers?.teamB?.minute?.trim())}
               >
-                OK
+                ⚽
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="px-2 py-1 text-xs border border-gray-700 bg-gray-700 text-white rounded hover:bg-gray-800"
+                onClick={() => handleAddGoalScorer('teamB')}
+                disabled={!(goalScorers?.teamB?.player?.trim()) || !(goalScorers?.teamB?.minute?.trim())}
+              >
+                🟨
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="px-2 py-1 text-xs border border-gray-700 bg-gray-700 text-white rounded hover:bg-gray-800"
+                onClick={() => handleAddGoalScorer('teamB')}
+                disabled={!(goalScorers?.teamB?.player?.trim()) || !(goalScorers?.teamB?.minute?.trim())}
+              >
+                🟥
               </Button>
             </div>
           </div>

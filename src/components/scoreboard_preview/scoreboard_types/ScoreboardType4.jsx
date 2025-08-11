@@ -28,31 +28,52 @@ const ScoreboardType4 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                     {/* Các box chính */}
                     <div className="flex flex-col items-center z-20 relative">
                         <div className="flex flex-row items-end space-x-[-10px] sm:space-x-[-16px]">
-                            {/* Team A name */}
-                            <div
-                                className="text-white text-[10px] sm:text-sm font-semibold flex items-center justify-center h-[20px] sm:h-[32px]"
-                                style={{
-                                    width: '72px',
-                                    clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)',
-                                    background: 'linear-gradient(to right, #ef4444, #f97316)',
-                                }}
-                            >
-                                <span className="truncate text-center">{currentData.teamAName}</span>
+                            {/* Team A fouls + name */}
+                            <div className="flex flex-col items-center">
+                                {/* Team A fouls */}
+                                <div className="flex items-center justify-center">
+                                    <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[9px]" />
+                                </div>
+                                {/* Team A name */}
+                                <div
+                                    className="text-white text-[10px] sm:text-sm font-semibold flex items-center justify-center h-[20px] sm:h-[32px] z-10"
+                                    style={{
+                                        width: '72px',
+                                        clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)',
+                                        background: 'linear-gradient(to right, #ef4444, #f97316)',
+                                    }}
+                                >
+                                    <span className="truncate text-center">{currentData.teamAName}</span>
+                                </div>
                             </div>
 
-                            {/* Team A kit color */}
+                            {/* Team A kit color - Chia đôi màu */}
                             <div
-                                className="flex items-end h-[20px] sm:h-[32px] z-20"
+                                className="flex flex-col items-end h-[20px] sm:h-[32px] z-20"
                                 style={{
                                     width: '20px',
-                                    backgroundColor: currentData.teamAKitColor,
                                     clipPath: 'polygon(0% 0%, 55% 0%, 100% 100%, 45% 100%)',
                                 }}
-                            />
+                            >
+                                {/* Nửa trên */}
+                                <div 
+                                    className="w-full h-1/2"
+                                    style={{
+                                        backgroundColor: currentData.teamAKitColor,
+                                    }}
+                                />
+                                {/* Nửa dưới */}
+                                <div 
+                                    className="w-full h-1/2"
+                                    style={{
+                                        backgroundColor: currentData.teamA2KitColor,
+                                    }}
+                                />
+                            </div>
 
                             {/* Score box */}
                             <div
-                                className="relative h-[40px] sm:h-[48px] bg-blue-900 flex items-center z-10"
+                                className="relative h-[40px] sm:h-[48px] bg-blue-900 flex items-center z-0"
                                 style={{
                                     width: '140px',
                                     clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)',
@@ -80,26 +101,47 @@ const ScoreboardType4 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                                 </div>
                             </div>
 
-                            {/* Team B kit color */}
+                            {/* Team B kit color - Chia đôi màu */}
                             <div
-                                className="flex items-end h-[20px] sm:h-[32px] z-20"
+                                className="flex flex-col items-end h-[20px] sm:h-[32px] z-20"
                                 style={{
                                     width: '20px',
-                                    backgroundColor: currentData.teamBKitColor,
                                     clipPath: 'polygon(45% 0%, 100% 0%, 55% 100%, 0% 100%)',
                                 }}
-                            />
-
-                            {/* Team B name */}
-                            <div
-                                className="text-white text-[10px] sm:text-sm font-semibold flex items-center justify-center h-[20px] sm:h-[32px]"
-                                style={{
-                                    width: '72px',
-                                    clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)',
-                                    background: 'linear-gradient(to right, #ef4444, #f97316)',
-                                }}
                             >
-                                <span className="truncate text-center">{currentData.teamBName}</span>
+                                {/* Nửa trên */}
+                                <div 
+                                    className="w-full h-1/2"
+                                    style={{
+                                        backgroundColor: currentData.teamBKitColor,
+                                    }}
+                                />
+                                {/* Nửa dưới */}
+                                <div 
+                                    className="w-full h-1/2"
+                                    style={{
+                                        backgroundColor: currentData.teamB2KitColor,
+                                    }}
+                                />
+                            </div>
+
+                            {/* Team B fouls + name */}
+                            <div className="flex flex-col items-center">
+                                {/* Team B fouls */}
+                                <div className="flex items-center justify-center">
+                                    <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[9px]" />
+                                </div>
+                                {/* Team B name */}
+                                <div
+                                    className="text-white text-[10px] sm:text-sm font-semibold flex items-center justify-center h-[20px] sm:h-[32px]"
+                                    style={{
+                                        width: '72px',
+                                        clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)',
+                                        background: 'linear-gradient(to right, #ef4444, #f97316)',
+                                    }}
+                                >
+                                    <span className="truncate text-center">{currentData.teamBName}</span>
+                                </div>
                             </div>
                         </div>
 
@@ -128,41 +170,6 @@ const ScoreboardType4 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                         </div>
                     </div>
 
-                </div>
-            </div>
-
-            {/* Goal scorers và fouls - NẰM DƯỚI, không trong container chính */}
-            <div className="mt-3 flex justify-between items-center px-2 w-full max-w-xs mx-auto">
-                {/* Team A stats */}
-                <div className="flex items-center space-x-2 flex-1 min-w-0">
-                    <div className="text-[9px] text-gray-700 max-w-[80px] overflow-hidden max-h-[50px]">
-                        {currentData.teamAScorers && currentData.teamAScorers.length > 0 ? (
-                            currentData.teamAScorers.slice(0, 3).map((scorer, index) => (
-                                <div key={index} className="truncate">
-                                    {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
-                                </div>
-                            ))
-                        ) : (
-                            <div className="text-transparent">-</div>
-                        )}
-                    </div>
-                    <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[9px]" />
-                </div>
-
-                {/* Team B stats */}
-                <div className="flex items-center space-x-2 flex-1 justify-end min-w-0">
-                    <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[9px]" />
-                    <div className="text-[9px] text-gray-700 max-w-[80px] overflow-hidden text-right max-h-[50px]">
-                        {currentData.teamBScorers && currentData.teamBScorers.length > 0 ? (
-                            currentData.teamBScorers.slice(0, 3).map((scorer, index) => (
-                                <div key={index} className="truncate">
-                                    {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '} {scorer.player}
-                                </div>
-                            ))
-                        ) : (
-                            <div className="text-transparent">-</div>
-                        )}
-                    </div>
                 </div>
             </div>
         </div>
