@@ -207,6 +207,7 @@ const TeamLineupModal = ({
     };
     console.log("Giá trị của lineupData là:", lineupData);
 
+    // Luôn emit socket và chuyển view dù có thay đổi hay không
     updateLineup(lineupData.teamA, lineupData.teamB);
     updateView('player_list');
     onSave(lineupData);
