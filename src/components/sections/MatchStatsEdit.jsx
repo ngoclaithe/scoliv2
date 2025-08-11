@@ -24,6 +24,15 @@ const MatchStatsEdit = ({
   const [loadingPlayers, setLoadingPlayers] = useState(false);
   const [showDropdownA, setShowDropdownA] = useState(false);
   const [showDropdownB, setShowDropdownB] = useState(false);
+  const [matchStarted, setMatchStarted] = useState(false);
+  const [matchStartTime, setMatchStartTime] = useState(null);
+  const [matchDuration, setMatchDuration] = useState(90); // phút
+  const [teamAControlling, setTeamAControlling] = useState(false);
+  const [teamBControlling, setTeamBControlling] = useState(false);
+  const [possessionStartTime, setPossessionStartTime] = useState(null);
+  const [currentController, setCurrentController] = useState(null);
+  const [totalPossessionA, setTotalPossessionA] = useState(0); // tính bằng ms
+  const [totalPossessionB, setTotalPossessionB] = useState(0); // tính bằng ms
 
   // Fetch danh sách cầu thủ khi component mount
   useEffect(() => {
@@ -45,7 +54,7 @@ const MatchStatsEdit = ({
         const processPlayers = (players) => {
           if (!Array.isArray(players)) return [];
           return players.map((player, index) => ({
-            _id: player._id || `${player.name}_${index}`, // Tạo _id nếu không có
+            _id: player._id || `${player.name}_${index}`, // T��o _id nếu không có
             name: player.name || '',
             jerseyNumber: player.number || player.jerseyNumber || ''
           }));
@@ -97,6 +106,90 @@ const MatchStatsEdit = ({
     };
     onUpdateStats(newStats);
   };
+
+  const startMatch = () => {
+    const startTime = Date.now();
+    setMatchStarted(true);
+    setMatchStartTime(startTime);
+    setPossessionStartTime(startTime);
+    setCurrentController(null);
+    setTotalPossessionA(0);
+    setTotalPossessionB(0);
+  };
+
+  const handlePossessionChange = (team) => {
+    const now = Date.now();
+
+    if (!matchStarted || !matchStartTime) return;
+
+    // Cập nhật thời gian kiểm soát của đội trước đó
+    if (currentController && possessionStartTime) {
+      const duration = now - possessionStartTime;
+      if (currentController === 'teamA') {
+        setTotalPossessionA(prev => prev + duration);
+      } else if (currentController === 'teamB') {
+        setTotalPossessionB(prev => prev + duration);
+      }
+    }
+
+    // Cập nhật đội hiện tại kiểm soát
+    setCurrentController(team);
+    setPossessionStartTime(now);
+
+    // Cập nhật UI checkboxes
+    if (team === 'teamA') {
+      setTeamAControlling(true);
+      setTeamBControlling(false);
+    } else if (team === 'teamB') {
+      setTeamAControlling(false);
+      setTeamBControlling(true);
+    }
+  };
+
+  // Tính toán % kiểm soát theo thời gian thực
+  const calculatePossessionPercentage = () => {
+    if (!matchStarted || !matchStartTime) return { team1: 50, team2: 50 };
+
+    const now = Date.now();
+    const totalMatchTime = now - matchStartTime;
+
+    let currentTotalA = totalPossessionA;
+    let currentTotalB = totalPossessionB;
+
+    // Thêm thời gian hiện tại nếu có đội đang kiểm soát
+    if (currentController === 'teamA' && possessionStartTime) {
+      currentTotalA += (now - possessionStartTime);
+    } else if (currentController === 'teamB' && possessionStartTime) {
+      currentTotalB += (now - possessionStartTime);
+    }
+
+    const totalPossessionTime = currentTotalA + currentTotalB;
+
+    if (totalPossessionTime === 0) {
+      return { team1: 50, team2: 50 };
+    }
+
+    const percentageA = Math.round((currentTotalA / totalPossessionTime) * 100);
+    const percentageB = 100 - percentageA;
+
+    return { team1: percentageA, team2: percentageB };
+  };
+
+  // Cập nhật possession stats theo thời gian thực
+  useEffect(() => {
+    if (!matchStarted) return;
+
+    const interval = setInterval(() => {
+      const newPossession = calculatePossessionPercentage();
+      const newStats = {
+        ...matchStats,
+        possession: newPossession
+      };
+      onUpdateStats(newStats);
+    }, 1000); // Cập nhật mỗi giây
+
+    return () => clearInterval(interval);
+  }, [matchStarted, currentController, possessionStartTime, totalPossessionA, totalPossessionB, matchStats, onUpdateStats]);
 
   const StatControl = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => (
     <div className="py-0.5">
@@ -315,14 +408,82 @@ const MatchStatsEdit = ({
       {/* Stats Display - Gom chung vào 1 thẻ với padding và spacing giảm */}
       <div className="bg-gray-50 rounded-lg p-1.5 space-y-1">
         {/* Kiểm soát bóng */}
-        <StatControl
-          label="Kiểm soát bóng"
-          statKey="possession"
-          team1Value={matchStats.possession.team1}
-          team2Value={matchStats.possession.team2}
-          isPercentage={true}
-          onUpdate={(team, increment) => updatePossession(team, increment * 5)}
-        />
+        <div className="py-0.5">
+          <div className="text-center mb-1">
+            <span className="font-medium text-gray-700 text-sm">Kiểm soát bóng</span>
+          </div>
+
+          {/* Button trận đấu bắt đầu và select thời gian */}
+          <div className="flex items-center gap-2 mb-2">
+            <button
+              onClick={startMatch}
+              disabled={matchStarted}
+              className={`px-3 py-1 text-xs rounded font-medium ${
+                matchStarted
+                  ? 'bg-green-100 text-green-700 cursor-not-allowed'
+                  : 'bg-blue-500 text-white hover:bg-blue-600'
+              }`}
+            >
+              {matchStarted ? '✓ Đã bắt đầu' : 'Trận đấu bắt đầu'}
+            </button>
+            <select
+              value={matchDuration}
+              onChange={(e) => setMatchDuration(parseInt(e.target.value))}
+              disabled={matchStarted}
+              className="px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none"
+            >
+              <option value={40}>40 phút</option>
+              <option value={50}>50 phút</option>
+              <option value={60}>60 phút</option>
+              <option value={70}>70 phút</option>
+              <option value={80}>80 phút</option>
+              <option value={90}>90 phút</option>
+            </select>
+          </div>
+
+          {/* Hiển thị % kiểm soát */}
+          <div className="flex items-center gap-2 mb-2">
+            <div className="flex-1">
+              <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-8 text-center border border-red-300 rounded">
+                {matchStats.possession.team1}%
+              </div>
+            </div>
+            <div className="text-gray-400 text-xs">vs</div>
+            <div className="flex-1">
+              <div className="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold min-w-8 text-center border border-gray-300 rounded">
+                {matchStats.possession.team2}%
+              </div>
+            </div>
+          </div>
+
+          {/* Checkbox kiểm soát bóng */}
+          <div className="flex items-center gap-2">
+            <div className="flex-1">
+              <label className="flex items-center gap-1 text-xs">
+                <input
+                  type="checkbox"
+                  checked={teamAControlling}
+                  onChange={() => handlePossessionChange('teamA')}
+                  disabled={!matchStarted}
+                  className="w-3 h-3"
+                />
+                <span className="text-red-600 font-medium">Đội A kiểm soát</span>
+              </label>
+            </div>
+            <div className="flex-1">
+              <label className="flex items-center gap-1 text-xs justify-end">
+                <span className="text-gray-600 font-medium">Đội B kiểm soát</span>
+                <input
+                  type="checkbox"
+                  checked={teamBControlling}
+                  onChange={() => handlePossessionChange('teamB')}
+                  disabled={!matchStarted}
+                  className="w-3 h-3"
+                />
+              </label>
+            </div>
+          </div>
+        </div>
 
         {/* Tổng số cú sút */}
         <StatControl
