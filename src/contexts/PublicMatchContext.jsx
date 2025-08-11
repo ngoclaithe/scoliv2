@@ -721,7 +721,25 @@ export const PublicMatchProvider = ({ children }) => {
 
           if (state.matchData) {
             console.log('🔄 [PublicMatchContext] Updating matchData from join_roomed:', state.matchData);
-            setMatchData(prev => ({ ...prev, ...state.matchData }));
+
+            // Properly map backend scorers data to frontend structure
+            const mappedMatchData = { ...state.matchData };
+
+            if (mappedMatchData.teamA && mappedMatchData.teamA.scorers) {
+              mappedMatchData.teamA.teamAScorers = mappedMatchData.teamA.scorers.map(scorer => ({
+                player: scorer.player,
+                times: scorer.score ? scorer.score.split(',').map(time => parseInt(time.trim())) : []
+              }));
+            }
+
+            if (mappedMatchData.teamB && mappedMatchData.teamB.scorers) {
+              mappedMatchData.teamB.teamBScorers = mappedMatchData.teamB.scorers.map(scorer => ({
+                player: scorer.player,
+                times: scorer.score ? scorer.score.split(',').map(time => parseInt(time.trim())) : []
+              }));
+            }
+
+            setMatchData(prev => ({ ...prev, ...mappedMatchData }));
           }
 
           if (state.matchStats) {
@@ -802,6 +820,19 @@ export const PublicMatchProvider = ({ children }) => {
           if (state.futsalErrors) {
             console.log('🚫 [PublicMatchContext] Updating futsalErrors from join_roomed:', state.futsalErrors);
             setFutsalErrors(prev => ({ ...prev, ...state.futsalErrors }));
+          }
+
+          // Also map futsal fouls from matchData if available
+          if (state.matchData) {
+            const teamAFouls = state.matchData.teamA?.futsalFouls;
+            const teamBFouls = state.matchData.teamB?.futsalFouls;
+
+            if (teamAFouls !== undefined || teamBFouls !== undefined) {
+              setFutsalErrors(prev => ({
+                teamA: teamAFouls !== undefined ? teamAFouls : prev.teamA,
+                teamB: teamBFouls !== undefined ? teamBFouls : prev.teamB
+              }));
+            }
           }
 
           if (state.sponsors) {
