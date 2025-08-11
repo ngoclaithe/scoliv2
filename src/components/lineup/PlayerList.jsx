@@ -74,9 +74,8 @@ const PlayerList = () => {
         );
     };
 
-    // Component áo đấu hiện đại và đẹp
+    // Component cầu thủ thực tế với head, body, arms, legs
     const Jersey3D = ({ kitColor, kitColor2, teamName, isTeamA }) => {
-        // Tạo màu tương phản cho số áo
         const getContrastColor = (hexColor) => {
             const r = parseInt(hexColor.slice(1, 3), 16);
             const g = parseInt(hexColor.slice(3, 5), 16);
@@ -89,135 +88,103 @@ const PlayerList = () => {
 
         return (
             <div className="flex flex-col items-center justify-center">
-                {/* Jersey Container */}
+                {/* Player Figure */}
                 <div className="relative">
-                    {/* Main Jersey */}
-                    <div className="relative w-28 h-36 sm:w-32 sm:h-40">
-                        {/* Jersey Body */}
+                    {/* Head */}
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full mx-auto mb-1 bg-gradient-to-b from-yellow-100 to-yellow-200 border-2 border-yellow-300 shadow-md">
+                        {/* Hair */}
+                        <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-6 h-3 sm:w-8 sm:h-4 bg-gradient-to-b from-amber-800 to-amber-900 rounded-t-full"></div>
+                        {/* Eyes */}
+                        <div className="absolute top-2 sm:top-3 left-1/2 transform -translate-x-1/2 flex space-x-1">
+                            <div className="w-1 h-1 bg-black rounded-full"></div>
+                            <div className="w-1 h-1 bg-black rounded-full"></div>
+                        </div>
+                        {/* Smile */}
+                        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-3 h-1 border-b-2 border-black rounded-b-full"></div>
+                    </div>
+
+                    {/* Upper Body & Jersey */}
+                    <div className="relative">
+                        {/* Torso */}
                         <div
-                            className="w-full h-full rounded-t-3xl rounded-b-2xl shadow-xl"
+                            className="w-20 h-24 sm:w-24 sm:h-28 mx-auto rounded-t-lg shadow-lg relative"
                             style={{
                                 background: `linear-gradient(135deg, ${kitColor} 0%, ${kitColor}ee 50%, ${kitColor}cc 100%)`,
-                                boxShadow: `
-                                    0 10px 30px rgba(0,0,0,0.3),
-                                    inset 0 1px 0 rgba(255,255,255,0.2),
-                                    inset 0 -1px 0 rgba(0,0,0,0.1)
-                                `
+                                clipPath: 'polygon(20% 0%, 80% 0%, 100% 20%, 100% 100%, 0% 100%, 0% 20%)'
                             }}
                         >
-                            {/* V-neck collar */}
-                            <div className="absolute top-0 left-1/2 transform -translate-x-1/2">
-                                <div
-                                    className="w-8 h-6 rounded-b-xl border-b-2 border-opacity-30"
-                                    style={{
-                                        background: `linear-gradient(180deg, ${kitColor2} 0%, ${kitColor2}dd 100%)`,
-                                        borderColor: kitColor
-                                    }}
-                                >
-                                    {/* V-neck cut */}
-                                    <div
-                                        className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0"
-                                        style={{
-                                            borderLeft: '3px solid transparent',
-                                            borderRight: '3px solid transparent',
-                                            borderTop: `6px solid ${kitColor2}`
-                                        }}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Left Sleeve */}
-                            <div
-                                className="absolute -left-2 top-2 w-5 h-14 sm:w-6 sm:h-16 rounded-l-xl"
-                                style={{
-                                    background: `linear-gradient(90deg, ${kitColor}aa 0%, ${kitColor} 70%, ${kitColor}dd 100%)`,
-                                    boxShadow: `-2px 2px 8px rgba(0,0,0,0.2)`
-                                }}
-                            />
-
-                            {/* Right Sleeve */}
-                            <div
-                                className="absolute -right-2 top-2 w-5 h-14 sm:w-6 sm:h-16 rounded-r-xl"
-                                style={{
-                                    background: `linear-gradient(-90deg, ${kitColor}aa 0%, ${kitColor} 70%, ${kitColor}dd 100%)`,
-                                    boxShadow: `2px 2px 8px rgba(0,0,0,0.2)`
-                                }}
-                            />
-
-                            {/* Jersey Number với style đẹp */}
+                            {/* Jersey Number */}
                             <div className="absolute inset-0 flex items-center justify-center">
                                 <div
-                                    className="text-3xl sm:text-4xl font-black text-center leading-none select-none"
+                                    className="text-2xl sm:text-3xl font-black leading-none select-none"
                                     style={{
                                         color: numberColor,
-                                        textShadow: `
-                                            2px 2px 0 ${numberColor === '#FFFFFF' ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)'},
-                                            -1px -1px 0 ${numberColor === '#FFFFFF' ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)'},
-                                            1px -1px 0 ${numberColor === '#FFFFFF' ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)'},
-                                            -1px 1px 0 ${numberColor === '#FFFFFF' ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)'},
-                                            0 0 8px rgba(0,0,0,0.4)
-                                        `,
-                                        fontFamily: 'Arial Black, sans-serif'
+                                        textShadow: `2px 2px 0 ${numberColor === '#FFFFFF' ? 'rgba(0,0,0,0.8)' : 'rgba(255,255,255,0.8)'}`
                                     }}
                                 >
                                     {isTeamA ? '10' : '9'}
                                 </div>
                             </div>
 
-                            {/* Subtle jersey texture */}
+                            {/* Collar */}
                             <div
-                                className="absolute inset-0 rounded-t-3xl rounded-b-2xl opacity-20"
-                                style={{
-                                    background: `repeating-linear-gradient(
-                                        45deg,
-                                        transparent,
-                                        transparent 1px,
-                                        rgba(255,255,255,0.1) 1px,
-                                        rgba(255,255,255,0.1) 2px
-                                    )`
-                                }}
+                                className="absolute top-0 left-1/2 transform -translate-x-1/2 w-6 h-3 rounded-b-lg"
+                                style={{ background: kitColor2 }}
                             />
+
+                            {/* Jersey stripes/details */}
+                            <div className="absolute inset-x-0 bottom-0 h-2 opacity-30" style={{ background: kitColor2 }}></div>
                         </div>
+
+                        {/* Arms */}
+                        <div className="absolute top-2 -left-3 w-4 h-16 sm:w-5 sm:h-20 rounded-full shadow-md" style={{ background: `linear-gradient(180deg, ${kitColor} 0%, #f59e0b 60%, #f59e0b 100%)` }}></div>
+                        <div className="absolute top-2 -right-3 w-4 h-16 sm:w-5 sm:h-20 rounded-full shadow-md" style={{ background: `linear-gradient(180deg, ${kitColor} 0%, #f59e0b 60%, #f59e0b 100%)` }}></div>
                     </div>
 
                     {/* Shorts */}
-                    <div className="mt-1 relative">
+                    <div
+                        className="w-16 h-8 sm:w-18 sm:h-10 mx-auto rounded-lg shadow-md"
+                        style={{
+                            background: `linear-gradient(135deg, ${kitColor2} 0%, ${kitColor2}dd 100%)`,
+                            marginTop: '-2px'
+                        }}
+                    >
+                        {/* Waistband */}
                         <div
-                            className="w-18 h-8 sm:w-20 sm:h-10 rounded-lg mx-auto shadow-lg"
-                            style={{
-                                background: `linear-gradient(135deg, ${kitColor2} 0%, ${kitColor2}dd 50%, ${kitColor2}bb 100%)`,
-                                boxShadow: `
-                                    0 6px 20px rgba(0,0,0,0.25),
-                                    inset 0 1px 0 rgba(255,255,255,0.2)
-                                `
-                            }}
-                        >
-                            {/* Waistband */}
-                            <div
-                                className="absolute top-0 left-0 right-0 h-1 rounded-t-lg"
-                                style={{
-                                    background: `linear-gradient(90deg, ${kitColor}bb 0%, ${kitColor} 50%, ${kitColor}bb 100%)`
-                                }}
-                            />
+                            className="w-full h-1 rounded-t-lg"
+                            style={{ background: kitColor }}
+                        />
+                    </div>
 
-                            {/* Side seams */}
-                            <div className="absolute left-1 top-1 bottom-1 w-px bg-white/20 rounded-full" />
-                            <div className="absolute right-1 top-1 bottom-1 w-px bg-white/20 rounded-full" />
+                    {/* Legs */}
+                    <div className="flex justify-center space-x-2 -mt-1">
+                        <div className="w-3 h-12 sm:w-4 sm:h-16 bg-gradient-to-b from-yellow-100 to-yellow-200 rounded-b-lg shadow-sm">
+                            {/* Sock */}
+                            <div className="absolute bottom-0 w-full h-4 sm:h-6" style={{ background: kitColor, borderRadius: '0 0 6px 6px' }}></div>
                         </div>
+                        <div className="w-3 h-12 sm:w-4 sm:h-16 bg-gradient-to-b from-yellow-100 to-yellow-200 rounded-b-lg shadow-sm">
+                            {/* Sock */}
+                            <div className="absolute bottom-0 w-full h-4 sm:h-6" style={{ background: kitColor, borderRadius: '0 0 6px 6px' }}></div>
+                        </div>
+                    </div>
+
+                    {/* Feet/Boots */}
+                    <div className="flex justify-center space-x-2 -mt-1">
+                        <div className="w-4 h-3 sm:w-5 sm:h-4 bg-black rounded-lg shadow-sm"></div>
+                        <div className="w-4 h-3 sm:w-5 sm:h-4 bg-black rounded-lg shadow-sm"></div>
                     </div>
                 </div>
 
-                {/* Team name với style đẹp */}
+                {/* Team name */}
                 <div className="mt-3 text-center">
                     <div
-                        className="px-4 py-2 rounded-full shadow-lg"
+                        className="px-3 py-1.5 rounded-lg shadow-md"
                         style={{
-                            background: `linear-gradient(135deg, ${kitColor}22 0%, ${kitColor}11 100%)`,
-                            backdropFilter: 'blur(10px)',
-                            border: `1px solid ${kitColor}44`
+                            background: `linear-gradient(135deg, ${kitColor}33 0%, ${kitColor}22 100%)`,
+                            border: `1px solid ${kitColor}66`
                         }}
                     >
-                        <p className="text-white font-semibold text-sm tracking-wide text-stroke">
+                        <p className="text-white font-semibold text-xs sm:text-sm tracking-wide text-stroke">
                             {teamName}
                         </p>
                     </div>
