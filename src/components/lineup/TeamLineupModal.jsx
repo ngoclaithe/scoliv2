@@ -21,7 +21,7 @@ const TeamLineupModal = ({
   const [showHistorySelection, setShowHistorySelection] = useState(false);
   
   const defaultPlayers = [
-    { number: "1", name: "" }, 
+    { number: "GK", name: "" },
     { number: "2", name: "" },
     { number: "3", name: "" },
     { number: "4", name: "" },
@@ -61,47 +61,41 @@ const TeamLineupModal = ({
 
     setIsLoading(true);
     try {
-      // Load both teams' lineups
       const [teamAResponse, teamBResponse] = await Promise.all([
         PlayerListAPI.getPlayerListByAccessCode(accessCode, 'teamA'),
         PlayerListAPI.getPlayerListByAccessCode(accessCode, 'teamB')
       ]);
 
-      console.log('Team A Response:', teamAResponse);
-      console.log('Team B Response:', teamBResponse);
-
-      if (teamAResponse.success && teamAResponse.data && Array.isArray(teamAResponse.data)) {
-        const teamAPlayers = teamAResponse.data.map(player => ({
-          number: player.number,
-          name: player.name
+      // Xử lý dữ liệu giống như trong MatchStatsEdit.jsx
+      const processPlayers = (players) => {
+        if (!Array.isArray(players)) return [];
+        return players.map(player => ({
+          number: player.number || player.jerseyNumber || '',
+          name: player.name || ''
         }));
+      };
 
+      const teamAPlayers = processPlayers(teamAResponse.data?.players || []);
+      const teamBPlayers = processPlayers(teamBResponse.data?.players || []);
+
+      if (teamAPlayers.length > 0) {
         setLineups(prev => ({
           ...prev,
           home: [...teamAPlayers, ...defaultPlayers.slice(teamAPlayers.length)]
         }));
-      } else if (teamAResponse.success && teamAResponse.data && !Array.isArray(teamAResponse.data)) {
-        // Handle case where data is not an array (maybe empty response or different structure)
-        console.log('Team A data is not an array:', teamAResponse.data);
       }
 
-      if (teamBResponse.success && teamBResponse.data && Array.isArray(teamBResponse.data)) {
-        const teamBPlayers = teamBResponse.data.map(player => ({
-          number: player.number,
-          name: player.name
-        }));
-
+      if (teamBPlayers.length > 0) {
         setLineups(prev => ({
           ...prev,
           away: [...teamBPlayers, ...defaultPlayers.slice(teamBPlayers.length)]
         }));
-      } else if (teamBResponse.success && teamBResponse.data && !Array.isArray(teamBResponse.data)) {
-        // Handle case where data is not an array
-        console.log('Team B data is not an array:', teamBResponse.data);
       }
     } catch (error) {
-      console.error('Error loading current lineup:', error);
-      toast.error('Không thể tải danh sách cầu thủ hiện tại');
+      if (!error.message.includes('AccessCode is not associated to PlayerList')) {
+        console.error('Error loading current lineup:', error);
+        toast.error('Không thể tải danh sách cầu thủ hiện tại');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -231,37 +225,31 @@ const TeamLineupModal = ({
       size="xl"
     >
       <div className="space-y-4 sm:space-y-6">
-        {/* Team Selection - Thu gọn header */}
+        {/* Team Selection */}
         <div className="flex bg-gray-100 rounded-lg p-1 mb-2">
           <button
             onClick={() => setActiveTeam("home")}
-            className={`flex-1 py-1.5 px-2 rounded-md text-sm font-medium transition-all min-h-[2rem] ${
+            className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
               activeTeam === "home"
                 ? "bg-white text-blue-600 shadow-sm"
                 : "text-gray-600 hover:bg-gray-200"
             }`}
           >
-            <div className="flex flex-col items-center">
-              <span className="text-sm">🏠</span>
-              <span className="text-xs font-medium">
-                {matchData.homeTeam?.name || "Đội A"}
-              </span>
-            </div>
+            <span className="text-sm font-medium">
+              {matchData.homeTeam?.name || "Đội A"}
+            </span>
           </button>
           <button
             onClick={() => setActiveTeam("away")}
-            className={`flex-1 py-1.5 px-2 rounded-md text-sm font-medium transition-all min-h-[2rem] ${
+            className={`flex-1 py-2 px-3 rounded-md text-sm font-medium transition-all ${
               activeTeam === "away"
                 ? "bg-white text-red-600 shadow-sm"
                 : "text-gray-600 hover:bg-gray-200"
             }`}
           >
-            <div className="flex flex-col items-center">
-              <span className="text-sm">✈️</span>
-              <span className="text-xs font-medium">
-                {matchData.awayTeam?.name || "Đội B"}
-              </span>
-            </div>
+            <span className="text-sm font-medium">
+              {matchData.awayTeam?.name || "Đội B"}
+            </span>
           </button>
         </div>
 
@@ -271,9 +259,8 @@ const TeamLineupModal = ({
             variant="outline"
             size="sm"
             onClick={() => setBulkMode(!bulkMode)}
-            className="h-10 flex flex-col items-center justify-center"
+            className="h-10 flex items-center justify-center"
           >
-            <span className="text-sm">📋</span>
             <span className="text-xs">Nhập hàng loạt</span>
           </Button>
 
@@ -281,9 +268,8 @@ const TeamLineupModal = ({
             variant="outline"
             size="sm"
             onClick={() => setShowHistorySelection(!showHistorySelection)}
-            className="h-10 flex flex-col items-center justify-center"
+            className="h-10 flex items-center justify-center"
           >
-            <span className="text-sm">📚</span>
             <span className="text-xs">Trận cũ</span>
           </Button>
 
@@ -291,11 +277,10 @@ const TeamLineupModal = ({
             variant="primary"
             size="sm"
             onClick={validateAndSave}
-            className="h-10 flex flex-col items-center justify-center text-xs"
-            disabled={homeCount === 0 && awayCount === 0 || isLoading}
+            className="h-10 flex items-center justify-center text-xs"
+            disabled={isLoading}
           >
-            <span className="text-sm">💾</span>
-            <span className="text-xs">Lưu</span>
+            <span className="text-xs">Hiển thị</span>
           </Button>
         </div>
 
@@ -387,7 +372,7 @@ const TeamLineupModal = ({
             <div className="flex justify-between items-center">
               <h4 className="font-medium text-gray-900">
                 Danh sách {activeTeam === "home" ? "đội nhà" : "đội khách"}
-                {isLoading && <span className="ml-2 text-blue-500">🔄</span>}
+                {isLoading && <span className="ml-2 text-blue-500">Đang tải...</span>}
               </h4>
               <div className="text-sm text-gray-500">
                 {currentTeamData.filter(p => p.name.trim()).length}/11 cầu thủ
