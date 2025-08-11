@@ -111,7 +111,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   const [customTime, setCustomTime] = useState("");
   const [customSeconds, setCustomSeconds] = useState("");
   const [quickCustomMinutes, setQuickCustomMinutes] = useState(""); 
-  const [tickerColor, setTickerColor] = useState("#ffffff");
+  const [tickerColor, setTickerColor] = useState("white-black");
 
   // State cho thông tin đội và trận đấu
   const [teamAInfo, setTeamAInfo] = useState({
