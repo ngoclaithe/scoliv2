@@ -33,7 +33,6 @@ const DisplayController = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
 
-  // Khởi tạo kết nối socket
   useEffect(() => {
     let isCleanedUp = false;
 
@@ -54,9 +53,7 @@ const DisplayController = () => {
       } catch (err) {
         console.error('❌ [DisplayController] Failed to initialize display:', err);
         if (!isCleanedUp) {
-          // Kiểm tra lỗi hết hạn truy cập trước
           if (handleExpiredAccess && handleExpiredAccess(err)) {
-            // Đã xử lý lỗi hết hạn, không cần set error
             return;
           }
           setError('Không thể kết nối đến hệ thống');
@@ -73,7 +70,6 @@ const DisplayController = () => {
     };
   }, [accessCode, initializeSocket, handleExpiredAccess]);
 
-  // Render poster component theo type
   const renderPoster = (posterType) => {
     switch (posterType) {
       case 'haoquang':
@@ -93,7 +89,6 @@ const DisplayController = () => {
     }
   };
 
-  // Render component theo currentView
   const renderCurrentView = () => {
     switch (currentView) {
       case 'intro':
