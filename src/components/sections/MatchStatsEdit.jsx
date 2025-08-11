@@ -293,10 +293,10 @@ const MatchStatsEdit = ({
         <div className="flex items-center gap-2">
         <button
             onClick={() => {
-              onUpdateView('stat');
+              onUpdateView('event');
               onPlayAudio('poster');
             }}
-            className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+            className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
           >
             <span className="text-xs font-bold text-center">Sự kiện</span>
           </button>
@@ -351,14 +351,25 @@ const MatchStatsEdit = ({
           onUpdate={(team, increment) => updateStat('corners', team, increment)}
         />
 
-        {/* Thẻ vàng */}
-        <StatControl
-          label="Thẻ vàng"
-          statKey="yellowCards"
-          team1Value={matchStats.yellowCards.team1}
-          team2Value={matchStats.yellowCards.team2}
-          onUpdate={(team, increment) => updateStat('yellowCards', team, increment)}
-        />
+        {/* Thẻ vàng - chỉ hiển thị, không cho chỉnh tay */}
+        <div className="py-0.5">
+          <div className="text-center mb-0.5">
+            <span className="font-medium text-gray-700 text-sm">Thẻ vàng</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="flex-1">
+              <div className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold min-w-8 text-center border border-yellow-300 rounded">
+                {matchStats.yellowCards.team1}
+              </div>
+            </div>
+            <div className="text-gray-400 text-xs">vs</div>
+            <div className="flex-1">
+              <div className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold min-w-8 text-center border border-yellow-300 rounded">
+                {matchStats.yellowCards.team2}
+              </div>
+            </div>
+          </div>
+        </div>
 
         {/* Phạm lỗi */}
         <StatControl
