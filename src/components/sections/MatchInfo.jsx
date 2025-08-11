@@ -28,22 +28,6 @@ const MatchInfo = ({
 }) => {
   return (
     <>
-      <Button
-        variant="primary"
-        size="sm"
-        className={`px-2 py-1 ${showMatchInfo
-          ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
-          : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
-          } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
-        onClick={() => setShowMatchInfo(!showMatchInfo)}
-      >
-        <span className={`mr-1 inline-block transform transition-transform duration-300 ${showMatchInfo ? 'rotate-0' : 'rotate-180'}`}>
-          ▼
-        </span>
-        <span className="hidden sm:inline">THÔNG TIN</span>
-        <span className="sm:hidden">INFO</span>
-      </Button>
-
       {showMatchInfo && (
         <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg space-y-2 animate-in slide-in-from-top-3 duration-300 mt-1">
           {/* Tên trận đấu & Đơn vị live - 1 hàng */}

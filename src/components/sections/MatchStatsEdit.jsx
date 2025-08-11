@@ -35,19 +35,16 @@ const MatchStatsEdit = ({
       setLoadingPlayers(true);
       try {
         const [teamAResponse, teamBResponse] = await Promise.all([
-          PlayerListAPI.getPlayerListByAccessCode(accessCode, 'A'),
-          PlayerListAPI.getPlayerListByAccessCode(accessCode, 'B')
+          PlayerListAPI.getPlayerListByAccessCode(accessCode, 'teamA'),
+          PlayerListAPI.getPlayerListByAccessCode(accessCode, 'teamB')
         ]);
 
         setPlayersTeamA(teamAResponse.data?.players || []);
         setPlayersTeamB(teamBResponse.data?.players || []);
       } catch (error) {
-        // Silently handle the case where no player lists are associated with access code
-        // This is expected behavior for many matches that don't have pre-configured player lists
         setPlayersTeamA([]);
         setPlayersTeamB([]);
 
-        // Only log if it's not the expected "not associated" error
         if (!error.message.includes('AccessCode is not associated to PlayerList')) {
           console.error('Error fetching players:', error);
         }
