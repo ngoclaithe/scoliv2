@@ -7,11 +7,13 @@ const AudioControls = ({
   currentAudioFile,
   audioEnabled,
   timerData,
+  showMatchInfo,
   onPauseAudio,
   onResumeAudio,
   onToggleAudio,
   onResumeTimer,
-  onPauseTimer
+  onPauseTimer,
+  onToggleMatchInfo
 }) => {
   return (
     <div className="flex justify-center items-center mt-2 space-x-2">
