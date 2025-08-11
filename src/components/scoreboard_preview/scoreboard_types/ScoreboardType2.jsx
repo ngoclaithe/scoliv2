@@ -166,7 +166,7 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
                     </div>
 
                     {/* Team B fouls and scorers */}
-                    <div className="flex items-center space-x-3 flex-1 justify-end min-w-0">
+                    <div className="flex items-center space-x-6 flex-1 justify-end min-w-0">
                         <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[10px]" />
                         <div className="text-[10px] text-gray-700 max-w-[140px] overflow-hidden text-right max-h-[60px]">
                             {currentData.teamBScorers && currentData.teamBScorers.length > 0 ? (
