@@ -1,4 +1,5 @@
 import React from 'react';
+import { FoulsDisplay } from '../../../utils/futsalUtils';
 
 const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
     const getTextColor = (backgroundColor) => {
