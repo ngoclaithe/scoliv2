@@ -227,28 +227,12 @@ const PlayerList = () => {
                         0 -2px 0 #000,
                         0 2px 0 #000;
                 }
-                .perspective-1000 {
-                    perspective: 1000px;
-                }
-                .transform-style-preserve-3d {
-                    transform-style: preserve-3d;
-                }
-                .rotate-y-8 {
-                    transform: rotateY(8deg);
-                }
                 .bg-gradient-radial {
                     background: radial-gradient(circle, var(--tw-gradient-stops));
                 }
-                @keyframes float {
-                    0%, 100% { transform: translateY(0px); }
-                    50% { transform: translateY(-10px); }
-                }
-                .animate-float {
-                    animation: float 3s ease-in-out infinite;
-                }
             `}</style>
             
-            {/* Background với gradient mới ��ẹp hơn */}
+            {/* Background với gradient mới đẹp hơn */}
             <div className="w-full h-full bg-gradient-to-br from-slate-800 via-blue-900 to-purple-900 relative overflow-hidden">
                 {/* Enhanced Background Pattern */}
                 <div className="absolute inset-0 opacity-30">
