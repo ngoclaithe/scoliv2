@@ -368,12 +368,12 @@ const ScoreboardBelowNew = ({
                 </div>
             </div>
 
-            {/* Goal scorers and fouls row - luôn hiển thị */}
-            <div className="space-y-2 mt-4">
-                <div className="flex justify-between items-center px-4">
+            {/* Goal scorers and fouls row - luôn hiển thị với width đủ rộng */}
+            <div className="space-y-2 mt-4 w-full max-w-lg mx-auto">
+                <div className="flex justify-between items-center px-8">
                     {/* Team A scorers and fouls */}
-                    <div className="flex items-center space-x-4 flex-1">
-                        <div className="text-[10px] text-gray-700 max-w-[140px] overflow-hidden max-h-[60px]">
+                    <div className="flex items-center space-x-3 flex-1 min-w-0">
+                        <div className="text-[10px] text-gray-700 max-w-[160px] overflow-hidden max-h-[60px]">
                             {currentData.teamAScorers && currentData.teamAScorers.length > 0 ? (
                                 currentData.teamAScorers.slice(0, 4).map((scorer, index) => (
                                     <div key={index} className="truncate">
@@ -387,10 +387,13 @@ const ScoreboardBelowNew = ({
                         <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[10px]" />
                     </div>
 
+                    {/* Center spacer */}
+                    <div className="w-8"></div>
+
                     {/* Team B fouls and scorers */}
-                    <div className="flex items-center space-x-4 flex-1 justify-end">
+                    <div className="flex items-center space-x-3 flex-1 justify-end min-w-0">
                         <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[10px]" />
-                        <div className="text-[10px] text-gray-700 max-w-[140px] overflow-hidden text-right max-h-[60px]">
+                        <div className="text-[10px] text-gray-700 max-w-[160px] overflow-hidden text-right max-h-[60px]">
                             {currentData.teamBScorers && currentData.teamBScorers.length > 0 ? (
                                 currentData.teamBScorers.slice(0, 4).map((scorer, index) => (
                                     <div key={index} className="truncate">
