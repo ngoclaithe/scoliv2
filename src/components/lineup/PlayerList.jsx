@@ -90,49 +90,44 @@ const PlayerList = () => {
             <div className="flex flex-col items-center justify-center">
                 {/* Kit Preview */}
                 <div className="relative">
-                    {/* Jersey/Shirt */}
+                    {/* Jersey/Shirt với hình dạng thật */}
                     <div className="relative w-24 h-32 sm:w-28 sm:h-36 mx-auto">
                         <div
-                            className="w-full h-full rounded-t-2xl rounded-b-lg shadow-lg relative overflow-hidden"
+                            className="w-full h-full shadow-lg relative overflow-hidden"
                             style={{
                                 background: `linear-gradient(135deg, ${kitColor} 0%, ${kitColor}dd 70%, ${kitColor}bb 100%)`,
-                                boxShadow: `0 8px 25px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1)`
+                                boxShadow: `0 8px 25px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1)`,
+                                clipPath: 'polygon(25% 0%, 75% 0%, 85% 15%, 100% 25%, 100% 85%, 85% 100%, 15% 100%, 0% 85%, 0% 25%, 15% 15%)'
                             }}
                         >
                             {/* V-neck collar */}
                             <div className="absolute top-0 left-1/2 transform -translate-x-1/2">
                                 <div
-                                    className="w-6 h-4 sm:w-8 sm:h-5 rounded-b-lg"
+                                    className="w-6 h-4 sm:w-8 sm:h-5"
                                     style={{
-                                        background: `linear-gradient(180deg, ${kitColor2} 0%, ${kitColor2}dd 100%)`
-                                    }}
-                                />
-                                {/* V-cut */}
-                                <div
-                                    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-0 h-0"
-                                    style={{
-                                        borderLeft: '2px solid transparent',
-                                        borderRight: '2px solid transparent',
-                                        borderTop: `4px solid ${kitColor2}`
+                                        background: `linear-gradient(180deg, ${kitColor2} 0%, ${kitColor2}dd 100%)`,
+                                        clipPath: 'polygon(20% 0%, 80% 0%, 100% 100%, 50% 80%, 0% 100%)'
                                     }}
                                 />
                             </div>
 
-                            {/* Left sleeve */}
+                            {/* Left sleeve với hình dạng thật */}
                             <div
-                                className="absolute -left-2 top-2 w-4 h-10 sm:w-5 sm:h-12 rounded-l-lg"
+                                className="absolute -left-2 top-2 w-4 h-10 sm:w-5 sm:h-12"
                                 style={{
                                     background: `linear-gradient(90deg, ${kitColor}cc 0%, ${kitColor} 100%)`,
-                                    boxShadow: `-2px 2px 6px rgba(0,0,0,0.15)`
+                                    boxShadow: `-2px 2px 6px rgba(0,0,0,0.15)`,
+                                    clipPath: 'polygon(0% 20%, 70% 0%, 100% 30%, 100% 80%, 70% 100%, 0% 90%)'
                                 }}
                             />
 
-                            {/* Right sleeve */}
+                            {/* Right sleeve với hình dạng thật */}
                             <div
-                                className="absolute -right-2 top-2 w-4 h-10 sm:w-5 sm:h-12 rounded-r-lg"
+                                className="absolute -right-2 top-2 w-4 h-10 sm:w-5 sm:h-12"
                                 style={{
                                     background: `linear-gradient(-90deg, ${kitColor}cc 0%, ${kitColor} 100%)`,
-                                    boxShadow: `2px 2px 6px rgba(0,0,0,0.15)`
+                                    boxShadow: `2px 2px 6px rgba(0,0,0,0.15)`,
+                                    clipPath: 'polygon(30% 0%, 100% 20%, 100% 90%, 30% 100%, 0% 80%, 0% 30%)'
                                 }}
                             />
 
@@ -154,44 +149,35 @@ const PlayerList = () => {
                                 </div>
                             </div>
 
-                            {/* Jersey details/texture */}
-                            <div className="absolute inset-0 opacity-10 rounded-t-2xl rounded-b-lg">
-                                <div
-                                    className="w-full h-full"
-                                    style={{
-                                        background: `repeating-linear-gradient(
-                                            45deg,
-                                            transparent,
-                                            transparent 1px,
-                                            rgba(255,255,255,0.1) 1px,
-                                            rgba(255,255,255,0.1) 2px
-                                        )`
-                                    }}
-                                />
-                            </div>
+                            {/* Jersey stitching lines */}
+                            <div className="absolute inset-x-0 bottom-8 h-px bg-white/20"></div>
+                            <div className="absolute inset-y-0 left-1/2 w-px bg-white/10 transform -translate-x-1/2"></div>
                         </div>
                     </div>
 
-                    {/* Shorts */}
+                    {/* Shorts với hình dạng thật */}
                     <div className="mt-1 relative">
                         <div
-                            className="w-16 h-8 sm:w-18 sm:h-10 mx-auto rounded-lg shadow-md relative"
+                            className="w-16 h-8 sm:w-18 sm:h-10 mx-auto shadow-md relative"
                             style={{
                                 background: `linear-gradient(135deg, ${kitColor2} 0%, ${kitColor2}dd 70%, ${kitColor2}bb 100%)`,
-                                boxShadow: `0 4px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1)`
+                                boxShadow: `0 4px 15px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.1)`,
+                                clipPath: 'polygon(15% 0%, 85% 0%, 100% 20%, 95% 80%, 85% 100%, 15% 100%, 5% 80%, 0% 20%)'
                             }}
                         >
                             {/* Waistband */}
                             <div
-                                className="absolute top-0 left-0 right-0 h-1 rounded-t-lg"
+                                className="absolute top-0 left-0 right-0 h-1"
                                 style={{
-                                    background: `linear-gradient(90deg, ${kitColor}cc 0%, ${kitColor} 50%, ${kitColor}cc 100%)`
+                                    background: `linear-gradient(90deg, ${kitColor}cc 0%, ${kitColor} 50%, ${kitColor}cc 100%)`,
+                                    clipPath: 'polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%)'
                                 }}
                             />
 
-                            {/* Side seams */}
-                            <div className="absolute left-1 top-1 bottom-1 w-px bg-white/15 rounded-full" />
-                            <div className="absolute right-1 top-1 bottom-1 w-px bg-white/15 rounded-full" />
+                            {/* Shorts seams */}
+                            <div className="absolute left-2 top-2 bottom-2 w-px bg-white/20"></div>
+                            <div className="absolute right-2 top-2 bottom-2 w-px bg-white/20"></div>
+                            <div className="absolute inset-x-0 bottom-3 h-px bg-white/15"></div>
                         </div>
                     </div>
                 </div>
