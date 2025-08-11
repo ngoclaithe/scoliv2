@@ -102,7 +102,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   const [currentAudioFile, setCurrentAudioFile] = useState(null);
 
   // State cho các tùy chọn điều khiển UI
-  const [selectedOption, setSelectedOption] = useState("thong-so");
+  const [selectedOption, setSelectedOption] = useState("dieu-khien");
   const [clockSetting, setClockSetting] = useState("khong");
   const [clockText, setClockText] = useState("");
   const [showMatchInfo, setShowMatchInfo] = useState(false);
