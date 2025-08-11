@@ -39,8 +39,18 @@ const MatchStatsEdit = ({
           PlayerListAPI.getPlayerListByAccessCode(accessCode, 'teamB')
         ]);
 
-        setPlayersTeamA(teamAResponse.data?.players || []);
-        setPlayersTeamB(teamBResponse.data?.players || []);
+        // Xử lý dữ liệu players từ API response
+        const processPlayers = (players) => {
+          if (!Array.isArray(players)) return [];
+          return players.map((player, index) => ({
+            _id: player._id || `${player.name}_${index}`, // Tạo _id nếu không có
+            name: player.name || '',
+            jerseyNumber: player.number || player.jerseyNumber || ''
+          }));
+        };
+
+        setPlayersTeamA(processPlayers(teamAResponse.data?.players || []));
+        setPlayersTeamB(processPlayers(teamBResponse.data?.players || []));
       } catch (error) {
         setPlayersTeamA([]);
         setPlayersTeamB([]);
@@ -145,16 +155,20 @@ const MatchStatsEdit = ({
 
   const handleAddGoalScorer = (team) => {
     const scorer = goalScorers[team];
-    if (scorer.player.trim() && scorer.minute.trim()) {
+    // Kiểm tra an toàn với optional chaining và fallback
+    const playerValue = scorer?.player || '';
+    const minuteValue = scorer?.minute || '';
+    
+    if (playerValue.trim() && minuteValue.trim()) {
       // Tìm thông tin chi tiết của cầu thủ
       const players = team === 'teamA' ? playersTeamA : playersTeamB;
-      const playerInfo = players.find(p => p._id === scorer.player) ||
-                        players.find(p => p.name === scorer.player);
+      const playerInfo = players.find(p => p._id === playerValue) ||
+                        players.find(p => p.name === playerValue);
 
       onUpdateGoalScorers(team, {
-        playerId: playerInfo?._id || scorer.player,
-        player: playerInfo?.name || scorer.player,
-        minute: parseInt(scorer.minute)
+        playerId: playerInfo?._id || playerValue,
+        player: playerInfo?.name || playerValue,
+        minute: parseInt(minuteValue)
       });
 
       // Reset input
@@ -378,7 +392,7 @@ const MatchStatsEdit = ({
               <PlayerDropdown
                 team="teamA"
                 players={playersTeamA}
-                selectedPlayerId={goalScorers.teamA.player}
+                selectedPlayerId={goalScorers?.teamA?.player || ''}
                 onSelect={handlePlayerSelect}
                 show={showDropdownA}
                 onToggle={() => setShowDropdownA(!showDropdownA)}
@@ -386,7 +400,7 @@ const MatchStatsEdit = ({
               <input
                 type="number"
                 placeholder="Phút"
-                value={goalScorers.teamA.minute}
+                value={goalScorers?.teamA?.minute || ''}
                 onChange={(e) => setGoalScorers(prev => ({
                   ...prev,
                   teamA: { ...prev.teamA, minute: e.target.value }
@@ -400,7 +414,7 @@ const MatchStatsEdit = ({
                 size="sm"
                 className="px-2 py-1 text-xs border border-red-500 bg-red-500 text-white rounded hover:bg-red-600"
                 onClick={() => handleAddGoalScorer('teamA')}
-                disabled={!goalScorers.teamA.player.trim() || !goalScorers.teamA.minute.trim()}
+                disabled={!(goalScorers?.teamA?.player?.trim()) || !(goalScorers?.teamA?.minute?.trim())}
               >
                 OK
               </Button>
@@ -414,7 +428,7 @@ const MatchStatsEdit = ({
               <PlayerDropdown
                 team="teamB"
                 players={playersTeamB}
-                selectedPlayerId={goalScorers.teamB.player}
+                selectedPlayerId={goalScorers?.teamB?.player || ''}
                 onSelect={handlePlayerSelect}
                 show={showDropdownB}
                 onToggle={() => setShowDropdownB(!showDropdownB)}
@@ -422,7 +436,7 @@ const MatchStatsEdit = ({
               <input
                 type="number"
                 placeholder="Phút"
-                value={goalScorers.teamB.minute}
+                value={goalScorers?.teamB?.minute || ''}
                 onChange={(e) => setGoalScorers(prev => ({
                   ...prev,
                   teamB: { ...prev.teamB, minute: e.target.value }
@@ -436,7 +450,7 @@ const MatchStatsEdit = ({
                 size="sm"
                 className="px-2 py-1 text-xs border border-gray-700 bg-gray-700 text-white rounded hover:bg-gray-800"
                 onClick={() => handleAddGoalScorer('teamB')}
-                disabled={!goalScorers.teamB.player.trim() || !goalScorers.teamB.minute.trim()}
+                disabled={!(goalScorers?.teamB?.player?.trim()) || !(goalScorers?.teamB?.minute?.trim())}
               >
                 OK
               </Button>

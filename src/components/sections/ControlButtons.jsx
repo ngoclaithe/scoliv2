@@ -192,7 +192,7 @@ const ControlButtons = ({
             className="px-3 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-sm font-bold h-8"
             onClick={handleCustomTimeClick}
           >
-            ĐẾMTHỜI GIAN
+            ĐẾM T
           </button>
         </div>
       </div>
