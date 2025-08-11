@@ -595,19 +595,12 @@ const ScoreboardBelowNew = ({
                 />
             </div>
 
-            {/* Goal scorers and fouls row - thêm cho Type 4 */}
-            <div className="flex items-start justify-center w-full gap-0 mt-4">
-                {/* Spacer for logo A */}
-                <div className="w-8 sm:w-10 md:w-12"></div>
-
-                {/* Team A stats section */}
-                <div className="flex items-start gap-0">
-                    {/* Spacer for team name and kit */}
-                    <div className="w-24 sm:w-32 md:w-40"></div>
-                    <div className="w-12"></div>
-                    <div className="min-w-[80px] flex justify-between items-start">
-                        {/* Goal scorers for Team A */}
-                        <div className="flex-1 text-[8px] text-gray-700 leading-tight overflow-hidden max-h-[40px]">
+            {/* Goal scorers and fouls row - layout đơn giản cho Type 4 */}
+            <div className="w-full mt-4">
+                <div className="flex justify-between items-center max-w-lg mx-auto px-4">
+                    {/* Team A stats */}
+                    <div className="flex items-center space-x-2 flex-1 min-w-0">
+                        <div className="text-[9px] text-gray-700 max-w-[120px] overflow-hidden max-h-[50px]">
                             {currentData.teamAScorers && currentData.teamAScorers.length > 0 ? (
                                 currentData.teamAScorers.slice(0, 3).map((scorer, index) => (
                                     <div key={index} className="truncate">
@@ -618,29 +611,16 @@ const ScoreboardBelowNew = ({
                                 <div className="text-transparent">-</div>
                             )}
                         </div>
-
-                        {/* Fouls for Team A */}
-                        <div className="flex-shrink-0">
-                            <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[8px]" />
-                        </div>
+                        <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[9px]" />
                     </div>
-                </div>
 
-                {/* Spacer for central area */}
-                <div className="opacity-0 px-2 -mr-12 -ml-12">
-                    Score
-                </div>
+                    {/* Center spacer */}
+                    <div className="w-12"></div>
 
-                {/* Team B stats section */}
-                <div className="flex items-start gap-0">
-                    <div className="min-w-[80px] flex justify-between items-start">
-                        {/* Fouls for Team B */}
-                        <div className="flex-shrink-0">
-                            <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[8px]" />
-                        </div>
-
-                        {/* Goal scorers for Team B */}
-                        <div className="flex-1 text-[8px] text-gray-700 leading-tight overflow-hidden max-h-[40px] text-right">
+                    {/* Team B stats */}
+                    <div className="flex items-center space-x-2 flex-1 justify-end min-w-0">
+                        <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[9px]" />
+                        <div className="text-[9px] text-gray-700 max-w-[120px] overflow-hidden text-right max-h-[50px]">
                             {currentData.teamBScorers && currentData.teamBScorers.length > 0 ? (
                                 currentData.teamBScorers.slice(0, 3).map((scorer, index) => (
                                     <div key={index} className="truncate">
@@ -652,13 +632,7 @@ const ScoreboardBelowNew = ({
                             )}
                         </div>
                     </div>
-                    {/* Spacer for team name and kit */}
-                    <div className="w-12"></div>
-                    <div className="w-24 sm:w-32 md:w-40"></div>
                 </div>
-
-                {/* Spacer for logo B */}
-                <div className="w-8 sm:w-10 md:w-12"></div>
             </div>
         </div>
     );
