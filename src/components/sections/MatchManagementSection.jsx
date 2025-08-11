@@ -1,6 +1,4 @@
 import React, { useState, useCallback, useEffect, useMemo, useRef } from "react";
-import Button from "../common/Button";
-import Input from "../common/Input";
 import MemoizedPosterManager from "./MemoizedPosterManager";
 import TeamLineupModal from "../lineup/TeamLineupModal";
 import Modal from "../common/Modal";
@@ -9,12 +7,10 @@ import { useMatch } from "../../contexts/MatchContext";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTimer } from "../../contexts/TimerContext";
 import audioUtils from '../../utils/audioUtils';
-import { toDateInputFormat } from '../../utils/helpers';
 import LogoAPI from '../../API/apiLogo';
 import ScoreboardPreview from './ScoreboardPreview';
 import { getFullLogoUrl } from '../../utils/logoUtils';
 
-// Import các component mới
 import ScoreControls from './ScoreControls';
 import AudioControls from './AudioControls';
 import MatchInfo from './MatchInfo';
