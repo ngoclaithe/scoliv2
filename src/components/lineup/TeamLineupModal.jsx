@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "../common/Modal";
 import Button from "../common/Button";
 import Input from "../common/Input";
 import { useMatch } from "../../contexts/MatchContext";
+import PlayerListAPI from "../../API/apiPlayerList";
+import { toast } from "react-toastify";
 
 const TeamLineupModal = ({
   isOpen,
@@ -10,9 +12,13 @@ const TeamLineupModal = ({
   onSave,
   matchData = {},
   className = "",
+  accessCode = null,
 }) => {
   const { updateLineup, updateView } = useMatch();
   const [activeTeam, setActiveTeam] = useState("home");
+  const [isLoading, setIsLoading] = useState(false);
+  const [historyMatches, setHistoryMatches] = useState([]);
+  const [showHistorySelection, setShowHistorySelection] = useState(false);
   
   const defaultPlayers = [
     { number: "1", name: "" }, 
@@ -35,6 +41,100 @@ const TeamLineupModal = ({
 
   const [bulkMode, setBulkMode] = useState(false);
   const [bulkText, setBulkText] = useState("");
+
+  // Load current lineup data from API when modal opens
+  useEffect(() => {
+    if (isOpen && accessCode) {
+      loadCurrentLineup();
+    }
+  }, [isOpen, accessCode]);
+
+  // Load history matches when component mounts
+  useEffect(() => {
+    if (isOpen) {
+      loadHistoryMatches();
+    }
+  }, [isOpen]);
+
+  const loadCurrentLineup = async () => {
+    if (!accessCode) return;
+
+    setIsLoading(true);
+    try {
+      // Load both teams' lineups
+      const [teamAResponse, teamBResponse] = await Promise.all([
+        PlayerListAPI.getPlayerListByAccessCode(accessCode, 'teamA'),
+        PlayerListAPI.getPlayerListByAccessCode(accessCode, 'teamB')
+      ]);
+
+      if (teamAResponse.success && teamAResponse.data) {
+        const teamAPlayers = teamAResponse.data.map(player => ({
+          number: player.number,
+          name: player.name
+        }));
+
+        setLineups(prev => ({
+          ...prev,
+          home: [...teamAPlayers, ...defaultPlayers.slice(teamAPlayers.length)]
+        }));
+      }
+
+      if (teamBResponse.success && teamBResponse.data) {
+        const teamBPlayers = teamBResponse.data.map(player => ({
+          number: player.number,
+          name: player.name
+        }));
+
+        setLineups(prev => ({
+          ...prev,
+          away: [...teamBPlayers, ...defaultPlayers.slice(teamBPlayers.length)]
+        }));
+      }
+    } catch (error) {
+      console.error('Error loading current lineup:', error);
+      toast.error('Không thể tải danh sách cầu thủ hiện tại');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loadHistoryMatches = async () => {
+    try {
+      const response = await PlayerListAPI.getHistory10MatchAndPlayerList();
+      if (response.success && response.data) {
+        setHistoryMatches(response.data);
+      }
+    } catch (error) {
+      console.error('Error loading history matches:', error);
+    }
+  };
+
+  const loadHistoryLineup = (matchData) => {
+    const { playerLists } = matchData;
+
+    playerLists.forEach(teamData => {
+      const { teamType, players } = teamData;
+      const mappedPlayers = players.map(player => ({
+        number: player.number,
+        name: player.name
+      }));
+
+      if (teamType === 'teamA') {
+        setLineups(prev => ({
+          ...prev,
+          home: [...mappedPlayers, ...defaultPlayers.slice(mappedPlayers.length)]
+        }));
+      } else if (teamType === 'teamB') {
+        setLineups(prev => ({
+          ...prev,
+          away: [...mappedPlayers, ...defaultPlayers.slice(mappedPlayers.length)]
+        }));
+      }
+    });
+
+    setShowHistorySelection(false);
+    toast.success('Đã tải đội hình từ trận đấu cũ');
+  };
 
   const handlePlayerChange = (team, index, field, value) => {
     setLineups(prev => ({
@@ -157,7 +257,7 @@ const TeamLineupModal = ({
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-3 gap-2">
           <Button
             variant="outline"
             size="sm"
@@ -169,16 +269,74 @@ const TeamLineupModal = ({
           </Button>
 
           <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowHistorySelection(!showHistorySelection)}
+            className="h-10 flex flex-col items-center justify-center"
+          >
+            <span className="text-sm">📚</span>
+            <span className="text-xs">Trận cũ</span>
+          </Button>
+
+          <Button
             variant="primary"
             size="sm"
             onClick={validateAndSave}
             className="h-10 flex flex-col items-center justify-center text-xs"
-            disabled={homeCount === 0 && awayCount === 0}
+            disabled={homeCount === 0 && awayCount === 0 || isLoading}
           >
             <span className="text-sm">💾</span>
             <span className="text-xs">Lưu</span>
           </Button>
         </div>
+
+        {/* History Selection Mode */}
+        {showHistorySelection && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-h-60 overflow-y-auto">
+            <h4 className="font-medium text-blue-800 mb-3">
+              Chọn đội hình từ trận đấu cũ
+            </h4>
+            <div className="space-y-2">
+              {historyMatches.length > 0 ? (
+                historyMatches.map((match, index) => (
+                  <div
+                    key={index}
+                    className="border border-blue-200 rounded-lg p-3 cursor-pointer hover:bg-blue-100 transition-colors"
+                    onClick={() => loadHistoryLineup(match)}
+                  >
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <div className="font-medium text-sm">
+                          {match.matchInfo.teamAName} vs {match.matchInfo.teamBName}
+                        </div>
+                        <div className="text-xs text-gray-600">
+                          {new Date(match.matchInfo.matchDate).toLocaleDateString('vi-VN')}
+                        </div>
+                        <div className="text-xs text-blue-600">
+                          Mã: {match.accessCode}
+                        </div>
+                      </div>
+                      <span className="text-blue-600">→</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-gray-500 py-4">
+                  Không có dữ liệu trận đấu cũ
+                </div>
+              )}
+            </div>
+            <div className="flex justify-end mt-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowHistorySelection(false)}
+              >
+                Đóng
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* Bulk Input Mode */}
         {bulkMode && (
@@ -195,16 +353,16 @@ const TeamLineupModal = ({
             />
             <div className="flex justify-between items-center mt-3">
               <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={() => setBulkMode(false)}
                 >
                   Hủy
                 </Button>
-                <Button 
-                  variant="primary" 
-                  size="sm" 
+                <Button
+                  variant="primary"
+                  size="sm"
                   onClick={handleBulkInput}
                 >
                   Áp dụng
@@ -220,6 +378,7 @@ const TeamLineupModal = ({
             <div className="flex justify-between items-center">
               <h4 className="font-medium text-gray-900">
                 Danh sách {activeTeam === "home" ? "đội nhà" : "đội khách"}
+                {isLoading && <span className="ml-2 text-blue-500">🔄</span>}
               </h4>
               <div className="text-sm text-gray-500">
                 {currentTeamData.filter(p => p.name.trim()).length}/11 cầu thủ
