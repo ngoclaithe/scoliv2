@@ -67,7 +67,10 @@ const TeamLineupModal = ({
         PlayerListAPI.getPlayerListByAccessCode(accessCode, 'teamB')
       ]);
 
-      if (teamAResponse.success && teamAResponse.data) {
+      console.log('Team A Response:', teamAResponse);
+      console.log('Team B Response:', teamBResponse);
+
+      if (teamAResponse.success && teamAResponse.data && Array.isArray(teamAResponse.data)) {
         const teamAPlayers = teamAResponse.data.map(player => ({
           number: player.number,
           name: player.name
@@ -77,9 +80,12 @@ const TeamLineupModal = ({
           ...prev,
           home: [...teamAPlayers, ...defaultPlayers.slice(teamAPlayers.length)]
         }));
+      } else if (teamAResponse.success && teamAResponse.data && !Array.isArray(teamAResponse.data)) {
+        // Handle case where data is not an array (maybe empty response or different structure)
+        console.log('Team A data is not an array:', teamAResponse.data);
       }
 
-      if (teamBResponse.success && teamBResponse.data) {
+      if (teamBResponse.success && teamBResponse.data && Array.isArray(teamBResponse.data)) {
         const teamBPlayers = teamBResponse.data.map(player => ({
           number: player.number,
           name: player.name
@@ -89,6 +95,9 @@ const TeamLineupModal = ({
           ...prev,
           away: [...teamBPlayers, ...defaultPlayers.slice(teamBPlayers.length)]
         }));
+      } else if (teamBResponse.success && teamBResponse.data && !Array.isArray(teamBResponse.data)) {
+        // Handle case where data is not an array
+        console.log('Team B data is not an array:', teamBResponse.data);
       }
     } catch (error) {
       console.error('Error loading current lineup:', error);
