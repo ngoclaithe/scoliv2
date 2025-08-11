@@ -130,7 +130,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   const [liveText, setLiveText] = useState(matchData.liveText || "");
 
   useEffect(() => {
-    console.log("Giá trị đồng bộ t��� backend socket là", matchData);
+    console.log("Giá trị đồng bộ từ backend socket là", matchData);
     setTeamAInfo(prev => {
       const newTeamAInfo = {
         name: matchData.teamA.name || prev.name,
@@ -638,18 +638,141 @@ const MatchManagementSection = ({ isActive = true }) => {
 
       {/* Options - Các action buttons điều khiển */}
       {selectedOption === "dieu-khien" && (
-        <ControlButtons
-          typeMatch={typeMatch}
-          onShowPosterModal={setShowPosterModal}
-          onShowLineupModal={setShowLineupModal}
-          onShowPenaltyModal={setShowPenaltyModal}
-          onCountdownClick={handleCountdownClick}
-          onUpdateMatchTime={updateMatchTime}
-          onUpdateView={updateView}
-          onPlayAudio={playAudioForAction}
-          quickCustomMinutes={quickCustomMinutes}
-          setQuickCustomMinutes={setQuickCustomMinutes}
-        />
+        <div className="space-y-2">
+          <ControlButtons
+            typeMatch={typeMatch}
+            onShowPosterModal={setShowPosterModal}
+            onShowLineupModal={setShowLineupModal}
+            onShowPenaltyModal={setShowPenaltyModal}
+            onCountdownClick={handleCountdownClick}
+            onUpdateMatchTime={updateMatchTime}
+            onUpdateView={updateView}
+            onPlayAudio={playAudioForAction}
+            quickCustomMinutes={quickCustomMinutes}
+            setQuickCustomMinutes={setQuickCustomMinutes}
+          />
+
+          {/* Clock Settings - giống MatchManagementSectionOld.jsx */}
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-2 sm:p-3 border border-indigo-200">
+            <div className="space-y-3">
+              {/* Radio buttons */}
+              <div className="flex justify-center space-x-4">
+                <div className="flex items-center space-x-1">
+                  <input
+                    type="radio"
+                    name="clock"
+                    value="khong"
+                    checked={clockSetting === "khong"}
+                    onChange={(e) => setClockSetting(e.target.value)}
+                    className="scale-75"
+                  />
+                  <label className="text-xs">KHÔNG</label>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <input
+                    type="radio"
+                    name="clock"
+                    value="lien-tuc"
+                    checked={clockSetting === "lien-tuc"}
+                    onChange={(e) => setClockSetting(e.target.value)}
+                    className="scale-75"
+                  />
+                  <label className="text-xs">LIÊN TỤC</label>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <input
+                    type="radio"
+                    name="clock"
+                    value="moi-2"
+                    checked={clockSetting === "moi-2"}
+                    onChange={(e) => setClockSetting(e.target.value)}
+                    className="scale-75"
+                  />
+                  <label className="text-xs">MỖI 2'</label>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <input
+                    type="radio"
+                    name="clock"
+                    value="moi-5"
+                    checked={clockSetting === "moi-5"}
+                    onChange={(e) => setClockSetting(e.target.value)}
+                    className="scale-75"
+                  />
+                  <label className="text-xs">MỖI 5'</label>
+                </div>
+              </div>
+
+              {/* Text content */}
+              <input
+                placeholder="Nội dung chữ chạy..."
+                value={clockText}
+                onChange={(e) => setClockText(e.target.value)}
+                maxLength={100}
+                className="w-full text-xs px-2 py-1 border border-gray-300 rounded focus:border-blue-500 focus:outline-none"
+              />
+
+              {/* Text Style Selection */}
+              <div>
+                <div className="flex gap-1 flex-wrap justify-center">
+                  <button
+                    onClick={() => setTickerColor("white-black")}
+                    className={`px-2 py-1 text-xs font-medium rounded border-2 bg-black text-white ${tickerColor === "white-black" ? "border-orange-600" : "border-gray-300"}`}
+                  >
+                    Chữ
+                  </button>
+                  <button
+                    onClick={() => setTickerColor("black-white")}
+                    className={`px-2 py-1 text-xs font-medium rounded border-2 bg-white text-black ${tickerColor === "black-white" ? "border-orange-600" : "border-gray-300"}`}
+                  >
+                    Chữ
+                  </button>
+                  <button
+                    onClick={() => setTickerColor("white-blue")}
+                    className={`px-2 py-1 text-xs font-medium rounded border-2 bg-blue-600 text-white ${tickerColor === "white-blue" ? "border-orange-600" : "border-gray-300"}`}
+                  >
+                    Chữ
+                  </button>
+                  <button
+                    onClick={() => setTickerColor("white-red")}
+                    className={`px-2 py-1 text-xs font-medium rounded border-2 bg-red-600 text-white ${tickerColor === "white-red" ? "border-orange-600" : "border-gray-300"}`}
+                  >
+                    Chữ
+                  </button>
+                  <button
+                    onClick={() => setTickerColor("white-green")}
+                    className={`px-2 py-1 text-xs font-medium rounded border-2 bg-green-600 text-white ${tickerColor === "white-green" ? "border-orange-600" : "border-gray-300"}`}
+                  >
+                    Chữ
+                  </button>
+                </div>
+              </div>
+
+              {/* Apply Button */}
+              <div className="flex justify-center pt-2 border-t border-indigo-200">
+                <Button
+                  variant="primary"
+                  size="sm"
+                  onClick={() => {
+                    // Tạo marquee data từ clock settings
+                    const marqueeSettings = {
+                      text: clockText || "TRỰC TIẾP BÓNG ĐÁ",
+                      mode: clockSetting,
+                      color: tickerColor,
+                      interval: clockSetting === 'moi-2' ? 2 : clockSetting === 'moi-5' ? 5 : 0
+                    };
+
+                    // Update marquee qua MatchContext
+                    updateMarquee(marqueeSettings);
+                  }}
+                  className="px-4 py-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                >
+                  ÁP DỤNG
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Modals */}
