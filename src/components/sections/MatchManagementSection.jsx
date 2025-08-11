@@ -631,6 +631,7 @@ const MatchManagementSection = ({ isActive = true }) => {
           onUpdateGoalScorers={updateGoalScorers}
           onUpdateView={updateView}
           onPlayAudio={playAudioForAction}
+          accessCode={matchCode}
         />
       )}
 
