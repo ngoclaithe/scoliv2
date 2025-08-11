@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../../utils/logoUtils';
+import { FoulsDisplay } from '../../utils/futsalUtils';
 import ScoreboardType1 from './scoreboard_types/ScoreboardType1';
 import ScoreboardType2 from './scoreboard_types/ScoreboardType2';
 import ScoreboardType3 from './scoreboard_types/ScoreboardType3';
