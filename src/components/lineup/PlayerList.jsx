@@ -156,9 +156,9 @@ const PlayerList = () => {
                     <div className="mt-2 relative">
                         {/* Waistband */}
                         <div
-                            className="w-20 h-2 sm:w-24 sm:h-2.5 mx-auto rounded-t-md shadow-sm"
+                            className="w-20 h-4 sm:w-24 sm:h-5 mx-auto rounded-t-md shadow-sm"
                             style={{
-                                background: `linear-gradient(90deg, ${kitColor}cc 0%, ${kitColor} 50%, ${kitColor}cc 100%)`
+                                background: `linear-gradient(90deg, ${kitColor2}cc 0%, ${kitColor2} 50%, ${kitColor2}cc 100%)`
                             }}
                         />
 
