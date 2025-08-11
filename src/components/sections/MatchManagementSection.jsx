@@ -623,16 +623,92 @@ const MatchManagementSection = ({ isActive = true }) => {
 
       {/* Tab Thông số */}
       {selectedOption === "thong-so" && typeMatch !== 'pickleball' && (
-        <MatchStatsEdit
-          matchStats={matchStats}
-          futsalErrors={futsalErrors}
-          onUpdateStats={updateStats}
-          onUpdateFutsalErrors={updateFutsalErrors}
-          onUpdateGoalScorers={updateGoalScorers}
-          onUpdateView={updateView}
-          onPlayAudio={playAudioForAction}
-          accessCode={matchCode}
-        />
+        <div className="space-y-2">
+          <MatchStatsEdit
+            matchStats={matchStats}
+            futsalErrors={futsalErrors}
+            onUpdateStats={updateStats}
+            onUpdateFutsalErrors={updateFutsalErrors}
+            onUpdateGoalScorers={updateGoalScorers}
+            onUpdateView={updateView}
+            onPlayAudio={playAudioForAction}
+            accessCode={matchCode}
+          />
+
+          {/* Clock Setting - Thiết lập đồng hồ */}
+          <div className="bg-white rounded-lg p-2 border border-gray-200 shadow-sm">
+            <h3 className="text-base font-semibold text-gray-900 mb-2">Thiết lập đồng hồ</h3>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700">Chế độ:</label>
+                <select
+                  value={clockSetting}
+                  onChange={(e) => setClockSetting(e.target.value)}
+                  className="px-2 py-1 text-sm border border-gray-300 rounded focus:border-blue-500 focus:outline-none"
+                >
+                  <option value="khong">Không hiện</option>
+                  <option value="dem-len">Đếm lên</option>
+                  <option value="dem-xuong">Đếm xuống</option>
+                  <option value="ticker">Ticker text</option>
+                </select>
+              </div>
+
+              {clockSetting === "ticker" && (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    placeholder="Nội dung ticker..."
+                    value={clockText}
+                    onChange={(e) => setClockText(e.target.value)}
+                    className="flex-1 px-2 py-1 text-sm border border-gray-300 rounded focus:border-blue-500 focus:outline-none"
+                  />
+                  <input
+                    type="color"
+                    value={tickerColor}
+                    onChange={(e) => setTickerColor(e.target.value)}
+                    className="w-8 h-8 border border-gray-300 rounded cursor-pointer"
+                    title="Màu ticker"
+                  />
+                </div>
+              )}
+
+              {(clockSetting === "dem-len" || clockSetting === "dem-xuong") && (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    placeholder="mm:ss"
+                    value={customTime}
+                    onChange={(e) => setCustomTime(e.target.value)}
+                    className="w-20 px-2 py-1 text-sm border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Giây"
+                    value={customSeconds}
+                    onChange={(e) => setCustomSeconds(e.target.value)}
+                    className="w-16 px-2 py-1 text-sm border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center"
+                    min="0"
+                    max="59"
+                  />
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={() => {
+                      const minutes = customTime.split(':')[0] || '0';
+                      const seconds = customTime.split(':')[1] || customSeconds || '0';
+                      const timeString = `${minutes.padStart(2, '0')}:${seconds.padStart(2, '0')}`;
+                      updateMatchTime(timeString, "Hiệp 1", "live");
+                      updateView('scoreboard');
+                    }}
+                    className="px-3 py-1 text-xs"
+                  >
+                    Áp dụng
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Options - Các action buttons điều khiển */}
