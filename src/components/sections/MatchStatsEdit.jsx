@@ -245,6 +245,15 @@ const MatchStatsEdit = ({
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-base font-semibold text-gray-900">Thông số trận đấu</h3>
         <div className="flex items-center gap-2">
+        <button
+            onClick={() => {
+              onUpdateView('stat');
+              onPlayAudio('poster');
+            }}
+            className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
+          >
+            <span className="text-xs font-bold text-center">Sự kiện</span>
+          </button>
           <button
             onClick={() => {
               onUpdateView('stat');
@@ -252,8 +261,7 @@ const MatchStatsEdit = ({
             }}
             className="flex flex-row items-center justify-center p-1.5 sm:p-2 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200"
           >
-            <span className="text-sm mr-1">📊</span>
-            <span className="text-xs font-bold text-center">THỐNG KÊ</span>
+            <span className="text-xs font-bold text-center">Chỉ số</span>
           </button>
         </div>
       </div>

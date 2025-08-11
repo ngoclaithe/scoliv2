@@ -173,7 +173,7 @@ const AccessCodeManagement = () => {
         if (code.usageCount >= code.maxUses) {
           return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">Hết lượt</span>;
         }
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Hoạt động</span>;
+        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Sẵn sàng</span>;
       case 'used':
         return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Đang dùng</span>;
       case 'expired':
@@ -239,8 +239,8 @@ const AccessCodeManagement = () => {
               onChange={(e) => setStatusFilter(e.target.value)}
             >
               <option value="">Tất cả trạng thái</option>
-              <option value="active">Hoạt động</option>
-              <option value="used">Đã sử dụng</option>
+              <option value="active">Sẵn sàng</option>
+              <option value="used">Đang dùng</option>
               <option value="expired">Hết hạn</option>
               <option value="revoked">Đã thu hồi</option>
             </select>
@@ -483,7 +483,7 @@ const AccessCodeManagement = () => {
               onChange={(e) => setFormData({...formData, status: e.target.value})}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md leading-5 bg-white focus:outline-none focus:ring-1 focus:ring-primary-500 focus:border-primary-500"
             >
-              <option value="active">Hoạt động</option>
+              <option value="active">Sẵn sàng</option>
               <option value="revoked">Thu hồi</option>
             </select>
           </div>
