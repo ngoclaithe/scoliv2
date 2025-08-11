@@ -149,8 +149,14 @@ const MatchStatsEdit = ({
   const handleAddGoalScorer = (team) => {
     const scorer = goalScorers[team];
     if (scorer.player.trim() && scorer.minute.trim()) {
+      // Tìm thông tin chi tiết của cầu thủ
+      const players = team === 'teamA' ? playersTeamA : playersTeamB;
+      const playerInfo = players.find(p => p._id === scorer.player) ||
+                        players.find(p => p.name === scorer.player);
+
       onUpdateGoalScorers(team, {
-        player: scorer.player.trim(),
+        playerId: playerInfo?._id || scorer.player,
+        player: playerInfo?.name || scorer.player,
         minute: parseInt(scorer.minute)
       });
 
@@ -164,6 +170,22 @@ const MatchStatsEdit = ({
       if (team === 'teamA') setShowDropdownA(false);
       if (team === 'teamB') setShowDropdownB(false);
     }
+  };
+
+  const handlePlayerSelect = (team, playerId, playerName) => {
+    setGoalScorers(prev => ({
+      ...prev,
+      [team]: { ...prev[team], player: playerId }
+    }));
+
+    if (team === 'teamA') setShowDropdownA(false);
+    if (team === 'teamB') setShowDropdownB(false);
+  };
+
+  const getSelectedPlayerName = (team, playerId) => {
+    const players = team === 'teamA' ? playersTeamA : playersTeamB;
+    const player = players.find(p => p._id === playerId);
+    return player?.name || '';
   };
 
   const PlayerDropdown = ({ team, players, selectedPlayerId, onSelect, show, onToggle }) => (
