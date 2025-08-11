@@ -801,6 +801,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             setShowLineupModal(false);
           }}
           matchData={{ ...matchData, ...timerData }}
+          accessCode={matchCode}
         />
       )}
 
