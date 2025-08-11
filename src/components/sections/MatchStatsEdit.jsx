@@ -103,50 +103,42 @@ const MatchStatsEdit = ({
       </div>
       <div className="flex items-center gap-2">
         <div className="flex-1">
-          <div className="flex items-center bg-white rounded border border-gray-300">
-            <Button
-              variant="outline"
-              size="sm"
-              className="px-2 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
+          <div className="flex items-stretch bg-white rounded border border-gray-300 overflow-hidden">
+            <button
+              className="px-2 py-1 text-xs bg-white hover:bg-red-50 text-red-600 border-r border-gray-300 transition-colors duration-150"
               onClick={() => onUpdate('team1', -1)}
             >
               -
-            </Button>
-            <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-8 text-center">
+            </button>
+            <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-8 text-center flex-1">
               {team1Value}{isPercentage ? '%' : ''}
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              className="px-2 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
+            <button
+              className="px-2 py-1 text-xs bg-white hover:bg-red-50 text-red-600 border-l border-gray-300 transition-colors duration-150"
               onClick={() => onUpdate('team1', 1)}
             >
               +
-            </Button>
+            </button>
           </div>
         </div>
         <div className="text-gray-400 text-xs">vs</div>
         <div className="flex-1">
-          <div className="flex items-center bg-white rounded border border-gray-300">
-            <Button
-              variant="outline"
-              size="sm"
-              className="px-2 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
+          <div className="flex items-stretch bg-white rounded border border-gray-300 overflow-hidden">
+            <button
+              className="px-2 py-1 text-xs bg-white hover:bg-gray-50 text-gray-600 border-r border-gray-300 transition-colors duration-150"
               onClick={() => onUpdate('team2', -1)}
             >
               -
-            </Button>
-            <div className="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold min-w-8 text-center">
+            </button>
+            <div className="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold min-w-8 text-center flex-1">
               {team2Value}{isPercentage ? '%' : ''}
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              className="px-2 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
+            <button
+              className="px-2 py-1 text-xs bg-white hover:bg-gray-50 text-gray-600 border-l border-gray-300 transition-colors duration-150"
               onClick={() => onUpdate('team2', 1)}
             >
               +
-            </Button>
+            </button>
           </div>
         </div>
       </div>
@@ -330,50 +322,42 @@ const MatchStatsEdit = ({
           </div>
           <div className="flex items-center gap-2">
             <div className="flex-1">
-              <div className="flex items-center bg-white rounded border border-gray-300">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="px-2 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
+              <div className="flex items-stretch bg-white rounded border border-gray-300 overflow-hidden">
+                <button
+                  className="px-2 py-1 text-xs bg-white hover:bg-red-50 text-red-600 border-r border-gray-300 transition-colors duration-150"
                   onClick={() => onUpdateFutsalErrors('teamA', -1)}
                 >
                   -
-                </Button>
-                <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-8 text-center">
+                </button>
+                <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-8 text-center flex-1">
                   {futsalErrors.teamA}
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="px-2 py-1 text-xs border-0 hover:bg-red-50 text-red-600"
+                <button
+                  className="px-2 py-1 text-xs bg-white hover:bg-red-50 text-red-600 border-l border-gray-300 transition-colors duration-150"
                   onClick={() => onUpdateFutsalErrors('teamA', 1)}
                 >
                   +
-                </Button>
+                </button>
               </div>
             </div>
             <div className="text-gray-400 text-xs">vs</div>
             <div className="flex-1">
-              <div className="flex items-center bg-white rounded border border-gray-300">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="px-2 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
+              <div className="flex items-stretch bg-white rounded border border-gray-300 overflow-hidden">
+                <button
+                  className="px-2 py-1 text-xs bg-white hover:bg-gray-50 text-gray-600 border-r border-gray-300 transition-colors duration-150"
                   onClick={() => onUpdateFutsalErrors('teamB', -1)}
                 >
                   -
-                </Button>
-                <div className="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold min-w-8 text-center">
+                </button>
+                <div className="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold min-w-8 text-center flex-1">
                   {futsalErrors.teamB}
                 </div>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="px-2 py-1 text-xs border-0 hover:bg-gray-50 text-gray-600"
+                <button
+                  className="px-2 py-1 text-xs bg-white hover:bg-gray-50 text-gray-600 border-l border-gray-300 transition-colors duration-150"
                   onClick={() => onUpdateFutsalErrors('teamB', 1)}
                 >
                   +
-                </Button>
+                </button>
               </div>
             </div>
           </div>
