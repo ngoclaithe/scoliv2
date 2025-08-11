@@ -97,8 +97,8 @@ const MatchStatsEdit = ({
   };
 
   const StatControl = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => (
-    <div className="py-1">
-      <div className="text-center mb-1">
+    <div className="py-0.5">
+      <div className="text-center mb-0.5">
         <span className="font-medium text-gray-700 text-sm">{label}</span>
       </div>
       <div className="flex items-center gap-2">
@@ -258,8 +258,8 @@ const MatchStatsEdit = ({
         </div>
       </div>
 
-      {/* Stats Display - Gom chung vào 1 thẻ */}
-      <div className="bg-gray-50 rounded-lg p-2 space-y-2">
+      {/* Stats Display - Gom chung vào 1 thẻ với padding và spacing giảm */}
+      <div className="bg-gray-50 rounded-lg p-1.5 space-y-1">
         {/* Kiểm soát bóng */}
         <StatControl
           label="Kiểm soát bóng"
@@ -316,8 +316,8 @@ const MatchStatsEdit = ({
         />
 
         {/* Lỗi Futsal */}
-        <div className="py-1">
-          <div className="text-center mb-1">
+        <div className="py-0.5">
+          <div className="text-center mb-0.5">
             <span className="font-medium text-gray-700 text-sm">Lỗi Futsal</span>
           </div>
           <div className="flex items-center gap-2">
@@ -364,14 +364,14 @@ const MatchStatsEdit = ({
         </div>
 
         {/* Cầu thủ ghi bàn */}
-        <div className="py-1 border-t border-gray-200 pt-2">
-          <div className="text-center mb-2">
+        <div className="py-0.5 border-t border-gray-200 pt-1">
+          <div className="text-center mb-1.5">
             <span className="font-medium text-gray-700 text-sm">Cầu thủ ghi bàn</span>
           </div>
           
           {/* Đội A */}
-          <div className="mb-2">
-            <div className="text-xs text-red-600 mb-1">Đội A:</div>
+          <div className="mb-1.5">
+            <div className="text-xs text-red-600 mb-0.5">Đội A:</div>
             <div className="flex items-center gap-1 player-dropdown">
               <PlayerDropdown
                 team="teamA"
@@ -407,7 +407,7 @@ const MatchStatsEdit = ({
 
           {/* Đội B */}
           <div>
-            <div className="text-xs text-gray-800 mb-1">Đội B:</div>
+            <div className="text-xs text-gray-800 mb-0.5">Đội B:</div>
             <div className="flex items-center gap-1 player-dropdown">
               <PlayerDropdown
                 team="teamB"

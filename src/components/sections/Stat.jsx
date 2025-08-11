@@ -43,7 +43,7 @@ const Stat = () => {
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
           <div className="text-center">
-            <h1 className="text-2xl md:text-3xl font-bold mb-2">THỐNG KÊ TRẬN ĐẤU</h1>
+            {/* <h1 className="text-2xl md:text-3xl font-bold mb-2">THỐNG KÊ TRẬN ĐẤU</h1> */}
             <div className="flex items-center justify-center space-x-4 text-lg md:text-xl">
               <span className="font-semibold">{matchData.teamA.name || 'ĐỘI A'}</span>
               <span className="text-yellow-300 font-bold">VS</span>
