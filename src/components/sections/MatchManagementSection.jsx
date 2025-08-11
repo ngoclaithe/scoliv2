@@ -505,11 +505,13 @@ const MatchManagementSection = ({ isActive = true }) => {
           currentAudioFile={currentAudioFile}
           audioEnabled={audioEnabled}
           timerData={timerData}
+          showMatchInfo={showMatchInfo}
           onPauseAudio={pauseCurrentAudio}
           onResumeAudio={resumeCurrentAudio}
           onToggleAudio={toggleAudioEnabled}
           onResumeTimer={resumeTimer}
           onPauseTimer={() => updateMatchTime(timerData.matchTime, timerData.period, "paused")}
+          onToggleMatchInfo={() => setShowMatchInfo(!showMatchInfo)}
         />
 
         {/* Match Info */}
