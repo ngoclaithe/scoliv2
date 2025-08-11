@@ -146,6 +146,45 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
                 </div>
             </div>
 
+            {/* Goal scorers and fouls row */}
+            {!showMatchTime && (
+                <div className="space-y-2 mt-2">
+                    <div className="flex justify-between items-center px-4">
+                        {/* Team A scorers and fouls */}
+                        <div className="flex items-center space-x-4 flex-1">
+                            <div className="text-[10px] text-gray-700 max-w-[140px] overflow-hidden max-h-[60px]">
+                                {currentData.teamAScorers && currentData.teamAScorers.length > 0 ? (
+                                    currentData.teamAScorers.slice(0, 4).map((scorer, index) => (
+                                        <div key={index} className="truncate">
+                                            {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-transparent">-</div>
+                                )}
+                            </div>
+                            <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[10px]" />
+                        </div>
+
+                        {/* Team B fouls and scorers */}
+                        <div className="flex items-center space-x-4 flex-1 justify-end">
+                            <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[10px]" />
+                            <div className="text-[10px] text-gray-700 max-w-[140px] overflow-hidden text-right max-h-[60px]">
+                                {currentData.teamBScorers && currentData.teamBScorers.length > 0 ? (
+                                    currentData.teamBScorers.slice(0, 4).map((scorer, index) => (
+                                        <div key={index} className="truncate">
+                                            {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '} {scorer.player}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-transparent">-</div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* LIVE indicator */}
             {!showMatchTime && (
                 <div className="text-center mt-2">
