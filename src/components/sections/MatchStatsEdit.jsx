@@ -205,7 +205,9 @@ const MatchStatsEdit = ({
           {loadingPlayers ? (
             <div className="px-2 py-1 text-xs text-gray-500">Đang tải...</div>
           ) : players.length === 0 ? (
-            <div className="px-2 py-1 text-xs text-gray-500">Không có cầu th��</div>
+            <div className="px-2 py-1 text-xs text-gray-500">
+              Chưa có danh sách cầu thủ. Có thể nhập tên trực tiếp.
+            </div>
           ) : (
             players.map((player) => (
               <div
