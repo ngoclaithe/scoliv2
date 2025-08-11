@@ -26,21 +26,31 @@ const MatchStatsEdit = ({
   // Fetch danh sách cầu thủ khi component mount
   useEffect(() => {
     const fetchPlayers = async () => {
-      if (!accessCode) return;
-      
+      if (!accessCode) {
+        setPlayersTeamA([]);
+        setPlayersTeamB([]);
+        return;
+      }
+
       setLoadingPlayers(true);
       try {
         const [teamAResponse, teamBResponse] = await Promise.all([
           PlayerListAPI.getPlayerListByAccessCode(accessCode, 'A'),
           PlayerListAPI.getPlayerListByAccessCode(accessCode, 'B')
         ]);
-        
+
         setPlayersTeamA(teamAResponse.data?.players || []);
         setPlayersTeamB(teamBResponse.data?.players || []);
       } catch (error) {
-        console.error('Error fetching players:', error);
+        // Silently handle the case where no player lists are associated with access code
+        // This is expected behavior for many matches that don't have pre-configured player lists
         setPlayersTeamA([]);
         setPlayersTeamB([]);
+
+        // Only log if it's not the expected "not associated" error
+        if (!error.message.includes('AccessCode is not associated to PlayerList')) {
+          console.error('Error fetching players:', error);
+        }
       } finally {
         setLoadingPlayers(false);
       }
@@ -195,7 +205,7 @@ const MatchStatsEdit = ({
           {loadingPlayers ? (
             <div className="px-2 py-1 text-xs text-gray-500">Đang tải...</div>
           ) : players.length === 0 ? (
-            <div className="px-2 py-1 text-xs text-gray-500">Không có cầu thủ</div>
+            <div className="px-2 py-1 text-xs text-gray-500">Không có cầu th��</div>
           ) : (
             players.map((player) => (
               <div
