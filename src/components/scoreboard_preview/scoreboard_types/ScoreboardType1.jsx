@@ -1,4 +1,5 @@
 import React from 'react';
+import { FoulsDisplay } from '../../../utils/futsalUtils';
 
 const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
     return (
