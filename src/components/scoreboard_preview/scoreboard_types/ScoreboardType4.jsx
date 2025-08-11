@@ -110,6 +110,72 @@ const ScoreboardType4 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                     </div>
                 </div>
 
+                {/* Goal scorers and fouls row - Type 4 */}
+                <div className="flex items-start justify-center w-full gap-0 mt-1">
+                    {/* Spacer for logo A */}
+                    <div className="w-[32px] sm:w-[56px]"></div>
+
+                    {/* Team A stats section */}
+                    <div className="flex items-start gap-0">
+                        {/* Spacer for team name and kit */}
+                        <div className="w-[72px]"></div>
+                        <div className="w-[20px]"></div>
+                        <div className="w-[60px] flex justify-between items-start">
+                            {/* Goal scorers for Team A */}
+                            <div className="flex-1 text-[8px] text-gray-700 leading-tight overflow-hidden max-h-[40px]">
+                                {currentData.teamAScorers && currentData.teamAScorers.length > 0 ? (
+                                    currentData.teamAScorers.slice(0, 3).map((scorer, index) => (
+                                        <div key={index} className="truncate">
+                                            {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-transparent">-</div>
+                                )}
+                            </div>
+
+                            {/* Fouls for Team A */}
+                            <div className="flex-shrink-0">
+                                <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[8px]" />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Spacer for central area */}
+                    <div className="opacity-0 px-2 w-[140px]">
+                        Score
+                    </div>
+
+                    {/* Team B stats section */}
+                    <div className="flex items-start gap-0">
+                        <div className="w-[60px] flex justify-between items-start">
+                            {/* Fouls for Team B */}
+                            <div className="flex-shrink-0">
+                                <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[8px]" />
+                            </div>
+
+                            {/* Goal scorers for Team B */}
+                            <div className="flex-1 text-[8px] text-gray-700 leading-tight overflow-hidden max-h-[40px] text-right">
+                                {currentData.teamBScorers && currentData.teamBScorers.length > 0 ? (
+                                    currentData.teamBScorers.slice(0, 3).map((scorer, index) => (
+                                        <div key={index} className="truncate">
+                                            {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '} {scorer.player}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-transparent">-</div>
+                                )}
+                            </div>
+                        </div>
+                        {/* Spacer for team name and kit */}
+                        <div className="w-[20px]"></div>
+                        <div className="w-[72px]"></div>
+                    </div>
+
+                    {/* Spacer for logo B */}
+                    <div className="w-[32px] sm:w-[56px]"></div>
+                </div>
+
                 {/* Team B logo */}
                 <div className="w-[32px] h-[32px] sm:w-[56px] sm:h-[56px] ml-[4px] sm:ml-[8px] shrink-0 flex items-center justify-center z-10">
                     <div
