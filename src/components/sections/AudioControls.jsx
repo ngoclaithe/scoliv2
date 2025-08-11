@@ -70,6 +70,23 @@ const AudioControls = ({
         <span className="hidden sm:inline">{timerData.status === "paused" ? "TIẾP TỤC" : "TẠM DỪNG"}</span>
         <span className="sm:hidden">{timerData.status === "paused" ? "TIẾP" : "DỪNG"}</span>
       </Button>
+
+      <Button
+        variant="primary"
+        size="sm"
+        className={`px-2 py-1 ${showMatchInfo
+          ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
+          : "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
+          } text-white font-bold text-xs rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200`}
+        onClick={onToggleMatchInfo}
+      >
+        <span className={`mr-1 inline-block transform transition-transform duration-300 ${showMatchInfo ? 'rotate-0' : 'rotate-180'
+          }`}>
+          ▼
+        </span>
+        <span className="hidden sm:inline">THÔNG TIN</span>
+        <span className="sm:hidden">INFO</span>
+      </Button>
     </div>
   );
 };
