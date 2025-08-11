@@ -23,20 +23,22 @@ export const MatchProvider = ({ children }) => {
       name: "ĐỘI-A",
       score: 0,
       logo: null,
-      scoreSet: 0 // For pickleball
+      scoreSet: 0,
+      teamAScorers: [] // Danh sách cầu thủ ghi bàn
     },
     teamB: {
       name: "ĐỘI-B",
       score: 0,
       logo: null,
-      scoreSet: 0 
+      scoreSet: 0,
+      teamBScorers: [] // Danh sách cầu thủ ghi bàn
     },
     tournament: "",
     stadium: "",
     matchDate: "",
     liveText: "",
     matchTitle: "",
-    typeMatch: "soccer" 
+    typeMatch: "soccer"
   });
 
   // State cho thống kê trận đấu
@@ -68,7 +70,7 @@ export const MatchProvider = ({ children }) => {
   // State cho chữ chạy
   const [marqueeData, setMarqueeData] = useState({
     text: '',
-    mode: 'none', // none, continuous, interval
+    mode: 'none', 
     interval: 0,
     color: '#ffffff',
     fontSize: 16
@@ -77,12 +79,12 @@ export const MatchProvider = ({ children }) => {
   // State cho template và poster
   const [displaySettings, setDisplaySettings] = useState({
     selectedSkin: 1,
-    selectedPoster: 'tretrung', // tretrung, haoquang
+    selectedPoster: 'tretrung',
     showStats: false,
     showPenalty: false,
     showLineup: false,
-    logoShape: 'round', // 'round', 'square', 'hexagon'
-    rotateDisplay: false // thêm rotateDisplay
+    logoShape: 'round', 
+    rotateDisplay: false 
   });
 
   // State cho danh sách cầu thủ
@@ -114,7 +116,6 @@ export const MatchProvider = ({ children }) => {
     }
 
     return () => {
-      // Chỉ disconnect nếu không có external socket connection
       if (isAuthenticated) {
         disconnectSocket();
       }
@@ -124,7 +125,6 @@ export const MatchProvider = ({ children }) => {
   // Khởi tạo socket connection
   const initializeSocket = useCallback(async (accessCode) => {
     try {
-      // Tất cả người vào Home.jsx đều là admin (theo yêu cầu)
       let clientType = 'admin';
       if (socketService.getConnectionStatus().accessCode === accessCode &&
           socketService.getConnectionStatus().isConnected &&
@@ -135,25 +135,20 @@ export const MatchProvider = ({ children }) => {
       await socketService.connect(accessCode, clientType);
       setSocketConnected(true);
 
-      // Lắng nghe các event từ server
       setupSocketListeners();
 
-      // Lắng nghe trạng thái room (room_joined, room_left, room_error)
       setupRoomStatusListener();
 
-      // Request state hiện tại từ server sau khi connect
       setTimeout(() => {
         socketService.requestCurrentState();
         console.log('🔄 [MatchContext] Requested current state from server');
-      }, 1000); // Delay 1s để đảm bảo connect thành công
+      }, 1000); 
 
       console.log(`Socket initialized for access code: ${accessCode}`);
     } catch (error) {
       console.error('Failed to initialize socket:', error);
 
-      // Kiểm tra lỗi hết hạn truy cập
       if (handleExpiredAccess && handleExpiredAccess(error)) {
-        // Đã xử lý lỗi hết hạn
         return;
       }
 
@@ -172,12 +167,10 @@ export const MatchProvider = ({ children }) => {
           const state = data.currentState;
 
           if (state.matchData) {
-            console.log('🔄 [MatchContext] Updating matchData from room_joined:', state.matchData);
-            // Tách timer data và gửi sang TimerContext
+            // console.log('🔄 [MatchContext] Updating matchData from room_joined:', state.matchData);
             const { matchTime, period, status, ...otherMatchData } = state.matchData;
             setMatchData(prev => ({ ...prev, ...otherMatchData }));
 
-            // Cập nhật timer data trong TimerContext
             if (matchTime || period || status) {
               updateTimerData({ matchTime, period, status });
             }
@@ -223,7 +216,7 @@ export const MatchProvider = ({ children }) => {
             setCurrentView(state.view);
           }
 
-          console.log('✅ [MatchContext] All data updated from room_joined event');
+          // console.log('✅ [MatchContext] All data updated from room_joined event');
           setLastUpdateTime(Date.now());
         }
       } else if (eventType === 'room_error') {
@@ -234,15 +227,12 @@ export const MatchProvider = ({ children }) => {
     });
   }, []);
 
-  // Thiết lập các listener cho socket
   const setupSocketListeners = useCallback(() => {
-    // Lắng nghe cập nhật thông tin trận đấu
     socketService.on('match_info_updated', (data) => {
       console.log('📝 [MatchContext] match_info_updated received:', data);
       setMatchData(prev => ({
         ...prev,
         ...data.matchInfo,
-        // Đảm bảo màu áo được cập nhật từ backend
         teamA: {
           ...prev.teamA,
           teamAKitColor: data.matchInfo.teamAKitColor || prev.teamA.teamAKitColor,
@@ -257,7 +247,6 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật tỉ số
     socketService.on('score_updated', (data) => {
       console.log('⚽ [MatchContext] Received score_updated:', data);
       setMatchData(prev => ({
@@ -268,11 +257,51 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe cập nhật thống kê
     socketService.on('match_stats_updated', (data) => {
       setMatchStats(prev => ({ ...prev, ...data.stats }));
       setLastUpdateTime(Date.now());
     });
+
+    // Lắng nghe cập nhật cầu thủ ghi bàn
+    // socketService.on('goal_scorers_updated', (data) => {
+    //   console.log('⚽ [MatchContext] Received goal_scorers_updated:', data);
+    //   const { team, scorer } = data;
+    //   const teamKey = team === 'teamA' ? 'teamAScorers' : 'teamBScorers';
+
+    //   setMatchData(prev => {
+    //     const newScorers = [...(prev[team][teamKey] || [])];
+
+    //     const existingPlayerIndex = newScorers.findIndex(s => s.player === scorer.player);
+
+    //     if (existingPlayerIndex >= 0) {
+    //       newScorers[existingPlayerIndex] = {
+    //         ...newScorers[existingPlayerIndex],
+    //         times: [...newScorers[existingPlayerIndex].times, scorer.minute].sort((a, b) => a - b)
+    //       };
+    //     } else {
+    //       newScorers.push({
+    //         player: scorer.player,
+    //         times: [scorer.minute]
+    //       });
+    //     }
+
+    //     return {
+    //       ...prev,
+    //       [team]: {
+    //         ...prev[team],
+    //         [teamKey]: newScorers
+    //       }
+    //     };
+    //   });
+    //   setLastUpdateTime(Date.now());
+    // });
+
+    // Lắng nghe cập nhật lỗi futsal
+    // socketService.on('futsal_errors_updated', (data) => {
+    //   console.log('🚫 [MatchContext] Received futsal_errors_updated:', data);
+    //   setFutsalErrors(prev => ({ ...prev, ...data.futsalErrors }));
+    //   setLastUpdateTime(Date.now());
+    // });
 
     // Lắng nghe cập nhật template
     socketService.on('template_updated', (data) => {
@@ -658,15 +687,61 @@ export const MatchProvider = ({ children }) => {
 
   // Cập nhật lỗi futsal
   const updateFutsalErrors = useCallback((team, increment) => {
-    setFutsalErrors(prev => ({
-      ...prev,
-      [team]: Math.max(0, prev[team] + increment)
-    }));
-  }, []);
+    const newFutsalErrors = {
+      ...futsalErrors,
+      [team]: Math.max(0, futsalErrors[team] + increment)
+    };
 
-  // Cập nhật view hiện tại cho route dynamic (MỚI)
+    setFutsalErrors(newFutsalErrors);
+
+    if (socketConnected) {
+      socketService.emit('futsal_errors_update', {
+        futsalErrors: newFutsalErrors
+      });
+    }
+  }, [futsalErrors, socketConnected]);
+
+  const updateGoalScorers = useCallback((team, scorer) => {
+    const teamKey = team === 'teamA' ? 'teamAScorers' : 'teamBScorers';
+
+    setMatchData(prev => {
+      const newScorers = [...(prev[team][teamKey] || [])];
+
+      const existingPlayerIndex = newScorers.findIndex(s => s.player === scorer.player);
+
+      if (existingPlayerIndex >= 0) {
+        newScorers[existingPlayerIndex] = {
+          ...newScorers[existingPlayerIndex],
+          times: [...newScorers[existingPlayerIndex].times, scorer.minute].sort((a, b) => a - b)
+        };
+      } else {
+        newScorers.push({
+          player: scorer.player,
+          times: [scorer.minute]
+        });
+      }
+
+      const newMatchData = {
+        ...prev,
+        [team]: {
+          ...prev[team],
+          [teamKey]: newScorers
+        }
+      };
+
+      return newMatchData;
+    });
+
+    if (socketConnected) {
+      socketService.emit('goal_scorers_update', {
+        team,
+        scorer
+      });
+    }
+  }, [socketConnected]);
+
   const updateView = useCallback((viewType) => {
-    console.log('🎯 [MatchContext] updateView called with:', viewType);
+    // console.log('🎯 [MatchContext] updateView called with:', viewType);
     setCurrentView(viewType);
 
     if (socketConnected) {
@@ -674,9 +749,6 @@ export const MatchProvider = ({ children }) => {
       console.log('Sent view update:', viewType);
     }
   }, [socketConnected]);
-
-  // resumeTimer đã được chuyển sang TimerContext
-
 
 
   // Reset toàn bộ dữ liệu trận đấu
@@ -691,7 +763,6 @@ export const MatchProvider = ({ children }) => {
       matchTitle: ""
     });
 
-    // Reset timer trong TimerContext
     updateTimerData({
       matchTime: "00:00",
       period: "Chưa bắt đầu",
@@ -745,6 +816,7 @@ export const MatchProvider = ({ children }) => {
     updatePenalty,
     updateLineup,
     updateFutsalErrors,
+    updateGoalScorers,
     updateView,
     resetMatch,
     updateMatchTitle,

@@ -14,9 +14,8 @@ const TeamLineupModal = ({
   const { updateLineup, updateView } = useMatch();
   const [activeTeam, setActiveTeam] = useState("home");
   
-  // Khởi tạo với số áo thực tế, GK đầu tiên
   const defaultPlayers = [
-    { number: "1", name: "" }, // Thủ môn
+    { number: "1", name: "" }, 
     { number: "2", name: "" },
     { number: "3", name: "" },
     { number: "4", name: "" },

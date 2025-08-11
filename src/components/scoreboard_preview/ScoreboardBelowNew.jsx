@@ -2,19 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { getFullLogoUrl } from '../../utils/logoUtils';
 import DisplayLogo from '../common/DisplayLogo';
+import { FoulsDisplay } from '../../utils/futsalUtils';
 
 const ScoreboardBelowNew = ({
     type = 1
 }) => {
     const {
         matchData,
+        futsalErrors,
         displaySettings,
         marqueeData,
         penaltyData,
         socketConnected,
         tournamentLogo
     } = usePublicMatch();
-    
+
     const [currentType, setCurrentType] = useState(type);
 
     const currentData = {
@@ -26,6 +28,8 @@ const ScoreboardBelowNew = ({
         teamBScore: matchData?.teamB?.score || 0,
         teamAScorers: matchData?.teamA?.teamAScorers || [],
         teamBScorers: matchData?.teamB?.teamBScorers || [],
+        teamAFouls: futsalErrors?.teamA || 0,
+        teamBFouls: futsalErrors?.teamB || 0,
         matchTime: matchData?.matchTime || "00:00",
         period: matchData?.period || "Chưa bắt đầu",
         status: matchData?.status || "waiting",
@@ -41,20 +45,20 @@ const ScoreboardBelowNew = ({
     const scrollData = {
         text: marqueeData?.text || "TRỰC TIẾP BÓNG ĐÁ",
         color: marqueeData?.color === 'white-black' ? '#FFFFFF' :
-               marqueeData?.color === 'black-white' ? '#000000' :
-               marqueeData?.color === 'white-blue' ? '#FFFFFF' :
-               marqueeData?.color === 'white-red' ? '#FFFFFF' :
-               marqueeData?.color === 'white-green' ? '#FFFFFF' : "#FFFFFF",
+            marqueeData?.color === 'black-white' ? '#000000' :
+                marqueeData?.color === 'white-blue' ? '#FFFFFF' :
+                    marqueeData?.color === 'white-red' ? '#FFFFFF' :
+                        marqueeData?.color === 'white-green' ? '#FFFFFF' : "#FFFFFF",
         bgColor: marqueeData?.color === 'white-black' ? '#000000' :
-                 marqueeData?.color === 'black-white' ? '#FFFFFF' :
-                 marqueeData?.color === 'white-blue' ? '#2563eb' :
-                 marqueeData?.color === 'white-red' ? '#dc2626' :
-                 marqueeData?.color === 'white-green' ? '#16a34a' : "#FF0000",
+            marqueeData?.color === 'black-white' ? '#FFFFFF' :
+                marqueeData?.color === 'white-blue' ? '#2563eb' :
+                    marqueeData?.color === 'white-red' ? '#dc2626' :
+                        marqueeData?.color === 'white-green' ? '#16a34a' : "#FF0000",
         repeat: 1,
         mode: marqueeData?.mode || 'khong',
-        interval: marqueeData?.mode === 'moi-2' ? 120000 : 
-                  marqueeData?.mode === 'moi-5' ? 300000 : 
-                  marqueeData?.mode === 'lien-tuc' ? 30000 : 0 
+        interval: marqueeData?.mode === 'moi-2' ? 120000 :
+            marqueeData?.mode === 'moi-5' ? 300000 :
+                marqueeData?.mode === 'lien-tuc' ? 30000 : 0
     };
 
     const showMatchTime = currentData.status === 'live' || currentData.status === 'pause';
@@ -73,12 +77,12 @@ const ScoreboardBelowNew = ({
             setShowScrollingText(true);
             timer = setInterval(() => {
                 setShowScrollingText(false);
-                setTimeout(() => setShowScrollingText(true), 2000); 
+                setTimeout(() => setShowScrollingText(true), 2000);
             }, scrollData.interval);
         } else if (scrollData.mode === 'moi-2' || scrollData.mode === 'moi-5') {
             timer = setInterval(() => {
                 setShowScrollingText(true);
-                setTimeout(() => setShowScrollingText(false), 5000); 
+                setTimeout(() => setShowScrollingText(false), 5000);
             }, scrollData.interval);
         }
 
@@ -98,9 +102,10 @@ const ScoreboardBelowNew = ({
     };
 
     const logoShape = displaySettings?.logoShape || "square";
-    
+
     const renderScoreboardType1 = () => (
         <div className="flex flex-col items-center">
+            {/* Main scoreboard row */}
             <div className="flex items-center justify-center w-full px-2 gap-0">
                 {/* Logo team A */}
                 <DisplayLogo
@@ -110,13 +115,14 @@ const ScoreboardBelowNew = ({
                     type_play={logoShape}
                     logoSize="w-14 h-14"
                 />
-                {/* Score + team A name */}
+
+                {/* Team A section */}
                 <div className="flex items-center gap-0">
                     <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 min-w-[2.2rem] text-center"
                         style={{ clipPath: 'polygon(12px 0%, 100% 0%, 100% 100%, 12px 100%, 0% 50%)' }}>
                         {currentData.teamAScore}
                     </div>
-                    <div className="container-name-color-left flex flex-col items-center w-[90px]">
+                    <div className="flex flex-col items-center w-[110px]">
                         <div className="w-full bg-blue-600 text-white px-2 py-0.5 text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]">
                             {currentData.teamAName}
                         </div>
@@ -124,32 +130,19 @@ const ScoreboardBelowNew = ({
                             className="w-full h-3"
                             style={{ backgroundColor: currentData.teamAKitColor }}
                         />
-                        {/* Goal scorers for Team A */}
-                        {currentData.teamAScorers && currentData.teamAScorers.length > 0 && (
-                            <div className="w-full text-[10px] text-gray-700 px-1 py-0.5 text-center leading-tight overflow-hidden max-h-[40px]">
-                                {currentData.teamAScorers.map((scorer, index) => (
-                                    <div key={index} className="truncate">
-                                        {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
-                                    </div>
-                                )).slice(0, 4)}
-                            </div>
-                        )}
-                        {/* Fouls for Team A (futsal only) */}
-                        {currentData.sportType === 'futsal' && currentData.teamAFouls !== undefined && (
-                            <div className="w-full text-[10px] text-red-600 px-1 py-0.5 text-center leading-tight">
-                                Lỗi: {currentData.teamAFouls}
-                            </div>
-                        )}
                     </div>
                 </div>
+
+                {/* Match time - centered */}
                 {showMatchTime && (
                     <div className="bg-black text-white px-2 py-1 text-sm font-bold whitespace-nowrap">
                         {currentData.matchTime}
                     </div>
                 )}
-                {/* Score + team B name */}
+
+                {/* Team B section */}
                 <div className="flex items-center gap-0">
-                    <div className="container-name-color-right flex flex-col items-center w-[90px]">
+                    <div className="flex flex-col items-center w-[110px]">
                         <div className="w-full bg-blue-600 text-white px-2 py-0.5 text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]">
                             {currentData.teamBName}
                         </div>
@@ -157,28 +150,13 @@ const ScoreboardBelowNew = ({
                             className="w-full h-3"
                             style={{ backgroundColor: currentData.teamBKitColor }}
                         />
-                        {/* Goal scorers for Team B */}
-                        {currentData.teamBScorers && currentData.teamBScorers.length > 0 && (
-                            <div className="w-full text-[10px] text-gray-700 px-1 py-0.5 text-center leading-tight overflow-hidden max-h-[40px]">
-                                {currentData.teamBScorers.map((scorer, index) => (
-                                    <div key={index} className="truncate">
-                                        {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
-                                    </div>
-                                )).slice(0, 4)}
-                            </div>
-                        )}
-                        {/* Fouls for Team B (futsal only) */}
-                        {currentData.sportType === 'futsal' && currentData.teamBFouls !== undefined && (
-                            <div className="w-full text-[10px] text-red-600 px-1 py-0.5 text-center leading-tight">
-                                Lỗi: {currentData.teamBFouls}
-                            </div>
-                        )}
                     </div>
                     <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 min-w-[2.2rem] text-center"
                         style={{ clipPath: 'polygon(0% 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 0% 100%)' }}>
                         {currentData.teamBScore}
                     </div>
                 </div>
+
                 {/* Logo team B */}
                 <DisplayLogo
                     logos={[currentData.teamBLogo]}
@@ -188,14 +166,72 @@ const ScoreboardBelowNew = ({
                     logoSize="w-14 h-14"
                 />
             </div>
-            {/* Live Match Label cho Type 1 */}
-            {!showMatchTime && (
-                <div className="text-center mt-2">
-                    <span className="bg-green-600 text-white px-4 py-1 text-sm font-bold rounded animate-pulse">
-                        ● TRỰC TIẾP
-                    </span>
+
+            {/* Goal scorers and fouls row - separate from main scoreboard */}
+
+            <div className="flex items-start justify-center w-full gap-0">
+                {/* Spacer for logo A */}
+                <div className="w-14"></div>
+
+                {/* Team A stats section */}
+                <div className="flex items-start gap-0">
+                    {/* Spacer for score */}
+                    <div className="min-w-[2.2rem]"></div>
+                    <div className="w-[110px] flex justify-between items-start">
+                        {/* Goal scorers for Team A */}
+                        <div className="flex-1 text-[10px] text-gray-700 leading-tight overflow-hidden max-h-[60px]">
+                            {currentData.teamAScorers && currentData.teamAScorers.length > 0 ? (
+                                currentData.teamAScorers.slice(0, 4).map((scorer, index) => (
+                                    <div key={index} className="truncate">
+                                        {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-transparent">-</div>
+                            )}
+                        </div>
+
+                        {/* Fouls for Team A */}
+                        <div className="flex-shrink-0">
+                            <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[10px]" />
+                        </div>
+                    </div>
                 </div>
-            )}
+
+                {/* Spacer for match time */}
+                <div className="opacity-0 px-2">
+                    {currentData.matchTime}
+                </div>
+
+                {/* Team B stats section */}
+                <div className="flex items-start gap-0">
+                    <div className="w-[110px] flex justify-between items-start">
+                        {/* Fouls for Team B */}
+                        <div className="flex-shrink-0">
+                            <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[10px]" />
+                        </div>
+
+                        {/* Goal scorers for Team B - phút trước, tên cầu thủ sau */}
+                        <div className="flex-1 text-[10px] text-gray-700 leading-tight overflow-hidden max-h-[60px] text-right">
+                            {currentData.teamBScorers && currentData.teamBScorers.length > 0 ? (
+                                currentData.teamBScorers.slice(0, 4).map((scorer, index) => (
+                                    <div key={index} className="truncate">
+                                        {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '} {scorer.player}
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-transparent">-</div>
+                            )}
+                        </div>
+                    </div>
+                    {/* Spacer for score */}
+                    <div className="min-w-[2.2rem]"></div>
+                </div>
+
+                {/* Spacer for logo B */}
+                <div className="w-14"></div>
+            </div>
+
         </div>
     );
 
@@ -333,75 +369,152 @@ const ScoreboardBelowNew = ({
             </div>
 
             {!showMatchTime && (
-                <div className="text-center mt-2">
-                    <span className="bg-green-600 text-white px-4 py-1 text-sm font-bold rounded animate-pulse">
-                        ● TRỰC TIẾP
-                    </span>
+                <div className="space-y-2 mt-2">
+                    {/* Goal scorers and fouls row */}
+                    <div className="flex justify-between items-center px-4">
+                        {/* Team A scorers and fouls */}
+                        <div className="flex items-center space-x-4 flex-1">
+                            <div className="text-[10px] text-gray-700 max-w-[140px] overflow-hidden max-h-[60px]">
+                                {currentData.teamAScorers && currentData.teamAScorers.length > 0 ? (
+                                    currentData.teamAScorers.slice(0, 4).map((scorer, index) => (
+                                        <div key={index} className="truncate">
+                                            {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-transparent">-</div>
+                                )}
+                            </div>
+                            <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[10px]" />
+                        </div>
+
+                        {/* Center live indicator */}
+                        <div className="text-center">
+                            <span className="bg-green-600 text-white px-4 py-1 text-sm font-bold rounded animate-pulse">
+                                ● TRỰC TIẾP
+                            </span>
+                        </div>
+
+                        {/* Team B fouls and scorers */}
+                        <div className="flex items-center space-x-4 flex-1 justify-end">
+                            <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[10px]" />
+                            <div className="text-[10px] text-gray-700 max-w-[140px] overflow-hidden text-right max-h-[60px]">
+                                {currentData.teamBScorers && currentData.teamBScorers.length > 0 ? (
+                                    currentData.teamBScorers.slice(0, 4).map((scorer, index) => (
+                                        <div key={index} className="truncate">
+                                            {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '} {scorer.player}
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-transparent">-</div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
     );
 
     const renderScoreboardType3 = () => (
-        <div className="flex items-center justify-between w-full px-2">
-            <DisplayLogo
-                logos={[currentData.teamALogo]}
-                alt={currentData.teamAName}
-                className="w-12 h-12"
-                type_play={logoShape}
-                logoSize="w-12 h-12"
-            />
+        <div className="flex flex-col items-center w-full">
+            <div className="flex items-center justify-between w-full px-2">
+                <DisplayLogo
+                    logos={[currentData.teamALogo]}
+                    alt={currentData.teamAName}
+                    className="w-12 h-12"
+                    type_play={logoShape}
+                    logoSize="w-12 h-12"
+                />
 
-            <div className="flex items-center bg-black/20 backdrop-blur-sm rounded-lg p-1 shadow-xl">
-                {/* Team A */}
-                <div className="flex items-center">
-                    <div className="text-white px-3 py-2 text-sm font-medium bg-gray-800/80 rounded-md w-[120px] truncate">
-                        {currentData.teamAName}
-                    </div>
-                    <div
-                        className="w-1 h-6 ml-1 rounded-full"
-                        style={{ backgroundColor: currentData.teamAKitColor }}
-                    />
-                </div>
-
-                {/* Score */}
-                <div className="mx-4 flex flex-col items-center">
-                    <div className="flex items-center bg-white/95 px-4 py-1 rounded-md shadow-sm">
-                        <span className="font-bold text-xl text-gray-900">{currentData.teamAScore}</span>
-                        <span className="mx-2 text-gray-400 font-light">:</span>
-                        <span className="font-bold text-xl text-gray-900">{currentData.teamBScore}</span>
-                    </div>
-                    {showMatchTime && (
-                        <div className="bg-red-600 text-white px-2 py-0.5 text-xs font-medium rounded-sm mt-1">
-                            {currentData.matchTime}
+                <div className="flex items-center bg-black/20 backdrop-blur-sm rounded-lg p-1 shadow-xl">
+                    {/* Team A */}
+                    <div className="flex items-center">
+                        <div className="text-white px-3 py-2 text-sm font-medium bg-gray-800/80 rounded-md w-[120px] truncate">
+                            {currentData.teamAName}
                         </div>
-                    )}
-                    {!showMatchTime && (
-                        <div className="bg-green-600 text-white px-2 py-0.5 text-[10px] font-medium rounded-sm mt-1 animate-pulse whitespace-nowrap">
-                            ● TRỰC TIẾP
-                        </div>
-                    )}
-                </div>
+                        <div
+                            className="w-1 h-6 ml-1 rounded-full"
+                            style={{ backgroundColor: currentData.teamAKitColor }}
+                        />
+                    </div>
 
-                {/* Team B */}
-                <div className="flex items-center">
-                    <div
-                        className="w-1 h-6 mr-1 rounded-full"
-                        style={{ backgroundColor: currentData.teamBKitColor }}
-                    />
-                    <div className="text-white px-3 py-2 text-sm font-medium bg-gray-800/80 rounded-md w-[120px] truncate text-right">
-                        {currentData.teamBName}
+                    {/* Score */}
+                    <div className="mx-4 flex flex-col items-center">
+                        <div className="flex items-center bg-white/95 px-4 py-1 rounded-md shadow-sm">
+                            <span className="font-bold text-xl text-gray-900">{currentData.teamAScore}</span>
+                            <span className="mx-2 text-gray-400 font-light">:</span>
+                            <span className="font-bold text-xl text-gray-900">{currentData.teamBScore}</span>
+                        </div>
+                        {showMatchTime && (
+                            <div className="bg-red-600 text-white px-2 py-0.5 text-xs font-medium rounded-sm mt-1">
+                                {currentData.matchTime}
+                            </div>
+                        )}
+                        {!showMatchTime && (
+                            <div className="bg-green-600 text-white px-2 py-0.5 text-[10px] font-medium rounded-sm mt-1 animate-pulse whitespace-nowrap">
+                                ● TRỰC TIẾP
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Team B */}
+                    <div className="flex items-center">
+                        <div
+                            className="w-1 h-6 mr-1 rounded-full"
+                            style={{ backgroundColor: currentData.teamBKitColor }}
+                        />
+                        <div className="text-white px-3 py-2 text-sm font-medium bg-gray-800/80 rounded-md w-[120px] truncate text-right">
+                            {currentData.teamBName}
+                        </div>
                     </div>
                 </div>
+
+                <DisplayLogo
+                    logos={[currentData.teamBLogo]}
+                    alt={currentData.teamBName}
+                    className="w-12 h-12"
+                    type_play={logoShape}
+                    logoSize="w-12 h-12"
+                />
             </div>
 
-            <DisplayLogo
-                logos={[currentData.teamBLogo]}
-                alt={currentData.teamBName}
-                className="w-12 h-12"
-                type_play={logoShape}
-                logoSize="w-12 h-12"
-            />
+            {/* Goal scorers and fouls row below main scoreboard */}
+            {!showMatchTime && (
+                <div className="w-full flex justify-between items-center px-2 mt-2">
+                    {/* Team A scorers and fouls */}
+                    <div className="flex items-center space-x-2 flex-1">
+                        <div className="text-[10px] text-gray-700 max-w-[140px] overflow-hidden max-h-[60px]">
+                            {currentData.teamAScorers && currentData.teamAScorers.length > 0 ? (
+                                currentData.teamAScorers.slice(0, 4).map((scorer, index) => (
+                                    <div key={index} className="truncate">
+                                        {scorer.player} {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '}
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-transparent">-</div>
+                            )}
+                        </div>
+                        <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[10px]" />
+                    </div>
+
+                    {/* Team B fouls and scorers */}
+                    <div className="flex items-center space-x-2 flex-1 justify-end">
+                        <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[10px]" />
+                        <div className="text-[10px] text-gray-700 max-w-[140px] overflow-hidden text-right max-h-[60px]">
+                            {currentData.teamBScorers && currentData.teamBScorers.length > 0 ? (
+                                currentData.teamBScorers.slice(0, 4).map((scorer, index) => (
+                                    <div key={index} className="truncate">
+                                        {scorer.times.join("' ")}'{scorer.times.length > 0 && ' '} {scorer.player}
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="text-transparent">-</div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 

@@ -29,17 +29,15 @@ export const TimerProvider = ({ children }) => {
   // Setup timer listeners khi có matchCode và authenticated
   useEffect(() => {
     if (matchCode && isAuthenticated) {
-      console.log('🕐 [TimerContext] Setting up timer listeners for:', matchCode);
+      // console.log('🕐 [TimerContext] Setting up timer listeners for:', matchCode);
       setupTimerListeners();
     }
 
     return () => {
-      console.log('🕐 [TimerContext] Cleaning up timer context');
-      // Cleanup timer interval
+      // console.log('🕐 [TimerContext] Cleaning up timer context');
       if (timerInterval) {
         clearInterval(timerInterval);
       }
-      // KHÔNG cleanup socket listeners vì có thể conflict với MatchContext
     };
   }, [matchCode, isAuthenticated]);
 
@@ -54,9 +52,8 @@ export const TimerProvider = ({ children }) => {
 
   // Thiết lập listeners cho timer events
   const setupTimerListeners = useCallback(() => {
-    console.log('🕐 [TimerContext] Setting up timer listeners');
+    // console.log('🕐 [TimerContext] Setting up timer listeners');
 
-    // Remove existing listeners để tránh duplicate
     socketService.removeAllListeners('timer_tick');
     socketService.removeAllListeners('timer_started');
     socketService.removeAllListeners('timer_paused');
@@ -64,14 +61,12 @@ export const TimerProvider = ({ children }) => {
     socketService.removeAllListeners('timer_reset');
     socketService.removeAllListeners('match_time_updated');
 
-    // Lắng nghe timer real-time updates từ server
     socketService.on('timer_tick', (data) => {
       // console.log('🕐 [TimerContext] Received timer_tick:', data);
       setTimerData(prev => {
         const newTime = data.displayTime || data.currentTime;
         const newStatus = prev.status === 'paused' ? 'paused' : 'live';
 
-        // Chỉ cập nhật nếu có thay đổi thực sự
         if (prev.matchTime === newTime && prev.status === newStatus) {
           return prev;
         }
@@ -86,9 +81,8 @@ export const TimerProvider = ({ children }) => {
       });
     });
 
-    // Lắng nghe timer start từ server
     socketService.on('timer_started', (data) => {
-      console.log('▶️ [TimerContext] Timer started from server:', data);
+      // console.log('▶️ [TimerContext] Timer started from server:', data);
       setTimerData(prev => ({
         ...prev,
         matchTime: data.currentTime,
@@ -98,9 +92,8 @@ export const TimerProvider = ({ children }) => {
       }));
     });
 
-    // Lắng nghe timer pause từ server
     socketService.on('timer_paused', (data) => {
-      console.log('⏸️ [TimerContext] Timer paused from server:', data);
+      // console.log('⏸️ [TimerContext] Timer paused from server:', data);
       setTimerData(prev => ({
         ...prev,
         matchTime: data.currentTime,
@@ -109,9 +102,8 @@ export const TimerProvider = ({ children }) => {
       }));
     });
 
-    // Lắng nghe timer resume từ server
     socketService.on('timer_resumed', (data) => {
-      console.log('▶️ [TimerContext] Timer resumed from server:', data);
+      // console.log('▶️ [TimerContext] Timer resumed from server:', data);
       setTimerData(prev => ({
         ...prev,
         matchTime: data.currentTime,
@@ -120,9 +112,8 @@ export const TimerProvider = ({ children }) => {
       }));
     });
 
-    // Lắng nghe timer reset từ server
     socketService.on('timer_reset', (data) => {
-      console.log('🔄 [TimerContext] Timer reset from server:', data);
+      // console.log('🔄 [TimerContext] Timer reset from server:', data);
       setTimerData(prev => ({
         ...prev,
         matchTime: data.resetTime,
@@ -132,7 +123,6 @@ export const TimerProvider = ({ children }) => {
       }));
     });
 
-    // Lắng nghe cập nhật thời gian
     socketService.on('match_time_updated', (data) => {
       setTimerData(prev => ({
         ...prev,
@@ -142,9 +132,8 @@ export const TimerProvider = ({ children }) => {
       }));
     });
 
-    // Lắng nghe current_state_response để cập nhật timer data
     socketService.on('current_state_response', (data) => {
-      console.log('🕐 [TimerContext] Received current_state_response:', data);
+      // console.log('🕐 [TimerContext] Received current_state_response:', data);
       if (data.matchData) {
         const { matchTime, period, status } = data.matchData;
         if (matchTime || period || status) {
@@ -158,12 +147,11 @@ export const TimerProvider = ({ children }) => {
       }
     });
 
-    // Lắng nghe room_joined để cập nhật timer data
     socketService.onRoomStatus((eventType, data) => {
       if (eventType === 'room_joined' && data?.currentState?.matchData) {
         const { matchTime, period, status } = data.currentState.matchData;
         if (matchTime || period || status) {
-          console.log('🕐 [TimerContext] Updating timer from room_joined:', { matchTime, period, status });
+          // console.log('🕐 [TimerContext] Updating timer from room_joined:', { matchTime, period, status });
           setTimerData(prev => ({
             ...prev,
             matchTime: matchTime || prev.matchTime,
@@ -174,31 +162,29 @@ export const TimerProvider = ({ children }) => {
       }
     });
 
-    // Lắng nghe socket connect để setup lại listeners
     socketService.on('connect', () => {
       console.log('🕐 [TimerContext] Socket connected, setting up timer listeners');
     });
 
   }, []);
 
-  // Cleanup timer listeners (không thực sự cleanup để tránh conflict)
   const cleanupTimerListeners = useCallback(() => {
     console.log('🕐 [TimerContext] Cleanup timer listeners called (but not actually cleaning up)');
   }, []);
 
   // Timer control functions
   const updateMatchTime = useCallback((matchTime, period, status) => {
-    console.log('🕐 [TimerContext] updateMatchTime called:', { matchTime, period, status });
+    // console.log('🕐 [TimerContext] updateMatchTime called:', { matchTime, period, status });
 
     // Update local state
     setTimerData(prev => {
-      console.log('🕐 [TimerContext] Updating local timerData from:', prev, 'to:', { matchTime, period, status });
+      // console.log('🕐 [TimerContext] Updating local timerData from:', prev, 'to:', { matchTime, period, status });
       return { ...prev, matchTime, period, status };
     });
 
     // Emit to server if connected
     const connectionStatus = socketService.getConnectionStatus();
-    console.log('🕐 [TimerContext] Socket connection status:', connectionStatus);
+    // console.log('🕐 [TimerContext] Socket connection status:', connectionStatus);
 
     if (connectionStatus.isConnected) {
       if (status === "live") {
@@ -220,11 +206,10 @@ export const TimerProvider = ({ children }) => {
   const resumeTimer = useCallback(() => {
     if (socketService.getConnectionStatus().isConnected) {
       socketService.resumeServerTimer();
-      console.log('▶️ [TimerContext] Resumed server timer');
+      // console.log('▶️ [TimerContext] Resumed server timer');
     }
   }, []);
 
-  // Update timer data from external source (như từ MatchContext khi nhận current_state_response)
   const updateTimerData = useCallback((newTimerData) => {
     setTimerData(prev => ({ ...prev, ...newTimerData }));
   }, []);

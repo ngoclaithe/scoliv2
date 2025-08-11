@@ -99,6 +99,11 @@ export const PublicMatchProvider = ({ children }) => {
     lastUpdated: null
   });
 
+  const [futsalErrors, setFutsalErrors] = useState({
+    teamA: 0,
+    teamB: 0
+  });
+
   const [marqueeData, setMarqueeData] = useState({
     text: '',
     mode: 'none',
@@ -331,6 +336,49 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('penalty_updated', (data) => {
       setPenaltyData(prev => ({ ...prev, ...data.penaltyData }));
       setLastUpdateTime(Date.now());
+    });
+
+    socketService.on('futsal_errors_updated', (data) => {
+      console.log('🚫 [PublicMatchContext] futsal_errors_updated received:', data);
+      setFutsalErrors(prev => ({ ...prev, ...data.futsalErrors }));
+      setLastUpdateTime(Date.now());
+    });
+
+    socketService.on('goal_scorers_updated', (data) => {
+      const { team, scorer } = data;
+      
+      // Xác định đúng teamKey dựa trên cấu trúc state
+      const teamKey = team === 'teamA' ? 'teamA' : 'teamB';
+      const scorersKey = team === 'teamA' ? 'teamAScorers' : 'teamBScorers';
+      
+      setMatchData(prev => {
+        const newState = { ...prev };
+        
+        if (!newState[teamKey][scorersKey]) {
+          newState[teamKey][scorersKey] = [];
+        }
+        
+        const currentScorers = [...newState[teamKey][scorersKey]];
+        const existingPlayerIndex = currentScorers.findIndex(s => s.player === scorer.player);
+        
+        if (existingPlayerIndex >= 0) {
+          const existingTimes = currentScorers[existingPlayerIndex].times || [];
+          if (!existingTimes.includes(scorer.minute)) {
+            currentScorers[existingPlayerIndex] = {
+              ...currentScorers[existingPlayerIndex],
+              times: [...existingTimes, scorer.minute].sort((a, b) => a - b)
+            };
+          }
+        } else {
+          currentScorers.push({
+            player: scorer.player,
+            times: [scorer.minute]
+          });
+        }
+        
+        newState[teamKey][scorersKey] = currentScorers;
+        return newState;
+      });
     });
 
     socketService.on('lineup_updated', (data) => {
@@ -751,6 +799,11 @@ export const PublicMatchProvider = ({ children }) => {
             setLineupData(state.lineupData);
           }
 
+          if (state.futsalErrors) {
+            console.log('🚫 [PublicMatchContext] Updating futsalErrors from join_roomed:', state.futsalErrors);
+            setFutsalErrors(prev => ({ ...prev, ...state.futsalErrors }));
+          }
+
           if (state.sponsors) {
             console.log('🏢 [PublicMatchContext] Updating sponsors from join_roomed:', state.sponsors);
             setSponsors(prev => ({ ...prev, sponsors: state.sponsors }));
@@ -892,6 +945,7 @@ export const PublicMatchProvider = ({ children }) => {
     // ===== STATE DATA =====
     matchData,
     matchStats,
+    futsalErrors,
     penaltyData,
     marqueeData,
     displaySettings,
@@ -907,16 +961,13 @@ export const PublicMatchProvider = ({ children }) => {
     liveUnit: liveUnit || { code_logo: [], url_logo: [], name: 'LIVE STREAMING', position: 'top-right' },
     posterSettings: posterSettings || { showTimer: true, showDate: true, showStadium: true, showLiveIndicator: true, backgroundOpacity: 0.8, textColor: '#ffffff', accentColor: '#3b82f6' },
 
-    // ===== CONNECTION FUNCTIONS =====
     initializeSocket,
     disconnectSocket,
 
-    // ===== SETTER FUNCTIONS (ALWAYS AVAILABLE) =====
     setLiveUnit,
     setPosterSettings,
     setDisplaySettings,
 
-    // ===== SENDING FUNCTIONS (CHỈ KHI CÓ URL PARAMS) =====
     canSendToSocket,
     hasUrlParams: hasUrlParams(),
     updateMatchInfo,

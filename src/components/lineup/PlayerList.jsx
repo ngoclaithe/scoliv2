@@ -95,12 +95,6 @@ const PlayerList = () => {
                     
                     <div className="relative z-10">
                         <div className="flex items-center justify-center gap-2">
-                            <DisplayLogo
-                                logos={[logo]}
-                                alt={team}
-                                className="w-6 h-6 sm:w-7 sm:h-7 drop-shadow-lg"
-                                type_play={logoShape}
-                            />
                             <h2 className="text-sm sm:text-base font-bold text-white tracking-wide drop-shadow-lg truncate text-stroke">
                                 {team}
                             </h2>
