@@ -188,32 +188,40 @@ const MatchStatsEdit = ({
     return player?.name || '';
   };
 
-  const PlayerDropdown = ({ team, players, selectedPlayerId, onSelect, show, onToggle }) => (
+  const PlayerInput = ({ team, players, value, onChange, show, onToggle }) => (
     <div className="relative flex-1">
-      <div
-        className="flex items-center justify-between px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 focus:outline-none cursor-pointer bg-white"
-        onClick={onToggle}
-      >
-        <span className={selectedPlayerId ? "text-gray-900" : "text-gray-500"}>
-          {selectedPlayerId ? getSelectedPlayerName(team, selectedPlayerId) : "Chọn cầu thủ"}
-        </span>
-        <span className="text-gray-400">▼</span>
+      <div className="flex">
+        <input
+          type="text"
+          placeholder="Tên cầu thủ..."
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="flex-1 px-2 py-1 text-xs border border-gray-300 rounded-l focus:border-gray-700 focus:outline-none"
+        />
+        {players.length > 0 && (
+          <button
+            type="button"
+            onClick={onToggle}
+            className="px-2 py-1 text-xs border border-l-0 border-gray-300 rounded-r bg-gray-50 hover:bg-gray-100 focus:outline-none"
+          >
+            ▼
+          </button>
+        )}
       </div>
-      
-      {show && (
+
+      {show && players.length > 0 && (
         <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded shadow-lg max-h-32 overflow-y-auto z-10">
           {loadingPlayers ? (
             <div className="px-2 py-1 text-xs text-gray-500">Đang tải...</div>
-          ) : players.length === 0 ? (
-            <div className="px-2 py-1 text-xs text-gray-500">
-              Chưa có danh sách cầu thủ. Có thể nhập tên trực tiếp.
-            </div>
           ) : (
             players.map((player) => (
               <div
                 key={player._id}
                 className="px-2 py-1 text-xs hover:bg-gray-100 cursor-pointer"
-                onClick={() => onSelect(team, player._id, player.name)}
+                onClick={() => {
+                  onChange(player.name);
+                  onToggle();
+                }}
               >
                 {player.name} {player.jerseyNumber && `(#${player.jerseyNumber})`}
               </div>
@@ -414,7 +422,7 @@ const MatchStatsEdit = ({
 
           {/* Đội B */}
           <div>
-            <div className="text-xs text-gray-800 mb-1">Đội B:</div>
+            <div className="text-xs text-gray-800 mb-1">Đ��i B:</div>
             <div className="flex items-center gap-1 player-dropdown">
               <PlayerDropdown
                 team="teamB"
