@@ -87,6 +87,7 @@ export const PublicMatchProvider = ({ children }) => {
     shotsOnTarget: { team1: 0, team2: 0 },
     corners: { team1: 0, team2: 0 },
     yellowCards: { team1: 0, team2: 0 },
+    redCards: { team1: 0, team2: 0 },
     fouls: { team1: 0, team2: 0 },
   });
 
