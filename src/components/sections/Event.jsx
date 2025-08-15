@@ -161,18 +161,18 @@ const Event = () => {
     };
 
     return (
-      <div className={`flex items-center gap-2 p-2 mb-2 ${isTeamA ? 'text-left' : 'text-right flex-row-reverse'} ${window.innerWidth < 640 ? 'text-left flex-row' : ''}`}>
-        <div className="text-lg sm:text-xl">{event.icon}</div>
-        <div className={`flex-1 ${isTeamA ? 'text-left' : 'text-right'} ${window.innerWidth < 640 ? 'text-left' : ''}`}>
-          <div className="font-bold text-xs sm:text-sm text-gray-900 truncate">{event.player}</div>
+      <div className={`flex items-center gap-1 sm:gap-2 p-1.5 sm:p-2 rounded-lg bg-white/70 hover:bg-white/90 shadow-sm border border-gray-100 transition-all duration-200 ${isTeamA ? '' : 'flex-row-reverse'}`}>
+        <div className="text-sm sm:text-base flex-shrink-0">{event.icon}</div>
+        <div className={`flex-1 min-w-0 ${isTeamA ? 'text-left' : 'text-right'}`}>
+          <div className="font-bold text-xs sm:text-sm text-gray-900 truncate leading-tight">{event.player}</div>
           {event.type !== 'goal' && (
-            <div className="text-xs text-gray-600">
+            <div className="text-xs text-gray-500 leading-tight">
               {event.type === 'yellow_card' ? 'Thẻ vàng' : 'Thẻ đỏ'}
             </div>
           )}
         </div>
         <div
-          className="px-2 py-1 rounded-full text-white font-bold text-xs min-w-[35px] sm:min-w-[40px] text-center"
+          className="px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md text-white font-bold text-xs min-w-[28px] sm:min-w-[32px] text-center flex-shrink-0 shadow-sm"
           style={{ backgroundColor: getEventColor(event.type) }}
         >
           {event.minute}'
