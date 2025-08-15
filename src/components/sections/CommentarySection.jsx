@@ -119,36 +119,37 @@ const CommentarySection = ({ isActive = true }) => {
     setIsStreaming(false);
   };
 
-  const startRecording = async () => {
+  const startMicrophone = async () => {
     if (!isSupported) {
-      alert("Trình duyệt không hỗ trợ ghi âm");
+      alert("Trình duyệt không hỗ trợ Web Audio API");
       return;
     }
-    const mimeType = getSupportedMimeType();
-    if (!mimeType) {
-      alert("Trình duyệt không hỗ trợ các codec audio cần thiết");
-      return;
-    }
-    if (!canPlayFormat(mimeType)) {
-      console.warn("⚠️ Browser may not be able to play recorded format:", mimeType);
-    }
+
     try {
       setIsProcessing(true);
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          sampleRate: 48000,
+          sampleRate: 44100,
           channelCount: 1,
           autoGainControl: true,
         },
       });
+
       streamRef.current = stream;
-      await createMediaRecorder(stream, mimeType);
-      setIsProcessing(false);
-      console.log("🎙️ Continuous recording started with format:", mimeType);
+      const success = await setupAudioStream(stream);
+
+      if (success) {
+        startStreaming();
+        setIsProcessing(false);
+        console.log("🎙️ Real-time audio streaming started");
+      } else {
+        setIsProcessing(false);
+        alert("Không thể khởi tạo audio context");
+      }
     } catch (error) {
-      console.error("Lỗi khi bắt đầu ghi âm:", error);
+      console.error("Lỗi khi bắt đầu microphone:", error);
       alert("Không thể truy cập microphone. Vui lòng cho phép quyền truy cập.");
       setIsProcessing(false);
     }
