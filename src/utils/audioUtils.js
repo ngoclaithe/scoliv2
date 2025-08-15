@@ -40,17 +40,19 @@ class AudioManager {
       try {
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         this.audioContext.latencyHint = 'interactive';
-        
+
         // Create gain node for volume control
         this.gainNode = this.audioContext.createGain();
         this.gainNode.connect(this.audioContext.destination);
         this.gainNode.gain.value = this.isMuted ? 0 : this.volume;
-        
-        if (this.audioContext.state === 'suspended') {
+
+        // Only try to resume if user has interacted and context is suspended
+        if (this.userInteracted && this.audioContext.state === 'suspended') {
           await this.audioContext.resume();
         }
       } catch (error) {
         // Silent error handling
+        console.warn('Failed to initialize AudioContext:', error.message);
       }
     }
   }
