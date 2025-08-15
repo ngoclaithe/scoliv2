@@ -581,7 +581,7 @@ const MatchStatsEdit = ({
             </select>
           </div>
 
-          {/* Hi���n thị % kiểm soát - sử dụng localStats */}
+          {/* Hiển thị % kiểm soát - sử dụng localStats */}
           <div className="flex items-center gap-2 mb-2">
             <div className="flex-1">
               <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-8 text-center border border-red-300 rounded">
@@ -604,20 +604,20 @@ const MatchStatsEdit = ({
                   type="checkbox"
                   checked={teamAControlling}
                   onChange={() => handlePossessionChange('teamA')}
-                  disabled={!matchStarted}
+                  disabled={!matchStarted || matchPaused}
                   className="w-3 h-3"
                 />
-                <span className="text-red-600 font-medium">Đội A kiểm soát</span>
+                <span className={`font-medium ${!matchStarted || matchPaused ? 'text-gray-400' : 'text-red-600'}`}>Đội A kiểm soát</span>
               </label>
             </div>
             <div className="flex-1">
               <label className="flex items-center gap-1 text-xs justify-end">
-                <span className="text-gray-600 font-medium">Đội B kiểm soát</span>
+                <span className={`font-medium ${!matchStarted || matchPaused ? 'text-gray-400' : 'text-gray-600'}`}>Đội B kiểm soát</span>
                 <input
                   type="checkbox"
                   checked={teamBControlling}
                   onChange={() => handlePossessionChange('teamB')}
-                  disabled={!matchStarted}
+                  disabled={!matchStarted || matchPaused}
                   className="w-3 h-3"
                 />
               </label>
