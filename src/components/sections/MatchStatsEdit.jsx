@@ -24,6 +24,7 @@ const MatchStatsEdit = ({
   const [showDropdownA, setShowDropdownA] = useState(false);
   const [showDropdownB, setShowDropdownB] = useState(false);
   const [matchStarted, setMatchStarted] = useState(false);
+  const [matchPaused, setMatchPaused] = useState(false);
   const [matchStartTime, setMatchStartTime] = useState(null);
   const [matchDuration, setMatchDuration] = useState(90); // phút
   const [teamAControlling, setTeamAControlling] = useState(false);
@@ -44,8 +45,39 @@ const MatchStatsEdit = ({
 
   // Khởi tạo localStats từ matchStats khi component mount
   useEffect(() => {
+    // Xử lý possession - nếu nhận được dạng seconds từ server, cộng vào tổng thời gian
+    let possessionDisplay = { team1: 50, team2: 50 };
+
+    if (matchStats.possession) {
+      // Kiểm tra xem server gửi về dạng percentage hay seconds
+      const team1Value = matchStats.possession.team1 || 0;
+      const team2Value = matchStats.possession.team2 || 0;
+
+      // Nếu tổng > 100 thì có thể là seconds, nếu không thì là percentage
+      if (team1Value + team2Value > 100) {
+        // Dữ liệu là seconds - cộng vào tổng thời gian kiểm soát
+        setTotalPossessionA(prev => prev + (team1Value * 1000));
+        setTotalPossessionB(prev => prev + (team2Value * 1000));
+
+        // Tính lại percentage
+        const totalTime = team1Value + team2Value;
+        if (totalTime > 0) {
+          possessionDisplay = {
+            team1: Math.round((team1Value / totalTime) * 100),
+            team2: Math.round((team2Value / totalTime) * 100)
+          };
+        }
+      } else {
+        // Dữ liệu đã là percentage
+        possessionDisplay = {
+          team1: team1Value,
+          team2: team2Value
+        };
+      }
+    }
+
     setLocalStats({
-      possession: matchStats.possession || { team1: 50, team2: 50 },
+      possession: possessionDisplay,
       totalShots: matchStats.totalShots || { team1: 0, team2: 0 },
       shotsOnTarget: matchStats.shotsOnTarget || { team1: 0, team2: 0 },
       corners: matchStats.corners || { team1: 0, team2: 0 },
@@ -132,9 +164,33 @@ const MatchStatsEdit = ({
 
   // Hàm manual update - gửi tất cả local stats lên backend
   const handleManualUpdate = () => {
+    const now = Date.now();
+
+    // Tính toán thời gian kiểm soát thực tế hiện tại
+    let currentTotalA = totalPossessionA;
+    let currentTotalB = totalPossessionB;
+
+    // Thêm thời gian hiện tại nếu có đội đang kiểm soát và không bị pause
+    if (!matchPaused && currentController && possessionStartTime) {
+      const currentDuration = now - possessionStartTime;
+      if (currentController === 'teamA') {
+        currentTotalA += currentDuration;
+      } else if (currentController === 'teamB') {
+        currentTotalB += currentDuration;
+      }
+    }
+
+    // Chuyển đổi từ milliseconds sang seconds cho possession
+    const possessionSeconds = {
+      team1: Math.round(currentTotalA / 1000),
+      team2: Math.round(currentTotalB / 1000)
+    };
+
     const newStats = {
       ...matchStats,
-      ...localStats
+      ...localStats,
+      // Gửi possession dưới dạng seconds thay vì percentage
+      possession: possessionSeconds
     };
     onUpdateStats(newStats);
   };
@@ -142,6 +198,7 @@ const MatchStatsEdit = ({
   const startMatch = () => {
     const startTime = Date.now();
     setMatchStarted(true);
+    setMatchPaused(false);
     setMatchStartTime(startTime);
     setPossessionStartTime(startTime);
     setCurrentController(null);
@@ -149,10 +206,33 @@ const MatchStatsEdit = ({
     setTotalPossessionB(0);
   };
 
+  const pauseMatch = () => {
+    const now = Date.now();
+    // Cập nhật thời gian kiểm soát của đội hiện tại trước khi pause
+    if (currentController && possessionStartTime) {
+      const duration = now - possessionStartTime;
+      if (currentController === 'teamA') {
+        setTotalPossessionA(prev => prev + duration);
+      } else if (currentController === 'teamB') {
+        setTotalPossessionB(prev => prev + duration);
+      }
+    }
+    setMatchPaused(true);
+    setPossessionStartTime(null);
+    setCurrentController(null);
+    setTeamAControlling(false);
+    setTeamBControlling(false);
+  };
+
+  const resumeMatch = () => {
+    setMatchPaused(false);
+    setPossessionStartTime(Date.now());
+  };
+
   const handlePossessionChange = (team) => {
     const now = Date.now();
 
-    if (!matchStarted || !matchStartTime) return;
+    if (!matchStarted || !matchStartTime || matchPaused) return;
 
     // Cập nhật thời gian kiểm soát của đội trước đó
     if (currentController && possessionStartTime) {
@@ -183,16 +263,18 @@ const MatchStatsEdit = ({
     if (!matchStarted || !matchStartTime) return { team1: 50, team2: 50 };
 
     const now = Date.now();
-    const totalMatchTime = now - matchStartTime;
 
     let currentTotalA = totalPossessionA;
     let currentTotalB = totalPossessionB;
 
-    // Thêm thời gian hiện tại nếu có đội đang kiểm soát
-    if (currentController === 'teamA' && possessionStartTime) {
-      currentTotalA += (now - possessionStartTime);
-    } else if (currentController === 'teamB' && possessionStartTime) {
-      currentTotalB += (now - possessionStartTime);
+    // Thêm thời gian hiện tại nếu có đội đang kiểm soát và không bị pause
+    if (!matchPaused && currentController && possessionStartTime) {
+      const currentDuration = now - possessionStartTime;
+      if (currentController === 'teamA') {
+        currentTotalA += currentDuration;
+      } else if (currentController === 'teamB') {
+        currentTotalB += currentDuration;
+      }
     }
 
     const totalPossessionTime = currentTotalA + currentTotalB;
@@ -209,7 +291,7 @@ const MatchStatsEdit = ({
 
   // Cập nhật local possession stats theo thời gian thực (không gọi onUpdateStats)
   useEffect(() => {
-    if (!matchStarted) return;
+    if (!matchStarted || matchPaused) return;
 
     const interval = setInterval(() => {
       const newPossession = calculatePossessionPercentage();
@@ -220,7 +302,7 @@ const MatchStatsEdit = ({
     }, 1000); // Cập nhật mỗi giây
 
     return () => clearInterval(interval);
-  }, [matchStarted, currentController, possessionStartTime, totalPossessionA, totalPossessionB]);
+  }, [matchStarted, matchPaused, currentController, possessionStartTime, totalPossessionA, totalPossessionB]);
 
   const StatControl = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => (
     <div className="py-0.5">
@@ -527,6 +609,18 @@ const MatchStatsEdit = ({
             >
               {matchStarted ? '✓ Đã bắt đầu' : 'Trận đấu bắt đầu'}
             </button>
+            {matchStarted && (
+              <button
+                onClick={matchPaused ? resumeMatch : pauseMatch}
+                className={`px-3 py-1 text-xs rounded font-medium ${
+                  matchPaused
+                    ? 'bg-green-500 text-white hover:bg-green-600'
+                    : 'bg-yellow-500 text-white hover:bg-yellow-600'
+                }`}
+              >
+                {matchPaused ? '▶️ Tiếp tục' : '⏸️ Tạm dừng'}
+              </button>
+            )}
             <select
               value={matchDuration}
               onChange={(e) => setMatchDuration(parseInt(e.target.value))}
@@ -565,20 +659,20 @@ const MatchStatsEdit = ({
                   type="checkbox"
                   checked={teamAControlling}
                   onChange={() => handlePossessionChange('teamA')}
-                  disabled={!matchStarted}
+                  disabled={!matchStarted || matchPaused}
                   className="w-3 h-3"
                 />
-                <span className="text-red-600 font-medium">Đội A kiểm soát</span>
+                <span className={`font-medium ${!matchStarted || matchPaused ? 'text-gray-400' : 'text-red-600'}`}>Đội A kiểm soát</span>
               </label>
             </div>
             <div className="flex-1">
               <label className="flex items-center gap-1 text-xs justify-end">
-                <span className="text-gray-600 font-medium">Đội B kiểm soát</span>
+                <span className={`font-medium ${!matchStarted || matchPaused ? 'text-gray-400' : 'text-gray-600'}`}>Đội B kiểm soát</span>
                 <input
                   type="checkbox"
                   checked={teamBControlling}
                   onChange={() => handlePossessionChange('teamB')}
-                  disabled={!matchStarted}
+                  disabled={!matchStarted || matchPaused}
                   className="w-3 h-3"
                 />
               </label>

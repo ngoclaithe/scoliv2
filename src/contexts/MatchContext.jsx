@@ -47,7 +47,8 @@ export const MatchProvider = ({ children }) => {
     totalShots: { team1: 0, team2: 0 },
     shotsOnTarget: { team1: 0, team2: 0 },
     corners: { team1: 0, team2: 0 },
-    yellowCards: { team1: 0, team2: 0 },
+    yellowCards: { team1: [], team2: [] },
+    redCards: { team1: [], team2: [] },
     fouls: { team1: 0, team2: 0 },
   });
 
@@ -637,7 +638,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Cập nhật logo giải đấu
+  // Cập nhật logo gi��i đấu
   const updateTournamentLogo = useCallback((newTournamentLogo) => {
     console.log('[MatchContext] updateTournamentLogo called:', newTournamentLogo, 'socketConnected:', socketConnected);
     if (socketConnected) {
@@ -763,21 +764,45 @@ export const MatchProvider = ({ children }) => {
       socketService.emit('update_card', cardData);
     }
 
-    // Cập nhật local state cho thẻ vàng - vẫn update ngay lập tức
+    // Cập nhật local state cho thẻ vàng và thẻ đỏ - update ngay lập tức
+    const teamKey = team === 'teamA' ? 'team1' : 'team2';
+
     if (cardType === 'yellow') {
-      const teamKey = team === 'teamA' ? 'team1' : 'team2';
-      const currentValue = matchStats.yellowCards[teamKey] || 0;
-      const newValue = Math.max(0, currentValue + 1);
+      // Đảm bảo yellowCards là array
+      const currentCards = Array.isArray(matchStats.yellowCards[teamKey]) ? matchStats.yellowCards[teamKey] : [];
+      const newCard = {
+        player: playerInfo?.name || '',
+        minute: parseInt(minute),
+        id: playerInfo?.id || playerInfo?.name || ''
+      };
 
       const newStats = {
         ...matchStats,
         yellowCards: {
           ...matchStats.yellowCards,
-          [teamKey]: newValue
+          [teamKey]: [...currentCards, newCard].sort((a, b) => a.minute - b.minute)
         }
       };
       setMatchStats(newStats);
       console.log("Giá trị gửi lên socket là", cardData);
+    } else if (cardType === 'red') {
+      // Đảm bảo redCards là array
+      const currentCards = Array.isArray(matchStats.redCards?.[teamKey]) ? matchStats.redCards[teamKey] : [];
+      const newCard = {
+        player: playerInfo?.name || '',
+        minute: parseInt(minute),
+        id: playerInfo?.id || playerInfo?.name || ''
+      };
+
+      const newStats = {
+        ...matchStats,
+        redCards: {
+          ...matchStats.redCards,
+          [teamKey]: [...currentCards, newCard].sort((a, b) => a.minute - b.minute)
+        }
+      };
+      setMatchStats(newStats);
+      console.log("Giá trị thẻ đỏ gửi lên socket là", cardData);
     }
 
     return cardData;
@@ -817,7 +842,8 @@ export const MatchProvider = ({ children }) => {
       totalShots: { team1: 0, team2: 0 },
       shotsOnTarget: { team1: 0, team2: 0 },
       corners: { team1: 0, team2: 0 },
-      yellowCards: { team1: 0, team2: 0 },
+      yellowCards: { team1: [], team2: [] },
+      redCards: { team1: [], team2: [] },
       fouls: { team1: 0, team2: 0 },
     });
     
