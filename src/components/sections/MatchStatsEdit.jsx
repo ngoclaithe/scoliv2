@@ -350,34 +350,75 @@ const MatchStatsEdit = ({
   };
 
   const PlayerDropdown = ({ team, players, selectedPlayerId, onSelect, show, onToggle }) => {
-    const [manualInput, setManualInput] = useState('');
-    const [showManualInput, setShowManualInput] = useState(false);
+    const [searchText, setSearchText] = useState('');
+    const [isInputFocused, setIsInputFocused] = useState(false);
 
-    const handleManualSubmit = () => {
-      if (manualInput.trim()) {
-        onSelect(team, manualInput.trim(), manualInput.trim());
-        setManualInput('');
-        setShowManualInput(false);
+    // Lọc danh sách cầu thủ theo text search
+    const filteredPlayers = players.filter(player =>
+      player.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+
+    const handleInputChange = (e) => {
+      const value = e.target.value;
+      setSearchText(value);
+      // Nếu không có dropdown hiển thị và người dùng đang nhập, hiện dropdown
+      if (!show && value.trim()) {
+        onToggle();
       }
     };
 
-    const handleKeyPress = (e) => {
-      if (e.key === 'Enter') {
-        handleManualSubmit();
+    const handleInputFocus = () => {
+      setIsInputFocused(true);
+      // Hiện dropdown khi focus vào input
+      if (!show) {
+        onToggle();
       }
+    };
+
+    const handleInputBlur = () => {
+      setIsInputFocused(false);
+      // Delay để cho phép click vào dropdown item
+      setTimeout(() => {
+        if (!isInputFocused) {
+          setSearchText('');
+        }
+      }, 200);
+    };
+
+    const handlePlayerSelect = (playerId, playerName) => {
+      onSelect(team, playerId, playerName);
+      setSearchText('');
+    };
+
+    const handleKeyPress = (e) => {
+      if (e.key === 'Enter' && searchText.trim()) {
+        // Nếu có text, sử dụng làm tên cầu thủ manual
+        onSelect(team, searchText.trim(), searchText.trim());
+        setSearchText('');
+      }
+    };
+
+    // Hiển thị giá trị trong input
+    const getDisplayValue = () => {
+      if (searchText) return searchText;
+      if (selectedPlayerId) {
+        return getSelectedPlayerName(team, selectedPlayerId) || selectedPlayerId;
+      }
+      return '';
     };
 
     return (
       <div className="relative flex-1">
-        <div
-          className="flex items-center justify-between px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 focus:outline-none cursor-pointer bg-white"
-          onClick={onToggle}
-        >
-          <span className={selectedPlayerId ? "text-gray-900" : "text-gray-500"}>
-            {selectedPlayerId ? getSelectedPlayerName(team, selectedPlayerId) || selectedPlayerId : "Chọn cầu thủ"}
-          </span>
-          <span className="text-gray-400">▼</span>
-        </div>
+        <input
+          type="text"
+          value={getDisplayValue()}
+          onChange={handleInputChange}
+          onFocus={handleInputFocus}
+          onBlur={handleInputBlur}
+          onKeyPress={handleKeyPress}
+          placeholder="Chọn hoặc nhập tên cầu thủ..."
+          className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 focus:outline-none bg-white"
+        />
 
         {show && (
           <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded shadow-lg max-h-40 overflow-y-auto z-10">
@@ -385,59 +426,32 @@ const MatchStatsEdit = ({
               <div className="px-2 py-1 text-xs text-gray-500">Đang tải...</div>
             ) : (
               <>
-                {players.length > 0 && (
-                  <>
-                    {players.map((player) => (
-                      <div
-                        key={player._id}
-                        className="px-2 py-1 text-xs hover:bg-gray-100 cursor-pointer"
-                        onClick={() => onSelect(team, player._id, player.name)}
-                      >
-                        {player.name} {player.jerseyNumber && `(#${player.jerseyNumber})`}
-                      </div>
-                    ))}
-                    <div className="border-t border-gray-200"></div>
-                  </>
-                )}
-
-                {/* Manual input option */}
-                {!showManualInput ? (
-                  <div
-                    className="px-2 py-1 text-xs text-blue-600 hover:bg-blue-50 cursor-pointer font-medium"
-                    onClick={() => setShowManualInput(true)}
-                  >
-                    ✏️ Nhập thủ công
-                  </div>
-                ) : (
-                  <div className="p-2 border-t border-gray-200">
-                    <input
-                      type="text"
-                      value={manualInput}
-                      onChange={(e) => setManualInput(e.target.value)}
-                      onKeyPress={handleKeyPress}
-                      placeholder="Nhập tên cầu thủ..."
-                      className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none"
-                      autoFocus
-                    />
-                    <div className="flex gap-1 mt-1">
-                      <button
-                        onClick={handleManualSubmit}
-                        className="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
-                        disabled={!manualInput.trim()}
-                      >
-                        OK
-                      </button>
-                      <button
-                        onClick={() => {
-                          setShowManualInput(false);
-                          setManualInput('');
-                        }}
-                        className="px-2 py-1 text-xs bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
-                      >
-                        Hủy
-                      </button>
+                {filteredPlayers.length > 0 ? (
+                  filteredPlayers.map((player) => (
+                    <div
+                      key={player._id}
+                      className="px-2 py-1 text-xs hover:bg-gray-100 cursor-pointer"
+                      onMouseDown={(e) => e.preventDefault()} // Ngăn blur khi click
+                      onClick={() => handlePlayerSelect(player._id, player.name)}
+                    >
+                      {player.name} {player.jerseyNumber && `(#${player.jerseyNumber})`}
                     </div>
-                  </div>
+                  ))
+                ) : (
+                  searchText ? (
+                    <div
+                      className="px-2 py-1 text-xs text-blue-600 hover:bg-blue-50 cursor-pointer font-medium"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => {
+                        onSelect(team, searchText.trim(), searchText.trim());
+                        setSearchText('');
+                      }}
+                    >
+                      ✏️ Sử dụng "{searchText}"
+                    </div>
+                  ) : (
+                    <div className="px-2 py-1 text-xs text-gray-500">Không tìm thấy cầu thủ</div>
+                  )
                 )}
               </>
             )}

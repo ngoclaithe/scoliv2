@@ -177,8 +177,13 @@ export const MatchProvider = ({ children }) => {
           }
 
           if (state.matchStats) {
-            console.log('�� [MatchContext] Updating matchStats from room_joined:', state.matchStats);
-            setMatchStats(prev => ({ ...prev, ...state.matchStats }));
+            console.log('📊 [MatchContext] Updating matchStats from room_joined:', state.matchStats);
+            // Kiểm tra nếu server trả về array thay vì object
+            if (Array.isArray(state.matchStats)) {
+              console.log('⚠️ [MatchContext] Server returned array for matchStats, skipping update');
+            } else {
+              setMatchStats(prev => ({ ...prev, ...state.matchStats }));
+            }
           }
 
           if (state.displaySettings) {
@@ -773,10 +778,6 @@ export const MatchProvider = ({ children }) => {
       };
       setMatchStats(newStats);
       console.log("Giá trị gửi lên socket là", cardData);
-      // Emit stats update cho yellow cards
-      // if (socketConnected) {
-      //   socketService.updateMatchStats(newStats);
-      // }
     }
 
     return cardData;
