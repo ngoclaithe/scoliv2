@@ -929,6 +929,85 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     return false;
   };
 
+  const handleRoundGroupUpdate = useCallback((type, value, show) => {
+    if (type === 'round') {
+      setRoundGroupOptions(prev => ({ ...prev, round: value, showRound: show }));
+      if (onLogoUpdate) {
+        onLogoUpdate({
+          roundGroupUpdate: { round: value, showRound: show, type: 'round' }
+        });
+      }
+    } else if (type === 'group') {
+      setRoundGroupOptions(prev => ({ ...prev, group: value, showGroup: show }));
+      if (onLogoUpdate) {
+        onLogoUpdate({
+          roundGroupUpdate: { group: value, showGroup: show, type: 'group' }
+        });
+      }
+    }
+  }, [onLogoUpdate]);
+
+  const renderRoundGroupSection = () => {
+    return (
+      <div className="space-y-2">
+        <div className="flex items-center gap-1">
+          <span className="text-xs">🏆</span>
+          <h3 className="text-xs font-semibold text-gray-900">Vòng đấu & Bảng đấu</h3>
+        </div>
+
+        {/* Vòng đấu */}
+        <div className="flex items-center gap-2">
+          <label className="flex items-center gap-1">
+            <span className="text-xs text-gray-700">Vòng:</span>
+            <select
+              value={roundGroupOptions.round}
+              onChange={(e) => handleRoundGroupUpdate('round', parseInt(e.target.value), roundGroupOptions.showRound)}
+              className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white"
+            >
+              {[1,2,3,4,5,6,7,8,9,10].map(num => (
+                <option key={num} value={num}>Vòng {num}</option>
+              ))}
+            </select>
+          </label>
+          <label className="flex items-center gap-1">
+            <input
+              type="checkbox"
+              checked={roundGroupOptions.showRound}
+              onChange={(e) => handleRoundGroupUpdate('round', roundGroupOptions.round, e.target.checked)}
+              className="w-3 h-3"
+            />
+            <span className="text-xs text-gray-600">Hiện</span>
+          </label>
+        </div>
+
+        {/* Bảng đấu */}
+        <div className="flex items-center gap-2">
+          <label className="flex items-center gap-1">
+            <span className="text-xs text-gray-700">Bảng:</span>
+            <select
+              value={roundGroupOptions.group}
+              onChange={(e) => handleRoundGroupUpdate('group', e.target.value, roundGroupOptions.showGroup)}
+              className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white"
+            >
+              {['A','B','C','D','E','F','G','H'].map(letter => (
+                <option key={letter} value={letter}>Bảng {letter}</option>
+              ))}
+            </select>
+          </label>
+          <label className="flex items-center gap-1">
+            <input
+              type="checkbox"
+              checked={roundGroupOptions.showGroup}
+              onChange={(e) => handleRoundGroupUpdate('group', roundGroupOptions.group, e.target.checked)}
+              className="w-3 h-3"
+            />
+            <span className="text-xs text-gray-600">Hiện</span>
+          </label>
+        </div>
+      </div>
+    );
+  };
+
   const renderLogoSection = () => {
 
     return (
