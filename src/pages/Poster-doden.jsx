@@ -320,20 +320,6 @@ export default function DodenMatchIntro() {
 
             {/* Title section */}
             <div className="text-center mb-1 sm:mb-2 md:mb-3">
-              {/* Round and Group display */}
-              <div className="flex items-center justify-center gap-2 sm:gap-4 mb-1 sm:mb-2">
-                {matchData.showRound && (
-                  <div className="bg-blue-600/80 px-1 sm:px-2 py-0.5 sm:py-1 rounded text-[6px] sm:text-[8px] md:text-[10px] font-bold text-white">
-                    VÒNG {matchData.round}
-                  </div>
-                )}
-                {matchData.showGroup && (
-                  <div className="bg-red-600/80 px-1 sm:px-2 py-0.5 sm:py-1 rounded text-[6px] sm:text-[8px] md:text-[10px] font-bold text-white">
-                    BẢNG {matchData.group}
-                  </div>
-                )}
-              </div>
-
               <h1
                 className="font-black uppercase text-white text-xs sm:text-sm md:text-lg lg:text-2xl xl:text-3xl px-1 sm:px-2"
                 style={{
@@ -349,6 +335,20 @@ export default function DodenMatchIntro() {
                   {matchData.subtitle}
                 </div>
               )}
+
+              {/* Round and Group display - Moved below title */}
+              <div className="flex items-center justify-center gap-2 sm:gap-4 mt-1 sm:mt-2">
+                {matchData.showRound && (
+                  <div className="bg-blue-600/80 px-1 sm:px-2 py-0.5 sm:py-1 rounded text-[6px] sm:text-[8px] md:text-[10px] font-bold text-white">
+                    VÒNG {matchData.round}
+                  </div>
+                )}
+                {matchData.showGroup && (
+                  <div className="bg-red-600/80 px-1 sm:px-2 py-0.5 sm:py-1 rounded text-[6px] sm:text-[8px] md:text-[10px] font-bold text-white">
+                    BẢNG {matchData.group}
+                  </div>
+                )}
+              </div>
 
               <div className="flex items-center justify-center mt-2 sm:mt-4">
                 <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
