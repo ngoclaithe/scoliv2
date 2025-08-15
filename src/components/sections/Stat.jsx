@@ -143,8 +143,15 @@ const Stat = () => {
               {/* Thẻ vàng */}
               <StatBar
                 label="Thẻ vàng"
-                team1Value={matchStats.yellowCards.team1}
-                team2Value={matchStats.yellowCards.team2}
+                team1Value={Array.isArray(matchStats.yellowCards.team1) ? matchStats.yellowCards.team1.length : matchStats.yellowCards.team1 || 0}
+                team2Value={Array.isArray(matchStats.yellowCards.team2) ? matchStats.yellowCards.team2.length : matchStats.yellowCards.team2 || 0}
+              />
+
+              {/* Thẻ đỏ */}
+              <StatBar
+                label="Thẻ đỏ"
+                team1Value={Array.isArray(matchStats.redCards?.team1) ? matchStats.redCards.team1.length : matchStats.redCards?.team1 || 0}
+                team2Value={Array.isArray(matchStats.redCards?.team2) ? matchStats.redCards.team2.length : matchStats.redCards?.team2 || 0}
               />
 
               {/* Phạm lỗi */}
