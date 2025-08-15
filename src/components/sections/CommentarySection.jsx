@@ -58,31 +58,65 @@ const CommentarySection = ({ isActive = true }) => {
     setIsProcessing(false);
   };
 
-  const createMediaRecorder = async (stream, mimeType) => {
-    const options = {
-      mimeType,
-      audioBitsPerSecond: 128000,
-    };
+  const setupAudioStream = async (stream) => {
+    try {
+      // Create audio context with low latency
+      audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      audioContextRef.current.latencyHint = 'interactive';
 
-    const mediaRecorder = new MediaRecorder(stream, options);
-    mediaRecorderRef.current = mediaRecorder;
+      // Create media stream source
+      mediaStreamSourceRef.current = audioContextRef.current.createMediaStreamSource(stream);
 
-    mediaRecorder.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        // gửi ngay khi có chunk để giảm delay
-        const audioBlob = new Blob([event.data], { type: mimeType });
-        sendVoiceToServer(audioBlob).catch((err) =>
-          console.error("❌ Failed to send chunk:", err)
-        );
-      }
-    };
+      console.log("🎙️ Audio stream setup completed");
+      return true;
+    } catch (error) {
+      console.error("❌ Error setting up audio stream:", error);
+      return false;
+    }
+  };
 
-    mediaRecorder.onstart = () => {
-      console.log("🎙️ MediaRecorder started");
-    };
+  const startStreaming = () => {
+    if (!audioContextRef.current || !mediaStreamSourceRef.current) {
+      console.error("❌ Audio context or media stream source not available");
+      return;
+    }
 
-    mediaRecorder.start(200); // giảm chunk xuống 200ms để giảm delay
-    setIsRecording(true);
+    try {
+      const bufferSize = 2048;
+      scriptNodeRef.current = audioContextRef.current.createScriptProcessor(bufferSize, 1, 1);
+
+      scriptNodeRef.current.onaudioprocess = (audioProcessingEvent) => {
+        if (!isStreaming) return;
+
+        const inputBuffer = audioProcessingEvent.inputBuffer;
+        const audioData = inputBuffer.getChannelData(0);
+
+        // Send Float32Array directly to server
+        if (socketService.socket && socketService.socket.connected) {
+          socketService.sendRefereeVoiceRealtime(Array.from(audioData));
+        }
+      };
+
+      // Connect nodes
+      mediaStreamSourceRef.current.connect(scriptNodeRef.current);
+      scriptNodeRef.current.connect(audioContextRef.current.destination);
+
+      console.log("🎙️ Started real-time audio streaming");
+      setIsStreaming(true);
+    } catch (error) {
+      console.error("❌ Error starting streaming:", error);
+    }
+  };
+
+  const stopStreaming = () => {
+    console.log("🔇 Stopping real-time streaming");
+
+    if (scriptNodeRef.current) {
+      scriptNodeRef.current.disconnect();
+      scriptNodeRef.current = null;
+    }
+
+    setIsStreaming(false);
   };
 
   const startRecording = async () => {
