@@ -114,7 +114,7 @@ const Event = () => {
       <div className="relative z-20 min-h-screen flex items-center justify-center py-12">
         <div className="max-w-7xl mx-auto px-6 w-full">
           {/* Main Event Board */}
-          <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-12 border border-white/20">
+          <div className="bg-white/98 backdrop-blur-xl rounded-3xl shadow-2xl p-12 border-2 border-white/30 ring-1 ring-green-500/20">
 
             {/* Header with team names and score */}
             <div className="text-center mb-12">
