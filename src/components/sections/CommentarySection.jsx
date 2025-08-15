@@ -3,43 +3,18 @@ import { Mic, MicOff } from "lucide-react";
 import socketService from "../../services/socketService";
 
 const CommentarySection = ({ isActive = true }) => {
-  const [isRecording, setIsRecording] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
-  const mediaRecorderRef = useRef(null);
+  const audioContextRef = useRef(null);
+  const mediaStreamSourceRef = useRef(null);
+  const scriptNodeRef = useRef(null);
   const streamRef = useRef(null);
-  const isRecordingRef = useRef(false);
-
-  useEffect(() => {
-    isRecordingRef.current = isRecording;
-  }, [isRecording]);
 
   const isSupported =
     typeof navigator !== "undefined" &&
     navigator.mediaDevices &&
     navigator.mediaDevices.getUserMedia &&
-    typeof MediaRecorder !== "undefined";
-
-  const getSupportedMimeType = () => {
-    const types = [
-      "audio/webm;codecs=opus",
-      "audio/ogg;codecs=opus",
-      "audio/webm",
-      "audio/mp4",
-      "audio/wav",
-    ];
-    for (const type of types) {
-      if (MediaRecorder.isTypeSupported(type)) {
-        console.log("🎙️ Using mime type:", type);
-        return type;
-      }
-    }
-    return null;
-  };
-
-  const canPlayFormat = (mimeType) => {
-    const audio = document.createElement("audio");
-    return audio.canPlayType(mimeType) !== "";
-  };
+    typeof AudioContext !== "undefined";
 
   useEffect(() => {
     return () => {
