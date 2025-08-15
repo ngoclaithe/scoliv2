@@ -14,6 +14,7 @@ const MatchStatsEdit = ({
   accessCode,
   socketConnected
 }) => {
+  const { handleCardEvent } = useMatch();
   const [isEditingStats, setIsEditingStats] = useState(false);
   const [goalScorers, setGoalScorers] = useState({
     teamA: { player: '', minute: '' },
