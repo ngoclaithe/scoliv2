@@ -26,6 +26,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     showGroup: true
   });
 
+  const [customPosters, setCustomPosters] = useState([]);
+
   const availablePosters = [
     {
       id: "tretrung",
@@ -925,7 +927,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       return true;
     }
 
-    // Nếu chỉ chọn logo thì cho phép t��t cả shapes
+    // Nếu chỉ chọn logo thì cho phép tất cả shapes
     return false;
   };
 
