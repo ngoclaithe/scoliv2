@@ -177,7 +177,7 @@ const MatchStatsEdit = ({
   const handlePossessionChange = (team) => {
     const now = Date.now();
 
-    if (!matchStarted || !matchStartTime) return;
+    if (!matchStarted || !matchStartTime || matchPaused) return;
 
     // Cập nhật thời gian kiểm soát của đội trước đó
     if (currentController && possessionStartTime) {
