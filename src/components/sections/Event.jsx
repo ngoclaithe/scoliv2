@@ -220,7 +220,7 @@ const Event = () => {
       <div className="relative z-20 h-full flex flex-col">
         {/* Complex Interlocking Geometric Scoreboard */}
         <div className="relative flex-shrink-0 px-1 sm:px-3 lg:px-4 pt-3 sm:pt-4 flex justify-center">
-          <div className="relative h-20 sm:h-24 lg:h-28 w-full sm:w-full lg:w-[30%]">
+          <div className="relative h-20 sm:h-24 lg:h-28 w-full sm:w-full lg:w-[60%]">
 
             {/* Extra Layer 0 - Outer container with additional geometry */}
             <div
