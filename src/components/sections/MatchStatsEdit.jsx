@@ -208,16 +208,18 @@ const MatchStatsEdit = ({
     if (!matchStarted || !matchStartTime) return { team1: 50, team2: 50 };
 
     const now = Date.now();
-    const totalMatchTime = now - matchStartTime;
 
     let currentTotalA = totalPossessionA;
     let currentTotalB = totalPossessionB;
 
-    // Thêm thời gian hiện tại nếu có đội đang kiểm soát
-    if (currentController === 'teamA' && possessionStartTime) {
-      currentTotalA += (now - possessionStartTime);
-    } else if (currentController === 'teamB' && possessionStartTime) {
-      currentTotalB += (now - possessionStartTime);
+    // Thêm thời gian hiện tại nếu có đội đang kiểm soát và không bị pause
+    if (!matchPaused && currentController && possessionStartTime) {
+      const currentDuration = now - possessionStartTime;
+      if (currentController === 'teamA') {
+        currentTotalA += currentDuration;
+      } else if (currentController === 'teamB') {
+        currentTotalB += currentDuration;
+      }
     }
 
     const totalPossessionTime = currentTotalA + currentTotalB;
