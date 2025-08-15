@@ -133,9 +133,33 @@ const MatchStatsEdit = ({
 
   // Hàm manual update - gửi tất cả local stats lên backend
   const handleManualUpdate = () => {
+    const now = Date.now();
+
+    // Tính toán thời gian kiểm soát thực tế hiện tại
+    let currentTotalA = totalPossessionA;
+    let currentTotalB = totalPossessionB;
+
+    // Thêm thời gian hiện tại nếu có đội đang kiểm soát và không bị pause
+    if (!matchPaused && currentController && possessionStartTime) {
+      const currentDuration = now - possessionStartTime;
+      if (currentController === 'teamA') {
+        currentTotalA += currentDuration;
+      } else if (currentController === 'teamB') {
+        currentTotalB += currentDuration;
+      }
+    }
+
+    // Chuyển đổi từ milliseconds sang seconds cho possession
+    const possessionSeconds = {
+      team1: Math.round(currentTotalA / 1000),
+      team2: Math.round(currentTotalB / 1000)
+    };
+
     const newStats = {
       ...matchStats,
-      ...localStats
+      ...localStats,
+      // Gửi possession dưới dạng seconds thay vì percentage
+      possession: possessionSeconds
     };
     onUpdateStats(newStats);
   };
