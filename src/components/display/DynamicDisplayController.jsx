@@ -12,7 +12,6 @@ import {
   parseNumberParam
 } from '../../utils/dynamicRouteUtils';
 
-// Import các component hiển thị
 import PosterTreTrung from '../../pages/Poster-tretrung';
 import PosterHaoQuang from '../../pages/Poster-haoquang';
 import PosterDoDen from '../../pages/Poster-doden';
@@ -26,10 +25,11 @@ import ScoreboardBelowNew from '../scoreboard_preview/ScoreboardBelowNew';
 import PenaltyScoreboard from '../scoreboard_preview/PenaltyScoreboard';
 import PlayerList from '../lineup/PlayerList';
 import Stat from '../sections/Stat';
+import Event from '../sections/Event';
 
 const DynamicDisplayController = () => {
   const params = useParams();
-  console.log('🌐 [DynamicDisplayController] Route params:', params);
+  // console.log('🌐 [DynamicDisplayController] Route params:', params);
 
   const {
     accessCode,
@@ -56,7 +56,6 @@ const DynamicDisplayController = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
 
-  // Parse và validate parameters từ URL
   const parseUrlParams = useCallback(() => {
     console.log('🔍 [DynamicDisplayController] Raw URL params:', {
       location, matchTitle, liveText, teamALogoCode, teamBLogoCode,
@@ -85,7 +84,6 @@ const DynamicDisplayController = () => {
     return params;
   }, [location, matchTitle, liveText, teamALogoCode, teamBLogoCode, teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore]);
 
-  // Gửi cập nhật lên socket khi có tham số từ URL
   const updateSocketWithParams = useCallback(async (params) => {
     console.log('🔄 [DynamicDisplayController] updateSocketWithParams called with:', params);
 
@@ -250,6 +248,8 @@ const DynamicDisplayController = () => {
         return <PlayerList accessCode={accessCode} />;
       case 'stat':
         return <Stat accessCode={accessCode} />;
+      case 'event':
+        return <Event accessCode={accessCode} />;  
       case 'poster':
       default:
         const posterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;

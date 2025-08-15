@@ -25,7 +25,7 @@ import ScoreboardBelowNew from '../scoreboard_preview/ScoreboardBelowNew';
 import PenaltyScoreboard from '../scoreboard_preview/PenaltyScoreboard';
 import PlayerList from '../lineup/PlayerList';
 import Stat from '../sections/Stat';
-
+import Event from '../sections/Event';
 const UnifiedDisplayController = () => {
   const params = useParams();
   // console.log('🌐 [UnifiedDisplayController] Route params:', params);
@@ -284,6 +284,8 @@ const UnifiedDisplayController = () => {
         return <PlayerList accessCode={accessCode} />;
       case 'stat':
         return <Stat accessCode={accessCode} />;
+      case 'event':
+        return <Event accessCode={accessCode} />;  
       case 'poster':
       default:
         const posterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;

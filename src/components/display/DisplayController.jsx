@@ -91,6 +91,7 @@ const DisplayController = () => {
   };
 
   const renderCurrentView = () => {
+
     switch (currentView) {
       case 'intro':
         return <Intro accessCode={accessCode} />;
