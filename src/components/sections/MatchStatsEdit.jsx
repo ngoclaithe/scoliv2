@@ -45,8 +45,39 @@ const MatchStatsEdit = ({
 
   // Khởi tạo localStats từ matchStats khi component mount
   useEffect(() => {
+    // Xử lý possession - nếu nhận được dạng seconds từ server, cộng vào tổng thời gian
+    let possessionDisplay = { team1: 50, team2: 50 };
+
+    if (matchStats.possession) {
+      // Kiểm tra xem server gửi về dạng percentage hay seconds
+      const team1Value = matchStats.possession.team1 || 0;
+      const team2Value = matchStats.possession.team2 || 0;
+
+      // Nếu tổng > 100 thì có thể là seconds, nếu không thì là percentage
+      if (team1Value + team2Value > 100) {
+        // Dữ liệu là seconds - cộng vào tổng thời gian kiểm soát
+        setTotalPossessionA(prev => prev + (team1Value * 1000));
+        setTotalPossessionB(prev => prev + (team2Value * 1000));
+
+        // Tính lại percentage
+        const totalTime = team1Value + team2Value;
+        if (totalTime > 0) {
+          possessionDisplay = {
+            team1: Math.round((team1Value / totalTime) * 100),
+            team2: Math.round((team2Value / totalTime) * 100)
+          };
+        }
+      } else {
+        // Dữ liệu đã là percentage
+        possessionDisplay = {
+          team1: team1Value,
+          team2: team2Value
+        };
+      }
+    }
+
     setLocalStats({
-      possession: matchStats.possession || { team1: 50, team2: 50 },
+      possession: possessionDisplay,
       totalShots: matchStats.totalShots || { team1: 0, team2: 0 },
       shotsOnTarget: matchStats.shotsOnTarget || { team1: 0, team2: 0 },
       corners: matchStats.corners || { team1: 0, team2: 0 },
