@@ -68,7 +68,7 @@ export const PublicMatchProvider = ({ children }) => {
       teamA2KitColor: "#FF0000",
       teamB2KitColor: "#0000FF",
       scoreSet: 0,
-      teamBScorers: [], 
+      teamBScorers: [],
     },
     matchTime: "00:00",
     period: "Chưa bắt đầu",
@@ -78,7 +78,7 @@ export const PublicMatchProvider = ({ children }) => {
     matchDate: "",
     liveText: "",
     matchTitle: "",
-    typeMatch: "soccer" 
+    typeMatch: "soccer"
   });
 
   const [matchStats, setMatchStats] = useState({
@@ -166,10 +166,10 @@ export const PublicMatchProvider = ({ children }) => {
     tournamentLogo: {
       code_logo: [],
       url_logo: [],
-      position:  [],
+      position: [],
       type_display: [],
       behavior: 'add'
-    }    
+    }
   });
 
   const [liveUnit, setLiveUnit] = useState({
@@ -208,7 +208,7 @@ export const PublicMatchProvider = ({ children }) => {
           teamA2KitColor: data.matchInfo.teamA2kitcolor || prev.teamA.teamA2KitColor
         },
         teamB: {
-          ...prev.teamB, 
+          ...prev.teamB,
           teamBKitColor: data.matchInfo.teamBkitcolor || prev.teamB.teamBKitColor,
           teamB2KitColor: data.matchInfo.teamB2kitcolor || prev.teamB.teamB2KitColor
         }
@@ -229,7 +229,7 @@ export const PublicMatchProvider = ({ children }) => {
       setMatchData(prev => ({
         ...prev,
         teamA: { ...prev.teamA, scoreSet: data.teamAScoreSet || 0 },
-        teamB: { ...prev.teamB, scoreSet: data.teamBScoreSet  || 0 }
+        teamB: { ...prev.teamB, scoreSet: data.teamBScoreSet || 0 }
       }));
       updateLastTime();
     });
@@ -346,21 +346,21 @@ export const PublicMatchProvider = ({ children }) => {
 
     socketService.on('goal_scorers_updated', (data) => {
       const { team, scorer } = data;
-      
+
       // Xác định đúng teamKey dựa trên cấu trúc state
       const teamKey = team === 'teamA' ? 'teamA' : 'teamB';
       const scorersKey = team === 'teamA' ? 'teamAScorers' : 'teamBScorers';
-      
+
       setMatchData(prev => {
         const newState = { ...prev };
-        
+
         if (!newState[teamKey][scorersKey]) {
           newState[teamKey][scorersKey] = [];
         }
-        
+
         const currentScorers = [...newState[teamKey][scorersKey]];
         const existingPlayerIndex = currentScorers.findIndex(s => s.player === scorer.player);
-        
+
         if (existingPlayerIndex >= 0) {
           const existingTimes = currentScorers[existingPlayerIndex].times || [];
           if (!existingTimes.includes(scorer.minute)) {
@@ -375,7 +375,7 @@ export const PublicMatchProvider = ({ children }) => {
             times: [scorer.minute]
           });
         }
-        
+
         newState[teamKey][scorersKey] = currentScorers;
         return newState;
       });
@@ -391,34 +391,34 @@ export const PublicMatchProvider = ({ children }) => {
 
     socketService.on('sponsors_updated', (data) => {
       console.log('📝 [PublicMatchContext] sponsors_updated received:', data);
-    
+
       setSponsors(prev => {
         const newSponsors = { ...prev };
         const behavior = data.behavior;
         const d = data.sponsors;
-    
+
         if (!d || !Array.isArray(d.code_logo)) return prev;
-    
+
         const current = prev.sponsors || {
           url_logo: [],
           code_logo: [],
           position: [],
           type_display: [],
         };
-    
+
         let updatedSponsors = {
           url_logo: [...current.url_logo],
           code_logo: [...current.code_logo],
           position: [...current.position],
           type_display: [...current.type_display],
         };
-    
+
         d.code_logo.forEach((code, i) => {
           const index = updatedSponsors.code_logo.findIndex(c => c === code);
           const newUrl = d.url_logo?.[i];
           const newPos = d.position?.[i];
           const newType = d.type_display?.[i];
-    
+
           if (behavior === 'add') {
             if (index === -1) {
               updatedSponsors.code_logo.push(code);
@@ -427,7 +427,7 @@ export const PublicMatchProvider = ({ children }) => {
               updatedSponsors.type_display.push(newType || '');
             }
           }
-    
+
           if (behavior === 'update') {
             if (index !== -1) {
               if (newPos !== undefined) updatedSponsors.position[index] = newPos;
@@ -435,7 +435,7 @@ export const PublicMatchProvider = ({ children }) => {
               if (newType !== undefined) updatedSponsors.type_display[index] = newType;
             }
           }
-    
+
           if (behavior === 'remove') {
             if (index !== -1) {
               updatedSponsors.code_logo.splice(index, 1);
@@ -445,23 +445,23 @@ export const PublicMatchProvider = ({ children }) => {
             }
           }
         });
-    
+
         newSponsors.sponsors = updatedSponsors;
         return newSponsors;
       });
-    
+
       setLastUpdateTime(Date.now());
     });
 
     socketService.on('organizing_updated', (data) => {
       console.log('📝 [PublicMatchContext] organizing_updated received:', data);
-    
+
       setOrganizing(prev => {
         const behavior = data.behavior;
         const d = data.organizing;
-    
+
         if (!d || !Array.isArray(d.code_logo)) return prev;
-    
+
         const current = prev.organizing || {
           url_logo: [],
           code_logo: [],
@@ -475,13 +475,13 @@ export const PublicMatchProvider = ({ children }) => {
           position: [...current.position],
           type_display: [...current.type_display],
         };
-    
+
         d.code_logo.forEach((code, i) => {
           const index = updatedOrganizing.code_logo.findIndex(c => c === code);
           const newUrl = d.url_logo?.[i];
           const newPos = d.position?.[i];
           const newType = d.type_display?.[i];
-    
+
           if (behavior === 'add') {
             if (index === -1) {
               updatedOrganizing.code_logo.push(code);
@@ -490,7 +490,7 @@ export const PublicMatchProvider = ({ children }) => {
               updatedOrganizing.type_display.push(newType || '');
             }
           }
-    
+
           if (behavior === 'update') {
             if (index !== -1) {
               if (newPos !== undefined) updatedOrganizing.position[index] = newPos;
@@ -498,7 +498,7 @@ export const PublicMatchProvider = ({ children }) => {
               if (newType !== undefined) updatedOrganizing.type_display[index] = newType;
             }
           }
-    
+
           if (behavior === 'remove') {
             if (index !== -1) {
               updatedOrganizing.code_logo.splice(index, 1);
@@ -508,22 +508,22 @@ export const PublicMatchProvider = ({ children }) => {
             }
           }
         });
-    
+
         return { organizing: updatedOrganizing };
       });
-    
+
       setLastUpdateTime(Date.now());
     });
 
     socketService.on('media_partners_updated', (data) => {
       console.log('📝 [PublicMatchContext] media_partners_updated received:', data);
-    
+
       setMediaPartners(prev => {
         const behavior = data.behavior;
         const d = data.mediaPartners;
-    
+
         if (!d || !Array.isArray(d.code_logo)) return prev;
-    
+
         const current = prev.mediaPartners || {
           url_logo: [],
           code_logo: [],
@@ -537,13 +537,13 @@ export const PublicMatchProvider = ({ children }) => {
           position: [...current.position],
           type_display: [...current.type_display],
         };
-    
+
         d.code_logo.forEach((code, i) => {
           const index = updatedMediaPartners.code_logo.findIndex(c => c === code);
           const newUrl = d.url_logo?.[i];
           const newPos = d.position?.[i];
           const newType = d.type_display?.[i];
-    
+
           if (behavior === 'add') {
             if (index === -1) {
               updatedMediaPartners.code_logo.push(code);
@@ -552,7 +552,7 @@ export const PublicMatchProvider = ({ children }) => {
               updatedMediaPartners.type_display.push(newType || '');
             }
           }
-    
+
           if (behavior === 'update') {
             if (index !== -1) {
               if (newPos !== undefined) updatedMediaPartners.position[index] = newPos;
@@ -560,7 +560,7 @@ export const PublicMatchProvider = ({ children }) => {
               if (newType !== undefined) updatedMediaPartners.type_display[index] = newType;
             }
           }
-    
+
           if (behavior === 'remove') {
             if (index !== -1) {
               updatedMediaPartners.code_logo.splice(index, 1);
@@ -570,42 +570,42 @@ export const PublicMatchProvider = ({ children }) => {
             }
           }
         });
-    
+
         return { mediaPartners: updatedMediaPartners };
       });
-    
+
       setLastUpdateTime(Date.now());
     });
 
     socketService.on('tournament_logo_updated', (data) => {
       console.log('📝 [PublicMatchContext] tournament_logo_updated received:', data);
-    
+
       setTournamentLogo(prev => {
         const behavior = data.behavior;
         const d = data.tournamentLogo;
-    
+
         if (!d || !Array.isArray(d.code_logo)) return prev;
-    
+
         const current = prev || {
           url_logo: [],
           code_logo: [],
           position: [],
           type_display: [],
         };
-    
+
         let updatedTournamentLogo = {
           url_logo: Array.isArray(current.url_logo) ? [...current.url_logo] : [],
           code_logo: Array.isArray(current.code_logo) ? [...current.code_logo] : [],
           position: Array.isArray(current.position) ? [...current.position] : [],
           type_display: Array.isArray(current.type_display) ? [...current.type_display] : [],
         };
-    
+
         d.code_logo.forEach((code, i) => {
           const index = updatedTournamentLogo.code_logo.findIndex(c => c === code);
           const newUrl = d.url_logo?.[i];
           const newPos = d.position?.[i];
           const newType = d.type_display?.[i];
-    
+
           if (behavior === 'add') {
             if (index === -1) {
               updatedTournamentLogo.code_logo.push(code);
@@ -614,7 +614,7 @@ export const PublicMatchProvider = ({ children }) => {
               updatedTournamentLogo.type_display.push(newType || '');
             }
           }
-    
+
           if (behavior === 'update') {
             if (index !== -1) {
               if (newPos !== undefined) updatedTournamentLogo.position[index] = newPos;
@@ -622,7 +622,7 @@ export const PublicMatchProvider = ({ children }) => {
               if (newType !== undefined) updatedTournamentLogo.type_display[index] = newType;
             }
           }
-    
+
           if (behavior === 'remove') {
             if (index !== -1) {
               updatedTournamentLogo.code_logo.splice(index, 1);
@@ -632,19 +632,19 @@ export const PublicMatchProvider = ({ children }) => {
             }
           }
         });
-    
+
         return updatedTournamentLogo;
       });
-    
+
       setLastUpdateTime(Date.now());
     });
-    
+
 
     socketService.on('live_unit_updated', (data) => {
       console.log('📝 [PublicMatchContext] live_unit_updated received:', data);
       setLiveUnit(prev => ({ ...prev, ...data.liveUnit }));
 
-      if (data.liveUnit && (data.liveUnit.text )) {
+      if (data.liveUnit && (data.liveUnit.text)) {
         setMatchData(prev => ({
           ...prev,
           liveText: data.liveUnit.text || prev.liveText
@@ -665,8 +665,8 @@ export const PublicMatchProvider = ({ children }) => {
     });
 
     socketService.on('view_updated', (data) => {
-      
-        console.log("Giá trị currentView", data.viewType);
+
+      console.log("Giá trị currentView", data.viewType);
       setCurrentView(data.viewType);
     });
 
@@ -674,34 +674,18 @@ export const PublicMatchProvider = ({ children }) => {
       if (data.target === 'display' && data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
         const { audioData, mimeType } = data.payload;
         try {
-          let audioBlob = null;
+          if (!audioData || (Array.isArray(audioData) && audioData.length === 0)) {
+            return;
+          }
 
-          if (audioData instanceof ArrayBuffer && audioData.byteLength > 0) {
-            audioBlob = new Blob([audioData], { type: mimeType || 'audio/webm' });
-          } else if (Array.isArray(audioData) && audioData.length > 0) {
-            const uint8Array = new Uint8Array(audioData);
-            audioBlob = new Blob([uint8Array], { type: mimeType || 'audio/webm' });
-          } else {
-            return;
-          }
-    
-          if (!audioBlob || audioBlob.size === 0) {
-            return;
-          }
-    
-          audioUtils.playRefereeVoice(audioBlob, mimeType);
-    
+          // audioUtils.playRefereeVoice đã tự động detect và xử lý tất cả các format
+          audioUtils.playRefereeVoice(audioData, mimeType);
+
         } catch (error) {
-          console.error('❌ Error processing referee voice in PublicMatchContext:', {
-            error: error.message,
-            stack: error.stack,
-            audioDataType: typeof audioData,
-            mimeType
-          });
+          console.error('❌ Error processing referee voice:', error.message);
         }
       }
     });
-
     socketService.on('disconnect', () => {
       setSocketConnected(false);
     });
