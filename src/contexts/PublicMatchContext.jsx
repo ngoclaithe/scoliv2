@@ -671,15 +671,26 @@ export const PublicMatchProvider = ({ children }) => {
     });
 
     socketService.on('audio_control', (data) => {
-      if (data.target === 'display' && data.command === 'PLAY_REFEREE_VOICE' && data.payload) {
-        const { audioData, mimeType } = data.payload;
+      if (data.target === 'display' && data.payload) {
         try {
-          if (!audioData || (Array.isArray(audioData) && audioData.length === 0)) {
-            return;
-          }
+          if (data.command === 'PLAY_REFEREE_VOICE_REALTIME') {
+            // Handle real-time audio (Float32Array)
+            const { audioData } = data.payload;
+            if (!audioData || (Array.isArray(audioData) && audioData.length === 0)) {
+              return;
+            }
+            console.log('🎵 [PublicMatchContext] Playing real-time referee voice');
+            audioUtils.playRefereeVoiceRealtime(new Float32Array(audioData));
 
-          // audioUtils.playRefereeVoice đã tự động detect và xử lý tất cả các format
-          audioUtils.playRefereeVoice(audioData, mimeType);
+          } else if (data.command === 'PLAY_REFEREE_VOICE') {
+            // Handle blob audio (legacy)
+            const { audioData, mimeType } = data.payload;
+            if (!audioData || (Array.isArray(audioData) && audioData.length === 0)) {
+              return;
+            }
+            console.log('🎵 [PublicMatchContext] Playing blob referee voice');
+            audioUtils.playRefereeVoice(audioData, mimeType);
+          }
 
         } catch (error) {
           console.error('❌ Error processing referee voice:', error.message);
