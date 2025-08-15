@@ -540,6 +540,10 @@ const MatchManagementSection = ({ isActive = true }) => {
           onSearchLogoA={handleSearchLogoA}
           onSearchLogoB={handleSearchLogoB}
           onApplyChanges={handleApplyChanges}
+          subtitle={subtitle}
+          setSubtitle={setSubtitle}
+          showSubtitle={showSubtitle}
+          setShowSubtitle={setShowSubtitle}
         />
       </div>
 
