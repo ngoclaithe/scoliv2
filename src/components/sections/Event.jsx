@@ -130,10 +130,10 @@ const Event = () => {
                   <h2 className="text-3xl font-bold text-gray-900">{teamAData.name}</h2>
                 </div>
 
-                <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white px-8 py-4 rounded-2xl shadow-xl">
-                  <span className="text-4xl font-black">{teamAData.score}</span>
-                  <span className="text-2xl mx-4 text-white/80">-</span>
-                  <span className="text-4xl font-black">{teamBData.score}</span>
+                <div className="bg-gradient-to-r from-green-600 via-emerald-600 to-green-700 text-white px-8 py-4 rounded-2xl shadow-xl border-2 border-green-500/30">
+                  <span className="text-4xl font-black drop-shadow-lg">{teamAData.score}</span>
+                  <span className="text-2xl mx-4 text-white/90">-</span>
+                  <span className="text-4xl font-black drop-shadow-lg">{teamBData.score}</span>
                 </div>
 
                 <div className="flex items-center gap-4">
