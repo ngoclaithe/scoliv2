@@ -285,7 +285,7 @@ class SocketService {
     return this.emit('audio_control_broadcast', payload);
   }
 
-  // Gửi voice trọng tài tới display clients
+  // Gửi voice trọng tài tới display clients (blob data)
   sendRefereeVoice(audioData, mimeType = 'audio/ogg; codecs=opus') {
     console.log('🎙️ [SocketService] Sending referee voice to displays');
     return this.sendAudioControl({
@@ -293,6 +293,19 @@ class SocketService {
       payload: {
         audioData,
         mimeType,
+        timestamp: Date.now()
+      },
+      target: 'display'
+    });
+  }
+
+  // Gửi real-time voice trọng tài (Float32Array data)
+  sendRefereeVoiceRealtime(audioData) {
+    console.log('🎙️ [SocketService] Sending real-time referee voice to displays');
+    return this.sendAudioControl({
+      command: 'PLAY_REFEREE_VOICE_REALTIME',
+      payload: {
+        audioData,
         timestamp: Date.now()
       },
       target: 'display'
