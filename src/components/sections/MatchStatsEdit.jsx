@@ -12,10 +12,8 @@ const MatchStatsEdit = ({
   onUpdateView,
   onPlayAudio,
   accessCode,
-  socketConnected
 }) => {
   const { handleCardEvent } = useMatch();
-  const [isEditingStats, setIsEditingStats] = useState(false);
   const [goalScorers, setGoalScorers] = useState({
     teamA: { player: '', minute: '' },
     teamB: { player: '', minute: '' }
@@ -615,7 +613,7 @@ const MatchStatsEdit = ({
           onUpdate={(team, increment) => updateLocalStat('corners', team, increment)}
         />
 
-        {/* Thẻ vàng - chỉ hiển thị, không cho chỉnh tay - giữ nguyên */}
+        {/* Thẻ vàng - chỉ hiển thị, không cho chỉnh tay - Fix lỗi object rendering */}
         <div className="py-0.5">
           <div className="text-center mb-0.5">
             <span className="font-medium text-gray-700 text-sm">Thẻ vàng</span>
@@ -623,13 +621,13 @@ const MatchStatsEdit = ({
           <div className="flex items-center gap-2">
             <div className="flex-1">
               <div className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold min-w-8 text-center border border-yellow-300 rounded">
-                {matchStats.yellowCards.team1}
+                {Array.isArray(matchStats.yellowCards?.team1) ? matchStats.yellowCards.team1.length : matchStats.yellowCards?.team1 || 0}
               </div>
             </div>
             <div className="text-gray-400 text-xs">vs</div>
             <div className="flex-1">
               <div className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold min-w-8 text-center border border-yellow-300 rounded">
-                {matchStats.yellowCards.team2}
+                {Array.isArray(matchStats.yellowCards?.team2) ? matchStats.yellowCards.team2.length : matchStats.yellowCards?.team2 || 0}
               </div>
             </div>
           </div>

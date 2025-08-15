@@ -7,31 +7,29 @@ const CommentarySection = ({ isActive = true }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const mediaRecorderRef = useRef(null);
   const streamRef = useRef(null);
-  const continuousTimeoutRef = useRef(null);
-  const audioChunksRef = useRef([]);
   const isRecordingRef = useRef(false);
 
   useEffect(() => {
     isRecordingRef.current = isRecording;
   }, [isRecording]);
 
-  const isSupported = typeof navigator !== 'undefined' &&
-                     navigator.mediaDevices &&
-                     navigator.mediaDevices.getUserMedia &&
-                     typeof MediaRecorder !== 'undefined';
+  const isSupported =
+    typeof navigator !== "undefined" &&
+    navigator.mediaDevices &&
+    navigator.mediaDevices.getUserMedia &&
+    typeof MediaRecorder !== "undefined";
 
   const getSupportedMimeType = () => {
     const types = [
-      'audio/webm;codecs=opus',
-      'audio/ogg;codecs=opus',
-      'audio/webm',
-      'audio/mp4',
-      'audio/wav'
+      "audio/webm;codecs=opus",
+      "audio/ogg;codecs=opus",
+      "audio/webm",
+      "audio/mp4",
+      "audio/wav",
     ];
-
     for (const type of types) {
       if (MediaRecorder.isTypeSupported(type)) {
-        console.log('🎙️ Using mime type:', type);
+        console.log("🎙️ Using mime type:", type);
         return type;
       }
     }
@@ -39,8 +37,8 @@ const CommentarySection = ({ isActive = true }) => {
   };
 
   const canPlayFormat = (mimeType) => {
-    const audio = document.createElement('audio');
-    return audio.canPlayType(mimeType) !== '';
+    const audio = document.createElement("audio");
+    return audio.canPlayType(mimeType) !== "";
   };
 
   useEffect(() => {
@@ -51,63 +49,27 @@ const CommentarySection = ({ isActive = true }) => {
 
   useEffect(() => {
     if (!isActive) {
-      console.log('🔇 [CommentarySection] Tab inactive, stopping recording');
+      console.log("🔇 [CommentarySection] Tab inactive, stopping recording");
       stopAllRecording();
     }
   }, [isActive]);
 
   const stopAllRecording = () => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
       mediaRecorderRef.current.stop();
     }
-    
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
     }
-    
-    if (continuousTimeoutRef.current) {
-      clearTimeout(continuousTimeoutRef.current);
-      continuousTimeoutRef.current = null;
-    }
-    
     setIsRecording(false);
     setIsProcessing(false);
-    audioChunksRef.current = [];
-  };
-
-  const sendAccumulatedChunks = () => {
-    if (audioChunksRef.current.length === 0) {
-      console.log('⚠️ No chunks to send');
-      return;
-    }
-
-    const mimeType = mediaRecorderRef.current?.mimeType || getSupportedMimeType() || 'audio/webm';
-    const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
-
-    console.log('📡 Sending accumulated chunks:', {
-      chunksCount: audioChunksRef.current.length,
-      totalSize: audioBlob.size,
-      mimeType: mimeType
-    });
-
-    if (audioBlob.size < 1000) { 
-      console.warn('⚠️ Audio blob too small, might be invalid:', audioBlob.size, 'bytes');
-    }
-
-    audioChunksRef.current = [];
-    
-    sendVoiceToServer(audioBlob).then(() => {
-      console.log('✅ Accumulated chunks sent successfully');
-    }).catch(error => {
-      console.error('❌ Failed to send accumulated chunks:', error);
-    });
   };
 
   const createMediaRecorder = async (stream, mimeType) => {
-    const options = { 
+    const options = {
       mimeType,
-      audioBitsPerSecond: 128000 
+      audioBitsPerSecond: 128000,
     };
 
     const mediaRecorder = new MediaRecorder(stream, options);
@@ -115,121 +77,65 @@ const CommentarySection = ({ isActive = true }) => {
 
     mediaRecorder.ondataavailable = (event) => {
       if (event.data.size > 0) {
-        console.log('📥 Data chunk received:', event.data.size, 'bytes');
-        audioChunksRef.current.push(event.data);
-        console.log('📦 Total chunks accumulated:', audioChunksRef.current.length);
-      }
-    };
-
-    mediaRecorder.onstop = () => {
-      console.log('🎙️ MediaRecorder stopped');
-            if (audioChunksRef.current.length > 0) {
-        sendAccumulatedChunks();
-      }
-      
-      if (isRecordingRef.current) {
-        scheduleNextChunk();
+        // gửi ngay khi có chunk để giảm delay
+        const audioBlob = new Blob([event.data], { type: mimeType });
+        sendVoiceToServer(audioBlob).catch((err) =>
+          console.error("❌ Failed to send chunk:", err)
+        );
       }
     };
 
     mediaRecorder.onstart = () => {
-      console.log('🎙️ MediaRecorder started');
-      audioChunksRef.current = []; 
+      console.log("🎙️ MediaRecorder started");
     };
 
-    console.log('🎙️ Starting MediaRecorder with 500ms chunks');
-    mediaRecorder.start(500);
+    mediaRecorder.start(200); // giảm chunk xuống 200ms để giảm delay
     setIsRecording(true);
-
-    continuousTimeoutRef.current = setTimeout(() => {
-      if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
-        console.log('🔄 Auto-restarting recording (500ms -> send)');
-        mediaRecorderRef.current.stop(); 
-      }
-    }, 2000);
-  };
-
-  const scheduleNextChunk = () => {
-    if (!isRecordingRef.current) {
-      console.log('⏹️ Recording stopped, not scheduling next chunk');
-      return;
-    }
-
-    console.log('🔄 Scheduling next chunk');
-    continuousTimeoutRef.current = setTimeout(() => {
-      if (isRecordingRef.current && streamRef.current && streamRef.current.active) {
-        startNextChunk();
-      }
-    }, 100); 
-  };
-
-  const startNextChunk = async () => {
-    if (!streamRef.current || !streamRef.current.active || !isRecordingRef.current) {
-      console.log('⚠️ Cannot start next chunk - stream inactive or recording stopped');
-      return;
-    }
-
-    console.log('🎙️ Starting next chunk');
-    const mimeType = getSupportedMimeType();
-    await createMediaRecorder(streamRef.current, mimeType);
   };
 
   const startRecording = async () => {
     if (!isSupported) {
-      alert('Trình duyệt không hỗ trợ ghi âm');
+      alert("Trình duyệt không hỗ trợ ghi âm");
       return;
     }
-
     const mimeType = getSupportedMimeType();
     if (!mimeType) {
-      alert('Trình duyệt không hỗ trợ các codec audio cần thiết');
+      alert("Trình duyệt không hỗ trợ các codec audio cần thiết");
       return;
     }
-
     if (!canPlayFormat(mimeType)) {
-      console.warn('⚠️ Browser may not be able to play recorded format:', mimeType);
+      console.warn("⚠️ Browser may not be able to play recorded format:", mimeType);
     }
-
     try {
       setIsProcessing(true);
-      
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          sampleRate: 48000, 
+          sampleRate: 48000,
           channelCount: 1,
-          autoGainControl: true
-        }
+          autoGainControl: true,
+        },
       });
       streamRef.current = stream;
-
       await createMediaRecorder(stream, mimeType);
-      
       setIsProcessing(false);
-      console.log('🎙️ Continuous recording started with format:', mimeType);
+      console.log("🎙️ Continuous recording started with format:", mimeType);
     } catch (error) {
-      console.error('Lỗi khi bắt đầu ghi âm:', error);
-      alert('Không thể truy cập microphone. Vui lòng cho phép quyền truy cập.');
+      console.error("Lỗi khi bắt đầu ghi âm:", error);
+      alert("Không thể truy cập microphone. Vui lòng cho phép quyền truy cập.");
       setIsProcessing(false);
     }
   };
 
   const stopRecording = () => {
-    console.log('🔇 Stopping continuous recording');
+    console.log("🔇 Stopping continuous recording");
     setIsRecording(false);
-    
-    if (continuousTimeoutRef.current) {
-      clearTimeout(continuousTimeoutRef.current);
-      continuousTimeoutRef.current = null;
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+      mediaRecorderRef.current.stop();
     }
-
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-      mediaRecorderRef.current.stop(); 
-    }
-
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
     }
   };
@@ -240,21 +146,18 @@ const CommentarySection = ({ isActive = true }) => {
       reader.onload = () => {
         const arrayBuffer = reader.result;
         const uint8Array = new Uint8Array(arrayBuffer);
-
         if (socketService.socket && socketService.socket.connected) {
-          const mimeType = mediaRecorderRef.current?.mimeType || getSupportedMimeType() || 'audio/webm';
+          const mimeType =
+            mediaRecorderRef.current?.mimeType ||
+            getSupportedMimeType() ||
+            "audio/webm";
           const success = socketService.sendRefereeVoice(
             Array.from(uint8Array),
             mimeType
           );
-
-          if (success) {
-            resolve();
-          } else {
-            reject(new Error('Failed to send voice through socket service'));
-          }
+          success ? resolve() : reject(new Error("Failed to send voice"));
         } else {
-          reject(new Error('Socket not connected'));
+          reject(new Error("Socket not connected"));
         }
       };
       reader.onerror = () => reject(reader.error);
@@ -263,16 +166,11 @@ const CommentarySection = ({ isActive = true }) => {
   };
 
   const toggleRecording = () => {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      startRecording();
-    }
+    isRecording ? stopRecording() : startRecording();
   };
 
   return (
     <div className="p-4 space-y-4">
-      {/* Voice Recording Button */}
       <div className="flex justify-center">
         <button
           onClick={toggleRecording}
@@ -280,12 +178,11 @@ const CommentarySection = ({ isActive = true }) => {
           className={`
             w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 transform
             ${isRecording
-              ? 'bg-red-500 hover:bg-red-600 animate-pulse scale-110'
-              : 'bg-blue-500 hover:bg-blue-600'
-            }
-            ${isProcessing ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105'}
+              ? "bg-red-500 hover:bg-red-600 animate-pulse scale-110"
+              : "bg-blue-500 hover:bg-blue-600"}
+            ${isProcessing ? "opacity-50 cursor-not-allowed" : "hover:scale-105"}
             text-white shadow-lg hover:shadow-xl
-            ${!isSupported ? 'bg-gray-400 cursor-not-allowed' : ''}
+            ${!isSupported ? "bg-gray-400 cursor-not-allowed" : ""}
           `}
         >
           {isProcessing ? (
@@ -297,8 +194,6 @@ const CommentarySection = ({ isActive = true }) => {
           )}
         </button>
       </div>
-
-      {/* Status Text */}
       <div className="text-center">
         {isProcessing && (
           <p className="text-blue-600 font-medium">Đang khởi tạo...</p>
@@ -309,15 +204,12 @@ const CommentarySection = ({ isActive = true }) => {
           </p>
         )}
         {!isRecording && !isProcessing && (
-          <p className="text-gray-600">
-            Ấn mic để bắt đầu bình luận liên tục
-          </p>
+          <p className="text-gray-600">Ấn mic để bắt đầu bình luận liên tục</p>
         )}
         {!isSupported && (
           <p className="text-red-600">Trình duyệt không hỗ trợ ghi âm</p>
         )}
       </div>
-
     </div>
   );
 };

@@ -3,10 +3,6 @@ import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { useAuth } from '../../contexts/AuthContext';
 import PublicAPI from '../../API/apiPublic';
-import audioUtils from '../../utils/audioUtils';
-import socketService from '../../services/socketService';
-
-// Import các component hiển thị
 import PosterTreTrung from '../../pages/Poster-tretrung';
 import PosterHaoQuang from '../../pages/Poster-haoquang';
 import PosterDoDen from '../../pages/Poster-doden';
