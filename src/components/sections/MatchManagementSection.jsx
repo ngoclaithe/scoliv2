@@ -236,7 +236,6 @@ const MatchManagementSection = ({ isActive = true }) => {
   const [showPosterModal, setShowPosterModal] = useState(false);
   const [showLineupModal, setShowLineupModal] = useState(false);
   const [showPenaltyModal, setShowPenaltyModal] = useState(false);
-  const [showTimerModal, setShowTimerModal] = useState(false);
   const [logoCodeA, setLogoCodeA] = useState("");
   const [logoCodeB, setLogoCodeB] = useState("");
   const [isSearchingLogoA, setIsSearchingLogoA] = useState(false);
@@ -291,11 +290,13 @@ const MatchManagementSection = ({ isActive = true }) => {
   const onPosterUpdateRef = useRef();
 
   const handleLogoUpdate = useCallback((logoData) => {
+    console.log("🚀 [MatchManagementSection] handleLogoUpdate called with:", logoData);
+
     if (logoData.changedItem && logoData.behavior) {
       const item = logoData.changedItem;
       const behavior = logoData.behavior;
 
-      console.log(`[MatchManagementSection] ${behavior} logo:`, item);
+      // console.log(`[MatchManagementSection] ${behavior} logo:`, item);
 
       const logoUpdateData = {
         code_logo: [item.code],

@@ -9,7 +9,6 @@ const PosterManager = ({ matchData, onPosterUpdate, onLogoUpdate, onPositionChan
   const [showCustomForm, setShowCustomForm] = useState(false);
   const [loading] = useState(false);
 
-  // Posters từ thư mục public/images/posters
   const availablePosters = [
     {
       id: "tretrung",
