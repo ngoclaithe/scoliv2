@@ -382,49 +382,81 @@ const Event = () => {
         </div>
 
         {/* Events Section - Takes remaining space */}
-        <div className="flex-1 px-2 sm:px-6 pb-4 sm:pb-6 overflow-hidden">
-          <div className="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl h-full border-2 border-white/30 ring-1 ring-green-500/20 p-3 sm:p-6">
+        <div className="flex-1 px-1 sm:px-3 lg:px-4 pb-3 sm:pb-4 overflow-hidden">
+          <div className="bg-gradient-to-br from-white/98 via-white/95 to-white/92 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl h-full border border-white/40 ring-1 ring-blue-500/10 overflow-hidden">
             {(teamAEvents.length > 0 || teamBEvents.length > 0) ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 h-full">
-                {/* Team A Events */}
-                <div className="flex flex-col h-full">
-                  <div className="flex items-center gap-2 mb-3 sm:mb-4">
+              <div className="h-full flex flex-col">
+                {/* Header with team names - Always horizontal */}
+                <div className="flex items-center justify-between px-3 sm:px-4 lg:px-6 py-2 sm:py-3 border-b border-gray-200/50 bg-gradient-to-r from-gray-50/50 to-gray-100/30">
+                  <div className="flex items-center gap-2 flex-1">
                     <div
-                      className="h-1 rounded-full flex-1"
+                      className="w-3 h-3 rounded-full shadow-sm"
                       style={{ backgroundColor: teamAData.color }}
                     ></div>
-                    <span className="text-xs sm:text-sm font-bold text-gray-600 sm:hidden">{teamAData.name}</span>
+                    <span className="text-xs sm:text-sm lg:text-base font-bold text-gray-800 truncate">
+                      {teamAData.name}
+                    </span>
+                    <span className="text-xs text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded-full">
+                      {teamAEvents.length}
+                    </span>
                   </div>
-                  <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pr-1 sm:pr-2">
-                    {teamAEvents.map((event, index) => (
-                      <EventItem
-                        key={event.uniqueKey || `teamA-${event.type}-${event.player}-${event.minute}-${index}`}
-                        event={event}
-                        isTeamA={true}
-                        teamColor={teamAData.color}
-                      />
-                    ))}
-                  </div>
-                </div>
 
-                {/* Team B Events */}
-                <div className="flex flex-col h-full">
-                  <div className="flex items-center gap-2 mb-3 sm:mb-4">
-                    <span className="text-xs sm:text-sm font-bold text-gray-600 sm:hidden">{teamBData.name}</span>
+                  <div className="text-xs sm:text-sm font-bold text-gray-400 px-2">VS</div>
+
+                  <div className="flex items-center gap-2 flex-1 justify-end">
+                    <span className="text-xs text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded-full">
+                      {teamBEvents.length}
+                    </span>
+                    <span className="text-xs sm:text-sm lg:text-base font-bold text-gray-800 truncate">
+                      {teamBData.name}
+                    </span>
                     <div
-                      className="h-1 rounded-full flex-1"
+                      className="w-3 h-3 rounded-full shadow-sm"
                       style={{ backgroundColor: teamBData.color }}
                     ></div>
                   </div>
-                  <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pr-1 sm:pr-2">
-                    {teamBEvents.map((event, index) => (
-                      <EventItem
-                        key={event.uniqueKey || `teamB-${event.type}-${event.player}-${event.minute}-${index}`}
-                        event={event}
-                        isTeamA={false}
-                        teamColor={teamBData.color}
-                      />
-                    ))}
+                </div>
+
+                {/* Events content - Always side by side */}
+                <div className="flex-1 flex overflow-hidden">
+                  {/* Team A Events */}
+                  <div className="flex-1 flex flex-col border-r border-gray-200/50">
+                    <div
+                      className="h-1 w-full"
+                      style={{ backgroundColor: teamAData.color + '40' }}
+                    ></div>
+                    <div className="flex-1 overflow-y-auto p-2 sm:p-3">
+                      <div className="space-y-1 sm:space-y-2">
+                        {teamAEvents.map((event, index) => (
+                          <EventItem
+                            key={event.uniqueKey || `teamA-${event.type}-${event.player}-${event.minute}-${index}`}
+                            event={event}
+                            isTeamA={true}
+                            teamColor={teamAData.color}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Team B Events */}
+                  <div className="flex-1 flex flex-col">
+                    <div
+                      className="h-1 w-full"
+                      style={{ backgroundColor: teamBData.color + '40' }}
+                    ></div>
+                    <div className="flex-1 overflow-y-auto p-2 sm:p-3">
+                      <div className="space-y-1 sm:space-y-2">
+                        {teamBEvents.map((event, index) => (
+                          <EventItem
+                            key={event.uniqueKey || `teamB-${event.type}-${event.player}-${event.minute}-${index}`}
+                            event={event}
+                            isTeamA={false}
+                            teamColor={teamBData.color}
+                          />
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
