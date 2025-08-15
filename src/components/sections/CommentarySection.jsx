@@ -290,14 +290,14 @@ const CommentarySection = ({ isActive = true }) => {
   };
 
   // Debug info
-  useEffect(() => {
-    console.log("🔍 [Debug] Component state:");
-    console.log("- isStreaming:", isStreaming);
-    console.log("- isProcessing:", isProcessing);
-    console.log("- isActive:", isActive);
-    console.log("- socketService:", socketService);
-    console.log("- socket connected:", socketService?.socket?.connected);
-  }, [isStreaming, isProcessing, isActive]);
+  // useEffect(() => {
+  //   console.log("🔍 [Debug] Component state:");
+  //   console.log("- isStreaming:", isStreaming);
+  //   console.log("- isProcessing:", isProcessing);
+  //   console.log("- isActive:", isActive);
+  //   console.log("- socketService:", socketService);
+  //   console.log("- socket connected:", socketService?.socket?.connected);
+  // }, [isStreaming, isProcessing, isActive]);
 
   return (
     <div className="p-4 space-y-4">

@@ -11,11 +11,13 @@ import UserAPI from '../../API/apiUser';
 import AccessCodeList from './AccessCodeList';
 import ActivityList from './ActivityList';
 import UserProfileSection from './UserProfileSection';
+import ActivitiesAPI from '../../API/apiActivities';
 
 const ManageAccessCode = ({ onNavigate }) => {
   const { user, logout, enterMatchCode, loading: authLoading } = useAuth();
   const [activeTab, setActiveTab] = useState('list');
   const [activities, setActivities] = useState([]);
+  const [activitiesLoading, setActivitiesLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
   const [showEditProfileModal, setShowEditProfileModal] = useState(false);
@@ -45,6 +47,7 @@ const ManageAccessCode = ({ onNavigate }) => {
   const [paymentData, setPaymentData] = useState(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [paymentInfo, setPaymentInfo] = useState(null);
+  
   const loadCodes = useCallback(async (page = 1, status = '') => {
     try {
       setLoading(true);
@@ -70,7 +73,7 @@ const ManageAccessCode = ({ onNavigate }) => {
       setCreateLoading(true);
 
       const response = await AccessCodeAPI.createCode({ typeMatch });
-      console.log("Giá trị của reponse sau khi tạo code là:", response.data);
+      console.log("Giá trị của response sau khi tạo code là:", response.data);
       if (response && response.data) {
         setCodes(prev => [response.data, ...prev]);
         const sportName = {
@@ -80,6 +83,11 @@ const ManageAccessCode = ({ onNavigate }) => {
         }[typeMatch] || '';
 
         console.log(`Tạo mã truy cập ${sportName} thành công!`);
+        
+        // Reload activities sau khi tạo code thành công
+        if (activeTab === 'activities') {
+          loadActivities();
+        }
       } else {
         throw new Error(response?.message || 'Không thể tạo mã truy cập');
       }
@@ -98,7 +106,6 @@ const ManageAccessCode = ({ onNavigate }) => {
     }
     if (activeTab === 'account') {
       loadCurrentUser();
-
     }
   }, [activeTab]);
 
@@ -116,52 +123,57 @@ const ManageAccessCode = ({ onNavigate }) => {
 
   const loadActivities = async () => {
     try {
-      setLoading(true);
-      const mockActivities = [
-        {
-          id: '1',
-          type: 'code_created',
-          description: 'Tạo mã truy cập mới cho bóng đá',
-          timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
-          details: { code: 'SOCCER123' }
-        },
-        {
-          id: '2',
-          type: 'code_used',
-          description: 'Sử dụng mã truy cập để vào trận',
-          timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-          details: { code: 'FUTSAL456' }
-        },
-        {
-          id: '3',
-          type: 'profile_updated',
-          description: 'Cập nhật thông tin tài khoản',
-          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-          details: { field: 'name' }
-        },
-        {
-          id: '4',
-          type: 'payment_completed',
-          description: 'Thanh toán mã truy cập thành công',
-          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-          details: { amount: '10000 VNĐ' }
-        },
-        {
-          id: '5',
-          type: 'login',
-          description: 'Đăng nhập vào hệ thống',
-          timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
-          details: { device: 'Chrome Browser' }
-        }
-      ];
-
-      setActivities(mockActivities);
+      setActivitiesLoading(true);
+      const response = await ActivitiesAPI.getActivities();
+      
+      if (response && response.success) {
+        // Transform API data to match the expected format
+        const transformedActivities = response.data.map(activity => ({
+          id: activity.id.toString(),
+          type: getActivityType(activity.action, activity.status),
+          description: getActivityDescription(activity.action, activity.status, activity.code),
+          timestamp: activity.createdAt,
+          details: {
+            code: activity.code,
+            status: activity.status,
+            createdBy: activity.createdBy?.name || 'Không rõ',
+            expiredAt: activity.expiredAt
+          }
+        }));
+        
+        setActivities(transformedActivities);
+      } else {
+        setActivities([]);
+      }
     } catch (error) {
       console.error('Error loading activities:', error);
       setActivities([]);
     } finally {
-      setLoading(false);
+      setActivitiesLoading(false);
     }
+  };
+
+  const getActivityType = (action, status) => {
+    if (action === 'create_access_code') {
+      if (status === 'used') return 'code_used';
+      if (status === 'expired') return 'code_expired';
+      return 'code_created';
+    }
+    return 'other';
+  };
+
+  const getActivityDescription = (action, status, code) => {
+    if (action === 'create_access_code') {
+      if (status === 'active') {
+        return `Tạo mã truy cập ${code} - Đang hoạt động`;
+      } else if (status === 'used') {
+        return `Mã truy cập ${code} đã được sử dụng`;
+      } else if (status === 'expired') {
+        return `Mã truy cập ${code} đã hết hạn`;
+      }
+      return `Tạo mã truy cập ${code}`;
+    }
+    return 'Hoạt động khác';
   };
 
   const loadCurrentUser = async () => {
@@ -422,7 +434,7 @@ const ManageAccessCode = ({ onNavigate }) => {
           {activeTab === 'activities' && (
             <ActivityList
               activities={activities}
-              loading={loading}
+              loading={activitiesLoading}
             />
           )}
 
