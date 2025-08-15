@@ -103,20 +103,6 @@ const ActivityList = ({ activities, loading }) => {
                               </div>
                             )}
                             
-                            {activity.details.status && (
-                              <div className="flex items-center space-x-2">
-                                <span className="text-xs text-gray-500">Trạng thái:</span>
-                                {getStatusBadge(activity.details.status)}
-                              </div>
-                            )}
-                            
-                            {activity.details.createdBy && (
-                              <div className="flex items-center space-x-2">
-                                <span className="text-xs text-gray-500">Người tạo:</span>
-                                <span className="text-xs text-gray-700">{activity.details.createdBy}</span>
-                              </div>
-                            )}
-                            
                             {activity.details.expiredAt && (
                               <div className="flex items-center space-x-2">
                                 <span className="text-xs text-gray-500">Hết hạn:</span>
