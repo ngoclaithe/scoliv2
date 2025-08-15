@@ -191,13 +191,13 @@ class AudioManager {
 
   // Fallback method for blob-based audio (backward compatibility)
   playRefereeVoice(audioData, originalMimeType = null) {
-    // Try real-time first if audioData is Float32Array or Array
-    if (audioData instanceof Float32Array || Array.isArray(audioData)) {
+    // Try real-time first if audioData is Float32Array
+    if (audioData instanceof Float32Array) {
       this.playRefereeVoiceRealtime(audioData);
       return;
     }
 
-    // Fallback to blob-based approach for other data types
+    // For Array data from MediaRecorder (Uint8Array converted to Array), use blob approach
     if (!this.audioEnabled || !this.userInteracted) return;
 
     try {
@@ -218,11 +218,15 @@ class AudioManager {
           arrayBuffer = audioData;
         } else if (audioData instanceof Uint8Array) {
           arrayBuffer = audioData.buffer.slice(audioData.byteOffset, audioData.byteOffset + audioData.byteLength);
+        } else if (Array.isArray(audioData)) {
+          // Handle Array from MediaRecorder (Uint8Array converted to Array)
+          const uint8Array = new Uint8Array(audioData);
+          arrayBuffer = uint8Array.buffer.slice(uint8Array.byteOffset, uint8Array.byteOffset + uint8Array.byteLength);
         } else {
           return; // Unsupported format
         }
 
-        const mimeType = originalMimeType || 'audio/wav';
+        const mimeType = originalMimeType || 'audio/webm';
         blob = new Blob([arrayBuffer], { type: mimeType });
       }
 
@@ -247,7 +251,7 @@ class AudioManager {
       };
 
       this.refereeVoiceRef = audio;
-      
+
       // Play audio
       const playPromise = audio.play();
       if (playPromise) {
