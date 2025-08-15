@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../common/Button';
 import PlayerListAPI from '../../API/apiPlayerList';
-import socketService from '../../services/socketService';
+import { useMatch } from '../../contexts/MatchContext';
 
 const MatchStatsEdit = ({
   matchStats,
