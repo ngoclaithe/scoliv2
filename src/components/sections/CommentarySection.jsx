@@ -18,26 +18,43 @@ const CommentarySection = ({ isActive = true }) => {
 
   useEffect(() => {
     return () => {
-      stopAllRecording();
+      stopAllStreaming();
     };
   }, []);
 
   useEffect(() => {
     if (!isActive) {
-      console.log("🔇 [CommentarySection] Tab inactive, stopping recording");
-      stopAllRecording();
+      console.log("🔇 [CommentarySection] Tab inactive, stopping streaming");
+      stopAllStreaming();
     }
   }, [isActive]);
 
-  const stopAllRecording = () => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
-      mediaRecorderRef.current.stop();
+  const stopAllStreaming = () => {
+    // Stop script processor
+    if (scriptNodeRef.current) {
+      scriptNodeRef.current.disconnect();
+      scriptNodeRef.current = null;
     }
+
+    // Disconnect media stream source
+    if (mediaStreamSourceRef.current) {
+      mediaStreamSourceRef.current.disconnect();
+      mediaStreamSourceRef.current = null;
+    }
+
+    // Close audio context
+    if (audioContextRef.current && audioContextRef.current.state !== "closed") {
+      audioContextRef.current.close();
+      audioContextRef.current = null;
+    }
+
+    // Stop media stream
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
     }
-    setIsRecording(false);
+
+    setIsStreaming(false);
     setIsProcessing(false);
   };
 
