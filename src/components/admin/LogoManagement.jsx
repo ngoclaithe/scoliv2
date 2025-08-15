@@ -82,7 +82,23 @@ const LogoManagement = () => {
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
+      // Kiểm tra kích thước file (tối đa 5MB)
+      if (selectedFile.size > 5 * 1024 * 1024) {
+        setError("Kích thước file tối đa là 5MB");
+        e.target.value = ''; // Reset input
+        return;
+      }
+
+      // Kiểm tra loại file
+      const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      if (!validTypes.includes(selectedFile.type)) {
+        setError("Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WebP)");
+        e.target.value = ''; // Reset input
+        return;
+      }
+
       setFile(selectedFile);
+      setError(null); // Clear any previous errors
       // Set default name from filename without extension
       const name = selectedFile.name.replace(/\.[^/.]+$/, '');
       setLogoData(prev => ({ ...prev, name }));
