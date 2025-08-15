@@ -80,72 +80,66 @@ const DynamicDisplayController = () => {
       }
     };
 
-    console.log('🌐 [DynamicDisplayController] Parsed URL params:', params);
+    // console.log('[DynamicDisplayController] Parsed URL params:', params);
     return params;
   }, [location, matchTitle, liveText, teamALogoCode, teamBLogoCode, teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore]);
 
   const updateSocketWithParams = useCallback(async (params) => {
-    console.log('🔄 [DynamicDisplayController] updateSocketWithParams called with:', params);
+    // console.log('[DynamicDisplayController] updateSocketWithParams called with:', params);
 
     if (!socketService.getConnectionStatus().isConnected) {
-      console.warn('⚠️ [DynamicDisplayController] Socket not connected, cannot update parameters');
+      // console.warn('[DynamicDisplayController] Socket not connected, cannot update parameters');
       return;
     }
 
-    console.log('✅ [DynamicDisplayController] Socket is connected, proceeding with updates...');
+    // console.log('[DynamicDisplayController] Socket is connected, proceeding with updates...');
 
     try {
-      // Cập nhật thông tin trận đấu
       if (params.matchTitle || params.location) {
         const matchInfo = {
           matchTitle: params.matchTitle,
           stadium: params.location,
           liveText: params.liveText
         };
-        console.log('📝 [DynamicDisplayController] Updating match info:', matchInfo);
+        // console.log('[DynamicDisplayController] Updating match info:', matchInfo);
         socketService.updateMatchInfo(matchInfo);
       }
 
-      // Cập nhật tên đội
       if (params.teamA.name || params.teamB.name) {
-        console.log('📛 [DynamicDisplayController] Updating team names:', params.teamA.name, params.teamB.name);
+        // console.log('[DynamicDisplayController] Updating team names:', params.teamA.name, params.teamB.name);
         socketService.updateTeamNames(params.teamA.name, params.teamB.name);
       }
 
-      // Cập nhật tỉ số
       if (params.teamA.score !== undefined || params.teamB.score !== undefined) {
-        console.log('⚽ [DynamicDisplayController] Updating scores:', params.teamA.score, params.teamB.score);
+        // console.log('[DynamicDisplayController] Updating scores:', params.teamA.score, params.teamB.score);
         socketService.updateScore(params.teamA.score, params.teamB.score);
       }
 
-      // Cập nhật màu áo đội nếu có
       const matchInfoWithColors = {
         teamAKitColor: params.teamA.kitColor,
         teamBKitColor: params.teamB.kitColor
       };
-      console.log('👕 [DynamicDisplayController] Updating kit colors:', matchInfoWithColors);
+      // console.log('[DynamicDisplayController] Updating kit colors:', matchInfoWithColors);
       socketService.updateMatchInfo(matchInfoWithColors);
 
-      // Tìm và cập nhật logo đội dựa trên code
       if (params.teamA.logoCode || params.teamB.logoCode) {
-        console.log('🏆 [DynamicDisplayController] Team logo codes received:', params.teamA.logoCode, params.teamB.logoCode);
+        // console.log('[DynamicDisplayController] Team logo codes received:', params.teamA.logoCode, params.teamB.logoCode);
         try {
           const { teamALogo, teamBLogo } = await findTeamLogos(params.teamA.logoCode, params.teamB.logoCode);
           if (teamALogo || teamBLogo) {
-            console.log('🏆 [DynamicDisplayController] Found team logos, updating...', { teamALogo, teamBLogo });
+            // console.log('[DynamicDisplayController] Found team logos, updating...', { teamALogo, teamBLogo });
             socketService.updateTeamLogos(teamALogo, teamBLogo);
           }
         } catch (error) {
-          console.error('❌ [DynamicDisplayController] Failed to find team logos:', error);
+          console.error('[DynamicDisplayController] Failed to find team logos:', error);
         }
       }
 
     } catch (error) {
-      console.error('❌ [DynamicDisplayController] Failed to update socket with params:', error);
+      console.error('[DynamicDisplayController] Failed to update socket with params:', error);
     }
   }, []);
 
-  // Khởi tạo kết nối socket và cập nhật parameters
   useEffect(() => {
     let isCleanedUp = false;
 
@@ -162,31 +156,23 @@ const DynamicDisplayController = () => {
 
         if (!isCleanedUp) {
           setIsInitialized(true);
-          console.log('✅ [DynamicDisplayController] Initialized successfully');
+          // console.log('[DynamicDisplayController] Initialized successfully');
 
-          // Parse parameters từ URL và gửi lên socket
           const params = parseUrlParams();
-          console.log('📋 [DynamicDisplayController] About to update socket with params:', params);
+          // console.log('[DynamicDisplayController] About to update socket with params:', params);
 
           if (Object.keys(params).length > 0) {
-            // Delay một chút để đảm bảo socket đã kết nối hoàn toàn
-            console.log('⏰ [DynamicDisplayController] Setting timeout to update socket params...');
 
-            // Thử sau 1 giây
             setTimeout(() => {
-              console.log('🚀 [DynamicDisplayController] First attempt to update socket params...');
               updateSocketWithParams(params);
             }, 1000);
 
-            // Fallback: thử lại sau 3 giây nếu lần đầu thất bại
             setTimeout(() => {
-              console.log('🔄 [DynamicDisplayController] Fallback attempt to update socket params...');
               updateSocketWithParams(params);
             }, 3000);
           }
         }
       } catch (err) {
-        console.error('❌ [DynamicDisplayController] Failed to initialize display:', err);
         if (!isCleanedUp) {
           if (handleExpiredAccess && handleExpiredAccess(err)) {
             return;
@@ -205,7 +191,6 @@ const DynamicDisplayController = () => {
     };
   }, [accessCode, initializeSocket, handleExpiredAccess, parseUrlParams, updateSocketWithParams]);
 
-  // Render poster component theo type
   const renderPoster = (posterType) => {
     switch (posterType) {
       case 'haoquang':
@@ -225,7 +210,6 @@ const DynamicDisplayController = () => {
     }
   };
 
-  // Render component theo currentView
   const renderCurrentView = () => {
     switch (currentView) {
       case 'intro':

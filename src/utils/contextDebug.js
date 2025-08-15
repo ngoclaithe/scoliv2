@@ -1,4 +1,3 @@
-// Utility để debug PublicMatchContext
 export const logContextState = (contextName, state) => {
   console.group(`🔍 [${contextName}] Context State Debug`);
   
@@ -16,9 +15,9 @@ export const logContextState = (contextName, state) => {
 };
 
 export const logRouteInfo = (params, location) => {
-  console.group('🛣️ [Route] Debug Info');
-  console.log('📍 Location:', location.pathname);
-  console.log('🔗 Params:', params);
+  // console.group('🛣️ [Route] Debug Info');
+  // console.log('📍 Location:', location.pathname);
+  // console.log('🔗 Params:', params);
   
   const hasUrlParams = Boolean(
     params.location || params.matchTitle || params.liveText || 

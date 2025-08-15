@@ -29,8 +29,6 @@ const AppRoutes = () => {
           </AuthProvider>
         } />
 
-        {/* Dynamic route with multiple parameters - PHẢI ĐẶT TRƯỚC route /:accessCode
-            PublicMatchContext sẽ tự động detect URL params và kết nối socket với clientType='admin' để có thể GỬI + NGHE */}
         <Route path="/:accessCode/:location/:matchTitle/:liveText/:teamALogoCode/:teamBLogoCode/:teamAName/:teamBName/:teamAKitColor/:teamBKitColor/:teamAScore/:teamBScore/:view/:matchTime" element={
           <AuthProvider>
             <PublicMatchProvider>
@@ -39,7 +37,6 @@ const AppRoutes = () => {
           </AuthProvider>
         } />
 
-        {/* Preview route for posters - CHỈ NGHE socket */}
         <Route path="/:accessCode/preview" element={
           <AuthProvider>
             <PublicMatchProvider>
@@ -48,7 +45,6 @@ const AppRoutes = () => {
           </AuthProvider>
         } />
 
-        {/* Public dynamic routes for access codes - CHỈ NGHE socket */}
         <Route path="/:accessCode" element={
           <AuthProvider>
             <PublicMatchProvider>
@@ -58,7 +54,6 @@ const AppRoutes = () => {
         } />
       </Routes>
 
-      {/* Toast Container - để ở đây để có thể dùng cho tất cả routes */}
       {/* <ToastContainer
         position="top-left"
         autoClose={3000}

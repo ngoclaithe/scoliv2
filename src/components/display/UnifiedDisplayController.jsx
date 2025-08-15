@@ -11,7 +11,6 @@ import {
   parseNumberParam
 } from '../../utils/dynamicRouteUtils';
 
-// Import các component hiển thị
 import PosterTreTrung from '../../pages/Poster-tretrung';
 import PosterHaoQuang from '../../pages/Poster-haoquang';
 import PosterDoDen from '../../pages/Poster-doden';
@@ -28,7 +27,6 @@ import Stat from '../sections/Stat';
 import Event from '../sections/Event';
 const UnifiedDisplayController = () => {
   const params = useParams();
-  // console.log('🌐 [UnifiedDisplayController] Route params:', params);
   const {
     accessCode,
     location,
@@ -64,7 +62,6 @@ const UnifiedDisplayController = () => {
   const [error, setError] = useState(null);
   const [isDynamicRoute, setIsDynamicRoute] = useState(false);
 
-  // Kiểm tra xem có phải dynamic route không
   const checkIfDynamicRoute = useCallback(() => {
     const hasDynamicParams = Boolean(
       location || matchTitle || liveText || 
@@ -75,19 +72,17 @@ const UnifiedDisplayController = () => {
       view || matchTime
     );
     
-    // console.log('🔍 [UnifiedDisplayController] Dynamic route check:', hasDynamicParams);
     return hasDynamicParams;
   }, [location, matchTitle, liveText, teamALogoCode, teamBLogoCode, teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore, view, matchTime]);
 
-  // Parse và validate parameters từ URL (chỉ cho dynamic route)
   const parseUrlParams = useCallback(() => {
     if (!isDynamicRoute) return null;
 
-    // console.log('🔍 [UnifiedDisplayController] Raw URL params:', {
-    //   location, matchTitle, liveText, teamALogoCode, teamBLogoCode,
-    //   teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore,
-    //   view, matchTime
-    // });
+    console.log('🔍 [UnifiedDisplayController] Raw URL params:', {
+      location, matchTitle, liveText, teamALogoCode, teamBLogoCode,
+      teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore,
+      view, matchTime
+    });
 
     const params = {
       location: parseTextParam(location),
@@ -109,22 +104,20 @@ const UnifiedDisplayController = () => {
       }
     };
 
-    console.log('🌐 [UnifiedDisplayController] Parsed URL params:', params);
+    // console.log('🌐 [UnifiedDisplayController] Parsed URL params:', params);
     return params;
   }, [isDynamicRoute, location, matchTitle, liveText, teamALogoCode, teamBLogoCode, teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore, view, matchTime]);
 
-  // Gửi cập nhật lên socket khi có tham số từ URL (sử dụng PublicMatchContext)
   const updateSocketWithParams = useCallback(async (params) => {
     if (!params || !canSendToSocket) {
-      console.log('⚠️ [UnifiedDisplayController] Cannot send params - canSend:', canSendToSocket);
+      // console.log('⚠️ [UnifiedDisplayController] Cannot send params - canSend:', canSendToSocket);
       return;
     }
 
-    console.log('🔄 [UnifiedDisplayController] updateSocketWithParams called with:', params);
-    console.log('✅ [UnifiedDisplayController] Using PublicMatchContext sending functions...');
+    // console.log('🔄 [UnifiedDisplayController] updateSocketWithParams called with:', params);
+    // console.log('✅ [UnifiedDisplayController] Using PublicMatchContext sending functions...');
 
     try {
-      // Cập nhật thông tin trận đấu
       if (params.matchTitle || params.location || params.matchTime || params.liveText) {
         const matchInfo = {
           matchTitle: params.matchTitle,
@@ -134,35 +127,31 @@ const UnifiedDisplayController = () => {
           teamAKitColor: params.teamA.kitColor,
           teamBKitColor: params.teamB.kitColor
         };
-        console.log('📝 [UnifiedDisplayController] Updating match info via context:', matchInfo);
+        // console.log('📝 [UnifiedDisplayController] Updating match info via context:', matchInfo);
         updateMatchInfo(matchInfo);
       }
 
-      // Cập nhật view nếu có
       if (params.view) {
-        console.log('👁️ [UnifiedDisplayController] Updating view via context:', params.view);
+        // console.log('👁️ [UnifiedDisplayController] Updating view via context:', params.view);
         updateView(params.view);
       }
 
-      // Cập nhật tên đội
       if (params.teamA.name || params.teamB.name) {
-        console.log('📛 [UnifiedDisplayController] Updating team names via context:', params.teamA.name, params.teamB.name);
+        // console.log('📛 [UnifiedDisplayController] Updating team names via context:', params.teamA.name, params.teamB.name);
         updateTeamNames(params.teamA.name, params.teamB.name);
       }
 
-      // Cập nhật tỉ số
       if (params.teamA.score !== undefined || params.teamB.score !== undefined) {
-        console.log('⚽ [UnifiedDisplayController] Updating scores via context:', params.teamA.score, params.teamB.score);
+        // console.log('⚽ [UnifiedDisplayController] Updating scores via context:', params.teamA.score, params.teamB.score);
         updateScore(params.teamA.score, params.teamB.score);
       }
 
-      // Tìm và cập nhật logo đội dựa trên code
       if (params.teamA.logoCode || params.teamB.logoCode) {
-        console.log('🏆 [UnifiedDisplayController] Team logo codes received:', params.teamA.logoCode, params.teamB.logoCode);
+        // console.log('🏆 [UnifiedDisplayController] Team logo codes received:', params.teamA.logoCode, params.teamB.logoCode);
         try {
           const { teamALogo, teamBLogo } = await findTeamLogos(params.teamA.logoCode, params.teamB.logoCode);
           if (teamALogo || teamBLogo) {
-            console.log('🏆 [UnifiedDisplayController] Found team logos, updating via context...', { teamALogo, teamBLogo });
+            // console.log('🏆 [UnifiedDisplayController] Found team logos, updating via context...', { teamALogo, teamBLogo });
             updateTeamLogos(teamALogo, teamBLogo);
           }
         } catch (error) {
@@ -175,17 +164,15 @@ const UnifiedDisplayController = () => {
     }
   }, [canSendToSocket, updateMatchInfo, updateView, updateTeamNames, updateScore, updateTeamLogos]);
 
-  // Khởi tạo kết nối socket và cập nhật parameters
   useEffect(() => {
     let isCleanedUp = false;
 
     const initializeDisplay = async () => {
       try {
-        // Kiểm tra loại route trước
         const isDynamic = checkIfDynamicRoute();
         setIsDynamicRoute(isDynamic);
         
-        console.log(`🎯 [UnifiedDisplayController] Route type: ${isDynamic ? 'Dynamic' : 'Standard'}, hasUrlParams:`, hasUrlParams);
+        // console.log(`🎯 [UnifiedDisplayController] Route type: ${isDynamic ? 'Dynamic' : 'Standard'}, hasUrlParams:`, hasUrlParams);
 
         const verifyResult = await PublicAPI.verifyAccessCode(accessCode);
 
@@ -202,21 +189,17 @@ const UnifiedDisplayController = () => {
 
           if (isDynamic && hasUrlParams) {
             const params = parseUrlParams();
-            console.log('📋 [UnifiedDisplayController] About to update socket with params:', params);
-            console.log('🔧 [UnifiedDisplayController] canSendToSocket:', canSendToSocket);
+            // console.log('📋 [UnifiedDisplayController] About to update socket with params:', params);
+            // console.log('🔧 [UnifiedDisplayController] canSendToSocket:', canSendToSocket);
 
             if (params && Object.keys(params).length > 0) {
-              console.log('⏰ [UnifiedDisplayController] Setting timeout to update socket params...');
+              // console.log('⏰ [UnifiedDisplayController] Setting timeout to update socket params...');
 
-              // Đợi socket connect và context setup xong
               setTimeout(() => {
-                console.log('🚀 [UnifiedDisplayController] First attempt to update socket params...');
                 updateSocketWithParams(params);
               }, 1500);
 
-              // Retry để đảm bảo
               setTimeout(() => {
-                console.log('🔄 [UnifiedDisplayController] Retry attempt to update socket params...');
                 updateSocketWithParams(params);
               }, 3000);
             }
@@ -241,7 +224,6 @@ const UnifiedDisplayController = () => {
     };
   }, [accessCode, initializeSocket, handleExpiredAccess, checkIfDynamicRoute, parseUrlParams, updateSocketWithParams, canSendToSocket, hasUrlParams]);
 
-  // Render poster component theo type
   const renderPoster = (posterType) => {
     switch (posterType) {
       case 'haoquang':
@@ -261,7 +243,6 @@ const UnifiedDisplayController = () => {
     }
   };
 
-  // Render component theo currentView
   const renderCurrentView = () => {
     switch (currentView) {
       case 'intro':
@@ -293,7 +274,6 @@ const UnifiedDisplayController = () => {
     }
   };
 
-  // Render loading state
   if (!isInitialized) {
     return (
       <div className="fixed inset-0 bg-gradient-to-br from-blue-900 to-purple-900 text-white flex items-center justify-center">
@@ -318,7 +298,6 @@ const UnifiedDisplayController = () => {
     );
   }
 
-  // Render error state
   if (error) {
     return (
       <div className="fixed inset-0 bg-red-900 text-white flex items-center justify-center">
