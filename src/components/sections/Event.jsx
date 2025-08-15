@@ -167,7 +167,7 @@ const Event = () => {
           <div className="font-bold text-xs sm:text-sm text-gray-900 truncate leading-tight">{event.player}</div>
           {event.type !== 'goal' && (
             <div className="text-xs text-gray-500 leading-tight">
-              {event.type === 'yellow_card' ? 'Thẻ vàng' : 'Thẻ đỏ'}
+              {event.type === 'yellow_card' ? 'Thẻ vàng' : 'Th�� đỏ'}
             </div>
           )}
         </div>
@@ -218,80 +218,140 @@ const Event = () => {
       </div>
 
       <div className="relative z-20 h-full flex flex-col">
-        {/* Layered Geometric Scoreboard Header */}
+        {/* Complex Interlocking Geometric Scoreboard */}
         <div className="relative flex-shrink-0 px-1 sm:px-3 lg:px-4 pt-3 sm:pt-4">
-          <div className="relative h-16 sm:h-20 lg:h-24">
+          <div className="relative h-20 sm:h-24 lg:h-28">
 
-            {/* Layer 1 - Base geometric shape */}
+            {/* Layer 1 - Base complex polygon */}
             <div
-              className="absolute inset-0 bg-slate-800"
+              className="absolute inset-0 bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800"
               style={{
-                clipPath: 'polygon(0 20%, 20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%)'
+                clipPath: 'polygon(0 25%, 8% 0%, 25% 10%, 40% 0%, 60% 0%, 75% 10%, 92% 0%, 100% 25%, 100% 75%, 92% 100%, 75% 90%, 60% 100%, 40% 100%, 25% 90%, 8% 100%, 0% 75%)'
               }}
             ></div>
 
-            {/* Layer 2 - Team A side geometric */}
+            {/* Layer 2 - Team A geometric blocks */}
             <div
-              className="absolute left-0 top-0 bottom-0 w-1/3 opacity-80"
+              className="absolute left-0 top-1/4 w-1/3 h-1/2 opacity-90"
               style={{
-                background: `linear-gradient(135deg, ${teamAData.color}70, ${teamAData.color}40)`,
-                clipPath: 'polygon(0 0, 85% 0, 70% 100%, 0 100%)'
+                background: `linear-gradient(135deg, ${teamAData.color}80, ${teamAData.color}50)`,
+                clipPath: 'polygon(0 0, 80% 20%, 90% 80%, 20% 100%, 0 60%)'
+              }}
+            ></div>
+            <div
+              className="absolute left-4 top-0 w-16 h-8 opacity-70"
+              style={{
+                background: `linear-gradient(45deg, ${teamAData.color}60, ${teamAData.color}30)`,
+                clipPath: 'polygon(0 40%, 20% 0%, 80% 0%, 100% 40%, 80% 100%, 20% 100%)'
               }}
             ></div>
 
-            {/* Layer 3 - Team B side geometric */}
+            {/* Layer 3 - Team B geometric blocks */}
             <div
-              className="absolute right-0 top-0 bottom-0 w-1/3 opacity-80"
+              className="absolute right-0 top-1/4 w-1/3 h-1/2 opacity-90"
               style={{
-                background: `linear-gradient(225deg, ${teamBData.color}70, ${teamBData.color}40)`,
-                clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 30% 100%)'
+                background: `linear-gradient(225deg, ${teamBData.color}80, ${teamBData.color}50)`,
+                clipPath: 'polygon(100% 0, 100% 60%, 80% 100%, 10% 80%, 20% 20%)'
+              }}
+            ></div>
+            <div
+              className="absolute right-4 bottom-0 w-16 h-8 opacity-70"
+              style={{
+                background: `linear-gradient(315deg, ${teamBData.color}60, ${teamBData.color}30)`,
+                clipPath: 'polygon(20% 0%, 80% 0%, 100% 60%, 80% 100%, 20% 100%, 0% 60%)'
               }}
             ></div>
 
-            {/* Layer 4 - Center diamond shape */}
-            <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 sm:w-32 lg:w-40 h-12 sm:h-16 lg:h-20">
+            {/* Layer 4 - Center multi-part score area */}
+            {/* Score left segment */}
+            <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 sm:w-40 lg:w-48 h-12 sm:h-14 lg:h-16">
               <div
-                className="w-full h-full bg-gradient-to-br from-white via-gray-100 to-gray-200 shadow-2xl"
+                className="absolute left-0 top-0 w-1/3 h-full bg-gradient-to-br from-white to-gray-200 shadow-lg"
                 style={{
-                  clipPath: 'polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%)'
+                  clipPath: 'polygon(0 20%, 80% 0%, 100% 80%, 20% 100%)'
+                }}
+              ></div>
+
+              {/* Score center segment */}
+              <div
+                className="absolute left-1/4 top-0 w-1/2 h-full bg-gradient-to-br from-gray-50 to-gray-100 shadow-lg"
+                style={{
+                  clipPath: 'polygon(20% 0%, 80% 0%, 100% 30%, 100% 70%, 80% 100%, 20% 100%, 0% 70%, 0% 30%)'
+                }}
+              ></div>
+
+              {/* Score right segment */}
+              <div
+                className="absolute right-0 top-0 w-1/3 h-full bg-gradient-to-br from-white to-gray-200 shadow-lg"
+                style={{
+                  clipPath: 'polygon(0% 0%, 100% 20%, 80% 100%, 20% 80%)'
                 }}
               ></div>
             </div>
 
-            {/* Layer 5 - Accent triangles */}
+            {/* Layer 5 - Interlocking accent shapes */}
             <div
-              className="absolute left-8 sm:left-12 top-2 w-6 h-6 opacity-60"
+              className="absolute left-6 sm:left-8 top-2 w-6 h-6 opacity-80"
               style={{
-                background: teamAData.color,
-                clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)'
+                background: `linear-gradient(45deg, ${teamAData.color}, ${teamAData.color}80)`,
+                clipPath: 'polygon(30% 0%, 100% 0%, 70% 100%, 0% 100%)'
               }}
             ></div>
             <div
-              className="absolute right-8 sm:right-12 bottom-2 w-6 h-6 opacity-60"
+              className="absolute left-12 sm:left-16 top-6 w-4 h-8 opacity-60"
               style={{
-                background: teamBData.color,
-                clipPath: 'polygon(0% 0%, 50% 100%, 100% 0%)'
+                background: `linear-gradient(135deg, ${teamAData.color}70, ${teamAData.color}40)`,
+                clipPath: 'polygon(0% 0%, 100% 25%, 100% 100%, 0% 75%)'
               }}
             ></div>
 
-            {/* Layer 6 - Corner brackets */}
-            <div className="absolute top-0 left-0 w-8 h-8 border-l-4 border-t-4 border-gray-600" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 30%, 30% 30%, 30% 100%, 0 100%)' }}></div>
-            <div className="absolute top-0 right-0 w-8 h-8 border-r-4 border-t-4 border-gray-600" style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%, 70% 100%, 70% 30%, 0 30%)' }}></div>
-            <div className="absolute bottom-0 left-0 w-8 h-8 border-l-4 border-b-4 border-gray-600" style={{ clipPath: 'polygon(0 0, 30% 0, 30% 70%, 100% 70%, 100% 100%, 0 100%)' }}></div>
-            <div className="absolute bottom-0 right-0 w-8 h-8 border-r-4 border-b-4 border-gray-600" style={{ clipPath: 'polygon(70% 0, 100% 0, 100% 100%, 0 100%, 0 70%, 70% 70%)' }}></div>
+            <div
+              className="absolute right-6 sm:right-8 bottom-2 w-6 h-6 opacity-80"
+              style={{
+                background: `linear-gradient(225deg, ${teamBData.color}, ${teamBData.color}80)`,
+                clipPath: 'polygon(0% 0%, 70% 0%, 100% 100%, 30% 100%)'
+              }}
+            ></div>
+            <div
+              className="absolute right-12 sm:right-16 bottom-6 w-4 h-8 opacity-60"
+              style={{
+                background: `linear-gradient(315deg, ${teamBData.color}70, ${teamBData.color}40)`,
+                clipPath: 'polygon(0% 25%, 100% 0%, 100% 75%, 0% 100%)'
+              }}
+            ></div>
 
-            {/* Content overlay */}
+            {/* Layer 6 - Corner interlocking pieces */}
+            <div className="absolute top-0 left-0 w-10 h-6 bg-slate-600 opacity-80" style={{ clipPath: 'polygon(0 0, 80% 0, 100% 100%, 20% 100%)' }}></div>
+            <div className="absolute top-0 right-0 w-10 h-6 bg-slate-600 opacity-80" style={{ clipPath: 'polygon(20% 0, 100% 0, 80% 100%, 0% 100%)' }}></div>
+            <div className="absolute bottom-0 left-0 w-6 h-10 bg-slate-600 opacity-80" style={{ clipPath: 'polygon(0 0, 100% 20%, 100% 80%, 0 100%)' }}></div>
+            <div className="absolute bottom-0 right-0 w-6 h-10 bg-slate-600 opacity-80" style={{ clipPath: 'polygon(0 20%, 100% 0, 100% 100%, 0% 80%)' }}></div>
+
+            {/* Layer 7 - Zigzag dividers */}
+            <div
+              className="absolute left-1/4 top-0 bottom-0 w-0.5 bg-slate-500 opacity-60"
+              style={{
+                clipPath: 'polygon(0 0, 100% 10%, 100% 20%, 0 10%, 0 30%, 100% 40%, 100% 50%, 0 40%, 0 60%, 100% 70%, 100% 80%, 0 70%, 0 90%, 100% 100%, 100% 90%, 0 100%)'
+              }}
+            ></div>
+            <div
+              className="absolute right-1/4 top-0 bottom-0 w-0.5 bg-slate-500 opacity-60"
+              style={{
+                clipPath: 'polygon(0 10%, 100% 0, 100% 10%, 0 20%, 0 40%, 100% 30%, 100% 40%, 0 50%, 0 70%, 100% 60%, 100% 70%, 0 80%, 0 100%, 100% 90%, 100% 100%, 0 90%)'
+              }}
+            ></div>
+
+            {/* Content overlay with geometric containers */}
             <div className="relative z-10 h-full flex items-center justify-between px-2 sm:px-4 lg:px-6">
 
-              {/* Team A Section */}
+              {/* Team A Section - Multi-part container */}
               <div className="flex items-center gap-1 sm:gap-2 lg:gap-3 flex-1 min-w-0">
-                {/* Team A Logo Container */}
+                {/* Team A Logo - Octagon */}
                 <div className="relative flex-shrink-0">
                   <div
-                    className="w-8 h-8 sm:w-10 sm:h-10 lg:w-14 lg:h-14 p-1 sm:p-1.5 lg:p-2"
+                    className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 p-1.5 sm:p-2"
                     style={{
-                      background: `linear-gradient(135deg, ${teamAData.color}20, rgba(255,255,255,0.3))`,
-                      clipPath: 'polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%)'
+                      background: `linear-gradient(135deg, ${teamAData.color}25, rgba(255,255,255,0.4))`,
+                      clipPath: 'polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%)'
                     }}
                   >
                     <DisplayLogo
@@ -304,45 +364,70 @@ const Event = () => {
                   </div>
                 </div>
 
-                {/* Team A Name */}
-                <div className="flex-1 min-w-0">
-                  <h2 className="text-xs sm:text-sm lg:text-lg xl:text-xl font-bold text-white truncate drop-shadow-lg">
-                    {teamAData.name}
-                  </h2>
+                {/* Team A Name container - Chevron */}
+                <div className="flex-1 min-w-0 relative">
                   <div
-                    className="w-6 sm:w-8 lg:w-12 h-1 mt-0.5"
+                    className="absolute inset-0 opacity-20"
                     style={{
-                      background: teamAData.color,
-                      clipPath: 'polygon(0 0, 80% 0, 100% 100%, 20% 100%)'
+                      background: `linear-gradient(90deg, ${teamAData.color}40, transparent)`,
+                      clipPath: 'polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%)'
                     }}
                   ></div>
+                  <div className="relative z-10 py-1 px-2">
+                    <h2 className="text-xs sm:text-sm lg:text-lg xl:text-xl font-bold text-white truncate drop-shadow-lg">
+                      {teamAData.name}
+                    </h2>
+                    <div
+                      className="w-8 sm:w-10 lg:w-16 h-1 mt-0.5"
+                      style={{
+                        background: `linear-gradient(90deg, ${teamAData.color}, ${teamAData.color}60)`,
+                        clipPath: 'polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%)'
+                      }}
+                    ></div>
+                  </div>
                 </div>
               </div>
 
-              {/* Central Score Display */}
+              {/* Central Score Display - Complex multi-segment */}
               <div className="flex items-center justify-center flex-shrink-0">
                 <div className="relative">
-                  {/* Score background with diamond shape */}
-                  <div
-                    className="px-3 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 bg-white text-gray-900 shadow-xl"
-                    style={{
-                      clipPath: 'polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%)'
-                    }}
-                  >
-                    <div className="flex items-center gap-2 sm:gap-3 lg:gap-4">
+                  <div className="flex items-center">
+                    {/* Team A Score segment */}
+                    <div
+                      className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 lg:py-4 bg-white text-gray-900 shadow-xl"
+                      style={{
+                        clipPath: 'polygon(0 15%, 85% 0%, 100% 50%, 85% 100%, 0 85%)'
+                      }}
+                    >
                       <div
                         className="text-lg sm:text-2xl lg:text-4xl font-black tabular-nums"
                         style={{ color: teamAData.color }}
                       >
                         {teamAData.score}
                       </div>
+                    </div>
 
+                    {/* Center divider - Diamond */}
+                    <div
+                      className="px-1 sm:px-2 py-2 sm:py-3 lg:py-4 bg-gradient-to-br from-gray-200 to-gray-300 shadow-lg"
+                      style={{
+                        clipPath: 'polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%)'
+                      }}
+                    >
                       <div className="flex flex-col items-center">
-                        <div className="w-px h-4 sm:h-6 lg:h-8 bg-gray-400"></div>
-                        <div className="text-xs sm:text-sm font-bold text-gray-500">-</div>
-                        <div className="w-px h-4 sm:h-6 lg:h-8 bg-gray-400"></div>
+                        <div className="w-0.5 h-2 sm:h-3 lg:h-4 bg-gray-600"></div>
+                        <div className="text-xs font-bold text-gray-600">VS</div>
+                        <div className="w-0.5 h-2 sm:h-3 lg:h-4 bg-gray-600"></div>
                       </div>
+                    </div>
 
+                    {/* Team B Score segment */}
+                    <div
+                      className="px-2 sm:px-3 lg:px-4 py-2 sm:py-3 lg:py-4 bg-white text-gray-900 shadow-xl"
+                      style={{
+                        clipPath: 'polygon(15% 0%, 100% 15%, 100% 85%, 15% 100%, 0% 50%)'
+                      }}
+                    >
                       <div
                         className="text-lg sm:text-2xl lg:text-4xl font-black tabular-nums"
                         style={{ color: teamBData.color }}
@@ -354,29 +439,38 @@ const Event = () => {
                 </div>
               </div>
 
-              {/* Team B Section */}
+              {/* Team B Section - Multi-part container */}
               <div className="flex items-center gap-1 sm:gap-2 lg:gap-3 flex-1 min-w-0 justify-end">
-                {/* Team B Name */}
-                <div className="flex-1 min-w-0 text-right">
-                  <h2 className="text-xs sm:text-sm lg:text-lg xl:text-xl font-bold text-white truncate drop-shadow-lg">
-                    {teamBData.name}
-                  </h2>
+                {/* Team B Name container - Reverse chevron */}
+                <div className="flex-1 min-w-0 text-right relative">
                   <div
-                    className="w-6 sm:w-8 lg:w-12 h-1 mt-0.5 ml-auto"
+                    className="absolute inset-0 opacity-20"
                     style={{
-                      background: teamBData.color,
-                      clipPath: 'polygon(20% 0, 100% 0, 80% 100%, 0% 100%)'
+                      background: `linear-gradient(270deg, ${teamBData.color}40, transparent)`,
+                      clipPath: 'polygon(10% 0, 100% 0, 100% 100%, 10% 100%, 0% 50%)'
                     }}
                   ></div>
+                  <div className="relative z-10 py-1 px-2">
+                    <h2 className="text-xs sm:text-sm lg:text-lg xl:text-xl font-bold text-white truncate drop-shadow-lg">
+                      {teamBData.name}
+                    </h2>
+                    <div
+                      className="w-8 sm:w-10 lg:w-16 h-1 mt-0.5 ml-auto"
+                      style={{
+                        background: `linear-gradient(270deg, ${teamBData.color}, ${teamBData.color}60)`,
+                        clipPath: 'polygon(15% 0, 100% 0, 100% 100%, 15% 100%, 0% 50%)'
+                      }}
+                    ></div>
+                  </div>
                 </div>
 
-                {/* Team B Logo Container */}
+                {/* Team B Logo - Octagon */}
                 <div className="relative flex-shrink-0">
                   <div
-                    className="w-8 h-8 sm:w-10 sm:h-10 lg:w-14 lg:h-14 p-1 sm:p-1.5 lg:p-2"
+                    className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 p-1.5 sm:p-2"
                     style={{
-                      background: `linear-gradient(225deg, ${teamBData.color}20, rgba(255,255,255,0.3))`,
-                      clipPath: 'polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%)'
+                      background: `linear-gradient(225deg, ${teamBData.color}25, rgba(255,255,255,0.4))`,
+                      clipPath: 'polygon(25% 0%, 75% 0%, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0% 75%, 0% 25%)'
                     }}
                   >
                     <DisplayLogo
