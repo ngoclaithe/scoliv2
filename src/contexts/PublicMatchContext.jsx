@@ -746,7 +746,12 @@ export const PublicMatchProvider = ({ children }) => {
 
           if (state.matchStats) {
             console.log('📊 [PublicMatchContext] Updating matchStats from join_roomed:', state.matchStats);
-            setMatchStats(prev => ({ ...prev, ...state.matchStats }));
+            // Kiểm tra nếu server trả về array thay vì object
+            if (Array.isArray(state.matchStats)) {
+              console.log('⚠️ [PublicMatchContext] Server returned array for matchStats, skipping update');
+            } else {
+              setMatchStats(prev => ({ ...prev, ...state.matchStats }));
+            }
           }
 
           if (state.displaySettings) {
