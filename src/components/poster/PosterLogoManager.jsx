@@ -21,9 +21,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
   const [roundGroupOptions, setRoundGroupOptions] = useState({
     round: 1,
-    showRound: true,
+    showRound: false,
     group: "A",
-    showGroup: true
+    showGroup: false
   });
 
   const [customPosters, setCustomPosters] = useState([]);
