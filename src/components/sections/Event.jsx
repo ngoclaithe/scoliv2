@@ -510,31 +510,31 @@ const Event = () => {
             {(teamAEvents.length > 0 || teamBEvents.length > 0) ? (
               <div className="h-full flex flex-col">
                 {/* Header with team names - Always horizontal */}
-                <div className="flex items-center justify-between px-3 sm:px-4 lg:px-6 py-2 sm:py-3 border-b border-gray-200/50 bg-gradient-to-r from-gray-50/50 to-gray-100/30">
-                  <div className="flex items-center gap-2 flex-1">
+                <div className="flex items-center justify-between px-2 sm:px-3 py-1 sm:py-2 border-b border-gray-200/50 bg-gradient-to-r from-gray-50/50 to-gray-100/30">
+                  <div className="flex items-center gap-1 sm:gap-2 flex-1">
                     <div
-                      className="w-3 h-3 rounded-full shadow-sm"
+                      className="w-2 h-2 sm:w-3 sm:h-3 rounded-full shadow-sm"
                       style={{ backgroundColor: teamAData.color }}
                     ></div>
-                    <span className="text-xs sm:text-sm lg:text-base font-bold text-gray-800 truncate">
+                    <span className="text-xs sm:text-sm font-bold text-gray-800 truncate">
                       {teamAData.name}
                     </span>
-                    <span className="text-xs text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded-full">
+                    <span className="text-xs text-gray-500 bg-gray-200 px-1 py-0.5 rounded-full">
                       {Math.min(teamAEvents.length, 20)}
                     </span>
                   </div>
 
-                  <div className="text-xs sm:text-sm font-bold text-gray-400 px-2">VS</div>
+                  <div className="text-xs font-bold text-gray-400 px-1">VS</div>
 
-                  <div className="flex items-center gap-2 flex-1 justify-end">
-                    <span className="text-xs text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded-full">
+                  <div className="flex items-center gap-1 sm:gap-2 flex-1 justify-end">
+                    <span className="text-xs text-gray-500 bg-gray-200 px-1 py-0.5 rounded-full">
                       {Math.min(teamBEvents.length, 20)}
                     </span>
-                    <span className="text-xs sm:text-sm lg:text-base font-bold text-gray-800 truncate">
+                    <span className="text-xs sm:text-sm font-bold text-gray-800 truncate">
                       {teamBData.name}
                     </span>
                     <div
-                      className="w-3 h-3 rounded-full shadow-sm"
+                      className="w-2 h-2 sm:w-3 sm:h-3 rounded-full shadow-sm"
                       style={{ backgroundColor: teamBData.color }}
                     ></div>
                   </div>
@@ -545,11 +545,11 @@ const Event = () => {
                   {/* Team A Events - Limited to 20 events max */}
                   <div className="flex-1 flex flex-col border-r border-gray-200/50">
                     <div
-                      className="h-1 w-full"
+                      className="h-0.5 w-full"
                       style={{ backgroundColor: teamAData.color + '40' }}
                     ></div>
-                    <div className="flex-1 p-2 sm:p-3">
-                      <div className="space-y-1 sm:space-y-2">
+                    <div className="flex-1 p-1 sm:p-2">
+                      <div className="space-y-0.5 sm:space-y-1">
                         {teamAEvents.slice(0, 20).map((event, index) => (
                           <EventItem
                             key={event.uniqueKey || `teamA-${event.type}-${event.player}-${event.minute}-${index}`}
@@ -565,11 +565,11 @@ const Event = () => {
                   {/* Team B Events - Limited to 20 events max */}
                   <div className="flex-1 flex flex-col">
                     <div
-                      className="h-1 w-full"
+                      className="h-0.5 w-full"
                       style={{ backgroundColor: teamBData.color + '40' }}
                     ></div>
-                    <div className="flex-1 p-2 sm:p-3">
-                      <div className="space-y-1 sm:space-y-2">
+                    <div className="flex-1 p-1 sm:p-2">
+                      <div className="space-y-0.5 sm:space-y-1">
                         {teamBEvents.slice(0, 20).map((event, index) => (
                           <EventItem
                             key={event.uniqueKey || `teamB-${event.type}-${event.player}-${event.minute}-${index}`}
@@ -586,7 +586,7 @@ const Event = () => {
             ) : (
               <div className="flex flex-col items-center justify-center h-full">
                 <div className="text-4xl sm:text-6xl mb-2 sm:mb-4">⚽</div>
-                <div className="text-lg sm:text-xl font-bold text-gray-700 mb-1 sm:mb-2">Chưa có sự kiện nào</div>
+                <div className="text-lg sm:text-xl font-bold text-gray-700 mb-1 sm:mb-2">Ch��a có sự kiện nào</div>
                 <div className="text-gray-500 text-sm sm:text-base text-center px-4">Các sự kiện trận đấu sẽ hiển thị tại đây</div>
               </div>
             )}
