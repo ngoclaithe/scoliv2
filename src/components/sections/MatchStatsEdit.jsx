@@ -303,7 +303,7 @@ const MatchStatsEdit = ({
     }
   };
 
-  const handleCardEvent = (team, cardType) => {
+  const handleCardEventLocal = (team, cardType) => {
     const scorer = goalScorers[team];
     const playerValue = scorer?.player || '';
     const minuteValue = scorer?.minute || '';
@@ -313,37 +313,13 @@ const MatchStatsEdit = ({
       const playerInfo = players.find(p => p._id === playerValue) ||
                         players.find(p => p.name === playerValue);
 
-      const cardData = {
-        team,
-        cardType, // 'yellow' hoặc 'red'
-        player: {
-          id: playerInfo?._id || playerValue,
-          name: playerInfo?.name || playerValue
-        },
-        minute: parseInt(minuteValue),
-        timestamp: Date.now()
+      const playerData = {
+        id: playerInfo?._id || playerValue,
+        name: playerInfo?.name || playerValue
       };
 
-      // Gửi socket event
-      if (socketConnected) {
-        socketService.emit('update_card', cardData);
-      }
-
-      // Cập nhật local state cho thẻ vàng - vẫn update ngay lập tức
-      if (cardType === 'yellow') {
-        const teamKey = team === 'teamA' ? 'team1' : 'team2';
-        const currentValue = matchStats.yellowCards[teamKey] || 0;
-        const newValue = Math.max(0, currentValue + 1);
-        
-        const newStats = {
-          ...matchStats,
-          yellowCards: {
-            ...matchStats.yellowCards,
-            [teamKey]: newValue
-          }
-        };
-        onUpdateStats(newStats);
-      }
+      // Gọi hàm từ MatchContext
+      handleCardEvent(team, cardType, playerData, minuteValue);
 
       // Reset input
       setGoalScorers(prev => ({
