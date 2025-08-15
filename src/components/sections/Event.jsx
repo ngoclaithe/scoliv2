@@ -8,17 +8,14 @@ const Event = () => {
   const [teamAEvents, setTeamAEvents] = useState([]);
   const [teamBEvents, setTeamBEvents] = useState([]);
 
-  // Tạo danh sách sự kiện từ matchData và matchStats
   useEffect(() => {
     const teamAEventsList = [];
     const teamBEventsList = [];
 
-    // Helper function để tạo unique key cho event
     const createEventKey = (type, player, minute) => {
       return `${type}-${player}-${minute}`;
     };
 
-    // Helper function để loại bỏ duplicate events
     const removeDuplicates = (events) => {
       const seen = new Set();
       return events.filter(event => {
@@ -32,7 +29,6 @@ const Event = () => {
       });
     };
 
-    // Sự kiện ghi bàn đội A
     if (matchData.teamA?.teamAScorers) {
       matchData.teamA.teamAScorers.forEach(scorer => {
         scorer.times.forEach(time => {
@@ -47,7 +43,6 @@ const Event = () => {
       });
     }
 
-    // Sự kiện ghi bàn đội B
     if (matchData.teamB?.teamBScorers) {
       matchData.teamB.teamBScorers.forEach(scorer => {
         scorer.times.forEach(time => {
@@ -62,7 +57,6 @@ const Event = () => {
       });
     }
 
-    // Thẻ vàng đội A (team1)
     if (Array.isArray(matchStats.yellowCards?.team1)) {
       matchStats.yellowCards.team1.forEach(card => {
         teamAEventsList.push({
@@ -75,7 +69,6 @@ const Event = () => {
       });
     }
 
-    // Thẻ vàng đội B (team2)
     if (Array.isArray(matchStats.yellowCards?.team2)) {
       matchStats.yellowCards.team2.forEach(card => {
         teamBEventsList.push({
@@ -114,17 +107,9 @@ const Event = () => {
       });
     }
 
-    // Loại bỏ duplicates trước khi sắp xếp
     const uniqueTeamAEvents = removeDuplicates(teamAEventsList);
     const uniqueTeamBEvents = removeDuplicates(teamBEventsList);
 
-    // Debug log để kiểm tra
-    console.log('🔍 Team A Events (before dedup):', teamAEventsList.length);
-    console.log('🔍 Team A Events (after dedup):', uniqueTeamAEvents.length);
-    console.log('🔍 Team B Events (before dedup):', teamBEventsList.length);
-    console.log('🔍 Team B Events (after dedup):', uniqueTeamBEvents.length);
-
-    // Sắp xếp theo phút
     uniqueTeamAEvents.sort((a, b) => a.minute - b.minute);
     uniqueTeamBEvents.sort((a, b) => a.minute - b.minute);
 
@@ -519,17 +504,11 @@ const Event = () => {
                     <span className="text-xs sm:text-sm font-bold text-gray-800 truncate">
                       {teamAData.name}
                     </span>
-                    <span className="text-xs text-gray-500 bg-gray-200 px-1 py-0.5 rounded-full">
-                      {Math.min(teamAEvents.length, 20)}
-                    </span>
                   </div>
 
                   <div className="text-xs font-bold text-gray-400 px-1">VS</div>
 
                   <div className="flex items-center gap-1 sm:gap-2 flex-1 justify-end">
-                    <span className="text-xs text-gray-500 bg-gray-200 px-1 py-0.5 rounded-full">
-                      {Math.min(teamBEvents.length, 20)}
-                    </span>
                     <span className="text-xs sm:text-sm font-bold text-gray-800 truncate">
                       {teamBData.name}
                     </span>

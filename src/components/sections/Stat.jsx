@@ -3,6 +3,19 @@ import { usePublicMatch } from '../../contexts/PublicMatchContext';
 
 const Stat = () => {
   const { matchData, matchStats } = usePublicMatch();
+  const teamAData = {
+    name: matchData.teamA?.name || "ĐỘI A",
+    logo: matchData.teamA?.logo || "/images/default-team.png",
+    score: matchData.teamA?.score || 0,
+    color: matchData.teamA?.teamAKitColor || "#FF6B6B"
+  };
+
+  const teamBData = {
+    name: matchData.teamB?.name || "ĐỘI B",
+    logo: matchData.teamB?.logo || "/images/default-team.png",
+    score: matchData.teamB?.score || 0,
+    color: matchData.teamB?.teamBKitColor || "#4ECDC4"
+  };
 
   const StatBar = ({ label, team1Value, team2Value, isPercentage = false }) => {
     return (
@@ -142,10 +155,10 @@ const Stat = () => {
                       clipPath: 'polygon(15% 0%, 85% 0%, 100% 30%, 85% 70%, 100% 100%, 15% 100%, 0% 70%, 15% 30%)'
                     }}
                   >
-                    {matchData.teamA.logo ? (
+                    {teamAData.logo ? (
                       <img
-                        src={matchData.teamA.logo}
-                        alt={matchData.teamA.name || 'ĐỘI A'}
+                        src={teamAData.logo}
+                        alt={teamAData.name || 'ĐỘI A'}
                         className="w-full h-full object-contain"
                       />
                     ) : (
