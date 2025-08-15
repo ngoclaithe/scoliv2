@@ -925,7 +925,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       return true;
     }
 
-    // Nếu chỉ chọn logo thì cho phép tất cả shapes
+    // Nếu chỉ chọn logo thì cho phép t��t cả shapes
     return false;
   };
 
@@ -1192,6 +1192,10 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
       <div className="bg-white border border-gray-200 rounded-lg p-2">
         {renderPosterSection()}
+      </div>
+
+      <div className="bg-white border border-gray-200 rounded-lg p-2">
+        {renderRoundGroupSection()}
       </div>
 
       <div className="bg-white border border-gray-200 rounded-lg p-2">
