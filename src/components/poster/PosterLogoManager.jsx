@@ -114,9 +114,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           };
         });
         setHistoryMatches(transformedMatches);
-        console.log(`✅ [PosterLogoManager] Loaded ${transformedMatches.length} history matches`);
+        // console.log(`✅ [PosterLogoManager] Loaded ${transformedMatches.length} history matches`);
       } else {
-        console.warn('⚠️ [PosterLogoManager] Invalid history matches response format');
+        // console.warn('⚠️ [PosterLogoManager] Invalid history matches response format');
         setHistoryMatches([]);
       }
     } catch (error) {
@@ -258,11 +258,11 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
               if (isMounted) {
                 setApiLogos(loadedLogos);
-                console.log(`✅ [PosterLogoManager] Loaded ${loadedLogos.length} display settings from API`);
+                // console.log(`✅ [PosterLogoManager] Loaded ${loadedLogos.length} display settings from API`);
               }
             }
           } catch (err) {
-            console.warn('⚠️ [PosterLogoManager] Failed to load display settings from API:', err);
+            // console.warn('⚠️ [PosterLogoManager] Failed to load display settings from API:', err);
             if (isMounted) {
               setApiLogos([]);
             }
@@ -307,7 +307,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     const file = event.target.files[0];
     if (!file) return;
 
-    // Kiểm tra kích thước file (tối đa 5MB)
     if (file.size > 5 * 1024 * 1024) {
       alert("Kích thước file tối đa là 5MB");
       return;
@@ -330,7 +329,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
       setCustomPosters(prev => [...prev, newPoster]);
 
-      // Tự động chọn poster mới upload
       handlePosterSelect(newPoster);
     };
     reader.readAsDataURL(file);
@@ -369,7 +367,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       ));
 
       try {
-        // Upload ảnh lên server
         const response = await LogoAPI.uploadLogo(file, item.type, item.unitName,
           (progressEvent) => {
             const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
@@ -394,30 +391,25 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             uploadProgress: 100
           };
 
-          // Xóa preview URL và cập nhật danh sách logo
           URL.revokeObjectURL(previewUrl);
           setLogoItems(prev => prev.filter(logo => logo.id !== item.id));
           setApiLogos(prev => [apiLogo, ...prev]);
 
-          // Thông báo thành công
           alert(`Tải lên ${item.type} thành công!`);
         }
       } catch (error) {
         console.error("Lỗi khi tải lên:", error);
 
-        // Cập nhật trạng thái lỗi
         setLogoItems(prev => prev.map(logo =>
           logo.id === item.id
             ? { ...logo, uploadStatus: 'error' }
             : logo
         ));
 
-        // Thông báo lỗi
         alert(`Lỗi khi tải lên: ${error.message || 'Đã xảy ra lỗi'}`);
       }
     };
 
-    // Bắt đầu đọc file
     reader.readAsDataURL(file);
   };
 
@@ -972,20 +964,16 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     return currentItems.some(item => item.type === 'logo' && item.displayPositions && item.displayPositions.length > 0);
   }, [currentItems]);
 
-  // Đối với tournament, chỉ cho phép 1 item duy nhất
   const tournamentItemsCount = useMemo(() => {
     if (activeLogoCategory !== 'tournament') return 0;
     return currentItems.filter(item => item.displayPositions && item.displayPositions.length > 0).length;
   }, [currentItems, activeLogoCategory]);
 
-  // Logic để disable shape options
   const shouldDisableShapeOption = (shapeValue) => {
-    // Nếu đã chọn banner (bất kì category nào) thì chỉ cho phép square
     if (hasBannerSelected && shapeValue !== 'square') {
       return true;
     }
 
-    // Nếu chỉ chọn logo thì cho phép tất cả shapes
     return false;
   };
 
@@ -1253,20 +1241,17 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       <div className="bg-white border border-gray-200 rounded-lg p-2">
         {renderPosterSection()}
       </div>
-
-      <div className="bg-white border border-gray-200 rounded-lg p-2">
-        {renderRoundGroupSection()}
-      </div>
-
       <div className="bg-white border border-gray-200 rounded-lg p-2">
         {renderLogoSection()}
+      </div>
+      <div className="bg-white border border-gray-200 rounded-lg p-2">
+        {renderRoundGroupSection()}
       </div>
 
       <div className="bg-white border border-gray-200 rounded-lg p-2">
         <div className="flex justify-center">
           <button
             onClick={() => {
-              // Mở preview trong tab mới với dynamic route
               const previewUrl = `/${accessCode}/preview`;
               window.open(previewUrl, '_blank');
             }}
