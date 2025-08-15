@@ -19,6 +19,13 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     rotateDisplay: false
   });
 
+  const [roundGroupOptions, setRoundGroupOptions] = useState({
+    round: 1,
+    showRound: true,
+    group: "A",
+    showGroup: true
+  });
+
   const availablePosters = [
     {
       id: "tretrung",
