@@ -128,6 +128,8 @@ const MatchManagementSection = ({ isActive = true }) => {
   });
   const [matchTitle, setMatchTitle] = useState(matchData.matchTitle || "");
   const [liveText, setLiveText] = useState(matchData.liveText || "");
+  const [subtitle, setSubtitle] = useState(matchData.subtitle || "");
+  const [showSubtitle, setShowSubtitle] = useState(matchData.showSubtitle !== false);
 
   useEffect(() => {
     console.log("Giá trị đồng bộ từ backend socket là", matchData);
