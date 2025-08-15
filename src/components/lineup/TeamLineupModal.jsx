@@ -200,14 +200,27 @@ const TeamLineupModal = ({
     }));
   };
 
+  const updateOnly = () => {
+    const lineupData = {
+      teamA: lineups.home.filter(p => p.name.trim()),
+      teamB: lineups.away.filter(p => p.name.trim()),
+    };
+    console.log("Giá trị của lineupData (cập nhật):", lineupData);
+
+    // Chỉ emit socket, không thay đổi view
+    updateLineup(lineupData.teamA, lineupData.teamB);
+    onSave(lineupData);
+    onClose();
+  };
+
   const validateAndSave = () => {
     const lineupData = {
       teamA: lineups.home.filter(p => p.name.trim()),
       teamB: lineups.away.filter(p => p.name.trim()),
     };
-    console.log("Giá trị của lineupData là:", lineupData);
+    console.log("Giá trị của lineupData (hiển thị):", lineupData);
 
-    // Luôn emit socket và chuyển view dù có thay đổi hay không
+    // Emit socket và chuyển view
     updateLineup(lineupData.teamA, lineupData.teamB);
     updateView('player_list');
     onSave(lineupData);
@@ -255,7 +268,7 @@ const TeamLineupModal = ({
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2 mb-2">
           <Button
             variant="outline"
             size="sm"
@@ -272,6 +285,19 @@ const TeamLineupModal = ({
             className="h-10 flex items-center justify-center"
           >
             <span className="text-xs">Trận cũ</span>
+          </Button>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="grid grid-cols-2 gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={updateOnly}
+            className="h-10 flex items-center justify-center text-xs bg-orange-500 text-white hover:bg-orange-600 border-orange-500"
+            disabled={isLoading}
+          >
+            <span className="text-xs">Cập nhật</span>
           </Button>
 
           <Button

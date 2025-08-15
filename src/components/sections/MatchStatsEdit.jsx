@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../common/Button';
 import PlayerListAPI from '../../API/apiPlayerList';
-import socketService from '../../services/socketService';
+import { useMatch } from '../../contexts/MatchContext';
 
 const MatchStatsEdit = ({
   matchStats,
@@ -14,6 +14,7 @@ const MatchStatsEdit = ({
   accessCode,
   socketConnected
 }) => {
+  const { handleCardEvent } = useMatch();
   const [isEditingStats, setIsEditingStats] = useState(false);
   const [goalScorers, setGoalScorers] = useState({
     teamA: { player: '', minute: '' },
@@ -302,7 +303,7 @@ const MatchStatsEdit = ({
     }
   };
 
-  const handleCardEvent = (team, cardType) => {
+  const handleCardEventLocal = (team, cardType) => {
     const scorer = goalScorers[team];
     const playerValue = scorer?.player || '';
     const minuteValue = scorer?.minute || '';
@@ -312,37 +313,13 @@ const MatchStatsEdit = ({
       const playerInfo = players.find(p => p._id === playerValue) ||
                         players.find(p => p.name === playerValue);
 
-      const cardData = {
-        team,
-        cardType, // 'yellow' hoặc 'red'
-        player: {
-          id: playerInfo?._id || playerValue,
-          name: playerInfo?.name || playerValue
-        },
-        minute: parseInt(minuteValue),
-        timestamp: Date.now()
+      const playerData = {
+        id: playerInfo?._id || playerValue,
+        name: playerInfo?.name || playerValue
       };
 
-      // Gửi socket event
-      if (socketConnected) {
-        socketService.emit('update_card', cardData);
-      }
-
-      // Cập nhật local state cho thẻ vàng - vẫn update ngay lập tức
-      if (cardType === 'yellow') {
-        const teamKey = team === 'teamA' ? 'team1' : 'team2';
-        const currentValue = matchStats.yellowCards[teamKey] || 0;
-        const newValue = Math.max(0, currentValue + 1);
-        
-        const newStats = {
-          ...matchStats,
-          yellowCards: {
-            ...matchStats.yellowCards,
-            [teamKey]: newValue
-          }
-        };
-        onUpdateStats(newStats);
-      }
+      // Gọi hàm từ MatchContext
+      handleCardEvent(team, cardType, playerData, minuteValue);
 
       // Reset input
       setGoalScorers(prev => ({
@@ -372,39 +349,103 @@ const MatchStatsEdit = ({
     return player?.name || '';
   };
 
-  const PlayerDropdown = ({ team, players, selectedPlayerId, onSelect, show, onToggle }) => (
-    <div className="relative flex-1">
-      <div
-        className="flex items-center justify-between px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 focus:outline-none cursor-pointer bg-white"
-        onClick={onToggle}
-      >
-        <span className={selectedPlayerId ? "text-gray-900" : "text-gray-500"}>
-          {selectedPlayerId ? getSelectedPlayerName(team, selectedPlayerId) : "Chọn cầu thủ"}
-        </span>
-        <span className="text-gray-400">▼</span>
-      </div>
+  const PlayerDropdown = ({ team, players, selectedPlayerId, onSelect, show, onToggle }) => {
+    const [manualInput, setManualInput] = useState('');
+    const [showManualInput, setShowManualInput] = useState(false);
 
-      {show && (
-        <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded shadow-lg max-h-32 overflow-y-auto z-10">
-          {loadingPlayers ? (
-            <div className="px-2 py-1 text-xs text-gray-500">Đang tải...</div>
-          ) : players.length === 0 ? (
-            <div className="px-2 py-1 text-xs text-gray-500">Không có cầu thủ</div>
-          ) : (
-            players.map((player) => (
-              <div
-                key={player._id}
-                className="px-2 py-1 text-xs hover:bg-gray-100 cursor-pointer"
-                onClick={() => onSelect(team, player._id, player.name)}
-              >
-                {player.name} {player.jerseyNumber && `(#${player.jerseyNumber})`}
-              </div>
-            ))
-          )}
+    const handleManualSubmit = () => {
+      if (manualInput.trim()) {
+        onSelect(team, manualInput.trim(), manualInput.trim());
+        setManualInput('');
+        setShowManualInput(false);
+      }
+    };
+
+    const handleKeyPress = (e) => {
+      if (e.key === 'Enter') {
+        handleManualSubmit();
+      }
+    };
+
+    return (
+      <div className="relative flex-1">
+        <div
+          className="flex items-center justify-between px-2 py-1 text-xs border border-gray-300 rounded focus:border-gray-700 focus:outline-none cursor-pointer bg-white"
+          onClick={onToggle}
+        >
+          <span className={selectedPlayerId ? "text-gray-900" : "text-gray-500"}>
+            {selectedPlayerId ? getSelectedPlayerName(team, selectedPlayerId) || selectedPlayerId : "Chọn cầu thủ"}
+          </span>
+          <span className="text-gray-400">▼</span>
         </div>
-      )}
-    </div>
-  );
+
+        {show && (
+          <div className="absolute top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded shadow-lg max-h-40 overflow-y-auto z-10">
+            {loadingPlayers ? (
+              <div className="px-2 py-1 text-xs text-gray-500">Đang tải...</div>
+            ) : (
+              <>
+                {players.length > 0 && (
+                  <>
+                    {players.map((player) => (
+                      <div
+                        key={player._id}
+                        className="px-2 py-1 text-xs hover:bg-gray-100 cursor-pointer"
+                        onClick={() => onSelect(team, player._id, player.name)}
+                      >
+                        {player.name} {player.jerseyNumber && `(#${player.jerseyNumber})`}
+                      </div>
+                    ))}
+                    <div className="border-t border-gray-200"></div>
+                  </>
+                )}
+
+                {/* Manual input option */}
+                {!showManualInput ? (
+                  <div
+                    className="px-2 py-1 text-xs text-blue-600 hover:bg-blue-50 cursor-pointer font-medium"
+                    onClick={() => setShowManualInput(true)}
+                  >
+                    ✏️ Nhập thủ công
+                  </div>
+                ) : (
+                  <div className="p-2 border-t border-gray-200">
+                    <input
+                      type="text"
+                      value={manualInput}
+                      onChange={(e) => setManualInput(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      placeholder="Nhập tên cầu thủ..."
+                      className="w-full px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none"
+                      autoFocus
+                    />
+                    <div className="flex gap-1 mt-1">
+                      <button
+                        onClick={handleManualSubmit}
+                        className="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
+                        disabled={!manualInput.trim()}
+                      >
+                        OK
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowManualInput(false);
+                          setManualInput('');
+                        }}
+                        className="px-2 py-1 text-xs bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+                      >
+                        Hủy
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   // Click outside handler để đóng dropdown
   useEffect(() => {
@@ -680,7 +721,7 @@ const MatchStatsEdit = ({
                 variant="outline"
                 size="sm"
                 className="px-2 py-1 text-xs border border-yellow-500 bg-yellow-500 text-black rounded hover:bg-yellow-600"
-                onClick={() => handleCardEvent('teamA', 'yellow')}
+                onClick={() => handleCardEventLocal('teamA', 'yellow')}
                 disabled={!(goalScorers?.teamA?.player?.trim()) || !(goalScorers?.teamA?.minute?.trim())}
               >
                 🟨
@@ -689,7 +730,7 @@ const MatchStatsEdit = ({
                 variant="outline"
                 size="sm"
                 className="px-2 py-1 text-xs border border-red-500 bg-red-500 text-white rounded hover:bg-red-600"
-                onClick={() => handleCardEvent('teamA', 'red')}
+                onClick={() => handleCardEventLocal('teamA', 'red')}
                 disabled={!(goalScorers?.teamA?.player?.trim()) || !(goalScorers?.teamA?.minute?.trim())}
               >
                 🟥
@@ -734,7 +775,7 @@ const MatchStatsEdit = ({
                 variant="outline"
                 size="sm"
                 className="px-2 py-1 text-xs border border-yellow-500 bg-yellow-500 text-black rounded hover:bg-yellow-600"
-                onClick={() => handleCardEvent('teamB', 'yellow')}
+                onClick={() => handleCardEventLocal('teamB', 'yellow')}
                 disabled={!(goalScorers?.teamB?.player?.trim()) || !(goalScorers?.teamB?.minute?.trim())}
               >
                 🟨
@@ -743,7 +784,7 @@ const MatchStatsEdit = ({
                 variant="outline"
                 size="sm"
                 className="px-2 py-1 text-xs border border-red-500 bg-red-500 text-white rounded hover:bg-red-600"
-                onClick={() => handleCardEvent('teamB', 'red')}
+                onClick={() => handleCardEventLocal('teamB', 'red')}
                 disabled={!(goalScorers?.teamB?.player?.trim()) || !(goalScorers?.teamB?.minute?.trim())}
               >
                 🟥

@@ -75,12 +75,26 @@ const Event = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 relative overflow-hidden">
-      {/* Animated background elements */}
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Background Image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: 'url(/images/basic/sanconhantao.jpg)',
+        }}
+      >
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/40"></div>
+      </div>
+
+      {/* Gradient overlay for more depth */}
+      <div className="absolute inset-0 bg-gradient-to-br from-green-900/30 via-transparent to-blue-900/30"></div>
+
+      {/* Animated background elements for extra visual appeal */}
       <div className="absolute inset-0">
-        <div className="absolute top-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl animate-pulse transform -translate-x-1/2 -translate-y-1/2"></div>
+        <div className="absolute top-20 left-20 w-72 h-72 bg-green-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl animate-pulse transform -translate-x-1/2 -translate-y-1/2"></div>
       </div>
 
       {/* Logo ScoLiv */}
@@ -100,7 +114,7 @@ const Event = () => {
       <div className="relative z-20 min-h-screen flex items-center justify-center py-12">
         <div className="max-w-7xl mx-auto px-6 w-full">
           {/* Main Event Board */}
-          <div className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-12 border border-white/20">
+          <div className="bg-white/98 backdrop-blur-xl rounded-3xl shadow-2xl p-12 border-2 border-white/30 ring-1 ring-green-500/20">
 
             {/* Header with team names and score */}
             <div className="text-center mb-12">
@@ -116,10 +130,10 @@ const Event = () => {
                   <h2 className="text-3xl font-bold text-gray-900">{teamAData.name}</h2>
                 </div>
 
-                <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white px-8 py-4 rounded-2xl shadow-xl">
-                  <span className="text-4xl font-black">{teamAData.score}</span>
-                  <span className="text-2xl mx-4 text-white/80">-</span>
-                  <span className="text-4xl font-black">{teamBData.score}</span>
+                <div className="bg-gradient-to-r from-green-600 via-emerald-600 to-green-700 text-white px-8 py-4 rounded-2xl shadow-xl border-2 border-green-500/30">
+                  <span className="text-4xl font-black drop-shadow-lg">{teamAData.score}</span>
+                  <span className="text-2xl mx-4 text-white/90">-</span>
+                  <span className="text-4xl font-black drop-shadow-lg">{teamBData.score}</span>
                 </div>
 
                 <div className="flex items-center gap-4">

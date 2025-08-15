@@ -177,7 +177,7 @@ export const MatchProvider = ({ children }) => {
           }
 
           if (state.matchStats) {
-            console.log('📊 [MatchContext] Updating matchStats from room_joined:', state.matchStats);
+            console.log('�� [MatchContext] Updating matchStats from room_joined:', state.matchStats);
             setMatchStats(prev => ({ ...prev, ...state.matchStats }));
           }
 
@@ -740,6 +740,48 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
+  // Hàm xử lý sự kiện thẻ phạt
+  const handleCardEvent = useCallback((team, cardType, playerInfo, minute) => {
+    const cardData = {
+      team,
+      cardType, // 'yellow' hoặc 'red'
+      player: {
+        id: playerInfo?.id || playerInfo?.name || '',
+        name: playerInfo?.name || ''
+      },
+      minute: parseInt(minute),
+      timestamp: Date.now()
+    };
+
+    // Gửi socket event
+    if (socketConnected) {
+      socketService.emit('update_card', cardData);
+    }
+
+    // Cập nhật local state cho thẻ vàng - vẫn update ngay lập tức
+    if (cardType === 'yellow') {
+      const teamKey = team === 'teamA' ? 'team1' : 'team2';
+      const currentValue = matchStats.yellowCards[teamKey] || 0;
+      const newValue = Math.max(0, currentValue + 1);
+
+      const newStats = {
+        ...matchStats,
+        yellowCards: {
+          ...matchStats.yellowCards,
+          [teamKey]: newValue
+        }
+      };
+      setMatchStats(newStats);
+
+      // Emit stats update cho yellow cards
+      if (socketConnected) {
+        socketService.updateMatchStats(newStats);
+      }
+    }
+
+    return cardData;
+  }, [socketConnected, matchStats]);
+
   const updateView = useCallback((viewType) => {
     // console.log('🎯 [MatchContext] updateView called with:', viewType);
     setCurrentView(viewType);
@@ -817,6 +859,7 @@ export const MatchProvider = ({ children }) => {
     updateLineup,
     updateFutsalErrors,
     updateGoalScorers,
+    handleCardEvent,
     updateView,
     resetMatch,
     updateMatchTitle,
