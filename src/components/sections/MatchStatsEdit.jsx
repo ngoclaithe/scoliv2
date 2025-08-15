@@ -613,7 +613,7 @@ const MatchStatsEdit = ({
           onUpdate={(team, increment) => updateLocalStat('corners', team, increment)}
         />
 
-        {/* Thẻ vàng - chỉ hiển thị, không cho chỉnh tay - Fix lỗi object rendering */}
+        {/* Thẻ vàng - chỉ hiển thị, không cho chỉnh tay */}
         <div className="py-0.5">
           <div className="text-center mb-0.5">
             <span className="font-medium text-gray-700 text-sm">Thẻ vàng</span>
@@ -628,6 +628,26 @@ const MatchStatsEdit = ({
             <div className="flex-1">
               <div className="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs font-bold min-w-8 text-center border border-yellow-300 rounded">
                 {Array.isArray(matchStats.yellowCards?.team2) ? matchStats.yellowCards.team2.length : matchStats.yellowCards?.team2 || 0}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Thẻ đỏ - chỉ hiển thị, không cho chỉnh tay */}
+        <div className="py-0.5">
+          <div className="text-center mb-0.5">
+            <span className="font-medium text-gray-700 text-sm">Thẻ đỏ</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="flex-1">
+              <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-8 text-center border border-red-300 rounded">
+                {Array.isArray(matchStats.redCards?.team1) ? matchStats.redCards.team1.length : matchStats.redCards?.team1 || 0}
+              </div>
+            </div>
+            <div className="text-gray-400 text-xs">vs</div>
+            <div className="flex-1">
+              <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-8 text-center border border-red-300 rounded">
+                {Array.isArray(matchStats.redCards?.team2) ? matchStats.redCards.team2.length : matchStats.redCards?.team2 || 0}
               </div>
             </div>
           </div>

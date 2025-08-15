@@ -3,23 +3,45 @@ import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import DisplayLogo from '../common/DisplayLogo';
 
 const Event = () => {
-  const { matchData } = usePublicMatch();
+  const { matchData, matchStats } = usePublicMatch();
 
-  const [teamAGoals, setTeamAGoals] = useState([]);
-  const [teamBGoals, setTeamBGoals] = useState([]);
+  const [teamAEvents, setTeamAEvents] = useState([]);
+  const [teamBEvents, setTeamBEvents] = useState([]);
 
-  // Tạo danh sách bàn thắng từ matchData
+  // Tạo danh sách sự kiện từ matchData và matchStats
   useEffect(() => {
-    const teamAGoalsList = [];
-    const teamBGoalsList = [];
+    const teamAEventsList = [];
+    const teamBEventsList = [];
+
+    // Helper function để tạo unique key cho event
+    const createEventKey = (type, player, minute) => {
+      return `${type}-${player}-${minute}`;
+    };
+
+    // Helper function để loại bỏ duplicate events
+    const removeDuplicates = (events) => {
+      const seen = new Set();
+      return events.filter(event => {
+        const key = createEventKey(event.type, event.player, event.minute);
+        if (seen.has(key)) {
+          console.log('🔄 Removing duplicate event:', key);
+          return false;
+        }
+        seen.add(key);
+        return true;
+      });
+    };
 
     // Sự kiện ghi bàn đội A
     if (matchData.teamA?.teamAScorers) {
       matchData.teamA.teamAScorers.forEach(scorer => {
         scorer.times.forEach(time => {
-          teamAGoalsList.push({
+          teamAEventsList.push({
+            type: 'goal',
             player: scorer.player,
-            minute: time
+            minute: time,
+            icon: '⚽',
+            uniqueKey: createEventKey('goal', scorer.player, time)
           });
         });
       });
@@ -29,21 +51,86 @@ const Event = () => {
     if (matchData.teamB?.teamBScorers) {
       matchData.teamB.teamBScorers.forEach(scorer => {
         scorer.times.forEach(time => {
-          teamBGoalsList.push({
+          teamBEventsList.push({
+            type: 'goal',
             player: scorer.player,
-            minute: time
+            minute: time,
+            icon: '⚽',
+            uniqueKey: createEventKey('goal', scorer.player, time)
           });
         });
       });
     }
 
-    // Sắp xếp theo phút
-    teamAGoalsList.sort((a, b) => a.minute - b.minute);
-    teamBGoalsList.sort((a, b) => a.minute - b.minute);
+    // Thẻ vàng đội A (team1)
+    if (Array.isArray(matchStats.yellowCards?.team1)) {
+      matchStats.yellowCards.team1.forEach(card => {
+        teamAEventsList.push({
+          type: 'yellow_card',
+          player: card.player,
+          minute: card.minute,
+          icon: '🟨',
+          uniqueKey: createEventKey('yellow_card', card.player, card.minute)
+        });
+      });
+    }
 
-    setTeamAGoals(teamAGoalsList);
-    setTeamBGoals(teamBGoalsList);
-  }, [matchData]);
+    // Thẻ vàng đội B (team2)
+    if (Array.isArray(matchStats.yellowCards?.team2)) {
+      matchStats.yellowCards.team2.forEach(card => {
+        teamBEventsList.push({
+          type: 'yellow_card',
+          player: card.player,
+          minute: card.minute,
+          icon: '🟨',
+          uniqueKey: createEventKey('yellow_card', card.player, card.minute)
+        });
+      });
+    }
+
+    // Thẻ đỏ đội A (team1)
+    if (Array.isArray(matchStats.redCards?.team1)) {
+      matchStats.redCards.team1.forEach(card => {
+        teamAEventsList.push({
+          type: 'red_card',
+          player: card.player,
+          minute: card.minute,
+          icon: '🟥',
+          uniqueKey: createEventKey('red_card', card.player, card.minute)
+        });
+      });
+    }
+
+    // Thẻ đỏ đội B (team2)
+    if (Array.isArray(matchStats.redCards?.team2)) {
+      matchStats.redCards.team2.forEach(card => {
+        teamBEventsList.push({
+          type: 'red_card',
+          player: card.player,
+          minute: card.minute,
+          icon: '🟥',
+          uniqueKey: createEventKey('red_card', card.player, card.minute)
+        });
+      });
+    }
+
+    // Loại bỏ duplicates trước khi sắp xếp
+    const uniqueTeamAEvents = removeDuplicates(teamAEventsList);
+    const uniqueTeamBEvents = removeDuplicates(teamBEventsList);
+
+    // Debug log để kiểm tra
+    console.log('🔍 Team A Events (before dedup):', teamAEventsList.length);
+    console.log('🔍 Team A Events (after dedup):', uniqueTeamAEvents.length);
+    console.log('🔍 Team B Events (before dedup):', teamBEventsList.length);
+    console.log('🔍 Team B Events (after dedup):', uniqueTeamBEvents.length);
+
+    // Sắp xếp theo phút
+    uniqueTeamAEvents.sort((a, b) => a.minute - b.minute);
+    uniqueTeamBEvents.sort((a, b) => a.minute - b.minute);
+
+    setTeamAEvents(uniqueTeamAEvents);
+    setTeamBEvents(uniqueTeamBEvents);
+  }, [matchData, matchStats]);
 
   const teamAData = {
     name: matchData.teamA?.name || "ĐỘI A",
@@ -59,20 +146,40 @@ const Event = () => {
     color: matchData.teamB?.teamBKitColor || "#4ECDC4"
   };
 
-  const GoalItem = ({ player, minute, isTeamA, teamColor }) => (
-    <div className={`flex items-center gap-3 p-3 mb-2 ${isTeamA ? 'text-left' : 'text-right flex-row-reverse'}`}>
-      <div className="text-2xl">⚽</div>
-      <div className={`flex-1 ${isTeamA ? 'text-left' : 'text-right'}`}>
-        <div className="font-bold text-lg text-gray-900">{player}</div>
+  const EventItem = ({ event, isTeamA, teamColor }) => {
+    const getEventColor = (eventType) => {
+      switch (eventType) {
+        case 'goal':
+          return teamColor;
+        case 'yellow_card':
+          return '#FCD34D'; // yellow
+        case 'red_card':
+          return '#EF4444'; // red
+        default:
+          return teamColor;
+      }
+    };
+
+    return (
+      <div className={`flex items-center gap-3 p-3 mb-2 ${isTeamA ? 'text-left' : 'text-right flex-row-reverse'}`}>
+        <div className="text-2xl">{event.icon}</div>
+        <div className={`flex-1 ${isTeamA ? 'text-left' : 'text-right'}`}>
+          <div className="font-bold text-lg text-gray-900">{event.player}</div>
+          {event.type !== 'goal' && (
+            <div className="text-sm text-gray-600">
+              {event.type === 'yellow_card' ? 'Thẻ vàng' : 'Thẻ đỏ'}
+            </div>
+          )}
+        </div>
+        <div
+          className="px-3 py-1 rounded-full text-white font-bold text-sm min-w-[50px] text-center"
+          style={{ backgroundColor: getEventColor(event.type) }}
+        >
+          {event.minute}'
+        </div>
       </div>
-      <div
-        className="px-3 py-1 rounded-full text-white font-bold text-sm min-w-[50px] text-center"
-        style={{ backgroundColor: teamColor }}
-      >
-        {minute}'
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -149,37 +256,35 @@ const Event = () => {
               </div>
             </div>
 
-            {/* Goals Section */}
-            {(teamAGoals.length > 0 || teamBGoals.length > 0) ? (
+            {/* Events Section */}
+            {(teamAEvents.length > 0 || teamBEvents.length > 0) ? (
               <div className="grid grid-cols-2 gap-12">
-                {/* Team A Goals */}
+                {/* Team A Events */}
                 <div className="space-y-3">
                   <div
                     className="h-1 rounded-full mb-6"
                     style={{ backgroundColor: teamAData.color }}
                   ></div>
-                  {teamAGoals.map((goal, index) => (
-                    <GoalItem
-                      key={`teamA-${index}`}
-                      player={goal.player}
-                      minute={goal.minute}
+                  {teamAEvents.map((event, index) => (
+                    <EventItem
+                      key={event.uniqueKey || `teamA-${event.type}-${event.player}-${event.minute}-${index}`}
+                      event={event}
                       isTeamA={true}
                       teamColor={teamAData.color}
                     />
                   ))}
                 </div>
 
-                {/* Team B Goals */}
+                {/* Team B Events */}
                 <div className="space-y-3">
                   <div
                     className="h-1 rounded-full mb-6"
                     style={{ backgroundColor: teamBData.color }}
                   ></div>
-                  {teamBGoals.map((goal, index) => (
-                    <GoalItem
-                      key={`teamB-${index}`}
-                      player={goal.player}
-                      minute={goal.minute}
+                  {teamBEvents.map((event, index) => (
+                    <EventItem
+                      key={event.uniqueKey || `teamB-${event.type}-${event.player}-${event.minute}-${index}`}
+                      event={event}
                       isTeamA={false}
                       teamColor={teamBData.color}
                     />
@@ -189,8 +294,8 @@ const Event = () => {
             ) : (
               <div className="text-center py-16">
                 <div className="text-8xl mb-6 animate-bounce">⚽</div>
-                <div className="text-2xl font-bold text-gray-700 mb-3">Chưa có bàn thắng nào</div>
-                <div className="text-gray-500 text-lg">Các bàn thắng sẽ hiển thị tại đây</div>
+                <div className="text-2xl font-bold text-gray-700 mb-3">Chưa có sự kiện nào</div>
+                <div className="text-gray-500 text-lg">Các sự kiện trận đấu sẽ hiển thị tại đây</div>
               </div>
             )}
           </div>
