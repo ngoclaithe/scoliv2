@@ -40,7 +40,7 @@ const Stat = () => {
     <div
       className="h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center overflow-hidden"
       style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/basic/sanconhantao.jpg')`
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/basic/sancodep.jpg')`
       }}
     >
       {/* Small ScoLiv Logo - Top Right */}
