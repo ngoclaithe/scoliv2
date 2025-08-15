@@ -161,7 +161,7 @@ const Event = () => {
     };
 
     return (
-      <div className={`flex items-center gap-1 sm:gap-2 p-1.5 sm:p-2 rounded-lg bg-white/70 hover:bg-white/90 shadow-sm border border-gray-100 transition-all duration-200 ${isTeamA ? '' : 'flex-row-reverse'}`}>
+      <div className={`flex items-center gap-1 sm:gap-2 p-1.5 sm:p-2 rounded-lg bg-white/80 shadow-sm border border-gray-100 ${isTeamA ? '' : 'flex-row-reverse'}`}>
         <div className="text-sm sm:text-base flex-shrink-0">{event.icon}</div>
         <div className={`flex-1 min-w-0 ${isTeamA ? 'text-left' : 'text-right'}`}>
           <div className="font-bold text-xs sm:text-sm text-gray-900 truncate leading-tight">{event.player}</div>
