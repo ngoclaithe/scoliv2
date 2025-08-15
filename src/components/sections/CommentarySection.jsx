@@ -173,11 +173,11 @@ const CommentarySection = ({ isActive = true }) => {
     <div className="p-4 space-y-4">
       <div className="flex justify-center">
         <button
-          onClick={toggleRecording}
+          onClick={toggleMicrophone}
           disabled={isProcessing || !isSupported}
           className={`
             w-20 h-20 rounded-full flex items-center justify-center transition-all duration-300 transform
-            ${isRecording
+            ${isStreaming
               ? "bg-red-500 hover:bg-red-600 animate-pulse scale-110"
               : "bg-blue-500 hover:bg-blue-600"}
             ${isProcessing ? "opacity-50 cursor-not-allowed" : "hover:scale-105"}
@@ -187,7 +187,7 @@ const CommentarySection = ({ isActive = true }) => {
         >
           {isProcessing ? (
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-          ) : isRecording ? (
+          ) : isStreaming ? (
             <MicOff size={32} />
           ) : (
             <Mic size={32} />
@@ -198,16 +198,16 @@ const CommentarySection = ({ isActive = true }) => {
         {isProcessing && (
           <p className="text-blue-600 font-medium">Đang khởi tạo...</p>
         )}
-        {isRecording && !isProcessing && (
+        {isStreaming && !isProcessing && (
           <p className="text-red-600 font-medium animate-pulse">
-            🔴 Đang thu âm
+            🔴 Đang phát trực tiếp
           </p>
         )}
-        {!isRecording && !isProcessing && (
-          <p className="text-gray-600">Ấn mic để bắt đầu bình luận liên tục</p>
+        {!isStreaming && !isProcessing && (
+          <p className="text-gray-600">Ấn mic để bắt đầu phát trực tiếp</p>
         )}
         {!isSupported && (
-          <p className="text-red-600">Trình duyệt không hỗ trợ ghi âm</p>
+          <p className="text-red-600">Trình duyệt không hỗ trợ Web Audio API</p>
         )}
       </div>
     </div>
