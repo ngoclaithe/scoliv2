@@ -742,15 +742,21 @@ export const MatchProvider = ({ children }) => {
 
   // Hàm xử lý sự kiện thẻ phạt
   const handleCardEvent = useCallback((team, cardType, playerInfo, minute) => {
-    const cardData = {
-      team,
-      cardType, // 'yellow' hoặc 'red'
-      player: {
-        id: playerInfo?.id || playerInfo?.name || '',
-        name: playerInfo?.name || ''
-      },
-      minute: parseInt(minute),
+    // Đảm bảo dữ liệu được xử lý an toàn
+    const safePlayerInfo = {
+      playerId: String(playerInfo?.id || playerInfo?.name || ''),
+      playerName: String(playerInfo?.name || ''),
+      minute: parseInt(minute) || 0,
       timestamp: Date.now()
+    };
+
+    const cardData = {
+      team: String(team),
+      cardType: String(cardType), // 'yellow' hoặc 'red'
+      playerId: safePlayerInfo.playerId,
+      playerName: safePlayerInfo.playerName,
+      minute: safePlayerInfo.minute,
+      timestamp: safePlayerInfo.timestamp
     };
 
     // Gửi socket event
@@ -772,14 +778,16 @@ export const MatchProvider = ({ children }) => {
         }
       };
       setMatchStats(newStats);
-      console.log("Giá trị gửi lên socket là", cardData);
-      // Emit stats update cho yellow cards
-      // if (socketConnected) {
-      //   socketService.updateMatchStats(newStats);
-      // }
+      console.log("Card event data:", {
+        team: cardData.team,
+        cardType: cardData.cardType,
+        playerName: cardData.playerName,
+        minute: cardData.minute
+      });
     }
 
-    return cardData;
+    // Trả về array thay vì object để tránh lỗi render
+    return [safePlayerInfo.playerId, safePlayerInfo.playerName, safePlayerInfo.minute];
   }, [socketConnected, matchStats]);
 
   const updateView = useCallback((viewType) => {
