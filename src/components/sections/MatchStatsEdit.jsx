@@ -156,7 +156,7 @@ const MatchStatsEdit = ({
 
     if (!matchStarted || !matchStartTime) return;
 
-    // Cập nhật thời gian kiểm soát của đội trước đó
+    // Cập nhật thời gian kiểm soát của đội trước đ��
     if (currentController && possessionStartTime) {
       const duration = now - possessionStartTime;
       if (currentController === 'teamA') {
@@ -721,7 +721,7 @@ const MatchStatsEdit = ({
                 variant="outline"
                 size="sm"
                 className="px-2 py-1 text-xs border border-yellow-500 bg-yellow-500 text-black rounded hover:bg-yellow-600"
-                onClick={() => handleCardEvent('teamA', 'yellow')}
+                onClick={() => handleCardEventLocal('teamA', 'yellow')}
                 disabled={!(goalScorers?.teamA?.player?.trim()) || !(goalScorers?.teamA?.minute?.trim())}
               >
                 🟨
@@ -730,10 +730,10 @@ const MatchStatsEdit = ({
                 variant="outline"
                 size="sm"
                 className="px-2 py-1 text-xs border border-red-500 bg-red-500 text-white rounded hover:bg-red-600"
-                onClick={() => handleCardEvent('teamA', 'red')}
+                onClick={() => handleCardEventLocal('teamA', 'red')}
                 disabled={!(goalScorers?.teamA?.player?.trim()) || !(goalScorers?.teamA?.minute?.trim())}
               >
-                🟥
+                ���
               </Button>
             </div>
           </div>
