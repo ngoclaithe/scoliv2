@@ -167,7 +167,7 @@ const Event = () => {
           <div className="font-bold text-xs sm:text-sm text-gray-900 truncate leading-tight">{event.player}</div>
           {event.type !== 'goal' && (
             <div className="text-xs text-gray-500 leading-tight">
-              {event.type === 'yellow_card' ? 'Thẻ vàng' : 'Th�� đỏ'}
+              {event.type === 'yellow_card' ? 'Thẻ vàng' : 'Thẻ đỏ'}
             </div>
           )}
         </div>
@@ -219,8 +219,25 @@ const Event = () => {
 
       <div className="relative z-20 h-full flex flex-col">
         {/* Complex Interlocking Geometric Scoreboard */}
-        <div className="relative flex-shrink-0 px-1 sm:px-3 lg:px-4 pt-3 sm:pt-4">
-          <div className="relative h-20 sm:h-24 lg:h-28">
+        <div className="relative flex-shrink-0 px-1 sm:px-3 lg:px-4 pt-3 sm:pt-4 flex justify-center">
+          <div className="relative h-20 sm:h-24 lg:h-28 w-full sm:w-full lg:w-[30%]">
+
+            {/* Extra Layer 0 - Outer container with additional geometry */}
+            <div
+              className="absolute -inset-4 opacity-30"
+              style={{
+                background: `linear-gradient(45deg, ${teamAData.color}10, transparent, ${teamBData.color}10)`,
+                clipPath: 'polygon(5% 15%, 15% 5%, 35% 8%, 50% 0%, 65% 8%, 85% 5%, 95% 15%, 100% 35%, 95% 50%, 100% 65%, 95% 85%, 85% 95%, 65% 92%, 50% 100%, 35% 92%, 15% 95%, 5% 85%, 0% 65%, 5% 50%, 0% 35%)'
+              }}
+            ></div>
+
+            {/* Extra Layer 00 - Mid container */}
+            <div
+              className="absolute -inset-2 opacity-50 bg-slate-900"
+              style={{
+                clipPath: 'polygon(10% 20%, 20% 10%, 30% 15%, 45% 5%, 55% 5%, 70% 15%, 80% 10%, 90% 20%, 95% 40%, 90% 55%, 95% 70%, 90% 90%, 80% 95%, 70% 85%, 55% 95%, 45% 95%, 30% 85%, 20% 95%, 10% 90%, 5% 70%, 10% 55%, 5% 40%)'
+              }}
+            ></div>
 
             {/* Layer 1 - Base complex polygon */}
             <div
