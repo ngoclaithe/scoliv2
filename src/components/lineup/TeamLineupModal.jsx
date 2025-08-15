@@ -268,7 +268,7 @@ const TeamLineupModal = ({
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-2 mb-2">
           <Button
             variant="outline"
             size="sm"
@@ -285,6 +285,19 @@ const TeamLineupModal = ({
             className="h-10 flex items-center justify-center"
           >
             <span className="text-xs">Trận cũ</span>
+          </Button>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="grid grid-cols-2 gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={updateOnly}
+            className="h-10 flex items-center justify-center text-xs bg-orange-500 text-white hover:bg-orange-600 border-orange-500"
+            disabled={isLoading}
+          >
+            <span className="text-xs">Cập nhật</span>
           </Button>
 
           <Button
@@ -412,7 +425,7 @@ const TeamLineupModal = ({
                   />
                 </div>
                 
-                {/* Tên cầu th�� */}
+                {/* Tên cầu thủ */}
                 <div className="flex-1 min-w-0">
                   <Input
                     value={player.name}
