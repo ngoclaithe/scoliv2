@@ -78,7 +78,13 @@ export const PublicMatchProvider = ({ children }) => {
     matchDate: "",
     liveText: "",
     matchTitle: "",
-    typeMatch: "soccer"
+    typeMatch: "soccer",
+    round: 1,
+    group: "A",
+    subtitle: "",
+    showRound: true,
+    showGroup: true,
+    showSubtitle: true
   });
 
   const [matchStats, setMatchStats] = useState({
@@ -685,6 +691,42 @@ export const PublicMatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
+    socketService.on('round_updated', (data) => {
+      console.log('📝 [PublicMatchContext] round_updated received:', data);
+      setMatchData(prev => ({ ...prev, round: data.round, showRound: data.showRound }));
+      setLastUpdateTime(Date.now());
+    });
+
+    socketService.on('group_updated', (data) => {
+      console.log('📝 [PublicMatchContext] group_updated received:', data);
+      setMatchData(prev => ({ ...prev, group: data.group, showGroup: data.showGroup }));
+      setLastUpdateTime(Date.now());
+    });
+
+    socketService.on('subtitle_updated', (data) => {
+      console.log('📝 [PublicMatchContext] subtitle_updated received:', data);
+      setMatchData(prev => ({ ...prev, subtitle: data.subtitle, showSubtitle: data.showSubtitle }));
+      setLastUpdateTime(Date.now());
+    });
+
+    socketService.on('round_visibility_updated', (data) => {
+      console.log('📝 [PublicMatchContext] round_visibility_updated received:', data);
+      setMatchData(prev => ({ ...prev, showRound: data.showRound }));
+      setLastUpdateTime(Date.now());
+    });
+
+    socketService.on('group_visibility_updated', (data) => {
+      console.log('📝 [PublicMatchContext] group_visibility_updated received:', data);
+      setMatchData(prev => ({ ...prev, showGroup: data.showGroup }));
+      setLastUpdateTime(Date.now());
+    });
+
+    socketService.on('subtitle_visibility_updated', (data) => {
+      console.log('📝 [PublicMatchContext] subtitle_visibility_updated received:', data);
+      setMatchData(prev => ({ ...prev, showSubtitle: data.showSubtitle }));
+      setLastUpdateTime(Date.now());
+    });
+
     socketService.on('poster_settings_updated', (data) => {
       setPosterSettings(prev => ({ ...prev, ...data.posterSettings }));
       setLastUpdateTime(Date.now());
@@ -751,7 +793,15 @@ export const PublicMatchProvider = ({ children }) => {
             console.log('🔄 [PublicMatchContext] Updating matchData from join_roomed:', state.matchData);
 
             // Properly map backend scorers data to frontend structure
-            const mappedMatchData = { ...state.matchData };
+            const mappedMatchData = {
+              ...state.matchData,
+              round: state.matchData.round || 1,
+              group: state.matchData.group || "A",
+              subtitle: state.matchData.subtitle || "",
+              showRound: state.matchData.showRound !== false,
+              showGroup: state.matchData.showGroup !== false,
+              showSubtitle: state.matchData.showSubtitle !== false
+            };
 
             if (mappedMatchData.teamA && mappedMatchData.teamA.scorers) {
               mappedMatchData.teamA.teamAScorers = mappedMatchData.teamA.scorers.map(scorer => ({
@@ -1024,6 +1074,60 @@ export const PublicMatchProvider = ({ children }) => {
     }
   }, [canSendToSocket, socketConnected]);
 
+  // Cập nhật round (vòng đấu)
+  const updateRound = useCallback((round, showRound = true) => {
+    setMatchData(prev => ({ ...prev, round, showRound }));
+
+    if (canSendToSocket && socketConnected) {
+      socketService.emit('round_updated', { round, showRound });
+    }
+  }, [canSendToSocket, socketConnected]);
+
+  // Cập nhật group (bảng đấu)
+  const updateGroup = useCallback((group, showGroup = true) => {
+    setMatchData(prev => ({ ...prev, group, showGroup }));
+
+    if (canSendToSocket && socketConnected) {
+      socketService.emit('group_updated', { group, showGroup });
+    }
+  }, [canSendToSocket, socketConnected]);
+
+  // Cập nhật subtitle (tiêu đề phụ)
+  const updateSubtitle = useCallback((subtitle, showSubtitle = true) => {
+    setMatchData(prev => ({ ...prev, subtitle, showSubtitle }));
+
+    if (canSendToSocket && socketConnected) {
+      socketService.emit('subtitle_updated', { subtitle, showSubtitle });
+    }
+  }, [canSendToSocket, socketConnected]);
+
+  // Cập nhật trạng thái hiển thị round
+  const toggleRoundVisibility = useCallback((showRound) => {
+    setMatchData(prev => ({ ...prev, showRound }));
+
+    if (canSendToSocket && socketConnected) {
+      socketService.emit('round_visibility_updated', { showRound });
+    }
+  }, [canSendToSocket, socketConnected]);
+
+  // Cập nhật trạng thái hiển thị group
+  const toggleGroupVisibility = useCallback((showGroup) => {
+    setMatchData(prev => ({ ...prev, showGroup }));
+
+    if (canSendToSocket && socketConnected) {
+      socketService.emit('group_visibility_updated', { showGroup });
+    }
+  }, [canSendToSocket, socketConnected]);
+
+  // Cập nhật trạng thái hiển thị subtitle
+  const toggleSubtitleVisibility = useCallback((showSubtitle) => {
+    setMatchData(prev => ({ ...prev, showSubtitle }));
+
+    if (canSendToSocket && socketConnected) {
+      socketService.emit('subtitle_visibility_updated', { showSubtitle });
+    }
+  }, [canSendToSocket, socketConnected]);
+
   const value = {
     // ===== STATE DATA =====
     matchData,
@@ -1058,7 +1162,15 @@ export const PublicMatchProvider = ({ children }) => {
     updateTeamNames,
     updateTeamLogos,
     updateView,
-    updateDisplaySettings
+    updateDisplaySettings,
+
+    // Round, Group, Subtitle functions
+    updateRound,
+    updateGroup,
+    updateSubtitle,
+    toggleRoundVisibility,
+    toggleGroupVisibility,
+    toggleSubtitleVisibility
   };
 
   return (
