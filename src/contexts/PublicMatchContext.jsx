@@ -798,8 +798,8 @@ export const PublicMatchProvider = ({ children }) => {
               round: state.matchData.round || 1,
               group: state.matchData.group || "A",
               subtitle: state.matchData.subtitle || "",
-              showRound: state.matchData.showRound !== false,
-              showGroup: state.matchData.showGroup !== false,
+              showRound: state.matchData.showRound === true,
+              showGroup: state.matchData.showGroup === true,
               showSubtitle: state.matchData.showSubtitle !== false
             };
 
@@ -1119,7 +1119,7 @@ export const PublicMatchProvider = ({ children }) => {
     }
   }, [canSendToSocket, socketConnected]);
 
-  // Cập nh��t trạng thái hiển thị subtitle
+  // Cập nhật trạng thái hiển thị subtitle
   const toggleSubtitleVisibility = useCallback((showSubtitle) => {
     setMatchData(prev => ({ ...prev, showSubtitle }));
 
