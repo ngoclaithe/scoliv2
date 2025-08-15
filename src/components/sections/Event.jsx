@@ -505,8 +505,8 @@ const Event = () => {
         </div>
 
         {/* Events Section - Takes remaining space */}
-        <div className="flex-1 px-1 sm:px-3 lg:px-4 pb-3 sm:pb-4 overflow-hidden">
-          <div className="bg-gradient-to-br from-white/98 via-white/95 to-white/92 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl h-full border border-white/40 ring-1 ring-blue-500/10 overflow-hidden">
+        <div className="flex-1 px-1 sm:px-3 lg:px-4 pb-3 sm:pb-4 flex justify-center">
+          <div className="bg-gradient-to-br from-white/98 via-white/95 to-white/92 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl h-full border border-white/40 ring-1 ring-blue-500/10 overflow-hidden w-full sm:w-full lg:w-[90%]">
             {(teamAEvents.length > 0 || teamBEvents.length > 0) ? (
               <div className="h-full flex flex-col">
                 {/* Header with team names - Always horizontal */}
@@ -520,7 +520,7 @@ const Event = () => {
                       {teamAData.name}
                     </span>
                     <span className="text-xs text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded-full">
-                      {teamAEvents.length}
+                      {Math.min(teamAEvents.length, 20)}
                     </span>
                   </div>
 
@@ -528,7 +528,7 @@ const Event = () => {
 
                   <div className="flex items-center gap-2 flex-1 justify-end">
                     <span className="text-xs text-gray-500 bg-gray-200 px-1.5 py-0.5 rounded-full">
-                      {teamBEvents.length}
+                      {Math.min(teamBEvents.length, 20)}
                     </span>
                     <span className="text-xs sm:text-sm lg:text-base font-bold text-gray-800 truncate">
                       {teamBData.name}
@@ -540,17 +540,17 @@ const Event = () => {
                   </div>
                 </div>
 
-                {/* Events content - Always side by side */}
+                {/* Events content - Always side by side, NO SCROLL */}
                 <div className="flex-1 flex overflow-hidden">
-                  {/* Team A Events */}
+                  {/* Team A Events - Limited to 20 events max */}
                   <div className="flex-1 flex flex-col border-r border-gray-200/50">
                     <div
                       className="h-1 w-full"
                       style={{ backgroundColor: teamAData.color + '40' }}
                     ></div>
-                    <div className="flex-1 overflow-y-auto p-2 sm:p-3">
+                    <div className="flex-1 p-2 sm:p-3">
                       <div className="space-y-1 sm:space-y-2">
-                        {teamAEvents.map((event, index) => (
+                        {teamAEvents.slice(0, 20).map((event, index) => (
                           <EventItem
                             key={event.uniqueKey || `teamA-${event.type}-${event.player}-${event.minute}-${index}`}
                             event={event}
@@ -562,15 +562,15 @@ const Event = () => {
                     </div>
                   </div>
 
-                  {/* Team B Events */}
+                  {/* Team B Events - Limited to 20 events max */}
                   <div className="flex-1 flex flex-col">
                     <div
                       className="h-1 w-full"
                       style={{ backgroundColor: teamBData.color + '40' }}
                     ></div>
-                    <div className="flex-1 overflow-y-auto p-2 sm:p-3">
+                    <div className="flex-1 p-2 sm:p-3">
                       <div className="space-y-1 sm:space-y-2">
-                        {teamBEvents.map((event, index) => (
+                        {teamBEvents.slice(0, 20).map((event, index) => (
                           <EventItem
                             key={event.uniqueKey || `teamB-${event.type}-${event.player}-${event.minute}-${index}`}
                             event={event}
@@ -585,7 +585,7 @@ const Event = () => {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-full">
-                <div className="text-4xl sm:text-6xl mb-2 sm:mb-4 animate-bounce">⚽</div>
+                <div className="text-4xl sm:text-6xl mb-2 sm:mb-4">⚽</div>
                 <div className="text-lg sm:text-xl font-bold text-gray-700 mb-1 sm:mb-2">Chưa có sự kiện nào</div>
                 <div className="text-gray-500 text-sm sm:text-base text-center px-4">Các sự kiện trận đấu sẽ hiển thị tại đây</div>
               </div>
