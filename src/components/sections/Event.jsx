@@ -27,7 +27,7 @@ const Event = () => {
       });
     }
 
-    // Sự kiện ghi bàn đội B
+    // Sự kiện ghi bàn đ���i B
     if (matchData.teamB?.teamBScorers) {
       matchData.teamB.teamBScorers.forEach(scorer => {
         scorer.times.forEach(time => {
@@ -77,7 +77,7 @@ const Event = () => {
       });
     }
 
-    // Thẻ đỏ đội B (team2)
+    // Thẻ ��ỏ đội B (team2)
     if (Array.isArray(matchStats.redCards?.team2)) {
       matchStats.redCards.team2.forEach(card => {
         teamBEventsList.push({
@@ -221,37 +221,35 @@ const Event = () => {
               </div>
             </div>
 
-            {/* Goals Section */}
-            {(teamAGoals.length > 0 || teamBGoals.length > 0) ? (
+            {/* Events Section */}
+            {(teamAEvents.length > 0 || teamBEvents.length > 0) ? (
               <div className="grid grid-cols-2 gap-12">
-                {/* Team A Goals */}
+                {/* Team A Events */}
                 <div className="space-y-3">
                   <div
                     className="h-1 rounded-full mb-6"
                     style={{ backgroundColor: teamAData.color }}
                   ></div>
-                  {teamAGoals.map((goal, index) => (
-                    <GoalItem
-                      key={`teamA-${index}`}
-                      player={goal.player}
-                      minute={goal.minute}
+                  {teamAEvents.map((event, index) => (
+                    <EventItem
+                      key={`teamA-${event.type}-${index}`}
+                      event={event}
                       isTeamA={true}
                       teamColor={teamAData.color}
                     />
                   ))}
                 </div>
 
-                {/* Team B Goals */}
+                {/* Team B Events */}
                 <div className="space-y-3">
                   <div
                     className="h-1 rounded-full mb-6"
                     style={{ backgroundColor: teamBData.color }}
                   ></div>
-                  {teamBGoals.map((goal, index) => (
-                    <GoalItem
-                      key={`teamB-${index}`}
-                      player={goal.player}
-                      minute={goal.minute}
+                  {teamBEvents.map((event, index) => (
+                    <EventItem
+                      key={`teamB-${event.type}-${index}`}
+                      event={event}
                       isTeamA={false}
                       teamColor={teamBData.color}
                     />
@@ -261,8 +259,8 @@ const Event = () => {
             ) : (
               <div className="text-center py-16">
                 <div className="text-8xl mb-6 animate-bounce">⚽</div>
-                <div className="text-2xl font-bold text-gray-700 mb-3">Chưa có bàn thắng nào</div>
-                <div className="text-gray-500 text-lg">Các bàn thắng sẽ hiển thị tại đây</div>
+                <div className="text-2xl font-bold text-gray-700 mb-3">Chưa có sự kiện nào</div>
+                <div className="text-gray-500 text-lg">Các sự kiện trận đấu sẽ hiển thị tại đây</div>
               </div>
             )}
           </div>
