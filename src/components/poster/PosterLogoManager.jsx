@@ -347,7 +347,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!validTypes.includes(file.type)) {
-      alert("Chỉ chấp nh��n file ảnh (JPEG, PNG, GIF, WebP)");
+      alert("Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WebP)");
       return;
     }
 
@@ -906,11 +906,13 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
 
 
+  const allPosters = [...availablePosters, ...customPosters];
+
   const renderPosterSection = () => {
     return (
       <div className="space-y-1">
         <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
-          {availablePosters.map((poster) => (
+          {allPosters.map((poster) => (
             <div key={poster.id} className="flex-none w-24">
               <PosterCard
                 poster={poster}
@@ -919,6 +921,29 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               />
             </div>
           ))}
+          {/* Nút thêm poster */}
+          <div className="flex-none w-24">
+            <div className="relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer group border-2 border-dashed border-gray-300 hover:border-blue-400">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handlePosterUpload}
+                className="hidden"
+                id="poster-upload"
+              />
+              <label
+                htmlFor="poster-upload"
+                className="block aspect-video bg-gray-50 hover:bg-blue-50 transition-colors duration-200 cursor-pointer"
+              >
+                <div className="w-full h-full flex flex-col items-center justify-center">
+                  <div className="w-8 h-8 bg-gray-200 hover:bg-blue-200 rounded-full flex items-center justify-center mb-1 transition-colors duration-200">
+                    <span className="text-lg text-gray-500 hover:text-blue-500">+</span>
+                  </div>
+                  <span className="text-xs text-gray-500 font-medium">Thêm poster</span>
+                </div>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -1219,7 +1244,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           <option value="">Chọn trận</option>
           {historyMatches.map((match) => (
             <option key={match.id} value={match.id}>
-              {match.accessCode} ({match.status === 'expired' ? 'Đã kết th��c' : match.status})
+              {match.accessCode} ({match.status === 'expired' ? 'Đã kết thúc' : match.status})
             </option>
           ))}
         </select>
