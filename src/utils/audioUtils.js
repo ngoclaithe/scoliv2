@@ -127,7 +127,10 @@ class AudioManager {
 
   // Real-time audio playback using Web Audio API for low latency
   playRefereeVoiceRealtime(audioData) {
-    if (!this.audioEnabled || !this.userInteracted) return;
+    if (!this.audioEnabled || !this.userInteracted) {
+      console.warn('Audio not enabled or user has not interacted yet');
+      return;
+    }
 
     this.initAudioContext().then(() => {
       try {
