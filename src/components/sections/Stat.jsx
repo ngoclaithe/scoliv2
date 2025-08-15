@@ -250,9 +250,9 @@ const Stat = () => {
             </div>
           </div>
 
-          {/* Stats Content */}
-          <div className="p-4 sm:p-6 md:p-8">
-            <div className="space-y-4 sm:space-y-6">
+          {/* Stats Content - Fixed height, no scroll */}
+          <div className="p-3 overflow-hidden">
+            <div className="space-y-3 max-h-[60vh] overflow-hidden">
               {/* Kiểm soát bóng */}
               <StatBar
                 label="Kiểm soát bóng"
