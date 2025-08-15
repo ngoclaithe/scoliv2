@@ -86,8 +86,8 @@ export const PublicMatchProvider = ({ children }) => {
     totalShots: { team1: 0, team2: 0 },
     shotsOnTarget: { team1: 0, team2: 0 },
     corners: { team1: 0, team2: 0 },
-    yellowCards: { team1: 0, team2: 0 },
-    redCards: { team1: 0, team2: 0 },
+    yellowCards: { team1: [], team2: [] },
+    redCards: { team1: [], team2: [] },
     fouls: { team1: 0, team2: 0 },
   });
 
@@ -380,6 +380,36 @@ export const PublicMatchProvider = ({ children }) => {
         newState[teamKey][scorersKey] = currentScorers;
         return newState;
       });
+    });
+
+    socketService.on('card_updated', (data) => {
+      console.log('🟨🟥 [PublicMatchContext] card_updated received:', data);
+      const { team, cardType, player, minute } = data;
+
+      setMatchStats(prev => {
+        const newStats = { ...prev };
+        const teamKey = team === 'teamA' ? 'team1' : 'team2';
+        const cardKey = cardType === 'yellow' ? 'yellowCards' : 'redCards';
+
+        // Đảm bảo cards là array
+        if (!Array.isArray(newStats[cardKey][teamKey])) {
+          newStats[cardKey][teamKey] = [];
+        }
+
+        // Thêm thẻ mới với thông tin cầu thủ và phút
+        const newCard = {
+          player: player.name || player,
+          minute: parseInt(minute),
+          id: player.id || player.name || player
+        };
+
+        newStats[cardKey][teamKey] = [...newStats[cardKey][teamKey], newCard]
+          .sort((a, b) => a.minute - b.minute);
+
+        return newStats;
+      });
+
+      setLastUpdateTime(Date.now());
     });
 
     socketService.on('lineup_updated', (data) => {
@@ -746,7 +776,26 @@ export const PublicMatchProvider = ({ children }) => {
             if (Array.isArray(state.matchStats)) {
               console.log('⚠️ [PublicMatchContext] Server returned array for matchStats, skipping update');
             } else {
-              setMatchStats(prev => ({ ...prev, ...state.matchStats }));
+              // Đảm bảo cards được chuyển đổi thành arrays nếu cần
+              const normalizedStats = { ...state.matchStats };
+
+              // Chuyển đổi yellowCards từ object thành array nếu cần
+              if (normalizedStats.yellowCards && typeof normalizedStats.yellowCards.team1 === 'number') {
+                normalizedStats.yellowCards = {
+                  team1: [],
+                  team2: []
+                };
+              }
+
+              // Chuyển đổi redCards từ object thành array nếu cần
+              if (normalizedStats.redCards && typeof normalizedStats.redCards.team1 === 'number') {
+                normalizedStats.redCards = {
+                  team1: [],
+                  team2: []
+                };
+              }
+
+              setMatchStats(prev => ({ ...prev, ...normalizedStats }));
             }
           }
 
