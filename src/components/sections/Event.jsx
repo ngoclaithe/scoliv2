@@ -3,7 +3,7 @@ import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import DisplayLogo from '../common/DisplayLogo';
 
 const Event = () => {
-  const { matchData } = usePublicMatch();
+  const { matchData, matchStats } = usePublicMatch();
 
   const [teamAGoals, setTeamAGoals] = useState([]);
   const [teamBGoals, setTeamBGoals] = useState([]);
