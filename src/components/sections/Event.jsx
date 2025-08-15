@@ -152,27 +152,27 @@ const Event = () => {
         case 'goal':
           return teamColor;
         case 'yellow_card':
-          return '#FCD34D'; // yellow
+          return '#FCD34D';
         case 'red_card':
-          return '#EF4444'; // red
+          return '#EF4444';
         default:
           return teamColor;
       }
     };
 
     return (
-      <div className={`flex items-center gap-3 p-3 mb-2 ${isTeamA ? 'text-left' : 'text-right flex-row-reverse'}`}>
-        <div className="text-2xl">{event.icon}</div>
+      <div className={`flex items-center gap-2 p-2 mb-2 ${isTeamA ? 'text-left' : 'text-right flex-row-reverse'}`}>
+        <div className="text-xl">{event.icon}</div>
         <div className={`flex-1 ${isTeamA ? 'text-left' : 'text-right'}`}>
-          <div className="font-bold text-lg text-gray-900">{event.player}</div>
+          <div className="font-bold text-sm text-gray-900 truncate">{event.player}</div>
           {event.type !== 'goal' && (
-            <div className="text-sm text-gray-600">
+            <div className="text-xs text-gray-600">
               {event.type === 'yellow_card' ? 'Thẻ vàng' : 'Thẻ đỏ'}
             </div>
           )}
         </div>
         <div
-          className="px-3 py-1 rounded-full text-white font-bold text-sm min-w-[50px] text-center"
+          className="px-2 py-1 rounded-full text-white font-bold text-xs min-w-[40px] text-center"
           style={{ backgroundColor: getEventColor(event.type) }}
         >
           {event.minute}'
@@ -182,7 +182,7 @@ const Event = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="h-screen relative overflow-hidden">
       {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -190,14 +190,13 @@ const Event = () => {
           backgroundImage: 'url(/images/basic/sanconhantao.jpg)',
         }}
       >
-        {/* Dark overlay for better text readability */}
         <div className="absolute inset-0 bg-black/40"></div>
       </div>
 
-      {/* Gradient overlay for more depth */}
+      {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-green-900/30 via-transparent to-blue-900/30"></div>
 
-      {/* Animated background elements for extra visual appeal */}
+      {/* Animated background elements */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-20 w-72 h-72 bg-green-500/10 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute bottom-20 right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -218,90 +217,124 @@ const Event = () => {
         </div>
       </div>
 
-      <div className="relative z-20 min-h-screen flex items-center justify-center py-12">
-        <div className="max-w-7xl mx-auto px-6 w-full">
-          {/* Main Event Board */}
-          <div className="bg-white/98 backdrop-blur-xl rounded-3xl shadow-2xl p-12 border-2 border-white/30 ring-1 ring-green-500/20">
+      <div className="relative z-20 h-full flex flex-col">
+        {/* Curved Ribbon Header */}
+        <div className="relative flex-shrink-0">
+          {/* Main curved ribbon */}
+          <div className="relative">
+            {/* Background ribbon shape */}
+            <svg className="w-full h-32" viewBox="0 0 1200 200" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="ribbonGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style={{stopColor: teamAData.color, stopOpacity: 0.9}} />
+                  <stop offset="50%" style={{stopColor: '#ffffff', stopOpacity: 0.95}} />
+                  <stop offset="100%" style={{stopColor: teamBData.color, stopOpacity: 0.9}} />
+                </linearGradient>
+                <filter id="ribbonShadow">
+                  <feDropShadow dx="0" dy="4" stdDeviation="8" floodOpacity="0.3"/>
+                </filter>
+              </defs>
+              <path 
+                d="M0,60 Q150,20 300,50 T600,40 T900,50 Q1050,20 1200,60 L1200,140 Q1050,180 900,150 T600,160 T300,150 Q150,180 0,140 Z" 
+                fill="url(#ribbonGradient)" 
+                filter="url(#ribbonShadow)"
+                className="drop-shadow-2xl"
+              />
+            </svg>
 
-            {/* Header with team names and score */}
-            <div className="text-center mb-12">
-              <div className="flex items-center justify-center gap-8 mb-8">
-                <div className="flex items-center gap-4">
-                  <DisplayLogo
-                    logos={[teamAData.logo]}
-                    alt={teamAData.name}
-                    className="w-16 h-16"
-                    type_play="circle"
-                    logoSize="w-16 h-16"
-                  />
-                  <h2 className="text-3xl font-bold text-gray-900">{teamAData.name}</h2>
-                </div>
-
-                <div className="bg-gradient-to-r from-green-600 via-emerald-600 to-green-700 text-white px-8 py-4 rounded-2xl shadow-xl border-2 border-green-500/30">
-                  <span className="text-4xl font-black drop-shadow-lg">{teamAData.score}</span>
-                  <span className="text-2xl mx-4 text-white/90">-</span>
-                  <span className="text-4xl font-black drop-shadow-lg">{teamBData.score}</span>
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <h2 className="text-3xl font-bold text-gray-900">{teamBData.name}</h2>
-                  <DisplayLogo
-                    logos={[teamBData.logo]}
-                    alt={teamBData.name}
-                    className="w-16 h-16"
-                    type_play="circle"
-                    logoSize="w-16 h-16"
-                  />
+            {/* Content over the ribbon */}
+            <div className="absolute inset-0 flex items-center justify-between px-16 py-8">
+              {/* Team A */}
+              <div className="flex items-center gap-4 flex-1">
+                <DisplayLogo
+                  logos={[teamAData.logo]}
+                  alt={teamAData.name}
+                  className="w-14 h-14"
+                  type_play="circle"
+                  logoSize="w-14 h-14"
+                />
+                <div className="text-right">
+                  <h2 className="text-xl font-bold text-gray-900 drop-shadow-sm">{teamAData.name}</h2>
                 </div>
               </div>
-            </div>
 
-            {/* Events Section */}
+              {/* Score in center */}
+              <div className="flex items-center justify-center px-8">
+                <div className="bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-700 text-white px-8 py-4 rounded-full shadow-2xl border-4 border-white/30 backdrop-blur-sm">
+                  <span className="text-3xl font-black drop-shadow-lg">{teamAData.score}</span>
+                  <span className="text-xl mx-3 text-white/90">-</span>
+                  <span className="text-3xl font-black drop-shadow-lg">{teamBData.score}</span>
+                </div>
+              </div>
+
+              {/* Team B */}
+              <div className="flex items-center gap-4 flex-1 justify-end">
+                <div className="text-left">
+                  <h2 className="text-xl font-bold text-gray-900 drop-shadow-sm">{teamBData.name}</h2>
+                </div>
+                <DisplayLogo
+                  logos={[teamBData.logo]}
+                  alt={teamBData.name}
+                  className="w-14 h-14"
+                  type_play="circle"
+                  logoSize="w-14 h-14"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Events Section - Takes remaining space */}
+        <div className="flex-1 px-6 pb-6 overflow-hidden">
+          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl h-full border-2 border-white/30 ring-1 ring-green-500/20 p-6">
             {(teamAEvents.length > 0 || teamBEvents.length > 0) ? (
-              <div className="grid grid-cols-2 gap-12">
+              <div className="grid grid-cols-2 gap-8 h-full">
                 {/* Team A Events */}
-                <div className="space-y-3">
+                <div className="flex flex-col h-full">
                   <div
-                    className="h-1 rounded-full mb-6"
+                    className="h-1 rounded-full mb-4"
                     style={{ backgroundColor: teamAData.color }}
                   ></div>
-                  {teamAEvents.map((event, index) => (
-                    <EventItem
-                      key={event.uniqueKey || `teamA-${event.type}-${event.player}-${event.minute}-${index}`}
-                      event={event}
-                      isTeamA={true}
-                      teamColor={teamAData.color}
-                    />
-                  ))}
+                  <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pr-2">
+                    {teamAEvents.map((event, index) => (
+                      <EventItem
+                        key={event.uniqueKey || `teamA-${event.type}-${event.player}-${event.minute}-${index}`}
+                        event={event}
+                        isTeamA={true}
+                        teamColor={teamAData.color}
+                      />
+                    ))}
+                  </div>
                 </div>
 
                 {/* Team B Events */}
-                <div className="space-y-3">
+                <div className="flex flex-col h-full">
                   <div
-                    className="h-1 rounded-full mb-6"
+                    className="h-1 rounded-full mb-4"
                     style={{ backgroundColor: teamBData.color }}
                   ></div>
-                  {teamBEvents.map((event, index) => (
-                    <EventItem
-                      key={event.uniqueKey || `teamB-${event.type}-${event.player}-${event.minute}-${index}`}
-                      event={event}
-                      isTeamA={false}
-                      teamColor={teamBData.color}
-                    />
-                  ))}
+                  <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pr-2">
+                    {teamBEvents.map((event, index) => (
+                      <EventItem
+                        key={event.uniqueKey || `teamB-${event.type}-${event.player}-${event.minute}-${index}`}
+                        event={event}
+                        isTeamA={false}
+                        teamColor={teamBData.color}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
             ) : (
-              <div className="text-center py-16">
-                <div className="text-8xl mb-6 animate-bounce">⚽</div>
-                <div className="text-2xl font-bold text-gray-700 mb-3">Chưa có sự kiện nào</div>
-                <div className="text-gray-500 text-lg">Các sự kiện trận đấu sẽ hiển thị tại đây</div>
+              <div className="flex flex-col items-center justify-center h-full">
+                <div className="text-6xl mb-4 animate-bounce">⚽</div>
+                <div className="text-xl font-bold text-gray-700 mb-2">Chưa có sự kiện nào</div>
+                <div className="text-gray-500">Các sự kiện trận đấu sẽ hiển thị tại đây</div>
               </div>
             )}
           </div>
         </div>
       </div>
-
     </div>
   );
 };
