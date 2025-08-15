@@ -177,7 +177,7 @@ export const MatchProvider = ({ children }) => {
           }
 
           if (state.matchStats) {
-            console.log('📊 [MatchContext] Updating matchStats from room_joined:', state.matchStats);
+            console.log('�� [MatchContext] Updating matchStats from room_joined:', state.matchStats);
             setMatchStats(prev => ({ ...prev, ...state.matchStats }));
           }
 
@@ -859,6 +859,7 @@ export const MatchProvider = ({ children }) => {
     updateLineup,
     updateFutsalErrors,
     updateGoalScorers,
+    handleCardEvent,
     updateView,
     resetMatch,
     updateMatchTitle,
