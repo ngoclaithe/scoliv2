@@ -27,7 +27,7 @@ const Event = () => {
       });
     }
 
-    // Sự kiện ghi bàn đ���i B
+    // Sự kiện ghi bàn đội B
     if (matchData.teamB?.teamBScorers) {
       matchData.teamB.teamBScorers.forEach(scorer => {
         scorer.times.forEach(time => {
@@ -77,7 +77,7 @@ const Event = () => {
       });
     }
 
-    // Thẻ ��ỏ đội B (team2)
+    // Thẻ đỏ đội B (team2)
     if (Array.isArray(matchStats.redCards?.team2)) {
       matchStats.redCards.team2.forEach(card => {
         teamBEventsList.push({
@@ -111,20 +111,40 @@ const Event = () => {
     color: matchData.teamB?.teamBKitColor || "#4ECDC4"
   };
 
-  const GoalItem = ({ player, minute, isTeamA, teamColor }) => (
-    <div className={`flex items-center gap-3 p-3 mb-2 ${isTeamA ? 'text-left' : 'text-right flex-row-reverse'}`}>
-      <div className="text-2xl">⚽</div>
-      <div className={`flex-1 ${isTeamA ? 'text-left' : 'text-right'}`}>
-        <div className="font-bold text-lg text-gray-900">{player}</div>
+  const EventItem = ({ event, isTeamA, teamColor }) => {
+    const getEventColor = (eventType) => {
+      switch (eventType) {
+        case 'goal':
+          return teamColor;
+        case 'yellow_card':
+          return '#FCD34D'; // yellow
+        case 'red_card':
+          return '#EF4444'; // red
+        default:
+          return teamColor;
+      }
+    };
+
+    return (
+      <div className={`flex items-center gap-3 p-3 mb-2 ${isTeamA ? 'text-left' : 'text-right flex-row-reverse'}`}>
+        <div className="text-2xl">{event.icon}</div>
+        <div className={`flex-1 ${isTeamA ? 'text-left' : 'text-right'}`}>
+          <div className="font-bold text-lg text-gray-900">{event.player}</div>
+          {event.type !== 'goal' && (
+            <div className="text-sm text-gray-600">
+              {event.type === 'yellow_card' ? 'Thẻ vàng' : 'Thẻ đỏ'}
+            </div>
+          )}
+        </div>
+        <div
+          className="px-3 py-1 rounded-full text-white font-bold text-sm min-w-[50px] text-center"
+          style={{ backgroundColor: getEventColor(event.type) }}
+        >
+          {event.minute}'
+        </div>
       </div>
-      <div
-        className="px-3 py-1 rounded-full text-white font-bold text-sm min-w-[50px] text-center"
-        style={{ backgroundColor: teamColor }}
-      >
-        {minute}'
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen relative overflow-hidden">
