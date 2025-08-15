@@ -24,6 +24,7 @@ const MatchStatsEdit = ({
   const [showDropdownA, setShowDropdownA] = useState(false);
   const [showDropdownB, setShowDropdownB] = useState(false);
   const [matchStarted, setMatchStarted] = useState(false);
+  const [matchPaused, setMatchPaused] = useState(false);
   const [matchStartTime, setMatchStartTime] = useState(null);
   const [matchDuration, setMatchDuration] = useState(90); // phút
   const [teamAControlling, setTeamAControlling] = useState(false);
@@ -164,7 +165,7 @@ const MatchStatsEdit = ({
       }
     }
 
-    // Cập nhật đội hiện tại kiểm soát
+    // Cập nhật đội hi���n tại kiểm soát
     setCurrentController(team);
     setPossessionStartTime(now);
 
