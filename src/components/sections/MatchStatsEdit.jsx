@@ -554,6 +554,18 @@ const MatchStatsEdit = ({
             >
               {matchStarted ? '✓ Đã bắt đầu' : 'Trận đấu bắt đầu'}
             </button>
+            {matchStarted && (
+              <button
+                onClick={matchPaused ? resumeMatch : pauseMatch}
+                className={`px-3 py-1 text-xs rounded font-medium ${
+                  matchPaused
+                    ? 'bg-green-500 text-white hover:bg-green-600'
+                    : 'bg-yellow-500 text-white hover:bg-yellow-600'
+                }`}
+              >
+                {matchPaused ? '▶️ Tiếp tục' : '⏸️ Tạm dừng'}
+              </button>
+            )}
             <select
               value={matchDuration}
               onChange={(e) => setMatchDuration(parseInt(e.target.value))}
@@ -569,7 +581,7 @@ const MatchStatsEdit = ({
             </select>
           </div>
 
-          {/* Hiển thị % kiểm soát - sử dụng localStats */}
+          {/* Hi���n thị % kiểm soát - sử dụng localStats */}
           <div className="flex items-center gap-2 mb-2">
             <div className="flex-1">
               <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-8 text-center border border-red-300 rounded">
