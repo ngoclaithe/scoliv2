@@ -161,10 +161,10 @@ const Event = () => {
     };
 
     return (
-      <div className={`flex items-center gap-2 p-2 mb-2 ${isTeamA ? 'text-left' : 'text-right flex-row-reverse'}`}>
-        <div className="text-xl">{event.icon}</div>
-        <div className={`flex-1 ${isTeamA ? 'text-left' : 'text-right'}`}>
-          <div className="font-bold text-sm text-gray-900 truncate">{event.player}</div>
+      <div className={`flex items-center gap-2 p-2 mb-2 ${isTeamA ? 'text-left' : 'text-right flex-row-reverse'} ${window.innerWidth < 640 ? 'text-left flex-row' : ''}`}>
+        <div className="text-lg sm:text-xl">{event.icon}</div>
+        <div className={`flex-1 ${isTeamA ? 'text-left' : 'text-right'} ${window.innerWidth < 640 ? 'text-left' : ''}`}>
+          <div className="font-bold text-xs sm:text-sm text-gray-900 truncate">{event.player}</div>
           {event.type !== 'goal' && (
             <div className="text-xs text-gray-600">
               {event.type === 'yellow_card' ? 'Thẻ vàng' : 'Thẻ đỏ'}
@@ -172,7 +172,7 @@ const Event = () => {
           )}
         </div>
         <div
-          className="px-2 py-1 rounded-full text-white font-bold text-xs min-w-[40px] text-center"
+          className="px-2 py-1 rounded-full text-white font-bold text-xs min-w-[35px] sm:min-w-[40px] text-center"
           style={{ backgroundColor: getEventColor(event.type) }}
         >
           {event.minute}'
@@ -218,84 +218,112 @@ const Event = () => {
       </div>
 
       <div className="relative z-20 h-full flex flex-col">
-        {/* Curved Ribbon Header */}
-        <div className="relative flex-shrink-0">
-          {/* Main curved ribbon */}
-          <div className="relative">
-            {/* Background ribbon shape */}
-            <svg className="w-full h-32" viewBox="0 0 1200 200" preserveAspectRatio="none">
-              <defs>
-                <linearGradient id="ribbonGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" style={{stopColor: teamAData.color, stopOpacity: 0.9}} />
-                  <stop offset="50%" style={{stopColor: '#ffffff', stopOpacity: 0.95}} />
-                  <stop offset="100%" style={{stopColor: teamBData.color, stopOpacity: 0.9}} />
-                </linearGradient>
-                <filter id="ribbonShadow">
-                  <feDropShadow dx="0" dy="4" stdDeviation="8" floodOpacity="0.3"/>
-                </filter>
-              </defs>
-              <path 
-                d="M0,60 Q150,20 300,50 T600,40 T900,50 Q1050,20 1200,60 L1200,140 Q1050,180 900,150 T600,160 T300,150 Q150,180 0,140 Z" 
-                fill="url(#ribbonGradient)" 
-                filter="url(#ribbonShadow)"
-                className="drop-shadow-2xl"
-              />
-            </svg>
-
-            {/* Content over the ribbon */}
-            <div className="absolute inset-0 flex items-center justify-between px-16 py-8">
+        {/* Modern Header */}
+        <div className="relative flex-shrink-0 px-2 sm:px-6 pt-4 sm:pt-6">
+          <div className="relative bg-white/98 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl border-2 border-white/30 overflow-hidden">
+            {/* Background gradient bars */}
+            <div className="absolute inset-0 flex">
+              <div 
+                className="w-1/3 h-full opacity-20"
+                style={{ backgroundColor: teamAData.color }}
+              ></div>
+              <div className="w-1/3 h-full bg-gradient-to-r from-gray-100 to-gray-50"></div>
+              <div 
+                className="w-1/3 h-full opacity-20"
+                style={{ backgroundColor: teamBData.color }}
+              ></div>
+            </div>
+            
+            {/* Header content */}
+            <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4 sm:gap-0 px-4 sm:px-8 lg:px-12 py-4 sm:py-6 lg:py-8">
               {/* Team A */}
-              <div className="flex items-center gap-4 flex-1">
-                <DisplayLogo
-                  logos={[teamAData.logo]}
-                  alt={teamAData.name}
-                  className="w-14 h-14"
-                  type_play="circle"
-                  logoSize="w-14 h-14"
-                />
-                <div className="text-right">
-                  <h2 className="text-xl font-bold text-gray-900 drop-shadow-sm">{teamAData.name}</h2>
+              <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 flex-shrink-0 sm:flex-1">
+                <div 
+                  className="p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-lg border-2 border-white"
+                  style={{ backgroundColor: teamAData.color + '20' }}
+                >
+                  <DisplayLogo
+                    logos={[teamAData.logo]}
+                    alt={teamAData.name}
+                    className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16"
+                    type_play="circle"
+                    logoSize="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16"
+                  />
+                </div>
+                <div className="hidden sm:block">
+                  <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 truncate">{teamAData.name}</h2>
+                  <div 
+                    className="w-16 sm:w-20 h-1 rounded-full mt-1"
+                    style={{ backgroundColor: teamAData.color }}
+                  ></div>
                 </div>
               </div>
 
+              {/* Mobile team names (above score) */}
+              <div className="flex sm:hidden items-center gap-8 w-full justify-between px-4 order-first">
+                <h2 className="text-sm font-bold text-gray-900 truncate max-w-[120px]">{teamAData.name}</h2>
+                <h2 className="text-sm font-bold text-gray-900 truncate max-w-[120px] text-right">{teamBData.name}</h2>
+              </div>
+
               {/* Score in center */}
-              <div className="flex items-center justify-center px-8">
-                <div className="bg-gradient-to-r from-emerald-600 via-green-600 to-emerald-700 text-white px-8 py-4 rounded-full shadow-2xl border-4 border-white/30 backdrop-blur-sm">
-                  <span className="text-3xl font-black drop-shadow-lg">{teamAData.score}</span>
-                  <span className="text-xl mx-3 text-white/90">-</span>
-                  <span className="text-3xl font-black drop-shadow-lg">{teamBData.score}</span>
+              <div className="flex items-center justify-center px-2 sm:px-4 lg:px-8 flex-shrink-0">
+                <div className="relative">
+                  <div className="bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 text-white px-4 sm:px-6 lg:px-12 py-3 sm:py-4 lg:py-6 rounded-xl sm:rounded-2xl shadow-2xl border-2 sm:border-4 border-white/20">
+                    <div className="flex items-center justify-center gap-2 sm:gap-3 lg:gap-4">
+                      <span className="text-2xl sm:text-3xl lg:text-4xl font-black">{teamAData.score}</span>
+                      <div className="w-0.5 sm:w-1 h-6 sm:h-8 lg:h-12 bg-white/30 rounded-full"></div>
+                      <span className="text-2xl sm:text-3xl lg:text-4xl font-black">{teamBData.score}</span>
+                    </div>
+                  </div>
+                  {/* Score glow effect */}
+                  <div className="absolute -inset-1 bg-gradient-to-r from-emerald-600 to-green-600 rounded-xl sm:rounded-2xl blur opacity-20"></div>
                 </div>
               </div>
 
               {/* Team B */}
-              <div className="flex items-center gap-4 flex-1 justify-end">
-                <div className="text-left">
-                  <h2 className="text-xl font-bold text-gray-900 drop-shadow-sm">{teamBData.name}</h2>
+              <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 flex-shrink-0 sm:flex-1 sm:justify-end flex-row-reverse sm:flex-row">
+                <div 
+                  className="p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-lg border-2 border-white"
+                  style={{ backgroundColor: teamBData.color + '20' }}
+                >
+                  <DisplayLogo
+                    logos={[teamBData.logo]}
+                    alt={teamBData.name}
+                    className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16"
+                    type_play="circle"
+                    logoSize="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16"
+                  />
                 </div>
-                <DisplayLogo
-                  logos={[teamBData.logo]}
-                  alt={teamBData.name}
-                  className="w-14 h-14"
-                  type_play="circle"
-                  logoSize="w-14 h-14"
-                />
+                <div className="hidden sm:block text-right">
+                  <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 truncate">{teamBData.name}</h2>
+                  <div 
+                    className="w-16 sm:w-20 h-1 rounded-full mt-1 ml-auto"
+                    style={{ backgroundColor: teamBData.color }}
+                  ></div>
+                </div>
               </div>
             </div>
+
+            {/* Bottom decorative line */}
+            <div className="h-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
           </div>
         </div>
 
         {/* Events Section - Takes remaining space */}
-        <div className="flex-1 px-6 pb-6 overflow-hidden">
-          <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl h-full border-2 border-white/30 ring-1 ring-green-500/20 p-6">
+        <div className="flex-1 px-2 sm:px-6 pb-4 sm:pb-6 overflow-hidden">
+          <div className="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl h-full border-2 border-white/30 ring-1 ring-green-500/20 p-3 sm:p-6">
             {(teamAEvents.length > 0 || teamBEvents.length > 0) ? (
-              <div className="grid grid-cols-2 gap-8 h-full">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 h-full">
                 {/* Team A Events */}
                 <div className="flex flex-col h-full">
-                  <div
-                    className="h-1 rounded-full mb-4"
-                    style={{ backgroundColor: teamAData.color }}
-                  ></div>
-                  <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pr-2">
+                  <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                    <div
+                      className="h-1 rounded-full flex-1"
+                      style={{ backgroundColor: teamAData.color }}
+                    ></div>
+                    <span className="text-xs sm:text-sm font-bold text-gray-600 sm:hidden">{teamAData.name}</span>
+                  </div>
+                  <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pr-1 sm:pr-2">
                     {teamAEvents.map((event, index) => (
                       <EventItem
                         key={event.uniqueKey || `teamA-${event.type}-${event.player}-${event.minute}-${index}`}
@@ -309,11 +337,14 @@ const Event = () => {
 
                 {/* Team B Events */}
                 <div className="flex flex-col h-full">
-                  <div
-                    className="h-1 rounded-full mb-4"
-                    style={{ backgroundColor: teamBData.color }}
-                  ></div>
-                  <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pr-2">
+                  <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                    <span className="text-xs sm:text-sm font-bold text-gray-600 sm:hidden">{teamBData.name}</span>
+                    <div
+                      className="h-1 rounded-full flex-1"
+                      style={{ backgroundColor: teamBData.color }}
+                    ></div>
+                  </div>
+                  <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 pr-1 sm:pr-2">
                     {teamBEvents.map((event, index) => (
                       <EventItem
                         key={event.uniqueKey || `teamB-${event.type}-${event.player}-${event.minute}-${index}`}
@@ -327,9 +358,9 @@ const Event = () => {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-full">
-                <div className="text-6xl mb-4 animate-bounce">⚽</div>
-                <div className="text-xl font-bold text-gray-700 mb-2">Chưa có sự kiện nào</div>
-                <div className="text-gray-500">Các sự kiện trận đấu sẽ hiển thị tại đây</div>
+                <div className="text-4xl sm:text-6xl mb-2 sm:mb-4 animate-bounce">⚽</div>
+                <div className="text-lg sm:text-xl font-bold text-gray-700 mb-1 sm:mb-2">Chưa có sự kiện nào</div>
+                <div className="text-gray-500 text-sm sm:text-base text-center px-4">Các sự kiện trận đấu sẽ hiển thị tại đây</div>
               </div>
             )}
           </div>
