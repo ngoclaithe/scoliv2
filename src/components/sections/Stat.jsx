@@ -6,16 +6,16 @@ const Stat = () => {
 
   const StatBar = ({ label, team1Value, team2Value, isPercentage = false }) => {
     return (
-      <div className="space-y-2">
-        <div className="flex justify-between items-center text-xs sm:text-sm">
-          <span className="font-semibold text-red-600 w-12 text-left">{team1Value}{isPercentage ? '%' : ''}</span>
+      <div className="space-y-1">
+        <div className="flex justify-between items-center text-xs">
+          <span className="font-semibold text-emerald-600 w-10 text-left">{team1Value}{isPercentage ? '%' : ''}</span>
           <span className="font-medium text-gray-700 text-center flex-1 px-2">{label}</span>
-          <span className="font-semibold text-blue-600 w-12 text-right">{team2Value}{isPercentage ? '%' : ''}</span>
+          <span className="font-semibold text-orange-600 w-10 text-right">{team2Value}{isPercentage ? '%' : ''}</span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+        <div className="w-full bg-gray-200 rounded-full h-1.5 overflow-hidden">
           <div className="h-full flex">
             <div
-              className="bg-red-500 transition-all duration-300"
+              className="bg-emerald-500"
               style={{
                 width: isPercentage
                   ? `${team1Value}%`
@@ -23,7 +23,7 @@ const Stat = () => {
               }}
             ></div>
             <div
-              className="bg-blue-500 transition-all duration-300"
+              className="bg-orange-500"
               style={{
                 width: isPercentage
                   ? `${team2Value}%`
