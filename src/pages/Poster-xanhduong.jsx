@@ -47,8 +47,8 @@ export default function XanhDuongMatchIntro() {
     round: contextMatchData.round || 1,
     group: contextMatchData.group || 'A',
     subtitle: contextMatchData.subtitle || '',
-    showRound: contextMatchData.showRound !== false,
-    showGroup: contextMatchData.showGroup !== false,
+    showRound: contextMatchData.showRound === true,
+    showGroup: contextMatchData.showGroup === true,
     showSubtitle: contextMatchData.showSubtitle !== false
   };
 
