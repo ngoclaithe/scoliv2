@@ -47,7 +47,8 @@ export const MatchProvider = ({ children }) => {
     totalShots: { team1: 0, team2: 0 },
     shotsOnTarget: { team1: 0, team2: 0 },
     corners: { team1: 0, team2: 0 },
-    yellowCards: { team1: 0, team2: 0 },
+    yellowCards: { team1: [], team2: [] },
+    redCards: { team1: [], team2: [] },
     fouls: { team1: 0, team2: 0 },
   });
 
