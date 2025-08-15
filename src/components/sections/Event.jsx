@@ -218,94 +218,178 @@ const Event = () => {
       </div>
 
       <div className="relative z-20 h-full flex flex-col">
-        {/* Modern Header */}
-        <div className="relative flex-shrink-0 px-2 sm:px-6 pt-4 sm:pt-6">
-          <div className="relative bg-white/98 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-2xl border-2 border-white/30 overflow-hidden">
-            {/* Background gradient bars */}
-            <div className="absolute inset-0 flex">
-              <div 
-                className="w-1/3 h-full opacity-20"
-                style={{ backgroundColor: teamAData.color }}
-              ></div>
-              <div className="w-1/3 h-full bg-gradient-to-r from-gray-100 to-gray-50"></div>
-              <div 
-                className="w-1/3 h-full opacity-20"
-                style={{ backgroundColor: teamBData.color }}
-              ></div>
-            </div>
-            
-            {/* Header content */}
-            <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4 sm:gap-0 px-4 sm:px-8 lg:px-12 py-4 sm:py-6 lg:py-8">
-              {/* Team A */}
-              <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 flex-shrink-0 sm:flex-1">
-                <div 
-                  className="p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-lg border-2 border-white"
-                  style={{ backgroundColor: teamAData.color + '20' }}
-                >
-                  <DisplayLogo
-                    logos={[teamAData.logo]}
-                    alt={teamAData.name}
-                    className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16"
-                    type_play="circle"
-                    logoSize="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16"
-                  />
-                </div>
-                <div className="hidden sm:block">
-                  <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 truncate">{teamAData.name}</h2>
-                  <div 
-                    className="w-16 sm:w-20 h-1 rounded-full mt-1"
-                    style={{ backgroundColor: teamAData.color }}
-                  ></div>
-                </div>
+        {/* Stylized Scoreboard Header */}
+        <div className="relative flex-shrink-0 px-2 sm:px-4 lg:px-6 pt-4 sm:pt-6">
+          <div className="relative">
+            {/* Background glow effects */}
+            <div className="absolute -inset-2 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-green-600/20 rounded-3xl blur-xl"></div>
+
+            {/* Main scoreboard container with indented corners */}
+            <div className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+              {/* Decorative corner indents */}
+              <div className="absolute top-0 left-0 w-8 h-8 bg-gradient-to-br from-transparent to-black/30"
+                   style={{ clipPath: 'polygon(0 0, 100% 0, 0 100%)' }}></div>
+              <div className="absolute top-0 right-0 w-8 h-8 bg-gradient-to-bl from-transparent to-black/30"
+                   style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%)' }}></div>
+              <div className="absolute bottom-0 left-0 w-8 h-8 bg-gradient-to-tr from-transparent to-black/30"
+                   style={{ clipPath: 'polygon(0 0, 0 100%, 100% 100%)' }}></div>
+              <div className="absolute bottom-0 right-0 w-8 h-8 bg-gradient-to-tl from-transparent to-black/30"
+                   style={{ clipPath: 'polygon(100% 0, 100% 100%, 0 100%)' }}></div>
+
+              {/* Inner glow */}
+              <div className="absolute inset-1 bg-gradient-to-br from-blue-500/5 via-transparent to-green-500/5 rounded-2xl"></div>
+
+              {/* Team color accents */}
+              <div className="absolute inset-0 flex">
+                <div
+                  className="w-1/3 h-full opacity-10"
+                  style={{
+                    background: `linear-gradient(135deg, ${teamAData.color}40, transparent)`
+                  }}
+                ></div>
+                <div className="w-1/3 h-full"></div>
+                <div
+                  className="w-1/3 h-full opacity-10"
+                  style={{
+                    background: `linear-gradient(225deg, ${teamBData.color}40, transparent)`
+                  }}
+                ></div>
               </div>
 
-              {/* Mobile team names (above score) */}
-              <div className="flex sm:hidden items-center gap-8 w-full justify-between px-4 order-first">
-                <h2 className="text-sm font-bold text-gray-900 truncate max-w-[120px]">{teamAData.name}</h2>
-                <h2 className="text-sm font-bold text-gray-900 truncate max-w-[120px] text-right">{teamBData.name}</h2>
-              </div>
+              {/* Header content */}
+              <div className="relative z-10 px-3 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8">
+                {/* Mobile team names row */}
+                <div className="flex sm:hidden justify-between items-center mb-4 px-2">
+                  <h2 className="text-sm font-bold text-white/90 truncate max-w-[35%]">{teamAData.name}</h2>
+                  <div className="text-xs text-white/60 font-medium px-3 py-1 bg-white/10 rounded-full">
+                    VS
+                  </div>
+                  <h2 className="text-sm font-bold text-white/90 truncate max-w-[35%] text-right">{teamBData.name}</h2>
+                </div>
 
-              {/* Score in center */}
-              <div className="flex items-center justify-center px-2 sm:px-4 lg:px-8 flex-shrink-0">
-                <div className="relative">
-                  <div className="bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 text-white px-4 sm:px-6 lg:px-12 py-3 sm:py-4 lg:py-6 rounded-xl sm:rounded-2xl shadow-2xl border-2 sm:border-4 border-white/20">
-                    <div className="flex items-center justify-center gap-2 sm:gap-3 lg:gap-4">
-                      <span className="text-2xl sm:text-3xl lg:text-4xl font-black">{teamAData.score}</span>
-                      <div className="w-0.5 sm:w-1 h-6 sm:h-8 lg:h-12 bg-white/30 rounded-full"></div>
-                      <span className="text-2xl sm:text-3xl lg:text-4xl font-black">{teamBData.score}</span>
+                <div className="flex items-center justify-between">
+                  {/* Team A Section */}
+                  <div className="flex items-center gap-2 sm:gap-4 lg:gap-6 flex-1">
+                    {/* Team A Logo with stylized container */}
+                    <div className="relative group">
+                      <div className="absolute -inset-1 bg-gradient-to-r from-white/20 to-transparent rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                      <div
+                        className="relative p-2 sm:p-3 lg:p-4 rounded-xl sm:rounded-2xl border border-white/20 backdrop-blur-sm"
+                        style={{
+                          background: `linear-gradient(135deg, ${teamAData.color}20, rgba(255,255,255,0.1))`,
+                          boxShadow: `0 0 20px ${teamAData.color}30`
+                        }}
+                      >
+                        <DisplayLogo
+                          logos={[teamAData.logo]}
+                          alt={teamAData.name}
+                          className="w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16"
+                          type_play="circle"
+                          logoSize="w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Team A Name - Desktop only */}
+                    <div className="hidden sm:block flex-1">
+                      <h2 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white truncate">
+                        {teamAData.name}
+                      </h2>
+                      <div
+                        className="w-12 sm:w-16 lg:w-24 h-1 rounded-full mt-1 transition-all duration-300"
+                        style={{
+                          background: `linear-gradient(90deg, ${teamAData.color}, transparent)`,
+                          boxShadow: `0 0 10px ${teamAData.color}50`
+                        }}
+                      ></div>
                     </div>
                   </div>
-                  {/* Score glow effect */}
-                  <div className="absolute -inset-1 bg-gradient-to-r from-emerald-600 to-green-600 rounded-xl sm:rounded-2xl blur opacity-20"></div>
+
+                  {/* Central Score Display */}
+                  <div className="flex items-center justify-center px-2 sm:px-4 lg:px-6">
+                    <div className="relative group">
+                      {/* Score background glow */}
+                      <div className="absolute -inset-2 bg-gradient-to-r from-emerald-500/30 via-blue-500/30 to-purple-500/30 rounded-2xl blur-lg group-hover:blur-xl transition duration-300"></div>
+
+                      {/* Score container */}
+                      <div className="relative bg-gradient-to-br from-white/95 via-white/90 to-white/95 text-slate-900 px-3 sm:px-6 lg:px-8 py-2 sm:py-3 lg:py-4 rounded-xl sm:rounded-2xl shadow-2xl border-2 border-white/30 backdrop-blur-sm">
+                        <div className="flex items-center justify-center gap-1 sm:gap-2 lg:gap-4">
+                          <div className="text-center">
+                            <div
+                              className="text-lg sm:text-2xl lg:text-4xl xl:text-5xl font-black tracking-tight"
+                              style={{ color: teamAData.color }}
+                            >
+                              {teamAData.score}
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col items-center gap-1">
+                            <div className="w-0.5 sm:w-1 h-6 sm:h-8 lg:h-12 bg-gradient-to-b from-gray-300 via-gray-500 to-gray-300 rounded-full"></div>
+                            <div className="text-xs sm:text-sm font-bold text-gray-500 tracking-wider">VS</div>
+                            <div className="w-0.5 sm:w-1 h-6 sm:h-8 lg:h-12 bg-gradient-to-b from-gray-300 via-gray-500 to-gray-300 rounded-full"></div>
+                          </div>
+
+                          <div className="text-center">
+                            <div
+                              className="text-lg sm:text-2xl lg:text-4xl xl:text-5xl font-black tracking-tight"
+                              style={{ color: teamBData.color }}
+                            >
+                              {teamBData.score}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Decorative corner elements */}
+                      <div className="absolute -top-1 -left-1 w-3 h-3 border-l-2 border-t-2 border-white/40 rounded-tl-lg"></div>
+                      <div className="absolute -top-1 -right-1 w-3 h-3 border-r-2 border-t-2 border-white/40 rounded-tr-lg"></div>
+                      <div className="absolute -bottom-1 -left-1 w-3 h-3 border-l-2 border-b-2 border-white/40 rounded-bl-lg"></div>
+                      <div className="absolute -bottom-1 -right-1 w-3 h-3 border-r-2 border-b-2 border-white/40 rounded-br-lg"></div>
+                    </div>
+                  </div>
+
+                  {/* Team B Section */}
+                  <div className="flex items-center gap-2 sm:gap-4 lg:gap-6 flex-1 justify-end">
+                    {/* Team B Name - Desktop only */}
+                    <div className="hidden sm:block flex-1 text-right">
+                      <h2 className="text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold text-white truncate">
+                        {teamBData.name}
+                      </h2>
+                      <div
+                        className="w-12 sm:w-16 lg:w-24 h-1 rounded-full mt-1 ml-auto transition-all duration-300"
+                        style={{
+                          background: `linear-gradient(270deg, ${teamBData.color}, transparent)`,
+                          boxShadow: `0 0 10px ${teamBData.color}50`
+                        }}
+                      ></div>
+                    </div>
+
+                    {/* Team B Logo with stylized container */}
+                    <div className="relative group">
+                      <div className="absolute -inset-1 bg-gradient-to-l from-white/20 to-transparent rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                      <div
+                        className="relative p-2 sm:p-3 lg:p-4 rounded-xl sm:rounded-2xl border border-white/20 backdrop-blur-sm"
+                        style={{
+                          background: `linear-gradient(225deg, ${teamBData.color}20, rgba(255,255,255,0.1))`,
+                          boxShadow: `0 0 20px ${teamBData.color}30`
+                        }}
+                      >
+                        <DisplayLogo
+                          logos={[teamBData.logo]}
+                          alt={teamBData.name}
+                          className="w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16"
+                          type_play="circle"
+                          logoSize="w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16"
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Team B */}
-              <div className="flex items-center gap-3 sm:gap-4 lg:gap-6 flex-shrink-0 sm:flex-1 sm:justify-end flex-row-reverse sm:flex-row">
-                <div 
-                  className="p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-lg border-2 border-white"
-                  style={{ backgroundColor: teamBData.color + '20' }}
-                >
-                  <DisplayLogo
-                    logos={[teamBData.logo]}
-                    alt={teamBData.name}
-                    className="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16"
-                    type_play="circle"
-                    logoSize="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16"
-                  />
-                </div>
-                <div className="hidden sm:block text-right">
-                  <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 truncate">{teamBData.name}</h2>
-                  <div 
-                    className="w-16 sm:w-20 h-1 rounded-full mt-1 ml-auto"
-                    style={{ backgroundColor: teamBData.color }}
-                  ></div>
-                </div>
-              </div>
+              {/* Bottom accent line */}
+              <div className="h-1 bg-gradient-to-r from-blue-500/50 via-purple-500/50 via-green-500/50 to-blue-500/50"></div>
             </div>
-
-            {/* Bottom decorative line */}
-            <div className="h-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
           </div>
         </div>
 
