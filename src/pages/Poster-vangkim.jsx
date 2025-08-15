@@ -43,7 +43,13 @@ export default function DodenMatchIntro() {
     showStadium: posterSettings?.showStadium !== false,
     showLiveIndicator: posterSettings?.showLiveIndicator !== false,
     accentColor: posterSettings?.accentColor || '#ef4444',
-    liveText: contextMatchData.liveText || 'FACEBOOK LIVE'
+    liveText: contextMatchData.liveText || 'FACEBOOK LIVE',
+    round: contextMatchData.round || 1,
+    group: contextMatchData.group || 'A',
+    subtitle: contextMatchData.subtitle || '',
+    showRound: contextMatchData.showRound === true,
+    showGroup: contextMatchData.showGroup === true,
+    showSubtitle: contextMatchData.showSubtitle !== false
   };
 
   const [windowSize, setWindowSize] = useState({

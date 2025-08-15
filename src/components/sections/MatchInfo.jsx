@@ -24,7 +24,11 @@ const MatchInfo = ({
   isSearchingLogoB,
   onSearchLogoA,
   onSearchLogoB,
-  onApplyChanges
+  onApplyChanges,
+  subtitle,
+  setSubtitle,
+  showSubtitle,
+  setShowSubtitle
 }) => {
   return (
     <>
@@ -210,6 +214,27 @@ const MatchInfo = ({
               className="w-full min-w-0 px-1 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center bg-white"
               maxLength={20}
             />
+          </div>
+
+          {/* Tiêu đề phụ */}
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              placeholder="Tiêu đề phụ..."
+              value={subtitle || ''}
+              onChange={(e) => setSubtitle && setSubtitle(e.target.value)}
+              className="flex-1 min-w-0 px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center bg-white"
+              maxLength={50}
+            />
+            <label className="flex items-center gap-1 flex-shrink-0">
+              <input
+                type="checkbox"
+                checked={showSubtitle !== false}
+                onChange={(e) => setShowSubtitle && setShowSubtitle(e.target.checked)}
+                className="w-3 h-3"
+              />
+              <span className="text-xs text-gray-600">Hiện</span>
+            </label>
           </div>
 
           {/* Nút áp dụng - compact */}

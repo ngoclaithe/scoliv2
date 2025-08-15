@@ -43,7 +43,13 @@ export default function DodenMatchIntro() {
     showStadium: posterSettings?.showStadium !== false,
     showLiveIndicator: posterSettings?.showLiveIndicator !== false,
     accentColor: posterSettings?.accentColor || '#ef4444',
-    liveText: contextMatchData.liveText || 'FACEBOOK LIVE'
+    liveText: contextMatchData.liveText || 'FACEBOOK LIVE',
+    round: contextMatchData.round || 1,
+    group: contextMatchData.group || 'A',
+    subtitle: contextMatchData.subtitle || '',
+    showRound: contextMatchData.showRound === true,
+    showGroup: contextMatchData.showGroup === true,
+    showSubtitle: contextMatchData.showSubtitle !== false
   };
 
   const [windowSize, setWindowSize] = useState({
@@ -322,6 +328,27 @@ export default function DodenMatchIntro() {
               >
                 {matchData.matchTitle}
               </h1>
+
+              {/* Subtitle display */}
+              {matchData.showSubtitle && matchData.subtitle && (
+                <div className="text-white/90 text-[8px] sm:text-xs md:text-sm lg:text-base font-medium mt-1 sm:mt-2 px-2">
+                  {matchData.subtitle}
+                </div>
+              )}
+
+              {/* Round and Group display - Moved below title */}
+              <div className="flex items-center justify-center gap-2 sm:gap-4 mt-1 sm:mt-2">
+                {matchData.showRound && (
+                  <div className="bg-blue-600/80 px-1 sm:px-2 py-0.5 sm:py-1 rounded text-[6px] sm:text-[8px] md:text-[10px] font-bold text-white">
+                    VÒNG {matchData.round}
+                  </div>
+                )}
+                {matchData.showGroup && (
+                  <div className="bg-red-600/80 px-1 sm:px-2 py-0.5 sm:py-1 rounded text-[6px] sm:text-[8px] md:text-[10px] font-bold text-white">
+                    BẢNG {matchData.group}
+                  </div>
+                )}
+              </div>
 
               <div className="flex items-center justify-center mt-2 sm:mt-4">
                 <div className="w-12 sm:w-24 h-0.5 bg-white"></div>

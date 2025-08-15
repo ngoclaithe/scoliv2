@@ -38,7 +38,13 @@ export const MatchProvider = ({ children }) => {
     matchDate: "",
     liveText: "",
     matchTitle: "",
-    typeMatch: "soccer"
+    typeMatch: "soccer",
+    round: 1,
+    group: "A",
+    subtitle: "",
+    showRound: false,
+    showGroup: false,
+    showSubtitle: true
   });
 
   // State cho thống kê trận đấu
@@ -654,6 +660,60 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
+  // Cập nhật round (vòng đấu)
+  const updateRound = useCallback((round, showRound = true) => {
+    setMatchData(prev => ({ ...prev, round, showRound }));
+
+    if (socketConnected) {
+      socketService.emit('round_updated', { round, showRound });
+    }
+  }, [socketConnected]);
+
+  // Cập nhật group (bảng đấu)
+  const updateGroup = useCallback((group, showGroup = true) => {
+    setMatchData(prev => ({ ...prev, group, showGroup }));
+
+    if (socketConnected) {
+      socketService.emit('group_updated', { group, showGroup });
+    }
+  }, [socketConnected]);
+
+  // Cập nhật subtitle (tiêu đề phụ)
+  const updateSubtitle = useCallback((subtitle, showSubtitle = true) => {
+    setMatchData(prev => ({ ...prev, subtitle, showSubtitle }));
+
+    if (socketConnected) {
+      socketService.emit('subtitle_updated', { subtitle, showSubtitle });
+    }
+  }, [socketConnected]);
+
+  // Cập nhật trạng thái hiển thị round
+  const toggleRoundVisibility = useCallback((showRound) => {
+    setMatchData(prev => ({ ...prev, showRound }));
+
+    if (socketConnected) {
+      socketService.emit('round_visibility_updated', { showRound });
+    }
+  }, [socketConnected]);
+
+  // Cập nhật trạng thái hiển thị group
+  const toggleGroupVisibility = useCallback((showGroup) => {
+    setMatchData(prev => ({ ...prev, showGroup }));
+
+    if (socketConnected) {
+      socketService.emit('group_visibility_updated', { showGroup });
+    }
+  }, [socketConnected]);
+
+  // Cập nhật trạng thái hiển thị subtitle
+  const toggleSubtitleVisibility = useCallback((showSubtitle) => {
+    setMatchData(prev => ({ ...prev, showSubtitle }));
+
+    if (socketConnected) {
+      socketService.emit('subtitle_visibility_updated', { showSubtitle });
+    }
+  }, [socketConnected]);
+
   // Cập nhật cài đặt poster
   const updatePosterSettings = useCallback((newPosterSettings) => {
     console.log('[MatchContext] updatePosterSettings called:', newPosterSettings, 'socketConnected:', socketConnected);
@@ -899,6 +959,14 @@ export const MatchProvider = ({ children }) => {
     updateLiveUnit,
     updatePosterSettings,
     updateDisplaySettings,
+
+    // Round, Group, Subtitle functions
+    updateRound,
+    updateGroup,
+    updateSubtitle,
+    toggleRoundVisibility,
+    toggleGroupVisibility,
+    toggleSubtitleVisibility,
 
     // Timer functions đã được chuyển sang TimerContext
 

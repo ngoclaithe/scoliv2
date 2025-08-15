@@ -128,6 +128,8 @@ const MatchManagementSection = ({ isActive = true }) => {
   });
   const [matchTitle, setMatchTitle] = useState(matchData.matchTitle || "");
   const [liveText, setLiveText] = useState(matchData.liveText || "");
+  const [subtitle, setSubtitle] = useState(matchData.subtitle || "");
+  const [showSubtitle, setShowSubtitle] = useState(matchData.showSubtitle !== false);
 
   useEffect(() => {
     console.log("Giá trị đồng bộ từ backend socket là", matchData);
@@ -429,7 +431,9 @@ const MatchManagementSection = ({ isActive = true }) => {
       teamB2KitColor: teamBInfo.teamB2Kitcolor || '#00ff00',
       liveText: liveText,
       logoTeamA: teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
-      logoTeamB: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || ""
+      logoTeamB: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || "",
+      subtitle: subtitle,
+      showSubtitle: showSubtitle
     };
 
     console.log("🎨 [DEBUG] Gửi updateMatchInfo với:", matchInfoData);
@@ -538,6 +542,10 @@ const MatchManagementSection = ({ isActive = true }) => {
           onSearchLogoA={handleSearchLogoA}
           onSearchLogoB={handleSearchLogoB}
           onApplyChanges={handleApplyChanges}
+          subtitle={subtitle}
+          setSubtitle={setSubtitle}
+          showSubtitle={showSubtitle}
+          setShowSubtitle={setShowSubtitle}
         />
       </div>
 

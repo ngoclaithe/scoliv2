@@ -19,6 +19,15 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     rotateDisplay: false
   });
 
+  const [roundGroupOptions, setRoundGroupOptions] = useState({
+    round: 1,
+    showRound: false,
+    group: "A",
+    showGroup: false
+  });
+
+  const [customPosters, setCustomPosters] = useState([]);
+
   const availablePosters = [
     {
       id: "tretrung",
@@ -293,6 +302,39 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   useEffect(() => {
     updateSelectedLogosCount();
   }, [updateSelectedLogosCount]);
+
+  const handlePosterUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Kiểm tra kích thước file (tối đa 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Kích thước file tối đa là 5MB");
+      return;
+    }
+
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      alert("Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WebP)");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const newPoster = {
+        id: `custom-poster-${Date.now()}`,
+        name: `Poster tùy chỉnh ${customPosters.length + 1}`,
+        thumbnail: e.target.result,
+        isCustom: true
+      };
+
+      setCustomPosters(prev => [...prev, newPoster]);
+
+      // Tự động chọn poster mới upload
+      handlePosterSelect(newPoster);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleFileUpload = async (event, item) => {
     const file = event.target.files[0];
@@ -864,11 +906,13 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
 
 
+  const allPosters = [...availablePosters, ...customPosters];
+
   const renderPosterSection = () => {
     return (
       <div className="space-y-1">
         <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
-          {availablePosters.map((poster) => (
+          {allPosters.map((poster) => (
             <div key={poster.id} className="flex-none w-24">
               <PosterCard
                 poster={poster}
@@ -877,6 +921,29 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               />
             </div>
           ))}
+          {/* Nút thêm poster */}
+          <div className="flex-none w-24">
+            <div className="relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer group border-2 border-dashed border-gray-300 hover:border-blue-400">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handlePosterUpload}
+                className="hidden"
+                id="poster-upload"
+              />
+              <label
+                htmlFor="poster-upload"
+                className="block aspect-video bg-gray-50 hover:bg-blue-50 transition-colors duration-200 cursor-pointer"
+              >
+                <div className="w-full h-full flex flex-col items-center justify-center">
+                  <div className="w-8 h-8 bg-gray-200 hover:bg-blue-200 rounded-full flex items-center justify-center mb-1 transition-colors duration-200">
+                    <span className="text-lg text-gray-500 hover:text-blue-500">+</span>
+                  </div>
+                  <span className="text-xs text-gray-500 font-medium">Thêm poster</span>
+                </div>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -920,6 +987,85 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     // Nếu chỉ chọn logo thì cho phép tất cả shapes
     return false;
+  };
+
+  const handleRoundGroupUpdate = useCallback((type, value, show) => {
+    if (type === 'round') {
+      setRoundGroupOptions(prev => ({ ...prev, round: value, showRound: show }));
+      if (onLogoUpdate) {
+        onLogoUpdate({
+          roundGroupUpdate: { round: value, showRound: show, type: 'round' }
+        });
+      }
+    } else if (type === 'group') {
+      setRoundGroupOptions(prev => ({ ...prev, group: value, showGroup: show }));
+      if (onLogoUpdate) {
+        onLogoUpdate({
+          roundGroupUpdate: { group: value, showGroup: show, type: 'group' }
+        });
+      }
+    }
+  }, [onLogoUpdate]);
+
+  const renderRoundGroupSection = () => {
+    return (
+      <div className="space-y-2">
+        <div className="flex items-center gap-1">
+          <span className="text-xs">🏆</span>
+          <h3 className="text-xs font-semibold text-gray-900">Vòng đấu & Bảng đấu</h3>
+        </div>
+
+        {/* Vòng đấu */}
+        <div className="flex items-center gap-2">
+          <label className="flex items-center gap-1">
+            <span className="text-xs text-gray-700">Vòng:</span>
+            <select
+              value={roundGroupOptions.round}
+              onChange={(e) => handleRoundGroupUpdate('round', parseInt(e.target.value), roundGroupOptions.showRound)}
+              className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white"
+            >
+              {[1,2,3,4,5,6,7,8,9,10].map(num => (
+                <option key={num} value={num}>Vòng {num}</option>
+              ))}
+            </select>
+          </label>
+          <label className="flex items-center gap-1">
+            <input
+              type="checkbox"
+              checked={roundGroupOptions.showRound}
+              onChange={(e) => handleRoundGroupUpdate('round', roundGroupOptions.round, e.target.checked)}
+              className="w-3 h-3"
+            />
+            <span className="text-xs text-gray-600">Hiện</span>
+          </label>
+        </div>
+
+        {/* Bảng đấu */}
+        <div className="flex items-center gap-2">
+          <label className="flex items-center gap-1">
+            <span className="text-xs text-gray-700">Bảng:</span>
+            <select
+              value={roundGroupOptions.group}
+              onChange={(e) => handleRoundGroupUpdate('group', e.target.value, roundGroupOptions.showGroup)}
+              className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white"
+            >
+              {['A','B','C','D','E','F','G','H'].map(letter => (
+                <option key={letter} value={letter}>Bảng {letter}</option>
+              ))}
+            </select>
+          </label>
+          <label className="flex items-center gap-1">
+            <input
+              type="checkbox"
+              checked={roundGroupOptions.showGroup}
+              onChange={(e) => handleRoundGroupUpdate('group', roundGroupOptions.group, e.target.checked)}
+              className="w-3 h-3"
+            />
+            <span className="text-xs text-gray-600">Hiện</span>
+          </label>
+        </div>
+      </div>
+    );
   };
 
   const renderLogoSection = () => {
@@ -1106,6 +1252,10 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
       <div className="bg-white border border-gray-200 rounded-lg p-2">
         {renderPosterSection()}
+      </div>
+
+      <div className="bg-white border border-gray-200 rounded-lg p-2">
+        {renderRoundGroupSection()}
       </div>
 
       <div className="bg-white border border-gray-200 rounded-lg p-2">
