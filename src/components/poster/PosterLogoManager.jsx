@@ -303,6 +303,39 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     updateSelectedLogosCount();
   }, [updateSelectedLogosCount]);
 
+  const handlePosterUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // Kiểm tra kích thước file (tối đa 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Kích thước file tối đa là 5MB");
+      return;
+    }
+
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      alert("Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WebP)");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const newPoster = {
+        id: `custom-poster-${Date.now()}`,
+        name: `Poster tùy chỉnh ${customPosters.length + 1}`,
+        thumbnail: e.target.result,
+        isCustom: true
+      };
+
+      setCustomPosters(prev => [...prev, newPoster]);
+
+      // Tự động chọn poster mới upload
+      handlePosterSelect(newPoster);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleFileUpload = async (event, item) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -314,7 +347,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!validTypes.includes(file.type)) {
-      alert("Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WebP)");
+      alert("Chỉ chấp nh��n file ảnh (JPEG, PNG, GIF, WebP)");
       return;
     }
 
@@ -1186,7 +1219,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           <option value="">Chọn trận</option>
           {historyMatches.map((match) => (
             <option key={match.id} value={match.id}>
-              {match.accessCode} ({match.status === 'expired' ? 'Đã kết thúc' : match.status})
+              {match.accessCode} ({match.status === 'expired' ? 'Đã kết th��c' : match.status})
             </option>
           ))}
         </select>
