@@ -155,45 +155,18 @@ const CommentarySection = ({ isActive = true }) => {
     }
   };
 
-  const stopRecording = () => {
-    console.log("🔇 Stopping continuous recording");
-    setIsRecording(false);
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
-      mediaRecorderRef.current.stop();
-    }
+  const stopMicrophone = () => {
+    console.log("🔇 Stopping microphone");
+    stopStreaming();
+
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
     }
   };
 
-  const sendVoiceToServer = async (audioBlob) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const arrayBuffer = reader.result;
-        const uint8Array = new Uint8Array(arrayBuffer);
-        if (socketService.socket && socketService.socket.connected) {
-          const mimeType =
-            mediaRecorderRef.current?.mimeType ||
-            getSupportedMimeType() ||
-            "audio/webm";
-          const success = socketService.sendRefereeVoice(
-            Array.from(uint8Array),
-            mimeType
-          );
-          success ? resolve() : reject(new Error("Failed to send voice"));
-        } else {
-          reject(new Error("Socket not connected"));
-        }
-      };
-      reader.onerror = () => reject(reader.error);
-      reader.readAsArrayBuffer(audioBlob);
-    });
-  };
-
-  const toggleRecording = () => {
-    isRecording ? stopRecording() : startRecording();
+  const toggleMicrophone = () => {
+    isStreaming ? stopMicrophone() : startMicrophone();
   };
 
   return (
