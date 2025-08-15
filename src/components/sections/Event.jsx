@@ -5,45 +5,97 @@ import DisplayLogo from '../common/DisplayLogo';
 const Event = () => {
   const { matchData, matchStats } = usePublicMatch();
 
-  const [teamAGoals, setTeamAGoals] = useState([]);
-  const [teamBGoals, setTeamBGoals] = useState([]);
+  const [teamAEvents, setTeamAEvents] = useState([]);
+  const [teamBEvents, setTeamBEvents] = useState([]);
 
-  // Tạo danh sách bàn thắng từ matchData
+  // Tạo danh sách sự kiện từ matchData và matchStats
   useEffect(() => {
-    const teamAGoalsList = [];
-    const teamBGoalsList = [];
+    const teamAEventsList = [];
+    const teamBEventsList = [];
 
     // Sự kiện ghi bàn đội A
     if (matchData.teamA?.teamAScorers) {
       matchData.teamA.teamAScorers.forEach(scorer => {
         scorer.times.forEach(time => {
-          teamAGoalsList.push({
+          teamAEventsList.push({
+            type: 'goal',
             player: scorer.player,
-            minute: time
+            minute: time,
+            icon: '⚽'
           });
         });
       });
     }
 
-    // Sự kiện ghi bàn đội B
+    // Sự kiện ghi bàn đ���i B
     if (matchData.teamB?.teamBScorers) {
       matchData.teamB.teamBScorers.forEach(scorer => {
         scorer.times.forEach(time => {
-          teamBGoalsList.push({
+          teamBEventsList.push({
+            type: 'goal',
             player: scorer.player,
-            minute: time
+            minute: time,
+            icon: '⚽'
           });
+        });
+      });
+    }
+
+    // Thẻ vàng đội A (team1)
+    if (Array.isArray(matchStats.yellowCards?.team1)) {
+      matchStats.yellowCards.team1.forEach(card => {
+        teamAEventsList.push({
+          type: 'yellow_card',
+          player: card.player,
+          minute: card.minute,
+          icon: '🟨'
+        });
+      });
+    }
+
+    // Thẻ vàng đội B (team2)
+    if (Array.isArray(matchStats.yellowCards?.team2)) {
+      matchStats.yellowCards.team2.forEach(card => {
+        teamBEventsList.push({
+          type: 'yellow_card',
+          player: card.player,
+          minute: card.minute,
+          icon: '🟨'
+        });
+      });
+    }
+
+    // Thẻ đỏ đội A (team1)
+    if (Array.isArray(matchStats.redCards?.team1)) {
+      matchStats.redCards.team1.forEach(card => {
+        teamAEventsList.push({
+          type: 'red_card',
+          player: card.player,
+          minute: card.minute,
+          icon: '🟥'
+        });
+      });
+    }
+
+    // Thẻ ��ỏ đội B (team2)
+    if (Array.isArray(matchStats.redCards?.team2)) {
+      matchStats.redCards.team2.forEach(card => {
+        teamBEventsList.push({
+          type: 'red_card',
+          player: card.player,
+          minute: card.minute,
+          icon: '🟥'
         });
       });
     }
 
     // Sắp xếp theo phút
-    teamAGoalsList.sort((a, b) => a.minute - b.minute);
-    teamBGoalsList.sort((a, b) => a.minute - b.minute);
+    teamAEventsList.sort((a, b) => a.minute - b.minute);
+    teamBEventsList.sort((a, b) => a.minute - b.minute);
 
-    setTeamAGoals(teamAGoalsList);
-    setTeamBGoals(teamBGoalsList);
-  }, [matchData]);
+    setTeamAEvents(teamAEventsList);
+    setTeamBEvents(teamBEventsList);
+  }, [matchData, matchStats]);
 
   const teamAData = {
     name: matchData.teamA?.name || "ĐỘI A",
