@@ -431,7 +431,9 @@ const MatchManagementSection = ({ isActive = true }) => {
       teamB2KitColor: teamBInfo.teamB2Kitcolor || '#00ff00',
       liveText: liveText,
       logoTeamA: teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
-      logoTeamB: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || ""
+      logoTeamB: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || "",
+      subtitle: subtitle,
+      showSubtitle: showSubtitle
     };
 
     console.log("🎨 [DEBUG] Gửi updateMatchInfo với:", matchInfoData);
