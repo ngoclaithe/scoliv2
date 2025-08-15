@@ -42,8 +42,8 @@ export const MatchProvider = ({ children }) => {
     round: 1,
     group: "A",
     subtitle: "",
-    showRound: true,
-    showGroup: true,
+    showRound: false,
+    showGroup: false,
     showSubtitle: true
   });
 
