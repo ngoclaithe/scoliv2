@@ -45,7 +45,6 @@ const ManageAccessCode = ({ onNavigate }) => {
   const [paymentData, setPaymentData] = useState(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [paymentInfo, setPaymentInfo] = useState(null);
-
   const loadCodes = useCallback(async (page = 1, status = '') => {
     try {
       setLoading(true);
@@ -99,6 +98,7 @@ const ManageAccessCode = ({ onNavigate }) => {
     }
     if (activeTab === 'account') {
       loadCurrentUser();
+
     }
   }, [activeTab]);
 
