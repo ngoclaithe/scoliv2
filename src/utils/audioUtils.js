@@ -40,17 +40,19 @@ class AudioManager {
       try {
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
         this.audioContext.latencyHint = 'interactive';
-        
+
         // Create gain node for volume control
         this.gainNode = this.audioContext.createGain();
         this.gainNode.connect(this.audioContext.destination);
         this.gainNode.gain.value = this.isMuted ? 0 : this.volume;
-        
-        if (this.audioContext.state === 'suspended') {
+
+        // Only try to resume if user has interacted and context is suspended
+        if (this.userInteracted && this.audioContext.state === 'suspended') {
           await this.audioContext.resume();
         }
       } catch (error) {
         // Silent error handling
+        console.warn('Failed to initialize AudioContext:', error.message);
       }
     }
   }
@@ -125,7 +127,10 @@ class AudioManager {
 
   // Real-time audio playback using Web Audio API for low latency
   playRefereeVoiceRealtime(audioData) {
-    if (!this.audioEnabled || !this.userInteracted) return;
+    if (!this.audioEnabled || !this.userInteracted) {
+      console.warn('Audio not enabled or user has not interacted yet');
+      return;
+    }
 
     this.initAudioContext().then(() => {
       try {
@@ -191,14 +196,17 @@ class AudioManager {
 
   // Fallback method for blob-based audio (backward compatibility)
   playRefereeVoice(audioData, originalMimeType = null) {
-    // Try real-time first if audioData is Float32Array or Array
-    if (audioData instanceof Float32Array || Array.isArray(audioData)) {
+    // Try real-time first if audioData is Float32Array
+    if (audioData instanceof Float32Array) {
       this.playRefereeVoiceRealtime(audioData);
       return;
     }
 
-    // Fallback to blob-based approach for other data types
-    if (!this.audioEnabled || !this.userInteracted) return;
+    // For Array data from MediaRecorder (Uint8Array converted to Array), use blob approach
+    if (!this.audioEnabled || !this.userInteracted) {
+      console.warn('Audio not enabled or user has not interacted yet');
+      return;
+    }
 
     try {
       // Stop previous audio
@@ -218,11 +226,15 @@ class AudioManager {
           arrayBuffer = audioData;
         } else if (audioData instanceof Uint8Array) {
           arrayBuffer = audioData.buffer.slice(audioData.byteOffset, audioData.byteOffset + audioData.byteLength);
+        } else if (Array.isArray(audioData)) {
+          // Handle Array from MediaRecorder (Uint8Array converted to Array)
+          const uint8Array = new Uint8Array(audioData);
+          arrayBuffer = uint8Array.buffer.slice(uint8Array.byteOffset, uint8Array.byteOffset + uint8Array.byteLength);
         } else {
           return; // Unsupported format
         }
 
-        const mimeType = originalMimeType || 'audio/wav';
+        const mimeType = originalMimeType || 'audio/webm';
         blob = new Blob([arrayBuffer], { type: mimeType });
       }
 
@@ -247,7 +259,7 @@ class AudioManager {
       };
 
       this.refereeVoiceRef = audio;
-      
+
       // Play audio
       const playPromise = audio.play();
       if (playPromise) {
