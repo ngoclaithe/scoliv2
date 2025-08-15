@@ -13,6 +13,25 @@ const Event = () => {
     const teamAEventsList = [];
     const teamBEventsList = [];
 
+    // Helper function để tạo unique key cho event
+    const createEventKey = (type, player, minute) => {
+      return `${type}-${player}-${minute}`;
+    };
+
+    // Helper function để loại bỏ duplicate events
+    const removeDuplicates = (events) => {
+      const seen = new Set();
+      return events.filter(event => {
+        const key = createEventKey(event.type, event.player, event.minute);
+        if (seen.has(key)) {
+          console.log('🔄 Removing duplicate event:', key);
+          return false;
+        }
+        seen.add(key);
+        return true;
+      });
+    };
+
     // Sự kiện ghi bàn đội A
     if (matchData.teamA?.teamAScorers) {
       matchData.teamA.teamAScorers.forEach(scorer => {
@@ -21,13 +40,14 @@ const Event = () => {
             type: 'goal',
             player: scorer.player,
             minute: time,
-            icon: '⚽'
+            icon: '⚽',
+            uniqueKey: createEventKey('goal', scorer.player, time)
           });
         });
       });
     }
 
-    // Sự kiện ghi bàn đ���i B
+    // Sự kiện ghi bàn đội B
     if (matchData.teamB?.teamBScorers) {
       matchData.teamB.teamBScorers.forEach(scorer => {
         scorer.times.forEach(time => {
@@ -35,7 +55,8 @@ const Event = () => {
             type: 'goal',
             player: scorer.player,
             minute: time,
-            icon: '⚽'
+            icon: '⚽',
+            uniqueKey: createEventKey('goal', scorer.player, time)
           });
         });
       });
@@ -48,7 +69,8 @@ const Event = () => {
           type: 'yellow_card',
           player: card.player,
           minute: card.minute,
-          icon: '🟨'
+          icon: '🟨',
+          uniqueKey: createEventKey('yellow_card', card.player, card.minute)
         });
       });
     }
@@ -60,7 +82,8 @@ const Event = () => {
           type: 'yellow_card',
           player: card.player,
           minute: card.minute,
-          icon: '🟨'
+          icon: '🟨',
+          uniqueKey: createEventKey('yellow_card', card.player, card.minute)
         });
       });
     }
@@ -72,29 +95,41 @@ const Event = () => {
           type: 'red_card',
           player: card.player,
           minute: card.minute,
-          icon: '🟥'
+          icon: '🟥',
+          uniqueKey: createEventKey('red_card', card.player, card.minute)
         });
       });
     }
 
-    // Thẻ ��ỏ đội B (team2)
+    // Thẻ đỏ đội B (team2)
     if (Array.isArray(matchStats.redCards?.team2)) {
       matchStats.redCards.team2.forEach(card => {
         teamBEventsList.push({
           type: 'red_card',
           player: card.player,
           minute: card.minute,
-          icon: '🟥'
+          icon: '🟥',
+          uniqueKey: createEventKey('red_card', card.player, card.minute)
         });
       });
     }
 
-    // Sắp xếp theo phút
-    teamAEventsList.sort((a, b) => a.minute - b.minute);
-    teamBEventsList.sort((a, b) => a.minute - b.minute);
+    // Loại bỏ duplicates trước khi sắp xếp
+    const uniqueTeamAEvents = removeDuplicates(teamAEventsList);
+    const uniqueTeamBEvents = removeDuplicates(teamBEventsList);
 
-    setTeamAEvents(teamAEventsList);
-    setTeamBEvents(teamBEventsList);
+    // Debug log để kiểm tra
+    console.log('🔍 Team A Events (before dedup):', teamAEventsList.length);
+    console.log('🔍 Team A Events (after dedup):', uniqueTeamAEvents.length);
+    console.log('🔍 Team B Events (before dedup):', teamBEventsList.length);
+    console.log('🔍 Team B Events (after dedup):', uniqueTeamBEvents.length);
+
+    // Sắp xếp theo phút
+    uniqueTeamAEvents.sort((a, b) => a.minute - b.minute);
+    uniqueTeamBEvents.sort((a, b) => a.minute - b.minute);
+
+    setTeamAEvents(uniqueTeamAEvents);
+    setTeamBEvents(uniqueTeamBEvents);
   }, [matchData, matchStats]);
 
   const teamAData = {
@@ -232,7 +267,7 @@ const Event = () => {
                   ></div>
                   {teamAEvents.map((event, index) => (
                     <EventItem
-                      key={`teamA-${event.type}-${index}`}
+                      key={event.uniqueKey || `teamA-${event.type}-${event.player}-${event.minute}-${index}`}
                       event={event}
                       isTeamA={true}
                       teamColor={teamAData.color}
@@ -248,7 +283,7 @@ const Event = () => {
                   ></div>
                   {teamBEvents.map((event, index) => (
                     <EventItem
-                      key={`teamB-${event.type}-${index}`}
+                      key={event.uniqueKey || `teamB-${event.type}-${event.player}-${event.minute}-${index}`}
                       event={event}
                       isTeamA={false}
                       teamColor={teamBData.color}
