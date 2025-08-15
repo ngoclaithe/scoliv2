@@ -43,7 +43,13 @@ export default function TreTrungMatchIntro() {
     showStadium: posterSettings?.showStadium !== false,
     showLiveIndicator: posterSettings?.showLiveIndicator !== false,
     accentColor: posterSettings?.accentColor || '#10b981',
-    liveText: contextMatchData.liveText || 'FACEBOOK LIVE'
+    liveText: contextMatchData.liveText || 'FACEBOOK LIVE',
+    round: contextMatchData.round || 1,
+    group: contextMatchData.group || 'A',
+    subtitle: contextMatchData.subtitle || '',
+    showRound: contextMatchData.showRound !== false,
+    showGroup: contextMatchData.showGroup !== false,
+    showSubtitle: contextMatchData.showSubtitle !== false
   };
 
   const [windowSize, setWindowSize] = useState({
