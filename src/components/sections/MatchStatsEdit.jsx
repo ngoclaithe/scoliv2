@@ -143,11 +143,35 @@ const MatchStatsEdit = ({
   const startMatch = () => {
     const startTime = Date.now();
     setMatchStarted(true);
+    setMatchPaused(false);
     setMatchStartTime(startTime);
     setPossessionStartTime(startTime);
     setCurrentController(null);
     setTotalPossessionA(0);
     setTotalPossessionB(0);
+  };
+
+  const pauseMatch = () => {
+    const now = Date.now();
+    // Cập nhật thời gian kiểm soát của đội hiện tại trước khi pause
+    if (currentController && possessionStartTime) {
+      const duration = now - possessionStartTime;
+      if (currentController === 'teamA') {
+        setTotalPossessionA(prev => prev + duration);
+      } else if (currentController === 'teamB') {
+        setTotalPossessionB(prev => prev + duration);
+      }
+    }
+    setMatchPaused(true);
+    setPossessionStartTime(null);
+    setCurrentController(null);
+    setTeamAControlling(false);
+    setTeamBControlling(false);
+  };
+
+  const resumeMatch = () => {
+    setMatchPaused(false);
+    setPossessionStartTime(Date.now());
   };
 
   const handlePossessionChange = (team) => {
@@ -165,7 +189,7 @@ const MatchStatsEdit = ({
       }
     }
 
-    // Cập nhật đội hi���n tại kiểm soát
+    // Cập nhật đội hiện tại kiểm soát
     setCurrentController(team);
     setPossessionStartTime(now);
 
