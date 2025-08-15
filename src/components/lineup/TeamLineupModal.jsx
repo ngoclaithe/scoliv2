@@ -66,7 +66,6 @@ const TeamLineupModal = ({
         PlayerListAPI.getPlayerListByAccessCode(accessCode, 'teamB')
       ]);
 
-      // Xử lý dữ liệu giống như trong MatchStatsEdit.jsx
       const processPlayers = (players) => {
         if (!Array.isArray(players)) return [];
         return players.map(player => ({

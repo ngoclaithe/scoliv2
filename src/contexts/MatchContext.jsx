@@ -772,11 +772,11 @@ export const MatchProvider = ({ children }) => {
         }
       };
       setMatchStats(newStats);
-
+      console.log("Giá trị gửi lên socket là", cardData);
       // Emit stats update cho yellow cards
-      if (socketConnected) {
-        socketService.updateMatchStats(newStats);
-      }
+      // if (socketConnected) {
+      //   socketService.updateMatchStats(newStats);
+      // }
     }
 
     return cardData;
