@@ -8,7 +8,7 @@ const BannerUpload = ({
   isOpen,
   onClose,
   onBannerUpload,
-  maxFileSize = 10 * 1024 * 1024, // 10MB
+  maxFileSize = 5 * 1024 * 1024, // 5MB
   className = "",
 }) => {
   const [uploadedFile, setUploadedFile] = useState(null);
