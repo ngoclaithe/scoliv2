@@ -203,7 +203,10 @@ class AudioManager {
     }
 
     // For Array data from MediaRecorder (Uint8Array converted to Array), use blob approach
-    if (!this.audioEnabled || !this.userInteracted) return;
+    if (!this.audioEnabled || !this.userInteracted) {
+      console.warn('Audio not enabled or user has not interacted yet');
+      return;
+    }
 
     try {
       // Stop previous audio
