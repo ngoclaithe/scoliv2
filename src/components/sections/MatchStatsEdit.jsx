@@ -236,7 +236,7 @@ const MatchStatsEdit = ({
 
   // Cập nhật local possession stats theo thời gian thực (không gọi onUpdateStats)
   useEffect(() => {
-    if (!matchStarted) return;
+    if (!matchStarted || matchPaused) return;
 
     const interval = setInterval(() => {
       const newPossession = calculatePossessionPercentage();
@@ -247,7 +247,7 @@ const MatchStatsEdit = ({
     }, 1000); // Cập nhật mỗi giây
 
     return () => clearInterval(interval);
-  }, [matchStarted, currentController, possessionStartTime, totalPossessionA, totalPossessionB]);
+  }, [matchStarted, matchPaused, currentController, possessionStartTime, totalPossessionA, totalPossessionB]);
 
   const StatControl = ({ label, statKey, team1Value, team2Value, isPercentage = false, onUpdate }) => (
     <div className="py-0.5">
