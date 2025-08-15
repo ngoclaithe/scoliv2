@@ -200,14 +200,27 @@ const TeamLineupModal = ({
     }));
   };
 
+  const updateOnly = () => {
+    const lineupData = {
+      teamA: lineups.home.filter(p => p.name.trim()),
+      teamB: lineups.away.filter(p => p.name.trim()),
+    };
+    console.log("Giá trị của lineupData (cập nhật):", lineupData);
+
+    // Chỉ emit socket, không thay đổi view
+    updateLineup(lineupData.teamA, lineupData.teamB);
+    onSave(lineupData);
+    onClose();
+  };
+
   const validateAndSave = () => {
     const lineupData = {
       teamA: lineups.home.filter(p => p.name.trim()),
       teamB: lineups.away.filter(p => p.name.trim()),
     };
-    console.log("Giá trị của lineupData là:", lineupData);
+    console.log("Giá trị của lineupData (hiển thị):", lineupData);
 
-    // Luôn emit socket và chuyển view dù có thay đổi hay không
+    // Emit socket và chuyển view
     updateLineup(lineupData.teamA, lineupData.teamB);
     updateView('player_list');
     onSave(lineupData);
@@ -399,7 +412,7 @@ const TeamLineupModal = ({
                   />
                 </div>
                 
-                {/* Tên cầu thủ */}
+                {/* Tên cầu th�� */}
                 <div className="flex-1 min-w-0">
                   <Input
                     value={player.name}
