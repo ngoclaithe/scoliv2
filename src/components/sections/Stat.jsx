@@ -1,5 +1,6 @@
 import React from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
+import DisplayLogo from '../common/DisplayLogo';
 
 const Stat = () => {
   const { matchData, matchStats } = usePublicMatch();
@@ -61,7 +62,7 @@ const Stat = () => {
         <img
           src="/images/basic/ScoLivLogo.png"
           alt="ScoLiv Logo"
-          className="h-8 w-8 drop-shadow-lg opacity-80"
+          className="h-8 w-24 drop-shadow-lg opacity-80"
         />
       </div>
 
@@ -155,15 +156,13 @@ const Stat = () => {
                       clipPath: 'polygon(15% 0%, 85% 0%, 100% 30%, 85% 70%, 100% 100%, 15% 100%, 0% 70%, 15% 30%)'
                     }}
                   >
-                    {teamAData.logo ? (
-                      <img
-                        src={teamAData.logo}
-                        alt={teamAData.name || 'ĐỘI A'}
-                        className="w-full h-full object-contain"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-xl font-bold text-gray-800">A</div>
-                    )}
+                    <DisplayLogo
+                      logos={[teamAData.logo]}
+                      alt={teamAData.name}
+                      className="w-full h-full"
+                      type_play="circle"
+                      logoSize="w-full h-full"
+                    />
                   </div>
                 </div>
 
@@ -248,15 +247,13 @@ const Stat = () => {
                       clipPath: 'polygon(15% 0%, 85% 0%, 100% 30%, 85% 70%, 100% 100%, 15% 100%, 0% 70%, 15% 30%)'
                     }}
                   >
-                    {matchData.teamB.logo ? (
-                      <img
-                        src={matchData.teamB.logo}
-                        alt={matchData.teamB.name || 'ĐỘI B'}
-                        className="w-full h-full object-contain"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-xl font-bold text-gray-800">B</div>
-                    )}
+                    <DisplayLogo
+                      logos={[teamBData.logo]}
+                      alt={teamBData.name}
+                      className="w-full h-full"
+                      type_play="circle"
+                      logoSize="w-full h-full"
+                    />
                   </div>
                 </div>
               </div>
