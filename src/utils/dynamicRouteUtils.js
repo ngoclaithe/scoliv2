@@ -5,7 +5,7 @@ import { parseColorParam as parseColor } from './colorUtils';
 /**
  * Tìm logo URL dựa trên logo code, trả về default nếu không tìm thấy
  * @param {string} logoCode - Mã logo cần tìm
- * @param {string} teamType - 'A' hoặc 'B' để xác định default logo
+ * @param {string} teamType - 'A' hoặc 'B' để xác đ���nh default logo
  * @returns {Promise<string>} - URL của logo hoặc default logo
  */
 export const findLogoByCode = async (logoCode, teamType = 'A') => {
@@ -58,24 +58,29 @@ export const findTeamLogos = async (teamALogoCode, teamBLogoCode) => {
 };
 
 /**
- * Validate và parse màu hex từ URL parameter
- * @param {string} colorParam - Tham số màu từ URL (không có #)
+ * Validate và parse màu hex từ URL parameter với hỗ trợ tên màu tiếng Việt
+ * @param {string} colorParam - Tham số màu từ URL (có thể là hex hoặc tên màu)
  * @returns {string} - Màu hex hợp lệ có dấu #
  */
 export const parseColorParam = (colorParam) => {
   if (!colorParam) return '#000000';
-  
-  // Loại bỏ # nếu có
+
+  // Thử parse bằng colorUtils trước
+  const parsedColor = parseColor(colorParam);
+  if (parsedColor) {
+    return parsedColor;
+  }
+
+  // Fallback: kiểm tra hex truyền thống
   const cleanColor = colorParam.replace('#', '');
-  
-  // Kiểm tra format hex hợp lệ (3 hoặc 6 ký tự)
   const hexPattern = /^[0-9A-Fa-f]{3}$|^[0-9A-Fa-f]{6}$/;
-  
+
   if (hexPattern.test(cleanColor)) {
     return `#${cleanColor}`;
   }
-  
+
   // Trả về màu mặc định nếu không hợp lệ
+  console.log(`⚠️ [dynamicRouteUtils] Invalid color parameter: ${colorParam}, using default`);
   return '#000000';
 };
 
