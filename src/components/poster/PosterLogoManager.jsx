@@ -694,7 +694,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                 }`}
             >
               {item.uploadStatus === 'preview' ? '⏳ Đang tải...' :
-                item.uploadStatus === 'error' ? '�� Thử lại' :
+                item.uploadStatus === 'error' ? '❌ Thử lại' :
                   '📁 Chọn file'}
             </label>
           </div>
@@ -1031,7 +1031,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       <div className="space-y-2">
         <div className="flex items-center gap-1">
           <span className="text-xs">🏆</span>
-          <h3 className="text-xs font-semibold text-gray-900">Vòng đấu & Bảng đấu</h3>
+          <h3 className="text-xs font-semibold text-gray-900">Vòng đấu & Bảng đấu & Tiêu đề phụ</h3>
         </div>
 
         {/* Vòng đấu */}
@@ -1078,6 +1078,30 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               type="checkbox"
               checked={roundGroupOptions.showGroup}
               onChange={(e) => handleRoundGroupUpdate('group', roundGroupOptions.group, e.target.checked)}
+              className="w-3 h-3"
+            />
+            <span className="text-xs text-gray-600">Hi��n</span>
+          </label>
+        </div>
+
+        {/* Tiêu đề phụ */}
+        <div className="flex items-center gap-2">
+          <label className="flex items-center gap-1">
+            <span className="text-xs text-gray-700">Tiêu đề phụ:</span>
+            <input
+              type="text"
+              value={roundGroupOptions.subtitle}
+              onChange={(e) => setRoundGroupOptions(prev => ({ ...prev, subtitle: e.target.value }))}
+              onBlur={(e) => handleSubtitleUpdate(e.target.value, roundGroupOptions.showSubtitle)}
+              placeholder="Nhập tiêu đề phụ"
+              className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white flex-1"
+            />
+          </label>
+          <label className="flex items-center gap-1">
+            <input
+              type="checkbox"
+              checked={roundGroupOptions.showSubtitle}
+              onChange={(e) => handleSubtitleUpdate(roundGroupOptions.subtitle, e.target.checked)}
               className="w-3 h-3"
             />
             <span className="text-xs text-gray-600">Hiện</span>
