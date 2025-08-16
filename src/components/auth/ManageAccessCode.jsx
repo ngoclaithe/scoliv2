@@ -8,6 +8,7 @@ import AccessCodeAPI from '../../API/apiAccessCode';
 import PaymentAccessCodeAPI from '../../API/apiPaymentAccessCode';
 import InfoPaymentAPI from '../../API/apiInfoPayment';
 import UserAPI from '../../API/apiUser';
+import AuthAPI from '../../API/apiAuth';
 import AccessCodeList from './AccessCodeList';
 import ActivityList from './ActivityList';
 import UserProfileSection from './UserProfileSection';
@@ -244,12 +245,24 @@ const ManageAccessCode = ({ onNavigate }) => {
         console.error('Mật khẩu mới phải có ít nhất 6 ký tự!');
         return;
       }
+
       setLoading(true);
-      setShowChangePasswordModal(false);
-      setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-      console.log('Đổi mật khẩu thành công!');
+
+      // Call the actual API to change password
+      const response = await AuthAPI.updatePassword({
+        currentPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword
+      });
+
+      if (response.success) {
+        setShowChangePasswordModal(false);
+        setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+        console.log('Đổi mật khẩu thành công!');
+      } else {
+        throw new Error(response.message || 'Không thể đổi mật khẩu');
+      }
     } catch (error) {
-      console.error('Error changing password:', error);
+      console.error('Error changing password:', error.message || 'Vui lòng thử lại sau');
     } finally {
       setLoading(false);
     }
