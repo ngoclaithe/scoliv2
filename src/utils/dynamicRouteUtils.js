@@ -1,32 +1,41 @@
 import LogoAPI from '../API/apiLogo';
 import { getFullLogoUrl } from './logoUtils';
+import { parseColorParam as parseColor } from './colorUtils';
 
 /**
- * Tìm logo URL dựa trên logo code
+ * Tìm logo URL dựa trên logo code, trả về default nếu không tìm thấy
  * @param {string} logoCode - Mã logo cần tìm
- * @returns {Promise<string|null>} - URL của logo hoặc null nếu không tìm thấy
+ * @param {string} teamType - 'A' hoặc 'B' để xác định default logo
+ * @returns {Promise<string>} - URL của logo hoặc default logo
  */
-export const findLogoByCode = async (logoCode) => {
+export const findLogoByCode = async (logoCode, teamType = 'A') => {
+  // Default logos
+  const defaultLogos = {
+    A: '/images/background-poster/default_logoA.png',
+    B: '/images/background-poster/default_logoB.png'
+  };
+
   if (!logoCode || logoCode.trim().length === 0) {
-    return null;
+    console.log(`ℹ️ [dynamicRouteUtils] No logo code provided, using default for team ${teamType}`);
+    return defaultLogos[teamType] || defaultLogos.A;
   }
 
   try {
     console.log(`🔍 [dynamicRouteUtils] Searching for logo with code: ${logoCode}`);
     const response = await LogoAPI.searchLogosByCode(logoCode.trim(), true);
-    
+
     if (response?.data?.length > 0) {
       const foundLogo = response.data[0];
       const logoUrl = getFullLogoUrl(foundLogo.url_logo || foundLogo.file_path);
       console.log(`✅ [dynamicRouteUtils] Found logo for code ${logoCode}:`, logoUrl);
       return logoUrl;
     } else {
-      console.log(`⚠️ [dynamicRouteUtils] No logo found for code: ${logoCode}`);
-      return null;
+      console.log(`⚠️ [dynamicRouteUtils] No logo found for code: ${logoCode}, using default for team ${teamType}`);
+      return defaultLogos[teamType] || defaultLogos.A;
     }
   } catch (error) {
-    console.error(`❌ [dynamicRouteUtils] Error finding logo for code ${logoCode}:`, error);
-    return null;
+    console.log(`⚠️ [dynamicRouteUtils] Error finding logo for code ${logoCode}, using default for team ${teamType}:`, error.message);
+    return defaultLogos[teamType] || defaultLogos.A;
   }
 };
 
@@ -34,12 +43,12 @@ export const findLogoByCode = async (logoCode) => {
  * Tìm cả hai logo đội dựa trên code
  * @param {string} teamALogoCode - Mã logo đội A
  * @param {string} teamBLogoCode - Mã logo đội B
- * @returns {Promise<{teamALogo: string|null, teamBLogo: string|null}>}
+ * @returns {Promise<{teamALogo: string, teamBLogo: string}>}
  */
 export const findTeamLogos = async (teamALogoCode, teamBLogoCode) => {
   const [teamALogo, teamBLogo] = await Promise.all([
-    findLogoByCode(teamALogoCode),
-    findLogoByCode(teamBLogoCode)
+    findLogoByCode(teamALogoCode, 'A'),
+    findLogoByCode(teamBLogoCode, 'B')
   ]);
 
   return {
@@ -49,24 +58,29 @@ export const findTeamLogos = async (teamALogoCode, teamBLogoCode) => {
 };
 
 /**
- * Validate và parse màu hex từ URL parameter
- * @param {string} colorParam - Tham số màu từ URL (không có #)
+ * Validate và parse màu hex từ URL parameter với hỗ trợ tên màu tiếng Việt
+ * @param {string} colorParam - Tham số màu từ URL (có thể là hex hoặc tên màu)
  * @returns {string} - Màu hex hợp lệ có dấu #
  */
 export const parseColorParam = (colorParam) => {
   if (!colorParam) return '#000000';
-  
-  // Loại bỏ # nếu có
+
+  // Thử parse bằng colorUtils trước
+  const parsedColor = parseColor(colorParam);
+  if (parsedColor) {
+    return parsedColor;
+  }
+
+  // Fallback: kiểm tra hex truyền thống
   const cleanColor = colorParam.replace('#', '');
-  
-  // Kiểm tra format hex hợp lệ (3 hoặc 6 ký tự)
   const hexPattern = /^[0-9A-Fa-f]{3}$|^[0-9A-Fa-f]{6}$/;
-  
+
   if (hexPattern.test(cleanColor)) {
     return `#${cleanColor}`;
   }
-  
+
   // Trả về màu mặc định nếu không hợp lệ
+  console.log(`⚠️ [dynamicRouteUtils] Invalid color parameter: ${colorParam}, using default`);
   return '#000000';
 };
 
@@ -131,10 +145,12 @@ export const buildDynamicRoute = (params) => {
     teamBLogoCode = 'TEAMB',
     teamAName = 'TEAM_A',
     teamBName = 'TEAM_B',
-    teamAKitColor = 'FF0000',
-    teamBKitColor = '0000FF',
+    teamAKitColor = 'do', // Hỗ trợ tên màu tiếng Việt
+    teamBKitColor = 'xanh',
     teamAScore = 0,
-    teamBScore = 0
+    teamBScore = 0,
+    view = 'poster',
+    matchTime = '00:00'
   } = params;
 
   // Encode các tham số text
@@ -143,12 +159,14 @@ export const buildDynamicRoute = (params) => {
   const encodedLiveText = encodeURIComponent(liveText.replace(/ /g, '_'));
   const encodedTeamAName = encodeURIComponent(teamAName.replace(/ /g, '_'));
   const encodedTeamBName = encodeURIComponent(teamBName.replace(/ /g, '_'));
+  const encodedView = encodeURIComponent(view.replace(/ /g, '_'));
+  const encodedMatchTime = encodeURIComponent(matchTime);
 
-  // Loại bỏ # khỏi màu
-  const cleanTeamAColor = teamAKitColor.replace('#', '');
-  const cleanTeamBColor = teamBKitColor.replace('#', '');
+  // Xử lý màu - có thể là tên tiếng Việt hoặc hex
+  const cleanTeamAColor = teamAKitColor.toString().replace('#', '').replace(/ /g, '_');
+  const cleanTeamBColor = teamBKitColor.toString().replace('#', '').replace(/ /g, '_');
 
-  return `/${accessCode}/${encodedLocation}/${encodedMatchTitle}/${encodedLiveText}/${teamALogoCode}/${teamBLogoCode}/${encodedTeamAName}/${encodedTeamBName}/${cleanTeamAColor}/${cleanTeamBColor}/${teamAScore}/${teamBScore}`;
+  return `/${accessCode}/${encodedLocation}/${encodedMatchTitle}/${encodedLiveText}/${teamALogoCode}/${teamBLogoCode}/${encodedTeamAName}/${encodedTeamBName}/${cleanTeamAColor}/${cleanTeamBColor}/${teamAScore}/${teamBScore}/${encodedView}/${encodedMatchTime}`;
 };
 
 export default {

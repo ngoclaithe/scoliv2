@@ -12,6 +12,7 @@ import PosterDoden from './Poster-doden';
 import PosterVangkim from './Poster-vangkim';
 import PosterVangxanh from './Poster-vangxanh';
 import PosterXanhduong from './Poster-xanhduong';
+import PosterTuHung from './Poster-tuhung';
 
 const PosterPreviewPage = () => {
   const { accessCode } = useParams();
@@ -42,7 +43,15 @@ const PosterPreviewPage = () => {
         const verifyResult = await PublicAPI.verifyAccessCode(accessCode);
 
         if (!verifyResult.success || !verifyResult.isValid) {
-          setError(`Mã truy cập không hợp lệ: ${accessCode}`);
+          if (verifyResult.message && (
+            verifyResult.message.includes('hết hạn') ||
+            verifyResult.message.includes('expired') ||
+            verifyResult.message.includes('không hợp lệ')
+          )) {
+            setError(`❌ Mã truy cập đã hết hạn hoặc không hợp lệ: ${accessCode}\n\n⏰ Vui lòng liên hệ admin để cấp mã mới.`);
+          } else {
+            setError(`❌ Mã truy cập không hợp lệ: ${accessCode}\n\n${verifyResult.message || 'Vui lòng kiểm tra lại mã truy cập.'}`);
+          }
           return;
         }
 
@@ -123,6 +132,8 @@ const PosterPreviewPage = () => {
         return <PosterVangxanh accessCode={accessCode} />;
       case 'xanhduong':
         return <PosterXanhduong accessCode={accessCode} />;
+      case 'tuhung':
+        return <PosterTuHung accessCode={accessCode} />;
       default:
         return <PosterTretrung accessCode={accessCode} />;
     }
@@ -130,18 +141,39 @@ const PosterPreviewPage = () => {
 
   // Render error state
   if (error) {
+    const isExpiredError = error.includes('hết hạn') || error.includes('expired');
+
     return (
-      <div className="min-h-screen bg-red-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-6xl mb-4">❌</div>
-          <h1 className="text-2xl font-bold mb-2 text-red-700">Lỗi kết nối</h1>
-          <p className="text-red-600">{error}</p>
-          <button
-            onClick={() => window.location.reload()}
-            className="mt-4 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-          >
-            🔄 Thử lại
-          </button>
+      <div className={`min-h-screen ${isExpiredError ? 'bg-gradient-to-br from-red-50 via-orange-50 to-red-50' : 'bg-red-50'} flex items-center justify-center p-4`}>
+        <div className="text-center max-w-lg">
+          <div className={`text-6xl mb-4 ${isExpiredError ? 'animate-pulse' : ''}`}>
+            {isExpiredError ? '⏰' : '❌'}
+          </div>
+          <h1 className="text-2xl font-bold mb-4 text-red-700">
+            {isExpiredError ? 'Mã truy cập hết hạn' : 'Lỗi kết nối'}
+          </h1>
+          <div className="text-red-600 mb-6 whitespace-pre-line text-sm leading-relaxed">
+            {error}
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            >
+              🔄 Thử lại
+            </button>
+            {isExpiredError && (
+              <button
+                onClick={() => window.location.href = '/'}
+                className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                🏠 Về trang chủ
+              </button>
+            )}
+          </div>
+          <div className="mt-4 text-xs text-gray-500">
+            Access Code: {accessCode}
+          </div>
         </div>
       </div>
     );

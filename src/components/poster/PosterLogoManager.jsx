@@ -3,6 +3,7 @@ import LogoAPI from "../../API/apiLogo";
 import DisplaySettingsAPI from "../../API/apiSettingDisplay";
 import RoomSessionAPI from "../../API/apiRoomSession";
 import { getFullLogoUrl } from "../../utils/logoUtils";
+import socketService from "../../services/socketService";
 
 const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialData, accessCode }) => {
   const [selectedPoster, setSelectedPoster] = useState(null);
@@ -23,7 +24,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     round: 1,
     showRound: false,
     group: "A",
-    showGroup: false
+    showGroup: false,
+    subtitle: "",
+    showSubtitle: false
   });
 
   const [customPosters, setCustomPosters] = useState([]);
@@ -58,6 +61,11 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       id: "xanhduong",
       name: "Xanh dương",
       thumbnail: "/images/posters/poster6.jpg",
+    },
+    {
+      id: "tuhung",
+      name: "Tứ hùng",
+      thumbnail: "/images/posters/poster7.jpg",
     },
   ];
 
@@ -978,8 +986,15 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   };
 
   const handleRoundGroupUpdate = useCallback((type, value, show) => {
+    console.log(`🔄 [PosterLogoManager] handleRoundGroupUpdate - type: ${type}, value: ${value}, show: ${show}`);
+
     if (type === 'round') {
       setRoundGroupOptions(prev => ({ ...prev, round: value, showRound: show }));
+
+      // Emit to backend
+      console.log(`📡 [PosterLogoManager] Emitting updateRound to backend - round: ${value}, showRound: ${show}`);
+      socketService.emit('round_update', { round: value, showRound: show });
+
       if (onLogoUpdate) {
         onLogoUpdate({
           roundGroupUpdate: { round: value, showRound: show, type: 'round' }
@@ -987,6 +1002,11 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       }
     } else if (type === 'group') {
       setRoundGroupOptions(prev => ({ ...prev, group: value, showGroup: show }));
+
+      // Emit to backend
+      console.log(`📡 [PosterLogoManager] Emitting updateGroup to backend - group: ${value}, showGroup: ${show}`);
+      socketService.emit('group_update', { group: value, showGroup: show });
+
       if (onLogoUpdate) {
         onLogoUpdate({
           roundGroupUpdate: { group: value, showGroup: show, type: 'group' }
@@ -995,12 +1015,28 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     }
   }, [onLogoUpdate]);
 
+  const handleSubtitleUpdate = useCallback((subtitle, show) => {
+    console.log(`🔄 [PosterLogoManager] handleSubtitleUpdate - subtitle: ${subtitle}, show: ${show}`);
+
+    setRoundGroupOptions(prev => ({ ...prev, subtitle, showSubtitle: show }));
+
+    // Emit to backend
+    console.log(`📡 [PosterLogoManager] Emitting updateSubtitle to backend - subtitle: ${subtitle}, showSubtitle: ${show}`);
+    socketService.emit('subtitle_update', { subtitle, showSubtitle: show });
+
+    if (onLogoUpdate) {
+      onLogoUpdate({
+        subtitleUpdate: { subtitle, showSubtitle: show, type: 'subtitle' }
+      });
+    }
+  }, [onLogoUpdate]);
+
   const renderRoundGroupSection = () => {
     return (
       <div className="space-y-2">
         <div className="flex items-center gap-1">
           <span className="text-xs">🏆</span>
-          <h3 className="text-xs font-semibold text-gray-900">Vòng đấu & Bảng đấu</h3>
+          <h3 className="text-xs font-semibold text-gray-900">Vòng đấu & Bảng đấu & Tiêu đề phụ</h3>
         </div>
 
         {/* Vòng đấu */}
@@ -1047,6 +1083,30 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               type="checkbox"
               checked={roundGroupOptions.showGroup}
               onChange={(e) => handleRoundGroupUpdate('group', roundGroupOptions.group, e.target.checked)}
+              className="w-3 h-3"
+            />
+            <span className="text-xs text-gray-600">Hiện</span>
+          </label>
+        </div>
+
+        {/* Tiêu đề phụ */}
+        <div className="flex items-center gap-2">
+          <label className="flex items-center gap-1">
+            <span className="text-xs text-gray-700">Tiêu đề phụ:</span>
+            <input
+              type="text"
+              value={roundGroupOptions.subtitle}
+              onChange={(e) => setRoundGroupOptions(prev => ({ ...prev, subtitle: e.target.value }))}
+              onBlur={(e) => handleSubtitleUpdate(e.target.value, roundGroupOptions.showSubtitle)}
+              placeholder="Nhập tiêu đề phụ"
+              className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white flex-1"
+            />
+          </label>
+          <label className="flex items-center gap-1">
+            <input
+              type="checkbox"
+              checked={roundGroupOptions.showSubtitle}
+              onChange={(e) => handleSubtitleUpdate(roundGroupOptions.subtitle, e.target.checked)}
               className="w-3 h-3"
             />
             <span className="text-xs text-gray-600">Hiện</span>

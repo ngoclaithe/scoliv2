@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { useAuth } from '../../contexts/AuthContext';
 import PublicAPI from '../../API/apiPublic';
+import socketService from '../../services/socketService';
 import {
   findTeamLogos,
   parseColorParam,
@@ -17,6 +18,7 @@ import PosterDoDen from '../../pages/Poster-doden';
 import PosterVangKim from '../../pages/Poster-vangkim';
 import PosterVangXanh from '../../pages/Poster-vangxanh';
 import PosterXanhDuong from '../../pages/Poster-xanhduong';
+import PosterTuHung from '../../pages/Poster-tuhung';
 import Intro from '../introduce/Intro';
 import HalfTime from '../halftime/HalfTime';
 import ScoreboardAbove from '../scoreboard_preview/ScoreboardAbove';
@@ -159,6 +161,32 @@ const UnifiedDisplayController = () => {
         }
       }
 
+      // Auto start timer nếu có matchTime (giống ControlButtons.jsx)
+      if (params.matchTime && params.matchTime !== '00:00') {
+        console.log('⏰ [UnifiedDisplayController] Auto starting timer with time:', params.matchTime);
+
+        // Delay để đảm bảo socket đã sẵn sàng
+        setTimeout(() => {
+          try {
+            console.log('🎯 [UnifiedDisplayController] Starting timer - calling startServerTimer:', {
+              startTime: params.matchTime,
+              period: "Hiệp 1",
+              status: "live"
+            });
+
+            socketService.startServerTimer(params.matchTime, "Hiệp 1", "live");
+
+            // Switch to scoreboard view if not specified
+            if (!params.view || params.view === 'poster') {
+              console.log('👁️ [UnifiedDisplayController] Switching to scoreboard view for timer');
+              updateView('scoreboard');
+            }
+          } catch (error) {
+            console.error('❌ [UnifiedDisplayController] Failed to start timer:', error);
+          }
+        }, 2000);
+      }
+
     } catch (error) {
       console.error('❌ [UnifiedDisplayController] Failed to update socket with params:', error);
     }
@@ -177,7 +205,15 @@ const UnifiedDisplayController = () => {
         const verifyResult = await PublicAPI.verifyAccessCode(accessCode);
 
         if (!verifyResult.success || !verifyResult.isValid) {
-          setError(`Mã truy cập không hợp lệ: ${accessCode}`);
+          if (verifyResult.message && (
+            verifyResult.message.includes('hết hạn') ||
+            verifyResult.message.includes('expired') ||
+            verifyResult.message.includes('không hợp lệ')
+          )) {
+            setError(`❌ Mã truy cập đã hết hạn hoặc không hợp lệ: ${accessCode}\n\n⏰ Vui lòng liên hệ admin để cấp mã mới.`);
+          } else {
+            setError(`❌ Mã truy cập không hợp lệ: ${accessCode}\n\n${verifyResult.message || 'Vui lòng kiểm tra lại mã truy cập.'}`);
+          }
           return;
         }
 
@@ -238,6 +274,8 @@ const UnifiedDisplayController = () => {
         return <PosterVangXanh accessCode={accessCode} />;
       case 'xanhduong':
         return <PosterXanhDuong accessCode={accessCode} />;
+      case 'tuhung':
+        return <PosterTuHung accessCode={accessCode} />;
       default:
         return <PosterHaoQuang accessCode={accessCode} />;
     }
@@ -299,18 +337,39 @@ const UnifiedDisplayController = () => {
   }
 
   if (error) {
+    const isExpiredError = error.includes('hết hạn') || error.includes('expired');
+
     return (
-      <div className="fixed inset-0 bg-red-900 text-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-6xl mb-4">❌</div>
-          <h1 className="text-2xl font-bold mb-2">Lỗi kết nối</h1>
-          <p className="text-gray-300">{error}</p>
-          <button 
-            onClick={() => window.location.reload()}
-            className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            🔄 Thử lại
-          </button>
+      <div className={`fixed inset-0 ${isExpiredError ? 'bg-gradient-to-br from-red-900 via-red-800 to-red-900' : 'bg-red-900'} text-white flex items-center justify-center p-4`}>
+        <div className="text-center max-w-lg">
+          <div className={`text-6xl mb-4 ${isExpiredError ? 'animate-pulse' : ''}`}>
+            {isExpiredError ? '⏰' : '❌'}
+          </div>
+          <h1 className="text-2xl font-bold mb-4">
+            {isExpiredError ? 'Mã truy cập hết hạn' : 'Lỗi kết nối'}
+          </h1>
+          <div className="text-gray-200 mb-6 whitespace-pre-line text-sm leading-relaxed">
+            {error}
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              🔄 Thử lại
+            </button>
+            {isExpiredError && (
+              <button
+                onClick={() => window.location.href = '/'}
+                className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                🏠 Về trang chủ
+              </button>
+            )}
+          </div>
+          <div className="mt-4 text-xs text-gray-400">
+            Access Code: {accessCode}
+          </div>
         </div>
       </div>
     );
