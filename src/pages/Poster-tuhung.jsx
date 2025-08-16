@@ -24,32 +24,40 @@ export default function TuHungMatchIntro() {
     stadium: contextMatchData.stadium || 'SVĐ TỨ HÙNG',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '19:30',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
-    sponsors: getFullLogoUrls(sponsors?.sponsors?.url_logo || []),
-    sponsorsTypeDisplay: sponsors?.sponsors?.type_display || [],
-    organizing: getFullLogoUrls(organizing?.organizing?.url_logo || []),
-    organizingTypeDisplay: organizing?.organizing?.type_display || [],
-    mediaPartners: getFullLogoUrls(mediaPartners?.mediaPartners?.url_logo || []),
-    mediaPartnersTypeDisplay: mediaPartners?.mediaPartners?.type_display || [],
     tournamentLogos: getFullLogoUrls(tournamentLogo?.url_logo || []),
-    tournamentPosition: displaySettings?.tournamentPosition || 'top-center',
     liveUnit: getFullLogoUrl(liveUnit?.url_logo?.[0]) || null,
-    logoShape: displaySettings?.displaySettings?.logoShape || 'round',
-    showTournamentLogo: displaySettings?.showTournamentLogo !== false,
-    showSponsors: displaySettings?.showSponsors !== false,
-    showOrganizing: displaySettings?.showOrganizing !== false,
-    showMediaPartners: displaySettings?.showMediaPartners !== false,
-    showTimer: posterSettings?.showTimer !== false,
-    showDate: posterSettings?.showDate !== false,
-    showStadium: posterSettings?.showStadium !== false,
-    showLiveIndicator: posterSettings?.showLiveIndicator !== false,
-    accentColor: posterSettings?.accentColor || '#8b5cf6',
     liveText: contextMatchData.liveText || 'YOUTUBE LIVE',
     round: contextMatchData.round || 1,
     group: contextMatchData.group || 'A',
     subtitle: contextMatchData.subtitle || '',
     showRound: contextMatchData.showRound === true,
     showGroup: contextMatchData.showGroup === true,
-    showSubtitle: contextMatchData.showSubtitle !== false
+    showSubtitle: contextMatchData.showSubtitle !== false,
+    showTournamentLogo: displaySettings?.showTournamentLogo !== false,
+    showTimer: posterSettings?.showTimer !== false,
+    showDate: posterSettings?.showDate !== false,
+    showStadium: posterSettings?.showStadium !== false,
+    // Combine all partners into one array
+    partners: [
+      ...((sponsors?.sponsors?.url_logo || []).map((url, index) => ({
+        logo: getFullLogoUrl(url),
+        name: 'Sponsor',
+        type: 'sponsor',
+        typeDisplay: sponsors?.sponsors?.type_display?.[index] || 'square'
+      }))),
+      ...((organizing?.organizing?.url_logo || []).map((url, index) => ({
+        logo: getFullLogoUrl(url),
+        name: 'Organizing',
+        type: 'organizing',
+        typeDisplay: organizing?.organizing?.type_display?.[index] || 'square'
+      }))),
+      ...((mediaPartners?.mediaPartners?.url_logo || []).map((url, index) => ({
+        logo: getFullLogoUrl(url),
+        name: 'Media Partner',
+        type: 'media',
+        typeDisplay: mediaPartners?.mediaPartners?.type_display?.[index] || 'square'
+      })))
+    ].filter(partner => partner.logo)
   };
 
   const [windowSize, setWindowSize] = useState({
@@ -80,32 +88,11 @@ export default function TuHungMatchIntro() {
       setMarqueeWidth(textWidth);
       setContainerWidth(containerWidth);
     }
-  }, [marqueeData?.text, windowSize.width]);
+  }, [windowSize.width]);
 
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
-  const logoSize = isMobile ? 80 : isTablet ? 100 : 120;
-
-  const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
-    logo: url,
-    name: 'Sponsor',
-    type: 'sponsor',
-    typeDisplay: matchData.sponsorsTypeDisplay[index] || 'square'
-  })) : [];
-
-  const organizingLogos = matchData.showOrganizing ? matchData.organizing.map((url, index) => ({
-    logo: url,
-    name: 'Organizing',
-    type: 'organizing',
-    typeDisplay: matchData.organizingTypeDisplay[index] || 'square'
-  })) : [];
-
-  const mediaPartnerLogos = matchData.showMediaPartners ? matchData.mediaPartners.map((url, index) => ({
-    logo: url,
-    name: 'Media Partner',
-    type: 'media',
-    typeDisplay: matchData.mediaPartnersTypeDisplay[index] || 'square'
-  })) : [];
+  const logoSize = isMobile ? 60 : isTablet ? 70 : 80;
 
   const scrollData = {
     text: marqueeData?.text || "TRỰC TIẾP GIẢI ĐẤU TỨ HÙNG",
@@ -139,35 +126,6 @@ export default function TuHungMatchIntro() {
     return 30;
   };
 
-  // Font size adjustment function
-  const adjustFontSize = (element) => {
-    if (!element) return;
-    let fontSize = parseInt(window.getComputedStyle(element).fontSize);
-    const minFontSize = 12;
-
-    while (element.scrollWidth > element.offsetWidth && fontSize > minFontSize) {
-      fontSize -= 1;
-      element.style.fontSize = fontSize + "px";
-    }
-  };
-
-  const hasSponsors = sponsorLogos.length > 0;
-  const hasOrganizing = organizingLogos.length > 0;
-  const hasMediaPartners = mediaPartnerLogos.length > 0;
-
-  const getDisplayEachLogo = (baseClass) => {
-    switch (matchData.logoShape) {
-      case 'round':
-        return `${baseClass} rounded-full`;
-      case 'hexagon':
-        return `${baseClass} hexagon-clip hexagon-glow`;
-      case 'square':
-        return `${baseClass} rounded-lg`;
-      default:
-        return `${baseClass} rounded-full`;
-    }
-  };
-
   // Check if marquee should be running
   const isMarqueeRunning = scrollData.mode !== 'khong' && scrollData.mode !== 'none' && scrollData.text && showMarquee;
 
@@ -186,25 +144,25 @@ export default function TuHungMatchIntro() {
   }, [scrollData.interval, scrollData.mode]);
 
   return (
-    <div className="w-full h-screen bg-black flex items-center justify-center p-2 sm:p-4 overflow-hidden">
+    <div className="w-full h-screen bg-black flex items-center justify-center p-1 sm:p-2 overflow-hidden">
 
-      <div className="relative w-full max-w-7xl aspect-video bg-gray-900 rounded-2xl overflow-hidden shadow-2xl border border-gray-700">
+      <div className="relative w-full max-w-7xl aspect-video bg-gray-900 rounded-xl overflow-hidden shadow-2xl border border-gray-700">
 
         {/* Tournament logos and Live unit header */}
-        <div className="absolute top-0 left-0 right-0 h-16 sm:h-20 bg-gradient-to-b from-black/60 to-transparent z-30">
-          <div className="flex items-center justify-between h-full px-4 sm:px-6 md:px-8">
+        <div className="absolute top-0 left-0 right-0 h-12 sm:h-14 bg-gradient-to-b from-black/60 to-transparent z-30">
+          <div className="flex items-center justify-between h-full px-3 sm:px-4 md:px-6">
             
             {/* Tournament Logos */}
-            <div className="flex items-center gap-3 sm:gap-4">
+            <div className="flex items-center gap-2 sm:gap-3">
               {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 && (
-                <div className="flex gap-2 sm:gap-3">
+                <div className="flex gap-1 sm:gap-2">
                   {matchData.tournamentLogos.slice(0, 3).map((logo, index) => (
                     <div key={index} className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg blur-sm opacity-70 animate-pulse"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 to-orange-500 rounded blur-sm opacity-70 animate-pulse"></div>
                       <img
                         src={logo}
                         alt={`Tournament Logo ${index + 1}`}
-                        className="relative object-contain h-8 sm:h-12 md:h-16 max-w-16 sm:max-w-24 md:max-w-32 bg-white/95 rounded-lg p-1 sm:p-2 shadow-xl border-2 border-white/50"
+                        className="relative object-contain h-6 sm:h-8 md:h-10 max-w-12 sm:max-w-16 md:max-w-20 bg-white/95 rounded p-1 shadow-xl border border-white/50"
                       />
                     </div>
                   ))}
@@ -216,18 +174,18 @@ export default function TuHungMatchIntro() {
             <div className="flex items-center">
               {matchData.liveUnit && (
                 <div className="relative">
-                  <div className="absolute inset-0 bg-red-500 rounded-xl blur-md opacity-80 animate-pulse"></div>
-                  <div className="relative bg-gradient-to-r from-red-600 to-red-500 text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-xl shadow-xl flex items-center space-x-2 sm:space-x-3 border-2 border-white/30">
+                  <div className="absolute inset-0 bg-red-500 rounded-lg blur opacity-80 animate-pulse"></div>
+                  <div className="relative bg-gradient-to-r from-red-600 to-red-500 text-white px-2 sm:px-3 md:px-4 py-1 sm:py-2 rounded-lg shadow-xl flex items-center space-x-1 sm:space-x-2 border border-white/30">
                     <div className="flex space-x-1">
-                      <div className="w-2 h-2 sm:w-3 sm:h-3 bg-white rounded-full animate-pulse"></div>
-                      <div className="w-1 h-1 sm:w-2 sm:h-2 bg-white/80 rounded-full animate-ping"></div>
+                      <div className="w-1 h-1 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
+                      <div className="w-1 h-1 bg-white/80 rounded-full animate-ping"></div>
                     </div>
                     <img
                       src={matchData.liveUnit}
                       alt="Live Unit"
-                      className="h-4 sm:h-5 md:h-6 lg:h-8 object-contain"
+                      className="h-3 sm:h-4 md:h-5 object-contain"
                     />
-                    <span className="text-[10px] sm:text-xs md:text-sm font-bold">LIVE</span>
+                    <span className="text-[8px] sm:text-[10px] md:text-xs font-bold">LIVE</span>
                   </div>
                 </div>
               )}
@@ -235,34 +193,49 @@ export default function TuHungMatchIntro() {
           </div>
         </div>
 
-        {/* Main content - True LEFT/RIGHT split */}
-        <div className="absolute inset-0 pt-16 sm:pt-20 pb-16 sm:pb-20">
+        {/* Partners section - right below header */}
+        <div className="absolute top-12 sm:top-14 left-0 right-0 px-3 sm:px-4 md:px-6 z-30">
+          <div className="flex items-center justify-center">
+            <div className="bg-black/30 backdrop-blur-sm rounded-lg px-3 sm:px-4 py-1 sm:py-2 border border-white/20 shadow-lg">
+              <div className="text-[8px] sm:text-[9px] font-bold text-yellow-300 mb-1 text-center">
+                🤝 CÁC ĐƠN VỊ ĐỒNG HÀNH
+              </div>
+              <div className="flex gap-1 sm:gap-2 justify-center max-w-sm">
+                {matchData.partners.slice(0, 8).map((partner, index) => (
+                  <img
+                    key={index}
+                    src={partner.logo}
+                    alt={partner.name}
+                    className="object-contain bg-white/95 border border-yellow-300/50 shadow-sm rounded w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 p-0.5"
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main content */}
+        <div className="absolute inset-0 pt-20 sm:pt-24 pb-12 sm:pb-16">
           <div className="h-full flex">
             
-            {/* LEFT SIDE - TEAMS ONLY */}
-            <div className="w-1/2 relative bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 border-r-4 border-yellow-500">
+            {/* LEFT SIDE - TEAMS */}
+            <div className="w-1/2 relative bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 border-r-2 border-yellow-500">
               
               {/* Background pattern for left side */}
               <div className="absolute inset-0">
-                <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-24 h-24 bg-blue-500/20 rounded-full blur-2xl animate-pulse" style={{animationDelay: '2s'}}></div>
-                
-                {/* Geometric patterns */}
-                <div className="absolute inset-0 opacity-10">
-                  <div className="absolute top-10 left-10 w-20 h-20 border-2 border-white/30 rounded-full"></div>
-                  <div className="absolute bottom-20 left-20 w-16 h-16 border-2 border-white/20 transform rotate-45"></div>
-                  <div className="absolute top-1/2 left-8 w-12 h-12 bg-white/10 rounded-full"></div>
-                </div>
+                <div className="absolute top-1/4 left-1/4 w-20 h-20 bg-purple-500/20 rounded-full blur-2xl animate-pulse"></div>
+                <div className="absolute bottom-1/4 right-1/4 w-16 h-16 bg-blue-500/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '2s'}}></div>
               </div>
 
-              <div className="relative z-10 h-full flex flex-col justify-center items-center px-4 sm:px-6 md:px-8 space-y-8 sm:space-y-12 md:space-y-16">
+              <div className="relative z-10 h-full flex flex-col justify-center items-center px-3 sm:px-4 md:px-6 space-y-6 sm:space-y-8">
                 
-                {/* Team A */}
-                <div className="flex flex-col items-center space-y-4 sm:space-y-6">
+                {/* Team Logos Row */}
+                <div className="flex items-center justify-center gap-8 sm:gap-12 md:gap-16">
+                  {/* Team A Logo */}
                   <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-blue-500 rounded-full blur-lg opacity-60 animate-pulse scale-125"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-blue-500 rounded-full blur opacity-60 animate-pulse scale-110"></div>
                     <div
-                      className="relative rounded-full bg-white p-4 sm:p-5 md:p-6 shadow-2xl border-4 border-white/50 flex items-center justify-center overflow-hidden"
+                      className="relative rounded-full bg-white p-2 sm:p-3 md:p-4 shadow-xl border-2 border-white/50 flex items-center justify-center overflow-hidden"
                       style={{
                         width: `${logoSize}px`,
                         height: `${logoSize}px`
@@ -278,23 +251,17 @@ export default function TuHungMatchIntro() {
                       />
                     </div>
                   </div>
-                  
-                  <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-2xl shadow-2xl border-2 border-white/40 backdrop-blur-sm max-w-xs">
-                    <span
-                      className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black uppercase tracking-wide text-white text-center block drop-shadow-lg"
-                      ref={(el) => el && adjustFontSize(el)}
-                    >
-                      {matchData.team1}
-                    </span>
-                  </div>
-                </div>
 
-                {/* Team B */}
-                <div className="flex flex-col items-center space-y-4 sm:space-y-6">
+                  {/* VS */}
+                  <div className="text-white font-black text-lg sm:text-xl md:text-2xl opacity-70">
+                    VS
+                  </div>
+
+                  {/* Team B Logo */}
                   <div className="relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-red-500 rounded-full blur-lg opacity-60 animate-pulse scale-125"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-red-500 rounded-full blur opacity-60 animate-pulse scale-110"></div>
                     <div
-                      className="relative rounded-full bg-white p-4 sm:p-5 md:p-6 shadow-2xl border-4 border-white/50 flex items-center justify-center overflow-hidden"
+                      className="relative rounded-full bg-white p-2 sm:p-3 md:p-4 shadow-xl border-2 border-white/50 flex items-center justify-center overflow-hidden"
                       style={{
                         width: `${logoSize}px`,
                         height: `${logoSize}px`
@@ -310,12 +277,20 @@ export default function TuHungMatchIntro() {
                       />
                     </div>
                   </div>
-                  
-                  <div className="bg-gradient-to-r from-orange-600 to-red-600 px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-2xl shadow-2xl border-2 border-white/40 backdrop-blur-sm max-w-xs">
-                    <span
-                      className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black uppercase tracking-wide text-white text-center block drop-shadow-lg"
-                      ref={(el) => el && adjustFontSize(el)}
-                    >
+                </div>
+
+                {/* Team Names Row */}
+                <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8">
+                  {/* Team A Name */}
+                  <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg shadow-xl border border-white/40 backdrop-blur-sm max-w-[120px] sm:max-w-[140px]">
+                    <span className="text-xs sm:text-sm md:text-base lg:text-lg font-black uppercase tracking-wide text-white text-center block drop-shadow-lg">
+                      {matchData.team1}
+                    </span>
+                  </div>
+
+                  {/* Team B Name */}
+                  <div className="bg-gradient-to-r from-orange-600 to-red-600 px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg shadow-xl border border-white/40 backdrop-blur-sm max-w-[120px] sm:max-w-[140px]">
+                    <span className="text-xs sm:text-sm md:text-base lg:text-lg font-black uppercase tracking-wide text-white text-center block drop-shadow-lg">
                       {matchData.team2}
                     </span>
                   </div>
@@ -323,13 +298,13 @@ export default function TuHungMatchIntro() {
               </div>
             </div>
 
-            {/* RIGHT SIDE - MATCH INFO ONLY */}
+            {/* RIGHT SIDE - MATCH INFO */}
             <div className="w-1/2 relative bg-gradient-to-bl from-gray-800 via-gray-900 to-black">
               
               {/* Background pattern for right side */}
               <div className="absolute inset-0">
-                <div className="absolute top-1/3 right-1/4 w-28 h-28 bg-yellow-500/20 rounded-full blur-3xl animate-pulse"></div>
-                <div className="absolute bottom-1/3 left-1/4 w-20 h-20 bg-orange-500/20 rounded-full blur-2xl animate-pulse" style={{animationDelay: '3s'}}></div>
+                <div className="absolute top-1/3 right-1/4 w-20 h-20 bg-yellow-500/20 rounded-full blur-2xl animate-pulse"></div>
+                <div className="absolute bottom-1/3 left-1/4 w-16 h-16 bg-orange-500/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '3s'}}></div>
                 
                 {/* Grid pattern */}
                 <div className="absolute inset-0 opacity-5" style={{
@@ -337,22 +312,22 @@ export default function TuHungMatchIntro() {
                     linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px),
                     linear-gradient(0deg, rgba(255,255,255,0.3) 1px, transparent 1px)
                   `,
-                  backgroundSize: '30px 30px'
+                  backgroundSize: '20px 20px'
                 }}></div>
               </div>
 
-              <div className="relative z-10 h-full flex flex-col justify-center px-6 sm:px-8 md:px-12 space-y-6 sm:space-y-8 md:space-y-10">
+              <div className="relative z-10 h-full flex flex-col justify-center px-4 sm:px-6 md:px-8 space-y-3 sm:space-y-4 md:space-y-6">
                 
                 {/* Match Title */}
                 <div className="text-center">
                   <h1
-                    className="font-black uppercase text-white text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl leading-tight mb-4 sm:mb-6"
+                    className="font-black uppercase text-white text-sm sm:text-lg md:text-xl lg:text-2xl xl:text-3xl leading-tight mb-2 sm:mb-3"
                     style={{
                       background: 'linear-gradient(135deg, #ffffff 0%, #fbbf24 25%, #f59e0b 50%, #ffffff 75%, #fbbf24 100%)',
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
                       backgroundClip: 'text',
-                      textShadow: '0 0 30px rgba(251, 191, 36, 0.3)',
+                      textShadow: '0 0 20px rgba(251, 191, 36, 0.3)',
                       backgroundSize: '200% 200%',
                       animation: 'gradientShift 4s ease-in-out infinite'
                     }}
@@ -362,7 +337,7 @@ export default function TuHungMatchIntro() {
 
                   {/* Subtitle */}
                   {matchData.showSubtitle && matchData.subtitle && (
-                    <div className="text-white/90 text-sm sm:text-lg md:text-xl font-semibold mb-4 sm:mb-6">
+                    <div className="text-white/90 text-[10px] sm:text-xs md:text-sm font-semibold mb-2 sm:mb-3">
                       <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
                         {matchData.subtitle}
                       </span>
@@ -371,19 +346,19 @@ export default function TuHungMatchIntro() {
                 </div>
 
                 {/* Round and Group */}
-                <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8">
+                <div className="flex items-center justify-center gap-2 sm:gap-3 md:gap-4">
                   {matchData.showRound && (
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl blur opacity-60 animate-pulse"></div>
-                      <div className="relative bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 px-4 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 rounded-2xl shadow-xl text-sm sm:text-base md:text-lg lg:text-xl font-bold text-white border-2 border-white/30">
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg blur opacity-60 animate-pulse"></div>
+                      <div className="relative bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 px-2 sm:px-3 md:px-4 py-1 sm:py-2 rounded-lg shadow-xl text-[10px] sm:text-xs md:text-sm font-bold text-white border border-white/30">
                         VÒNG {matchData.round}
                       </div>
                     </div>
                   )}
                   {matchData.showGroup && (
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl blur opacity-60 animate-pulse"></div>
-                      <div className="relative bg-gradient-to-r from-orange-600 via-orange-500 to-red-500 px-4 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4 rounded-2xl shadow-xl text-sm sm:text-base md:text-lg lg:text-xl font-bold text-white border-2 border-white/30">
+                      <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg blur opacity-60 animate-pulse"></div>
+                      <div className="relative bg-gradient-to-r from-orange-600 via-orange-500 to-red-500 px-2 sm:px-3 md:px-4 py-1 sm:py-2 rounded-lg shadow-xl text-[10px] sm:text-xs md:text-sm font-bold text-white border border-white/30">
                         BẢNG {matchData.group}
                       </div>
                     </div>
@@ -391,14 +366,14 @@ export default function TuHungMatchIntro() {
                 </div>
 
                 {/* Match Details */}
-                <div className="space-y-4 sm:space-y-5 md:space-y-6">
+                <div className="space-y-2 sm:space-y-3 md:space-y-4">
                   
                   {/* Date/Time */}
                   {(matchData.showTimer || matchData.showDate) && (
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-2xl blur-xl"></div>
-                      <div className="relative bg-black/50 backdrop-blur-lg px-6 sm:px-8 md:px-10 py-4 sm:py-5 md:py-6 rounded-2xl border border-white/30 shadow-2xl text-center">
-                        <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-yellow-300">
+                      <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-lg blur-lg"></div>
+                      <div className="relative bg-black/50 backdrop-blur-lg px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg border border-white/30 shadow-xl text-center">
+                        <div className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-yellow-300">
                           {matchData.showTimer && matchData.roundedTime}
                           {matchData.showTimer && matchData.showDate && ' • '}
                           {matchData.showDate && matchData.currentDate}
@@ -410,9 +385,9 @@ export default function TuHungMatchIntro() {
                   {/* Stadium */}
                   {matchData.showStadium && matchData.stadium && (
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-2xl blur-xl"></div>
-                      <div className="relative bg-black/50 backdrop-blur-lg px-6 sm:px-8 md:px-10 py-4 sm:py-5 md:py-6 rounded-2xl border border-white/30 shadow-2xl text-center">
-                        <div className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-cyan-300">
+                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-lg blur-lg"></div>
+                      <div className="relative bg-black/50 backdrop-blur-lg px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg border border-white/30 shadow-xl text-center">
+                        <div className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-cyan-300">
                           🏟️ {matchData.stadium}
                         </div>
                       </div>
@@ -422,14 +397,14 @@ export default function TuHungMatchIntro() {
                   {/* Live Text */}
                   {matchData.liveText && (
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-pink-500 rounded-2xl blur-lg animate-pulse"></div>
-                      <div className="relative bg-gradient-to-r from-red-600 to-pink-600 px-6 sm:px-8 md:px-10 py-4 sm:py-5 md:py-6 rounded-2xl shadow-2xl border-2 border-white/30 text-center">
-                        <div className="flex items-center justify-center space-x-3 sm:space-x-4">
-                          <div className="flex items-center space-x-2">
-                            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-white rounded-full animate-ping"></div>
-                            <div className="w-2 h-2 sm:w-3 sm:h-3 bg-white/80 rounded-full animate-pulse"></div>
+                      <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-pink-500 rounded-lg blur animate-pulse"></div>
+                      <div className="relative bg-gradient-to-r from-red-600 to-pink-600 px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg shadow-xl border border-white/30 text-center">
+                        <div className="flex items-center justify-center space-x-2 sm:space-x-3">
+                          <div className="flex items-center space-x-1">
+                            <div className="w-2 h-2 sm:w-3 sm:h-3 bg-white rounded-full animate-ping"></div>
+                            <div className="w-1 h-1 sm:w-2 sm:h-2 bg-white/80 rounded-full animate-pulse"></div>
                           </div>
-                          <span className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-white">🎥 {matchData.liveText}</span>
+                          <span className="text-sm sm:text-base md:text-lg lg:text-xl font-bold text-white">🎥 {matchData.liveText}</span>
                         </div>
                       </div>
                     </div>
@@ -440,74 +415,11 @@ export default function TuHungMatchIntro() {
           </div>
         </div>
 
-        {/* Footer with sponsors and partners */}
-        <div className="absolute bottom-16 sm:bottom-20 left-0 right-0 px-4 sm:px-6 md:px-8 z-30">
-          <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8">
-            
-            {/* Sponsors */}
-            {hasSponsors && (
-              <div className="bg-black/40 backdrop-blur-md rounded-xl p-2 sm:p-3 border border-white/20 shadow-xl">
-                <div className="text-[8px] sm:text-[10px] font-bold text-yellow-300 mb-1 sm:mb-2 drop-shadow-lg text-center">
-                  💰 NHÀ TÀI TRỢ
-                </div>
-                <div className="flex flex-wrap gap-1 sm:gap-2 justify-center max-w-32 sm:max-w-48">
-                  {sponsorLogos.slice(0, 6).map((sponsor, index) => (
-                    <img
-                      key={index}
-                      src={sponsor.logo}
-                      alt={sponsor.name}
-                      className={`${getDisplayEachLogo('object-contain bg-white/95 border border-yellow-300/50 shadow-lg')} w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 p-0.5 sm:p-1`}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Organizing */}
-            {hasOrganizing && (
-              <div className="bg-black/40 backdrop-blur-md rounded-xl p-2 sm:p-3 border border-white/20 shadow-xl">
-                <div className="text-[8px] sm:text-[10px] font-bold text-blue-300 mb-1 sm:mb-2 drop-shadow-lg text-center">
-                  🏛️ BAN TỔ CHỨC
-                </div>
-                <div className="flex flex-wrap gap-1 sm:gap-2 justify-center max-w-32 sm:max-w-48">
-                  {organizingLogos.slice(0, 6).map((organizing, index) => (
-                    <img
-                      key={index}
-                      src={organizing.logo}
-                      alt={organizing.name}
-                      className={`${getDisplayEachLogo('object-contain bg-white/95 border border-blue-300/50 shadow-lg')} w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 p-0.5 sm:p-1`}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Media Partners */}
-            {hasMediaPartners && (
-              <div className="bg-black/40 backdrop-blur-md rounded-xl p-2 sm:p-3 border border-white/20 shadow-xl">
-                <div className="text-[8px] sm:text-[10px] font-bold text-green-300 mb-1 sm:mb-2 drop-shadow-lg text-center">
-                  📺 TRUYỀN THÔNG
-                </div>
-                <div className="flex flex-wrap gap-1 sm:gap-2 justify-center max-w-32 sm:max-w-48">
-                  {mediaPartnerLogos.slice(0, 6).map((media, index) => (
-                    <img
-                      key={index}
-                      src={media.logo}
-                      alt={media.name}
-                      className={`${getDisplayEachLogo('object-contain bg-white/95 border border-green-300/50 shadow-lg')} w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 p-0.5 sm:p-1`}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
         {/* Fixed Marquee Section */}
         {isMarqueeRunning && scrollData.text && (
           <div 
             ref={marqueeContainerRef}
-            className="absolute bottom-0 left-0 w-full h-6 sm:h-8 md:h-12 overflow-hidden z-40 border-t-4 border-yellow-500"
+            className="absolute bottom-0 left-0 w-full h-4 sm:h-6 md:h-8 overflow-hidden z-40 border-t-2 border-yellow-500"
             style={{
               background: `linear-gradient(90deg, ${scrollData.bgColor}, ${scrollData.bgColor}ee, ${scrollData.bgColor})`
             }}
@@ -515,10 +427,10 @@ export default function TuHungMatchIntro() {
             <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/50"></div>
             <div
               ref={marqueeRef}
-              className="absolute top-1/2 whitespace-nowrap text-sm sm:text-base md:text-lg lg:text-xl font-bold drop-shadow-2xl"
+              className="absolute top-1/2 whitespace-nowrap text-xs sm:text-sm md:text-base font-bold drop-shadow-2xl"
               style={{
                 color: scrollData.color,
-                textShadow: `${scrollData.color === '#FFFFFF' ? '#000' : '#FFF'} 2px 2px 4px`,
+                textShadow: `${scrollData.color === '#FFFFFF' ? '#000' : '#FFF'} 1px 1px 2px`,
                 left: containerWidth ? `${containerWidth}px` : '100%',
                 transform: 'translateY(-50%)',
                 animation: containerWidth && marqueeWidth ? 
@@ -534,13 +446,13 @@ export default function TuHungMatchIntro() {
         {/* Decorative elements */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {/* Floating particles */}
-          {[...Array(8)].map((_, i) => (
+          {[...Array(6)].map((_, i) => (
             <div
               key={i}
               className="absolute rounded-full bg-gradient-to-r from-white/20 to-yellow-300/30 animate-floating"
               style={{
-                width: `${4 + Math.random() * 6}px`,
-                height: `${4 + Math.random() * 6}px`,
+                width: `${3 + Math.random() * 4}px`,
+                height: `${3 + Math.random() * 4}px`,
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
                 animationDelay: `${Math.random() * 5}s`,
@@ -566,7 +478,7 @@ export default function TuHungMatchIntro() {
               opacity: 0.4;
             }
             50% {
-              transform: translateY(-15px) rotate(180deg);
+              transform: translateY(-10px) rotate(180deg);
               opacity: 0.8;
             }
           }
@@ -582,16 +494,6 @@ export default function TuHungMatchIntro() {
           
           .animate-floating {
             animation: floating 8s ease-in-out infinite;
-          }
-          
-          /* Hexagon styles */
-          .hexagon-clip {
-            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-            position: relative;
-          }
-          
-          .hexagon-glow {
-            filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.8));
           }
         `}</style>
       </div>
