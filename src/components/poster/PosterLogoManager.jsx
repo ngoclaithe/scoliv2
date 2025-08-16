@@ -24,7 +24,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     round: 1,
     showRound: false,
     group: "A",
-    showGroup: false
+    showGroup: false,
+    subtitle: "",
+    showSubtitle: false
   });
 
   const [customPosters, setCustomPosters] = useState([]);
@@ -1152,7 +1154,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           <div className="text-xs font-medium text-gray-700">Tùy chọn hiển thị:</div>
           {hasBannerSelected && (
             <div className="text-xs text-orange-600 bg-orange-50 p-1 rounded border">
-              ⚠️ Đã chọn banner, chỉ được chọn hình vuông
+              ⚠️ Đã chọn banner, chỉ được chọn hình vu��ng
             </div>
           )}
           {activeLogoCategory === 'tournament' && tournamentItemsCount >= 1 && (
