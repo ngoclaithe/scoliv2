@@ -203,8 +203,8 @@ export default function TuHungMatchIntro() {
         <div className="absolute inset-0 pt-8 sm:pt-10 md:pt-12 lg:pt-14 pb-8 sm:pb-10 md:pb-12 lg:pb-16">
           <div className="h-full flex flex-row">
             
-            {/* LEFT SIDE - TEAMS (Always 50% width) */}
-            <div className="w-1/2 relative bg-transparent from-purple-900/80 via-blue-900/80 to-indigo-900/80 border-r border-yellow-500 flex-shrink-0">
+            {/* LEFT SIDE - TEAMS (Always 40% width) */}
+            <div className="w-2/5 relative bg-transparent from-purple-900/80 via-blue-900/80 to-indigo-900/80 border-r border-yellow-500 flex-shrink-0">
               
               {/* Background pattern for left side */}
               <div className="absolute inset-0">
