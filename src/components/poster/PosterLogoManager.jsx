@@ -3,6 +3,7 @@ import LogoAPI from "../../API/apiLogo";
 import DisplaySettingsAPI from "../../API/apiSettingDisplay";
 import RoomSessionAPI from "../../API/apiRoomSession";
 import { getFullLogoUrl } from "../../utils/logoUtils";
+import socketService from "../../services/socketService";
 
 const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialData, accessCode }) => {
   const [selectedPoster, setSelectedPoster] = useState(null);
@@ -535,7 +536,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       // Logic: Mỗi logo chỉ được chọn 1 position duy nhất
       const newPositions = item.displayPositions.includes(position)
         ? [] // Nếu đang chọn position này thì bỏ chọn (xóa hết)
-        : [position]; // Nếu chưa chọn thì chọn position này (thay thế position cũ)
+        : [position]; // Nếu chưa chọn thì ch���n position này (thay thế position cũ)
 
       const updatedItem = { ...item, displayPositions: newPositions };
       onUpdate(item.id, updatedItem);
