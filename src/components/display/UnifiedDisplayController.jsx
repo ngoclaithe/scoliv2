@@ -17,6 +17,7 @@ import PosterDoDen from '../../pages/Poster-doden';
 import PosterVangKim from '../../pages/Poster-vangkim';
 import PosterVangXanh from '../../pages/Poster-vangxanh';
 import PosterXanhDuong from '../../pages/Poster-xanhduong';
+import PosterTuHung from '../../pages/Poster-tuhung';
 import Intro from '../introduce/Intro';
 import HalfTime from '../halftime/HalfTime';
 import ScoreboardAbove from '../scoreboard_preview/ScoreboardAbove';
