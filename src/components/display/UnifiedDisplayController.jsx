@@ -239,6 +239,8 @@ const UnifiedDisplayController = () => {
         return <PosterVangXanh accessCode={accessCode} />;
       case 'xanhduong':
         return <PosterXanhDuong accessCode={accessCode} />;
+      case 'tuhung':
+        return <PosterTuHung accessCode={accessCode} />;
       default:
         return <PosterHaoQuang accessCode={accessCode} />;
     }
