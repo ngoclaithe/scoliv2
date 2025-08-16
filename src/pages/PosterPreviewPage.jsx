@@ -12,6 +12,7 @@ import PosterDoden from './Poster-doden';
 import PosterVangkim from './Poster-vangkim';
 import PosterVangxanh from './Poster-vangxanh';
 import PosterXanhduong from './Poster-xanhduong';
+import PosterTuHung from './Poster-tuhung';
 
 const PosterPreviewPage = () => {
   const { accessCode } = useParams();
