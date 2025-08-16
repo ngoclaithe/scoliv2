@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://192.168.31.186:5000/api/v1';
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://scoliv2.com/api/v1';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -26,9 +26,14 @@ const DisplaySettingsAPI = {
 
   getDisplaySettings: async (accessCode) => {
     try {
+      console.log('🌐 [DisplaySettingsAPI] Making request to:', `${API_BASE_URL}/display-settings/access-code/${accessCode}`);
       const response = await api.get(`/display-settings/access-code/${accessCode}`);
+      console.log('🌐 [DisplaySettingsAPI] Raw response:', response);
+      console.log('🌐 [DisplaySettingsAPI] Response status:', response.status);
+      console.log('🌐 [DisplaySettingsAPI] Response data:', response.data);
       return response.data;
     } catch (error) {
+      console.error('🌐 [DisplaySettingsAPI] API call failed:', error);
       throw DisplaySettingsAPI.handleError(error);
     }
   },
