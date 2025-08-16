@@ -43,7 +43,15 @@ const PosterPreviewPage = () => {
         const verifyResult = await PublicAPI.verifyAccessCode(accessCode);
 
         if (!verifyResult.success || !verifyResult.isValid) {
-          setError(`Mã truy cập không hợp lệ: ${accessCode}`);
+          if (verifyResult.message && (
+            verifyResult.message.includes('hết hạn') ||
+            verifyResult.message.includes('expired') ||
+            verifyResult.message.includes('không hợp lệ')
+          )) {
+            setError(`❌ Mã truy cập đã hết hạn hoặc không hợp lệ: ${accessCode}\n\n⏰ Vui lòng liên hệ admin để cấp mã mới.`);
+          } else {
+            setError(`❌ Mã truy cập không hợp lệ: ${accessCode}\n\n${verifyResult.message || 'Vui lòng kiểm tra lại mã truy cập.'}`);
+          }
           return;
         }
 
@@ -84,7 +92,7 @@ const PosterPreviewPage = () => {
     setDownloading(true);
     try {
       const canvas = await html2canvas(posterRef.current, {
-        scale: 2, // Độ ph��n giải cao hơn
+        scale: 2, // Độ phân giải cao hơn
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#ffffff',
