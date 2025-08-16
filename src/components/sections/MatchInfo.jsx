@@ -24,11 +24,7 @@ const MatchInfo = ({
   isSearchingLogoB,
   onSearchLogoA,
   onSearchLogoB,
-  onApplyChanges,
-  subtitle,
-  setSubtitle,
-  showSubtitle,
-  setShowSubtitle
+  onApplyChanges
 }) => {
   return (
     <>
