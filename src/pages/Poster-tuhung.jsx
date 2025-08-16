@@ -206,10 +206,37 @@ export default function TuHungMatchIntro() {
             {/* LEFT SIDE - TEAMS (Always 40% width) */}
             <div className="w-2/5 relative bg-transparent from-purple-900/80 via-blue-900/80 to-indigo-900/80 border-r border-yellow-500 flex-shrink-0">
               
-              {/* Background pattern for left side */}
+              {/* Complex geometric background pattern for left side */}
               <div className="absolute inset-0">
-                <div className="absolute top-1/4 left-1/4 w-12 sm:w-16 md:w-20 h-12 sm:h-16 md:h-20 bg-purple-500/20 rounded-full blur-2xl animate-pulse"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-8 sm:w-12 md:w-16 h-8 sm:h-12 md:h-16 bg-blue-500/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '2s'}}></div>
+                {/* Main diagonal shapes */}
+                <div className="absolute top-0 left-0 w-full h-full">
+                  <div className="absolute top-0 left-0 w-4/5 h-2/3 bg-gradient-to-br from-purple-600/30 to-transparent transform -skew-y-12 rounded-tr-[50px]"></div>
+                  <div className="absolute bottom-0 right-0 w-3/4 h-1/2 bg-gradient-to-tl from-blue-600/25 to-transparent transform skew-x-12 rounded-tl-[40px]"></div>
+                </div>
+
+                {/* Overlapping hexagons */}
+                <div className="absolute top-1/4 left-1/3 w-16 h-16 bg-purple-500/20 transform rotate-45 animate-pulse" style={{
+                  clipPath: 'polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%)'
+                }}></div>
+                <div className="absolute bottom-1/3 right-1/4 w-12 h-12 bg-cyan-400/15 transform -rotate-12 animate-pulse" style={{
+                  animationDelay: '1.5s',
+                  clipPath: 'polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%)'
+                }}></div>
+
+                {/* Triangle overlays */}
+                <div className="absolute top-1/2 left-1/4 w-10 h-10 bg-gradient-to-r from-yellow-400/20 to-orange-400/20 animate-bounce-subtle" style={{
+                  clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)'
+                }}></div>
+                <div className="absolute bottom-1/4 left-2/3 w-8 h-8 bg-gradient-to-l from-pink-400/15 to-purple-400/15 animate-pulse" style={{
+                  animationDelay: '2.5s',
+                  clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)'
+                }}></div>
+
+                {/* Diamond shapes */}
+                <div className="absolute top-2/3 left-1/6 w-6 h-6 bg-indigo-400/20 transform rotate-45 animate-pulse"></div>
+                <div className="absolute top-1/6 right-1/3 w-4 h-4 bg-teal-400/15 transform rotate-12 animate-pulse" style={{
+                  animationDelay: '3s'
+                }}></div>
               </div>
 
               <div className="relative z-10 h-full flex flex-col justify-center items-center px-1 sm:px-2 md:px-4 lg:px-6 space-y-2 sm:space-y-3 md:space-y-4 lg:space-y-6">
@@ -281,22 +308,61 @@ export default function TuHungMatchIntro() {
                   </div>
                 </div>
 
-                {/* Partners section - moved below team names */}
+                {/* Subtitle - moved from right side */}
+                {matchData.showSubtitle && matchData.subtitle && (
+                  <div className="relative">
+                    {/* Decorative background shape for subtitle */}
+                    <div className="absolute inset-0 transform -skew-x-6">
+                      <div className="bg-gradient-to-r from-purple-500/30 via-pink-500/20 to-purple-500/30 rounded-lg blur-sm"></div>
+                    </div>
+                    <div className="relative bg-black/30 backdrop-blur-md px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 border border-purple-400/40 shadow-xl" style={{
+                      clipPath: 'polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%)'
+                    }}>
+                      <span className="text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] xl:text-xs font-bold text-center block">
+                        <span className="bg-gradient-to-r from-purple-300 via-pink-300 to-purple-300 bg-clip-text text-transparent drop-shadow-lg">
+                          {matchData.subtitle}
+                        </span>
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Partners section - moved below subtitle */}
                 {matchData.partners.length > 0 && (
                   <div className="flex items-center justify-center">
-                    <div className="bg-black/40 backdrop-blur-sm rounded-lg px-1 sm:px-2 md:px-3 py-1 sm:py-1.5 border border-white/20 shadow-lg">
-                      <div className="text-[6px] sm:text-[7px] md:text-[8px] font-bold text-yellow-300 mb-0.5 sm:mb-1 text-center">
-                        🤝 CÁC ĐƠN VỊ ĐỒNG HÀNH
+                    {/* Creative container with multiple overlapping shapes */}
+                    <div className="relative">
+                      {/* Background geometric pattern */}
+                      <div className="absolute inset-0 transform rotate-2">
+                        <div className="bg-gradient-to-br from-yellow-500/20 to-orange-500/20 rounded-lg blur-sm"></div>
                       </div>
-                      <div className="flex gap-0.5 sm:gap-1 justify-center max-w-[120px] sm:max-w-[150px] md:max-w-[200px] lg:max-w-[250px]">
-                        {matchData.partners.slice(0, isMobile ? 4 : isTablet ? 6 : 8).map((partner, index) => (
-                          <img
-                            key={index}
-                            src={partner.logo}
-                            alt={partner.name}
-                            className="object-contain bg-white/95 border border-yellow-300/50 shadow-sm rounded w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 p-0.5"
-                          />
-                        ))}
+                      <div className="absolute inset-0 transform -rotate-1">
+                        <div className="bg-gradient-to-tl from-blue-500/15 to-cyan-500/15 rounded-full blur"></div>
+                      </div>
+
+                      <div className="relative bg-black/40 backdrop-blur-sm px-1 sm:px-2 md:px-3 py-1 sm:py-1.5 border border-white/20 shadow-lg" style={{
+                        clipPath: 'polygon(10% 0%, 90% 0%, 100% 25%, 90% 100%, 10% 100%, 0% 75%)'
+                      }}>
+                        <div className="text-[6px] sm:text-[7px] md:text-[8px] font-bold text-yellow-300 mb-0.5 sm:mb-1 text-center">
+                          🤝 CÁC ĐƠN VỊ ĐỒNG HÀNH
+                        </div>
+                        <div className="flex gap-0.5 sm:gap-1 justify-center max-w-[120px] sm:max-w-[150px] md:max-w-[200px] lg:max-w-[250px]">
+                          {matchData.partners.slice(0, isMobile ? 4 : isTablet ? 6 : 8).map((partner, index) => (
+                            <div key={index} className="relative">
+                              {/* Creative border for partner logos */}
+                              <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/50 to-orange-400/50 rounded transform rotate-45 scale-110 animate-pulse" style={{
+                                animationDelay: `${index * 0.2}s`
+                              }}></div>
+                              <img
+                                src={partner.logo}
+                                alt={partner.name}
+                                className="relative object-contain bg-white/95 border border-yellow-300/50 shadow-sm w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 lg:w-5 lg:h-5 p-0.5" style={{
+                                  clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
+                                }}
+                              />
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>
