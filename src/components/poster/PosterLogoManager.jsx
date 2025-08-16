@@ -64,7 +64,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     },
     {
       id: "tuhung",
-      name: "Tự hưng",
+      name: "Tứ hùng",
       thumbnail: "/images/posters/poster7.jpg",
     },
   ];
@@ -1098,7 +1098,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               value={roundGroupOptions.subtitle}
               onChange={(e) => setRoundGroupOptions(prev => ({ ...prev, subtitle: e.target.value }))}
               onBlur={(e) => handleSubtitleUpdate(e.target.value, roundGroupOptions.showSubtitle)}
-              placeholder="Nhập tiêu đề phụ"
+              placeholder="Nhập tiêu đề ph��"
               className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white flex-1"
             />
           </label>
