@@ -72,7 +72,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     {
       id: "tuhung",
       name: "Tứ hùng",
-      thumbnail: "/images/posters/poster7.jpg",
+      thumbnail: "/images/posters/tuhung.png",
     },
   ];
 
@@ -512,17 +512,14 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     const inputRef = useRef(null);
     const lastFocusedRef = useRef(false);
 
-    // Chỉ update localCode khi item.code thay đổi thật sự, không phải do re-render
     useEffect(() => {
       if (item.code !== localCodeRef) {
-        // Lưu trạng thái focus trước khi update
         const wasFocused = inputRef.current && document.activeElement === inputRef.current;
         lastFocusedRef.current = wasFocused;
 
         setLocalCode(item.code);
         setLocalCodeRef(item.code);
 
-        // Khôi phục focus sau khi update
         if (wasFocused && inputRef.current) {
           setTimeout(() => {
             inputRef.current.focus();
@@ -576,15 +573,12 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     };
 
     const handlePositionToggle = (position) => {
-      // Logic: Mỗi logo chỉ được chọn 1 position duy nhất
       const newPositions = item.displayPositions.includes(position)
-        ? [] // Nếu đang chọn position này thì bỏ chọn (xóa hết)
-        : [position]; // Nếu chưa chọn thì chọn position này (thay thế position cũ)
-
+        ? [] 
+        : [position]; 
       const updatedItem = { ...item, displayPositions: newPositions };
       onUpdate(item.id, updatedItem);
 
-      // Also trigger immediate logo update with behavior
       const allCurrentItems = [...apiLogos, ...logoItems].map(logoItem =>
         logoItem.id === item.id ? updatedItem : logoItem
       );
@@ -602,7 +596,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       } else if (item.displayPositions.length > 0 && newPositions.length > 0) {
         behavior = 'update';
       } else {
-        behavior = 'add'; // fallback
+        behavior = 'add'; 
       }
 
       if (onLogoUpdate) {
