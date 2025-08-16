@@ -644,7 +644,7 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Cập nhật logo gi��i đấu
+  // Cập nhật logo giải đấu
   const updateTournamentLogo = useCallback((newTournamentLogo) => {
     console.log('[MatchContext] updateTournamentLogo called:', newTournamentLogo, 'socketConnected:', socketConnected);
     if (socketConnected) {

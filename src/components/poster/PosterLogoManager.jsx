@@ -1098,7 +1098,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               value={roundGroupOptions.subtitle}
               onChange={(e) => setRoundGroupOptions(prev => ({ ...prev, subtitle: e.target.value }))}
               onBlur={(e) => handleSubtitleUpdate(e.target.value, roundGroupOptions.showSubtitle)}
-              placeholder="Nhập tiêu đề ph��"
+              placeholder="Nhập tiêu đề phụ"
               className="text-xs border border-gray-300 rounded px-1 py-0.5 bg-white flex-1"
             />
           </label>

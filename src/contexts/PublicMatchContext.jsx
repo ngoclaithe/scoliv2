@@ -722,12 +722,11 @@ export const PublicMatchProvider = ({ children }) => {
     });
 
     socketService.on('subtitle_visibility_updated', (data) => {
-      console.log('���� [PublicMatchContext] subtitle_visibility_updated received:', data);
+      console.log('[PublicMatchContext] subtitle_visibility_updated received:', data);
       setMatchData(prev => ({ ...prev, showSubtitle: data.showSubtitle }));
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe các events mới từ PosterLogoManager
     socketService.on('round_update', (data) => {
       console.log('📝 [PublicMatchContext] round_update received:', data);
       setMatchData(prev => ({ ...prev, round: data.round, showRound: data.showRound }));
@@ -1017,7 +1016,6 @@ export const PublicMatchProvider = ({ children }) => {
         return;
       }
 
-      // Xác ��ịnh clientType dựa trên URL params
       const hasDynamicParams = hasUrlParams();
       const finalClientType = clientType || (hasDynamicParams ? 'admin' : 'display');
 
