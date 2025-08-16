@@ -694,7 +694,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                 }`}
             >
               {item.uploadStatus === 'preview' ? '⏳ Đang tải...' :
-                item.uploadStatus === 'error' ? '❌ Thử lại' :
+                item.uploadStatus === 'error' ? '�� Thử lại' :
                   '📁 Chọn file'}
             </label>
           </div>
@@ -1010,6 +1010,22 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     }
   }, [onLogoUpdate]);
 
+  const handleSubtitleUpdate = useCallback((subtitle, show) => {
+    console.log(`🔄 [PosterLogoManager] handleSubtitleUpdate - subtitle: ${subtitle}, show: ${show}`);
+
+    setRoundGroupOptions(prev => ({ ...prev, subtitle, showSubtitle: show }));
+
+    // Emit to backend
+    console.log(`📡 [PosterLogoManager] Emitting updateSubtitle to backend - subtitle: ${subtitle}, showSubtitle: ${show}`);
+    socketService.emit('subtitle_update', { subtitle, showSubtitle: show });
+
+    if (onLogoUpdate) {
+      onLogoUpdate({
+        subtitleUpdate: { subtitle, showSubtitle: show, type: 'subtitle' }
+      });
+    }
+  }, [onLogoUpdate]);
+
   const renderRoundGroupSection = () => {
     return (
       <div className="space-y-2">
@@ -1154,7 +1170,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           <div className="text-xs font-medium text-gray-700">Tùy chọn hiển thị:</div>
           {hasBannerSelected && (
             <div className="text-xs text-orange-600 bg-orange-50 p-1 rounded border">
-              ⚠️ Đã chọn banner, chỉ được chọn hình vu��ng
+              ⚠️ Đã chọn banner, chỉ được chọn hình vuông
             </div>
           )}
           {activeLogoCategory === 'tournament' && tournamentItemsCount >= 1 && (
