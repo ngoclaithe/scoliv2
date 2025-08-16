@@ -5,7 +5,7 @@ import { parseColorParam as parseColor } from './colorUtils';
 /**
  * Tìm logo URL dựa trên logo code, trả về default nếu không tìm thấy
  * @param {string} logoCode - Mã logo cần tìm
- * @param {string} teamType - 'A' hoặc 'B' để xác đ���nh default logo
+ * @param {string} teamType - 'A' hoặc 'B' để xác định default logo
  * @returns {Promise<string>} - URL của logo hoặc default logo
  */
 export const findLogoByCode = async (logoCode, teamType = 'A') => {
@@ -145,10 +145,12 @@ export const buildDynamicRoute = (params) => {
     teamBLogoCode = 'TEAMB',
     teamAName = 'TEAM_A',
     teamBName = 'TEAM_B',
-    teamAKitColor = 'FF0000',
-    teamBKitColor = '0000FF',
+    teamAKitColor = 'do', // Hỗ trợ tên màu tiếng Việt
+    teamBKitColor = 'xanh',
     teamAScore = 0,
-    teamBScore = 0
+    teamBScore = 0,
+    view = 'poster',
+    matchTime = '00:00'
   } = params;
 
   // Encode các tham số text
@@ -157,12 +159,14 @@ export const buildDynamicRoute = (params) => {
   const encodedLiveText = encodeURIComponent(liveText.replace(/ /g, '_'));
   const encodedTeamAName = encodeURIComponent(teamAName.replace(/ /g, '_'));
   const encodedTeamBName = encodeURIComponent(teamBName.replace(/ /g, '_'));
+  const encodedView = encodeURIComponent(view.replace(/ /g, '_'));
+  const encodedMatchTime = encodeURIComponent(matchTime);
 
-  // Loại bỏ # khỏi màu
-  const cleanTeamAColor = teamAKitColor.replace('#', '');
-  const cleanTeamBColor = teamBKitColor.replace('#', '');
+  // Xử lý màu - có thể là tên tiếng Việt hoặc hex
+  const cleanTeamAColor = teamAKitColor.toString().replace('#', '').replace(/ /g, '_');
+  const cleanTeamBColor = teamBKitColor.toString().replace('#', '').replace(/ /g, '_');
 
-  return `/${accessCode}/${encodedLocation}/${encodedMatchTitle}/${encodedLiveText}/${teamALogoCode}/${teamBLogoCode}/${encodedTeamAName}/${encodedTeamBName}/${cleanTeamAColor}/${cleanTeamBColor}/${teamAScore}/${teamBScore}`;
+  return `/${accessCode}/${encodedLocation}/${encodedMatchTitle}/${encodedLiveText}/${teamALogoCode}/${teamBLogoCode}/${encodedTeamAName}/${encodedTeamBName}/${cleanTeamAColor}/${cleanTeamBColor}/${teamAScore}/${teamBScore}/${encodedView}/${encodedMatchTime}`;
 };
 
 export default {
