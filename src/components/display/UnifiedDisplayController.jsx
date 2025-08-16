@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { useAuth } from '../../contexts/AuthContext';
 import PublicAPI from '../../API/apiPublic';
+import socketService from '../../services/socketService';
 import {
   findTeamLogos,
   parseColorParam,
