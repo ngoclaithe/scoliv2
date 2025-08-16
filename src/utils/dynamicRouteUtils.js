@@ -3,31 +3,39 @@ import { getFullLogoUrl } from './logoUtils';
 import { parseColorParam as parseColor } from './colorUtils';
 
 /**
- * Tìm logo URL dựa trên logo code
+ * Tìm logo URL dựa trên logo code, trả về default nếu không tìm thấy
  * @param {string} logoCode - Mã logo cần tìm
- * @returns {Promise<string|null>} - URL của logo hoặc null nếu không tìm thấy
+ * @param {string} teamType - 'A' hoặc 'B' để xác định default logo
+ * @returns {Promise<string>} - URL của logo hoặc default logo
  */
-export const findLogoByCode = async (logoCode) => {
+export const findLogoByCode = async (logoCode, teamType = 'A') => {
+  // Default logos
+  const defaultLogos = {
+    A: '/images/background-poster/default_logoA.png',
+    B: '/images/background-poster/default_logoB.png'
+  };
+
   if (!logoCode || logoCode.trim().length === 0) {
-    return null;
+    console.log(`ℹ️ [dynamicRouteUtils] No logo code provided, using default for team ${teamType}`);
+    return defaultLogos[teamType] || defaultLogos.A;
   }
 
   try {
     console.log(`🔍 [dynamicRouteUtils] Searching for logo with code: ${logoCode}`);
     const response = await LogoAPI.searchLogosByCode(logoCode.trim(), true);
-    
+
     if (response?.data?.length > 0) {
       const foundLogo = response.data[0];
       const logoUrl = getFullLogoUrl(foundLogo.url_logo || foundLogo.file_path);
       console.log(`✅ [dynamicRouteUtils] Found logo for code ${logoCode}:`, logoUrl);
       return logoUrl;
     } else {
-      console.log(`⚠️ [dynamicRouteUtils] No logo found for code: ${logoCode}`);
-      return null;
+      console.log(`⚠️ [dynamicRouteUtils] No logo found for code: ${logoCode}, using default for team ${teamType}`);
+      return defaultLogos[teamType] || defaultLogos.A;
     }
   } catch (error) {
-    console.error(`❌ [dynamicRouteUtils] Error finding logo for code ${logoCode}:`, error);
-    return null;
+    console.log(`⚠️ [dynamicRouteUtils] Error finding logo for code ${logoCode}, using default for team ${teamType}:`, error.message);
+    return defaultLogos[teamType] || defaultLogos.A;
   }
 };
 
