@@ -51,6 +51,10 @@ const MatchManagementSection = ({ isActive = true }) => {
     updateTournamentLogo,
     updateLiveUnit,
     updateDisplaySettings,
+    // update round and group and tittle
+    updateRound,
+    updateGroup,
+    updateTittle,
 
   } = useMatch();
 
@@ -437,7 +441,7 @@ const MatchManagementSection = ({ isActive = true }) => {
       showSubtitle: showSubtitle
     };
 
-    console.log("🎨 [DEBUG] Gửi updateMatchInfo với:", matchInfoData);
+    // console.log("🎨 [DEBUG] Gửi updateMatchInfo với:", matchInfoData);
     updateMatchInfo(matchInfoData);
 
     if (liveText !== matchData.liveText) {
@@ -461,6 +465,8 @@ const MatchManagementSection = ({ isActive = true }) => {
     intro: 'Giới thiệu',
     halftime: 'Nghỉ giữa hiệp',
     player_list: 'Danh sách cầu thủ',
+    event: 'Sự kiện trận đấu',
+    stats: 'Thống kê'
   };
   
   return (
