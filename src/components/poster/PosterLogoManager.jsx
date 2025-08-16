@@ -6,7 +6,6 @@ import { getFullLogoUrl } from "../../utils/logoUtils";
 import socketService from "../../services/socketService";
 
 const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialData, accessCode }) => {
-  // Debug logging for props
   console.log('🗨️ [PosterLogoManager] Component initialized with props:', {
     onPosterUpdate: !!onPosterUpdate,
     onLogoUpdate: !!onLogoUpdate,
@@ -1322,7 +1321,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           <option value="">Chọn trận</option>
           {historyMatches.map((match) => (
             <option key={match.id} value={match.id}>
-              {match.accessCode} ({match.status === 'expired' ? 'Đã kết thúc' : match.status})
+              {match.accessCode}
             </option>
           ))}
         </select>

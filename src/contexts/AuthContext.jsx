@@ -18,21 +18,17 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Trạng thái mới cho việc phân biệt loại đăng nhập
   const [authType, setAuthType] = useState(null); // 'account', 'code', 'full'
   const [matchCode, setMatchCode] = useState(null); // Code trận đấu hiện tại
   const [codeOnly, setCodeOnly] = useState(false); // Đăng nhập chỉ bằng code
   const [typeMatch, setTypeMatch] = useState('soccer'); // 'soccer', 'pickleball'
 
-  // Hàm load thông tin người dùng từ token
   const loadUser = useCallback(async () => {
     try {
       setLoading(true);
       if (AuthAPI.isAuthenticated()) {
-        // Kiểm tra xem có phải là demo user account không
         const token = AuthAPI.getToken();
         if (token && (token.includes('user-token') || token.includes('admin-token'))) {
-          // Demo user account - set authType là 'account'
           const userData = {
             id: 'user-demo',
             email: 'demo@user.com',
@@ -72,7 +68,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  // Kiểm tra token từ localStorage khi khởi tạo
   useEffect(() => {
     loadUser();
   }, [loadUser]);
@@ -81,7 +76,6 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
 
-      // Demo: Đăng nhập user demo
       if (credentials.email === 'demo@user.com' && credentials.password === 'demo123') {
         const userData = {
           id: 'user-demo',
@@ -93,16 +87,14 @@ export const AuthProvider = ({ children }) => {
 
         setUser(userData);
         setCodeOnly(false);
-        setAuthType('account'); // User đăng nhập thành công
+        setAuthType('account'); 
         setIsAuthenticated(true);
 
-        // Fake token for demo
         localStorage.setItem('token', 'fake-user-token');
 
         return { success: true, user: userData };
       }
 
-      // Đăng nhập thực tế thông qua API
       const { user: userData } = await AuthAPI.login(credentials);
 
       setUser({

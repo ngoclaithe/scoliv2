@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://192.168.31.186:5000/api/v1';
 
-// Tạo instance axios với cấu hình cơ bản
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -10,7 +9,6 @@ const api = axios.create({
   },
 });
 
-// Thêm interceptor để tự động thêm token vào header
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -37,7 +35,6 @@ const AuthAPI = {
   register: async (userData) => {
     try {
       const response = await api.post('/auth/register', userData);
-      // Lưu token vào localStorage nếu có
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
       }

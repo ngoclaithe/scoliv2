@@ -256,13 +256,6 @@ const NewHomeLayout = () => {
             </div>
 
             <div className="space-y-3">
-              <div className="bg-gray-100 rounded-lg p-3">
-                <div className="text-sm text-gray-600">Loại truy cập:</div>
-                <div className="font-semibold text-gray-800">
-                  {codeOnly ? 'Truy cập bằng mã' : 'Tài khoản người dùng'}
-                </div>
-              </div>
-
               {!codeOnly && (
                 <div className="bg-gray-100 rounded-lg p-3">
                   <div className="text-sm text-gray-600">Tên người dùng:</div>
@@ -280,13 +273,6 @@ const NewHomeLayout = () => {
                   </div>
                 </div>
               )}
-
-              <div className="bg-gray-100 rounded-lg p-3">
-                <div className="text-sm text-gray-600">Quyền hạn:</div>
-                <div className="font-semibold text-gray-800">
-                  {hasAccountAccess ? 'Quản trị viên' : 'Người dùng cơ bản'}
-                </div>
-              </div>
             </div>
 
             <div className="mt-6 pt-4 border-t border-gray-200">
