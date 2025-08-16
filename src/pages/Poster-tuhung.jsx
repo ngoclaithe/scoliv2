@@ -193,29 +193,10 @@ export default function TuHungMatchIntro() {
           </div>
         </div>
 
-        {/* Partners section - right below header */}
-        <div className="absolute top-12 sm:top-14 left-0 right-0 px-3 sm:px-4 md:px-6 z-30">
-          <div className="flex items-center justify-center">
-            <div className="bg-black/30 backdrop-blur-sm rounded-lg px-3 sm:px-4 py-1 sm:py-2 border border-white/20 shadow-lg">
-              <div className="text-[8px] sm:text-[9px] font-bold text-yellow-300 mb-1 text-center">
-                🤝 CÁC ĐƠN VỊ ĐỒNG HÀNH
-              </div>
-              <div className="flex gap-1 sm:gap-2 justify-center max-w-sm">
-                {matchData.partners.slice(0, 8).map((partner, index) => (
-                  <img
-                    key={index}
-                    src={partner.logo}
-                    alt={partner.name}
-                    className="object-contain bg-white/95 border border-yellow-300/50 shadow-sm rounded w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 p-0.5"
-                  />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+
 
         {/* Main content */}
-        <div className="absolute inset-0 pt-20 sm:pt-24 pb-12 sm:pb-16">
+        <div className="absolute inset-0 pt-12 sm:pt-14 pb-12 sm:pb-16">
           <div className="h-full flex">
             
             {/* LEFT SIDE - TEAMS */}
@@ -227,10 +208,10 @@ export default function TuHungMatchIntro() {
                 <div className="absolute bottom-1/4 right-1/4 w-16 h-16 bg-blue-500/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '2s'}}></div>
               </div>
 
-              <div className="relative z-10 h-full flex flex-col justify-center items-center px-3 sm:px-4 md:px-6 space-y-6 sm:space-y-8">
+              <div className="relative z-10 h-full flex flex-col justify-center items-center px-3 sm:px-4 md:px-6 space-y-4 sm:space-y-6">
                 
                 {/* Team Logos Row */}
-                <div className="flex items-center justify-center gap-8 sm:gap-12 md:gap-16">
+                <div className="flex items-center justify-center gap-12 sm:gap-16 md:gap-20">
                   {/* Team A Logo */}
                   <div className="relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-blue-500 rounded-full blur opacity-60 animate-pulse scale-110"></div>
@@ -250,11 +231,6 @@ export default function TuHungMatchIntro() {
                         }}
                       />
                     </div>
-                  </div>
-
-                  {/* VS */}
-                  <div className="text-white font-black text-lg sm:text-xl md:text-2xl opacity-70">
-                    VS
                   </div>
 
                   {/* Team B Logo */}
@@ -278,6 +254,27 @@ export default function TuHungMatchIntro() {
                     </div>
                   </div>
                 </div>
+
+                {/* Partners section - below team logos */}
+                {matchData.partners.length > 0 && (
+                  <div className="flex items-center justify-center">
+                    <div className="bg-black/30 backdrop-blur-sm rounded-lg px-3 sm:px-4 py-1 sm:py-2 border border-white/20 shadow-lg">
+                      <div className="text-[8px] sm:text-[9px] font-bold text-yellow-300 mb-1 text-center">
+                        🤝 CÁC ĐƠN VỊ ĐỒNG HÀNH
+                      </div>
+                      <div className="flex gap-1 sm:gap-2 justify-center max-w-sm">
+                        {matchData.partners.slice(0, 8).map((partner, index) => (
+                          <img
+                            key={index}
+                            src={partner.logo}
+                            alt={partner.name}
+                            className="object-contain bg-white/95 border border-yellow-300/50 shadow-sm rounded w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 p-0.5"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Team Names Row */}
                 <div className="flex items-center justify-center gap-4 sm:gap-6 md:gap-8">
