@@ -6,6 +6,13 @@ import { getFullLogoUrl } from "../../utils/logoUtils";
 import socketService from "../../services/socketService";
 
 const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialData, accessCode }) => {
+  // Debug logging for props
+  console.log('🗨️ [PosterLogoManager] Component initialized with props:', {
+    onPosterUpdate: !!onPosterUpdate,
+    onLogoUpdate: !!onLogoUpdate,
+    initialData,
+    accessCode
+  });
   const [selectedPoster, setSelectedPoster] = useState(null);
   const [logoItems, setLogoItems] = useState([]);
   const [apiLogos, setApiLogos] = useState([]);
@@ -109,10 +116,13 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       console.log('🔍 [PosterLogoManager] Loading history matches from API...');
       const response = await RoomSessionAPI.getHistoryMatches();
       console.log('📋 [PosterLogoManager] History matches response:', response);
+      console.log('📋 [PosterLogoManager] History matches response structure:', JSON.stringify(response, null, 2));
 
       if (response?.success && response?.data && Array.isArray(response.data)) {
+        console.log('📋 [PosterLogoManager] Processing', response.data.length, 'history matches');
         const transformedMatches = response.data.map(match => {
           const displaySettings = match.accessCodeInfo?.displaySettings || [];
+          console.log('📋 [PosterLogoManager] Match:', match.accessCode, 'has', displaySettings.length, 'display settings');
           return {
             id: match.id,
             accessCode: match.accessCode,
@@ -122,13 +132,18 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           };
         });
         setHistoryMatches(transformedMatches);
-        // console.log(`✅ [PosterLogoManager] Loaded ${transformedMatches.length} history matches`);
+        console.log(`✅ [PosterLogoManager] Loaded ${transformedMatches.length} history matches`);
       } else {
-        // console.warn('⚠️ [PosterLogoManager] Invalid history matches response format');
+        console.warn('⚠️ [PosterLogoManager] Invalid history matches response format:', response);
         setHistoryMatches([]);
       }
     } catch (error) {
       console.error('❌ [PosterLogoManager] Failed to load history matches:', error);
+      console.error('❌ [PosterLogoManager] Error details:', {
+        message: error.message,
+        stack: error.stack,
+        response: error.response?.data
+      });
       setHistoryMatches([]);
     }
   };
@@ -138,6 +153,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     const loadLogos = async () => {
       try {
+        console.log('🗨️ [PosterLogoManager] useEffect loadLogos triggered with accessCode:', accessCode);
         setLoading(true);
 
         await loadHistoryMatches();
@@ -155,14 +171,18 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           try {
             console.log('🔍 [PosterLogoManager] Loading display settings from API for:', accessCode);
             const response = await DisplaySettingsAPI.getDisplaySettings(accessCode);
-            console.log("giá trị của reponse.data là", response.data);
+            console.log('📋 [PosterLogoManager] Full API response:', response);
+            console.log('📋 [PosterLogoManager] Response data structure:', JSON.stringify(response?.data, null, 2));
+
             if (response?.success && response?.data && isMounted) {
 
               const loadedLogos = [];
 
               // Process sponsors
               if (response.data.sponsors && Array.isArray(response.data.sponsors)) {
-                response.data.sponsors.forEach((item) => {
+                console.log('📋 [PosterLogoManager] Processing sponsors:', response.data.sponsors.length, 'items');
+                response.data.sponsors.forEach((item, index) => {
+                  console.log(`📋 [PosterLogoManager] Sponsor ${index + 1}:`, item);
                   let positions = [];
                   if (item.position) {
                     try {
@@ -174,7 +194,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                     }
                   }
 
-                  loadedLogos.push({
+                  const logoItem = {
                     id: `sponsor-${item.id}`,
                     unitName: item.code_logo || `Sponsor ${item.id}`,
                     code: item.code_logo || `SP${item.id}`,
@@ -182,13 +202,19 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                     category: 'sponsor',
                     url: getFullLogoUrl(item.url_logo),
                     displayPositions: positions
-                  });
+                  };
+                  console.log('📋 [PosterLogoManager] Created sponsor logo item:', logoItem);
+                  loadedLogos.push(logoItem);
                 });
+              } else {
+                console.log('📋 [PosterLogoManager] No sponsors found or sponsors is not an array');
               }
 
               // Process organizing (nếu có trong response)
               if (response.data.organizing && Array.isArray(response.data.organizing)) {
-                response.data.organizing.forEach((item) => {
+                console.log('📋 [PosterLogoManager] Processing organizing:', response.data.organizing.length, 'items');
+                response.data.organizing.forEach((item, index) => {
+                  console.log(`📋 [PosterLogoManager] Organizing ${index + 1}:`, item);
                   let positions = [];
                   if (item.position) {
                     try {
@@ -200,7 +226,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                     }
                   }
 
-                  loadedLogos.push({
+                  const logoItem = {
                     id: `organizing-${item.id}`,
                     unitName: item.code_logo || `Organizing ${item.id}`,
                     code: item.code_logo || `ORG${item.id}`,
@@ -208,8 +234,12 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                     category: 'organizing',
                     url: getFullLogoUrl(item.url_logo),
                     displayPositions: positions
-                  });
+                  };
+                  console.log('📋 [PosterLogoManager] Created organizing logo item:', logoItem);
+                  loadedLogos.push(logoItem);
                 });
+              } else {
+                console.log('📋 [PosterLogoManager] No organizing found or organizing is not an array');
               }
 
               // Process media (nếu có trong response)
@@ -265,12 +295,18 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               }
 
               if (isMounted) {
+                console.log(`✅ [PosterLogoManager] Final loaded logos array:`, loadedLogos);
+                console.log(`✅ [PosterLogoManager] Setting ${loadedLogos.length} display settings from API`);
                 setApiLogos(loadedLogos);
-                // console.log(`✅ [PosterLogoManager] Loaded ${loadedLogos.length} display settings from API`);
               }
             }
           } catch (err) {
-            // console.warn('⚠️ [PosterLogoManager] Failed to load display settings from API:', err);
+            console.error('❌ [PosterLogoManager] Failed to load display settings from API:', err);
+            console.error('❌ [PosterLogoManager] Error details:', {
+              message: err.message,
+              stack: err.stack,
+              response: err.response?.data
+            });
             if (isMounted) {
               setApiLogos([]);
             }

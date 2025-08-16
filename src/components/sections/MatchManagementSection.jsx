@@ -803,6 +803,7 @@ const MatchManagementSection = ({ isActive = true }) => {
             onLogoUpdate={onLogoUpdateRef.current}
             onPosterUpdate={onPosterUpdateRef.current}
             onClose={() => setShowPosterModal(false)}
+            accessCode={matchCode}
           />
         </Modal>
       )}
