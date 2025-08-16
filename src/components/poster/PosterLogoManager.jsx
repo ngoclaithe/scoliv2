@@ -62,6 +62,11 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       name: "Xanh dương",
       thumbnail: "/images/posters/poster6.jpg",
     },
+    {
+      id: "tuhung",
+      name: "Tự hưng",
+      thumbnail: "/images/posters/poster7.jpg",
+    },
   ];
 
   const logoTypes = [
@@ -1080,7 +1085,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               onChange={(e) => handleRoundGroupUpdate('group', roundGroupOptions.group, e.target.checked)}
               className="w-3 h-3"
             />
-            <span className="text-xs text-gray-600">Hi��n</span>
+            <span className="text-xs text-gray-600">Hiện</span>
           </label>
         </div>
 
