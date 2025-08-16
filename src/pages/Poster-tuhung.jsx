@@ -672,9 +672,13 @@ export default function TuHungMatchIntro() {
           .flex-row {
             flex-direction: row !important;
           }
-          
-          .w-1\\/2 {
-            width: 50% !important;
+
+          .w-2\\/5 {
+            width: 40% !important;
+          }
+
+          .w-3\\/5 {
+            width: 60% !important;
           }
         `}</style>
       </div>
