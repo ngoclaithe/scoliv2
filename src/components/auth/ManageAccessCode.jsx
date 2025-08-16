@@ -8,6 +8,7 @@ import AccessCodeAPI from '../../API/apiAccessCode';
 import PaymentAccessCodeAPI from '../../API/apiPaymentAccessCode';
 import InfoPaymentAPI from '../../API/apiInfoPayment';
 import UserAPI from '../../API/apiUser';
+import AuthAPI from '../../API/apiAuth';
 import AccessCodeList from './AccessCodeList';
 import ActivityList from './ActivityList';
 import UserProfileSection from './UserProfileSection';
