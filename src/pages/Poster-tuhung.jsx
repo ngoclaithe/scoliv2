@@ -108,7 +108,7 @@ export default function TuHungMatchIntro() {
   })) : [];
 
   const scrollData = {
-    text: marqueeData?.text || "TRỰC TIẾP GIẢI ĐẤU TỰ HƯNG",
+    text: marqueeData?.text || "TRỰC TIẾP GIẢI ĐẤU TỨ HÙNG",
     color: marqueeData?.color === 'white-black' ? '#FFFFFF' :
         marqueeData?.color === 'black-white' ? '#000000' :
             marqueeData?.color === 'white-blue' ? '#FFFFFF' :
