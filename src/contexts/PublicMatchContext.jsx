@@ -1019,7 +1019,7 @@ export const PublicMatchProvider = ({ children }) => {
       const hasDynamicParams = hasUrlParams();
       const finalClientType = clientType || (hasDynamicParams ? 'admin' : 'display');
 
-      console.log('🔌 [PublicMatchContext] Connecting with clientType:', finalClientType, 'hasDynamicParams:', hasDynamicParams);
+      // console.log('🔌 [PublicMatchContext] Connecting with clientType:', finalClientType, 'hasDynamicParams:', hasDynamicParams);
 
       await socketService.connect(accessCode, finalClientType);
       setSocketConnected(true);
