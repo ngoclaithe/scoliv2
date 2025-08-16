@@ -109,10 +109,13 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       console.log('🔍 [PosterLogoManager] Loading history matches from API...');
       const response = await RoomSessionAPI.getHistoryMatches();
       console.log('📋 [PosterLogoManager] History matches response:', response);
+      console.log('📋 [PosterLogoManager] History matches response structure:', JSON.stringify(response, null, 2));
 
       if (response?.success && response?.data && Array.isArray(response.data)) {
+        console.log('📋 [PosterLogoManager] Processing', response.data.length, 'history matches');
         const transformedMatches = response.data.map(match => {
           const displaySettings = match.accessCodeInfo?.displaySettings || [];
+          console.log('📋 [PosterLogoManager] Match:', match.accessCode, 'has', displaySettings.length, 'display settings');
           return {
             id: match.id,
             accessCode: match.accessCode,
@@ -122,13 +125,18 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           };
         });
         setHistoryMatches(transformedMatches);
-        // console.log(`✅ [PosterLogoManager] Loaded ${transformedMatches.length} history matches`);
+        console.log(`✅ [PosterLogoManager] Loaded ${transformedMatches.length} history matches`);
       } else {
-        // console.warn('⚠️ [PosterLogoManager] Invalid history matches response format');
+        console.warn('⚠️ [PosterLogoManager] Invalid history matches response format:', response);
         setHistoryMatches([]);
       }
     } catch (error) {
       console.error('❌ [PosterLogoManager] Failed to load history matches:', error);
+      console.error('❌ [PosterLogoManager] Error details:', {
+        message: error.message,
+        stack: error.stack,
+        response: error.response?.data
+      });
       setHistoryMatches([]);
     }
   };
@@ -1056,7 +1064,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       <div className="space-y-2">
         <div className="flex items-center gap-1">
           <span className="text-xs">🏆</span>
-          <h3 className="text-xs font-semibold text-gray-900">Vòng đấu & Bảng đấu & Tiêu đ�� phụ</h3>
+          <h3 className="text-xs font-semibold text-gray-900">Vòng đấu & Bảng đấu & Tiêu đề phụ</h3>
         </div>
 
         {/* Vòng đấu */}
