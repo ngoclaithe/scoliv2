@@ -304,8 +304,8 @@ export default function TuHungMatchIntro() {
               </div>
             </div>
 
-            {/* RIGHT SIDE - MATCH INFO (Always 50% width) */}
-            <div className="w-1/2 relative bg-transparent from-gray-800/80 via-gray-900/80 to-black/80 flex-shrink-0">
+            {/* RIGHT SIDE - MATCH INFO (Always 60% width) */}
+            <div className="w-3/5 relative bg-transparent from-gray-800/80 via-gray-900/80 to-black/80 flex-shrink-0">
               
               {/* Background pattern for right side */}
               <div className="absolute inset-0">
