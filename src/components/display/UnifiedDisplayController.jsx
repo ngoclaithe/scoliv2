@@ -205,7 +205,15 @@ const UnifiedDisplayController = () => {
         const verifyResult = await PublicAPI.verifyAccessCode(accessCode);
 
         if (!verifyResult.success || !verifyResult.isValid) {
-          setError(`Mã truy cập không hợp lệ: ${accessCode}`);
+          if (verifyResult.message && (
+            verifyResult.message.includes('hết hạn') ||
+            verifyResult.message.includes('expired') ||
+            verifyResult.message.includes('không hợp lệ')
+          )) {
+            setError(`❌ Mã truy cập đã hết hạn hoặc không hợp lệ: ${accessCode}\n\n⏰ Vui lòng liên hệ admin để cấp mã mới.`);
+          } else {
+            setError(`❌ Mã truy cập không hợp lệ: ${accessCode}\n\n${verifyResult.message || 'Vui lòng kiểm tra lại mã truy cập.'}`);
+          }
           return;
         }
 
