@@ -43,12 +43,12 @@ export const findLogoByCode = async (logoCode, teamType = 'A') => {
  * Tìm cả hai logo đội dựa trên code
  * @param {string} teamALogoCode - Mã logo đội A
  * @param {string} teamBLogoCode - Mã logo đội B
- * @returns {Promise<{teamALogo: string|null, teamBLogo: string|null}>}
+ * @returns {Promise<{teamALogo: string, teamBLogo: string}>}
  */
 export const findTeamLogos = async (teamALogoCode, teamBLogoCode) => {
   const [teamALogo, teamBLogo] = await Promise.all([
-    findLogoByCode(teamALogoCode),
-    findLogoByCode(teamBLogoCode)
+    findLogoByCode(teamALogoCode, 'A'),
+    findLogoByCode(teamBLogoCode, 'B')
   ]);
 
   return {
