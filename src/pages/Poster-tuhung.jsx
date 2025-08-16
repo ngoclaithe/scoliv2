@@ -16,12 +16,12 @@ export default function TuHungMatchIntro() {
   } = usePublicMatch();
 
   const matchData = {
-    matchTitle: contextMatchData.matchTitle || 'GIẢI ĐẤU BÓNG ĐÁ TỰ HƯNG',
+    matchTitle: contextMatchData.matchTitle || 'GIẢI ĐẤU BÓNG ĐÁ TỨ HÙNG',
     team1: contextMatchData.teamA.name || 'ĐỘI RỒNG VÀNG',
     team2: contextMatchData.teamB.name || 'ĐỘI SƯ TỬ XANH',
     logo1: getFullLogoUrl(contextMatchData.teamA.logo) || '/images/background-poster/default_logoA.png',
     logo2: getFullLogoUrl(contextMatchData.teamB.logo) || '/images/background-poster/default_logoB.png',
-    stadium: contextMatchData.stadium || 'SVĐ TỰ HƯNG',
+    stadium: contextMatchData.stadium || 'SVĐ TỨ HÙNG',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '19:30',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
     sponsors: getFullLogoUrls(sponsors?.sponsors?.url_logo || []),
