@@ -536,7 +536,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       // Logic: Mỗi logo chỉ được chọn 1 position duy nhất
       const newPositions = item.displayPositions.includes(position)
         ? [] // Nếu đang chọn position này thì bỏ chọn (xóa hết)
-        : [position]; // Nếu chưa chọn thì ch���n position này (thay thế position cũ)
+        : [position]; // Nếu chưa chọn thì chọn position này (thay thế position cũ)
 
       const updatedItem = { ...item, displayPositions: newPositions };
       onUpdate(item.id, updatedItem);
@@ -979,8 +979,15 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   };
 
   const handleRoundGroupUpdate = useCallback((type, value, show) => {
+    console.log(`🔄 [PosterLogoManager] handleRoundGroupUpdate - type: ${type}, value: ${value}, show: ${show}`);
+
     if (type === 'round') {
       setRoundGroupOptions(prev => ({ ...prev, round: value, showRound: show }));
+
+      // Emit to backend
+      console.log(`📡 [PosterLogoManager] Emitting updateRound to backend - round: ${value}, showRound: ${show}`);
+      socketService.emit('round_update', { round: value, showRound: show });
+
       if (onLogoUpdate) {
         onLogoUpdate({
           roundGroupUpdate: { round: value, showRound: show, type: 'round' }
@@ -988,6 +995,11 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       }
     } else if (type === 'group') {
       setRoundGroupOptions(prev => ({ ...prev, group: value, showGroup: show }));
+
+      // Emit to backend
+      console.log(`📡 [PosterLogoManager] Emitting updateGroup to backend - group: ${value}, showGroup: ${show}`);
+      socketService.emit('group_update', { group: value, showGroup: show });
+
       if (onLogoUpdate) {
         onLogoUpdate({
           roundGroupUpdate: { group: value, showGroup: show, type: 'group' }
