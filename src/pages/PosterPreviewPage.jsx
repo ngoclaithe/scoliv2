@@ -84,7 +84,7 @@ const PosterPreviewPage = () => {
     setDownloading(true);
     try {
       const canvas = await html2canvas(posterRef.current, {
-        scale: 2, // Độ phân giải cao hơn
+        scale: 2, // Độ ph��n giải cao hơn
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#ffffff',
@@ -124,6 +124,8 @@ const PosterPreviewPage = () => {
         return <PosterVangxanh accessCode={accessCode} />;
       case 'xanhduong':
         return <PosterXanhduong accessCode={accessCode} />;
+      case 'tuhung':
+        return <PosterTuHung accessCode={accessCode} />;
       default:
         return <PosterTretrung accessCode={accessCode} />;
     }
