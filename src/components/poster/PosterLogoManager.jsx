@@ -6,6 +6,13 @@ import { getFullLogoUrl } from "../../utils/logoUtils";
 import socketService from "../../services/socketService";
 
 const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialData, accessCode }) => {
+  // Debug logging for props
+  console.log('🗨️ [PosterLogoManager] Component initialized with props:', {
+    onPosterUpdate: !!onPosterUpdate,
+    onLogoUpdate: !!onLogoUpdate,
+    initialData,
+    accessCode
+  });
   const [selectedPoster, setSelectedPoster] = useState(null);
   const [logoItems, setLogoItems] = useState([]);
   const [apiLogos, setApiLogos] = useState([]);
@@ -146,6 +153,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     const loadLogos = async () => {
       try {
+        console.log('🗨️ [PosterLogoManager] useEffect loadLogos triggered with accessCode:', accessCode);
         setLoading(true);
 
         await loadHistoryMatches();
