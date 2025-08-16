@@ -79,18 +79,6 @@ const UserProfileSection = ({
                   <dt className="text-sm font-medium text-gray-500">Email</dt>
                   <dd className="mt-1 text-sm text-gray-900">{currentUser.email}</dd>
                 </div>
-                <div>
-                  <dt className="text-sm font-medium text-gray-500">Vai trò</dt>
-                  <dd className="mt-1 text-sm text-gray-900">
-                    {currentUser.role === 'admin' ? 'Quản trị viên' : 'Người dùng'}
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-sm font-medium text-gray-500">Ngày tạo</dt>
-                  <dd className="mt-1 text-sm text-gray-900">
-                    {new Date(currentUser.createdAt).toLocaleDateString('vi-VN')}
-                  </dd>
-                </div>
               </dl>
             </div>
           </div>
