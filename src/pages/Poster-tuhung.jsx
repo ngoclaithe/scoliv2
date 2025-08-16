@@ -442,20 +442,42 @@ export default function TuHungMatchIntro() {
 
                 </div>
 
-                {/* Round and Group */}
+                {/* Round and Group - Redesigned with geometric shapes */}
                 <div className="flex items-center justify-center gap-1 sm:gap-2 md:gap-3">
                   {matchData.showRound && (
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg blur opacity-60 animate-pulse"></div>
-                      <div className="relative bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 px-1 sm:px-1.5 md:px-2 lg:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-lg shadow-xl text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] xl:text-xs font-bold text-white border border-white/30">
+                      {/* Multi-layer geometric background */}
+                      <div className="absolute inset-0 transform rotate-3">
+                        <div className="bg-gradient-to-r from-blue-500 to-cyan-500 blur opacity-40 animate-pulse" style={{
+                          clipPath: 'polygon(15% 0%, 85% 0%, 100% 50%, 85% 100%, 15% 100%, 0% 50%)'
+                        }}></div>
+                      </div>
+                      <div className="absolute inset-0 transform -rotate-2 scale-95">
+                        <div className="bg-gradient-to-l from-cyan-400 to-blue-400 blur-sm opacity-30 animate-pulse" style={{
+                          animationDelay: '0.5s'
+                        }}></div>
+                      </div>
+                      <div className="relative bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 px-1 sm:px-1.5 md:px-2 lg:px-3 py-0.5 sm:py-1 md:py-1.5 shadow-xl text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] xl:text-xs font-bold text-white border border-white/30" style={{
+                        clipPath: 'polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%)'
+                      }}>
                         VÒNG {matchData.round}
                       </div>
                     </div>
                   )}
                   {matchData.showGroup && (
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg blur opacity-60 animate-pulse"></div>
-                      <div className="relative bg-gradient-to-r from-orange-600 via-orange-500 to-red-500 px-1 sm:px-1.5 md:px-2 lg:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-lg shadow-xl text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] xl:text-xs font-bold text-white border border-white/30">
+                      {/* Layered diamond-like shapes */}
+                      <div className="absolute inset-0 transform rotate-45 scale-110">
+                        <div className="bg-gradient-to-br from-orange-500 to-red-500 rounded blur opacity-40 animate-pulse"></div>
+                      </div>
+                      <div className="absolute inset-0 transform -rotate-12">
+                        <div className="bg-gradient-to-tl from-red-400 to-orange-400 blur-sm opacity-30 animate-pulse" style={{
+                          animationDelay: '0.8s'
+                        }}></div>
+                      </div>
+                      <div className="relative bg-gradient-to-r from-orange-600 via-orange-500 to-red-500 px-1 sm:px-1.5 md:px-2 lg:px-3 py-0.5 sm:py-1 md:py-1.5 shadow-xl text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] xl:text-xs font-bold text-white border border-white/30" style={{
+                        clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)'
+                      }}>
                         BẢNG {matchData.group}
                       </div>
                     </div>
@@ -465,11 +487,27 @@ export default function TuHungMatchIntro() {
                 {/* Match Details */}
                 <div className="space-y-1 sm:space-y-1.5 md:space-y-2 lg:space-y-3">
                   
-                  {/* Date/Time */}
+                  {/* Date/Time - Redesigned with geometric container */}
                   {(matchData.showTimer || matchData.showDate) && (
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 rounded-lg blur-lg"></div>
-                      <div className="relative bg-black/50 backdrop-blur-lg px-1 sm:px-2 md:px-3 lg:px-4 py-1 sm:py-1.5 md:py-2 rounded-lg border border-white/30 shadow-xl text-center">
+                      {/* Complex background layers */}
+                      <div className="absolute inset-0 transform skew-x-3">
+                        <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 blur-lg" style={{
+                          clipPath: 'polygon(5% 0%, 95% 0%, 100% 75%, 95% 100%, 5% 100%, 0% 25%)'
+                        }}></div>
+                      </div>
+                      <div className="absolute inset-0 transform -skew-x-1 scale-90">
+                        <div className="bg-gradient-to-l from-orange-400/15 to-yellow-400/15 blur-md animate-pulse"></div>
+                      </div>
+                      <div className="absolute inset-0">
+                        <div className="bg-gradient-to-br from-yellow-300/10 to-orange-300/10 rounded-full blur-sm animate-pulse" style={{
+                          animationDelay: '1.2s'
+                        }}></div>
+                      </div>
+
+                      <div className="relative bg-black/50 backdrop-blur-lg px-1 sm:px-2 md:px-3 lg:px-4 py-1 sm:py-1.5 md:py-2 border border-white/30 shadow-xl text-center" style={{
+                        clipPath: 'polygon(8% 0%, 92% 0%, 100% 30%, 92% 100%, 8% 100%, 0% 70%)'
+                      }}>
                         <div className="text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs xl:text-sm 2xl:text-base font-bold text-yellow-300">
                           {matchData.showTimer && matchData.roundedTime}
                           {matchData.showTimer && matchData.showDate && ' • '}
@@ -479,11 +517,27 @@ export default function TuHungMatchIntro() {
                     </div>
                   )}
 
-                  {/* Stadium */}
+                  {/* Stadium - Creative geometric design */}
                   {matchData.showStadium && matchData.stadium && (
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-lg blur-lg"></div>
-                      <div className="relative bg-black/50 backdrop-blur-lg px-1 sm:px-2 md:px-3 lg:px-4 py-1 sm:py-1.5 md:py-2 rounded-lg border border-white/30 shadow-xl text-center">
+                      {/* Layered geometric backgrounds */}
+                      <div className="absolute inset-0 transform rotate-1">
+                        <div className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 blur-lg" style={{
+                          clipPath: 'polygon(10% 0%, 90% 0%, 95% 50%, 90% 100%, 10% 100%, 5% 50%)'
+                        }}></div>
+                      </div>
+                      <div className="absolute inset-0 transform -rotate-2 scale-95">
+                        <div className="bg-gradient-to-br from-blue-400/15 to-cyan-400/15 blur-md animate-pulse"></div>
+                      </div>
+                      <div className="absolute inset-0 transform skew-y-1">
+                        <div className="bg-gradient-to-tl from-cyan-300/10 to-blue-300/10 rounded-lg blur animate-pulse" style={{
+                          animationDelay: '1.5s'
+                        }}></div>
+                      </div>
+
+                      <div className="relative bg-black/50 backdrop-blur-lg px-1 sm:px-2 md:px-3 lg:px-4 py-1 sm:py-1.5 md:py-2 border border-white/30 shadow-xl text-center" style={{
+                        clipPath: 'polygon(12% 0%, 88% 0%, 100% 40%, 88% 100%, 12% 100%, 0% 60%)'
+                      }}>
                         <div className="text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs xl:text-sm 2xl:text-base font-bold text-cyan-300">
                           🏟️ {matchData.stadium}
                         </div>
@@ -491,14 +545,35 @@ export default function TuHungMatchIntro() {
                     </div>
                   )}
 
-                  {/* Live Text */}
+                  {/* Live Text - Dynamic geometric design */}
                   {matchData.liveText && (
                     <div className="relative">
-                      <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-pink-500 rounded-lg blur animate-pulse"></div>
-                      <div className="relative bg-gradient-to-r from-red-600 to-pink-600 px-1 sm:px-2 md:px-3 lg:px-4 py-1 sm:py-1.5 md:py-2 rounded-lg shadow-xl border border-white/30 text-center">
+                      {/* Multi-layer animated backgrounds */}
+                      <div className="absolute inset-0 transform rotate-2">
+                        <div className="bg-gradient-to-r from-red-500 to-pink-500 blur animate-pulse" style={{
+                          clipPath: 'polygon(0% 0%, 100% 0%, 95% 100%, 5% 100%)'
+                        }}></div>
+                      </div>
+                      <div className="absolute inset-0 transform -rotate-1 scale-105">
+                        <div className="bg-gradient-to-br from-pink-400 to-red-400 blur-sm animate-pulse" style={{
+                          animationDelay: '0.3s'
+                        }}></div>
+                      </div>
+                      <div className="absolute inset-0 transform skew-x-2">
+                        <div className="bg-gradient-to-tl from-red-300/20 to-pink-300/20 rounded-full blur animate-pulse" style={{
+                          animationDelay: '0.6s'
+                        }}></div>
+                      </div>
+
+                      <div className="relative bg-gradient-to-r from-red-600 to-pink-600 px-1 sm:px-2 md:px-3 lg:px-4 py-1 sm:py-1.5 md:py-2 shadow-xl border border-white/30 text-center" style={{
+                        clipPath: 'polygon(5% 0%, 95% 0%, 100% 50%, 95% 100%, 5% 100%, 0% 50%)'
+                      }}>
                         <div className="flex items-center justify-center space-x-0.5 sm:space-x-1 md:space-x-2">
                           <div className="flex items-center space-x-0.5">
-                            <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 md:w-2 md:h-2 bg-white rounded-full animate-ping"></div>
+                            {/* Animated live indicators */}
+                            <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 md:w-2 md:h-2 bg-white animate-ping" style={{
+                              clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)'
+                            }}></div>
                             <div className="w-0.5 h-0.5 sm:w-1 sm:h-1 md:w-1.5 md:h-1.5 bg-white/80 rounded-full animate-pulse"></div>
                           </div>
                           <span className="text-[8px] sm:text-[9px] md:text-[10px] lg:text-xs xl:text-sm 2xl:text-base font-bold text-white">🎥 {matchData.liveText}</span>
