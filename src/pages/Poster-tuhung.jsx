@@ -373,18 +373,51 @@ export default function TuHungMatchIntro() {
             {/* RIGHT SIDE - MATCH INFO (Always 60% width) */}
             <div className="w-3/5 relative bg-transparent from-gray-800/80 via-gray-900/80 to-black/80 flex-shrink-0">
               
-              {/* Background pattern for right side */}
+              {/* Complex geometric background pattern for right side */}
               <div className="absolute inset-0">
-                <div className="absolute top-1/3 right-1/4 w-12 sm:w-16 md:w-20 h-12 sm:h-16 md:h-20 bg-yellow-500/20 rounded-full blur-2xl animate-pulse"></div>
-                <div className="absolute bottom-1/3 left-1/4 w-8 sm:w-12 md:w-16 h-8 sm:h-12 md:h-16 bg-orange-500/20 rounded-full blur-xl animate-pulse" style={{animationDelay: '3s'}}></div>
-                
-                {/* Grid pattern */}
-                <div className="absolute inset-0 opacity-5" style={{
+                {/* Main angular shapes */}
+                <div className="absolute top-0 right-0 w-full h-full overflow-hidden">
+                  <div className="absolute top-0 right-0 w-4/5 h-3/5 bg-gradient-to-bl from-yellow-600/25 to-transparent transform skew-y-6 rounded-bl-[60px]"></div>
+                  <div className="absolute bottom-0 left-0 w-2/3 h-2/5 bg-gradient-to-tr from-orange-600/20 to-transparent transform -skew-x-6 rounded-tr-[45px]"></div>
+                </div>
+
+                {/* Geometric overlays */}
+                <div className="absolute top-1/5 right-1/4 w-20 h-20 bg-gradient-to-br from-yellow-400/15 to-orange-400/15 transform rotate-12 animate-pulse" style={{
+                  clipPath: 'polygon(20% 0%, 80% 0%, 100% 60%, 80% 100%, 20% 100%, 0% 40%)'
+                }}></div>
+                <div className="absolute bottom-1/4 right-1/3 w-16 h-16 bg-gradient-to-tl from-red-400/12 to-pink-400/12 transform -rotate-45 animate-pulse" style={{
+                  animationDelay: '2s',
+                  clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)'
+                }}></div>
+
+                {/* Floating parallelograms */}
+                <div className="absolute top-2/5 left-1/5 w-12 h-8 bg-cyan-400/15 transform skew-x-12 rotate-6 animate-bounce-subtle"></div>
+                <div className="absolute bottom-2/5 right-1/6 w-10 h-6 bg-purple-400/12 transform -skew-x-6 rotate-12 animate-pulse" style={{
+                  animationDelay: '1.8s'
+                }}></div>
+
+                {/* Star-like shapes */}
+                <div className="absolute top-1/3 left-1/3 w-8 h-8 bg-gradient-to-r from-white/10 to-yellow-300/15 animate-pulse" style={{
+                  clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
+                  animationDelay: '2.5s'
+                }}></div>
+                <div className="absolute bottom-1/5 left-2/5 w-6 h-6 bg-gradient-to-l from-orange-300/12 to-red-300/12 animate-pulse" style={{
+                  clipPath: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)',
+                  animationDelay: '4s'
+                }}></div>
+
+                {/* Curved overlays */}
+                <div className="absolute top-1/6 right-1/5 w-14 h-14 bg-gradient-to-br from-blue-400/10 to-indigo-400/10 rounded-full transform rotate-45 animate-pulse" style={{
+                  animationDelay: '3.2s'
+                }}></div>
+
+                {/* Modern grid pattern */}
+                <div className="absolute inset-0 opacity-8" style={{
                   backgroundImage: `
-                    linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px),
-                    linear-gradient(0deg, rgba(255,255,255,0.3) 1px, transparent 1px)
+                    linear-gradient(45deg, rgba(255,215,0,0.1) 1px, transparent 1px),
+                    linear-gradient(-45deg, rgba(255,140,0,0.08) 1px, transparent 1px)
                   `,
-                  backgroundSize: '20px 20px'
+                  backgroundSize: '25px 25px'
                 }}></div>
               </div>
 
@@ -407,14 +440,6 @@ export default function TuHungMatchIntro() {
                     {matchData.matchTitle}
                   </h1>
 
-                  {/* Subtitle */}
-                  {matchData.showSubtitle && matchData.subtitle && (
-                    <div className="text-white/90 text-[7px] sm:text-[8px] md:text-[9px] lg:text-[10px] xl:text-xs font-semibold mb-1 sm:mb-2">
-                      <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
-                        {matchData.subtitle}
-                      </span>
-                    </div>
-                  )}
                 </div>
 
                 {/* Round and Group */}
