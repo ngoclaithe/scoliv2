@@ -337,18 +337,39 @@ const UnifiedDisplayController = () => {
   }
 
   if (error) {
+    const isExpiredError = error.includes('hết hạn') || error.includes('expired');
+
     return (
-      <div className="fixed inset-0 bg-red-900 text-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-6xl mb-4">❌</div>
-          <h1 className="text-2xl font-bold mb-2">Lỗi kết nối</h1>
-          <p className="text-gray-300">{error}</p>
-          <button 
-            onClick={() => window.location.reload()}
-            className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            🔄 Thử lại
-          </button>
+      <div className={`fixed inset-0 ${isExpiredError ? 'bg-gradient-to-br from-red-900 via-red-800 to-red-900' : 'bg-red-900'} text-white flex items-center justify-center p-4`}>
+        <div className="text-center max-w-lg">
+          <div className={`text-6xl mb-4 ${isExpiredError ? 'animate-pulse' : ''}`}>
+            {isExpiredError ? '⏰' : '❌'}
+          </div>
+          <h1 className="text-2xl font-bold mb-4">
+            {isExpiredError ? 'Mã truy cập hết hạn' : 'Lỗi kết nối'}
+          </h1>
+          <div className="text-gray-200 mb-6 whitespace-pre-line text-sm leading-relaxed">
+            {error}
+          </div>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              🔄 Thử lại
+            </button>
+            {isExpiredError && (
+              <button
+                onClick={() => window.location.href = '/'}
+                className="px-6 py-3 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                🏠 Về trang chủ
+              </button>
+            )}
+          </div>
+          <div className="mt-4 text-xs text-gray-400">
+            Access Code: {accessCode}
+          </div>
         </div>
       </div>
     );
