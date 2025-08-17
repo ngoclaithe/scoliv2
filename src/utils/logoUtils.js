@@ -73,6 +73,40 @@ export const getFullLogoUrlFromObject = (logoObject) => {
 };
 
 /**
+ * Tạo URL đầy đủ cho poster bằng cách thêm API_BASE_URL nếu cần
+ * @param {string} posterUrl - URL poster từ backend (có thể là relative hoặc absolute)
+ * @returns {string} - URL đầy đủ có thể sử dụng được
+ */
+export const getFullPosterUrl = (posterUrl) => {
+  if (!posterUrl || typeof posterUrl !== 'string' || posterUrl.trim() === '') {
+    return null;
+  }
+
+  if (isAbsoluteUrl(posterUrl)) {
+    return posterUrl;
+  }
+
+  const cleanPath = posterUrl.startsWith('/') ? posterUrl.substring(1) : posterUrl;
+
+  const baseUrl = API_BASE_URL.endsWith('/') ? API_BASE_URL.slice(0, -1) : API_BASE_URL;
+
+  return `${baseUrl}/${cleanPath}`;
+};
+
+/**
+ * Xử lý object chứa url_poster
+ * @param {Object} posterObject - Object chứa url_poster
+ * @returns {string|null} - URL đầy đủ hoặc null
+ */
+export const getFullPosterUrlFromObject = (posterObject) => {
+  if (!posterObject || typeof posterObject !== 'object') {
+    return null;
+  }
+
+  return getFullPosterUrl(posterObject.url_poster);
+};
+
+/**
  * Log để debug (có thể tắt trong production)
  */
 export const debugLogUrl = (originalUrl, fullUrl, context = '') => {
@@ -85,5 +119,7 @@ export default {
   getFullLogoUrl,
   getFullLogoUrls,
   getFullLogoUrlFromObject,
+  getFullPosterUrl,
+  getFullPosterUrlFromObject,
   debugLogUrl
 };
