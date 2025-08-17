@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import LogoAPI from "../../API/apiLogo";
+import PosterAPI from "../../API/apiPoster";
 import DisplaySettingsAPI from "../../API/apiSettingDisplay";
 import RoomSessionAPI from "../../API/apiRoomSession";
 import { getFullLogoUrl } from "../../utils/logoUtils";
@@ -179,7 +180,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
               // Process sponsors
               if (response.data.sponsors && Array.isArray(response.data.sponsors)) {
-                console.log('📋 [PosterLogoManager] Processing sponsors:', response.data.sponsors.length, 'items');
+                console.log('��� [PosterLogoManager] Processing sponsors:', response.data.sponsors.length, 'items');
                 response.data.sponsors.forEach((item, index) => {
                   console.log(`📋 [PosterLogoManager] Sponsor ${index + 1}:`, item);
                   let positions = [];
@@ -206,7 +207,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                   loadedLogos.push(logoItem);
                 });
               } else {
-                console.log('📋 [PosterLogoManager] No sponsors found or sponsors is not an array');
+                console.log('��� [PosterLogoManager] No sponsors found or sponsors is not an array');
               }
 
               // Process organizing (nếu có trong response)
