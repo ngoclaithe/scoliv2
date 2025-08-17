@@ -295,13 +295,6 @@ const AccountTab = () => {
             onChange={(e) => setFormData({...formData, name: e.target.value})}
             placeholder="Nhập tên đầy đủ"
           />
-          <Input
-            label="Email"
-            type="email"
-            value={formData.email}
-            onChange={(e) => setFormData({...formData, email: e.target.value})}
-            placeholder="Nhập địa chỉ email"
-          />
         </div>
         <div className="mt-6 flex justify-end space-x-3">
           <Button
