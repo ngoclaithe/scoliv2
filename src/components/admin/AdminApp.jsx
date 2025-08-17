@@ -56,19 +56,27 @@ const AdminAppContent = () => {
 
   // Show login if not authenticated
   if (!isAuthenticated) {
-    return <AdminLogin />;
+    return (
+      <>
+        <AdminLogin />
+        <TokenDebugInfo />
+      </>
+    );
   }
 
   // Show admin dashboard
   return (
-    <AdminLayout
-      currentPage={currentPage}
-      onNavigate={setCurrentPage}
-      onLogout={handleLogout}
-      adminInfo={admin}
-    >
-      {renderPage()}
-    </AdminLayout>
+    <>
+      <AdminLayout
+        currentPage={currentPage}
+        onNavigate={setCurrentPage}
+        onLogout={handleLogout}
+        adminInfo={admin}
+      >
+        {renderPage()}
+      </AdminLayout>
+      <TokenDebugInfo />
+    </>
   );
 };
 
