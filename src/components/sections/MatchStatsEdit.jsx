@@ -635,17 +635,17 @@ const MatchStatsEdit = ({
             )}
           </div>
 
-          {/* Hiển thị thời gian kiểm soát (giây) - sử dụng localStats */}
+          {/* Hiển thị tỷ lệ kiểm soát bóng (%) - sử dụng localStats */}
           <div className="flex items-center gap-2 mb-2">
             <div className="flex-1">
               <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-8 text-center border border-red-300 rounded">
-                {localStats.possession.team1}s
+                {localStats.possession.team1}%
               </div>
             </div>
             <div className="text-gray-400 text-xs">vs</div>
             <div className="flex-1">
               <div className="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold min-w-8 text-center border border-gray-300 rounded">
-                {localStats.possession.team2}s
+                {localStats.possession.team2}%
               </div>
             </div>
           </div>
