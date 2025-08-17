@@ -972,7 +972,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   const handleAddNewLogo = async () => {
     // Kiểm tra giới hạn cho tournament
     if (activeLogoCategory === 'tournament' && tournamentItemsCount >= 1) {
-      alert('Chỉ được phép có 1 logo hoặc banner duy nhất cho tournament!');
+      alert('Chỉ được phép có 1 logo hoặc banner duy nh��t cho tournament!');
       return;
     }
 
@@ -1033,8 +1033,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
         </div>
 
         <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
-          {allPosters.map((poster) => (
-            <div key={poster.id} className="flex-none w-24">
+          {allPosters.map((poster, index) => (
+            <div key={`${poster.id}-${index}`} className="flex-none w-24">
               <PosterCard
                 poster={poster}
                 isSelected={selectedPoster?.id === poster.id}
