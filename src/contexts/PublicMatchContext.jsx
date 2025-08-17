@@ -46,7 +46,7 @@ export const PublicMatchProvider = ({ children }) => {
       view || matchTime
     );
 
-    console.log('🔍 [PublicMatchContext] hasUrlParams result:', hasParams);
+    // console.log('🔍 [PublicMatchContext] hasUrlParams result:', hasParams);
     return hasParams;
   }, [params]);
 
@@ -1056,28 +1056,28 @@ export const PublicMatchProvider = ({ children }) => {
   }, [canSendToSocket, socketConnected]);
 
   const updateScore = useCallback((teamAScore, teamBScore) => {
-    logSocketOperation('updateScore', { teamAScore, teamBScore }, canSendToSocket, socketConnected);
+    // logSocketOperation('updateScore', { teamAScore, teamBScore }, canSendToSocket, socketConnected);
     if (canSendToSocket && socketConnected) {
       socketService.updateScore(teamAScore, teamBScore);
     }
   }, [canSendToSocket, socketConnected]);
 
   const updateTeamNames = useCallback((teamAName, teamBName) => {
-    logSocketOperation('updateTeamNames', { teamAName, teamBName }, canSendToSocket, socketConnected);
+    // logSocketOperation('updateTeamNames', { teamAName, teamBName }, canSendToSocket, socketConnected);
     if (canSendToSocket && socketConnected) {
       socketService.updateTeamNames(teamAName, teamBName);
     }
   }, [canSendToSocket, socketConnected]);
 
   const updateTeamLogos = useCallback((teamALogo, teamBLogo) => {
-    logSocketOperation('updateTeamLogos', { teamALogo, teamBLogo }, canSendToSocket, socketConnected);
+    // logSocketOperation('updateTeamLogos', { teamALogo, teamBLogo }, canSendToSocket, socketConnected);
     if (canSendToSocket && socketConnected) {
       socketService.updateTeamLogos(teamALogo, teamBLogo);
     }
   }, [canSendToSocket, socketConnected]);
 
   const updateView = useCallback((viewType) => {
-    logSocketOperation('updateView', { viewType }, canSendToSocket, socketConnected);
+    // logSocketOperation('updateView', { viewType }, canSendToSocket, socketConnected);
     if (canSendToSocket && socketConnected) {
       socketService.emit('view_update', { viewType });
     }

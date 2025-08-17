@@ -63,8 +63,6 @@ const HalftimeBreakPoster = () => {
     const showBDPXTLogo = liveTextLower.includes('bdpxt') || liveTextLower.includes('xu thanh');
     const showSCOLogo = !showNSBLogo && !showBDPXTLogo;
 
-    // Đã xóa dòng khai báo trùng lặp isMobile và isTablet ở đây
-
     return (
         <div className="min-h-screen bg-white p-4 flex items-center justify-center">
             <div className="w-full h-full bg-gradient-to-br from-blue-900 via-blue-800 to-green-700 rounded-3xl shadow-2xl flex items-center justify-center relative overflow-hidden">
@@ -77,7 +75,7 @@ const HalftimeBreakPoster = () => {
                 {/* Top left logos */}
                 {showNSBLogo && (
                     <div
-                        className="absolute top-8 left-8 z-50 bg-gradient-to-r from-red-600 to-red-500 rounded-xl flex items-center justify-center text-white font-bold px-4 shadow-lg transform hover:scale-105 transition-transform duration-300"
+                        className="absolute top-8 left-8 z-50 bg-gradient-to-r from-red-600 to-red-500 rounded-xl flex items-center justify-center text-white font-bold px-4 shadow-lg"
                         style={{
                             height: isMobile ? '6vw' : '4vw',
                             minHeight: '32px',
@@ -91,7 +89,7 @@ const HalftimeBreakPoster = () => {
 
                 {showBDPXTLogo && (
                     <div
-                        className="absolute top-8 left-8 z-50 bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl flex items-center justify-center text-white font-bold px-4 shadow-lg transform hover:scale-105 transition-transform duration-300"
+                        className="absolute top-8 left-8 z-50 bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl flex items-center justify-center text-white font-bold px-4 shadow-lg"
                         style={{
                             height: isMobile ? '6vw' : '4vw',
                             minHeight: '32px',
@@ -106,15 +104,15 @@ const HalftimeBreakPoster = () => {
                 {/* Main poster container */}
                 <div className="w-full max-w-6xl mx-auto px-8 py-8 relative z-10">
                     <div className="text-white text-center">
-                        {/* Title with enhanced glow effect */}
-                        <h1 className={`font-bold text-yellow-400 mb-6 animate-pulse-glow ${isMobile ? 'text-2xl' : isTablet ? 'text-3xl' : 'text-5xl'
+                        {/* Title */}
+                        <h1 className={`font-bold text-yellow-400 mb-6 ${isMobile ? 'text-2xl' : isTablet ? 'text-3xl' : 'text-5xl'
                             }`} style={{
                                 textShadow: '0 0 20px rgba(255, 235, 59, 0.8), 0 0 40px rgba(255, 235, 59, 0.6), 0 0 60px rgba(255, 235, 59, 0.4)'
                             }}>
                             {matchData.matchTitle}
                         </h1>
 
-                        {/* Subtitle with glass morphism effect */}
+                        {/* Subtitle */}
                         <div className={`backdrop-blur-sm bg-white/10 rounded-2xl px-6 py-4 mb-8 border border-white/20 shadow-xl ${isMobile ? 'text-lg' : isTablet ? 'text-2xl' : 'text-4xl'
                             }`}>
                             <div className="font-semibold">{matchData.time} - {matchData.date}</div>
@@ -125,12 +123,11 @@ const HalftimeBreakPoster = () => {
                             )}
                         </div>
 
-                        {/* Match section with enhanced design */}
+                        {/* Match section */}
                         <div className="flex items-center justify-center space-x-4 sm:space-x-6 md:space-x-12 mb-8">
                             {/* Team 1 */}
                             <div className="flex-1 flex flex-col items-center max-w-xs">
                                 <div className="relative mb-4">
-                                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-400 to-purple-500 animate-spin-slow"></div>
                                     <div
                                         className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                                         style={{
@@ -154,9 +151,9 @@ const HalftimeBreakPoster = () => {
                                 </div>
                             </div>
 
-                            {/* VS with enhanced animation */}
+                            {/* VS */}
                             <div className="flex-shrink-0">
-                                <div className={`font-bold text-yellow-400 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-full shadow-2xl animate-bounce-subtle border-4 border-yellow-300 ${isMobile ? 'text-2xl' : isTablet ? 'text-4xl' : 'text-6xl'
+                                <div className={`font-bold text-yellow-400 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-full shadow-2xl border-4 border-yellow-300 ${isMobile ? 'text-2xl' : isTablet ? 'text-4xl' : 'text-6xl'
                                     }`} style={{
                                         textShadow: '0 0 15px rgba(255, 235, 59, 0.8)'
                                     }}>
@@ -167,7 +164,6 @@ const HalftimeBreakPoster = () => {
                             {/* Team 2 */}
                             <div className="flex-1 flex flex-col items-center max-w-xs">
                                 <div className="relative mb-4">
-                                    <div className="absolute inset-0 rounded-full bg-gradient-to-r from-red-400 to-pink-500 animate-spin-slow-reverse"></div>
                                     <div
                                         className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                                         style={{
@@ -192,8 +188,8 @@ const HalftimeBreakPoster = () => {
                             </div>
                         </div>
 
-                        {/* Halftime break message with enhanced styling */}
-                        <div className={`bg-gradient-to-r from-orange-500 via-red-500 to-orange-500 text-white px-8 py-4 inline-block rounded-2xl font-bold shadow-2xl border-4 border-yellow-300 animate-pulse-slow ${isMobile ? 'text-xl' : isTablet ? 'text-3xl' : 'text-5xl'
+                        {/* Halftime break message - reduced size and width */}
+                        <div className={`bg-gradient-to-r from-orange-500 via-red-500 to-orange-500 text-white px-4 py-2 inline-block rounded-2xl font-bold shadow-2xl border-4 border-yellow-300 ${isMobile ? 'text-lg' : isTablet ? 'text-2xl' : 'text-3xl'
                             }`} style={{
                                 textShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
                                 boxShadow: '0 0 30px rgba(255, 165, 0, 0.6)'
@@ -206,7 +202,7 @@ const HalftimeBreakPoster = () => {
                 {/* Bottom left SCO logo */}
                 {showSCOLogo && (
                     <div
-                        className="absolute bottom-8 left-8 z-50 transform hover:scale-110 transition-transform duration-300"
+                        className="absolute bottom-8 left-8 z-50"
                         style={{
                             width: isMobile ? '60px' : '96px',
                             height: isMobile ? '60px' : '96px'
@@ -255,71 +251,15 @@ const HalftimeBreakPoster = () => {
                 )}
             </div>
 
-            {/* Enhanced custom styles for animations */}
+            {/* Minimal styles - only marquee animation kept */}
             <style>{`
-                @keyframes spin {
-                    from { transform: rotateY(0deg); }
-                    to { transform: rotateY(360deg); }
-                }
-                
-                @keyframes spin-slow {
-                    from { transform: rotate(0deg); }
-                    to { transform: rotate(360deg); }
-                }
-                
-                @keyframes spin-slow-reverse {
-                    from { transform: rotate(360deg); }
-                    to { transform: rotate(0deg); }
-                }
-                
                 @keyframes marquee {
                     0% { transform: translateX(100%); }
                     100% { transform: translateX(-100%); }
                 }
                 
-                @keyframes bounce-subtle {
-                    0%, 100% { transform: translateY(0px); }
-                    50% { transform: translateY(-10px); }
-                }
-                
-                @keyframes pulse-glow {
-                    0%, 100% { 
-                        text-shadow: 0 0 20px rgba(255, 235, 59, 0.8), 0 0 40px rgba(255, 235, 59, 0.6), 0 0 60px rgba(255, 235, 59, 0.4);
-                        transform: scale(1);
-                    }
-                    50% { 
-                        text-shadow: 0 0 30px rgba(255, 235, 59, 1), 0 0 60px rgba(255, 235, 59, 0.8), 0 0 90px rgba(255, 235, 59, 0.6);
-                        transform: scale(1.05);
-                    }
-                }
-                
-                @keyframes pulse-slow {
-                    0%, 100% { transform: scale(1); opacity: 1; }
-                    50% { transform: scale(1.05); opacity: 0.9; }
-                }
-                
                 .animate-marquee {
                     animation: marquee 20s linear infinite;
-                }
-                
-                .animate-bounce-subtle {
-                    animation: bounce-subtle 3s ease-in-out infinite;
-                }
-                
-                .animate-pulse-glow {
-                    animation: pulse-glow 4s ease-in-out infinite;
-                }
-                
-                .animate-pulse-slow {
-                    animation: pulse-slow 2s ease-in-out infinite;
-                }
-                
-                .animate-spin-slow {
-                    animation: spin-slow 20s linear infinite;
-                }
-                
-                .animate-spin-slow-reverse {
-                    animation: spin-slow-reverse 20s linear infinite;
                 }
                 
                 .football-pattern {
@@ -330,14 +270,6 @@ const HalftimeBreakPoster = () => {
                     background-position: 0 0, 50px 50px;
                     width: 100%;
                     height: 100%;
-                    animation: float 10s ease-in-out infinite;
-                }
-                
-                @keyframes float {
-                    0%, 100% { transform: translateX(0px) translateY(0px); }
-                    25% { transform: translateX(10px) translateY(-10px); }
-                    50% { transform: translateX(-5px) translateY(10px); }
-                    75% { transform: translateX(-10px) translateY(-5px); }
                 }
 
                 /* Ensure text stays readable on very small screens */

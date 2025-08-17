@@ -232,7 +232,7 @@ const UnifiedDisplayController = () => {
               serverData: poster
             }));
             setSavedPosters(savedPosterList);
-            console.log('✅ [UnifiedDisplayController] Loaded saved posters:', savedPosterList.length);
+            // console.log('✅ [UnifiedDisplayController] Loaded saved posters:', savedPosterList.length);
           }
         } catch (error) {
           console.error('❌ [UnifiedDisplayController] Failed to load saved posters:', error);
@@ -282,13 +282,12 @@ const UnifiedDisplayController = () => {
   const renderPoster = (posterType) => {
 
     const selectedPosterType = displaySettings.selectedPoster;
-    console.log("Giá trị selectedPosterType",selectedPosterType);
+    // console.log("Giá trị selectedPosterType",selectedPosterType);
 
-    // Tìm poster từ savedPosters nếu là api-poster
     if (typeof selectedPosterType === 'string' && selectedPosterType.includes('api-poster')) {
       const foundPoster = savedPosters.find(poster => poster.id === selectedPosterType);
       if (foundPoster && foundPoster.serverData?.url_poster) {
-        console.log("✅ [UnifiedDisplayController] Found custom poster:", foundPoster);
+        // console.log("✅ [UnifiedDisplayController] Found custom poster:", foundPoster);
         return (
           <div className="fixed inset-0 bg-black flex items-center justify-center">
             <img

@@ -28,7 +28,7 @@ export const logRouteInfo = (params, location) => {
     params.view || params.matchTime
   );
   
-  console.log('❓ Has URL Params:', hasUrlParams);
+  // console.log('❓ Has URL Params:', hasUrlParams);
   console.groupEnd();
 };
 

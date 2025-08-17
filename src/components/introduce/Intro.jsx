@@ -4,7 +4,7 @@ import { getFullLogoUrl, getFullLogoUrls } from '../../utils/logoUtils';
 
 const Intro = () => {
     const { matchData: contextMatchData, marqueeData } = usePublicMatch();
-    console.log("Giá trị của contextMatchData là", contextMatchData);
+    // console.log("Giá trị của contextMatchData là", contextMatchData);
     const matchData = {
         matchTitle: contextMatchData.matchTitle || "GIẢI BÓNG ĐÁ PHONG TRÀO",
         stadium: contextMatchData.stadium || "Sân vận động Thiên Trường",
@@ -119,7 +119,7 @@ const Intro = () => {
                                 <img
                                     src={matchData.logo1}
                                     alt={matchData.team1}
-                                    className="object-contain w-[85%] h-[85%]" 
+                                    className="object-contain w-[85%] h-[85%]"
                                     onError={(e) => {
                                         e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
                                     }}
@@ -153,7 +153,7 @@ const Intro = () => {
                                 <img
                                     src={matchData.logo2}
                                     alt={matchData.team2}
-                                    className="object-contain w-[85%] h-[85%]" 
+                                    className="object-contain w-[85%] h-[85%]"
                                     onError={(e) => {
                                         e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
                                     }}
@@ -184,20 +184,21 @@ const Intro = () => {
                         <img
                             src="/images/basic/ScoLivLogo.png"
                             alt="SCO Logo"
-                            className={`relative ${isMobile ? 'h-12' : 'h-16'} w-auto object-contain shadow-xl border-2 border-white/30 rounded-lg`}
+                            className={`relative ${isMobile ? 'h-6' : 'h-8'} w-auto object-contain shadow-xl border-2 border-white/30 rounded-lg`}
                             onError={(e) => {
                                 // Fallback to text logo if image fails
                                 e.target.style.display = 'none';
                                 e.target.parentElement.innerHTML = `
-                                    <div class="${isMobile ? 'w-24 h-12' : 'w-32 h-16'} bg-gray-700 rounded-lg flex items-center justify-center text-white font-bold shadow-xl border-2 border-white/30">
-                                        <span class="${isMobile ? 'text-sm' : 'text-base'}">SCO</span>
-                                    </div>
-                                `;
+                        <div class="${isMobile ? 'w-16 h-6' : 'w-20 h-8'} bg-gray-700 rounded-lg flex items-center justify-center text-white font-bold shadow-xl border-2 border-white/30">
+                            <span class="${isMobile ? 'text-xs' : 'text-sm'}">SCO</span>
+                        </div>
+                    `;
                             }}
                         />
                     </div>
                 </div>
             )}
+
 
             {/* Marquee (if enabled) */}
             {matchData.showMarquee && matchData.marqueeText && (
