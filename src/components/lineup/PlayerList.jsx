@@ -41,14 +41,14 @@ const PlayerList = () => {
 
     const PlayerCard = ({ player, index, teamKitColor, isTeamA, totalPlayers }) => {
         const cardHeight = totalPlayers > 10 ? 'h-6' : totalPlayers > 8 ? 'h-7' : 'h-8';
-        
+
         return (
             <div className={`relative bg-white/5 backdrop-blur-sm rounded-md border border-white/10 p-1.5 ${cardHeight} flex items-center`}>
                 <div className="flex items-center gap-2 w-full">
                     <div className="relative flex-shrink-0">
-                        <div 
+                        <div
                             className="w-5 h-5 rounded-md flex items-center justify-center text-white font-bold text-xs shadow-lg backdrop-blur-sm border border-white/20"
-                            style={{ 
+                            style={{
                                 background: `linear-gradient(135deg, ${teamKitColor}ee, ${teamKitColor}bb)`
                             }}
                         >
@@ -74,8 +74,8 @@ const PlayerList = () => {
         );
     };
 
-    // Component áo quần đơn giản và đẹp
-    const Jersey3D = ({ kitColor, kitColor2, teamName, isTeamA }) => {
+    // Component áo quần với 3D effect
+    const Jersey3D = ({ kitColor, kitColor2, teamName, isTeamA, logo }) => {
         const getContrastColor = (hexColor) => {
             const r = parseInt(hexColor.slice(1, 3), 16);
             const g = parseInt(hexColor.slice(3, 5), 16);
@@ -88,9 +88,9 @@ const PlayerList = () => {
 
         return (
             <div className="flex flex-col items-center justify-center">
-                {/* Kit Preview */}
+                {/* Kit Preview với kích thước compact */}
                 <div className="relative">
-                    {/* T-Shirt với tay áo dài hơn */}
+                    {/* T-Shirt nhỏ gọn hơn */}
                     <div className="relative w-28 h-32 sm:w-32 sm:h-36 mx-auto">
                         {/* Main body của t-shirt */}
                         <div
@@ -213,9 +213,9 @@ const PlayerList = () => {
         <div className="w-full bg-transparent overflow-hidden rounded-lg h-full flex flex-col">
             {/* Team Header */}
             <div className="relative overflow-hidden flex-shrink-0">
-                <div 
+                <div
                     className="px-2 py-2 text-center relative"
-                    style={{ 
+                    style={{
                         background: `linear-gradient(135deg, ${kitColor}dd, ${kitColor}aa, ${kitColor}77)`
                     }}
                 >
@@ -227,13 +227,13 @@ const PlayerList = () => {
                     </div>
                 </div>
             </div>
-            
+
             {/* Players List */}
             <div className="p-2 flex-1 min-h-0 overflow-y-auto">
                 {players.length > 0 ? (
                     <div className="space-y-1">
                         {players.map((player, index) => (
-                            <PlayerCard 
+                            <PlayerCard
                                 key={index}
                                 player={player}
                                 index={index}
@@ -251,45 +251,64 @@ const PlayerList = () => {
     );
 
     return (
-        <div className="w-full h-screen overflow-hidden">
+        <div className="w-full h-screen overflow-hidden relative">
             <style>{`
-                .text-stroke {
+                .text-shadow-lg {
+                    text-shadow: 
+                        -2px -2px 0 #000,
+                        2px -2px 0 #000,
+                        -2px 2px 0 #000,
+                        2px 2px 0 #000,
+                        -3px 0 0 #000,
+                        3px 0 0 #000,
+                        0 -3px 0 #000,
+                        0 3px 0 #000,
+                        0 0 10px rgba(0,0,0,0.8);
+                }
+                .text-shadow-md {
                     text-shadow: 
                         -1px -1px 0 #000,
                         1px -1px 0 #000,
                         -1px 1px 0 #000,
                         1px 1px 0 #000,
-                        -2px 0 0 #000,
-                        2px 0 0 #000,
-                        0 -2px 0 #000,
-                        0 2px 0 #000;
+                        0 0 5px rgba(0,0,0,0.6);
                 }
                 .bg-gradient-radial {
                     background: radial-gradient(circle, var(--tw-gradient-stops));
                 }
             `}</style>
             
-            {/* Background với gradient mới đẹp hơn */}
-            <div className="w-full h-full bg-gradient-to-br from-slate-800 via-blue-900 to-purple-900 relative overflow-hidden">
+            {/* Background với teamlineup.jpg */}
+            <div className="w-full h-full relative">
+                {/* Background Image */}
+                <div 
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                    style={{
+                        backgroundImage: `url('/images/basic/teamlineup.jpg')`,
+                    }}
+                />
+                
+                {/* Overlay gradient để text dễ đọc hơn */}
+                <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/60"></div>
+                
                 {/* Enhanced Background Pattern */}
-                <div className="absolute inset-0 opacity-30">
+                <div className="absolute inset-0 opacity-20">
                     <div 
                         className="absolute inset-0"
                         style={{
                             backgroundImage: `
-                                radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-                                radial-gradient(circle at 75% 75%, rgba(147, 51, 234, 0.1) 0%, transparent 50%),
-                                linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.02) 50%, transparent 60%)
+                                radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                                radial-gradient(circle at 75% 75%, rgba(147, 51, 234, 0.15) 0%, transparent 50%),
+                                linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.03) 50%, transparent 60%)
                             `,
-                            backgroundSize: '200px 200px, 300px 300px, 50px 50px'
+                            backgroundSize: '300px 300px, 400px 400px, 100px 100px'
                         }}
                     ></div>
                 </div>
 
                 {/* Dynamic Gradient Overlays */}
-                <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-radial from-blue-500/15 to-transparent rounded-full blur-3xl animate-pulse"></div>
-                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-radial from-purple-500/15 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-radial from-indigo-500/10 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+                <div className="absolute top-0 left-1/4 w-96 h-96 bg-gradient-radial from-blue-500/10 to-transparent rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-radial from-purple-500/10 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
 
                 <div className="relative z-10 h-full flex flex-col">
                     {/* Main Title */}
@@ -319,22 +338,24 @@ const PlayerList = () => {
                                     logo={currentData.teamALogo}
                                     isTeamA={true}
                                 />
-                                
+
                                 <div className="flex gap-12">
-                                    <Jersey3D 
+                                    <Jersey3D
                                         kitColor={currentData.teamAKitColor}
                                         kitColor2={currentData.teamA2KitColor}
                                         teamName={currentData.teamAName}
                                         isTeamA={true}
+                                        logo={currentData.teamALogo}
                                     />
-                                    <Jersey3D 
+                                    <Jersey3D
                                         kitColor={currentData.teamBKitColor}
                                         kitColor2={currentData.teamB2KitColor}
                                         teamName={currentData.teamBName}
                                         isTeamA={false}
+                                        logo={currentData.teamBLogo}
                                     />
                                 </div>
-                                
+
                                 <CompactTeamSection
                                     team={currentData.teamBName}
                                     players={currentData.teamBPlayers}
@@ -350,19 +371,21 @@ const PlayerList = () => {
                                 {/* Jersey showcase - smaller on mobile */}
                                 <div className="flex justify-center gap-2 sm:gap-4 mb-4 flex-shrink-0">
                                     <div className="scale-75 sm:scale-90">
-                                        <Jersey3D 
+                                        <Jersey3D
                                             kitColor={currentData.teamAKitColor}
                                             kitColor2={currentData.teamA2KitColor}
                                             teamName={currentData.teamAName}
                                             isTeamA={true}
+                                            logo={currentData.teamALogo}
                                         />
                                     </div>
                                     <div className="scale-75 sm:scale-90">
-                                        <Jersey3D 
+                                        <Jersey3D
                                             kitColor={currentData.teamBKitColor}
                                             kitColor2={currentData.teamB2KitColor}
                                             teamName={currentData.teamBName}
                                             isTeamA={false}
+                                            logo={currentData.teamBLogo}
                                         />
                                     </div>
                                 </div>
@@ -379,7 +402,7 @@ const PlayerList = () => {
                                             isTeamA={true}
                                         />
                                     </div>
-                                    
+
                                     <div className="flex-1">
                                         <CompactTeamSection
                                             team={currentData.teamBName}
@@ -395,13 +418,13 @@ const PlayerList = () => {
                         </div>
                     </div>
 
-                    {/* ScoLiv Logo */}
+                    {/* ScoLiv Logo với enhanced styling */}
                     <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-8 z-50">
-                        <div className="bg-transparent p-2 sm:p-3">
+                        <div className="bg-white/10 backdrop-blur-md p-3 sm:p-4 rounded-2xl border border-white/20 shadow-2xl">
                             <img
                                 src="/images/basic/ScoLivLogo.png"
                                 alt="ScoLiv"
-                                className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain drop-shadow-lg"
+                                className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain drop-shadow-2xl"
                                 onError={(e) => {
                                     e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%23007acc"/><text x="32" y="38" text-anchor="middle" font-size="12" fill="white" font-weight="bold">ScoLiv</text></svg>`;
                                 }}

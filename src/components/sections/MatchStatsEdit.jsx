@@ -45,27 +45,31 @@ const MatchStatsEdit = ({
 
   // Khởi tạo localStats từ matchStats khi component mount
   useEffect(() => {
-    // Xử lý possession - nếu nhận được dạng seconds từ server, cộng vào tổng thời gian
-    let possessionDisplaySeconds = { team1: 0, team2: 0 };
+    // Xử lý possession - nếu nhận được dạng seconds từ server, tính toán %
+    let possessionDisplayPercentage = { team1: 50, team2: 50 };
 
     if (matchStats.possession) {
       const team1Value = matchStats.possession.team1 || 0;
       const team2Value = matchStats.possession.team2 || 0;
 
-      // Luôn xử lý như seconds từ backend
-      // Cộng vào tổng thời gian kiểm soát hiện tại
+      // Luôn xử lý như seconds từ backend và lưu vào total possession
       setTotalPossessionA(team1Value * 1000); // convert to milliseconds
       setTotalPossessionB(team2Value * 1000); // convert to milliseconds
 
-      // Hiển thị possession dưới dạng seconds
-      possessionDisplaySeconds = {
-        team1: team1Value,
-        team2: team2Value
-      };
+      // Tính % cho hiển thị
+      const totalSeconds = team1Value + team2Value;
+      if (totalSeconds > 0) {
+        const percentageA = Math.round((team1Value / totalSeconds) * 100);
+        const percentageB = 100 - percentageA; // Đảm bảo tổng = 100%
+        possessionDisplayPercentage = {
+          team1: percentageA,
+          team2: percentageB
+        };
+      }
     }
 
     setLocalStats({
-      possession: possessionDisplaySeconds,
+      possession: possessionDisplayPercentage, // Hiển thị %
       totalShots: matchStats.totalShots || { team1: 0, team2: 0 },
       shotsOnTarget: matchStats.shotsOnTarget || { team1: 0, team2: 0 },
       corners: matchStats.corners || { team1: 0, team2: 0 },
@@ -168,17 +172,14 @@ const MatchStatsEdit = ({
       }
     }
 
-    // Chuyển đổi từ milliseconds sang seconds cho possession
-    const possessionSeconds = {
-      team1: Math.round(currentTotalA / 1000),
-      team2: Math.round(currentTotalB / 1000)
-    };
+    // Lấy dữ liệu possession (seconds để emit, percentage để hiển thị)
+    const possessionData = calculatePossessionData();
 
     const newStats = {
       ...matchStats,
       ...localStats,
-      // Gửi possession dưới dạng seconds thay vì percentage
-      possession: possessionSeconds
+      // Gửi possession dưới dạng seconds cho backend/socket
+      possession: possessionData.seconds
     };
     onUpdateStats(newStats);
   };
@@ -190,8 +191,17 @@ const MatchStatsEdit = ({
     setMatchStartTime(startTime);
     setPossessionStartTime(startTime);
     setCurrentController(null);
-    setTotalPossessionA(0);
-    setTotalPossessionB(0);
+
+    // Không reset possession nếu đã có dữ liệu từ backend
+    // Chỉ reset khi chưa có dữ liệu
+    const existingA = matchStats.possession?.team1 || 0;
+    const existingB = matchStats.possession?.team2 || 0;
+
+    if (existingA === 0 && existingB === 0) {
+      setTotalPossessionA(0);
+      setTotalPossessionB(0);
+    }
+    // Nếu có dữ liệu từ backend, giữ nguyên và tiếp tục đếm
   };
 
   const pauseMatch = () => {
@@ -246,8 +256,8 @@ const MatchStatsEdit = ({
     }
   };
 
-  // Tính toán thời gian kiểm soát bóng theo seconds
-  const calculatePossessionSeconds = () => {
+  // Tính toán thời gian kiểm soát bóng theo seconds và percentage
+  const calculatePossessionData = () => {
     const now = Date.now();
 
     let currentTotalA = totalPossessionA;
@@ -263,10 +273,35 @@ const MatchStatsEdit = ({
       }
     }
 
-    // Trả về seconds
+    const secondsA = Math.round(currentTotalA / 1000);
+    const secondsB = Math.round(currentTotalB / 1000);
+    const totalSeconds = secondsA + secondsB;
+
+    // Tính % kiểm soát bóng
+    let percentageA = 0;
+    let percentageB = 0;
+
+    if (totalSeconds > 0) {
+      percentageA = Math.round((secondsA / totalSeconds) * 100);
+      percentageB = Math.round((secondsB / totalSeconds) * 100);
+
+      // Đảm bảo tổng = 100%
+      if (percentageA + percentageB !== 100) {
+        const diff = 100 - (percentageA + percentageB);
+        if (secondsA >= secondsB) {
+          percentageA += diff;
+        } else {
+          percentageB += diff;
+        }
+      }
+    } else {
+      percentageA = 50;
+      percentageB = 50;
+    }
+
     return {
-      team1: Math.round(currentTotalA / 1000),
-      team2: Math.round(currentTotalB / 1000)
+      seconds: { team1: secondsA, team2: secondsB },
+      percentage: { team1: percentageA, team2: percentageB }
     };
   };
 
@@ -275,10 +310,10 @@ const MatchStatsEdit = ({
     if (!matchStarted || matchPaused) return;
 
     const interval = setInterval(() => {
-      const newPossessionSeconds = calculatePossessionSeconds();
+      const newPossessionData = calculatePossessionData();
       setLocalStats(prev => ({
         ...prev,
-        possession: newPossessionSeconds
+        possession: newPossessionData.percentage // Hiển thị %
       }));
     }, 1000); // Cập nhật mỗi giây
 
@@ -604,17 +639,17 @@ const MatchStatsEdit = ({
             )}
           </div>
 
-          {/* Hiển thị thời gian kiểm soát (giây) - sử dụng localStats */}
+          {/* Hiển thị tỷ lệ kiểm soát bóng (%) - sử dụng localStats */}
           <div className="flex items-center gap-2 mb-2">
             <div className="flex-1">
               <div className="px-2 py-1 bg-red-100 text-red-800 text-xs font-bold min-w-8 text-center border border-red-300 rounded">
-                {localStats.possession.team1}s
+                {localStats.possession.team1}%
               </div>
             </div>
             <div className="text-gray-400 text-xs">vs</div>
             <div className="flex-1">
               <div className="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-bold min-w-8 text-center border border-gray-300 rounded">
-                {localStats.possession.team2}s
+                {localStats.possession.team2}%
               </div>
             </div>
           </div>

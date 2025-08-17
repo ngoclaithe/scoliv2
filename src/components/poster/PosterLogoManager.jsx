@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import LogoAPI from "../../API/apiLogo";
+import PosterAPI from "../../API/apiPoster";
 import DisplaySettingsAPI from "../../API/apiSettingDisplay";
 import RoomSessionAPI from "../../API/apiRoomSession";
 import { getFullLogoUrl } from "../../utils/logoUtils";
@@ -361,20 +362,64 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const newPoster = {
-        id: `custom-poster-${Date.now()}`,
-        name: `Poster tùy chỉnh ${customPosters.length + 1}`,
-        thumbnail: e.target.result,
-        isCustom: true
+    try {
+      // Tạo preview trước khi upload
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        const previewPoster = {
+          id: `uploading-poster-${Date.now()}`,
+          name: `Đang tải lên...`,
+          thumbnail: e.target.result,
+          isCustom: true,
+          uploading: true
+        };
+
+        setCustomPosters(prev => [...prev, previewPoster]);
+
+        try {
+          // Upload poster lên server
+          const response = await PosterAPI.uploadPoster(
+            file,
+            accessCode,
+            `Poster tùy chỉnh ${customPosters.length + 1}`,
+            'Poster được tải lên bởi người dùng'
+          );
+
+          if (response.success && response.data) {
+            // Tạo poster từ response của server
+            const uploadedPoster = {
+              id: `uploaded-poster-${response.data.id}`,
+              name: response.data.name,
+              thumbnail: response.data.file_path,
+              isCustom: true,
+              uploading: false,
+              serverData: response.data
+            };
+
+            // Thay thế poster đang upload bằng poster đã upload thành công
+            setCustomPosters(prev => prev.map(poster =>
+              poster.id === previewPoster.id ? uploadedPoster : poster
+            ));
+
+            // Tự động chọn poster vừa upload
+            handlePosterSelect(uploadedPoster);
+
+            console.log('✅ [PosterLogoManager] Poster uploaded successfully:', response.data);
+          }
+        } catch (error) {
+          console.error('❌ [PosterLogoManager] Failed to upload poster:', error);
+
+          // Xóa poster đang upload nếu lỗi
+          setCustomPosters(prev => prev.filter(poster => poster.id !== previewPoster.id));
+
+          alert(`Lỗi khi tải lên poster: ${error.message || 'Đã xảy ra lỗi'}`);
+        }
       };
-
-      setCustomPosters(prev => [...prev, newPoster]);
-
-      handlePosterSelect(newPoster);
-    };
-    reader.readAsDataURL(file);
+      reader.readAsDataURL(file);
+    } catch (error) {
+      console.error('❌ [PosterLogoManager] Error processing poster upload:', error);
+      alert(`Lỗi khi xử lý file: ${error.message || 'Đã xảy ra lỗi'}`);
+    }
   };
 
   const handleFileUpload = async (event, item) => {
