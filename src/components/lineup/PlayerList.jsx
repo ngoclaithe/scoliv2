@@ -210,36 +210,30 @@ const PlayerList = () => {
     };
 
     const CompactTeamSection = ({ team, players, kitColor, kitColor2, logo, isTeamA }) => (
-        <div className="w-full bg-white/10 backdrop-blur-md overflow-hidden rounded-2xl h-full flex flex-col border border-white/20 shadow-2xl">
-            {/* Team Header with enhanced gradient */}
+        <div className="w-full bg-transparent overflow-hidden rounded-lg h-full flex flex-col">
+            {/* Team Header */}
             <div className="relative overflow-hidden flex-shrink-0">
-                <div 
-                    className="px-4 py-4 text-center relative"
-                    style={{ 
-                        background: `linear-gradient(135deg, ${kitColor}dd, ${kitColor}bb, ${kitColor}99)`
+                <div
+                    className="px-2 py-2 text-center relative"
+                    style={{
+                        background: `linear-gradient(135deg, ${kitColor}dd, ${kitColor}aa, ${kitColor}77)`
                     }}
                 >
-                    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm rounded-t-2xl"></div>
-                    <div className="relative z-10 flex items-center justify-center gap-3">
-                        <DisplayLogo
-                            logos={[logo]}
-                            alt={team}
-                            className="w-8 h-8 drop-shadow-xl"
-                            type_play={logoShape}
-                        />
-                        <h2 className="text-sm sm:text-base font-bold text-white tracking-wide drop-shadow-lg truncate text-shadow-lg">
+                    <div className="absolute inset-0 bg-black/30 backdrop-blur-sm rounded-t-lg"></div>
+                    <div className="relative z-10">
+                        <h2 className="text-xs sm:text-sm font-bold text-white tracking-wide drop-shadow-lg truncate text-stroke">
                             {team}
                         </h2>
                     </div>
                 </div>
             </div>
-            
-            {/* Players List with better spacing */}
-            <div className="p-4 flex-1 min-h-0 overflow-y-auto">
+
+            {/* Players List */}
+            <div className="p-2 flex-1 min-h-0 overflow-y-auto">
                 {players.length > 0 ? (
-                    <div className="space-y-3">
+                    <div className="space-y-1">
                         {players.map((player, index) => (
-                            <PlayerCard 
+                            <PlayerCard
                                 key={index}
                                 player={player}
                                 index={index}
