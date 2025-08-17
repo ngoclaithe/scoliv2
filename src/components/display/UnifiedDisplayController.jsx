@@ -221,7 +221,7 @@ const UnifiedDisplayController = () => {
 
         if (!isCleanedUp) {
           setIsInitialized(true);
-          // console.log('✅ [UnifiedDisplayController] Initialized successfully');
+          // console.log('��� [UnifiedDisplayController] Initialized successfully');
 
           if (isDynamic && hasUrlParams) {
             const params = parseUrlParams();
@@ -261,6 +261,22 @@ const UnifiedDisplayController = () => {
   }, [accessCode, initializeSocket, handleExpiredAccess, checkIfDynamicRoute, parseUrlParams, updateSocketWithParams, canSendToSocket, hasUrlParams]);
 
   const renderPoster = (posterType) => {
+    // Kiểm tra nếu là custom poster (poster upload)
+    if (displaySettings.selectedPoster && displaySettings.selectedPoster.isCustom) {
+      const customPoster = displaySettings.selectedPoster;
+      return (
+        <div className="fixed inset-0 bg-black flex items-center justify-center">
+          <img
+            src={customPoster.thumbnail || customPoster.serverData?.file_path}
+            alt={customPoster.name}
+            className="max-w-full max-h-full object-contain"
+            style={{ width: '100vw', height: '100vh', objectFit: 'cover' }}
+          />
+        </div>
+      );
+    }
+
+    // Render poster template mặc định
     switch (posterType) {
       case 'haoquang':
         return <PosterHaoQuang accessCode={accessCode} />;
