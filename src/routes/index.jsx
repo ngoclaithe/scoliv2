@@ -11,7 +11,6 @@ import App from '../App';
 import UnifiedDisplayController from '../components/display/UnifiedDisplayController';
 import PosterPreviewPage from '../pages/PosterPreviewPage';
 import AdminApp from '../components/admin/AdminApp';
-import UrlTestComponent from '../components/test/UrlTestComponent';
 
 const AppRoutes = () => {
   return (
