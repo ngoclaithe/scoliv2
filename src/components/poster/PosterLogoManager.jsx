@@ -1200,7 +1200,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           </label>
         </div>
 
-        {/* Bảng đấu */}
+        {/* Bảng đ��u */}
         <div className="flex items-center gap-2">
           <label className="flex items-center gap-1">
             <span className="text-xs text-gray-700">Bảng:</span>
@@ -1416,6 +1416,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     );
   };
 
+  // Kiểm tra xem có chọn custom poster không (poster đã upload)
+  const isCustomPosterSelected = selectedPoster && selectedPoster.isCustom;
+
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between gap-1">
@@ -1437,12 +1440,18 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       <div className="bg-white border border-gray-200 rounded-lg p-2">
         {renderPosterSection()}
       </div>
-      <div className="bg-white border border-gray-200 rounded-lg p-2">
-        {renderLogoSection()}
-      </div>
-      <div className="bg-white border border-gray-200 rounded-lg p-2">
-        {renderRoundGroupSection()}
-      </div>
+
+      {/* Chỉ hiện các section này khi KHÔNG chọn custom poster */}
+      {!isCustomPosterSelected && (
+        <>
+          <div className="bg-white border border-gray-200 rounded-lg p-2">
+            {renderLogoSection()}
+          </div>
+          <div className="bg-white border border-gray-200 rounded-lg p-2">
+            {renderRoundGroupSection()}
+          </div>
+        </>
+      )}
 
       <div className="bg-white border border-gray-200 rounded-lg p-2">
         <div className="flex justify-center">
