@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { useAuth } from '../../contexts/AuthContext';
 import PublicAPI from '../../API/apiPublic';
+import PosterAPI from '../../API/apiPoster';
 import socketService from '../../services/socketService';
 import {
   findTeamLogos,
@@ -64,6 +65,7 @@ const UnifiedDisplayController = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
   const [isDynamicRoute, setIsDynamicRoute] = useState(false);
+  const [savedPosters, setSavedPosters] = useState([]);
 
   const checkIfDynamicRoute = useCallback(() => {
     const hasDynamicParams = Boolean(
@@ -211,7 +213,7 @@ const UnifiedDisplayController = () => {
             verifyResult.message.includes('expired') ||
             verifyResult.message.includes('không hợp lệ')
           )) {
-            setError(`❌ Mã truy cập đã hết hạn hoặc không hợp lệ: ${accessCode}\n\n⏰ Vui lòng liên hệ admin để cấp mã mới.`);
+            setError(`❌ Mã truy cập đã hết hạn hoặc không hợp lệ: ${accessCode}\n\n⏰ Vui lòng liên h��� admin để cấp mã mới.`);
           } else {
             setError(`❌ Mã truy cập không hợp lệ: ${accessCode}\n\n${verifyResult.message || 'Vui lòng kiểm tra lại mã truy cập.'}`);
           }
@@ -219,6 +221,24 @@ const UnifiedDisplayController = () => {
         }
 
         await initializeSocket(accessCode);
+
+        // Load saved posters từ API giống PosterLogoManager
+        try {
+          const posterResponse = await PosterAPI.getPosters({ accessCode });
+          if (posterResponse?.success && posterResponse?.data) {
+            const savedPosterList = posterResponse.data.map(poster => ({
+              id: `api-poster-${poster.id}`,
+              name: poster.name || 'Poster tùy chỉnh',
+              thumbnail: getFullPosterUrl(poster.url_poster),
+              isCustom: true,
+              serverData: poster
+            }));
+            setSavedPosters(savedPosterList);
+            console.log('✅ [UnifiedDisplayController] Loaded saved posters:', savedPosterList.length);
+          }
+        } catch (error) {
+          console.error('❌ [UnifiedDisplayController] Failed to load saved posters:', error);
+        }
 
         if (!isCleanedUp) {
           setIsInitialized(true);
@@ -263,17 +283,34 @@ const UnifiedDisplayController = () => {
 
   const renderPoster = (posterType) => {
 
-    const selectedPoster = displaySettings.selectedPoster;
-    console.log("Giá trị selectedPoster",selectedPoster);
-    if (selectedPoster && (
-      selectedPoster.isCustom ||
-      (typeof posterType === 'string' && posterType.includes('api-poster'))
-    )) {
+    const selectedPosterType = displaySettings.selectedPoster;
+    console.log("Giá trị selectedPosterType",selectedPosterType);
+
+    // Tìm poster từ savedPosters nếu là api-poster
+    if (typeof selectedPosterType === 'string' && selectedPosterType.includes('api-poster')) {
+      const foundPoster = savedPosters.find(poster => poster.id === selectedPosterType);
+      if (foundPoster && foundPoster.serverData?.url_poster) {
+        console.log("✅ [UnifiedDisplayController] Found custom poster:", foundPoster);
+        return (
+          <div className="fixed inset-0 bg-black flex items-center justify-center">
+            <img
+              src={getFullPosterUrl(foundPoster.serverData.url_poster)}
+              alt={foundPoster.name || 'Custom Poster'}
+              className="max-w-full max-h-full object-contain"
+              style={{ width: '100vw', height: '100vh', objectFit: 'cover' }}
+            />
+          </div>
+        );
+      }
+    }
+
+    // Fallback: nếu selectedPoster là object (từ socket)
+    if (selectedPosterType && typeof selectedPosterType === 'object' && selectedPosterType.isCustom) {
       return (
         <div className="fixed inset-0 bg-black flex items-center justify-center">
           <img
-            src={selectedPoster.thumbnail || getFullPosterUrl(selectedPoster.serverData?.url_poster)}
-            alt={selectedPoster.name || 'Custom Poster'}
+            src={selectedPosterType.thumbnail || getFullPosterUrl(selectedPosterType.serverData?.url_poster)}
+            alt={selectedPosterType.name || 'Custom Poster'}
             className="max-w-full max-h-full object-contain"
             style={{ width: '100vw', height: '100vh', objectFit: 'cover' }}
           />
