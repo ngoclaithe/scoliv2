@@ -34,7 +34,7 @@ const NewHomeLayout = () => {
       name: "BÌNH LUẬN",
       icon: "🎙️",
       color: "red",
-      description: "Quản lý audio v�� bình luận trận đấu"
+      description: "Quản lý audio và bình luận trận đấu"
     },
   ];
 
@@ -158,20 +158,20 @@ const NewHomeLayout = () => {
         </div>
       </main>
 
-      {/* Footer với thông tin route dynamic */}
+      {/* Footer với thông tin liên hệ */}
       <footer className="bg-gray-800 text-white p-4 mt-8">
         <div className="max-w-7xl mx-auto">
-          {/* <div className="text-center">
-            <div className="text-sm mb-2">
-              <span className="font-semibold">Route Dynamic:</span>
-              <span className="ml-2 font-mono bg-gray-700 px-2 py-1 rounded">
-                /{matchCode || 'your-access-code'}
-              </span>
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21L6.16 10.928a11.021 11.021 0 005.931 5.931l1.541-3.064a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              <span className="text-sm font-medium text-green-400">Hỗ trợ:</span>
+              <a href="tel:0966335502" className="text-sm font-mono text-white hover:text-green-400 transition-colors">
+                0966 335 502
+              </a>
             </div>
-            <div className="text-xs text-gray-400">
-              Client1 (Admin) ➜ Socket.IO ➜ Server ➜ Socket.IO ➜ Client2 (Display)
-            </div>
-          </div> */}
+          </div>
         </div>
       </footer>
 
