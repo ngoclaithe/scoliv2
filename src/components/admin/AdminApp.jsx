@@ -9,7 +9,7 @@ import PaymentInfoManagement from './PaymentInfoManagement';
 import ActiveRoomManagement from './ActiveRoomManagement';
 import LogoManagement from './LogoManagement';
 import SocketStatusManagement from './SocketStatusManagement';
-import AuthAPI from '../../API/apiAuth';
+import AdminAuthAPI from '../../API/apiAdminAuth';
 import Loading from '../common/Loading';
 
 const AdminApp = () => {
@@ -26,19 +26,19 @@ const AdminApp = () => {
     try {
       setLoading(true);
 
-      // Check if token exists and get user info
-      if (AuthAPI.isAuthenticated()) {
-        const response = await AuthAPI.getMe();
+      // Check if admin token exists and get admin info
+      if (AdminAuthAPI.isAuthenticated()) {
+        const response = await AdminAuthAPI.getMe();
         if (response.success && response.user.role === 'admin') {
           setAdminInfo(response.user);
           setIsAuthenticated(true);
         } else {
-          AuthAPI.logout();
+          AdminAuthAPI.logout();
         }
       }
     } catch (error) {
       console.error('Error checking authentication:', error);
-      AuthAPI.logout();
+      AdminAuthAPI.logout();
     } finally {
       setLoading(false);
     }
@@ -59,7 +59,7 @@ const AdminApp = () => {
   };
 
   const handleLogout = () => {
-    AuthAPI.logout();
+    AdminAuthAPI.logout();
     setIsAuthenticated(false);
     setAdminInfo(null);
     setCurrentPage('dashboard');
