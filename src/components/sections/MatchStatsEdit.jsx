@@ -602,19 +602,6 @@ const MatchStatsEdit = ({
                 {matchPaused ? '▶️ Tiếp tục' : '⏸️ Tạm dừng'}
               </button>
             )}
-            <select
-              value={matchDuration}
-              onChange={(e) => setMatchDuration(parseInt(e.target.value))}
-              disabled={matchStarted}
-              className="px-2 py-1 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none"
-            >
-              <option value={40}>40 phút</option>
-              <option value={50}>50 phút</option>
-              <option value={60}>60 phút</option>
-              <option value={70}>70 phút</option>
-              <option value={80}>80 phút</option>
-              <option value={90}>90 phút</option>
-            </select>
           </div>
 
           {/* Hiển thị thời gian kiểm soát (giây) - sử dụng localStats */}
