@@ -110,13 +110,8 @@ export const parseTeamName = (teamNameParam, defaultName = 'ĐỘI') => {
  */
 export const parseTextParam = (textParam) => {
   if (!textParam) return '';
-  
-  try {
-    return decodeURIComponent(textParam.replace(/_/g, ' '));
-  } catch (error) {
-    console.warn('Failed to decode text param:', textParam, error);
-    return textParam.replace(/_/g, ' ') || '';
-  }
+
+  return decodeTextParam(textParam);
 };
 
 /**
