@@ -388,7 +388,7 @@ class SocketService {
 
     events.forEach(event => {
       this.on(event, (data) => {
-        console.log(`[Socket][${event}]`, data); 
+        // console.log(`[Socket][${event}]`, data); 
         if (typeof callback === 'function') {
           callback(event, data);
         }

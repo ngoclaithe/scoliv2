@@ -136,7 +136,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   const [showSubtitle, setShowSubtitle] = useState(matchData.showSubtitle !== false);
 
   useEffect(() => {
-    console.log("Giá trị đồng bộ từ backend socket là", matchData);
+    // console.log("Giá trị đồng bộ từ backend socket là", matchData);
     setTeamAInfo(prev => {
       const newTeamAInfo = {
         name: matchData.teamA.name || prev.name,

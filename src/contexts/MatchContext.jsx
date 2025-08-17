@@ -184,7 +184,7 @@ export const MatchProvider = ({ children }) => {
           }
 
           if (state.matchStats) {
-            console.log('📊 [MatchContext] Updating matchStats from room_joined:', state.matchStats);
+            // console.log('📊 [MatchContext] Updating matchStats from room_joined:', state.matchStats);
             // Kiểm tra nếu server trả về array thay vì object
             if (Array.isArray(state.matchStats)) {
               console.log('⚠️ [MatchContext] Server returned array for matchStats, skipping update');
@@ -224,7 +224,7 @@ export const MatchProvider = ({ children }) => {
           }
 
           if (state.view) {
-            console.log('👁️ [MatchContext] Updating currentView from room_joined:', state.view);
+            // console.log('👁️ [MatchContext] Updating currentView from room_joined:', state.view);
             setCurrentView(state.view);
           }
 
@@ -407,7 +407,6 @@ export const MatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật view
     socketService.on('view_updated', (data) => {
-      console.log('👁️ [MatchContext] view_updated received:', data);
       if (data.viewType) {
         setCurrentView(data.viewType);
       }
@@ -454,11 +453,9 @@ export const MatchProvider = ({ children }) => {
       }
 
       if (data.view) {
-        console.log('👁️ [MatchContext] Updating currentView from current_state_response:', data.view);
         setCurrentView(data.view);
       }
 
-      console.log('✅ [MatchContext] State loaded from server successfully');
       setLastUpdateTime(Date.now());
     });
   }, []);
