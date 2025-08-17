@@ -235,7 +235,7 @@ const AuthAPI = {
    * @returns {boolean} Đã đăng nhập hay chưa
    */
   isAuthenticated: () => {
-    return !!localStorage.getItem('token');
+    return TokenUtils.isUserAuthenticated();
   },
 
   /**
@@ -243,7 +243,7 @@ const AuthAPI = {
    * @returns {string|null} Token hoặc null nếu không có
    */
   getToken: () => {
-    return localStorage.getItem('token');
+    return TokenUtils.getUserToken();
   },
 
   /**
