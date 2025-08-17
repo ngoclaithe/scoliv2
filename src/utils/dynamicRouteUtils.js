@@ -89,7 +89,7 @@ export const parseColorParam = (colorParam) => {
  * Parse tên đội từ URL parameter
  * @param {string} teamNameParam - Tham số tên đội từ URL
  * @param {string} defaultName - Tên mặc định nếu không có
- * @returns {string} - Tên đội đã decode
+ * @returns {string} - Tên ��ội đã decode
  */
 export const parseTeamName = (teamNameParam, defaultName = 'ĐỘI') => {
   if (!teamNameParam) return defaultName;
@@ -160,7 +160,10 @@ export const buildDynamicRoute = (params) => {
   const encodedLiveText = encodeURIComponent(liveText.replace(/ /g, '_'));
   const encodedTeamAName = encodeURIComponent(teamAName.replace(/ /g, '_'));
   const encodedTeamBName = encodeURIComponent(teamBName.replace(/ /g, '_'));
-  const encodedView = encodeURIComponent(view.replace(/ /g, '_'));
+
+  // Map view sang tiếng Việt cho URL thân thiện hơn
+  const mappedView = mapInternalViewToUrl(view);
+  const encodedView = encodeURIComponent(mappedView.replace(/ /g, '_'));
   const encodedMatchTime = encodeURIComponent(matchTime);
 
   // Xử lý màu - có thể là tên tiếng Việt hoặc hex
