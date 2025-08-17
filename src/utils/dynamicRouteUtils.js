@@ -2,6 +2,7 @@ import LogoAPI from '../API/apiLogo';
 import { getFullLogoUrl } from './logoUtils';
 import { parseColorParam as parseColor } from './colorUtils';
 import { mapInternalViewToUrl } from './viewMappingUtils';
+import { decodeMatchTitle, decodeTextParam, encodeMatchTitle, encodeTextParam } from './urlEncodingUtils';
 
 /**
  * Tìm logo URL dựa trên logo code, trả về default nếu không tìm thấy
@@ -89,7 +90,7 @@ export const parseColorParam = (colorParam) => {
  * Parse tên đội từ URL parameter
  * @param {string} teamNameParam - Tham số tên đội từ URL
  * @param {string} defaultName - Tên mặc định nếu không có
- * @returns {string} - Tên ��ội đã decode
+ * @returns {string} - Tên đội đã decode
  */
 export const parseTeamName = (teamNameParam, defaultName = 'ĐỘI') => {
   if (!teamNameParam) return defaultName;
