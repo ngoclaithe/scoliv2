@@ -9,7 +9,7 @@ import UploadLogoSection from "../sections/UploadLogoSection";
 import MatchManagementSection from "../sections/MatchManagementSection";
 import CommentarySection from "../sections/CommentarySection";
 
-const NewHomeLayout = () => {
+const NewHomeLayout = ({ onNavigate }) => {
   const { user, logout, authType, hasAccountAccess, codeOnly, matchCode, clearMatchCode } = useAuth();
   const [activeTab, setActiveTab] = useState("quan-ly-tran");
   const [showAccessCodeModal, setShowAccessCodeModal] = useState(false);
@@ -118,15 +118,30 @@ const NewHomeLayout = () => {
       <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-800 shadow-lg sticky top-0 z-40">
         <div className="mx-auto px-3">
           <div className="flex justify-between items-center h-10">
-            {/* Left - Logo và thông tin */}
+            {/* Left - Logo và thông tin hoặc nút back */}
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">⚽</span>
-              </div>
-              <div className="flex flex-col">
-                <h1 className="text-sm font-bold text-white">SCOLIV</h1>
-                {/* <span className="text-xs text-gray-200">Livestream Control</span> */}
-              </div>
+              {authType === 'full' && onNavigate ? (
+                <button
+                  onClick={() => onNavigate('manage-access-code')}
+                  className="flex items-center space-x-2 text-white hover:text-gray-200 transition-colors"
+                  title="Quay lại danh sách mã truy cập"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  <span className="text-sm font-medium">Quay lại</span>
+                </button>
+              ) : (
+                <>
+                  <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">⚽</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <h1 className="text-sm font-bold text-white">SCOLIV</h1>
+                    {/* <span className="text-xs text-gray-200">Livestream Control</span> */}
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Center - Access Code Info */}
