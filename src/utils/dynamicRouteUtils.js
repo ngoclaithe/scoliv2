@@ -1,6 +1,7 @@
 import LogoAPI from '../API/apiLogo';
 import { getFullLogoUrl } from './logoUtils';
 import { parseColorParam as parseColor } from './colorUtils';
+import { mapInternalViewToUrl } from './viewMappingUtils';
 
 /**
  * Tìm logo URL dựa trên logo code, trả về default nếu không tìm thấy
