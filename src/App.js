@@ -56,7 +56,7 @@ function AppContent() {
   const renderCurrentPage = () => {
     switch (currentPage) {
       case "home":
-        return <NewHomeLayout />;
+        return <NewHomeLayout onNavigate={setCurrentPage} />;
 
       case "manage-access-code":
         return <ManageAccessCode onNavigate={setCurrentPage} />;
@@ -66,11 +66,11 @@ function AppContent() {
           return <ProfilePage />;
         } else {
           setCurrentPage("home");
-          return <NewHomeLayout />;
+          return <NewHomeLayout onNavigate={setCurrentPage} />;
         }
 
       default:
-        return <NewHomeLayout />;
+        return <NewHomeLayout onNavigate={setCurrentPage} />;
     }
   };
 

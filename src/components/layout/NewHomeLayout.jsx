@@ -1,17 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import Modal from "../common/Modal";
+import AccessCodeAPI from "../../API/apiAccessCode";
+import { toast } from "react-toastify";
 
 // Import các section components
 import UploadLogoSection from "../sections/UploadLogoSection";
 import MatchManagementSection from "../sections/MatchManagementSection";
 import CommentarySection from "../sections/CommentarySection";
 
-const NewHomeLayout = () => {
+const NewHomeLayout = ({ onNavigate }) => {
   const { user, logout, authType, hasAccountAccess, codeOnly, matchCode, clearMatchCode } = useAuth();
   const [activeTab, setActiveTab] = useState("quan-ly-tran");
   const [showAccessCodeModal, setShowAccessCodeModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
+  const [codeInfo, setCodeInfo] = useState(null);
+  const [loadingCodeInfo, setLoadingCodeInfo] = useState(false);
 
   // Định nghĩa các tab theo yêu cầu
   const tabs = [
@@ -48,7 +52,50 @@ const NewHomeLayout = () => {
     if (matchCode) {
       const displayUrl = `/${matchCode}`;
       window.open(displayUrl, '_blank');
+
+      // Hiển thị toast thông báo mã đã được sử dụng và hết hạn sau 2 tiếng
+      toast.info('Mã đã được sử dụng và hết hạn sau 2 tiếng từ bây giờ', {
+        position: "top-center",
+        autoClose: 3000,
+      });
     }
+  };
+
+  // Hàm lấy thông tin mã truy cập
+  const loadCodeInfo = async () => {
+    if (!matchCode) return;
+
+    try {
+      setLoadingCodeInfo(true);
+      const response = await AccessCodeAPI.verifyCodeForLogin(matchCode);
+      setCodeInfo(response.data);
+    } catch (error) {
+      console.error('Lỗi khi lấy thông tin mã:', error);
+      toast.error('Không thể lấy thông tin mã truy cập');
+    } finally {
+      setLoadingCodeInfo(false);
+    }
+  };
+
+  // Load thông tin mã khi mở modal
+  useEffect(() => {
+    if (showAccessCodeModal && matchCode) {
+      loadCodeInfo();
+    }
+  }, [showAccessCodeModal, matchCode]);
+
+  // Hàm format ngày giờ
+  const formatDateTime = (dateString) => {
+    if (!dateString) return 'Còn hạn';
+    const date = new Date(dateString);
+    return date.toLocaleString('vi-VN', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
   };
 
   // Render nội dung tab
@@ -71,15 +118,30 @@ const NewHomeLayout = () => {
       <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-800 shadow-lg sticky top-0 z-40">
         <div className="mx-auto px-3">
           <div className="flex justify-between items-center h-10">
-            {/* Left - Logo và thông tin */}
+            {/* Left - Logo và thông tin hoặc nút back */}
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">⚽</span>
-              </div>
-              <div className="flex flex-col">
-                <h1 className="text-sm font-bold text-white">SCOLIV</h1>
-                {/* <span className="text-xs text-gray-200">Livestream Control</span> */}
-              </div>
+              {authType === 'full' && onNavigate ? (
+                <button
+                  onClick={() => onNavigate('manage-access-code')}
+                  className="flex items-center space-x-2 text-white hover:text-gray-200 transition-colors"
+                  title="Quay lại danh sách mã truy cập"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  <span className="text-sm font-medium">Quay lại</span>
+                </button>
+              ) : (
+                <>
+                  <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center">
+                    <span className="text-white font-bold text-sm">⚽</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <h1 className="text-sm font-bold text-white">SCOLIV</h1>
+                    {/* <span className="text-xs text-gray-200">Livestream Control</span> */}
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Center - Access Code Info */}
@@ -220,6 +282,13 @@ const NewHomeLayout = () => {
               <div>Chia sẻ link này với đội ngũ để họ có thể xem trực tiếp</div>
               <div className="bg-yellow-50 border border-yellow-200 rounded p-2 text-yellow-700">
                 <div className="font-medium">⏰ Thời gian hết hạn:</div>
+                {loadingCodeInfo ? (
+                  <div className="text-sm mt-1">Đang tải...</div>
+                ) : (
+                  <div className="text-sm mt-1">
+                    {codeInfo?.expiredAt ? formatDateTime(codeInfo.expiredAt) : 'Còn hạn'}
+                  </div>
+                )}
               </div>
             </div>
           </div>
