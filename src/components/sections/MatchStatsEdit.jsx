@@ -246,8 +246,8 @@ const MatchStatsEdit = ({
     }
   };
 
-  // Tính toán thời gian kiểm soát bóng theo seconds
-  const calculatePossessionSeconds = () => {
+  // Tính toán thời gian kiểm soát bóng theo seconds và percentage
+  const calculatePossessionData = () => {
     const now = Date.now();
 
     let currentTotalA = totalPossessionA;
@@ -263,10 +263,35 @@ const MatchStatsEdit = ({
       }
     }
 
-    // Trả về seconds
+    const secondsA = Math.round(currentTotalA / 1000);
+    const secondsB = Math.round(currentTotalB / 1000);
+    const totalSeconds = secondsA + secondsB;
+
+    // Tính % kiểm soát bóng
+    let percentageA = 0;
+    let percentageB = 0;
+
+    if (totalSeconds > 0) {
+      percentageA = Math.round((secondsA / totalSeconds) * 100);
+      percentageB = Math.round((secondsB / totalSeconds) * 100);
+
+      // Đảm bảo tổng = 100%
+      if (percentageA + percentageB !== 100) {
+        const diff = 100 - (percentageA + percentageB);
+        if (secondsA >= secondsB) {
+          percentageA += diff;
+        } else {
+          percentageB += diff;
+        }
+      }
+    } else {
+      percentageA = 50;
+      percentageB = 50;
+    }
+
     return {
-      team1: Math.round(currentTotalA / 1000),
-      team2: Math.round(currentTotalB / 1000)
+      seconds: { team1: secondsA, team2: secondsB },
+      percentage: { team1: percentageA, team2: percentageB }
     };
   };
 
@@ -635,7 +660,7 @@ const MatchStatsEdit = ({
             </div>
             <div className="flex-1">
               <label className="flex items-center gap-1 text-xs justify-end">
-                <span className={`font-medium ${!matchStarted || matchPaused ? 'text-gray-400' : 'text-gray-600'}`}>Đội B kiểm soát</span>
+                <span className={`font-medium ${!matchStarted || matchPaused ? 'text-gray-400' : 'text-gray-600'}`}>Đội B kiểm so��t</span>
                 <input
                   type="checkbox"
                   checked={teamBControlling}
