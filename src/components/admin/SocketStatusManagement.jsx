@@ -202,9 +202,9 @@ const SocketStatusManagement = () => {
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
-                  <dt className="text-sm font-medium text-slate-600 truncate">Clients kết nối</dt>
+                  <dt className="text-sm font-medium text-slate-600 truncate">Connections</dt>
                   <dd className="text-2xl font-bold text-slate-900">
-                    {socketStatus?.data?.connectedClients || 0}
+                    {socketStatus?.data?.connections || 0}
                   </dd>
                 </dl>
               </div>
@@ -223,9 +223,9 @@ const SocketStatusManagement = () => {
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
-                  <dt className="text-sm font-medium text-slate-600 truncate">Phòng hoạt động</dt>
+                  <dt className="text-sm font-medium text-slate-600 truncate">Rooms</dt>
                   <dd className="text-2xl font-bold text-slate-900">
-                    {rooms.length}
+                    {socketStatus?.data?.rooms || 0}
                   </dd>
                 </dl>
               </div>
