@@ -93,14 +93,6 @@ const NewHomeLayout = () => {
 
             {/* Right - User Actions */}
             <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setShowUserModal(true)}
-                className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
-                title="Thông tin người dùng"
-              >
-                <span className="text-white text-sm">{codeOnly ? '🔑' : '👤'}</span>
-              </button>
-
               {/* Logout Button */}
               <button
                 onClick={logout}
@@ -109,15 +101,6 @@ const NewHomeLayout = () => {
               >
                 <span className="text-white text-sm">🚪</span>
               </button>
-
-              {/* Support Button */}
-              <a
-                href="tel:0923415678"
-                className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
-                title="Hotline: 0923415678"
-              >
-                <span className="text-white text-sm">📞</span>
-              </a>
             </div>
           </div>
         </div>

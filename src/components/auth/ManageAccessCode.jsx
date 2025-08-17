@@ -358,9 +358,6 @@ const ManageAccessCode = ({ onNavigate }) => {
 
             {/* Right - User Actions */}
             <div className="flex items-center space-x-3">
-              <div className="flex items-center bg-white/10 rounded-full px-3 py-2">
-                <span className="text-white text-sm mr-2">👤</span>
-              </div>
               {onNavigate && (
                 <button
                   onClick={() => setShowCodeEntry(true)}
