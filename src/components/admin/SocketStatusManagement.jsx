@@ -93,7 +93,7 @@ const SocketStatusManagement = () => {
     if (hours < 24) return `${hours} giờ trước`;
     
     const days = Math.floor(hours / 24);
-    return `${days} ngày trước`;
+    return `${days} ngày tr��ớc`;
   };
 
   const getStatusColor = (isConnected) => {
@@ -379,10 +379,55 @@ const SocketStatusManagement = () => {
           <div className="p-6">
             <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
               <div>
-                <dt className="text-sm font-medium text-gray-500">Memory Usage</dt>
+                <dt className="text-sm font-medium text-gray-500">Memory Usage (RSS)</dt>
                 <dd className="mt-1 text-sm text-gray-900">
-                  {socketStatus.data.memoryUsage ? 
-                    `${Math.round(socketStatus.data.memoryUsage.used / 1024 / 1024)} MB / ${Math.round(socketStatus.data.memoryUsage.total / 1024 / 1024)} MB` 
+                  {socketStatus.data.memoryUsage?.rss ?
+                    `${Math.round(socketStatus.data.memoryUsage.rss / 1024 / 1024)} MB`
+                    : 'N/A'
+                  }
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500">Heap Total</dt>
+                <dd className="mt-1 text-sm text-gray-900">
+                  {socketStatus.data.memoryUsage?.heapTotal ?
+                    `${Math.round(socketStatus.data.memoryUsage.heapTotal / 1024 / 1024)} MB`
+                    : 'N/A'
+                  }
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500">Heap Used</dt>
+                <dd className="mt-1 text-sm text-gray-900">
+                  {socketStatus.data.memoryUsage?.heapUsed ?
+                    `${Math.round(socketStatus.data.memoryUsage.heapUsed / 1024 / 1024)} MB`
+                    : 'N/A'
+                  }
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500">External</dt>
+                <dd className="mt-1 text-sm text-gray-900">
+                  {socketStatus.data.memoryUsage?.external ?
+                    `${Math.round(socketStatus.data.memoryUsage.external / 1024 / 1024)} MB`
+                    : 'N/A'
+                  }
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500">Array Buffers</dt>
+                <dd className="mt-1 text-sm text-gray-900">
+                  {socketStatus.data.memoryUsage?.arrayBuffers ?
+                    `${Math.round(socketStatus.data.memoryUsage.arrayBuffers / 1024 / 1024)} MB`
+                    : 'N/A'
+                  }
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500">Timestamp</dt>
+                <dd className="mt-1 text-sm text-gray-900">
+                  {socketStatus.data.timestamp ?
+                    new Date(socketStatus.data.timestamp).toLocaleString('vi-VN')
                     : 'N/A'
                   }
                 </dd>
