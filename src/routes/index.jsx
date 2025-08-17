@@ -16,7 +16,7 @@ const AppRoutes = () => {
   return (
     <>
       <Routes>
-        {/* Admin routes */}
+        {/* Admin routes - Completely separated, no AuthProvider */}
         <Route path="/admin/*" element={<AdminApp />} />
 
         {/* Authenticated routes */}
