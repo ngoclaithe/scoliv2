@@ -758,7 +758,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
           {/* Position toggles */}
           <div className="mt-2">
-            <div className="text-xs text-gray-600 mb-1">Vị trí hiển thị:</div>
+            <div className="text-xs text-gray-600 mb-1">Vị trí hi���n thị:</div>
             <div className="grid grid-cols-3 gap-1">
               {[
                 { key: 'top-left', icon: '↖️', title: 'Trên trái' },
@@ -1016,8 +1016,22 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   const allPosters = [...availablePosters, ...savedPosters, ...customPosters];
 
   const renderPosterSection = () => {
+    const uploadedPostersCount = [...savedPosters, ...customPosters].length;
+    const canUploadMore = uploadedPostersCount < 3;
+
     return (
       <div className="space-y-1">
+        {/* Hiển thị số lượng poster đã upload */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1">
+            <span className="text-xs">🖼️</span>
+            <h3 className="text-xs font-semibold text-gray-900">Poster Template</h3>
+          </div>
+          <span className="text-xs text-gray-500">
+            Đã upload: {uploadedPostersCount}/3
+          </span>
+        </div>
+
         <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
           {allPosters.map((poster) => (
             <div key={poster.id} className="flex-none w-24">
@@ -1028,29 +1042,44 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               />
             </div>
           ))}
-          {/* Nút thêm poster */}
-          <div className="flex-none w-24">
-            <div className="relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer group border-2 border-dashed border-gray-300 hover:border-blue-400">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handlePosterUpload}
-                className="hidden"
-                id="poster-upload"
-              />
-              <label
-                htmlFor="poster-upload"
-                className="block aspect-video bg-gray-50 hover:bg-blue-50 transition-colors duration-200 cursor-pointer"
-              >
-                <div className="w-full h-full flex flex-col items-center justify-center">
-                  <div className="w-8 h-8 bg-gray-200 hover:bg-blue-200 rounded-full flex items-center justify-center mb-1 transition-colors duration-200">
-                    <span className="text-lg text-gray-500 hover:text-blue-500">+</span>
+          {/* Nút thêm poster - chỉ hiện khi chưa đủ 3 poster */}
+          {canUploadMore && (
+            <div className="flex-none w-24">
+              <div className="relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer group border-2 border-dashed border-gray-300 hover:border-blue-400">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handlePosterUpload}
+                  className="hidden"
+                  id="poster-upload"
+                />
+                <label
+                  htmlFor="poster-upload"
+                  className="block aspect-video bg-gray-50 hover:bg-blue-50 transition-colors duration-200 cursor-pointer"
+                >
+                  <div className="w-full h-full flex flex-col items-center justify-center">
+                    <div className="w-8 h-8 bg-gray-200 hover:bg-blue-200 rounded-full flex items-center justify-center mb-1 transition-colors duration-200">
+                      <span className="text-lg text-gray-500 hover:text-blue-500">+</span>
+                    </div>
+                    <span className="text-xs text-gray-500 font-medium">Thêm poster</span>
                   </div>
-                  <span className="text-xs text-gray-500 font-medium">Thêm poster</span>
-                </div>
-              </label>
+                </label>
+              </div>
             </div>
-          </div>
+          )}
+          {/* Thông báo khi đã đủ 3 poster */}
+          {!canUploadMore && (
+            <div className="flex-none w-24">
+              <div className="relative bg-gray-100 rounded-lg overflow-hidden shadow-md border-2 border-dashed border-gray-300">
+                <div className="aspect-video bg-gray-100 flex flex-col items-center justify-center">
+                  <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center mb-1">
+                    <span className="text-lg text-gray-500">✓</span>
+                  </div>
+                  <span className="text-xs text-gray-500 font-medium px-1 text-center">Đã đủ 3 poster</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );
