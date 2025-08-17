@@ -850,15 +850,30 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     return !itemChanged && !callbacksChanged;
   });
 
-  const handlePosterSelect = useCallback((poster) => {
+  const handlePosterSelect = useCallback(async (poster) => {
     console.log('🎨 [PosterLogoManager] handlePosterSelect called with:', poster);
     setSelectedPoster(poster);
+
+    // Save selectedPoster to backend via DisplaySettingsAPI
+    try {
+      if (accessCode) {
+        console.log('🎨 [PosterLogoManager] Saving selectedPoster to backend:', poster);
+        // Emit to socket for real-time update
+        socketService.emit('poster_update', {
+          posterType: poster.id,
+          posterData: poster
+        });
+      }
+    } catch (error) {
+      console.error('❌ [PosterLogoManager] Failed to save selectedPoster to backend:', error);
+    }
+
     // Immediate update
     if (onPosterUpdate) {
       console.log('🎨 [PosterLogoManager] Calling onPosterUpdate immediately with:', poster);
       onPosterUpdate(poster);
     }
-  }, [onPosterUpdate]);
+  }, [onPosterUpdate, accessCode]);
 
   const handleItemUpdate = useCallback(async (itemId, updatedItem) => {
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);
