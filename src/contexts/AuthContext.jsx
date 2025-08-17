@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import AuthAPI from '../API/apiAuth';
 import AccessCodeAPI from '../API/apiAccessCode';
+import TokenUtils from '../utils/tokenUtils';
 import { toast } from 'react-toastify';
 
 const AuthContext = createContext();
@@ -26,9 +27,14 @@ export const AuthProvider = ({ children }) => {
   const loadUser = useCallback(async () => {
     try {
       setLoading(true);
-      if (AuthAPI.isAuthenticated()) {
-        const token = AuthAPI.getToken();
-        if (token && (token.includes('user-token') || token.includes('admin-token'))) {
+
+      // Migration token cũ trước khi check
+      TokenUtils.migrateOldTokens();
+
+      if (TokenUtils.isUserAuthenticated()) {
+        const token = TokenUtils.getUserToken();
+        if (token && token.includes('fake-user-token')) {
+          // Demo user
           const userData = {
             id: 'user-demo',
             email: 'demo@user.com',
@@ -44,25 +50,30 @@ export const AuthProvider = ({ children }) => {
           // Thực tế call API
           try {
             const userData = await AuthAPI.getMe();
-            setUser({
-              id: userData.id,
-              email: userData.email,
-              name: userData.name,
-              role: userData.role,
-              avatar: userData.avatar
-            });
-            setIsAuthenticated(true);
-            setAuthType('account'); // User account từ API
-            setCodeOnly(false);
+            if (userData && userData.role !== 'admin') {
+              setUser({
+                id: userData.id,
+                email: userData.email,
+                name: userData.name,
+                role: userData.role,
+                avatar: userData.avatar
+              });
+              setIsAuthenticated(true);
+              setAuthType('account'); // User account từ API
+              setCodeOnly(false);
+            } else {
+              // Nếu là admin, không được đăng nhập ở user context
+              TokenUtils.removeUserToken();
+            }
           } catch (apiError) {
             // Nếu API fail, clear token
-            AuthAPI.logout();
+            TokenUtils.removeUserToken();
           }
         }
       }
     } catch (error) {
       console.error('Lỗi tải thông tin người dùng:', error);
-      AuthAPI.logout();
+      TokenUtils.removeUserToken();
     } finally {
       setLoading(false);
     }
@@ -90,7 +101,7 @@ export const AuthProvider = ({ children }) => {
         setAuthType('account'); 
         setIsAuthenticated(true);
 
-        localStorage.setItem('token', 'fake-user-token');
+        TokenUtils.setUserToken('fake-user-token');
 
         return { success: true, user: userData };
       }
@@ -205,6 +216,8 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Lỗi khi đăng xuất:', error);
     } finally {
+      // Chỉ clear user token, không động đến admin token
+      TokenUtils.removeUserToken();
       setUser(null);
       setIsAuthenticated(false);
       setAuthType(null);
