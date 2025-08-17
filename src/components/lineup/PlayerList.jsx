@@ -311,45 +311,43 @@ const PlayerList = () => {
                 <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gradient-radial from-purple-500/10 to-transparent rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
 
                 <div className="relative z-10 h-full flex flex-col">
-                    {/* Main Title with enhanced styling */}
-                    <div className="px-4 py-4 sm:py-6 flex-shrink-0">
+                    {/* Main Title */}
+                    <div className="px-4 py-3 sm:py-4 flex-shrink-0">
                         <div className="text-center">
-                            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-3 sm:mb-4 tracking-wider drop-shadow-2xl text-shadow-lg">
+                            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-2 sm:mb-3 tracking-wider drop-shadow-lg text-stroke">
                                 DANH SÁCH CẦU THỦ
                             </h1>
-                            <div className="flex items-center justify-center gap-3">
-                                <div className="w-12 h-1 bg-gradient-to-r from-transparent via-blue-400 to-blue-600 rounded-full"></div>
-                                <div className="w-24 h-1 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 rounded-full"></div>
-                                <div className="w-12 h-1 bg-gradient-to-r from-pink-500 via-purple-400 to-transparent rounded-full"></div>
+                            <div className="flex items-center justify-center gap-2">
+                                <div className="w-8 h-0.5 bg-gradient-to-r from-transparent via-blue-400 to-blue-600 rounded-full"></div>
+                                <div className="w-16 h-0.5 bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 rounded-full"></div>
+                                <div className="w-8 h-0.5 bg-gradient-to-r from-pink-500 via-purple-400 to-transparent rounded-full"></div>
                             </div>
                         </div>
                     </div>
 
                     {/* Main Content - Responsive Layout */}
-                    <div className="flex-1 px-3 sm:px-6 pb-20 sm:pb-24 min-h-0 overflow-hidden">
+                    <div className="flex-1 px-2 sm:px-4 pb-16 sm:pb-20 min-h-0 overflow-hidden">
                         <div className="max-w-7xl mx-auto h-full">
                             {/* Desktop Layout */}
-                            <div className="hidden lg:flex items-center justify-center gap-12 h-full">
-                                <div className="flex-1 max-w-sm">
-                                    <CompactTeamSection
-                                        team={currentData.teamAName}
-                                        players={currentData.teamAPlayers}
-                                        kitColor={currentData.teamAKitColor}
-                                        kitColor2={currentData.teamA2KitColor}
-                                        logo={currentData.teamALogo}
-                                        isTeamA={true}
-                                    />
-                                </div>
-                                
-                                <div className="flex gap-16">
-                                    <Jersey3D 
+                            <div className="hidden lg:flex items-center justify-center gap-8 h-full">
+                                <CompactTeamSection
+                                    team={currentData.teamAName}
+                                    players={currentData.teamAPlayers}
+                                    kitColor={currentData.teamAKitColor}
+                                    kitColor2={currentData.teamA2KitColor}
+                                    logo={currentData.teamALogo}
+                                    isTeamA={true}
+                                />
+
+                                <div className="flex gap-12">
+                                    <Jersey3D
                                         kitColor={currentData.teamAKitColor}
                                         kitColor2={currentData.teamA2KitColor}
                                         teamName={currentData.teamAName}
                                         isTeamA={true}
                                         logo={currentData.teamALogo}
                                     />
-                                    <Jersey3D 
+                                    <Jersey3D
                                         kitColor={currentData.teamBKitColor}
                                         kitColor2={currentData.teamB2KitColor}
                                         teamName={currentData.teamBName}
@@ -357,25 +355,23 @@ const PlayerList = () => {
                                         logo={currentData.teamBLogo}
                                     />
                                 </div>
-                                
-                                <div className="flex-1 max-w-sm">
-                                    <CompactTeamSection
-                                        team={currentData.teamBName}
-                                        players={currentData.teamBPlayers}
-                                        kitColor={currentData.teamBKitColor}
-                                        kitColor2={currentData.teamB2KitColor}
-                                        logo={currentData.teamBLogo}
-                                        isTeamA={false}
-                                    />
-                                </div>
+
+                                <CompactTeamSection
+                                    team={currentData.teamBName}
+                                    players={currentData.teamBPlayers}
+                                    kitColor={currentData.teamBKitColor}
+                                    kitColor2={currentData.teamB2KitColor}
+                                    logo={currentData.teamBLogo}
+                                    isTeamA={false}
+                                />
                             </div>
 
                             {/* Mobile & Tablet Layout */}
                             <div className="lg:hidden h-full flex flex-col">
-                                {/* Jersey showcase */}
-                                <div className="flex justify-center gap-3 sm:gap-6 mb-6 flex-shrink-0">
-                                    <div className="scale-75 sm:scale-85 md:scale-95">
-                                        <Jersey3D 
+                                {/* Jersey showcase - smaller on mobile */}
+                                <div className="flex justify-center gap-2 sm:gap-4 mb-4 flex-shrink-0">
+                                    <div className="scale-75 sm:scale-90">
+                                        <Jersey3D
                                             kitColor={currentData.teamAKitColor}
                                             kitColor2={currentData.teamA2KitColor}
                                             teamName={currentData.teamAName}
@@ -383,8 +379,8 @@ const PlayerList = () => {
                                             logo={currentData.teamALogo}
                                         />
                                     </div>
-                                    <div className="scale-75 sm:scale-85 md:scale-95">
-                                        <Jersey3D 
+                                    <div className="scale-75 sm:scale-90">
+                                        <Jersey3D
                                             kitColor={currentData.teamBKitColor}
                                             kitColor2={currentData.teamB2KitColor}
                                             teamName={currentData.teamBName}
@@ -394,8 +390,8 @@ const PlayerList = () => {
                                     </div>
                                 </div>
 
-                                {/* Team lists */}
-                                <div className="flex gap-3 sm:gap-6 flex-1 min-h-0">
+                                {/* Team lists - always horizontal */}
+                                <div className="flex gap-2 sm:gap-4 flex-1 min-h-0">
                                     <div className="flex-1">
                                         <CompactTeamSection
                                             team={currentData.teamAName}
@@ -406,7 +402,7 @@ const PlayerList = () => {
                                             isTeamA={true}
                                         />
                                     </div>
-                                    
+
                                     <div className="flex-1">
                                         <CompactTeamSection
                                             team={currentData.teamBName}
