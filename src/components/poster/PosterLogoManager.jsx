@@ -42,7 +42,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   const availablePosters = [
     {
       id: "tretrung",
-      name: "Trẻ trung",
+      name: "Tr�� trung",
       thumbnail: "/images/posters/poster1.jpg",
     },
     {
@@ -408,6 +408,30 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     updateSelectedLogosCount();
   }, [updateSelectedLogosCount]);
 
+  // Effect to restore selectedPoster when savedPosters change
+  useEffect(() => {
+    if (savedPosters.length > 0 && !selectedPoster && window.selectedPosterToRestore) {
+      const selectedPosterData = window.selectedPosterToRestore;
+      const allAvailablePosters = [...availablePosters, ...savedPosters];
+
+      const foundPoster = allAvailablePosters.find(p =>
+        p.id === selectedPosterData ||
+        p.id === selectedPosterData?.id ||
+        (typeof selectedPosterData === 'string' && p.id.includes(selectedPosterData)) ||
+        (selectedPosterData?.serverData?.id && p.serverData?.id === selectedPosterData.serverData.id)
+      );
+
+      if (foundPoster) {
+        console.log('🎨 [PosterLogoManager] Late restore of selectedPoster:', foundPoster);
+        setSelectedPoster(foundPoster);
+        if (onPosterUpdate) {
+          onPosterUpdate(foundPoster);
+        }
+        delete window.selectedPosterToRestore;
+      }
+    }
+  }, [savedPosters, selectedPoster, onPosterUpdate]);
+
   const handlePosterUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -465,7 +489,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             // Thêm vào savedPosters thay vì customPosters
             setSavedPosters(prev => [...prev, uploadedPoster]);
 
-            // Tự động chọn poster v���a upload
+            // Tự động chọn poster vừa upload
             handlePosterSelect(uploadedPoster);
 
             console.log('✅ [PosterLogoManager] Poster uploaded successfully:', response.data);
@@ -1252,7 +1276,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
         {/* Tiêu đề phụ */}
         <div className="flex items-center gap-2">
           <label className="flex items-center gap-1">
-            <span className="text-xs text-gray-700">Tiêu đ��� phụ:</span>
+            <span className="text-xs text-gray-700">Tiêu đề phụ:</span>
             <input
               type="text"
               value={roundGroupOptions.subtitle}
