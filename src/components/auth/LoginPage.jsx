@@ -122,8 +122,19 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-500 via-purple-600 to-blue-800 px-4">
-      <div className="w-full max-w-sm bg-white rounded-lg shadow-xl">
+    <div 
+      className="min-h-screen flex items-center justify-center px-4"
+      style={{
+        backgroundImage: 'url(/images/basic/background_login.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Overlay for better readability */}
+      <div className="absolute inset-0 bg-black bg-opacity-30"></div>
+      
+      <div className="w-full max-w-sm bg-white rounded-lg shadow-xl relative z-10">
         {/* Header */}
         <div className="text-center py-4 bg-gradient-to-r from-blue-600 to-purple-600 rounded-t-lg">
           <div className="w-12 h-12 bg-white rounded-full mx-auto mb-2 flex items-center justify-center">
