@@ -40,38 +40,33 @@ const PlayerList = () => {
     );
 
     const PlayerCard = ({ player, index, teamKitColor, isTeamA, totalPlayers }) => {
-        const cardHeight = totalPlayers > 12 ? 'min-h-[2.5rem]' : totalPlayers > 8 ? 'min-h-[3rem]' : 'min-h-[3.5rem]';
-        
+        const cardHeight = totalPlayers > 10 ? 'h-6' : totalPlayers > 8 ? 'h-7' : 'h-8';
+
         return (
-            <div className={`relative bg-white/15 backdrop-blur-md rounded-xl border border-white/20 p-3 ${cardHeight} flex items-center hover:bg-white/20 transition-all duration-300 shadow-lg`}>
-                <div className="flex items-center gap-3 w-full">
+            <div className={`relative bg-white/5 backdrop-blur-sm rounded-md border border-white/10 p-1.5 ${cardHeight} flex items-center`}>
+                <div className="flex items-center gap-2 w-full">
                     <div className="relative flex-shrink-0">
-                        <div 
-                            className="w-8 h-8 rounded-xl flex items-center justify-center text-white font-bold text-sm shadow-xl backdrop-blur-sm border border-white/30"
-                            style={{ 
-                                background: `linear-gradient(135deg, ${teamKitColor}ee, ${teamKitColor}cc, ${teamKitColor}aa)`
+                        <div
+                            className="w-5 h-5 rounded-md flex items-center justify-center text-white font-bold text-xs shadow-lg backdrop-blur-sm border border-white/20"
+                            style={{
+                                background: `linear-gradient(135deg, ${teamKitColor}ee, ${teamKitColor}bb)`
                             }}
                         >
                             {player.number || index + 1}
                         </div>
-                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white shadow-lg">
+                        <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-emerald-500 rounded-full border border-white">
                             <div className="w-full h-full bg-emerald-400 rounded-full animate-pulse"></div>
                         </div>
                     </div>
                     <div className="flex-1 min-w-0">
-                        <h4 className="text-white font-semibold tracking-wide truncate text-sm text-shadow-lg">
+                        <h4 className="text-white font-medium tracking-wide truncate text-xs text-stroke">
                             {player.name || `Cầu thủ ${index + 1}`}
                         </h4>
-                        {player.position && (
-                            <p className="text-white/70 text-xs mt-0.5 text-shadow-md">
-                                {player.position}
-                            </p>
-                        )}
                     </div>
                     <div className="flex-shrink-0">
-                        <div className="flex flex-col gap-1">
-                            <div className="w-2 h-2 bg-emerald-400 rounded-full shadow-md"></div>
-                            <div className="w-2 h-2 bg-emerald-400/60 rounded-full shadow-md"></div>
+                        <div className="flex flex-col gap-0.5">
+                            <div className="w-1 h-1 bg-emerald-400 rounded-full"></div>
+                            <div className="w-1 h-1 bg-emerald-400/60 rounded-full"></div>
                         </div>
                     </div>
                 </div>
