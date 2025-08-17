@@ -104,6 +104,17 @@ export const parseTeamName = (teamNameParam, defaultName = 'ĐỘI') => {
 };
 
 /**
+ * Parse match title từ URL parameter (xử lý ký tự đặc biệt)
+ * @param {string} matchTitleParam - Tham số match title từ URL
+ * @returns {string} - Match title đã decode
+ */
+export const parseMatchTitle = (matchTitleParam) => {
+  if (!matchTitleParam) return '';
+
+  return decodeMatchTitle(matchTitleParam);
+};
+
+/**
  * Parse text từ URL parameter
  * @param {string} textParam - Tham số text từ URL
  * @returns {string} - Text đã decode
