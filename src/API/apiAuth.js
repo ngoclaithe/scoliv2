@@ -52,7 +52,7 @@ const AuthAPI = {
    * @param {string} userData.name - Họ và tên
    * @param {string} userData.email - Email
    * @param {string} userData.password - Mật khẩu
-   * @param {string} [userData.role=user] - Vai trò (mặc định l�� 'user')
+   * @param {string} [userData.role=user] - Vai trò (mặc định là 'user')
    * @returns {Promise<Object>} Thông tin người dùng đã đăng ký
    */
   register: async (userData) => {
@@ -93,9 +93,9 @@ const AuthAPI = {
       if (response.data === null && response.success === false) {
         return null;
       }
-      // Lưu token vào localStorage
+      // Lưu user token
       if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
+        TokenUtils.setUserToken(response.data.token);
       }
       return response.data;
     } catch (error) {
@@ -133,7 +133,7 @@ const AuthAPI = {
    * @param {Object} userData - Thông tin cập nhật
    * @param {string} [userData.name] - Tên mới
    * @param {string} [userData.email] - Email mới
-   * @returns {Promise<Object>} Thông tin người dùng đã cập nhật
+   * @returns {Promise<Object>} Thông tin người d��ng đã cập nhật
    */
   updateDetails: async (userData) => {
     try {
