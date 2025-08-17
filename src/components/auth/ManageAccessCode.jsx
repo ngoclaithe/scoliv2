@@ -74,7 +74,6 @@ const ManageAccessCode = ({ onNavigate }) => {
       setCreateLoading(true);
 
       const response = await AccessCodeAPI.createCode({ typeMatch });
-      console.log("Giá trị của response sau khi tạo code là:", response.data);
       if (response && response.data) {
         setCodes(prev => [response.data, ...prev]);
         const sportName = {
@@ -82,10 +81,6 @@ const ManageAccessCode = ({ onNavigate }) => {
           'futsal': 'futsal',
           'pickleball': 'pickleball'
         }[typeMatch] || '';
-
-        console.log(`Tạo mã truy cập ${sportName} thành công!`);
-        
-        // Reload activities sau khi tạo code thành công
         if (activeTab === 'activities') {
           loadActivities();
         }
