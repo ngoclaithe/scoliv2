@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
 
@@ -271,6 +272,10 @@ axios.interceptors.response.use(
   (error) => {
     if (error.response?.status === 401 && adminAPI.isAuthenticated()) {
       adminAPI.logout();
+      toast.error('Phiên đăng nhập admin đã hết hạn. Vui lòng đăng nhập lại.', {
+        position: "top-right",
+        autoClose: 3000,
+      });
       window.location.href = '/admin/login';
     }
     return Promise.reject(error);

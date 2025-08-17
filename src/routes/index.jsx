@@ -4,6 +4,7 @@ import { AuthProvider } from '../contexts/AuthContext';
 import { MatchProvider } from '../contexts/MatchContext';
 import { TimerProvider } from '../contexts/TimerContext';
 import { PublicMatchProvider } from '../contexts/PublicMatchContext';
+import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 import App from '../App';
@@ -54,7 +55,7 @@ const AppRoutes = () => {
         } />
       </Routes>
 
-      {/* <ToastContainer
+      <ToastContainer
         position="top-left"
         autoClose={3000}
         hideProgressBar={false}
@@ -67,7 +68,7 @@ const AppRoutes = () => {
         theme="light"
         toastClassName="custom-toast"
         bodyClassName="custom-toast-body"
-      /> */}
+      />
     </>
   );
 };

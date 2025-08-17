@@ -655,28 +655,28 @@ const MatchStatsEdit = ({
           </div>
 
           {/* Checkbox kiểm soát bóng */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <div className="flex-1">
-              <label className="flex items-center gap-1 text-xs">
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
                 <input
                   type="checkbox"
                   checked={teamAControlling}
                   onChange={() => handlePossessionChange('teamA')}
                   disabled={!matchStarted || matchPaused}
-                  className="w-3 h-3"
+                  className="w-5 h-5"
                 />
-                <span className={`font-medium ${!matchStarted || matchPaused ? 'text-gray-400' : 'text-red-600'}`}>Đội A kiểm soát</span>
+                <span className={`font-medium ${!matchStarted || matchPaused ? 'text-gray-400' : 'text-red-600'}`}>Đội A</span>
               </label>
             </div>
             <div className="flex-1">
-              <label className="flex items-center gap-1 text-xs justify-end">
-                <span className={`font-medium ${!matchStarted || matchPaused ? 'text-gray-400' : 'text-gray-600'}`}>Đội B kiểm soát</span>
+              <label className="flex items-center gap-2 text-sm justify-end cursor-pointer">
+                <span className={`font-medium ${!matchStarted || matchPaused ? 'text-gray-400' : 'text-gray-600'}`}>Đội B</span>
                 <input
                   type="checkbox"
                   checked={teamBControlling}
                   onChange={() => handlePossessionChange('teamB')}
                   disabled={!matchStarted || matchPaused}
-                  className="w-3 h-3"
+                  className="w-5 h-5"
                 />
               </label>
             </div>

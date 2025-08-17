@@ -159,7 +159,7 @@ const SocketStatusManagement = () => {
       </div>
 
       {/* Socket Status Cards */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         {/* Server Status */}
         <div className="bg-white overflow-hidden shadow-lg rounded-xl border border-slate-200">
           <div className="p-6">
@@ -202,9 +202,9 @@ const SocketStatusManagement = () => {
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
-                  <dt className="text-sm font-medium text-slate-600 truncate">Clients kết nối</dt>
+                  <dt className="text-sm font-medium text-slate-600 truncate">Connections</dt>
                   <dd className="text-2xl font-bold text-slate-900">
-                    {socketStatus?.data?.connectedClients || 0}
+                    {socketStatus?.data?.connections || 0}
                   </dd>
                 </dl>
               </div>
@@ -223,9 +223,51 @@ const SocketStatusManagement = () => {
               </div>
               <div className="ml-5 w-0 flex-1">
                 <dl>
-                  <dt className="text-sm font-medium text-slate-600 truncate">Phòng hoạt động</dt>
+                  <dt className="text-sm font-medium text-slate-600 truncate">Rooms</dt>
                   <dd className="text-2xl font-bold text-slate-900">
-                    {rooms.length}
+                    {socketStatus?.data?.rooms || 0}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* User Sessions */}
+        <div className="bg-white overflow-hidden shadow-lg rounded-xl border border-slate-200">
+          <div className="p-6">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="bg-indigo-50 p-3 rounded-xl">
+                  <UsersIcon className="h-6 w-6 text-indigo-600" />
+                </div>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-medium text-slate-600 truncate">User Sessions</dt>
+                  <dd className="text-2xl font-bold text-slate-900">
+                    {socketStatus?.data?.userSessions || 0}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Timer Intervals */}
+        <div className="bg-white overflow-hidden shadow-lg rounded-xl border border-slate-200">
+          <div className="p-6">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="bg-yellow-50 p-3 rounded-xl">
+                  <ClockIcon className="h-6 w-6 text-yellow-600" />
+                </div>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-medium text-slate-600 truncate">Timer Intervals</dt>
+                  <dd className="text-2xl font-bold text-slate-900">
+                    {socketStatus?.data?.timerIntervals || 0}
                   </dd>
                 </dl>
               </div>
@@ -335,28 +377,59 @@ const SocketStatusManagement = () => {
             <h3 className="text-lg font-semibold text-gray-900">Chi tiết Server</h3>
           </div>
           <div className="p-6">
-            <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+            <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
               <div>
-                <dt className="text-sm font-medium text-gray-500">Memory Usage</dt>
+                <dt className="text-sm font-medium text-gray-500">Memory Usage (RSS)</dt>
                 <dd className="mt-1 text-sm text-gray-900">
-                  {socketStatus.data.memoryUsage ? 
-                    `${Math.round(socketStatus.data.memoryUsage.used / 1024 / 1024)} MB / ${Math.round(socketStatus.data.memoryUsage.total / 1024 / 1024)} MB` 
+                  {socketStatus.data.memoryUsage?.rss ?
+                    `${Math.round(socketStatus.data.memoryUsage.rss / 1024 / 1024)} MB`
                     : 'N/A'
                   }
                 </dd>
               </div>
               <div>
-                <dt className="text-sm font-medium text-gray-500">Node.js Version</dt>
-                <dd className="mt-1 text-sm text-gray-900">{socketStatus.data.nodeVersion || 'N/A'}</dd>
-              </div>
-              <div>
-                <dt className="text-sm font-medium text-gray-500">Platform</dt>
-                <dd className="mt-1 text-sm text-gray-900">{socketStatus.data.platform || 'N/A'}</dd>
-              </div>
-              <div>
-                <dt className="text-sm font-medium text-gray-500">CPU Usage</dt>
+                <dt className="text-sm font-medium text-gray-500">Heap Total</dt>
                 <dd className="mt-1 text-sm text-gray-900">
-                  {socketStatus.data.cpuUsage ? `${socketStatus.data.cpuUsage.toFixed(2)}%` : 'N/A'}
+                  {socketStatus.data.memoryUsage?.heapTotal ?
+                    `${Math.round(socketStatus.data.memoryUsage.heapTotal / 1024 / 1024)} MB`
+                    : 'N/A'
+                  }
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500">Heap Used</dt>
+                <dd className="mt-1 text-sm text-gray-900">
+                  {socketStatus.data.memoryUsage?.heapUsed ?
+                    `${Math.round(socketStatus.data.memoryUsage.heapUsed / 1024 / 1024)} MB`
+                    : 'N/A'
+                  }
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500">External</dt>
+                <dd className="mt-1 text-sm text-gray-900">
+                  {socketStatus.data.memoryUsage?.external ?
+                    `${Math.round(socketStatus.data.memoryUsage.external / 1024 / 1024)} MB`
+                    : 'N/A'
+                  }
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500">Array Buffers</dt>
+                <dd className="mt-1 text-sm text-gray-900">
+                  {socketStatus.data.memoryUsage?.arrayBuffers ?
+                    `${Math.round(socketStatus.data.memoryUsage.arrayBuffers / 1024 / 1024)} MB`
+                    : 'N/A'
+                  }
+                </dd>
+              </div>
+              <div>
+                <dt className="text-sm font-medium text-gray-500">Timestamp</dt>
+                <dd className="mt-1 text-sm text-gray-900">
+                  {socketStatus.data.timestamp ?
+                    new Date(socketStatus.data.timestamp).toLocaleString('vi-VN')
+                    : 'N/A'
+                  }
                 </dd>
               </div>
             </dl>

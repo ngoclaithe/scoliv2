@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://192.168.31.186:5000/api/v1';
 
@@ -22,6 +23,27 @@ api.interceptors.request.use(
   }
 );
 
+// Response interceptor để xử lý 401 errors
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Chỉ xử lý 401 cho auth-related endpoints
+      const isAuthEndpoint = error.config.url.includes('/auth');
+      if (isAuthEndpoint) {
+        localStorage.removeItem('token');
+        toast.error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.', {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        // Không throw error, return rejected promise với null data
+        return Promise.resolve({ data: null, success: false, message: 'Unauthorized' });
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 const AuthAPI = {
   /**
    * Đăng ký tài khoản mới
@@ -35,11 +57,23 @@ const AuthAPI = {
   register: async (userData) => {
     try {
       const response = await api.post('/auth/register', userData);
+      // Kiểm tra nếu interceptor đã xử lý 401
+      if (response.data === null && response.success === false) {
+        return null;
+      }
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
       }
       return response.data;
     } catch (error) {
+      // Xử lý các lỗi khác (không phải 401)
+      if (error.response && error.response.status === 401) {
+        toast.error('Đăng ký thất bại. Vui lòng kiểm tra lại thông tin.', {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        return null;
+      }
       throw AuthAPI.handleError(error);
     }
   },
@@ -54,12 +88,24 @@ const AuthAPI = {
   login: async (credentials) => {
     try {
       const response = await api.post('/auth/login', credentials);
+      // Kiểm tra nếu interceptor đã xử lý 401
+      if (response.data === null && response.success === false) {
+        return null;
+      }
       // Lưu token vào localStorage
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
       }
       return response.data;
     } catch (error) {
+      // Xử lý các lỗi khác (không phải 401)
+      if (error.response && error.response.status === 401) {
+        toast.error('Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.', {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        return null;
+      }
       throw AuthAPI.handleError(error);
     }
   },
@@ -71,12 +117,12 @@ const AuthAPI = {
   getMe: async () => {
     try {
       const response = await api.get('/auth/me');
+      // Kiểm tra nếu interceptor đã xử lý 401
+      if (response.data === null && response.success === false) {
+        return null;
+      }
       return response.data;
     } catch (error) {
-      // Xử lý lỗi 401 (Unauthorized) - xóa token nếu hết hạn
-      if (error.response && error.response.status === 401) {
-        localStorage.removeItem('token');
-      }
       throw AuthAPI.handleError(error);
     }
   },
@@ -91,8 +137,19 @@ const AuthAPI = {
   updateDetails: async (userData) => {
     try {
       const response = await api.put('/auth/updatedetails', userData);
+      // Kiểm tra nếu interceptor đã xử lý 401
+      if (response.data === null && response.success === false) {
+        return null;
+      }
       return response.data;
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        toast.error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.', {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        return null;
+      }
       throw AuthAPI.handleError(error);
     }
   },
@@ -107,8 +164,19 @@ const AuthAPI = {
   updatePassword: async (passwords) => {
     try {
       const response = await api.put('/auth/updatepassword', passwords);
+      // Kiểm tra nếu interceptor đã xử lý 401
+      if (response.data === null && response.success === false) {
+        return null;
+      }
       return response.data;
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        toast.error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.', {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        return null;
+      }
       throw AuthAPI.handleError(error);
     }
   },
