@@ -19,9 +19,6 @@ const AppRoutes = () => {
         {/* Admin routes */}
         <Route path="/admin/*" element={<AdminApp />} />
 
-        {/* Test route */}
-        <Route path="/test-url" element={<UrlTestComponent />} />
-
         {/* Authenticated routes */}
         <Route path="/" element={
           <AuthProvider>
