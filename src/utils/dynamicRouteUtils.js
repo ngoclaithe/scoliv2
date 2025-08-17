@@ -181,7 +181,9 @@ export const buildDynamicRoute = (params) => {
   // Map view sang tiếng Việt cho URL thân thiện hơn
   const mappedView = mapInternalViewToUrl(view);
   const encodedView = encodeTextParam(mappedView);
-  const encodedMatchTime = encodeURIComponent(matchTime);
+
+  // Encode matchTime với format mới (T41 thay vì 41:00)
+  const encodedMatchTime = encodeMatchTimeForUrl(matchTime);
 
   // Xử lý màu - có thể là tên tiếng Việt hoặc hex
   const cleanTeamAColor = teamAKitColor.toString().replace('#', '').replace(/ /g, '_');
