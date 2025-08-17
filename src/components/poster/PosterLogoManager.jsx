@@ -1247,6 +1247,12 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           </div>
         </div>
 
+        {isCustomPosterSelected && (
+          <div className="text-xs text-red-600 bg-red-50 p-1 rounded border">
+            ⚠️ Đã chọn poster tùy chỉnh - logo & banner bị khóa
+          </div>
+        )}
+
         <div className="flex flex-wrap gap-0.5">
           {logoTypes.map((type) => (
             <button
