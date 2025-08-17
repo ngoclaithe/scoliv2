@@ -97,7 +97,7 @@ const UnifiedDisplayController = () => {
       matchTitle: parseMatchTitle(matchTitle),
       liveText: parseTextParam(liveText),
       view: mapUrlViewToInternal(parseTextParam(view)),
-      matchTime: parseTextParam(matchTime),
+      matchTime: parseMatchTime(matchTime),
       teamA: {
         name: parseTeamName(teamAName, 'ĐỘI-A'),
         score: parseNumberParam(teamAScore, 0),
@@ -167,7 +167,7 @@ const UnifiedDisplayController = () => {
         }
       }
 
-      // Auto start timer nếu có matchTime và view không phải poster/intro/halftime
+      // Auto start timer nếu có matchTime và view không ph��i poster/intro/halftime
       const viewsWithoutTimer = ['poster', 'intro', 'halftime'];
       if (params.matchTime && params.matchTime !== '00:00' && !viewsWithoutTimer.includes(params.view)) {
         console.log('⏰ [UnifiedDisplayController] Auto starting timer with time:', params.matchTime, 'for view:', params.view);
