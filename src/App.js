@@ -9,7 +9,6 @@ import LoginPage from "./components/auth/LoginPage";
 import ManageAccessCode from "./components/auth/ManageAccessCode";
 import ProfilePage from "./routes/ProfilePage";
 import Loading from "./components/common/Loading";
-import TokenDebugInfo from "./components/debug/TokenDebugInfo";
 
 function AppContent() {
   const {
