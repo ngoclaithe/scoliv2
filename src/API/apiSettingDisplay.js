@@ -26,14 +26,14 @@ const DisplaySettingsAPI = {
 
   getDisplaySettings: async (accessCode) => {
     try {
-      console.log('🌐 [DisplaySettingsAPI] Making request to:', `${API_BASE_URL}/display-settings/access-code/${accessCode}`);
+      // console.log('🌐 [DisplaySettingsAPI] Making request to:', `${API_BASE_URL}/display-settings/access-code/${accessCode}`);
       const response = await api.get(`/display-settings/access-code/${accessCode}`);
-      console.log('🌐 [DisplaySettingsAPI] Raw response:', response);
-      console.log('🌐 [DisplaySettingsAPI] Response status:', response.status);
-      console.log('🌐 [DisplaySettingsAPI] Response data:', response.data);
+      // console.log('🌐 [DisplaySettingsAPI] Raw response:', response);
+      // console.log('🌐 [DisplaySettingsAPI] Response status:', response.status);
+      // console.log('🌐 [DisplaySettingsAPI] Response data:', response.data);
       return response.data;
     } catch (error) {
-      console.error('🌐 [DisplaySettingsAPI] API call failed:', error);
+      // console.error('🌐 [DisplaySettingsAPI] API call failed:', error);
       throw DisplaySettingsAPI.handleError(error);
     }
   },

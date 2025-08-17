@@ -165,10 +165,10 @@ export const MatchProvider = ({ children }) => {
 
   const setupRoomStatusListener = useCallback(() => {
     socketService.onRoomStatus((eventType, data) => {
-      console.log(`🏠 [MatchContext] Room event: ${eventType}`, data);
+      // console.log(`🏠 [MatchContext] Room event: ${eventType}`, data);
 
       if (eventType === 'room_joined' && data) {
-        console.log('✅ [MatchContext] Successfully joined room, processing current state from room_joined...');
+        // console.log('✅ [MatchContext] Successfully joined room, processing current state from room_joined...');
 
         if (data.currentState) {
           const state = data.currentState;
@@ -194,7 +194,7 @@ export const MatchProvider = ({ children }) => {
           }
 
           if (state.displaySettings) {
-            console.log('🎨 [MatchContext] Updating displaySettings from room_joined:', state.displaySettings);
+            // console.log('🎨 [MatchContext] Updating displaySettings from room_joined:', state.displaySettings);
             setDisplaySettings(prev => ({ ...prev, ...state.displaySettings }));
           }
 
@@ -547,7 +547,6 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Cập nhật template
   const updateTemplate = useCallback((templateId) => {
     setDisplaySettings(prev => ({ ...prev, selectedSkin: templateId }));
     
@@ -556,22 +555,21 @@ export const MatchProvider = ({ children }) => {
     }
   }, [socketConnected]);
 
-  // Cập nhật poster
   const updatePoster = useCallback((posterType) => {
-    console.log('🎨 [MatchContext] updatePoster called with:', posterType);
-    console.log('🎨 [MatchContext] socketConnected:', socketConnected);
+    // console.log('🎨 [MatchContext] updatePoster called with:', posterType);
+    // console.log('🎨 [MatchContext] socketConnected:', socketConnected);
 
     setDisplaySettings(prev => {
       const newSettings = { ...prev, selectedPoster: posterType };
-      console.log('🎨 [MatchContext] Updated displaySettings:', newSettings);
+      // console.log('🎨 [MatchContext] Updated displaySettings:', newSettings);
       return newSettings;
     });
 
     if (socketConnected) {
-      console.log('🎨 [MatchContext] Emitting updatePoster via socket:', posterType);
+      // console.log('🎨 [MatchContext] Emitting updatePoster via socket:', posterType);
       socketService.updatePoster(posterType);
     } else {
-      console.log('⚠️ [MatchContext] Socket not connected, cannot emit poster update');
+      console.log('[MatchContext] Socket not connected, cannot emit poster update');
     }
   }, [socketConnected]);
 

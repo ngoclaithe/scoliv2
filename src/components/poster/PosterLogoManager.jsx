@@ -133,7 +133,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           };
         });
         setHistoryMatches(transformedMatches);
-        console.log(`✅ [PosterLogoManager] Loaded ${transformedMatches.length} history matches`);
+        // console.log(`✅ [PosterLogoManager] Loaded ${transformedMatches.length} history matches`);
       } else {
         console.warn('⚠️ [PosterLogoManager] Invalid history matches response format:', response);
         setHistoryMatches([]);
@@ -200,9 +200,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
               // Process sponsors
               if (response.data.sponsors && Array.isArray(response.data.sponsors)) {
-                console.log('📋 [PosterLogoManager] Processing sponsors:', response.data.sponsors.length, 'items');
+                // console.log('📋 [PosterLogoManager] Processing sponsors:', response.data.sponsors.length, 'items');
                 response.data.sponsors.forEach((item, index) => {
-                  console.log(`📋 [PosterLogoManager] Sponsor ${index + 1}:`, item);
+                  // console.log(`📋 [PosterLogoManager] Sponsor ${index + 1}:`, item);
                   let positions = [];
                   if (item.position) {
                     try {
@@ -223,7 +223,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                     url: getFullLogoUrl(item.url_logo),
                     displayPositions: positions
                   };
-                  console.log('📋 [PosterLogoManager] Created sponsor logo item:', logoItem);
+                  // console.log('📋 [PosterLogoManager] Created sponsor logo item:', logoItem);
                   loadedLogos.push(logoItem);
                 });
               } else {
@@ -232,9 +232,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
               // Process organizing (nếu có trong response)
               if (response.data.organizing && Array.isArray(response.data.organizing)) {
-                console.log('📋 [PosterLogoManager] Processing organizing:', response.data.organizing.length, 'items');
+                // console.log('📋 [PosterLogoManager] Processing organizing:', response.data.organizing.length, 'items');
                 response.data.organizing.forEach((item, index) => {
-                  console.log(`📋 [PosterLogoManager] Organizing ${index + 1}:`, item);
+                  // console.log(`📋 [PosterLogoManager] Organizing ${index + 1}:`, item);
                   let positions = [];
                   if (item.position) {
                     try {
@@ -255,11 +255,10 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                     url: getFullLogoUrl(item.url_logo),
                     displayPositions: positions
                   };
-                  console.log('📋 [PosterLogoManager] Created organizing logo item:', logoItem);
                   loadedLogos.push(logoItem);
                 });
               } else {
-                console.log('📋 [PosterLogoManager] No organizing found or organizing is not an array');
+                // console.log('📋 [PosterLogoManager] No organizing found or organizing is not an array');
               }
 
               // Process media (nếu có trong response)
@@ -315,8 +314,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               }
 
               if (isMounted) {
-                console.log(`✅ [PosterLogoManager] Final loaded logos array:`, loadedLogos);
-                console.log(`✅ [PosterLogoManager] Setting ${loadedLogos.length} display settings from API`);
+              //   console.log(`✅ [PosterLogoManager] Final loaded logos array:`, loadedLogos);
+              //   console.log(`✅ [PosterLogoManager] Setting ${loadedLogos.length} display settings from API`);
                 setApiLogos(loadedLogos);
               }
             }
@@ -428,19 +427,15 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               poster.id === previewPoster.id ? uploadedPoster : poster
             ));
 
-            // Thêm vào savedPosters
             setSavedPosters(prev => [...prev, uploadedPoster]);
-            // Xóa khỏi customPosters để tránh trùng lặp
             setCustomPosters(prev => prev.filter(poster => poster.id !== previewPoster.id));
-            // Tự động chọn poster vừa upload
             handlePosterSelect(uploadedPoster);
 
-            console.log('✅ [PosterLogoManager] Poster uploaded successfully:', response.data);
+            // console.log('✅ [PosterLogoManager] Poster uploaded successfully:', response.data);
           }
         } catch (error) {
-          console.error('❌ [PosterLogoManager] Failed to upload poster:', error);
+          // console.error('❌ [PosterLogoManager] Failed to upload poster:', error);
 
-          // Xóa poster đang upload nếu lỗi
           setCustomPosters(prev => prev.filter(poster => poster.id !== previewPoster.id));
 
           alert(`Lỗi khi tải lên poster: ${error.message || 'Đã xảy ra lỗi'}`);
@@ -448,7 +443,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       };
       reader.readAsDataURL(file);
     } catch (error) {
-      console.error('❌ [PosterLogoManager] Error processing poster upload:', error);
+      // console.error('❌ [PosterLogoManager] Error processing poster upload:', error);
       alert(`Lỗi khi xử lý file: ${error.message || 'Đã xảy ra lỗi'}`);
     }
   };
@@ -877,7 +872,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
         return;
       }
 
-      console.log('📋 [PosterLogoManager] Selected match data:', selectedMatch);
+      // console.log('📋 [PosterLogoManager] Selected match data:', selectedMatch);
 
       // Clear current logos
       setApiLogos([]);
@@ -918,7 +913,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       });
 
       setApiLogos(loadedLogos);
-      console.log(`✅ [PosterLogoManager] Loaded ${loadedLogos.length} logos from history match`);
+      // console.log(`✅ [PosterLogoManager] Loaded ${loadedLogos.length} logos from history match`);
 
     } catch (error) {
       console.error('❌ [PosterLogoManager] Error loading history match:', error);

@@ -163,7 +163,7 @@ export const TimerProvider = ({ children }) => {
     });
 
     socketService.on('connect', () => {
-      console.log('🕐 [TimerContext] Socket connected, setting up timer listeners');
+      // console.log('🕐 [TimerContext] Socket connected, setting up timer listeners');
     });
 
   }, []);
