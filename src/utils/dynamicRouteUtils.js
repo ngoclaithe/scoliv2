@@ -1,6 +1,9 @@
 import LogoAPI from '../API/apiLogo';
 import { getFullLogoUrl } from './logoUtils';
 import { parseColorParam as parseColor } from './colorUtils';
+import { mapInternalViewToUrl } from './viewMappingUtils';
+import { decodeMatchTitle, decodeTextParam, encodeMatchTitle, encodeTextParam } from './urlEncodingUtils';
+import { parseMatchTimeParam, encodeMatchTimeForUrl } from './matchTimeUtils';
 
 /**
  * Tìm logo URL dựa trên logo code, trả về default nếu không tìm thấy
@@ -102,19 +105,34 @@ export const parseTeamName = (teamNameParam, defaultName = 'ĐỘI') => {
 };
 
 /**
+ * Parse match title từ URL parameter (xử lý ký tự đặc biệt)
+ * @param {string} matchTitleParam - Tham số match title từ URL
+ * @returns {string} - Match title đã decode
+ */
+export const parseMatchTitle = (matchTitleParam) => {
+  if (!matchTitleParam) return '';
+
+  return decodeMatchTitle(matchTitleParam);
+};
+
+/**
  * Parse text từ URL parameter
  * @param {string} textParam - Tham số text từ URL
  * @returns {string} - Text đã decode
  */
 export const parseTextParam = (textParam) => {
   if (!textParam) return '';
-  
-  try {
-    return decodeURIComponent(textParam.replace(/_/g, ' '));
-  } catch (error) {
-    console.warn('Failed to decode text param:', textParam, error);
-    return textParam.replace(/_/g, ' ') || '';
-  }
+
+  return decodeTextParam(textParam);
+};
+
+/**
+ * Parse match time từ URL parameter (format: T41 -> 41:00)
+ * @param {string} matchTimeParam - Tham số match time từ URL
+ * @returns {string} - Match time format chuẩn
+ */
+export const parseMatchTime = (matchTimeParam) => {
+  return parseMatchTimeParam(matchTimeParam);
 };
 
 /**
@@ -125,7 +143,7 @@ export const parseTextParam = (textParam) => {
  */
 export const parseNumberParam = (numberParam, defaultValue = 0) => {
   if (!numberParam) return defaultValue;
-  
+
   const parsed = parseInt(numberParam, 10);
   return isNaN(parsed) ? defaultValue : parsed;
 };
@@ -154,13 +172,18 @@ export const buildDynamicRoute = (params) => {
   } = params;
 
   // Encode các tham số text
-  const encodedLocation = encodeURIComponent(location.replace(/ /g, '_'));
-  const encodedMatchTitle = encodeURIComponent(matchTitle.replace(/ /g, '_'));
-  const encodedLiveText = encodeURIComponent(liveText.replace(/ /g, '_'));
-  const encodedTeamAName = encodeURIComponent(teamAName.replace(/ /g, '_'));
-  const encodedTeamBName = encodeURIComponent(teamBName.replace(/ /g, '_'));
-  const encodedView = encodeURIComponent(view.replace(/ /g, '_'));
-  const encodedMatchTime = encodeURIComponent(matchTime);
+  const encodedLocation = encodeTextParam(location);
+  const encodedMatchTitle = encodeMatchTitle(matchTitle); // Xử lý đặc biệt cho matchTitle
+  const encodedLiveText = encodeTextParam(liveText);
+  const encodedTeamAName = encodeTextParam(teamAName);
+  const encodedTeamBName = encodeTextParam(teamBName);
+
+  // Map view sang tiếng Việt cho URL thân thiện hơn
+  const mappedView = mapInternalViewToUrl(view);
+  const encodedView = encodeTextParam(mappedView);
+
+  // Encode matchTime với format mới (T41 thay vì 41:00)
+  const encodedMatchTime = encodeMatchTimeForUrl(matchTime);
 
   // Xử lý màu - có thể là tên tiếng Việt hoặc hex
   const cleanTeamAColor = teamAKitColor.toString().replace('#', '').replace(/ /g, '_');
@@ -174,7 +197,9 @@ export default {
   findTeamLogos,
   parseColorParam,
   parseTeamName,
+  parseMatchTitle,
   parseTextParam,
+  parseMatchTime,
   parseNumberParam,
   buildDynamicRoute
 };
