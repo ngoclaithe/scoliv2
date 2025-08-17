@@ -77,6 +77,11 @@ const AuthAPI = {
       // Xử lý lỗi 401 (Unauthorized) - xóa token nếu hết hạn
       if (error.response && error.response.status === 401) {
         localStorage.removeItem('token');
+        toast.error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.', {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        return null; // Return null thay vì throw error
       }
       throw AuthAPI.handleError(error);
     }
@@ -145,7 +150,7 @@ const AuthAPI = {
 
   /**
    * Đăng xuất
-   * @returns {Promise<Object>} Kết qu�� đăng xuất
+   * @returns {Promise<Object>} Kết quả đăng xuất
    */
   logout: async () => {
     try {
@@ -196,7 +201,7 @@ const AuthAPI = {
       return new Error(`Lỗi (${status}): ${errorMessage}`);
     } else if (error.request) {
       // Yêu cầu đã được gửi nhưng không nhận được phản hồi
-      return new Error('Không nhận được phản hồi từ máy chủ. Vui lòng kiểm tra kết nối mạng.');
+      return new Error('Không nhận được ph��n hồi từ máy chủ. Vui lòng kiểm tra kết nối mạng.');
     } else {
       // Lỗi khi thiết lập yêu cầu
       return new Error(`Lỗi yêu cầu: ${error.message}`);
