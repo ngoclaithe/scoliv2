@@ -11,6 +11,7 @@ import LogoManagement from './LogoManagement';
 import SocketStatusManagement from './SocketStatusManagement';
 import { AdminAuthProvider, useAdminAuth } from '../../contexts/AdminAuthContext';
 import Loading from '../common/Loading';
+import TokenDebugInfo from '../debug/TokenDebugInfo';
 
 const AdminAppContent = () => {
   const { admin, isAuthenticated, loading, logout } = useAdminAuth();
