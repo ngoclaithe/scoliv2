@@ -161,7 +161,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
         if (accessCode) {
           try {
-            const posterResponse = await PosterAPI.getPosterByAccesscode({ accessCode });
+            const posterResponse = await PosterAPI.getPosterByAccesscode(accessCode);
             console.log("Giá trị posterResponse ", posterResponse);
             if (posterResponse?.success && posterResponse?.data) {
               const savedPosterList = posterResponse.data.map(poster => ({
