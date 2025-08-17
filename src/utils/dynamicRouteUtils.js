@@ -162,15 +162,15 @@ export const buildDynamicRoute = (params) => {
   } = params;
 
   // Encode các tham số text
-  const encodedLocation = encodeURIComponent(location.replace(/ /g, '_'));
-  const encodedMatchTitle = encodeURIComponent(matchTitle.replace(/ /g, '_'));
-  const encodedLiveText = encodeURIComponent(liveText.replace(/ /g, '_'));
-  const encodedTeamAName = encodeURIComponent(teamAName.replace(/ /g, '_'));
-  const encodedTeamBName = encodeURIComponent(teamBName.replace(/ /g, '_'));
+  const encodedLocation = encodeTextParam(location);
+  const encodedMatchTitle = encodeMatchTitle(matchTitle); // Xử lý đặc biệt cho matchTitle
+  const encodedLiveText = encodeTextParam(liveText);
+  const encodedTeamAName = encodeTextParam(teamAName);
+  const encodedTeamBName = encodeTextParam(teamBName);
 
   // Map view sang tiếng Việt cho URL thân thiện hơn
   const mappedView = mapInternalViewToUrl(view);
-  const encodedView = encodeURIComponent(mappedView.replace(/ /g, '_'));
+  const encodedView = encodeTextParam(mappedView);
   const encodedMatchTime = encodeURIComponent(matchTime);
 
   // Xử lý màu - có thể là tên tiếng Việt hoặc hex
