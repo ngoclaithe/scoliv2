@@ -23,6 +23,7 @@ const AdminLayout = ({ children, currentPage, onNavigate, onLogout, adminInfo })
     { name: 'Quản lý Logo', href : 'logo-management', icon: CurrencyDollarIcon, current: currentPage === 'logo-management'},
     { name: 'Thông tin thanh toán', href: 'payment-info', icon: CreditCardIcon, current: currentPage === 'payment-info' },
     { name: 'Phòng hoạt động', href: 'active-rooms', icon: ChatBubbleLeftRightIcon, current: currentPage === 'active-rooms' },
+    { name: 'Trạng thái Socket', href: 'socket-status', icon: WifiIcon, current: currentPage === 'socket-status' },
   ];
 
   const handleNavigation = (href) => {
