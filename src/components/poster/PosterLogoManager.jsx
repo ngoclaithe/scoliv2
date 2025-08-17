@@ -175,7 +175,37 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               serverData: poster
             }));
             setSavedPosters(savedPosterList);
-            console.log(`✅ [PosterLogoManager] Loaded ${savedPosterList.length} saved posters`);
+          console.log(`✅ [PosterLogoManager] Loaded ${savedPosterList.length} saved posters`);
+
+          // Restore selectedPoster if it was found in API response
+          if (window.selectedPosterToRestore) {
+            const selectedPosterData = window.selectedPosterToRestore;
+            const allAvailablePosters = [...availablePosters, ...savedPosterList];
+
+            const foundPoster = allAvailablePosters.find(p =>
+              p.id === selectedPosterData ||
+              p.id === selectedPosterData?.id ||
+              (typeof selectedPosterData === 'string' && p.id.includes(selectedPosterData)) ||
+              (selectedPosterData?.serverData?.id && p.serverData?.id === selectedPosterData.serverData.id)
+            );
+
+            if (foundPoster) {
+              console.log('🎨 [PosterLogoManager] Restoring selectedPoster after loading savedPosters:', foundPoster);
+              setSelectedPoster(foundPoster);
+              if (onPosterUpdate) {
+                onPosterUpdate(foundPoster);
+              }
+            } else {
+              console.log('🎨 [PosterLogoManager] Poster not found in available posters, using selectedPoster data directly:', selectedPosterData);
+              setSelectedPoster(selectedPosterData);
+              if (onPosterUpdate) {
+                onPosterUpdate(selectedPosterData);
+              }
+            }
+
+            // Clear the temp variable
+            delete window.selectedPosterToRestore;
+          }
           }
         } catch (error) {
           console.error('❌ [PosterLogoManager] Failed to load saved posters:', error);
@@ -318,29 +348,11 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                 });
               }
 
-              // Load selectedPoster from API response
+              // Store selectedPoster info for later restoration
               if (response.data.selectedPoster) {
                 console.log('🎨 [PosterLogoManager] Found selectedPoster in API response:', response.data.selectedPoster);
-                // Tìm poster trong availablePosters hoặc savedPosters
-                const foundPoster = [...availablePosters, ...savedPosters].find(p =>
-                  p.id === response.data.selectedPoster ||
-                  p.id === response.data.selectedPoster?.id ||
-                  (typeof response.data.selectedPoster === 'string' && p.id.includes(response.data.selectedPoster))
-                );
-
-                if (foundPoster) {
-                  console.log('🎨 [PosterLogoManager] Restoring selectedPoster:', foundPoster);
-                  setSelectedPoster(foundPoster);
-                  if (onPosterUpdate) {
-                    onPosterUpdate(foundPoster);
-                  }
-                } else {
-                  console.log('🎨 [PosterLogoManager] Poster not found, using selectedPoster data directly:', response.data.selectedPoster);
-                  setSelectedPoster(response.data.selectedPoster);
-                  if (onPosterUpdate) {
-                    onPosterUpdate(response.data.selectedPoster);
-                  }
-                }
+                // Save the selectedPoster info to restore later when savedPosters are loaded
+                window.selectedPosterToRestore = response.data.selectedPoster;
               }
 
               if (isMounted) {
@@ -453,7 +465,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             // Thêm vào savedPosters thay vì customPosters
             setSavedPosters(prev => [...prev, uploadedPoster]);
 
-            // Tự động chọn poster vừa upload
+            // Tự động chọn poster v���a upload
             handlePosterSelect(uploadedPoster);
 
             console.log('✅ [PosterLogoManager] Poster uploaded successfully:', response.data);
@@ -1240,7 +1252,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
         {/* Tiêu đề phụ */}
         <div className="flex items-center gap-2">
           <label className="flex items-center gap-1">
-            <span className="text-xs text-gray-700">Tiêu đề phụ:</span>
+            <span className="text-xs text-gray-700">Tiêu đ��� phụ:</span>
             <input
               type="text"
               value={roundGroupOptions.subtitle}
