@@ -30,18 +30,15 @@ const adminAPI = {
     return false;
   },
 
-  // Get admin token
   getToken: () => {
     return localStorage.getItem('admin_token');
   },
 
-  // Admin logout
   logout: () => {
     localStorage.removeItem('admin_token');
     delete axios.defaults.headers.common['Authorization'];
   },
 
-  // Get current admin info
   getMe: async () => {
     try {
       const response = await axios.get(`${API_BASE_URL}/admin/me`);

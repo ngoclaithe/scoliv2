@@ -4,7 +4,6 @@ import Button from "../common/Button";
 import Input from "../common/Input";
 import { useMatch } from "../../contexts/MatchContext";
 import PlayerListAPI from "../../API/apiPlayerList";
-import { toast } from "react-toastify";
 
 const TeamLineupModal = ({
   isOpen,
@@ -93,7 +92,6 @@ const TeamLineupModal = ({
     } catch (error) {
       if (!error.message.includes('AccessCode is not associated to PlayerList')) {
         console.error('Error loading current lineup:', error);
-        toast.error('Không thể tải danh sách cầu thủ hiện tại');
       }
     } finally {
       setIsLoading(false);
@@ -135,7 +133,6 @@ const TeamLineupModal = ({
     });
 
     setShowHistorySelection(false);
-    toast.success('Đã tải đội hình từ trận đấu cũ');
   };
 
   const handlePlayerChange = (team, index, field, value) => {

@@ -42,18 +42,15 @@ const NewHomeLayout = ({ onNavigate }) => {
     },
   ];
 
-  // Hàm chuyển tab
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
   };
 
-  // Hàm mở trang display trong tab mới
   const handleOpenDisplayPage = () => {
     if (matchCode) {
       const displayUrl = `/${matchCode}`;
       window.open(displayUrl, '_blank');
 
-      // Hiển thị toast thông báo mã đã được sử dụng và hết hạn sau 2 tiếng
       toast.info('Mã đã được sử dụng và hết hạn sau 2 tiếng từ bây giờ', {
         position: "top-center",
         autoClose: 3000,
@@ -61,7 +58,6 @@ const NewHomeLayout = ({ onNavigate }) => {
     }
   };
 
-  // Hàm lấy thông tin mã truy cập
   const loadCodeInfo = async () => {
     if (!matchCode) return;
 
@@ -71,13 +67,11 @@ const NewHomeLayout = ({ onNavigate }) => {
       setCodeInfo(response.data);
     } catch (error) {
       console.error('Lỗi khi lấy thông tin mã:', error);
-      toast.error('Không thể lấy thông tin mã truy cập');
     } finally {
       setLoadingCodeInfo(false);
     }
   };
 
-  // Load thông tin mã khi mở modal
   useEffect(() => {
     if (showAccessCodeModal && matchCode) {
       loadCodeInfo();

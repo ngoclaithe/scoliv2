@@ -311,7 +311,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Hàm kiểm tra và xử lý lỗi hết hạn truy cập
   const handleExpiredAccess = useCallback((error) => {
     if (error?.message && error.message.includes('Mã truy cập đã bị hết hạn')) {
       toast.error('Mã truy cập đã hết hạn. Đang đăng xuất...', {
@@ -319,18 +318,16 @@ export const AuthProvider = ({ children }) => {
         autoClose: 3000,
       });
 
-      // Delay logout một chút để user thấy thông báo
       setTimeout(() => {
         logout();
-        // Redirect về trang login hoặc home
         if (window.location.pathname !== '/') {
           window.location.href = '/';
         }
       }, 1000);
 
-      return true; // Đã xử lý error
+      return true; 
     }
-    return false; // Không phải lỗi hết hạn
+    return false; 
   }, [logout]);
 
   const hasAccountAccess = authType === 'account' || authType === 'full';

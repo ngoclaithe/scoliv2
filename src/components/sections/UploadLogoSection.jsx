@@ -33,13 +33,11 @@ const UploadLogoSection = () => {
     input.onchange = (e) => {
       const file = e.target.files[0];
       if (file) {
-        // Validate file size (5MB max)
         if (file.size > 5 * 1024 * 1024) {
           toast.error("Kích thước file tối đa là 5MB");
           return;
         }
         
-        // Validate file type
         const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
         if (!validTypes.includes(file.type)) {
           toast.error("Chỉ chấp nhận file ảnh (JPEG, PNG, GIF)");
@@ -71,10 +69,8 @@ const UploadLogoSection = () => {
     input.click();
   };
 
-  // Handle logo upload
   const handleUpload = async (type) => {
     if (!isAuthenticated) {
-      toast.error("Vui lòng đăng nhập để tải lên");
       return;
     }
 
@@ -88,7 +84,6 @@ const UploadLogoSection = () => {
     if (!data || !name.trim()) {
       const errorMsg = `Vui lòng nhập tên cho ${isLogo ? 'logo' : 'banner'}`;
       console.error('Lỗi upload:', errorMsg);
-      toast.error(errorMsg);
       return;
     }
 
@@ -130,19 +125,15 @@ const UploadLogoSection = () => {
           setLogoName("");
         } else {
           setUploadedBanners(prev => [uploadResult, ...prev]);
-          // Clear form sau khi upload thành công
           setBannerData(null);
           setBannerName("");
-        }
-        
-        toast.success(`Tải lên ${type === 'logo' ? 'logo' : 'banner'} thành công! Mã: ${uploadResult.code_logo}`);
+        }        
       } else {
         throw new Error('Response không hợp lệ');
       }
       
     } catch (error) {
       console.error(`Error uploading ${type}:`, error);
-      toast.error(`Lỗi khi tải lên: ${error.message || 'Có lỗi xảy ra'}`);
     } finally {
       setIsUploading(false);
     }
@@ -164,13 +155,9 @@ const UploadLogoSection = () => {
           }
         } catch (error) {
           console.error('Search error:', error);
-          // Handle different types of errors
           if (error.response && error.response.status === 404) {
-            // 404 không phải lỗi, chỉ là không tìm thấy
             setSearchResults([]);
           } else {
-            // Các lỗi khác mới hiển thị toast
-            toast.error(`Lỗi tìm kiếm: ${error.message || 'Có lỗi xảy ra'}`);
             setSearchResults([]);
           }
         } finally {
@@ -178,7 +165,6 @@ const UploadLogoSection = () => {
         }
       } else {
         setSearchResults([]);
-        // Không clear selectedLogo khi xóa search
       }
     }, 500);
 
@@ -195,8 +181,6 @@ const UploadLogoSection = () => {
       created_at: logo.created_at
     });
     setSearchResults([]);
-    // Không clear logoSearch để user biết đã search gì
-    toast.success(`Đã chọn ${logo.type_logo === 'banner' ? 'banner' : 'logo'}: ${logo.code_logo}`);
   };
 
   // Component hiển thị kết quả search với preview
@@ -281,7 +265,6 @@ const UploadLogoSection = () => {
             <button
               onClick={() => {
                 navigator.clipboard.writeText(logo.code_logo);
-                toast.success('Đã sao chép mã!');
               }}
               className="w-full px-3 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition-colors font-medium"
             >
@@ -366,7 +349,6 @@ const UploadLogoSection = () => {
           <button
             onClick={() => {
               navigator.clipboard.writeText(result.code_logo);
-              toast.success('Đã sao chép!');
             }}
             className="w-full px-1 py-0.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition-colors"
             style={{ fontSize: '10px' }}
@@ -392,7 +374,6 @@ const UploadLogoSection = () => {
   // Function để xóa logo đã chọn
   const clearSelectedLogo = () => {
     setSelectedLogo(null);
-    toast.info('Đã xóa lựa chọn');
   };
 
   return (
