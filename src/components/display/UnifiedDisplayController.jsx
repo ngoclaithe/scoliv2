@@ -93,7 +93,7 @@ const UnifiedDisplayController = () => {
 
     const params = {
       location: parseTextParam(location),
-      matchTitle: parseTextParam(matchTitle),
+      matchTitle: parseMatchTitle(matchTitle),
       liveText: parseTextParam(liveText),
       view: mapUrlViewToInternal(parseTextParam(view)),
       matchTime: parseTextParam(matchTime),
