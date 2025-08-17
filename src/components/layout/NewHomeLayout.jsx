@@ -99,7 +99,9 @@ const NewHomeLayout = () => {
                 className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
                 title="Đăng xuất"
               >
-                <span className="text-white text-sm">🚪</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
               </button>
             </div>
           </div>
@@ -156,20 +158,20 @@ const NewHomeLayout = () => {
         </div>
       </main>
 
-      {/* Footer với thông tin route dynamic */}
+      {/* Footer với thông tin liên hệ */}
       <footer className="bg-gray-800 text-white p-4 mt-8">
         <div className="max-w-7xl mx-auto">
-          {/* <div className="text-center">
-            <div className="text-sm mb-2">
-              <span className="font-semibold">Route Dynamic:</span>
-              <span className="ml-2 font-mono bg-gray-700 px-2 py-1 rounded">
-                /{matchCode || 'your-access-code'}
-              </span>
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21L6.16 10.928a11.021 11.021 0 005.931 5.931l1.541-3.064a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+              </svg>
+              <span className="text-sm font-medium text-green-400">Hỗ trợ:</span>
+              <a href="tel:0966335502" className="text-sm font-mono text-white hover:text-green-400 transition-colors">
+                0966 335 502
+              </a>
             </div>
-            <div className="text-xs text-gray-400">
-              Client1 (Admin) ➜ Socket.IO ➜ Server ➜ Socket.IO ➜ Client2 (Display)
-            </div>
-          </div> */}
+          </div>
         </div>
       </footer>
 
@@ -191,9 +193,9 @@ const NewHomeLayout = () => {
 
             <div className="bg-blue-50 rounded-lg p-3 mb-4">
               <div className="text-sm text-blue-800">
-                <div className="font-semibold mb-1">🌐 Route Dynamic:</div>
-                <div className="font-mono bg-blue-100 px-2 py-1 rounded text-blue-900">
-                  /{matchCode || 'your-access-code'}
+                <div className="font-semibold mb-1">🔗 URL:</div>
+                <div className="font-mono bg-blue-100 px-2 py-1 rounded text-blue-900 break-all">
+                  {window.location.origin}/{matchCode || 'your-access-code'}
                 </div>
               </div>
             </div>
@@ -209,16 +211,17 @@ const NewHomeLayout = () => {
                     : 'bg-gray-400 cursor-not-allowed'
                 }`}
               >
-                <span>🌐</span>
-                <span>Mở Trang Display</span>
+                <span>🔗</span>
+                <span>Mở Link</span>
               </button>
             </div>
 
             <div className="text-xs text-gray-500 space-y-1">
               <div>Chia sẻ link này với đội ngũ để họ có thể xem trực tiếp</div>
               <div className="bg-yellow-50 border border-yellow-200 rounded p-2 text-yellow-700">
-                <div className="font-medium">⏰ Lưu ý quan trọng:</div>
-                <div>Code sẽ tính giờ từ lần đầu tiên truy cập đường dẫn này</div>
+                <div className="font-medium">⏰ Thời gian hết hạn:</div>
+                <div>Code có hiệu lực trong 24 giờ kể từ lần đầu truy cập</div>
+                <div className="mt-1 text-xs">Thời gian còn lại: <span className="font-semibold">Tính toán tự động</span></div>
               </div>
             </div>
           </div>
@@ -263,7 +266,9 @@ const NewHomeLayout = () => {
                 onClick={logout}
                 className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2"
               >
-                <span>🚪</span>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
                 <span>Đăng xuất</span>
               </button>
             </div>
