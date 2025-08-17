@@ -116,34 +116,7 @@ const PosterPreviewPage = () => {
   };
 
   const renderPosterComponent = () => {
-    const selectedPoster = displaySettings?.selectedPoster;
-    let posterType = 'tretrung'; // default
-
-    if (selectedPoster) {
-      // Nếu selectedPoster là object, lấy id
-      if (typeof selectedPoster === 'object' && selectedPoster.id) {
-        posterType = selectedPoster.id;
-      } else if (typeof selectedPoster === 'string') {
-        posterType = selectedPoster;
-      }
-    }
-
-    console.log('🎨 [PosterPreviewPage] Rendering poster type:', posterType, 'selectedPoster:', selectedPoster);
-
-    // Nếu là poster tùy chỉnh (có chứa 'api-poster' hoặc 'uploaded-poster'), hiển thị ảnh trực tiếp
-    if (posterType.includes('api-poster') || posterType.includes('uploaded-poster') ||
-        (selectedPoster && selectedPoster.isCustom && selectedPoster.thumbnail)) {
-      return (
-        <div className="w-full h-full flex items-center justify-center bg-gray-100">
-          <img
-            src={selectedPoster?.thumbnail || selectedPoster?.serverData?.file_path}
-            alt={selectedPoster?.name || 'Custom Poster'}
-            className="max-w-full max-h-full object-contain"
-            style={{ maxHeight: '800px' }}
-          />
-        </div>
-      );
-    }
+    const posterType = displaySettings?.selectedPoster?.id || displaySettings?.selectedPoster || 'tretrung';
 
     // Truyền accessCode như trong DisplayController để poster components có thể sử dụng
     switch (posterType) {

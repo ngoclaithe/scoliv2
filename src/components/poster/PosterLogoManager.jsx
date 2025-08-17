@@ -37,12 +37,11 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   });
 
   const [customPosters, setCustomPosters] = useState([]);
-  const [savedPosters, setSavedPosters] = useState([]);
 
   const availablePosters = [
     {
       id: "tretrung",
-      name: "Tr�� trung",
+      name: "Trẻ trung",
       thumbnail: "/images/posters/poster1.jpg",
     },
     {
@@ -158,59 +157,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
         setLoading(true);
 
         await loadHistoryMatches();
-
-        // Load saved posters from API
-        try {
-          console.log('🎨 [PosterLogoManager] Loading saved posters from API...');
-          const posterResponse = await PosterAPI.getPosters({ accessCode });
-          console.log('🎨 [PosterLogoManager] Poster API response:', posterResponse);
-
-          if (posterResponse?.success && posterResponse?.data && Array.isArray(posterResponse.data)) {
-            const savedPosterList = posterResponse.data.map(poster => ({
-              id: `api-poster-${poster.id}`,
-              name: poster.name || 'Poster tùy chỉnh',
-              thumbnail: poster.file_path || poster.url,
-              isCustom: true,
-              uploading: false,
-              serverData: poster
-            }));
-            setSavedPosters(savedPosterList);
-          console.log(`✅ [PosterLogoManager] Loaded ${savedPosterList.length} saved posters`);
-
-          // Restore selectedPoster if it was found in API response
-          if (window.selectedPosterToRestore) {
-            const selectedPosterData = window.selectedPosterToRestore;
-            const allAvailablePosters = [...availablePosters, ...savedPosterList];
-
-            const foundPoster = allAvailablePosters.find(p =>
-              p.id === selectedPosterData ||
-              p.id === selectedPosterData?.id ||
-              (typeof selectedPosterData === 'string' && p.id.includes(selectedPosterData)) ||
-              (selectedPosterData?.serverData?.id && p.serverData?.id === selectedPosterData.serverData.id)
-            );
-
-            if (foundPoster) {
-              console.log('🎨 [PosterLogoManager] Restoring selectedPoster after loading savedPosters:', foundPoster);
-              setSelectedPoster(foundPoster);
-              if (onPosterUpdate) {
-                onPosterUpdate(foundPoster);
-              }
-            } else {
-              console.log('🎨 [PosterLogoManager] Poster not found in available posters, using selectedPoster data directly:', selectedPosterData);
-              setSelectedPoster(selectedPosterData);
-              if (onPosterUpdate) {
-                onPosterUpdate(selectedPosterData);
-              }
-            }
-
-            // Clear the temp variable
-            delete window.selectedPosterToRestore;
-          }
-          }
-        } catch (error) {
-          console.error('❌ [PosterLogoManager] Failed to load saved posters:', error);
-          setSavedPosters([]);
-        }
 
         if (initialData) {
           if (initialData.selectedPoster) {
@@ -348,13 +294,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                 });
               }
 
-              // Store selectedPoster info for later restoration
-              if (response.data.selectedPoster) {
-                console.log('🎨 [PosterLogoManager] Found selectedPoster in API response:', response.data.selectedPoster);
-                // Save the selectedPoster info to restore later when savedPosters are loaded
-                window.selectedPosterToRestore = response.data.selectedPoster;
-              }
-
               if (isMounted) {
                 console.log(`✅ [PosterLogoManager] Final loaded logos array:`, loadedLogos);
                 console.log(`✅ [PosterLogoManager] Setting ${loadedLogos.length} display settings from API`);
@@ -391,7 +330,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     return () => {
       isMounted = false;
     };
-  }, [accessCode, savedPosters, onPosterUpdate]); 
+  }, [accessCode]); 
 
   useEffect(() => {
     if (initialData) {
@@ -407,30 +346,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   useEffect(() => {
     updateSelectedLogosCount();
   }, [updateSelectedLogosCount]);
-
-  // Effect to restore selectedPoster when savedPosters change
-  useEffect(() => {
-    if (savedPosters.length > 0 && !selectedPoster && window.selectedPosterToRestore) {
-      const selectedPosterData = window.selectedPosterToRestore;
-      const allAvailablePosters = [...availablePosters, ...savedPosters];
-
-      const foundPoster = allAvailablePosters.find(p =>
-        p.id === selectedPosterData ||
-        p.id === selectedPosterData?.id ||
-        (typeof selectedPosterData === 'string' && p.id.includes(selectedPosterData)) ||
-        (selectedPosterData?.serverData?.id && p.serverData?.id === selectedPosterData.serverData.id)
-      );
-
-      if (foundPoster) {
-        console.log('🎨 [PosterLogoManager] Late restore of selectedPoster:', foundPoster);
-        setSelectedPoster(foundPoster);
-        if (onPosterUpdate) {
-          onPosterUpdate(foundPoster);
-        }
-        delete window.selectedPosterToRestore;
-      }
-    }
-  }, [savedPosters, selectedPoster, onPosterUpdate]);
 
   const handlePosterUpload = async (event) => {
     const file = event.target.files[0];
@@ -473,9 +388,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           if (response.success && response.data) {
             // Tạo poster từ response của server
             const uploadedPoster = {
-              id: `api-poster-${response.data.id}`,
-              name: response.data.name || 'Poster tùy chỉnh',
-              thumbnail: response.data.file_path || response.data.url || e.target.result,
+              id: `uploaded-poster-${response.data.id}`,
+              name: response.data.name,
+              thumbnail: response.data.file_path,
               isCustom: true,
               uploading: false,
               serverData: response.data
@@ -485,9 +400,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             setCustomPosters(prev => prev.map(poster =>
               poster.id === previewPoster.id ? uploadedPoster : poster
             ));
-
-            // Thêm vào savedPosters thay vì customPosters
-            setSavedPosters(prev => [...prev, uploadedPoster]);
 
             // Tự động chọn poster vừa upload
             handlePosterSelect(uploadedPoster);
@@ -607,21 +519,14 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             alt={poster.name}
             className="w-full h-full object-cover transition-opacity duration-200 group-hover:opacity-90"
             onError={(e) => {
-              console.warn('Failed to load poster thumbnail:', poster.thumbnail);
               e.target.style.display = 'none';
               e.target.nextSibling.style.display = 'flex';
             }}
-            crossOrigin="anonymous"
           />
         ) : null}
         <div className="w-full h-full bg-gray-200 items-center justify-center hidden">
           <span className="text-gray-500 font-medium text-xs">{poster.name}</span>
         </div>
-        {poster.uploading && (
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="text-white text-xs font-medium">⏳ Đang tải lên...</div>
-          </div>
-        )}
       </div>
 
       <div className="p-2">
@@ -893,30 +798,15 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     return !itemChanged && !callbacksChanged;
   });
 
-  const handlePosterSelect = useCallback(async (poster) => {
+  const handlePosterSelect = useCallback((poster) => {
     console.log('🎨 [PosterLogoManager] handlePosterSelect called with:', poster);
     setSelectedPoster(poster);
-
-    // Save selectedPoster to backend via DisplaySettingsAPI
-    try {
-      if (accessCode) {
-        console.log('🎨 [PosterLogoManager] Saving selectedPoster to backend:', poster);
-        // Emit to socket for real-time update
-        socketService.emit('poster_update', {
-          posterType: poster.id,
-          posterData: poster
-        });
-      }
-    } catch (error) {
-      console.error('❌ [PosterLogoManager] Failed to save selectedPoster to backend:', error);
-    }
-
     // Immediate update
     if (onPosterUpdate) {
       console.log('🎨 [PosterLogoManager] Calling onPosterUpdate immediately with:', poster);
       onPosterUpdate(poster);
     }
-  }, [onPosterUpdate, accessCode]);
+  }, [onPosterUpdate]);
 
   const handleItemUpdate = useCallback(async (itemId, updatedItem) => {
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);
@@ -1090,7 +980,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
 
 
-  const allPosters = [...availablePosters, ...savedPosters, ...customPosters];
+  const allPosters = [...availablePosters, ...customPosters];
 
   const renderPosterSection = () => {
     return (
