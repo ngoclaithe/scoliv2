@@ -93,17 +93,12 @@ const AuthAPI = {
   getMe: async () => {
     try {
       const response = await api.get('/auth/me');
+      // Kiểm tra nếu interceptor đã xử lý 401
+      if (response.data === null && response.success === false) {
+        return null;
+      }
       return response.data;
     } catch (error) {
-      // Xử lý lỗi 401 (Unauthorized) - xóa token nếu hết hạn
-      if (error.response && error.response.status === 401) {
-        localStorage.removeItem('token');
-        toast.error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.', {
-          position: "top-right",
-          autoClose: 3000,
-        });
-        return null; // Return null thay vì throw error
-      }
       throw AuthAPI.handleError(error);
     }
   },
@@ -208,7 +203,7 @@ const AuthAPI = {
    */
   handleError: (error) => {
     if (error.response) {
-      // Yêu cầu đã được gửi và server đã phản hồi với mã lỗi
+      // Yêu cầu đã được gửi và server đã phản hồi với m�� lỗi
       const { status, data } = error.response;
       const message = data?.message || 'Đã có lỗi xảy ra';
       
