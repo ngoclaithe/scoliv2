@@ -11,6 +11,7 @@ import {
   parseTeamName,
   parseMatchTitle,
   parseTextParam,
+  parseMatchTime,
   parseNumberParam
 } from '../../utils/dynamicRouteUtils';
 import { mapUrlViewToInternal } from '../../utils/viewMappingUtils';
