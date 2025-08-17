@@ -37,6 +37,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   });
 
   const [customPosters, setCustomPosters] = useState([]);
+  const [savedPosters, setSavedPosters] = useState([]);
 
   const availablePosters = [
     {
@@ -157,6 +158,29 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
         setLoading(true);
 
         await loadHistoryMatches();
+
+        // Load saved posters from API
+        try {
+          console.log('🎨 [PosterLogoManager] Loading saved posters from API...');
+          const posterResponse = await PosterAPI.getPosters({ accessCode });
+          console.log('🎨 [PosterLogoManager] Poster API response:', posterResponse);
+
+          if (posterResponse?.success && posterResponse?.data && Array.isArray(posterResponse.data)) {
+            const savedPosterList = posterResponse.data.map(poster => ({
+              id: `api-poster-${poster.id}`,
+              name: poster.name || 'Poster tùy chỉnh',
+              thumbnail: poster.file_path || poster.url,
+              isCustom: true,
+              uploading: false,
+              serverData: poster
+            }));
+            setSavedPosters(savedPosterList);
+            console.log(`✅ [PosterLogoManager] Loaded ${savedPosterList.length} saved posters`);
+          }
+        } catch (error) {
+          console.error('❌ [PosterLogoManager] Failed to load saved posters:', error);
+          setSavedPosters([]);
+        }
 
         if (initialData) {
           if (initialData.selectedPoster) {
@@ -294,6 +318,31 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                 });
               }
 
+              // Load selectedPoster from API response
+              if (response.data.selectedPoster) {
+                console.log('🎨 [PosterLogoManager] Found selectedPoster in API response:', response.data.selectedPoster);
+                // Tìm poster trong availablePosters hoặc savedPosters
+                const foundPoster = [...availablePosters, ...savedPosters].find(p =>
+                  p.id === response.data.selectedPoster ||
+                  p.id === response.data.selectedPoster?.id ||
+                  (typeof response.data.selectedPoster === 'string' && p.id.includes(response.data.selectedPoster))
+                );
+
+                if (foundPoster) {
+                  console.log('🎨 [PosterLogoManager] Restoring selectedPoster:', foundPoster);
+                  setSelectedPoster(foundPoster);
+                  if (onPosterUpdate) {
+                    onPosterUpdate(foundPoster);
+                  }
+                } else {
+                  console.log('🎨 [PosterLogoManager] Poster not found, using selectedPoster data directly:', response.data.selectedPoster);
+                  setSelectedPoster(response.data.selectedPoster);
+                  if (onPosterUpdate) {
+                    onPosterUpdate(response.data.selectedPoster);
+                  }
+                }
+              }
+
               if (isMounted) {
                 console.log(`✅ [PosterLogoManager] Final loaded logos array:`, loadedLogos);
                 console.log(`✅ [PosterLogoManager] Setting ${loadedLogos.length} display settings from API`);
@@ -330,7 +379,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     return () => {
       isMounted = false;
     };
-  }, [accessCode]); 
+  }, [accessCode, savedPosters, onPosterUpdate]); 
 
   useEffect(() => {
     if (initialData) {
@@ -400,6 +449,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             setCustomPosters(prev => prev.map(poster =>
               poster.id === previewPoster.id ? uploadedPoster : poster
             ));
+
+            // Thêm vào savedPosters thay vì customPosters
+            setSavedPosters(prev => [...prev, uploadedPoster]);
 
             // Tự động chọn poster vừa upload
             handlePosterSelect(uploadedPoster);
@@ -980,7 +1032,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
 
 
-  const allPosters = [...availablePosters, ...customPosters];
+  const allPosters = [...availablePosters, ...savedPosters, ...customPosters];
 
   const renderPosterSection = () => {
     return (
