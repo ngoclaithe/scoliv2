@@ -3,52 +3,30 @@ import { EyeIcon, EyeSlashIcon, LockClosedIcon, ShieldCheckIcon, ExclamationTria
 import Button from '../common/Button';
 import Input from '../common/Input';
 import Loading from '../common/Loading';
-import AdminAuthAPI from '../../API/apiAdminAuth';
+import { useAdminAuth } from '../../contexts/AdminAuthContext';
 
-const AdminLogin = ({ onLogin }) => {
+const AdminLogin = () => {
+  const { login, loading } = useAdminAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
 
-    try {
-      const response = await AdminAuthAPI.login({
-        email: formData.email,
-        password: formData.password
-      });
+    const result = await login({
+      email: formData.email,
+      password: formData.password
+    });
 
-      console.log('Admin login response:', response);
-
-      if (response.success) {
-        if (response.user.role === 'admin') {
-          onLogin(response.user);
-        } else {
-          setError('Bạn không có quyền truy cập vào trang quản trị');
-          AdminAuthAPI.logout();
-        }
-      } else {
-        setError(response.message || 'Thông tin đăng nhập chưa chính xác');
-      }
-    } catch (error) {
-      // console.error('Login error details:', {
-      //   message: error.message,
-      //   status: error.status,
-      //   response: error.response,
-      //   timestamp: new Date().toISOString()
-      // });
-      
-      setError('Thông tin đăng nhập chưa chính xác');
-    } finally {
-      setLoading(false);
+    if (!result.success) {
+      setError(result.error);
     }
+    // Nếu thành công, AdminAuthContext sẽ tự động redirect
   };
 
   const handleInputChange = (e) => {
