@@ -209,7 +209,7 @@ const UnifiedDisplayController = () => {
           if (verifyResult.message && (
             verifyResult.message.includes('hết hạn') ||
             verifyResult.message.includes('expired') ||
-            verifyResult.message.includes('không hợp l���')
+            verifyResult.message.includes('không hợp lệ')
           )) {
             setError(`❌ Mã truy cập đã hết hạn hoặc không hợp lệ: ${accessCode}\n\n⏰ Vui lòng liên hệ admin để cấp mã mới.`);
           } else {
@@ -222,7 +222,7 @@ const UnifiedDisplayController = () => {
 
         if (!isCleanedUp) {
           setIsInitialized(true);
-          // console.log('��� [UnifiedDisplayController] Initialized successfully');
+          // console.log('[UnifiedDisplayController] Initialized successfully');
 
           if (isDynamic && hasUrlParams) {
             const params = parseUrlParams();
@@ -262,8 +262,9 @@ const UnifiedDisplayController = () => {
   }, [accessCode, initializeSocket, handleExpiredAccess, checkIfDynamicRoute, parseUrlParams, updateSocketWithParams, canSendToSocket, hasUrlParams]);
 
   const renderPoster = (posterType) => {
-    // Kiểm tra nếu là custom poster (poster upload)
+
     const selectedPoster = displaySettings.selectedPoster;
+    console.log("Giá trị selectedPoster",selectedPoster);
     if (selectedPoster && (
       selectedPoster.isCustom ||
       (typeof posterType === 'string' && posterType.includes('api-poster'))

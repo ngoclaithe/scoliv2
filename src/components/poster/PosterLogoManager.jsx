@@ -7,12 +7,12 @@ import { getFullLogoUrl, getFullPosterUrl } from "../../utils/logoUtils";
 import socketService from "../../services/socketService";
 
 const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialData, accessCode }) => {
-  console.log('🗨️ [PosterLogoManager] Component initialized with props:', {
-    onPosterUpdate: !!onPosterUpdate,
-    onLogoUpdate: !!onLogoUpdate,
-    initialData,
-    accessCode
-  });
+  // console.log('🗨️ [PosterLogoManager] Component initialized with props:', {
+  //   onPosterUpdate: !!onPosterUpdate,
+  //   onLogoUpdate: !!onLogoUpdate,
+  //   initialData,
+  //   accessCode
+  // });
   const [selectedPoster, setSelectedPoster] = useState(null);
   const [logoItems, setLogoItems] = useState([]);
   const [apiLogos, setApiLogos] = useState([]);
@@ -85,7 +85,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     },
     {
       id: "organizing",
-      name: "TỔ CH���C",
+      name: "TỔ CHỨC",
       icon: "🏛️",
     },
     {
@@ -154,7 +154,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     const loadLogos = async () => {
       try {
-        console.log('🗨️ [PosterLogoManager] useEffect loadLogos triggered with accessCode:', accessCode);
+        // console.log('🗨️ [PosterLogoManager] useEffect loadLogos triggered with accessCode:', accessCode);
         setLoading(true);
 
         await loadHistoryMatches();
@@ -191,8 +191,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           try {
             console.log('🔍 [PosterLogoManager] Loading display settings from API for:', accessCode);
             const response = await DisplaySettingsAPI.getDisplaySettings(accessCode);
-            console.log('��� [PosterLogoManager] Full API response:', response);
-            console.log('📋 [PosterLogoManager] Response data structure:', JSON.stringify(response?.data, null, 2));
+            // console.log('[PosterLogoManager] Full API response:', response);
+            // console.log('📋 [PosterLogoManager] Response data structure:', JSON.stringify(response?.data, null, 2));
 
             if (response?.success && response?.data && isMounted) {
 
