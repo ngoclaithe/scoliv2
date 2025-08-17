@@ -137,8 +137,19 @@ const AuthAPI = {
   updateDetails: async (userData) => {
     try {
       const response = await api.put('/auth/updatedetails', userData);
+      // Kiểm tra nếu interceptor đã xử lý 401
+      if (response.data === null && response.success === false) {
+        return null;
+      }
       return response.data;
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        toast.error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.', {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        return null;
+      }
       throw AuthAPI.handleError(error);
     }
   },
@@ -153,8 +164,19 @@ const AuthAPI = {
   updatePassword: async (passwords) => {
     try {
       const response = await api.put('/auth/updatepassword', passwords);
+      // Kiểm tra nếu interceptor đã xử lý 401
+      if (response.data === null && response.success === false) {
+        return null;
+      }
       return response.data;
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        toast.error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.', {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        return null;
+      }
       throw AuthAPI.handleError(error);
     }
   },
