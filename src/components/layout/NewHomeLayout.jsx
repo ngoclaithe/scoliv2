@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useAuth } from "../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
 import Modal from "../common/Modal";
 
 // Import các section components
@@ -10,9 +9,9 @@ import CommentarySection from "../sections/CommentarySection";
 
 const NewHomeLayout = () => {
   const { user, logout, authType, hasAccountAccess, codeOnly, matchCode, clearMatchCode } = useAuth();
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("quan-ly-tran");
   const [showAccessCodeModal, setShowAccessCodeModal] = useState(false);
+  const [showUserModal, setShowUserModal] = useState(false);
 
   // Định nghĩa các tab theo yêu cầu
   const tabs = [
@@ -52,11 +51,6 @@ const NewHomeLayout = () => {
     }
   };
 
-  // Hàm quay về AccessCodeList
-  const handleBackToAccessCodeList = () => {
-    navigate('/access-code-list');
-  };
-
   // Render nội dung tab
   const renderTabContent = () => {
     switch (activeTab) {
@@ -88,21 +82,24 @@ const NewHomeLayout = () => {
               </div>
             </div>
 
-            {/* Center - Logo only */}
-            <div></div>
+            {/* Center - Access Code Info */}
+            <button
+              onClick={() => setShowAccessCodeModal(true)}
+              className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
+              title="Xem mã truy cập"
+            >
+              <span className="text-white text-sm">🔑</span>
+            </button>
 
             {/* Right - User Actions */}
             <div className="flex items-center space-x-2">
-              {/* Nút quay về AccessCodeList nếu login bằng tài khoản */}
-              {!codeOnly && (
-                <button
-                  onClick={handleBackToAccessCodeList}
-                  className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
-                  title="Quay về danh sách mã truy cập"
-                >
-                  <span className="text-white text-sm">📋</span>
-                </button>
-              )}
+              <button
+                onClick={() => setShowUserModal(true)}
+                className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
+                title="Thông tin người dùng"
+              >
+                <span className="text-white text-sm">{codeOnly ? '🔑' : '👤'}</span>
+              </button>
 
               {/* Logout Button */}
               <button
@@ -112,6 +109,15 @@ const NewHomeLayout = () => {
               >
                 <span className="text-white text-sm">🚪</span>
               </button>
+
+              {/* Support Button */}
+              <a
+                href="tel:0923415678"
+                className="flex items-center justify-center bg-white/10 rounded-full w-8 h-8 hover:bg-white/20 transition-colors"
+                title="Hotline: 0923415678"
+              >
+                <span className="text-white text-sm">📞</span>
+              </a>
             </div>
           </div>
         </div>
@@ -167,75 +173,120 @@ const NewHomeLayout = () => {
         </div>
       </main>
 
-      {/* Footer với thông tin chi tiết */}
+      {/* Footer với thông tin route dynamic */}
       <footer className="bg-gray-800 text-white p-4 mt-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center space-y-3">
-            {/* Mã truy cập */}
-            <div className="bg-gray-700 rounded-lg p-3">
-              <div className="text-sm text-gray-300 mb-1">Mã truy cập hiện tại:</div>
-              <div className="text-xl font-mono font-bold text-blue-400">
+          {/* <div className="text-center">
+            <div className="text-sm mb-2">
+              <span className="font-semibold">Route Dynamic:</span>
+              <span className="ml-2 font-mono bg-gray-700 px-2 py-1 rounded">
+                /{matchCode || 'your-access-code'}
+              </span>
+            </div>
+            <div className="text-xs text-gray-400">
+              Client1 (Admin) ➜ Socket.IO ➜ Server ➜ Socket.IO ➜ Client2 (Display)
+            </div>
+          </div> */}
+        </div>
+      </footer>
+
+      {/* Access Code Modal */}
+      <Modal
+        isOpen={showAccessCodeModal}
+        onClose={() => setShowAccessCodeModal(false)}
+        title="🔑 Mã Truy Cập"
+        size="md"
+      >
+        <div className="space-y-4">
+          <div className="text-center">
+            <div className="bg-gray-100 rounded-lg p-4 mb-4">
+              <div className="text-sm text-gray-600 mb-2">Mã truy cập hiện tại:</div>
+              <div className="text-2xl font-mono font-bold text-blue-600">
                 {matchCode || 'NO-CODE'}
               </div>
             </div>
 
-            {/* Đường dẫn */}
-            <div className="bg-blue-900/50 rounded-lg p-3">
-              <div className="text-sm text-blue-200 mb-1">🌐 Đường dẫn hiển thị:</div>
-              <div className="font-mono bg-blue-800 px-2 py-1 rounded text-blue-100 text-sm break-all">
-                {window.location.origin}/{matchCode || 'your-access-code'}
+            <div className="bg-blue-50 rounded-lg p-3 mb-4">
+              <div className="text-sm text-blue-800">
+                <div className="font-semibold mb-1">🌐 Route Dynamic:</div>
+                <div className="font-mono bg-blue-100 px-2 py-1 rounded text-blue-900">
+                  /{matchCode || 'your-access-code'}
+                </div>
               </div>
             </div>
 
-            {/* Thời gian hết hạn */}
-            {user?.expiredAt && (
-              <div className="bg-orange-900/50 rounded-lg p-3">
-                <div className="text-sm text-orange-200 mb-1">⏰ Thời gian hết hạn:</div>
-                <div className="font-mono bg-orange-800 px-2 py-1 rounded text-orange-100 text-sm">
-                  {new Date(user.expiredAt).toLocaleString('vi-VN')}
-                </div>
-              </div>
-            )}
-
-            {/* Nút mở trang hiển thị */}
-            <div className="flex space-x-2">
+            {/* Nút truy cập trang display */}
+            <div className="mb-4">
               <button
                 onClick={handleOpenDisplayPage}
                 disabled={!matchCode}
-                className={`flex-1 py-2 px-4 rounded-lg font-semibold text-white transition-colors flex items-center justify-center space-x-2 ${
-                  matchCode
-                    ? 'bg-green-600 hover:bg-green-700'
-                    : 'bg-gray-600 cursor-not-allowed'
+                className={`w-full py-3 px-4 rounded-lg font-semibold text-white transition-colors flex items-center justify-center space-x-2 ${
+                  matchCode 
+                    ? 'bg-green-500 hover:bg-green-600' 
+                    : 'bg-gray-400 cursor-not-allowed'
                 }`}
               >
                 <span>🌐</span>
-                <span className="text-sm">Mở Trang Hiển Thị</span>
+                <span>Mở Trang Display</span>
               </button>
-
-              {/* Nút gọi */}
-              <a
-                href="tel:0966335502"
-                className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2"
-                title="Hotline: 0966 335 502"
-              >
-                <span>📞</span>
-                <span className="text-sm">0966 335 502</span>
-              </a>
             </div>
 
-            {/* Ghi chú */}
-            <div className="text-xs text-gray-400 space-y-1">
-              <div>Chia sẻ link trên với đội ngũ để họ có thể xem trực tiếp</div>
-              <div className="bg-yellow-800/30 border border-yellow-600/50 rounded p-2 text-yellow-200">
+            <div className="text-xs text-gray-500 space-y-1">
+              <div>Chia sẻ link này với đội ngũ để họ có thể xem trực tiếp</div>
+              <div className="bg-yellow-50 border border-yellow-200 rounded p-2 text-yellow-700">
                 <div className="font-medium">⏰ Lưu ý quan trọng:</div>
-                <div>Code sẽ tính giờ từ lần đầu tiên truy cập đường dẫn</div>
+                <div>Code sẽ tính giờ từ lần đầu tiên truy cập đường dẫn này</div>
               </div>
             </div>
           </div>
         </div>
-      </footer>
+      </Modal>
 
+      {/* User Info Modal */}
+      <Modal
+        isOpen={showUserModal}
+        onClose={() => setShowUserModal(false)}
+        title="👤 Thông Tin Người Dùng"
+        size="md"
+      >
+        <div className="space-y-4">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-white text-2xl">{codeOnly ? '🔑' : '👤'}</span>
+            </div>
 
+            <div className="space-y-3">
+              {!codeOnly && (
+                <div className="bg-gray-100 rounded-lg p-3">
+                  <div className="text-sm text-gray-600">Tên người dùng:</div>
+                  <div className="font-semibold text-gray-800">
+                    {user?.name || 'Chưa có tên'}
+                  </div>
+                </div>
+              )}
+
+              {user?.email && (
+                <div className="bg-gray-100 rounded-lg p-3">
+                  <div className="text-sm text-gray-600">Email:</div>
+                  <div className="font-semibold text-gray-800">
+                    {user.email}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-6 pt-4 border-t border-gray-200">
+              <button
+                onClick={logout}
+                className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center space-x-2"
+              >
+                <span>🚪</span>
+                <span>Đăng xuất</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

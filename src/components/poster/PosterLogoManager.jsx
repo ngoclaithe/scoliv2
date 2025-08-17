@@ -423,20 +423,15 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               serverData: response.data
             };
 
-            // Xóa poster đang upload khỏi customPosters ngay lập tức
+            // Thay thế poster đang upload bằng poster đã upload thành công
+            setCustomPosters(prev => prev.map(poster =>
+              poster.id === previewPoster.id ? uploadedPoster : poster
+            ));
+
+            // Thêm vào savedPosters
+            setSavedPosters(prev => [...prev, uploadedPoster]);
+            // Xóa khỏi customPosters để tránh trùng lặp
             setCustomPosters(prev => prev.filter(poster => poster.id !== previewPoster.id));
-
-            // Kiểm tra xem poster đã tồn tại trong savedPosters chưa
-            setSavedPosters(prev => {
-              const exists = prev.some(p => p.serverData?.id === response.data.id);
-              if (exists) {
-                console.log('⚠️ Poster đã tồn tại, không thêm duplicate');
-                return prev;
-              }
-              console.log('✅ Thêm poster mới vào savedPosters:', uploadedPoster.name);
-              return [...prev, uploadedPoster];
-            });
-
             // Tự động chọn poster vừa upload
             handlePosterSelect(uploadedPoster);
 
@@ -522,7 +517,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           alert(`Tải lên ${item.type} thành công!`);
         }
       } catch (error) {
-        console.error("Lỗi khi tải l��n:", error);
+        console.error("Lỗi khi tải lên:", error);
 
         setLogoItems(prev => prev.map(logo =>
           logo.id === item.id
