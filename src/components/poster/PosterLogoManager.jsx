@@ -371,6 +371,13 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     const file = event.target.files[0];
     if (!file) return;
 
+    // Kiểm tra giới hạn tối đa 3 poster
+    const uploadedPostersCount = [...savedPosters, ...customPosters].length;
+    if (uploadedPostersCount >= 3) {
+      alert("Chỉ được phép upload tối đa 3 poster!");
+      return;
+    }
+
     if (file.size > 5 * 1024 * 1024) {
       alert("Kích thước file tối đa là 5MB");
       return;
