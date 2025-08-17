@@ -9,7 +9,11 @@ const PenaltyScoreboard = () => {
         matchData,
         displaySettings,
         penaltyData,
-        socketConnected
+        socketConnected,
+        sponsors,
+        organizing,
+        mediaPartners,
+        tournamentLogo
     } = usePublicMatch();
     console.log("Giá trị của penaltyData là:", penaltyData);
 
