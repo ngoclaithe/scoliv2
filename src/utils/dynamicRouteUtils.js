@@ -3,6 +3,7 @@ import { getFullLogoUrl } from './logoUtils';
 import { parseColorParam as parseColor } from './colorUtils';
 import { mapInternalViewToUrl } from './viewMappingUtils';
 import { decodeMatchTitle, decodeTextParam, encodeMatchTitle, encodeTextParam } from './urlEncodingUtils';
+import { parseMatchTimeParam, encodeMatchTimeForUrl } from './matchTimeUtils';
 
 /**
  * Tìm logo URL dựa trên logo code, trả về default nếu không tìm thấy
