@@ -265,7 +265,7 @@ const UnifiedDisplayController = () => {
 
     const selectedPoster = displaySettings.selectedPoster;
     console.log("Giá trị selectedPoster",selectedPoster);
-    if (selectedPoster && (
+    if (selectedPoster && typeof selectedPoster === 'object' && (
       selectedPoster.isCustom ||
       (typeof posterType === 'string' && posterType.includes('api-poster'))
     )) {
