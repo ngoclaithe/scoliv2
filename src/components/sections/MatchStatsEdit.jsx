@@ -657,26 +657,26 @@ const MatchStatsEdit = ({
           {/* Checkbox kiểm soát bóng */}
           <div className="flex items-center gap-4">
             <div className="flex-1">
-              <label className="flex items-center gap-2 text-sm cursor-pointer">
+              <label className="flex items-center gap-3 text-base cursor-pointer p-2 rounded-lg hover:bg-red-50 transition-colors">
                 <input
                   type="checkbox"
                   checked={teamAControlling}
                   onChange={() => handlePossessionChange('teamA')}
                   disabled={!matchStarted || matchPaused}
-                  className="w-5 h-5"
+                  className="w-6 h-6 rounded border-2 border-red-300 text-red-600 focus:ring-red-500 focus:ring-2"
                 />
-                <span className={`font-medium ${!matchStarted || matchPaused ? 'text-gray-400' : 'text-red-600'}`}>Đội A</span>
+                <span className={`font-bold text-base ${!matchStarted || matchPaused ? 'text-gray-400' : 'text-red-600'}`}>Đội A</span>
               </label>
             </div>
             <div className="flex-1">
-              <label className="flex items-center gap-2 text-sm justify-end cursor-pointer">
-                <span className={`font-medium ${!matchStarted || matchPaused ? 'text-gray-400' : 'text-gray-600'}`}>Đội B</span>
+              <label className="flex items-center gap-3 text-base justify-end cursor-pointer p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                <span className={`font-bold text-base ${!matchStarted || matchPaused ? 'text-gray-400' : 'text-gray-600'}`}>Đội B</span>
                 <input
                   type="checkbox"
                   checked={teamBControlling}
                   onChange={() => handlePossessionChange('teamB')}
                   disabled={!matchStarted || matchPaused}
-                  className="w-5 h-5"
+                  className="w-6 h-6 rounded border-2 border-gray-300 text-gray-600 focus:ring-gray-500 focus:ring-2"
                 />
               </label>
             </div>
@@ -807,7 +807,7 @@ const MatchStatsEdit = ({
           </div>
         </div>
 
-        {/* Cầu thủ ghi bàn - giữ nguyên logic */}
+        {/* Cầu thủ ghi bàn - gi��� nguyên logic */}
         <div className="py-0.5 border-t border-gray-200 pt-1">
           <div className="text-center mb-1.5">
             <span className="font-medium text-gray-700 text-sm">Sự kiện</span>
