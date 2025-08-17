@@ -9,6 +9,7 @@ import {
   findTeamLogos,
   parseColorParam,
   parseTeamName,
+  parseMatchTitle,
   parseTextParam,
   parseNumberParam
 } from '../../utils/dynamicRouteUtils';
