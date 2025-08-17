@@ -11,6 +11,7 @@ import {
   parseTextParam,
   parseNumberParam
 } from '../../utils/dynamicRouteUtils';
+import { getFullPosterUrl } from '../../utils/logoUtils';
 
 import PosterTreTrung from '../../pages/Poster-tretrung';
 import PosterHaoQuang from '../../pages/Poster-haoquang';
@@ -177,7 +178,7 @@ const DynamicDisplayController = () => {
           if (handleExpiredAccess && handleExpiredAccess(err)) {
             return;
           }
-          setError('Không thể kết nối đến hệ thống');
+          setError('Kh��ng thể kết nối đến hệ thống');
         }
       }
     };
