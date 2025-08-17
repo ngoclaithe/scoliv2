@@ -45,12 +45,23 @@ const MatchStatsEdit = ({
 
   // Khởi tạo localStats từ matchStats khi component mount
   useEffect(() => {
+    console.log('📥 Nhận dữ liệu từ backend:', {
+      matchStats,
+      possession: matchStats.possession
+    });
+
     // Xử lý possession - nếu nhận được dạng seconds từ server, tính toán %
     let possessionDisplayPercentage = { team1: 50, team2: 50 };
 
     if (matchStats.possession) {
       const team1Value = matchStats.possession.team1 || 0;
       const team2Value = matchStats.possession.team2 || 0;
+
+      console.log('🔄 Xử lý dữ liệu possession từ backend:', {
+        team1Value: `${team1Value}s`,
+        team2Value: `${team2Value}s`,
+        originalData: matchStats.possession
+      });
 
       // Luôn xử lý như seconds từ backend và lưu vào total possession
       setTotalPossessionA(team1Value * 1000); // convert to milliseconds
@@ -65,7 +76,16 @@ const MatchStatsEdit = ({
           team1: percentageA,
           team2: percentageB
         };
+        console.log('✅ Tính toán % từ backend data:', {
+          totalSeconds,
+          percentageA: `${percentageA}%`,
+          percentageB: `${percentageB}%`
+        });
+      } else {
+        console.log('⚠️ Backend trả về tổng thời gian = 0, dùng mặc định 50-50%');
       }
+    } else {
+      console.log('❌ Không có dữ liệu possession từ backend, dùng mặc định 50-50%');
     }
 
     setLocalStats({
@@ -74,6 +94,10 @@ const MatchStatsEdit = ({
       shotsOnTarget: matchStats.shotsOnTarget || { team1: 0, team2: 0 },
       corners: matchStats.corners || { team1: 0, team2: 0 },
       fouls: matchStats.fouls || { team1: 0, team2: 0 }
+    });
+
+    console.log('💾 Cập nhật localStats:', {
+      possession: possessionDisplayPercentage
     });
   }, [matchStats]);
 
@@ -172,7 +196,7 @@ const MatchStatsEdit = ({
       }
     }
 
-    // L���y dữ liệu possession (seconds để emit, percentage để hiển thị)
+    // Lấy dữ liệu possession (seconds để emit, percentage để hiển thị)
     const possessionData = calculatePossessionData();
 
     const newStats = {
@@ -299,7 +323,7 @@ const MatchStatsEdit = ({
     let currentTotalA = totalPossessionA;
     let currentTotalB = totalPossessionB;
 
-    // Thêm thời gian hiện tại nếu có đội đang kiểm soát và không bị pause
+    // Thêm thời gian hiện tại nếu c�� đội đang kiểm soát và không bị pause
     if (matchStarted && !matchPaused && currentController && possessionStartTime) {
       const currentDuration = now - possessionStartTime;
       if (currentController === 'teamA') {
