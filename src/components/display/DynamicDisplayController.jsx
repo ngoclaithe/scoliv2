@@ -192,6 +192,49 @@ const DynamicDisplayController = () => {
   }, [accessCode, initializeSocket, handleExpiredAccess, parseUrlParams, updateSocketWithParams]);
 
   const renderPoster = (posterType) => {
+    // Kiểm tra nếu posterType là object (custom poster)
+    if (typeof posterType === 'object' && posterType !== null) {
+      const customPoster = posterType;
+      // Hiển thị custom poster với ảnh từ serverData
+      const posterUrl = customPoster.thumbnail ||
+                       (customPoster.serverData?.url_poster ?
+                         `${process.env.REACT_APP_API_URL || 'http://localhost:8080'}/uploads/posters/${customPoster.serverData.url_poster}` :
+                         customPoster.url_poster);
+
+      return (
+        <div className="w-full h-screen bg-black flex items-center justify-center overflow-hidden">
+          <img
+            src={posterUrl}
+            alt={customPoster.name || 'Custom Poster'}
+            className="w-full h-full object-cover"
+            style={{
+              objectFit: 'cover',
+              width: '100vw',
+              height: '100vh'
+            }}
+            onError={(e) => {
+              console.error('Lỗi tải custom poster:', posterUrl);
+              e.target.style.display = 'none';
+              e.target.nextSibling.style.display = 'flex';
+            }}
+          />
+          {/* Fallback khi ảnh không load được */}
+          <div className="w-full h-full bg-gradient-to-br from-blue-600 to-purple-600 hidden items-center justify-center">
+            <div className="text-center text-white p-8">
+              <div className="text-8xl mb-4">🎬</div>
+              <h3 className="text-4xl font-bold mb-2">
+                {customPoster.name || 'Custom Poster'}
+              </h3>
+              <p className="text-xl opacity-90">
+                Không thể tải poster tùy chỉnh
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Xử lý poster built-in như cũ
     switch (posterType) {
       case 'haoquang':
         return <PosterHaoQuang accessCode={accessCode} />;
