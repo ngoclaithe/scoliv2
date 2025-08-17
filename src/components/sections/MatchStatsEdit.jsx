@@ -309,10 +309,10 @@ const MatchStatsEdit = ({
     if (!matchStarted || matchPaused) return;
 
     const interval = setInterval(() => {
-      const newPossessionSeconds = calculatePossessionSeconds();
+      const newPossessionData = calculatePossessionData();
       setLocalStats(prev => ({
         ...prev,
-        possession: newPossessionSeconds
+        possession: newPossessionData.percentage // Hiển thị %
       }));
     }, 1000); // Cập nhật mỗi giây
 
