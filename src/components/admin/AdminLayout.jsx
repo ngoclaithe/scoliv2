@@ -8,7 +8,8 @@ import {
   CurrencyDollarIcon,
   ChatBubbleLeftRightIcon,
   ArrowRightOnRectangleIcon,
-  CreditCardIcon
+  CreditCardIcon,
+  WifiIcon
 } from '@heroicons/react/24/outline';
 
 const AdminLayout = ({ children, currentPage, onNavigate, onLogout, adminInfo }) => {
