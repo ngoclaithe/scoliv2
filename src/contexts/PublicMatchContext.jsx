@@ -799,18 +799,17 @@ export const PublicMatchProvider = ({ children }) => {
 
   const setupRoomStatusListener = useCallback(() => {
     socketService.onRoomStatus((eventType, data) => {
-      console.log(`🏠 [PublicMatchContext] Room event: ${eventType}`, data);
+      // console.log(`🏠 [PublicMatchContext] Room event: ${eventType}`, data);
 
       if (eventType === 'room_joined' || eventType === 'join_roomed') {
-        console.log('✅ [PublicMatchContext] Successfully joined room, processing current state from join_roomed...');
+        // console.log('✅ [PublicMatchContext] Successfully joined room, processing current state from join_roomed...');
 
         if (data && data.currentState) {
           const state = data.currentState;
 
           if (state.matchData) {
-            console.log('🔄 [PublicMatchContext] Updating matchData from join_roomed:', state.matchData);
+            // console.log('🔄 [PublicMatchContext] Updating matchData from join_roomed:', state.matchData);
 
-            // Properly map backend scorers data to frontend structure
             const mappedMatchData = {
               ...state.matchData,
               round: state.matchData.round || 1,
@@ -873,7 +872,7 @@ export const PublicMatchProvider = ({ children }) => {
 
             // Process logos from displaySettings.logos if they exist
             if (state.displaySettings.logos && Array.isArray(state.displaySettings.logos)) {
-              console.log('🔄 [PublicMatchContext] Processing logos from displaySettings:', state.displaySettings.logos);
+              // console.log('🔄 [PublicMatchContext] Processing logos from displaySettings:', state.displaySettings.logos);
 
               // Separate logos by type
               const sponsorLogos = state.displaySettings.logos.filter(logo => logo.type === 'sponsors');
@@ -999,7 +998,7 @@ export const PublicMatchProvider = ({ children }) => {
             setCurrentView(state.view);
           }
 
-          console.log('✅ [PublicMatchContext] All data updated from join_roomed event');
+          // console.log('✅ [PublicMatchContext] All data updated from join_roomed event');
           setLastUpdateTime(Date.now());
         }
       } else if (eventType === 'room_error') {
@@ -1029,13 +1028,13 @@ export const PublicMatchProvider = ({ children }) => {
       setupSocketListeners();
       setupRoomStatusListener();
 
-      console.log('✅ [PublicMatchContext] Socket initialized successfully', {
-        accessCode,
-        clientType: finalClientType,
-        canSend: hasDynamicParams
-      });
+      // console.log('✅ [PublicMatchContext] Socket initialized successfully', {
+      //   accessCode,
+      //   clientType: finalClientType,
+      //   canSend: hasDynamicParams
+      // });
     } catch (error) {
-      console.error('❌ [PublicMatchContext] Failed to initialize socket:', error);
+      // console.error('❌ [PublicMatchContext] Failed to initialize socket:', error);
       setSocketConnected(false);
     }
   }, [currentAccessCode, socketConnected, setupSocketListeners, hasUrlParams]);
