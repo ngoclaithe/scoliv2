@@ -3,7 +3,7 @@ import LogoAPI from "../../API/apiLogo";
 import PosterAPI from "../../API/apiPoster";
 import DisplaySettingsAPI from "../../API/apiSettingDisplay";
 import RoomSessionAPI from "../../API/apiRoomSession";
-import { getFullLogoUrl } from "../../utils/logoUtils";
+import { getFullLogoUrl, getFullPosterUrl } from "../../utils/logoUtils";
 import socketService from "../../services/socketService";
 
 const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialData, accessCode }) => {
@@ -167,7 +167,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               const savedPosterList = posterResponse.data.map(poster => ({
                 id: `api-poster-${poster.id}`,
                 name: poster.name || 'Poster tùy chỉnh',
-                thumbnail: poster.url_poster,
+                thumbnail: getFullPosterUrl(poster.url_poster),
                 isCustom: true,
                 serverData: poster
               }));
@@ -191,7 +191,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           try {
             console.log('🔍 [PosterLogoManager] Loading display settings from API for:', accessCode);
             const response = await DisplaySettingsAPI.getDisplaySettings(accessCode);
-            console.log('📋 [PosterLogoManager] Full API response:', response);
+            console.log('��� [PosterLogoManager] Full API response:', response);
             console.log('📋 [PosterLogoManager] Response data structure:', JSON.stringify(response?.data, null, 2));
 
             if (response?.success && response?.data && isMounted) {
@@ -410,7 +410,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             const uploadedPoster = {
               id: `uploaded-poster-${response.data.id}`,
               name: response.data.name,
-              thumbnail: response.data.url_poster,
+              thumbnail: getFullPosterUrl(response.data.url_poster),
               isCustom: true,
               uploading: false,
               serverData: response.data
