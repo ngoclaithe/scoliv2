@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Button from "../common/Button";
 import Modal from "../common/Modal";
 import Loading from "../common/Loading";
+import { getFullPosterUrl } from "../../utils/logoUtils";
 
 const PosterSelector = ({
   posters = [],
@@ -27,7 +28,7 @@ const PosterSelector = ({
       <div className="aspect-video bg-gray-100 overflow-hidden">
         {poster.thumbnail ? (
           <img
-            src={poster.thumbnail}
+            src={poster.thumbnail || getFullPosterUrl(poster.serverData?.url_poster) || poster.url_poster}
             alt={poster.name}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
           />

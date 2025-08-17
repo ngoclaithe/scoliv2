@@ -11,6 +11,7 @@ import {
   parseTextParam,
   parseNumberParam
 } from '../../utils/dynamicRouteUtils';
+import { getFullPosterUrl } from '../../utils/logoUtils';
 
 import PosterTreTrung from '../../pages/Poster-tretrung';
 import PosterHaoQuang from '../../pages/Poster-haoquang';
@@ -270,7 +271,7 @@ const UnifiedDisplayController = () => {
       return (
         <div className="fixed inset-0 bg-black flex items-center justify-center">
           <img
-            src={selectedPoster.thumbnail || selectedPoster.serverData?.url_poster}
+            src={selectedPoster.thumbnail || getFullPosterUrl(selectedPoster.serverData?.url_poster)}
             alt={selectedPoster.name || 'Custom Poster'}
             className="max-w-full max-h-full object-contain"
             style={{ width: '100vw', height: '100vh', objectFit: 'cover' }}

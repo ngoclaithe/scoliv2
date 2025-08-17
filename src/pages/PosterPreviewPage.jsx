@@ -4,6 +4,7 @@ import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { useAuth } from '../contexts/AuthContext';
 import PublicAPI from '../API/apiPublic';
 import html2canvas from 'html2canvas';
+import { getFullPosterUrl } from '../utils/logoUtils';
 
 // Import các poster templates
 import PosterTretrung from './Poster-tretrung';
@@ -123,7 +124,7 @@ const PosterPreviewPage = () => {
       return (
         <div className="w-full h-full flex items-center justify-center bg-gray-100">
           <img
-            src={selectedPoster.thumbnail || selectedPoster.serverData?.url_poster}
+            src={selectedPoster.thumbnail || getFullPosterUrl(selectedPoster.serverData?.url_poster)}
             alt={selectedPoster.name || 'Custom Poster'}
             className="max-w-full max-h-full object-contain"
             style={{ maxHeight: '800px' }}
