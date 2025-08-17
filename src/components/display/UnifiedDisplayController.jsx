@@ -166,9 +166,10 @@ const UnifiedDisplayController = () => {
         }
       }
 
-      // Auto start timer nếu có matchTime (giống ControlButtons.jsx)
-      if (params.matchTime && params.matchTime !== '00:00') {
-        console.log('⏰ [UnifiedDisplayController] Auto starting timer with time:', params.matchTime);
+      // Auto start timer nếu có matchTime và view không phải poster/intro/halftime
+      const viewsWithoutTimer = ['poster', 'intro', 'halftime'];
+      if (params.matchTime && params.matchTime !== '00:00' && !viewsWithoutTimer.includes(params.view)) {
+        console.log('⏰ [UnifiedDisplayController] Auto starting timer with time:', params.matchTime, 'for view:', params.view);
 
         // Delay để đảm bảo socket đã sẵn sàng
         setTimeout(() => {
@@ -180,16 +181,12 @@ const UnifiedDisplayController = () => {
             });
 
             socketService.startServerTimer(params.matchTime, "Hiệp 1", "live");
-
-            // Switch to scoreboard view if not specified
-            if (!params.view || params.view === 'poster') {
-              console.log('👁️ [UnifiedDisplayController] Switching to scoreboard view for timer');
-              updateView('scoreboard');
-            }
           } catch (error) {
             console.error('❌ [UnifiedDisplayController] Failed to start timer:', error);
           }
         }, 2000);
+      } else if (viewsWithoutTimer.includes(params.view)) {
+        console.log('🚫 [UnifiedDisplayController] Skipping timer for view:', params.view);
       }
 
     } catch (error) {
