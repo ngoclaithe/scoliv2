@@ -148,7 +148,7 @@ export const MatchProvider = ({ children }) => {
 
       setTimeout(() => {
         socketService.requestCurrentState();
-        console.log('🔄 [MatchContext] Requested current state from server');
+        // console.log('🔄 [MatchContext] Requested current state from server');
       }, 1000); 
 
       console.log(`Socket initialized for access code: ${accessCode}`);
@@ -199,27 +199,27 @@ export const MatchProvider = ({ children }) => {
           }
 
           if (state.marqueeData) {
-            console.log('📢 [MatchContext] Updating marqueeData from room_joined:', state.marqueeData);
+            // console.log('📢 [MatchContext] Updating marqueeData from room_joined:', state.marqueeData);
             setMarqueeData(prev => ({ ...prev, ...state.marqueeData }));
           }
 
           if (state.penaltyData) {
-            console.log('⚽ [MatchContext] Updating penaltyData from room_joined:', state.penaltyData);
+            // console.log('⚽ [MatchContext] Updating penaltyData from room_joined:', state.penaltyData);
             setPenaltyData(prev => ({ ...prev, ...state.penaltyData }));
           }
 
           if (state.lineupData) {
-            console.log('📋 [MatchContext] Updating lineupData from room_joined:', state.lineupData);
+            // console.log('📋 [MatchContext] Updating lineupData from room_joined:', state.lineupData);
             setLineupData(state.lineupData);
           }
 
           if (state.futsalErrors) {
-            console.log('🚫 [MatchContext] Updating futsalErrors from room_joined:', state.futsalErrors);
+            // console.log('🚫 [MatchContext] Updating futsalErrors from room_joined:', state.futsalErrors);
             setFutsalErrors(prev => ({ ...prev, ...state.futsalErrors }));
           }
 
           if (state.sponsors) {
-            console.log('🏢 [MatchContext] Updating sponsors from room_joined:', state.sponsors);
+            // console.log('🏢 [MatchContext] Updating sponsors from room_joined:', state.sponsors);
             setSponsors(prev => ({ ...prev, ...state.sponsors }));
           }
 
@@ -260,7 +260,7 @@ export const MatchProvider = ({ children }) => {
     });
 
     socketService.on('score_updated', (data) => {
-      console.log('⚽ [MatchContext] Received score_updated:', data);
+      // console.log('⚽ [MatchContext] Received score_updated:', data);
       setMatchData(prev => ({
         ...prev,
         teamA: { ...prev.teamA, score: data.scores.teamA || data.scores.home },
@@ -413,16 +413,13 @@ export const MatchProvider = ({ children }) => {
       setLastUpdateTime(Date.now());
     });
 
-    // Lắng nghe response state hiện tại từ server
     socketService.on('current_state_response', (data) => {
-      console.log('🔄 [MatchContext] Received current_state_response:', data);
+      // console.log('🔄 [MatchContext] Received current_state_response:', data);
 
       if (data.matchData) {
-        // Tách timer data và gửi sang TimerContext
         const { matchTime, period, status, ...otherMatchData } = data.matchData;
         setMatchData(prev => ({ ...prev, ...otherMatchData }));
 
-        // Cập nhật timer data trong TimerContext
         if (matchTime || period || status) {
           updateTimerData({ matchTime, period, status });
         }
