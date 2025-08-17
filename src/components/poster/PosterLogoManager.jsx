@@ -167,7 +167,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               const savedPosterList = posterResponse.data.map(poster => ({
                 id: `api-poster-${poster.id}`,
                 name: poster.name || 'Poster tùy chỉnh',
-                thumbnail: poster.file_path || poster.url,
+                thumbnail: poster.url_poster,
                 isCustom: true,
                 serverData: poster
               }));
@@ -410,7 +410,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             const uploadedPoster = {
               id: `uploaded-poster-${response.data.id}`,
               name: response.data.name,
-              thumbnail: response.data.file_path,
+              thumbnail: response.data.url_poster,
               isCustom: true,
               uploading: false,
               serverData: response.data
@@ -607,11 +607,11 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
           if (response?.data?.length > 0) {
             const foundLogo = response.data[0];
-            if (foundLogo.url_logo || foundLogo.file_path) {
+            if (foundLogo.url_logo ) {
               onUpdate(item.id, {
                 ...item,
                 code: localCode.trim(),
-                url: getFullLogoUrl(foundLogo.url_logo || foundLogo.file_path),
+                url: getFullLogoUrl(foundLogo.url_logo ),
                 unitName: foundLogo.name || item.unitName,
                 displayPositions: [...item.displayPositions]
               });

@@ -119,12 +119,11 @@ const PosterPreviewPage = () => {
     const selectedPoster = displaySettings?.selectedPoster;
     const posterType = selectedPoster?.id || selectedPoster || 'tretrung';
 
-    // Nếu là custom poster
     if (selectedPoster?.isCustom && selectedPoster?.thumbnail) {
       return (
         <div className="w-full h-full flex items-center justify-center bg-gray-100">
           <img
-            src={selectedPoster.thumbnail || selectedPoster.serverData?.file_path}
+            src={selectedPoster.thumbnail || selectedPoster.serverData?.url_poster}
             alt={selectedPoster.name || 'Custom Poster'}
             className="max-w-full max-h-full object-contain"
             style={{ maxHeight: '800px' }}
@@ -133,7 +132,6 @@ const PosterPreviewPage = () => {
       );
     }
 
-    // Default poster templates
     switch (posterType) {
       case 'tretrung':
         return <PosterTretrung accessCode={accessCode} />;

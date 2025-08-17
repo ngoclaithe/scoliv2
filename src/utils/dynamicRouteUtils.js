@@ -21,20 +21,20 @@ export const findLogoByCode = async (logoCode, teamType = 'A') => {
   }
 
   try {
-    console.log(`🔍 [dynamicRouteUtils] Searching for logo with code: ${logoCode}`);
+    console.log(`[dynamicRouteUtils] Searching for logo with code: ${logoCode}`);
     const response = await LogoAPI.searchLogosByCode(logoCode.trim(), true);
 
     if (response?.data?.length > 0) {
       const foundLogo = response.data[0];
-      const logoUrl = getFullLogoUrl(foundLogo.url_logo || foundLogo.file_path);
-      console.log(`✅ [dynamicRouteUtils] Found logo for code ${logoCode}:`, logoUrl);
+      const logoUrl = getFullLogoUrl(foundLogo.url_logo);
+      console.log(`[dynamicRouteUtils] Found logo for code ${logoCode}:`, logoUrl);
       return logoUrl;
     } else {
-      console.log(`⚠️ [dynamicRouteUtils] No logo found for code: ${logoCode}, using default for team ${teamType}`);
+      console.log(`[dynamicRouteUtils] No logo found for code: ${logoCode}, using default for team ${teamType}`);
       return defaultLogos[teamType] || defaultLogos.A;
     }
   } catch (error) {
-    console.log(`⚠️ [dynamicRouteUtils] Error finding logo for code ${logoCode}, using default for team ${teamType}:`, error.message);
+    console.log(`[dynamicRouteUtils] Error finding logo for code ${logoCode}, using default for team ${teamType}:`, error.message);
     return defaultLogos[teamType] || defaultLogos.A;
   }
 };
