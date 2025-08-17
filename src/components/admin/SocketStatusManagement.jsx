@@ -139,7 +139,7 @@ const SocketStatusManagement = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Trạng thái Server Socket</h1>
-          <p className="text-gray-600 mt-1">Giám sát tình trạng kết nối và ho��t động của socket server</p>
+          <p className="text-gray-600 mt-1">Giám sát tình trạng kết nối và hoạt động của socket server</p>
         </div>
         <div className="flex items-center gap-3">
           {lastUpdate && (
@@ -430,20 +430,6 @@ const SocketStatusManagement = () => {
                     new Date(socketStatus.data.timestamp).toLocaleString('vi-VN')
                     : 'N/A'
                   }
-                </dd>
-              </div>
-              <div>
-                <dt className="text-sm font-medium text-gray-500">Node.js Version</dt>
-                <dd className="mt-1 text-sm text-gray-900">{socketStatus.data.nodeVersion || 'N/A'}</dd>
-              </div>
-              <div>
-                <dt className="text-sm font-medium text-gray-500">Platform</dt>
-                <dd className="mt-1 text-sm text-gray-900">{socketStatus.data.platform || 'N/A'}</dd>
-              </div>
-              <div>
-                <dt className="text-sm font-medium text-gray-500">CPU Usage</dt>
-                <dd className="mt-1 text-sm text-gray-900">
-                  {socketStatus.data.cpuUsage ? `${socketStatus.data.cpuUsage.toFixed(2)}%` : 'N/A'}
                 </dd>
               </div>
             </dl>
