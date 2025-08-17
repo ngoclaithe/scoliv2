@@ -168,17 +168,14 @@ const MatchStatsEdit = ({
       }
     }
 
-    // Chuyển đổi từ milliseconds sang seconds cho possession
-    const possessionSeconds = {
-      team1: Math.round(currentTotalA / 1000),
-      team2: Math.round(currentTotalB / 1000)
-    };
+    // Lấy dữ liệu possession (seconds để emit, percentage để hiển thị)
+    const possessionData = calculatePossessionData();
 
     const newStats = {
       ...matchStats,
       ...localStats,
-      // Gửi possession dưới dạng seconds thay vì percentage
-      possession: possessionSeconds
+      // Gửi possession dưới dạng seconds cho backend/socket
+      possession: possessionData.seconds
     };
     onUpdateStats(newStats);
   };
