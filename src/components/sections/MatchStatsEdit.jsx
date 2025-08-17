@@ -45,12 +45,23 @@ const MatchStatsEdit = ({
 
   // Khởi tạo localStats từ matchStats khi component mount
   useEffect(() => {
+    console.log('📥 Nhận dữ liệu từ backend:', {
+      matchStats,
+      possession: matchStats.possession
+    });
+
     // Xử lý possession - nếu nhận được dạng seconds từ server, tính toán %
     let possessionDisplayPercentage = { team1: 50, team2: 50 };
 
     if (matchStats.possession) {
       const team1Value = matchStats.possession.team1 || 0;
       const team2Value = matchStats.possession.team2 || 0;
+
+      console.log('🔄 Xử lý dữ liệu possession từ backend:', {
+        team1Value: `${team1Value}s`,
+        team2Value: `${team2Value}s`,
+        originalData: matchStats.possession
+      });
 
       // Luôn xử lý như seconds từ backend và lưu vào total possession
       setTotalPossessionA(team1Value * 1000); // convert to milliseconds
@@ -65,7 +76,16 @@ const MatchStatsEdit = ({
           team1: percentageA,
           team2: percentageB
         };
+        console.log('✅ Tính toán % từ backend data:', {
+          totalSeconds,
+          percentageA: `${percentageA}%`,
+          percentageB: `${percentageB}%`
+        });
+      } else {
+        console.log('⚠️ Backend trả về tổng thời gian = 0, dùng mặc định 50-50%');
       }
+    } else {
+      console.log('❌ Không có dữ liệu possession từ backend, dùng mặc định 50-50%');
     }
 
     setLocalStats({
@@ -74,6 +94,10 @@ const MatchStatsEdit = ({
       shotsOnTarget: matchStats.shotsOnTarget || { team1: 0, team2: 0 },
       corners: matchStats.corners || { team1: 0, team2: 0 },
       fouls: matchStats.fouls || { team1: 0, team2: 0 }
+    });
+
+    console.log('💾 Cập nhật localStats:', {
+      possession: possessionDisplayPercentage
     });
   }, [matchStats]);
 
@@ -197,9 +221,19 @@ const MatchStatsEdit = ({
     const existingA = matchStats.possession?.team1 || 0;
     const existingB = matchStats.possession?.team2 || 0;
 
+    console.log('🚀 Trận đấu bắt đầu:', {
+      startTime: new Date(startTime).toLocaleTimeString(),
+      existingPossessionA: existingA,
+      existingPossessionB: existingB,
+      backendData: matchStats.possession
+    });
+
     if (existingA === 0 && existingB === 0) {
       setTotalPossessionA(0);
       setTotalPossessionB(0);
+      console.log('✅ Reset possession về 0 vì backend trả về 0 hoặc null');
+    } else {
+      console.log('⚠️ Giữ nguyên possession từ backend:', { existingA, existingB });
     }
     // Nếu có dữ liệu từ backend, giữ nguyên và tiếp tục đếm
   };
@@ -230,17 +264,43 @@ const MatchStatsEdit = ({
   const handlePossessionChange = (team) => {
     const now = Date.now();
 
-    if (!matchStarted || !matchStartTime || matchPaused) return;
+    if (!matchStarted || !matchStartTime || matchPaused) {
+      console.log('⛔ Không thể thay đổi kiểm soát bóng:', {
+        matchStarted,
+        matchStartTime: matchStartTime ? new Date(matchStartTime).toLocaleTimeString() : null,
+        matchPaused
+      });
+      return;
+    }
 
     // Cập nhật thời gian kiểm soát của đội trước đó
     if (currentController && possessionStartTime) {
       const duration = now - possessionStartTime;
+      console.log(`⏱️ Kết thúc kiểm soát của ${currentController}:`, {
+        duration: `${duration}ms`,
+        durationSeconds: Math.round(duration / 1000)
+      });
+
       if (currentController === 'teamA') {
-        setTotalPossessionA(prev => prev + duration);
+        setTotalPossessionA(prev => {
+          const newTotal = prev + duration;
+          console.log(`🔴 Team A possession: ${prev}ms + ${duration}ms = ${newTotal}ms`);
+          return newTotal;
+        });
       } else if (currentController === 'teamB') {
-        setTotalPossessionB(prev => prev + duration);
+        setTotalPossessionB(prev => {
+          const newTotal = prev + duration;
+          console.log(`⚪ Team B possession: ${prev}ms + ${duration}ms = ${newTotal}ms`);
+          return newTotal;
+        });
       }
     }
+
+    console.log(`🎯 Chuyển kiểm soát bóng sang ${team}:`, {
+      previousController: currentController,
+      newController: team,
+      time: new Date(now).toLocaleTimeString()
+    });
 
     // Cập nhật đội hiện tại kiểm soát
     setCurrentController(team);
@@ -263,7 +323,7 @@ const MatchStatsEdit = ({
     let currentTotalA = totalPossessionA;
     let currentTotalB = totalPossessionB;
 
-    // Thêm thời gian hiện tại nếu có đội đang kiểm soát và không bị pause
+    // Thêm thời gian hiện tại nếu c�� đội đang kiểm soát và không bị pause
     if (matchStarted && !matchPaused && currentController && possessionStartTime) {
       const currentDuration = now - possessionStartTime;
       if (currentController === 'teamA') {
@@ -276,6 +336,18 @@ const MatchStatsEdit = ({
     const secondsA = Math.round(currentTotalA / 1000);
     const secondsB = Math.round(currentTotalB / 1000);
     const totalSeconds = secondsA + secondsB;
+
+    console.log('🏈 DEBUG Kiểm soát bóng:', {
+      matchStarted,
+      matchPaused,
+      currentController,
+      possessionStartTime: possessionStartTime ? new Date(possessionStartTime).toLocaleTimeString() : null,
+      totalPossessionA: `${totalPossessionA}ms (${secondsA}s)`,
+      totalPossessionB: `${totalPossessionB}ms (${secondsB}s)`,
+      totalSeconds,
+      teamAControlling,
+      teamBControlling
+    });
 
     // Tính % kiểm soát bóng
     let percentageA = 0;
@@ -295,9 +367,26 @@ const MatchStatsEdit = ({
         }
       }
     } else {
-      percentageA = 50;
-      percentageB = 50;
+      // VẤN ĐỀ: Khi chưa có thời gian kiểm soát nào, cần kiểm tra xem có đội nào đang được chọn không
+      // Thay vì mặc định 50-50, nên là 100-0 cho đội đang được chọn
+      if (currentController === 'teamA' || teamAControlling) {
+        percentageA = 100;
+        percentageB = 0;
+      } else if (currentController === 'teamB' || teamBControlling) {
+        percentageA = 0;
+        percentageB = 100;
+      } else {
+        // Chỉ khi không có đội nào được chọn thì mới 50-50
+        percentageA = 50;
+        percentageB = 50;
+      }
     }
+
+    console.log('📊 Tỉ lệ kiểm soát bóng:', {
+      percentageA: `${percentageA}%`,
+      percentageB: `${percentageB}%`,
+      totalPercentage: percentageA + percentageB
+    });
 
     return {
       seconds: { team1: secondsA, team2: secondsB },
