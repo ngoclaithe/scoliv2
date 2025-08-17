@@ -1,5 +1,6 @@
 import React from "react";
 import Loading from "../common/Loading";
+import { getFullPosterUrl } from "../../utils/logoUtils";
 
 const PosterPreview = ({
   poster,
@@ -29,7 +30,7 @@ const PosterPreview = ({
             {poster.thumbnail ? (
               <div className="w-full">
                 <img
-                  src={poster.thumbnail}
+                  src={poster.thumbnail || getFullPosterUrl(poster.serverData?.url_poster) || poster.url_poster}
                   alt={poster.name}
                   className="w-full h-auto rounded-lg shadow-sm"
                   style={{ 
