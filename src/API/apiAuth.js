@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import TokenUtils from '../utils/tokenUtils';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://192.168.31.186:5000/api/v1';
 
@@ -12,7 +13,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = TokenUtils.getUserToken();
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -31,7 +32,7 @@ api.interceptors.response.use(
       // Chỉ xử lý 401 cho auth-related endpoints
       const isAuthEndpoint = error.config.url.includes('/auth');
       if (isAuthEndpoint) {
-        localStorage.removeItem('token');
+        TokenUtils.removeUserToken();
         toast.error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.', {
           position: "top-right",
           autoClose: 3000,
