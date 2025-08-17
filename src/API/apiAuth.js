@@ -23,6 +23,27 @@ api.interceptors.request.use(
   }
 );
 
+// Response interceptor để xử lý 401 errors
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Chỉ xử lý 401 cho auth-related endpoints
+      const isAuthEndpoint = error.config.url.includes('/auth');
+      if (isAuthEndpoint) {
+        localStorage.removeItem('token');
+        toast.error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.', {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        // Không throw error, return rejected promise với null data
+        return Promise.resolve({ data: null, success: false, message: 'Unauthorized' });
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 const AuthAPI = {
   /**
    * Đăng ký tài khoản mới
@@ -201,7 +222,7 @@ const AuthAPI = {
       return new Error(`Lỗi (${status}): ${errorMessage}`);
     } else if (error.request) {
       // Yêu cầu đã được gửi nhưng không nhận được phản hồi
-      return new Error('Không nhận được ph��n hồi từ máy chủ. Vui lòng kiểm tra kết nối mạng.');
+      return new Error('Không nhận được phản hồi từ máy chủ. Vui lòng kiểm tra kết nối mạng.');
     } else {
       // Lỗi khi thiết lập yêu cầu
       return new Error(`Lỗi yêu cầu: ${error.message}`);
