@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://192.168.31.186:5000/api/v1';
 
@@ -144,7 +145,7 @@ const AuthAPI = {
 
   /**
    * Đăng xuất
-   * @returns {Promise<Object>} Kết quả đăng xuất
+   * @returns {Promise<Object>} Kết qu�� đăng xuất
    */
   logout: async () => {
     try {
