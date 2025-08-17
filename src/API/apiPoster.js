@@ -72,9 +72,9 @@ const PosterAPI = {
   },
 
   // Lấy thông tin chi tiết poster
-  getPoster: async (id) => {
+  getPosterByAccesscode: async (accessCode) => {
     try {
-      const response = await api.get(`/posters/${id}`);
+      const response = await api.get(`/posters/access-code/${accessCode}`);
       return response.data;
     } catch (error) {
       throw PosterAPI.handleError(error);

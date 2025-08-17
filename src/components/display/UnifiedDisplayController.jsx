@@ -224,7 +224,7 @@ const UnifiedDisplayController = () => {
 
         // Load saved posters từ API giống PosterLogoManager
         try {
-          const posterResponse = await PosterAPI.getPosters({ accessCode });
+          const posterResponse = await PosterAPI.getPosterByAccesscode({ accessCode });
           if (posterResponse?.success && posterResponse?.data) {
             const savedPosterList = posterResponse.data.map(poster => ({
               id: `api-poster-${poster.id}`,

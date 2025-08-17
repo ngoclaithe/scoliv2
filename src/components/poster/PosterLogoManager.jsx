@@ -114,16 +114,16 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
   const loadHistoryMatches = async () => {
     try {
-      console.log('🔍 [PosterLogoManager] Loading history matches from API...');
+      // console.log('🔍 [PosterLogoManager] Loading history matches from API...');
       const response = await RoomSessionAPI.getHistoryMatches();
-      console.log('📋 [PosterLogoManager] History matches response:', response);
-      console.log('📋 [PosterLogoManager] History matches response structure:', JSON.stringify(response, null, 2));
+      // console.log('📋 [PosterLogoManager] History matches response:', response);
+      // console.log('📋 [PosterLogoManager] History matches response structure:', JSON.stringify(response, null, 2));
 
       if (response?.success && response?.data && Array.isArray(response.data)) {
-        console.log('📋 [PosterLogoManager] Processing', response.data.length, 'history matches');
+        // console.log('📋 [PosterLogoManager] Processing', response.data.length, 'history matches');
         const transformedMatches = response.data.map(match => {
           const displaySettings = match.accessCodeInfo?.displaySettings || [];
-          console.log('📋 [PosterLogoManager] Match:', match.accessCode, 'has', displaySettings.length, 'display settings');
+          // console.log('📋 [PosterLogoManager] Match:', match.accessCode, 'has', displaySettings.length, 'display settings');
           return {
             id: match.id,
             accessCode: match.accessCode,
@@ -159,10 +159,10 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
         await loadHistoryMatches();
 
-        // Load saved posters từ API
         if (accessCode) {
           try {
-            const posterResponse = await PosterAPI.getPosters({ accessCode });
+            const posterResponse = await PosterAPI.getPosterByAccesscode({ accessCode });
+            console.log("Giá trị posterResponse ", posterResponse);
             if (posterResponse?.success && posterResponse?.data) {
               const savedPosterList = posterResponse.data.map(poster => ({
                 id: `api-poster-${poster.id}`,
