@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import socketService from '../services/socketService';
 import audioUtils from '../utils/audioUtils';
 import { logRouteInfo, logSocketOperation } from '../utils/contextDebug';
+import { mapUrlViewToInternal } from '../utils/viewMappingUtils';
 
 const PublicMatchContext = createContext();
 
@@ -133,7 +134,28 @@ export const PublicMatchProvider = ({ children }) => {
     showMediaPartners: true
   });
 
-  const [currentView, setCurrentView] = useState('poster');
+  // Khởi tạo currentView từ URL params nếu có, nếu không thì dùng 'poster'
+  const getInitialView = () => {
+    const { view } = params;
+    if (view) {
+      const mappedView = mapUrlViewToInternal(view);
+      console.log('🎨 [PublicMatchContext] Initial view from URL:', view, '->', mappedView);
+      return mappedView;
+    }
+    return 'poster';
+  };
+
+  const [currentView, setCurrentView] = useState(getInitialView());
+
+  // Cập nhật currentView khi URL params thay đổi
+  useEffect(() => {
+    const { view } = params;
+    if (view) {
+      const mappedView = mapUrlViewToInternal(view);
+      console.log('🔄 [PublicMatchContext] URL view changed:', view, '->', mappedView);
+      setCurrentView(mappedView);
+    }
+  }, [params.view]);
 
   const [lineupData, setLineupData] = useState({
     teamA: [],

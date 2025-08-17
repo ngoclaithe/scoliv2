@@ -248,8 +248,13 @@ const UnifiedDisplayController = () => {
             // console.log('🔧 [UnifiedDisplayController] canSendToSocket:', canSendToSocket);
 
             if (params && Object.keys(params).length > 0) {
-              // console.log('⏰ [UnifiedDisplayController] Setting timeout to update socket params...');
+              // Cập nhật view ngay lập tức nếu có trong URL
+              if (params.view) {
+                console.log('👁️ [UnifiedDisplayController] Setting view immediately from URL:', params.view);
+                updateView(params.view);
+              }
 
+              // console.log('⏰ [UnifiedDisplayController] Setting timeout to update socket params...');
               setTimeout(() => {
                 updateSocketWithParams(params);
               }, 1500);
