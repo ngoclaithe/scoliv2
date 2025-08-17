@@ -208,7 +208,7 @@ const UnifiedDisplayController = () => {
           if (verifyResult.message && (
             verifyResult.message.includes('hết hạn') ||
             verifyResult.message.includes('expired') ||
-            verifyResult.message.includes('không hợp lệ')
+            verifyResult.message.includes('không hợp l���')
           )) {
             setError(`❌ Mã truy cập đã hết hạn hoặc không hợp lệ: ${accessCode}\n\n⏰ Vui lòng liên hệ admin để cấp mã mới.`);
           } else {
@@ -262,13 +262,16 @@ const UnifiedDisplayController = () => {
 
   const renderPoster = (posterType) => {
     // Kiểm tra nếu là custom poster (poster upload)
-    if (displaySettings.selectedPoster && displaySettings.selectedPoster.isCustom) {
-      const customPoster = displaySettings.selectedPoster;
+    const selectedPoster = displaySettings.selectedPoster;
+    if (selectedPoster && (
+      selectedPoster.isCustom ||
+      (typeof posterType === 'string' && posterType.includes('api-poster'))
+    )) {
       return (
         <div className="fixed inset-0 bg-black flex items-center justify-center">
           <img
-            src={customPoster.thumbnail || customPoster.serverData?.file_path}
-            alt={customPoster.name}
+            src={selectedPoster.thumbnail || selectedPoster.serverData?.url_poster}
+            alt={selectedPoster.name || 'Custom Poster'}
             className="max-w-full max-h-full object-contain"
             style={{ width: '100vw', height: '100vh', objectFit: 'cover' }}
           />

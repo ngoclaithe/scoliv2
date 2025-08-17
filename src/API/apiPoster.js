@@ -47,9 +47,15 @@ const PosterAPI = {
   getPosters: async (filters = {}) => {
     try {
       const params = new URLSearchParams();
-      
+
       if (filters.name) {
         params.append('name', filters.name);
+      }
+      if (filters.accessCode) {
+        params.append('accessCode', filters.accessCode);
+      }
+      if (filters.accessCode) {
+        params.append('accessCode', filters.accessCode);
       }
       if (filters.sortBy) {
         params.append('sortBy', filters.sortBy);

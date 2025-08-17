@@ -116,9 +116,22 @@ const PosterPreviewPage = () => {
   };
 
   const renderPosterComponent = () => {
-    const posterType = displaySettings?.selectedPoster?.id || displaySettings?.selectedPoster || 'tretrung';
+    const selectedPoster = displaySettings?.selectedPoster;
+    const posterType = selectedPoster?.id || selectedPoster || 'tretrung';
 
-    // Truyền accessCode như trong DisplayController để poster components có thể sử dụng
+    if (selectedPoster?.isCustom && selectedPoster?.thumbnail) {
+      return (
+        <div className="w-full h-full flex items-center justify-center bg-gray-100">
+          <img
+            src={selectedPoster.thumbnail || selectedPoster.serverData?.url_poster}
+            alt={selectedPoster.name || 'Custom Poster'}
+            className="max-w-full max-h-full object-contain"
+            style={{ maxHeight: '800px' }}
+          />
+        </div>
+      );
+    }
+
     switch (posterType) {
       case 'tretrung':
         return <PosterTretrung accessCode={accessCode} />;
