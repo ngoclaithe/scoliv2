@@ -55,7 +55,7 @@ const AppRoutes = () => {
         } />
       </Routes>
 
-      {/* <ToastContainer
+      <ToastContainer
         position="top-left"
         autoClose={3000}
         hideProgressBar={false}
@@ -68,7 +68,7 @@ const AppRoutes = () => {
         theme="light"
         toastClassName="custom-toast"
         bodyClassName="custom-toast-body"
-      /> */}
+      />
     </>
   );
 };
