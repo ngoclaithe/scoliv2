@@ -430,6 +430,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
             // Thêm vào savedPosters
             setSavedPosters(prev => [...prev, uploadedPoster]);
+            // Xóa khỏi customPosters để tránh trùng lặp
+            setCustomPosters(prev => prev.filter(poster => poster.id !== previewPoster.id));
             // Tự động chọn poster vừa upload
             handlePosterSelect(uploadedPoster);
 
@@ -1021,15 +1023,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     return (
       <div className="space-y-1">
-        {/* Hiển thị số lượng poster đã upload */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <span className="text-xs">🖼️</span>
-            <h3 className="text-xs font-semibold text-gray-900">Poster Template</h3>
-          </div>
-          <span className="text-xs text-gray-500">
-            Đã upload: {uploadedPostersCount}/1
-          </span>
+        <div className="flex items-center gap-1">
+          <span className="text-xs">🖼️</span>
+          <h3 className="text-xs font-semibold text-gray-900">Poster Template</h3>
         </div>
 
         <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
@@ -1064,19 +1060,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                     <span className="text-xs text-gray-500 font-medium">Thêm poster</span>
                   </div>
                 </label>
-              </div>
-            </div>
-          )}
-          {/* Thông báo khi đã đủ 1 poster */}
-          {!canUploadMore && (
-            <div className="flex-none w-24">
-              <div className="relative bg-gray-100 rounded-lg overflow-hidden shadow-md border-2 border-dashed border-gray-300">
-                <div className="aspect-video bg-gray-100 flex flex-col items-center justify-center">
-                  <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center mb-1">
-                    <span className="text-lg text-gray-500">✓</span>
-                  </div>
-                  <span className="text-xs text-gray-500 font-medium px-1 text-center">Đã đủ 1 poster</span>
-                </div>
               </div>
             </div>
           )}
@@ -1264,6 +1247,12 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           </div>
         </div>
 
+        {isCustomPosterSelected && (
+          <div className="text-xs text-red-600 bg-red-50 p-1 rounded border">
+            ⚠️ Đã chọn poster tùy chỉnh - logo & banner bị khóa
+          </div>
+        )}
+
         <div className="flex flex-wrap gap-0.5">
           {logoTypes.map((type) => (
             <button
@@ -1441,17 +1430,30 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
         {renderPosterSection()}
       </div>
 
-      {/* Chỉ hiện các section này khi KHÔNG chọn custom poster */}
-      {!isCustomPosterSelected && (
-        <>
-          <div className="bg-white border border-gray-200 rounded-lg p-2">
-            {renderLogoSection()}
+      {/* Logo & Banner section - disabled khi chọn custom poster */}
+      <div className={`bg-white border border-gray-200 rounded-lg p-2 ${isCustomPosterSelected ? 'opacity-50 pointer-events-none' : ''}`}>
+        {renderLogoSection()}
+      </div>
+
+      {/* Display options section - disabled khi chọn custom poster */}
+      <div className={`bg-white border border-gray-200 rounded-lg p-2 ${isCustomPosterSelected ? 'opacity-50 pointer-events-none' : ''}`}>
+        <div className="text-xs font-medium text-gray-700 mb-2">Tùy chọn hiển thị</div>
+        {isCustomPosterSelected && (
+          <div className="text-xs text-red-600 bg-red-50 p-1 rounded border mb-2">
+            ⚠️ Đã chọn poster tùy chỉnh - tùy chọn hiển thị bị khóa
           </div>
-          <div className="bg-white border border-gray-200 rounded-lg p-2">
-            {renderRoundGroupSection()}
+        )}
+      </div>
+
+      {/* Round & Group section - disabled khi chọn custom poster */}
+      <div className={`bg-white border border-gray-200 rounded-lg p-2 ${isCustomPosterSelected ? 'opacity-50 pointer-events-none' : ''}`}>
+        {renderRoundGroupSection()}
+        {isCustomPosterSelected && (
+          <div className="text-xs text-red-600 bg-red-50 p-1 rounded border mt-2">
+            ⚠️ Đã chọn poster tùy chỉnh - vòng đấu & bảng đấu bị khóa
           </div>
-        </>
-      )}
+        )}
+      </div>
 
       <div className="bg-white border border-gray-200 rounded-lg p-2">
         <div className="flex justify-center">
