@@ -233,6 +233,48 @@ const SocketStatusManagement = () => {
           </div>
         </div>
 
+        {/* User Sessions */}
+        <div className="bg-white overflow-hidden shadow-lg rounded-xl border border-slate-200">
+          <div className="p-6">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="bg-indigo-50 p-3 rounded-xl">
+                  <UsersIcon className="h-6 w-6 text-indigo-600" />
+                </div>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-medium text-slate-600 truncate">User Sessions</dt>
+                  <dd className="text-2xl font-bold text-slate-900">
+                    {socketStatus?.data?.userSessions || 0}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Timer Intervals */}
+        <div className="bg-white overflow-hidden shadow-lg rounded-xl border border-slate-200">
+          <div className="p-6">
+            <div className="flex items-center">
+              <div className="flex-shrink-0">
+                <div className="bg-yellow-50 p-3 rounded-xl">
+                  <ClockIcon className="h-6 w-6 text-yellow-600" />
+                </div>
+              </div>
+              <div className="ml-5 w-0 flex-1">
+                <dl>
+                  <dt className="text-sm font-medium text-slate-600 truncate">Timer Intervals</dt>
+                  <dd className="text-2xl font-bold text-slate-900">
+                    {socketStatus?.data?.timerIntervals || 0}
+                  </dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Uptime */}
         <div className="bg-white overflow-hidden shadow-lg rounded-xl border border-slate-200">
           <div className="p-6">
