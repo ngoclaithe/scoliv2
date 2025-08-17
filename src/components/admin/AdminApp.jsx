@@ -8,6 +8,7 @@ import CodePurchaseManagement from './CodePurchaseManagement';
 import PaymentInfoManagement from './PaymentInfoManagement';
 import ActiveRoomManagement from './ActiveRoomManagement';
 import LogoManagement from './LogoManagement';
+import SocketStatusManagement from './SocketStatusManagement';
 import AuthAPI from '../../API/apiAuth';
 import Loading from '../common/Loading';
 
