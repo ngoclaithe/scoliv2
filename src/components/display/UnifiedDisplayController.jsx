@@ -12,6 +12,7 @@ import {
   parseTextParam,
   parseNumberParam
 } from '../../utils/dynamicRouteUtils';
+import { mapUrlViewToInternal } from '../../utils/viewMappingUtils';
 import { getFullPosterUrl } from '../../utils/logoUtils';
 
 import PosterTreTrung from '../../pages/Poster-tretrung';
@@ -93,7 +94,7 @@ const UnifiedDisplayController = () => {
       location: parseTextParam(location),
       matchTitle: parseTextParam(matchTitle),
       liveText: parseTextParam(liveText),
-      view: parseTextParam(view),
+      view: mapUrlViewToInternal(parseTextParam(view)),
       matchTime: parseTextParam(matchTime),
       teamA: {
         name: parseTeamName(teamAName, 'ĐỘI-A'),
@@ -137,7 +138,7 @@ const UnifiedDisplayController = () => {
       }
 
       if (params.view) {
-        // console.log('👁️ [UnifiedDisplayController] Updating view via context:', params.view);
+        console.log('👁️ [UnifiedDisplayController] Updating view via context:', params.view);
         updateView(params.view);
       }
 
