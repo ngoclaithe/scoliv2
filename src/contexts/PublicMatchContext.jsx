@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import socketService from '../services/socketService';
 import audioUtils from '../utils/audioUtils';
@@ -146,6 +146,16 @@ export const PublicMatchProvider = ({ children }) => {
   };
 
   const [currentView, setCurrentView] = useState(getInitialView());
+
+  // Cập nhật currentView khi URL params thay đổi
+  useEffect(() => {
+    const { view } = params;
+    if (view) {
+      const mappedView = mapUrlViewToInternal(view);
+      console.log('🔄 [PublicMatchContext] URL view changed:', view, '->', mappedView);
+      setCurrentView(mappedView);
+    }
+  }, [params.view]);
 
   const [lineupData, setLineupData] = useState({
     teamA: [],
