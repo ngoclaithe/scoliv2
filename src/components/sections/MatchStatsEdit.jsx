@@ -190,8 +190,17 @@ const MatchStatsEdit = ({
     setMatchStartTime(startTime);
     setPossessionStartTime(startTime);
     setCurrentController(null);
-    setTotalPossessionA(0);
-    setTotalPossessionB(0);
+
+    // Không reset possession nếu đã có dữ liệu từ backend
+    // Chỉ reset khi chưa có dữ liệu
+    const existingA = matchStats.possession?.team1 || 0;
+    const existingB = matchStats.possession?.team2 || 0;
+
+    if (existingA === 0 && existingB === 0) {
+      setTotalPossessionA(0);
+      setTotalPossessionB(0);
+    }
+    // Nếu có dữ liệu từ backend, giữ nguyên và tiếp tục đếm
   };
 
   const pauseMatch = () => {
@@ -660,7 +669,7 @@ const MatchStatsEdit = ({
             </div>
             <div className="flex-1">
               <label className="flex items-center gap-1 text-xs justify-end">
-                <span className={`font-medium ${!matchStarted || matchPaused ? 'text-gray-400' : 'text-gray-600'}`}>Đội B kiểm so��t</span>
+                <span className={`font-medium ${!matchStarted || matchPaused ? 'text-gray-400' : 'text-gray-600'}`}>Đội B kiểm soát</span>
                 <input
                   type="checkbox"
                   checked={teamBControlling}
