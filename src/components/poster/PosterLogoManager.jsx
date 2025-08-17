@@ -371,10 +371,10 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     const file = event.target.files[0];
     if (!file) return;
 
-    // Kiểm tra giới hạn tối đa 3 poster
+    // Kiểm tra giới hạn tối đa 1 poster
     const uploadedPostersCount = [...savedPosters, ...customPosters].length;
-    if (uploadedPostersCount >= 3) {
-      alert("Chỉ được phép upload tối đa 3 poster!");
+    if (uploadedPostersCount >= 1) {
+      alert("Chỉ được phép upload tối đa 1 poster!");
       return;
     }
 
@@ -972,7 +972,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   const handleAddNewLogo = async () => {
     // Kiểm tra giới hạn cho tournament
     if (activeLogoCategory === 'tournament' && tournamentItemsCount >= 1) {
-      alert('Chỉ được phép có 1 logo hoặc banner duy nh��t cho tournament!');
+      alert('Chỉ được phép có 1 logo hoặc banner duy nhất cho tournament!');
       return;
     }
 
@@ -1017,7 +1017,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
   const renderPosterSection = () => {
     const uploadedPostersCount = [...savedPosters, ...customPosters].length;
-    const canUploadMore = uploadedPostersCount < 3;
+    const canUploadMore = uploadedPostersCount < 1;
 
     return (
       <div className="space-y-1">
@@ -1028,7 +1028,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             <h3 className="text-xs font-semibold text-gray-900">Poster Template</h3>
           </div>
           <span className="text-xs text-gray-500">
-            Đã upload: {uploadedPostersCount}/3
+            Đã upload: {uploadedPostersCount}/1
           </span>
         </div>
 
@@ -1042,7 +1042,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               />
             </div>
           ))}
-          {/* Nút thêm poster - chỉ hiện khi chưa đủ 3 poster */}
+          {/* Nút thêm poster - chỉ hiện khi chưa đủ 1 poster */}
           {canUploadMore && (
             <div className="flex-none w-24">
               <div className="relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer group border-2 border-dashed border-gray-300 hover:border-blue-400">
@@ -1067,7 +1067,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               </div>
             </div>
           )}
-          {/* Thông báo khi đã đủ 3 poster */}
+          {/* Thông báo khi đã đủ 1 poster */}
           {!canUploadMore && (
             <div className="flex-none w-24">
               <div className="relative bg-gray-100 rounded-lg overflow-hidden shadow-md border-2 border-dashed border-gray-300">
@@ -1075,7 +1075,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                   <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center mb-1">
                     <span className="text-lg text-gray-500">✓</span>
                   </div>
-                  <span className="text-xs text-gray-500 font-medium px-1 text-center">Đã đủ 3 poster</span>
+                  <span className="text-xs text-gray-500 font-medium px-1 text-center">Đã đủ 1 poster</span>
                 </div>
               </div>
             </div>
