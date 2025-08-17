@@ -1,6 +1,8 @@
 import React from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
+import { getFullLogoUrl, getFullLogoUrls } from '../../utils/logoUtils';
 import DisplayLogo from '../common/DisplayLogo';
+import ScoreboardLogos from './ScoreboardLogos';
 
 const PenaltyScoreboard = () => {
     const {
