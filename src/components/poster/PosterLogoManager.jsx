@@ -423,12 +423,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               serverData: response.data
             };
 
-            // Thay thế poster đang upload bằng poster đã upload thành công
-            setCustomPosters(prev => prev.map(poster =>
-              poster.id === previewPoster.id ? uploadedPoster : poster
-            ));
-
-            // Xóa khỏi customPosters để tránh trùng lặp
+            // Xóa poster đang upload khỏi customPosters ngay lập tức
             setCustomPosters(prev => prev.filter(poster => poster.id !== previewPoster.id));
 
             // Kiểm tra xem poster đã tồn tại trong savedPosters chưa
@@ -438,6 +433,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                 console.log('⚠️ Poster đã tồn tại, không thêm duplicate');
                 return prev;
               }
+              console.log('✅ Thêm poster mới vào savedPosters:', uploadedPoster.name);
               return [...prev, uploadedPoster];
             });
 
