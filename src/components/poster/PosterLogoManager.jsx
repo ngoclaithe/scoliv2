@@ -437,9 +437,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           if (response.success && response.data) {
             // Tạo poster từ response của server
             const uploadedPoster = {
-              id: `uploaded-poster-${response.data.id}`,
-              name: response.data.name,
-              thumbnail: response.data.file_path,
+              id: `api-poster-${response.data.id}`,
+              name: response.data.name || 'Poster tùy chỉnh',
+              thumbnail: response.data.file_path || response.data.url || e.target.result,
               isCustom: true,
               uploading: false,
               serverData: response.data
@@ -571,14 +571,21 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             alt={poster.name}
             className="w-full h-full object-cover transition-opacity duration-200 group-hover:opacity-90"
             onError={(e) => {
+              console.warn('Failed to load poster thumbnail:', poster.thumbnail);
               e.target.style.display = 'none';
               e.target.nextSibling.style.display = 'flex';
             }}
+            crossOrigin="anonymous"
           />
         ) : null}
         <div className="w-full h-full bg-gray-200 items-center justify-center hidden">
           <span className="text-gray-500 font-medium text-xs">{poster.name}</span>
         </div>
+        {poster.uploading && (
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="text-white text-xs font-medium">⏳ Đang tải lên...</div>
+          </div>
+        )}
       </div>
 
       <div className="p-2">
