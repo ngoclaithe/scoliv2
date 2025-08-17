@@ -220,8 +220,6 @@ const NewHomeLayout = () => {
               <div>Chia sẻ link này với đội ngũ để họ có thể xem trực tiếp</div>
               <div className="bg-yellow-50 border border-yellow-200 rounded p-2 text-yellow-700">
                 <div className="font-medium">⏰ Thời gian hết hạn:</div>
-                <div>Code có hiệu lực trong 24 giờ kể từ lần đầu truy cập</div>
-                <div className="mt-1 text-xs">Thời gian còn lại: <span className="font-semibold">Tính toán tự động</span></div>
               </div>
             </div>
           </div>
