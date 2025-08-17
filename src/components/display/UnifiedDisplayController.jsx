@@ -261,16 +261,36 @@ const UnifiedDisplayController = () => {
   }, [accessCode, initializeSocket, handleExpiredAccess, checkIfDynamicRoute, parseUrlParams, updateSocketWithParams, canSendToSocket, hasUrlParams]);
 
   const renderPoster = (posterType) => {
+    console.log('🎨 [UnifiedDisplayController] renderPoster called with:', { posterType, selectedPoster: displaySettings.selectedPoster });
+
     // Kiểm tra nếu là custom poster (poster upload)
-    if (displaySettings.selectedPoster && displaySettings.selectedPoster.isCustom) {
-      const customPoster = displaySettings.selectedPoster;
+    const selectedPoster = displaySettings.selectedPoster;
+    const isCustomPoster = selectedPoster && (
+      selectedPoster.isCustom ||
+      (typeof posterType === 'string' && (
+        posterType.includes('api-poster') ||
+        posterType.includes('uploaded-poster')
+      ))
+    );
+
+    if (isCustomPoster) {
+      const posterSrc = selectedPoster.thumbnail ||
+                       selectedPoster.serverData?.file_path ||
+                       selectedPoster.serverData?.url;
+
+      console.log('🎨 [UnifiedDisplayController] Rendering custom poster with src:', posterSrc);
+
       return (
         <div className="fixed inset-0 bg-black flex items-center justify-center">
           <img
-            src={customPoster.thumbnail || customPoster.serverData?.file_path}
-            alt={customPoster.name}
+            src={posterSrc}
+            alt={selectedPoster.name || 'Custom Poster'}
             className="max-w-full max-h-full object-contain"
             style={{ width: '100vw', height: '100vh', objectFit: 'cover' }}
+            onError={(e) => {
+              console.error('❌ [UnifiedDisplayController] Failed to load custom poster:', posterSrc);
+              e.target.style.display = 'none';
+            }}
           />
         </div>
       );
