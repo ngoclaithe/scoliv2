@@ -37,6 +37,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   });
 
   const [customPosters, setCustomPosters] = useState([]);
+  const [savedPosters, setSavedPosters] = useState([]);
 
   const availablePosters = [
     {
@@ -84,7 +85,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     },
     {
       id: "organizing",
-      name: "TỔ CHỨC",
+      name: "TỔ CH���C",
       icon: "🏛️",
     },
     {
@@ -157,6 +158,25 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
         setLoading(true);
 
         await loadHistoryMatches();
+
+        // Load saved posters từ API
+        if (accessCode) {
+          try {
+            const posterResponse = await PosterAPI.getPosters({ accessCode });
+            if (posterResponse?.success && posterResponse?.data) {
+              const savedPosterList = posterResponse.data.map(poster => ({
+                id: `api-poster-${poster.id}`,
+                name: poster.name || 'Poster tùy chỉnh',
+                thumbnail: poster.file_path || poster.url,
+                isCustom: true,
+                serverData: poster
+              }));
+              setSavedPosters(savedPosterList);
+            }
+          } catch (error) {
+            console.error('Failed to load saved posters:', error);
+          }
+        }
 
         if (initialData) {
           if (initialData.selectedPoster) {
@@ -401,6 +421,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               poster.id === previewPoster.id ? uploadedPoster : poster
             ));
 
+            // Thêm vào savedPosters
+            setSavedPosters(prev => [...prev, uploadedPoster]);
             // Tự động chọn poster vừa upload
             handlePosterSelect(uploadedPoster);
 
@@ -799,14 +821,18 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   });
 
   const handlePosterSelect = useCallback((poster) => {
-    console.log('🎨 [PosterLogoManager] handlePosterSelect called with:', poster);
     setSelectedPoster(poster);
-    // Immediate update
+    // Save to backend
+    if (accessCode) {
+      socketService.emit('poster_update', {
+        posterType: poster.id,
+        posterData: poster
+      });
+    }
     if (onPosterUpdate) {
-      console.log('🎨 [PosterLogoManager] Calling onPosterUpdate immediately with:', poster);
       onPosterUpdate(poster);
     }
-  }, [onPosterUpdate]);
+  }, [onPosterUpdate, accessCode]);
 
   const handleItemUpdate = useCallback(async (itemId, updatedItem) => {
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);
@@ -980,7 +1006,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
 
 
-  const allPosters = [...availablePosters, ...customPosters];
+  const allPosters = [...availablePosters, ...savedPosters, ...customPosters];
 
   const renderPosterSection = () => {
     return (
