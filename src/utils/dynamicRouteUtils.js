@@ -127,6 +127,15 @@ export const parseTextParam = (textParam) => {
 };
 
 /**
+ * Parse match time từ URL parameter (format: T41 -> 41:00)
+ * @param {string} matchTimeParam - Tham số match time từ URL
+ * @returns {string} - Match time format chuẩn
+ */
+export const parseMatchTime = (matchTimeParam) => {
+  return parseMatchTimeParam(matchTimeParam);
+};
+
+/**
  * Parse số từ URL parameter
  * @param {string} numberParam - Tham số số từ URL
  * @param {number} defaultValue - Giá trị mặc định
@@ -134,7 +143,7 @@ export const parseTextParam = (textParam) => {
  */
 export const parseNumberParam = (numberParam, defaultValue = 0) => {
   if (!numberParam) return defaultValue;
-  
+
   const parsed = parseInt(numberParam, 10);
   return isNaN(parsed) ? defaultValue : parsed;
 };
