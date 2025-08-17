@@ -34,7 +34,7 @@ const NewHomeLayout = () => {
       name: "BÌNH LUẬN",
       icon: "🎙️",
       color: "red",
-      description: "Quản lý audio và bình luận trận đấu"
+      description: "Quản lý audio v�� bình luận trận đấu"
     },
   ];
 
@@ -193,9 +193,9 @@ const NewHomeLayout = () => {
 
             <div className="bg-blue-50 rounded-lg p-3 mb-4">
               <div className="text-sm text-blue-800">
-                <div className="font-semibold mb-1">🌐 Route Dynamic:</div>
-                <div className="font-mono bg-blue-100 px-2 py-1 rounded text-blue-900">
-                  /{matchCode || 'your-access-code'}
+                <div className="font-semibold mb-1">🔗 URL:</div>
+                <div className="font-mono bg-blue-100 px-2 py-1 rounded text-blue-900 break-all">
+                  {window.location.origin}/{matchCode || 'your-access-code'}
                 </div>
               </div>
             </div>
@@ -211,16 +211,17 @@ const NewHomeLayout = () => {
                     : 'bg-gray-400 cursor-not-allowed'
                 }`}
               >
-                <span>🌐</span>
-                <span>Mở Trang Display</span>
+                <span>🔗</span>
+                <span>Mở Link</span>
               </button>
             </div>
 
             <div className="text-xs text-gray-500 space-y-1">
               <div>Chia sẻ link này với đội ngũ để họ có thể xem trực tiếp</div>
               <div className="bg-yellow-50 border border-yellow-200 rounded p-2 text-yellow-700">
-                <div className="font-medium">⏰ Lưu ý quan trọng:</div>
-                <div>Code sẽ tính giờ từ lần đầu tiên truy cập đường dẫn này</div>
+                <div className="font-medium">⏰ Thời gian hết hạn:</div>
+                <div>Code có hiệu lực trong 24 giờ kể từ lần đầu truy cập</div>
+                <div className="mt-1 text-xs">Thời gian còn lại: <span className="font-semibold">Tính toán tự động</span></div>
               </div>
             </div>
           </div>
