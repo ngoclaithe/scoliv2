@@ -3,7 +3,7 @@ import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../../utils/logoUtils';
 
 const HalftimeBreakPoster = () => {
-    const { matchData: contextMatchData, marqueeData } = usePublicMatch();
+    const { matchData: contextMatchData } = usePublicMatch();
 
     const matchData = {
         matchTitle: contextMatchData.matchTitle || "GIẢI BÓNG ĐÁ PHONG TRÀO",
@@ -14,9 +14,7 @@ const HalftimeBreakPoster = () => {
         team2: contextMatchData.teamB.name || "ĐỘI B",
         logo1: getFullLogoUrl(contextMatchData?.teamA?.logo) || "/api/placeholder/90/90",
         logo2: getFullLogoUrl(contextMatchData?.teamB?.logo) || "/api/placeholder/90/90",
-        liveText: contextMatchData.liveText || "FACEBOOK LIVE",
-        showMarquee: marqueeData.mode !== 'none',
-        marqueeText: marqueeData.text || ""
+        liveText: contextMatchData.liveText || "FACEBOOK LIVE"
     };
     const [windowSize, setWindowSize] = useState({
         width: typeof window !== 'undefined' ? window.innerWidth : 1200,

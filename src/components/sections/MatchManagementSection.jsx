@@ -452,7 +452,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   };
 
   const handleCountdownClick = (timeString) => {
-    console.log('🎯 [MatchManagementSection] Clicked countdown - calling updateMatchTime:', { timeString, period: "Hiệp 1", status: "live" });
+    // console.log('🎯 [MatchManagementSection] Clicked countdown - calling updateMatchTime:', { timeString, period: "Hiệp 1", status: "live" });
     updateMatchTime(timeString, "Hiệp 1", "live");
     updateView('scoreboard');
     playAudioForAction('gialap');
@@ -466,7 +466,8 @@ const MatchManagementSection = ({ isActive = true }) => {
     halftime: 'Nghỉ giữa hiệp',
     player_list: 'Danh sách cầu thủ',
     event: 'Sự kiện trận đấu',
-    stats: 'Thống kê'
+    stats: 'Thống kê',
+    stat: 'Chỉ số',
   };
   
   return (

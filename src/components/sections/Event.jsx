@@ -565,8 +565,8 @@ const Event = () => {
             ) : (
               <div className="flex flex-col items-center justify-center h-full">
                 <div className="text-4xl sm:text-6xl mb-2 sm:mb-4">⚽</div>
-                <div className="text-lg sm:text-xl font-bold text-gray-700 mb-1 sm:mb-2">Chưa có sự kiện nào</div>
-                <div className="text-gray-500 text-sm sm:text-base text-center px-4">Các sự kiện trận đấu sẽ hiển thị tại đây</div>
+                {/* <div className="text-lg sm:text-xl font-bold text-gray-700 mb-1 sm:mb-2">Chưa có sự kiện nào</div> */}
+                {/* <div className="text-gray-500 text-sm sm:text-base text-center px-4">Các sự kiện trận đấu sẽ hiển thị tại đây</div> */}
               </div>
             )}
           </div>
