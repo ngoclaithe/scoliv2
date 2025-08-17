@@ -93,7 +93,7 @@ const SocketStatusManagement = () => {
     if (hours < 24) return `${hours} giờ trước`;
     
     const days = Math.floor(hours / 24);
-    return `${days} ngày tr��ớc`;
+    return `${days} ngày trước`;
   };
 
   const getStatusColor = (isConnected) => {
@@ -139,7 +139,7 @@ const SocketStatusManagement = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Trạng thái Server Socket</h1>
-          <p className="text-gray-600 mt-1">Giám sát tình trạng kết nối và hoạt động của socket server</p>
+          <p className="text-gray-600 mt-1">Giám sát tình trạng kết nối và ho��t động của socket server</p>
         </div>
         <div className="flex items-center gap-3">
           {lastUpdate && (
@@ -377,7 +377,7 @@ const SocketStatusManagement = () => {
             <h3 className="text-lg font-semibold text-gray-900">Chi tiết Server</h3>
           </div>
           <div className="p-6">
-            <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2">
+            <dl className="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
               <div>
                 <dt className="text-sm font-medium text-gray-500">Memory Usage (RSS)</dt>
                 <dd className="mt-1 text-sm text-gray-900">
