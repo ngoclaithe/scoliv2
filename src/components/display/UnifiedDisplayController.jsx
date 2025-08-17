@@ -213,7 +213,7 @@ const UnifiedDisplayController = () => {
             verifyResult.message.includes('expired') ||
             verifyResult.message.includes('không hợp lệ')
           )) {
-            setError(`❌ Mã truy cập đã hết hạn hoặc không hợp lệ: ${accessCode}\n\n⏰ Vui lòng liên hệ admin để cấp mã mới.`);
+            setError(`❌ Mã truy cập đã hết hạn hoặc không hợp lệ: ${accessCode}\n\n⏰ Vui lòng liên h��� admin để cấp mã mới.`);
           } else {
             setError(`❌ Mã truy cập không hợp lệ: ${accessCode}\n\n${verifyResult.message || 'Vui lòng kiểm tra lại mã truy cập.'}`);
           }
@@ -283,17 +283,34 @@ const UnifiedDisplayController = () => {
 
   const renderPoster = (posterType) => {
 
-    const selectedPoster = displaySettings.selectedPoster;
-    console.log("Giá trị selectedPoster",selectedPoster);
-    if (selectedPoster && typeof selectedPoster === 'object' && (
-      selectedPoster.isCustom ||
-      (typeof posterType === 'string' && posterType.includes('api-poster'))
-    )) {
+    const selectedPosterType = displaySettings.selectedPoster;
+    console.log("Giá trị selectedPosterType",selectedPosterType);
+
+    // Tìm poster từ savedPosters nếu là api-poster
+    if (typeof selectedPosterType === 'string' && selectedPosterType.includes('api-poster')) {
+      const foundPoster = savedPosters.find(poster => poster.id === selectedPosterType);
+      if (foundPoster && foundPoster.serverData?.url_poster) {
+        console.log("✅ [UnifiedDisplayController] Found custom poster:", foundPoster);
+        return (
+          <div className="fixed inset-0 bg-black flex items-center justify-center">
+            <img
+              src={getFullPosterUrl(foundPoster.serverData.url_poster)}
+              alt={foundPoster.name || 'Custom Poster'}
+              className="max-w-full max-h-full object-contain"
+              style={{ width: '100vw', height: '100vh', objectFit: 'cover' }}
+            />
+          </div>
+        );
+      }
+    }
+
+    // Fallback: nếu selectedPoster là object (từ socket)
+    if (selectedPosterType && typeof selectedPosterType === 'object' && selectedPosterType.isCustom) {
       return (
         <div className="fixed inset-0 bg-black flex items-center justify-center">
           <img
-            src={selectedPoster.thumbnail || getFullPosterUrl(selectedPoster.serverData?.url_poster)}
-            alt={selectedPoster.name || 'Custom Poster'}
+            src={selectedPosterType.thumbnail || getFullPosterUrl(selectedPosterType.serverData?.url_poster)}
+            alt={selectedPosterType.name || 'Custom Poster'}
             className="max-w-full max-h-full object-contain"
             style={{ width: '100vw', height: '100vh', objectFit: 'cover' }}
           />
