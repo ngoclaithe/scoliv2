@@ -3,7 +3,7 @@ import { EyeIcon, EyeSlashIcon, LockClosedIcon, ShieldCheckIcon, ExclamationTria
 import Button from '../common/Button';
 import Input from '../common/Input';
 import Loading from '../common/Loading';
-import AuthAPI from '../../API/apiAuth';
+import AdminAuthAPI from '../../API/apiAdminAuth';
 
 const AdminLogin = ({ onLogin }) => {
   const [formData, setFormData] = useState({
@@ -20,22 +20,22 @@ const AdminLogin = ({ onLogin }) => {
     setLoading(true);
 
     try {
-      const response = await AuthAPI.login({
+      const response = await AdminAuthAPI.login({
         email: formData.email,
         password: formData.password
       });
-      
-      console.log('Login response:', response);
+
+      console.log('Admin login response:', response);
 
       if (response.success) {
         if (response.user.role === 'admin') {
           onLogin(response.user);
         } else {
           setError('Bạn không có quyền truy cập vào trang quản trị');
-          AuthAPI.logout();
+          AdminAuthAPI.logout();
         }
       } else {
-        setError('Thông tin đăng nhập chưa chính xác');
+        setError(response.message || 'Thông tin đăng nhập chưa chính xác');
       }
     } catch (error) {
       // console.error('Login error details:', {
