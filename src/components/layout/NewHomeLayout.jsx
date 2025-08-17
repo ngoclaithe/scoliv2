@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import Modal from "../common/Modal";
+import AccessCodeAPI from "../../API/apiAccessCode";
+import { toast } from "react-toastify";
 
 // Import các section components
 import UploadLogoSection from "../sections/UploadLogoSection";
@@ -12,6 +14,8 @@ const NewHomeLayout = () => {
   const [activeTab, setActiveTab] = useState("quan-ly-tran");
   const [showAccessCodeModal, setShowAccessCodeModal] = useState(false);
   const [showUserModal, setShowUserModal] = useState(false);
+  const [codeInfo, setCodeInfo] = useState(null);
+  const [loadingCodeInfo, setLoadingCodeInfo] = useState(false);
 
   // Định nghĩa các tab theo yêu cầu
   const tabs = [
@@ -48,7 +52,50 @@ const NewHomeLayout = () => {
     if (matchCode) {
       const displayUrl = `/${matchCode}`;
       window.open(displayUrl, '_blank');
+
+      // Hiển thị toast thông báo mã đã được sử dụng và hết hạn sau 2 tiếng
+      toast.info('Mã đã được sử dụng và hết hạn sau 2 tiếng từ bây giờ', {
+        position: "top-center",
+        autoClose: 3000,
+      });
     }
+  };
+
+  // Hàm lấy thông tin mã truy cập
+  const loadCodeInfo = async () => {
+    if (!matchCode) return;
+
+    try {
+      setLoadingCodeInfo(true);
+      const response = await AccessCodeAPI.verifyCodeForLogin(matchCode);
+      setCodeInfo(response.data);
+    } catch (error) {
+      console.error('Lỗi khi lấy thông tin mã:', error);
+      toast.error('Không thể lấy thông tin mã truy cập');
+    } finally {
+      setLoadingCodeInfo(false);
+    }
+  };
+
+  // Load thông tin mã khi mở modal
+  useEffect(() => {
+    if (showAccessCodeModal && matchCode) {
+      loadCodeInfo();
+    }
+  }, [showAccessCodeModal, matchCode]);
+
+  // Hàm format ngày giờ
+  const formatDateTime = (dateString) => {
+    if (!dateString) return 'Còn hạn';
+    const date = new Date(dateString);
+    return date.toLocaleString('vi-VN', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
   };
 
   // Render nội dung tab
@@ -220,6 +267,13 @@ const NewHomeLayout = () => {
               <div>Chia sẻ link này với đội ngũ để họ có thể xem trực tiếp</div>
               <div className="bg-yellow-50 border border-yellow-200 rounded p-2 text-yellow-700">
                 <div className="font-medium">⏰ Thời gian hết hạn:</div>
+                {loadingCodeInfo ? (
+                  <div className="text-sm mt-1">Đang tải...</div>
+                ) : (
+                  <div className="text-sm mt-1">
+                    {codeInfo?.expiredAt ? formatDateTime(codeInfo.expiredAt) : 'Còn hạn'}
+                  </div>
+                )}
               </div>
             </div>
           </div>
