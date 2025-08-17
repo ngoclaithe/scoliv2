@@ -178,7 +178,7 @@ const DynamicDisplayController = () => {
           if (handleExpiredAccess && handleExpiredAccess(err)) {
             return;
           }
-          setError('Kh��ng thể kết nối đến hệ thống');
+          setError('Không thể kết nối đến hệ thống');
         }
       }
     };
@@ -198,9 +198,8 @@ const DynamicDisplayController = () => {
       const customPoster = posterType;
       // Hiển thị custom poster với ảnh từ serverData
       const posterUrl = customPoster.thumbnail ||
-                       (customPoster.serverData?.url_poster ?
-                         `${process.env.REACT_APP_API_URL || 'http://localhost:8080'}/uploads/posters/${customPoster.serverData.url_poster}` :
-                         customPoster.url_poster);
+                       getFullPosterUrl(customPoster.serverData?.url_poster) ||
+                       customPoster.url_poster;
 
       return (
         <div className="w-full h-screen bg-black flex items-center justify-center overflow-hidden">
