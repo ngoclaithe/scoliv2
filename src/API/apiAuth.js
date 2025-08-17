@@ -145,6 +145,7 @@ const AuthAPI = {
       return response.data;
     } catch (error) {
       if (error.response && error.response.status === 401) {
+        TokenUtils.removeUserToken();
         toast.error('Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.', {
           position: "top-right",
           autoClose: 3000,
