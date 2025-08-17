@@ -74,12 +74,7 @@ function AppContent() {
     }
   };
 
-  return (
-    <>
-      {renderCurrentPage()}
-      <TokenDebugInfo />
-    </>
-  );
+  return renderCurrentPage();
 }
 
 function App() {
