@@ -57,11 +57,23 @@ const AuthAPI = {
   register: async (userData) => {
     try {
       const response = await api.post('/auth/register', userData);
+      // Kiểm tra nếu interceptor đã xử lý 401
+      if (response.data === null && response.success === false) {
+        return null;
+      }
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
       }
       return response.data;
     } catch (error) {
+      // Xử lý các lỗi khác (không phải 401)
+      if (error.response && error.response.status === 401) {
+        toast.error('Đăng ký thất bại. Vui lòng kiểm tra lại thông tin.', {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        return null;
+      }
       throw AuthAPI.handleError(error);
     }
   },
@@ -76,12 +88,24 @@ const AuthAPI = {
   login: async (credentials) => {
     try {
       const response = await api.post('/auth/login', credentials);
+      // Kiểm tra nếu interceptor đã xử lý 401
+      if (response.data === null && response.success === false) {
+        return null;
+      }
       // Lưu token vào localStorage
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
       }
       return response.data;
     } catch (error) {
+      // Xử lý các lỗi khác (không phải 401)
+      if (error.response && error.response.status === 401) {
+        toast.error('Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.', {
+          position: "top-right",
+          autoClose: 3000,
+        });
+        return null;
+      }
       throw AuthAPI.handleError(error);
     }
   },
@@ -203,7 +227,7 @@ const AuthAPI = {
    */
   handleError: (error) => {
     if (error.response) {
-      // Yêu cầu đã được gửi và server đã phản hồi với m�� lỗi
+      // Yêu cầu đã được gửi và server đã phản hồi với mã lỗi
       const { status, data } = error.response;
       const message = data?.message || 'Đã có lỗi xảy ra';
       
