@@ -277,6 +277,18 @@ const MatchStatsEdit = ({
     const secondsB = Math.round(currentTotalB / 1000);
     const totalSeconds = secondsA + secondsB;
 
+    console.log('🏈 DEBUG Kiểm soát bóng:', {
+      matchStarted,
+      matchPaused,
+      currentController,
+      possessionStartTime: possessionStartTime ? new Date(possessionStartTime).toLocaleTimeString() : null,
+      totalPossessionA: `${totalPossessionA}ms (${secondsA}s)`,
+      totalPossessionB: `${totalPossessionB}ms (${secondsB}s)`,
+      totalSeconds,
+      teamAControlling,
+      teamBControlling
+    });
+
     // Tính % kiểm soát bóng
     let percentageA = 0;
     let percentageB = 0;
@@ -295,9 +307,26 @@ const MatchStatsEdit = ({
         }
       }
     } else {
-      percentageA = 50;
-      percentageB = 50;
+      // VẤN ĐỀ: Khi chưa có thời gian kiểm soát nào, cần kiểm tra xem có đội nào đang được chọn không
+      // Thay vì mặc định 50-50, nên là 100-0 cho đội đang được chọn
+      if (currentController === 'teamA' || teamAControlling) {
+        percentageA = 100;
+        percentageB = 0;
+      } else if (currentController === 'teamB' || teamBControlling) {
+        percentageA = 0;
+        percentageB = 100;
+      } else {
+        // Chỉ khi không có đội nào được chọn thì mới 50-50
+        percentageA = 50;
+        percentageB = 50;
+      }
     }
+
+    console.log('📊 Tỉ lệ kiểm soát bóng:', {
+      percentageA: `${percentageA}%`,
+      percentageB: `${percentageB}%`,
+      totalPercentage: percentageA + percentageB
+    });
 
     return {
       seconds: { team1: secondsA, team2: secondsB },
