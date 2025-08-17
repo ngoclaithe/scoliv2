@@ -28,7 +28,7 @@ api.interceptors.request.use(
     const token = localStorage.getItem('token');
 
     if (requiresToken(config.url) && token) {
-      console.log("Thêm token vào request:", config.url);
+      // console.log("Thêm token vào request:", config.url);
       config.headers.Authorization = `Bearer ${token}`;
     } else if (!requiresToken(config.url)) {
       console.log("Endpoint không cần token:", config.url);
