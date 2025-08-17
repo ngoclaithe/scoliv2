@@ -199,6 +199,7 @@ export default {
   parseTeamName,
   parseMatchTitle,
   parseTextParam,
+  parseMatchTime,
   parseNumberParam,
   buildDynamicRoute
 };
