@@ -81,6 +81,8 @@ const AdminApp = () => {
         return <ActiveRoomManagement />;
       case 'logo-management':
         return <LogoManagement />;
+      case 'socket-status':
+        return <SocketStatusManagement />;
       default:
         return <AdminDashboard />;
     }
