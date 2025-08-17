@@ -185,6 +185,7 @@ export default {
   findTeamLogos,
   parseColorParam,
   parseTeamName,
+  parseMatchTitle,
   parseTextParam,
   parseNumberParam,
   buildDynamicRoute
