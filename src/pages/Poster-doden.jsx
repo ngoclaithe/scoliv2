@@ -485,125 +485,101 @@ export default function DodenMatchIntro() {
             }
           }
 
-          /* Shooting star animations for 8 directions */
+          /* Shooting star animations for 16 directions */
           @keyframes shootingStar-0 {
-            0% {
-              transform: translate(-50%, -50%) translateX(0) scale(0);
-              opacity: 0;
-            }
-            10% {
-              opacity: 1;
-              transform: translate(-50%, -50%) translateX(0) scale(1);
-            }
-            100% {
-              transform: translate(-50%, -50%) translateX(1200px) scale(0);
-              opacity: 0;
-            }
+            0% { transform: translate(-50%, -50%) translateX(0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translateX(0) scale(1); }
+            100% { transform: translate(-50%, -50%) translateX(1200px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-22.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(1131px, -465px) scale(0); opacity: 0; }
           }
 
           @keyframes shootingStar-45 {
-            0% {
-              transform: translate(-50%, -50%) translate(0, 0) scale(0);
-              opacity: 0;
-            }
-            10% {
-              opacity: 1;
-              transform: translate(-50%, -50%) translate(0, 0) scale(1);
-            }
-            100% {
-              transform: translate(-50%, -50%) translate(450px, -450px) scale(0);
-              opacity: 0;
-            }
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(900px, -900px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-67.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(465px, -1131px) scale(0); opacity: 0; }
           }
 
           @keyframes shootingStar-90 {
-            0% {
-              transform: translate(-50%, -50%) translateY(0) scale(0);
-              opacity: 0;
-            }
-            10% {
-              opacity: 1;
-              transform: translate(-50%, -50%) translateY(0) scale(1);
-            }
-            100% {
-              transform: translate(-50%, -50%) translateY(-600px) scale(0);
-              opacity: 0;
-            }
+            0% { transform: translate(-50%, -50%) translateY(0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translateY(0) scale(1); }
+            100% { transform: translate(-50%, -50%) translateY(-1200px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-112.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-465px, -1131px) scale(0); opacity: 0; }
           }
 
           @keyframes shootingStar-135 {
-            0% {
-              transform: translate(-50%, -50%) translate(0, 0) scale(0);
-              opacity: 0;
-            }
-            10% {
-              opacity: 1;
-              transform: translate(-50%, -50%) translate(0, 0) scale(1);
-            }
-            100% {
-              transform: translate(-50%, -50%) translate(-450px, -450px) scale(0);
-              opacity: 0;
-            }
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-900px, -900px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-157.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-1131px, -465px) scale(0); opacity: 0; }
           }
 
           @keyframes shootingStar-180 {
-            0% {
-              transform: translate(-50%, -50%) translateX(0) scale(0);
-              opacity: 0;
-            }
-            10% {
-              opacity: 1;
-              transform: translate(-50%, -50%) translateX(0) scale(1);
-            }
-            100% {
-              transform: translate(-50%, -50%) translateX(-600px) scale(0);
-              opacity: 0;
-            }
+            0% { transform: translate(-50%, -50%) translateX(0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translateX(0) scale(1); }
+            100% { transform: translate(-50%, -50%) translateX(-1200px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-202.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-1131px, 465px) scale(0); opacity: 0; }
           }
 
           @keyframes shootingStar-225 {
-            0% {
-              transform: translate(-50%, -50%) translate(0, 0) scale(0);
-              opacity: 0;
-            }
-            10% {
-              opacity: 1;
-              transform: translate(-50%, -50%) translate(0, 0) scale(1);
-            }
-            100% {
-              transform: translate(-50%, -50%) translate(-450px, 450px) scale(0);
-              opacity: 0;
-            }
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-900px, 900px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-247.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-465px, 1131px) scale(0); opacity: 0; }
           }
 
           @keyframes shootingStar-270 {
-            0% {
-              transform: translate(-50%, -50%) translateY(0) scale(0);
-              opacity: 0;
-            }
-            10% {
-              opacity: 1;
-              transform: translate(-50%, -50%) translateY(0) scale(1);
-            }
-            100% {
-              transform: translate(-50%, -50%) translateY(600px) scale(0);
-              opacity: 0;
-            }
+            0% { transform: translate(-50%, -50%) translateY(0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translateY(0) scale(1); }
+            100% { transform: translate(-50%, -50%) translateY(1200px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-292.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(465px, 1131px) scale(0); opacity: 0; }
           }
 
           @keyframes shootingStar-315 {
-            0% {
-              transform: translate(-50%, -50%) translate(0, 0) scale(0);
-              opacity: 0;
-            }
-            10% {
-              opacity: 1;
-              transform: translate(-50%, -50%) translate(0, 0) scale(1);
-            }
-            100% {
-              transform: translate(-50%, -50%) translate(450px, 450px) scale(0);
-              opacity: 0;
-            }
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(900px, 900px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-337.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(1131px, 465px) scale(0); opacity: 0; }
           }
 
           .scrollbar-hide {
