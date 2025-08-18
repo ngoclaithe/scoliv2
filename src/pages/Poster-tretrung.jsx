@@ -364,13 +364,14 @@ export default function TreTrungMatchIntro() {
                     width: 'auto',
                     minWidth: 'unset',
                     maxWidth: 'unset',
-                    fontSize: isMobile ? '20px' : isTablet ? '35px' : '60px',
+                    fontSize: isMobile ? '16px' : isTablet ? '28px' : '48px',
                     padding: '4px 20px',
                     width: 'fit-content',
                     minWidth: '35%',
                     color: '#ffffff',
                     fontFamily: 'Baloo Bhai 2, sans-serif',
-                    fontWeight: '800'
+                    fontWeight: '800',
+                    textShadow: '4px 4px #727272'
                   }}
                 >
                   {matchData.team2}
