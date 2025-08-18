@@ -489,7 +489,7 @@ export default function TreTrungMatchIntro() {
 
           @media (max-width: 768px) {
             .title {
-              font-size: 24px !important;
+              font-size: 14px !important;
             }
           }
 
