@@ -78,9 +78,9 @@ export default function HaoQuangMatchIntro() {
       const teamNameElements = document.querySelectorAll('.team-name-text');
       teamNameElements.forEach((element) => {
         const container = element.parentElement;
-        const containerWidth = container.offsetWidth - 30; // subtract padding
-        let fontSize = isMobile ? 7 : isTablet ? 20 : 34;
-        const minFontSize = isMobile ? 4 : isTablet ? 8 : 14;
+        const containerWidth = container.offsetWidth - (isMobile ? 16 : 30); // subtract padding
+        let fontSize = isMobile ? 6 : isTablet ? 16 : 28;
+        const minFontSize = isMobile ? 3 : isTablet ? 6 : 12;
 
         element.style.fontSize = fontSize + 'px';
 
