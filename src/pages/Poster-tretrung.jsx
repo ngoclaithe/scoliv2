@@ -204,7 +204,7 @@ export default function TreTrungMatchIntro() {
               {hasMediaPartners && (
                 <div className="flex-shrink-0 w-full">
                   <div className={`font-bold text-white mb-0.5 drop-shadow-lg text-right ${isMobile ? 'text-xs' : 'text-sm sm:text-lg md:text-xl'}`}>
-                    {isMobile ? 'ĐVTT' : 'Đơn vị truyền thông'}
+                    Đơn vị truyền thông
                   </div>
                   <div className="flex gap-0.5 justify-end overflow-x-auto scrollbar-hide">
                     <div className="flex gap-0.5 flex-nowrap">
