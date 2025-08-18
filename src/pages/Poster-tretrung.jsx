@@ -166,18 +166,14 @@ export default function TreTrungMatchIntro() {
                     <div className={`font-bold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-sm sm:text-lg md:text-xl'}`}>
                       Đơn vị tổ chức
                     </div>
-                    <div className="flex flex-col gap-0.5">
-                      {Array.from({ length: Math.ceil(Math.min(organizingLogos.length, isMobile ? 2 : 6) / (isMobile ? 1 : 3)) }, (_, rowIndex) => (
-                        <div key={`organizing-row-${rowIndex}`} className="flex gap-0.5 flex-nowrap">
-                          {organizingLogos.slice(rowIndex * (isMobile ? 1 : 3), (rowIndex + 1) * (isMobile ? 1 : 3)).slice(0, isMobile ? 1 : 3).map((organizing, index) => (
-                            <div key={`organizing-${rowIndex}-${index}`} className="flex-shrink-0">
-                              <img
-                                src={organizing.logo}
-                                alt={organizing.name}
-                                className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 p-0.5 sm:p-1'}`}
-                              />
-                            </div>
-                          ))}
+                    <div className="flex gap-0.5">
+                      {organizingLogos.slice(0, isMobile ? 3 : 6).map((organizing, index) => (
+                        <div key={`organizing-${index}`} className="flex-shrink-0">
+                          <img
+                            src={organizing.logo}
+                            alt={organizing.name}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 p-0.5 sm:p-1'}`}
+                          />
                         </div>
                       ))}
                     </div>
