@@ -226,8 +226,8 @@ export default function HaoQuangMatchIntro() {
                   <div
                     className="relative rounded-full bg-white p-2 sm:p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
-                      width: `${logoSize / 2}px`,
-                      height: `${logoSize / 2}px`
+                      width: `${logoSize}px`,
+                      height: `${logoSize}px`
                     }}
                   >
                     <img
@@ -241,24 +241,31 @@ export default function HaoQuangMatchIntro() {
                   </div>
                 </div>
                 <div
-                  className="text-white font-bold uppercase tracking-wide text-center"
+                  className="text-white font-bold uppercase tracking-wide text-center team-name-container"
                   style={{
                     background: 'linear-gradient(135deg, #1eae99, #008582)',
                     borderRadius: '17px',
                     marginTop: '45px',
                     textAlign: 'center',
-                    fontSize: isMobile ? '20px' : isTablet ? '56px' : '96px',
-                    padding: '8px 30px',
-                    width: 'fit-content',
-                    minWidth: isMobile ? 'unset' : '35%',
+                    fontSize: isMobile ? '10px' : isTablet ? '28px' : '48px',
+                    padding: '4px 15px',
+                    width: isMobile ? '80px' : isTablet ? '150px' : '200px',
+                    height: isMobile ? '25px' : isTablet ? '45px' : '60px',
+                    minWidth: 'unset',
                     border: 'solid 5px #ffffff',
                     color: '#ffffff',
                     fontFamily: 'Baloo Bhai 2, sans-serif',
                     fontWeight: '800',
-                    textShadow: '4px 4px #727272'
+                    textShadow: '4px 4px #727272',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden'
                   }}
                 >
-                  {matchData.team1}
+                  <span className="team-name-text" style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                    {matchData.team1}
+                  </span>
                 </div>
               </div>
 
@@ -298,7 +305,7 @@ export default function HaoQuangMatchIntro() {
                         fontSize: isMobile ? '7px' : isTablet ? '12px' : '16px'
                       }}
                     >
-                      {matchData.stadium}
+                      Địa điểm: {matchData.stadium}
                     </div>
                   )}
                 </div>
@@ -326,24 +333,31 @@ export default function HaoQuangMatchIntro() {
                   </div>
                 </div>
                 <div
-                  className="text-white font-bold uppercase tracking-wide text-center"
+                  className="text-white font-bold uppercase tracking-wide text-center team-name-container"
                   style={{
                     background: 'linear-gradient(135deg, #1eae99, #008582)',
                     borderRadius: '17px',
                     marginTop: '45px',
                     textAlign: 'center',
-                    fontSize: isMobile ? '20px' : isTablet ? '56px' : '96px',
-                    padding: '8px 30px',
-                    width: 'fit-content',
-                    minWidth: isMobile ? 'unset' : '35%',
+                    fontSize: isMobile ? '10px' : isTablet ? '28px' : '48px',
+                    padding: '4px 15px',
+                    width: isMobile ? '80px' : isTablet ? '150px' : '200px',
+                    height: isMobile ? '25px' : isTablet ? '45px' : '60px',
+                    minWidth: 'unset',
                     border: 'solid 5px #ffffff',
                     color: '#ffffff',
                     fontFamily: 'Baloo Bhai 2, sans-serif',
                     fontWeight: '800',
-                    textShadow: '4px 4px #727272'
+                    textShadow: '4px 4px #727272',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    overflow: 'hidden'
                   }}
                 >
-                  {matchData.team2}
+                  <span className="team-name-text" style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                    {matchData.team2}
+                  </span>
                 </div>
               </div>
             </div>
