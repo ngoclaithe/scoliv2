@@ -177,10 +177,7 @@ export default function HaoQuangMatchIntro() {
             {/* Title section */}
             <div className="text-center mb-1 sm:mb-2 md:mb-3">
               <h1
-                className="font-black uppercase text-white text-xs sm:text-sm md:text-lg lg:text-2xl xl:text-3xl px-1 sm:px-2"
-                style={{
-                  textShadow: '#0006 2px 2px 4px',
-                }}
+                className="title text-white px-1 sm:px-2"
               >
                 {matchData.matchTitle}
               </h1>
