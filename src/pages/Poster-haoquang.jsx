@@ -348,6 +348,49 @@ export default function HaoQuangMatchIntro() {
               </div>
             </div>
 
+            {/* Các đơn vị đồng hành */}
+            {(hasSponsors || hasOrganizing || hasMediaPartners) && (
+              <div className="flex flex-col items-center mt-2 sm:mt-4 mb-2 sm:mb-4">
+                <div className="text-yellow-400 font-bold text-xs sm:text-sm md:text-base mb-2">
+                  Các đơn vị đồng hành
+                </div>
+                <div className="flex justify-center items-center gap-2 sm:gap-3 md:gap-4 flex-wrap">
+                  {/* Sponsors */}
+                  {sponsorLogos.map((sponsor, index) => (
+                    <div key={`all-sponsor-${index}`} className="flex-shrink-0">
+                      <img
+                        src={sponsor.logo}
+                        alt={sponsor.name}
+                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                      />
+                    </div>
+                  ))}
+
+                  {/* Organizing */}
+                  {organizingLogos.map((organizing, index) => (
+                    <div key={`all-organizing-${index}`} className="flex-shrink-0">
+                      <img
+                        src={organizing.logo}
+                        alt={organizing.name}
+                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                      />
+                    </div>
+                  ))}
+
+                  {/* Media Partners */}
+                  {mediaPartnerLogos.map((media, index) => (
+                    <div key={`all-media-${index}`} className="flex-shrink-0">
+                      <img
+                        src={media.logo}
+                        alt={media.name}
+                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
           </div>
 
           {/* Bottom spacer */}
