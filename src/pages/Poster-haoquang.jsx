@@ -253,7 +253,7 @@ export default function HaoQuangMatchIntro() {
                     width: 'fit-content',
                     minWidth: isMobile ? 'unset' : '35%',
                     color: '#ffffff',
-                    fontFamily: 'UTM Colossalis, sans-serif',
+                    fontFamily: 'Baloo Bhai 2, sans-serif',
                     fontWeight: '800',
                     textShadow: '4px 4px #727272'
                   }}
@@ -311,7 +311,7 @@ export default function HaoQuangMatchIntro() {
                     width: 'fit-content',
                     minWidth: isMobile ? 'unset' : '35%',
                     color: '#ffffff',
-                    fontFamily: 'UTM Colossalis, sans-serif',
+                    fontFamily: 'Baloo Bhai 2, sans-serif',
                     fontWeight: '800',
                     textShadow: '4px 4px #727272'
                   }}
