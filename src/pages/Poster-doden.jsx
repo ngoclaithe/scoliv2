@@ -415,30 +415,18 @@ export default function DodenMatchIntro() {
           </div>
         </div>
 
-        {/* Hiệu ứng 500 sao bay ra từ tâm */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(500)].map((_, i) => {
-            const angle = (Math.PI * 2 * i) / 500;
-            const dist = 50 + Math.random() * 400;
-            const duration = 2 + Math.random() * 3;
-            const delay = Math.random() * 5;
-            
-            return (
-              <div
-                key={`star-${i}`}
-                className="star absolute w-1 h-1 bg-white rounded-full opacity-80"
-                style={{
-                  left: '50%',
-                  top: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  animation: `starExplosion ${duration}s ease-out infinite`,
-                  animationDelay: `${delay}s`,
-                  '--angle': `${angle}rad`,
-                  '--dist': `${dist}px`
-                }}
-              />
-            );
-          })}
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-2 h-2 bg-gradient-to-r from-red-400 to-orange-500 rounded-full opacity-80"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animation: `sparkle ${2 + Math.random() * 3}s ease-in-out infinite`
+              }}
+            />
+          ))}
         </div>
 
         <style>{`
