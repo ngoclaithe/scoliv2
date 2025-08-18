@@ -470,7 +470,7 @@ export default function TreTrungMatchIntro() {
               style={{
                 left: `${Math.random() * 100}%`,
                 fontSize: `${8 + Math.random() * 8}px`,
-                animation: `fallingStar ${4 + Math.random() * 6}s linear infinite`,
+                animation: `fallingStar ${8 + Math.random() * 8}s linear infinite`,
                 animationDelay: `${Math.random() * 5}s`
               }}
             >
