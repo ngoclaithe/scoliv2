@@ -282,8 +282,12 @@ export default function TreTrungMatchIntro() {
 
             </div>
 
-            {/* Teams section - compact */}
-            <div className="flex items-center justify-center w-full px-4 sm:px-8 md:px-12 mb-1 sm:mb-2 md:mb-3 gap-2 sm:gap-4 md:gap-6">
+            {/* Teams section - compact and mobile responsive */}
+            <div className={`flex items-center justify-center w-full mb-1 sm:mb-2 md:mb-3 ${
+              isMobile
+                ? 'px-2 gap-1'
+                : 'px-4 sm:px-8 md:px-12 gap-2 sm:gap-4 md:gap-6'
+            }`}>
 
               {/* Team A */}
               <div className="flex flex-col items-center space-y-1 sm:space-y-2">
