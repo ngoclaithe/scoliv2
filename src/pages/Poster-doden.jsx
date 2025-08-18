@@ -256,13 +256,16 @@ export default function DodenMatchIntro() {
           {/* Main content section */}
           <div className="flex-1 flex flex-col justify-start pt-1 sm:pt-2 md:pt-3 min-h-0">
 
-            {/* Title section - Tăng font lên 2 lần và giảm padding top */}
+            {/* Title section - T��ng font lên 2 lần và giảm padding top */}
             <div className="text-center mb-0">
               <h1
-                className="font-black uppercase text-white px-2 sm:px-4 md:px-6"
+                className="font-black uppercase px-2 sm:px-4 md:px-6"
                 style={{
-                  textShadow: '#dc2626 2px 2px 4px',
-                  fontSize: isMobile ? '20px' : isTablet ? '24px' : '48px' // Giảm font title cho mobile
+                  color: '#ef4444',
+                  WebkitTextStroke: '2px white',
+                  textStroke: '2px white',
+                  fontFamily: "'UTM Colossalis', 'Arial Black', sans-serif",
+                  fontSize: isMobile ? '20px' : isTablet ? '24px' : '48px'
                 }}
               >
                 {matchData.matchTitle}
@@ -435,7 +438,7 @@ export default function DodenMatchIntro() {
           </div>
         </div>
 
-        {/* Hiệu ứng mưa sao băng từ tâm ra 8 hướng */}
+        {/* Hiệu ứng mưa sao b��ng từ tâm ra 8 hướng */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {[...Array(40)].map((_, i) => {
             const angle = (i % 8) * 45; // 8 hướng: 0, 45, 90, 135, 180, 225, 270, 315 độ
