@@ -148,8 +148,8 @@ export default function DodenMatchIntro() {
 
         <div className="relative z-10 h-full flex flex-col p-1 sm:p-3">
 
-          {/* Sửa khoảng cách giống poster-tretrung */}
-          <div className={`flex justify-between items-start ${isMobile ? 'mb-2' : 'mb-2 sm:mb-3 md:mb-4'} ${isMobile ? 'min-h-[6vh]' : 'min-h-[10vh] sm:min-h-[12vh] md:min-h-[14vh]'}`}>
+          {/* Header section với khoảng cách nhỏ hơn */}
+          <div className={`flex justify-between items-start ${isMobile ? 'mb-1' : 'mb-1 sm:mb-2 md:mb-2'}`}>
 
             {/* Top-left: Sponsors and Organizing */}
             <div className="flex items-start gap-2 sm:gap-4 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '35%' }}>
