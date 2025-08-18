@@ -189,7 +189,7 @@ export default function DodenMatchIntro() {
                             <img
                               src={organizing.logo}
                               alt={organizing.name}
-                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 p-0.5 sm:p-1`}
+                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 p-1 sm:p-2`}
                             />
                           </div>
                         ))}
