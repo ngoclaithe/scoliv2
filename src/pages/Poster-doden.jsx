@@ -590,7 +590,7 @@ export default function DodenMatchIntro() {
               transform: translate(-50%, -50%) translateY(0) scale(1);
             }
             100% {
-              transform: translate(-50%, -50%) translateY(200px) scale(0);
+              transform: translate(-50%, -50%) translateY(600px) scale(0);
               opacity: 0;
             }
           }
