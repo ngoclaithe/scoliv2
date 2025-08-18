@@ -228,7 +228,7 @@ export default function DodenMatchIntro() {
                           <img
                             src={media.logo}
                             alt={media.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 p-2`}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 p-1`}
                           />
                         </div>
                       ))}
@@ -287,7 +287,7 @@ export default function DodenMatchIntro() {
                 )}
                 {matchData.showGroup && (
                   <div className="bg-red-600/80 px-1 sm:px-2 py-0.5 sm:py-1 rounded text-[6px] sm:text-[8px] md:text-[10px] font-bold text-white">
-                    BẢNG {matchData.group}
+                    B��NG {matchData.group}
                   </div>
                 )}
               </div>
