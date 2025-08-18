@@ -323,7 +323,7 @@ export default function DodenMatchIntro() {
                     className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-center block truncate"
                     style={{
                       color: '#ffe006',
-                      fontFamily: "'UTM Colossalis', sans-serif",
+                      fontFamily: "'Orbitron', 'Arial Black', sans-serif",
                       textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                     }}
                     ref={(el) => el && adjustFontSize(el)}
@@ -383,7 +383,7 @@ export default function DodenMatchIntro() {
                     className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-center block truncate"
                     style={{
                       color: '#ffe006',
-                      fontFamily: "'UTM Colossalis', sans-serif",
+                      fontFamily: "'Orbitron', 'Arial Black', sans-serif",
                       textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                     }}
                     ref={(el) => el && adjustFontSize(el)}
