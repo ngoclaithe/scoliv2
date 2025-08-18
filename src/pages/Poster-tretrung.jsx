@@ -157,7 +157,6 @@ export default function TreTrungMatchIntro() {
               boxShadow: '0 4px 20px rgba(24, 119, 242, 0.11)',
               letterSpacing: '1px',
               textShadow: '1px 2px 3px #0e306c22',
-              zIndex: 50,
               whiteSpace: 'nowrap'
             }}
           >
