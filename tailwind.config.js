@@ -16,6 +16,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
+        "utm-colossalis": ["UTM Colossalis", "sans-serif"],
       },
       spacing: {
         18: "4.5rem",

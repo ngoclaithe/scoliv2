@@ -4,8 +4,8 @@
 /* UTM Colossalis Font */
 @font-face {
   font-family: 'UTM Colossalis';
-  src: url('https://cdn.jsdelivr.net/gh/viet-fonts/utm-colossalis@main/UTM-Colossalis.woff2') format('woff2'),
-       url('https://cdn.jsdelivr.net/gh/viet-fonts/utm-colossalis@main/UTM-Colossalis.woff') format('woff');
+  src: url('../public/fonts/UTMColossalis.woff2') format('woff2'),
+       url('../public/fonts/UTMColossalis.woff') format('woff'),;
   font-weight: normal;
   font-style: normal;
   font-display: swap;

@@ -70,7 +70,9 @@ export default function DodenMatchIntro() {
 
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
-  const logoSize = isMobile ? 70 : isTablet ? 96 : 128; // Giảm nhỏ hơn cho mobile
+  const isDesktop = windowSize.width >= 1024;
+
+  const logoSize = isMobile ? 70 : isTablet ? 96 : 188; 
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
@@ -93,7 +95,6 @@ export default function DodenMatchIntro() {
     typeDisplay: matchData.mediaPartnersTypeDisplay[index] || 'square'
   })) : [];
 
-  // Font size adjustment function
   const adjustFontSize = (element) => {
     if (!element) return;
     let fontSize = parseInt(window.getComputedStyle(element).fontSize);
@@ -134,8 +135,29 @@ export default function DodenMatchIntro() {
     }
   };
 
+  // Helper function to get sponsor label font size
+  const getSponsorLabelFontSize = () => {
+    if (isMobile) return 'text-[8px]';
+    if (isTablet) return 'text-xs';
+    return 'text-lg'; // 1.5x larger than original text-xs for desktop
+  };
+
+  // Helper function to get team name font size
+  const getTeamNameFontSize = () => {
+    if (isMobile) return 'text-[8px]';
+    if (isTablet) return 'text-xs';
+    return 'text-3xl'; // 1.4x larger than original text-xl for desktop (approximately)
+  };
+
+  // Helper function to get team name top margin (doubled spacing)
+  const getTeamNameMargin = () => {
+    if (isMobile) return 'mt-4'; // doubled from mt-2 equivalent
+    if (isTablet) return 'mt-6'; // doubled from mt-3 equivalent  
+    return 'mt-8'; // doubled from mt-4 equivalent
+  };
+
   return (
-    <div className="w-full h-screen flex items-center justify-center p-2 sm:p-4 overflow-hidden" style={{background: 'transparent'}}>
+    <div className="w-full h-screen flex items-center justify-center p-2 sm:p-4 overflow-hidden" style={{ background: 'transparent' }}>
       <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
 
         <div
@@ -148,14 +170,12 @@ export default function DodenMatchIntro() {
 
         <div className="relative z-10 h-full flex flex-col p-1 sm:p-3">
 
-          {/* Header section với khoảng cách nhỏ hơn */}
-          <div className={`flex justify-between items-start ${isMobile ? 'mb-1' : 'mb-1 sm:mb-2 md:mb-2'}`}>
+          <div className={`flex justify-between items-start ${isMobile ? 'py-0 mb-0' : 'py-4 mb-1 sm:mb-2 md:mb-2'}`}>
 
-            {/* Top-left: Sponsors and Organizing */}
             <div className="flex items-start gap-2 sm:gap-4 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '35%' }}>
               {hasSponsors && (
                 <div className="flex-shrink-0">
-                  <div className="text-[8px] sm:text-xs font-bold text-white mb-1 drop-shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <div className={`${getSponsorLabelFontSize()} font-bold text-white mb-1 drop-shadow-lg`} style={{ fontFamily: 'Inter, sans-serif' }}>
                     Nhà tài trợ
                   </div>
                   <div className="flex flex-col gap-1">
@@ -178,7 +198,7 @@ export default function DodenMatchIntro() {
 
               {hasOrganizing && (
                 <div className="flex-shrink-0">
-                  <div className="text-[8px] sm:text-xs font-bold text-white mb-1 drop-shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <div className={`${getSponsorLabelFontSize()} font-bold text-white mb-1 drop-shadow-lg`} style={{ fontFamily: 'Inter, sans-serif' }}>
                     Đơn vị đồng hành
                   </div>
                   <div className="flex flex-col gap-1">
@@ -200,7 +220,6 @@ export default function DodenMatchIntro() {
               )}
             </div>
 
-            {/* Top-center: Tournament Logos */}
             <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4 px-4`}>
               {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 &&
                 matchData.tournamentLogos.map((logo, index) => (
@@ -214,11 +233,10 @@ export default function DodenMatchIntro() {
               }
             </div>
 
-            {/* Top-right: Media Partners and Live Unit */}
             <div className="flex flex-col items-end gap-2 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '30%' }}>
               {hasMediaPartners && (
                 <div className="flex-shrink-0 w-full">
-                  <div className="text-[8px] sm:text-xs font-bold text-white mb-1 drop-shadow-lg text-right" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <div className={`${getSponsorLabelFontSize()} font-bold text-white mb-1 drop-shadow-lg text-right`} style={{ fontFamily: 'Inter, sans-serif' }}>
                     Đơn vị truyền thông
                   </div>
                   <div className="flex gap-1 justify-end overflow-x-auto scrollbar-hide">
@@ -253,32 +271,27 @@ export default function DodenMatchIntro() {
 
           </div>
 
-          {/* Main content section */}
           <div className="flex-1 flex flex-col justify-start min-h-0">
 
-            {/* Title section - Tăng font lên 2 lần và giảm padding top */}
             <div className="text-center">
               <h1
-                className="font-black uppercase px-2 sm:px-4 md:px-6"
+                className="font-black uppercase px-2 sm:px-4 md:px-6 font-utm-colossalis py-0 my-0 leading-none"
                 style={{
                   color: '#ef4444',
-                  WebkitTextStroke: '2px white',
-                  textStroke: '2px white',
-                  fontFamily: "'UTM Colossalis', 'Arial Black', sans-serif",
+                  WebkitTextStroke: '1px white',
+                  textStroke: '1px white',
                   fontSize: isMobile ? '20px' : isTablet ? '24px' : '48px'
                 }}
               >
                 {matchData.matchTitle}
               </h1>
 
-              {/* Subtitle display */}
               {matchData.showSubtitle && matchData.subtitle && (
                 <div className="text-white/90 text-[8px] sm:text-xs md:text-sm lg:text-base font-medium mt-1 sm:mt-2 px-2">
                   {matchData.subtitle}
                 </div>
               )}
 
-              {/* Round and Group display - Moved below title */}
               <div className="flex items-center justify-center gap-2 sm:gap-4 mt-1 sm:mt-2">
                 {matchData.showRound && (
                   <div className="bg-blue-600/80 px-1 sm:px-2 py-0.5 sm:py-1 rounded text-[6px] sm:text-[8px] md:text-[10px] font-bold text-white">
@@ -294,17 +307,15 @@ export default function DodenMatchIntro() {
 
             </div>
 
-            {/* Teams section và Time/Date section ngang hàng */}
-            <div className="flex items-center justify-center gap-4 sm:gap-8 md:gap-16 w-full px-1 sm:px-2 md:px-4">
-
+            <div className={`flex items-center justify-center w-full px-1 sm:px-2 md:px-4 ${isDesktop ? 'gap-8 md:gap-12' : 'gap-4 sm:gap-8 md:gap-16'}`}>
               {/* Team A */}
-              <div className="flex flex-col items-center">
+              <div className={`flex flex-col items-center ${isDesktop ? 'transform -translate-x-[10%]' : ''}`}>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
                     className="relative rounded-full bg-white p-1 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
-                      width: `${isMobile ? logoSize * 0.5 : logoSize}px`, // Tăng gấp đôi từ 0.25 lên 0.5 cho mobile
+                      width: `${isMobile ? logoSize * 0.5 : logoSize}px`,
                       height: `${isMobile ? logoSize * 0.5 : logoSize}px`
                     }}
                   >
@@ -318,12 +329,11 @@ export default function DodenMatchIntro() {
                     />
                   </div>
                 </div>
-                <div className="px-1 sm:px-2 md:px-3">
+                <div className={`px-1 sm:px-2 md:px-3 ${getTeamNameMargin()}`}>
                   <span
-                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-center block truncate"
+                    className={`${getTeamNameFontSize()} font-bold uppercase tracking-wide text-center block truncate font-utm-colossalis`}
                     style={{
                       color: '#ffe006',
-                      fontFamily: "'UTM Colossalis', 'Arial Black', sans-serif",
                       textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                     }}
                     ref={(el) => el && adjustFontSize(el)}
@@ -333,13 +343,13 @@ export default function DodenMatchIntro() {
                 </div>
               </div>
 
-              {/* Time and Date section - Ngang hàng với teams */}
+              {/* Middle section - Timer and Date */}
               <div className="flex flex-col items-center px-2 sm:px-4">
                 {matchData.showTimer && (
                   <div
-                    className="text-white font-bold"
+                    className="text-white font-bold font-utm-colossalis leading-none"
                     style={{
-                      fontSize: isMobile ? '20px' : isTablet ? '32px' : '60px'
+                      fontSize: isMobile ? '20px' : isTablet ? '32px' : '88px'
                     }}
                   >
                     {matchData.roundedTime}
@@ -347,9 +357,10 @@ export default function DodenMatchIntro() {
                 )}
                 {matchData.showDate && (
                   <div
-                    className="text-white/90 font-bold mt-1"
+                    className="text-white/90 font-bold font-utm-colossalis leading-none"
                     style={{
-                      fontSize: isMobile ? '12px' : isTablet ? '18px' : '24px'
+                      fontSize: isMobile ? '12px' : isTablet ? '18px' : '44px',
+                      marginTop: isMobile ? '-2px' : isTablet ? '-4px' : '-8px'
                     }}
                   >
                     {matchData.currentDate}
@@ -357,14 +368,14 @@ export default function DodenMatchIntro() {
                 )}
               </div>
 
-              {/* Team B */}
-              <div className="flex flex-col items-center">
+              {/* Team B - Shifted right by 10% on desktop */}
+              <div className={`flex flex-col items-center ${isDesktop ? 'transform translate-x-[10%]' : ''}`}>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-gray-700 to-black rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
                     className="relative rounded-full bg-white p-1 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
-                      width: `${isMobile ? logoSize * 0.5 : logoSize}px`, // Tăng gấp đôi từ 0.25 lên 0.5 cho mobile
+                      width: `${isMobile ? logoSize * 0.5 : logoSize}px`,
                       height: `${isMobile ? logoSize * 0.5 : logoSize}px`
                     }}
                   >
@@ -378,12 +389,11 @@ export default function DodenMatchIntro() {
                     />
                   </div>
                 </div>
-                <div className="px-1 sm:px-2 md:px-3">
+                <div className={`px-1 sm:px-2 md:px-3 ${getTeamNameMargin()}`}>
                   <span
-                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-center block truncate"
+                    className={`${getTeamNameFontSize()} font-bold uppercase tracking-wide text-center block truncate font-utm-colossalis`}
                     style={{
                       color: '#ffe006',
-                      fontFamily: "'UTM Colossalis', 'Arial Black', sans-serif",
                       textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                     }}
                     ref={(el) => el && adjustFontSize(el)}
@@ -398,10 +408,8 @@ export default function DodenMatchIntro() {
 
         </div>
 
-        {/* Bottom section - Stadium và Live Text - Đưa ra ngoài để width bằng poster */}
         <div className="absolute bottom-[20%] left-0 right-0 z-10 bg-white">
           <div className="flex justify-center items-center gap-2 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8 py-2 rounded-t-lg mx-4 sm:mx-8">
-            {/* Stadium */}
             {matchData.showStadium && (
               <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-gray-800 font-normal" style={{
                 fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
@@ -415,7 +423,6 @@ export default function DodenMatchIntro() {
               </div>
             )}
 
-            {/* Live Text */}
             {matchData.showLiveIndicator && (
               <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-red-600 font-bold" style={{
                 fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
@@ -431,12 +438,10 @@ export default function DodenMatchIntro() {
           </div>
         </div>
 
-        {/* Hiệu ứng mưa sao băng từ tâm ra 8 hướng */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(80)].map((_, i) => {
-            const angle = (i % 16) * 22.5; // 16 hướng: 0, 22.5, 45, 67.5, 90, 112.5, 135, 157.5, 180, 202.5, 225, 247.5, 270, 292.5, 315, 337.5 độ
-            const distance = 60 + (i % 10) * 30; // Tăng gấp đôi khoảng cách
-            const delay = (i % 16) * 0.1; // Độ trễ cho mỗi hướng (16 hướng)
+          {[...Array(216)].map((_, i) => {
+            const angle = (i * 360) / 216;
+            const distance = 60 + (i % 10) * 30;
 
             return (
               <div
@@ -447,7 +452,6 @@ export default function DodenMatchIntro() {
                   top: '50%',
                   transform: 'translate(-50%, -50%)',
                   animation: `shootingStar-${angle} ${3 + Math.random() * 2}s ease-out infinite`,
-                  animationDelay: `${delay}s`,
                   opacity: 0.8
                 }}
               />
@@ -455,7 +459,6 @@ export default function DodenMatchIntro() {
           })}
         </div>
 
-        {/* Bụi sao nhỏ rơi rơi ngẫu nhiên */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {[...Array(20)].map((_, i) => (
             <div
@@ -474,6 +477,7 @@ export default function DodenMatchIntro() {
         </div>
 
         <style>{`
+          
           @keyframes sparkle {
             0%, 100% {
               transform: scale(0) rotate(0deg);
@@ -485,102 +489,30 @@ export default function DodenMatchIntro() {
             }
           }
 
-          /* Shooting star animations for 16 directions */
-          @keyframes shootingStar-0 {
-            0% { transform: translate(-50%, -50%) translateX(0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translate(-50%, -50%) translateX(0) scale(1); }
-            100% { transform: translate(-50%, -50%) translateX(1200px) scale(0); opacity: 0; }
-          }
+          ${[...Array(216)].map((_, i) => {
+          const angle = (i * 360) / 216;
+          const radian = (angle * Math.PI) / 180;
+          const distance = 1200;
+          const x = Math.cos(radian) * distance;
+          const y = Math.sin(radian) * distance;
 
-          @keyframes shootingStar-22.5 {
-            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
-            100% { transform: translate(-50%, -50%) translate(1131px, -465px) scale(0); opacity: 0; }
-          }
-
-          @keyframes shootingStar-45 {
-            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
-            100% { transform: translate(-50%, -50%) translate(900px, -900px) scale(0); opacity: 0; }
-          }
-
-          @keyframes shootingStar-67.5 {
-            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
-            100% { transform: translate(-50%, -50%) translate(465px, -1131px) scale(0); opacity: 0; }
-          }
-
-          @keyframes shootingStar-90 {
-            0% { transform: translate(-50%, -50%) translateY(0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translate(-50%, -50%) translateY(0) scale(1); }
-            100% { transform: translate(-50%, -50%) translateY(-1200px) scale(0); opacity: 0; }
-          }
-
-          @keyframes shootingStar-112.5 {
-            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
-            100% { transform: translate(-50%, -50%) translate(-465px, -1131px) scale(0); opacity: 0; }
-          }
-
-          @keyframes shootingStar-135 {
-            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
-            100% { transform: translate(-50%, -50%) translate(-900px, -900px) scale(0); opacity: 0; }
-          }
-
-          @keyframes shootingStar-157.5 {
-            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
-            100% { transform: translate(-50%, -50%) translate(-1131px, -465px) scale(0); opacity: 0; }
-          }
-
-          @keyframes shootingStar-180 {
-            0% { transform: translate(-50%, -50%) translateX(0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translate(-50%, -50%) translateX(0) scale(1); }
-            100% { transform: translate(-50%, -50%) translateX(-1200px) scale(0); opacity: 0; }
-          }
-
-          @keyframes shootingStar-202.5 {
-            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
-            100% { transform: translate(-50%, -50%) translate(-1131px, 465px) scale(0); opacity: 0; }
-          }
-
-          @keyframes shootingStar-225 {
-            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
-            100% { transform: translate(-50%, -50%) translate(-900px, 900px) scale(0); opacity: 0; }
-          }
-
-          @keyframes shootingStar-247.5 {
-            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
-            100% { transform: translate(-50%, -50%) translate(-465px, 1131px) scale(0); opacity: 0; }
-          }
-
-          @keyframes shootingStar-270 {
-            0% { transform: translate(-50%, -50%) translateY(0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translate(-50%, -50%) translateY(0) scale(1); }
-            100% { transform: translate(-50%, -50%) translateY(1200px) scale(0); opacity: 0; }
-          }
-
-          @keyframes shootingStar-292.5 {
-            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
-            100% { transform: translate(-50%, -50%) translate(465px, 1131px) scale(0); opacity: 0; }
-          }
-
-          @keyframes shootingStar-315 {
-            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
-            100% { transform: translate(-50%, -50%) translate(900px, 900px) scale(0); opacity: 0; }
-          }
-
-          @keyframes shootingStar-337.5 {
-            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
-            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
-            100% { transform: translate(-50%, -50%) translate(1131px, 465px) scale(0); opacity: 0; }
-          }
+          return `
+              @keyframes shootingStar-${angle} {
+                0% { 
+                  transform: translate(-50%, -50%) translate(0, 0) scale(0); 
+                  opacity: 0; 
+                }
+                10% { 
+                  opacity: 1; 
+                  transform: translate(-50%, -50%) translate(0, 0) scale(1); 
+                }
+                100% { 
+                  transform: translate(-50%, -50%) translate(${x}px, ${y}px) scale(0); 
+                  opacity: 0; 
+                }
+              }
+            `;
+        }).join('')}
 
           .scrollbar-hide {
             -ms-overflow-style: none;
@@ -590,7 +522,6 @@ export default function DodenMatchIntro() {
             display: none;
           }
           
-          /* Hexagon styles */
           .hexagon-clip {
             clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
             position: relative;
