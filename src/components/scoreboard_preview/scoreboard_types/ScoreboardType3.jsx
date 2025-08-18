@@ -6,25 +6,6 @@ const ScoreboardType3 = ({ currentData, logoShape, showMatchTime }) => {
         <div className="flex flex-col items-center w-full scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
             {/* Main scoreboard row */}
             <div className="flex items-center justify-center w-full px-2 max-w-sm mx-auto">
-                {/* Logo đội A */}
-                <div className="flex-shrink-0 mr-2 sm:mr-3">
-                    <div
-                        className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
-                        style={{
-                            width: '48px',
-                            height: '48px'
-                        }}
-                    >
-                        <img
-                            src={currentData.teamALogo}
-                            alt={currentData.teamAName}
-                            className="object-contain w-[100%] h-[100%]"
-                            onError={(e) => {
-                                e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
-                            }}
-                        />
-                    </div>
-                </div>
 
                 {/* Container chính */}
                 <div className="flex flex-col bg-black/20 backdrop-blur-sm rounded-lg p-1 shadow-xl flex-1">
@@ -99,25 +80,6 @@ const ScoreboardType3 = ({ currentData, logoShape, showMatchTime }) => {
                     </div>
                 </div>
 
-                {/* Logo đội B */}
-                <div className="flex-shrink-0 ml-2 sm:ml-3">
-                    <div
-                        className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
-                        style={{
-                            width: '48px',
-                            height: '48px'
-                        }}
-                    >
-                        <img
-                            src={currentData.teamBLogo}
-                            alt={currentData.teamBName}
-                            className="object-contain w-[100%] h-[100%]"
-                            onError={(e) => {
-                                e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBCPC90ZXh0Pgo8L3N2Zz4K';
-                            }}
-                        />
-                    </div>
-                </div>
             </div>
         </div>
     );
