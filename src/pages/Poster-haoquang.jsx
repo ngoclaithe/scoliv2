@@ -386,11 +386,11 @@ export default function HaoQuangMatchIntro() {
 
             {/* Các đơn vị đồng hành */}
             {(hasSponsors || hasOrganizing || hasMediaPartners) && (
-              <div className="flex flex-col items-center mt-2 sm:mt-4 mb-2 sm:mb-4">
-                <div className="font-bold mb-2" style={{color: '#FFD700', fontSize: isMobile ? '10px' : isTablet ? '17px' : '20px'}}>
+              <div className={`flex flex-col items-center ${isMobile ? 'mt-1 mb-1' : 'mt-2 sm:mt-4 mb-2 sm:mb-4'}`}>
+                <div className="font-bold mb-1 sm:mb-2" style={{color: '#FFD700', fontSize: isMobile ? '8px' : isTablet ? '14px' : '18px'}}>
                   Các đơn vị đồng hành
                 </div>
-                <div className="flex justify-center items-center gap-2 sm:gap-3 md:gap-4 flex-wrap" style={{backgroundColor: 'white', padding: '8px', borderRadius: '8px'}}>
+                <div className={`flex justify-center items-center ${isMobile ? 'gap-1' : 'gap-2 sm:gap-3 md:gap-4'} flex-wrap`} style={{backgroundColor: 'white', padding: isMobile ? '4px' : '8px', borderRadius: isMobile ? '4px' : '8px'}}>
                   {/* Sponsors */}
                   {sponsorLogos.map((sponsor, index) => (
                     <div key={`all-sponsor-${index}`} className="flex-shrink-0" style={{backgroundColor: 'white', padding: '2px', borderRadius: '4px'}}>
