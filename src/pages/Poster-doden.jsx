@@ -430,23 +430,14 @@ export default function DodenMatchIntro() {
         </div>
 
         <style>{`
-          @keyframes starExplosion {
-            0% {
-              transform: translate(-50%, -50%) rotate(var(--angle)) translateX(0px) rotate(calc(var(--angle) * -1));
+          @keyframes sparkle {
+            0%, 100% {
+              transform: scale(0) rotate(0deg);
               opacity: 0;
-              scale: 0;
             }
-            10% {
+            50% {
+              transform: scale(1.5) rotate(180deg);
               opacity: 1;
-              scale: 1;
-            }
-            90% {
-              opacity: 1;
-            }
-            100% {
-              transform: translate(-50%, -50%) rotate(var(--angle)) translateX(var(--dist)) rotate(calc(var(--angle) * -1));
-              opacity: 0;
-              scale: 0.5;
             }
           }
 
