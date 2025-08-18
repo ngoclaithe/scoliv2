@@ -342,8 +342,8 @@ export default function TreTrungMatchIntro() {
                     alt="VS"
                     className="object-contain animate-pulse"
                     style={{
-                      width: isMobile ? '80px' : isTablet ? '120px' : '160px',
-                      height: isMobile ? '80px' : isTablet ? '120px' : '160px'
+                      width: isMobile ? '40px' : isTablet ? '120px' : '160px',
+                      height: isMobile ? '40px' : isTablet ? '120px' : '160px'
                     }}
                   />
                 </div>
