@@ -311,7 +311,7 @@ export default function HaoQuangMatchIntro() {
                     <div
                       className="font-bold"
                       style={{
-                        fontSize: isMobile ? '8px' : isTablet ? '14px' : '18px'
+                        fontSize: isMobile ? '6px' : isTablet ? '12px' : '16px'
                       }}
                     >
                       {matchData.showTimer && matchData.roundedTime}
@@ -324,7 +324,7 @@ export default function HaoQuangMatchIntro() {
                     <div
                       className="font-normal"
                       style={{
-                        fontSize: isMobile ? '7px' : isTablet ? '12px' : '16px'
+                        fontSize: isMobile ? '5px' : isTablet ? '10px' : '14px'
                       }}
                     >
                       Địa điểm: {matchData.stadium}
