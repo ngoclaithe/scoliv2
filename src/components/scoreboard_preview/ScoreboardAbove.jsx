@@ -193,7 +193,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
                     sm:top-2 sm:right-2 sm:scale-90
                     max-[480px]:top-1 max-[480px]:right-1 max-[480px]:scale-[0.44]
                     max-[360px]:top-0.5 max-[360px]:right-0.5 max-[360px]:scale-[0.33]">
-                    <div className="bg-transparent rounded-lg shadow-2xl">
+                    <div className="bg-transparent">
                         {renderScoreboard()}
                     </div>
                 </div>
