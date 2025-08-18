@@ -134,7 +134,7 @@ export default function TreTrungMatchIntro() {
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col p-2 sm:p-4 md:p-6">
+        <div className="relative z-10 h-full flex flex-col pt-2 px-2 pb-0 sm:pt-4 sm:px-4 sm:pb-0 md:pt-6 md:px-6 md:pb-0">
 
 
           {/* Top section với logos - Mobile responsive */}
