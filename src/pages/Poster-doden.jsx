@@ -166,7 +166,7 @@ export default function DodenMatchIntro() {
                             <img
                               src={sponsor.logo}
                               alt={sponsor.name}
-                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 p-1 sm:p-2`}
+                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 p-1`}
                             />
                           </div>
                         ))}
