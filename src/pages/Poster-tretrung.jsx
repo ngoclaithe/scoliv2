@@ -310,7 +310,9 @@ export default function TreTrungMatchIntro() {
                     padding: '4px 20px',
                     width: 'fit-content',
                     minWidth: '35%',
-                    color: '#ffffff'
+                    color: '#ffffff',
+                    fontFamily: 'Baloo Bhai 2, sans-serif',
+                    fontWeight: '800'
                   }}
                 >
                   {matchData.team1}
