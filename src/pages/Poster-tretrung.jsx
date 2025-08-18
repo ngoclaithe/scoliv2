@@ -70,7 +70,7 @@ export default function TreTrungMatchIntro() {
 
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
-  const logoSize = isMobile ? 80 : isTablet ? 120 : 160; // Giảm size để fit layout
+  const logoSize = isMobile ? 40 : isTablet ? 100 : 160; // Giảm size đáng kể cho mobile
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
