@@ -61,7 +61,7 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                         
                         <div className="flex items-start">
                             <div className="w-[180px]">
-                                <div className="w-full text-white text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)] h-6" style={{ backgroundColor: '#004d73', fontFamily: 'UTM Bebas, sans-serif' }}>
+                                <div className="w-full text-white text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]" style={{ backgroundColor: '#004d73', fontFamily: 'UTM Bebas, sans-serif', height: '56px' }}>
                                     {currentData.teamBName}
                                 </div>
 
