@@ -140,9 +140,8 @@ export default function TreTrungMatchIntro() {
           {/* Top section với logos - Mobile responsive */}
           <div className={`flex justify-between items-start mb-2 sm:mb-3 md:mb-4 ${isMobile ? 'min-h-[6vh]' : 'min-h-[10vh] sm:min-h-[12vh] md:min-h-[14vh]'}`}>
 
-            {/* Top-left: Sponsors and Organizing - Hidden on mobile */}
-            {!isMobile && (
-              <div className="flex items-start gap-2 sm:gap-4 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '35%' }}>
+            {/* Top-left: Sponsors and Organizing - Show on mobile but smaller */}
+            <div className={`flex items-start flex-shrink-0 ${isMobile ? 'gap-1' : 'gap-2 sm:gap-4'}`} style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: isMobile ? '25%' : '35%' }}>
                 {hasSponsors && (
                   <div className="flex-shrink-0">
                     <div className="text-sm sm:text-lg md:text-xl font-bold text-white mb-1 drop-shadow-lg">
