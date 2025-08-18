@@ -79,8 +79,8 @@ export default function HaoQuangMatchIntro() {
       teamNameElements.forEach((element) => {
         const container = element.parentElement;
         const containerWidth = container.offsetWidth - 30; // subtract padding
-        let fontSize = isMobile ? 10 : isTablet ? 28 : 48;
-        const minFontSize = isMobile ? 6 : isTablet ? 12 : 20;
+        let fontSize = isMobile ? 7 : isTablet ? 20 : 34;
+        const minFontSize = isMobile ? 4 : isTablet ? 8 : 14;
 
         element.style.fontSize = fontSize + 'px';
 
@@ -177,7 +177,7 @@ export default function HaoQuangMatchIntro() {
         <div className="relative z-10 h-full flex flex-col p-1 sm:p-2">
 
           {/* Top section với tournament logos only */}
-          <div className="flex justify-center items-start mb-1 sm:mb-3 md:mb-5 min-h-[8vh] sm:min-h-[12vh] md:min-h-[14vh]">
+          <div className="flex justify-center items-start mb-0 sm:mb-1 md:mb-2 min-h-[6vh] sm:min-h-[8vh] md:min-h-[10vh]">
             {/* Tournament Logos */}
             <div className={`flex ${getTournamentPositionClass()} items-center gap-1 sm:gap-2 md:gap-4 px-4`}>
               {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 &&
@@ -197,7 +197,7 @@ export default function HaoQuangMatchIntro() {
           <div className="flex-1 flex flex-col justify-center min-h-0">
 
             {/* Title section */}
-            <div className="text-center mb-1 sm:mb-2 md:mb-3">
+            <div className="text-center mb-0 sm:mb-1 md:mb-2">
               <h1
                 className="title text-white px-1 sm:px-2"
               >
@@ -225,20 +225,20 @@ export default function HaoQuangMatchIntro() {
                 )}
               </div>
 
-              <div className="flex items-center justify-center mt-2 sm:mt-4">
-                <div className="w-24 sm:w-48 h-0.5 bg-white"></div>
+              <div className="flex items-center justify-center mt-1 sm:mt-2">
+                <div className="w-32 sm:w-64 md:w-80 h-0.5 bg-white"></div>
                 <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-400 rounded-full mx-1 sm:mx-2"></div>
                 <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-orange-500 rounded-full mx-1 sm:mx-2"></div>
                 <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-500 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-24 sm:w-48 h-0.5 bg-white"></div>
+                <div className="w-32 sm:w-64 md:w-80 h-0.5 bg-white"></div>
               </div>
             </div>
 
             {/* Teams section với Match info ngang hàng */}
-            <div className={`flex items-center justify-between w-full mb-1 sm:mb-2 md:mb-3 ${
+            <div className={`flex items-center justify-center w-full mb-1 sm:mb-2 md:mb-3 ${
               isMobile
-                ? 'px-2 gap-1'
-                : 'px-4 sm:px-8 md:px-12 gap-1 sm:gap-2 md:gap-3'
+                ? 'px-8 gap-3'
+                : 'px-16 sm:px-20 md:px-24 gap-4 sm:gap-6 md:gap-8'
             }`}>
 
               {/* Team A */}
@@ -387,7 +387,7 @@ export default function HaoQuangMatchIntro() {
             {/* Các đơn vị đồng hành */}
             {(hasSponsors || hasOrganizing || hasMediaPartners) && (
               <div className="flex flex-col items-center mt-2 sm:mt-4 mb-2 sm:mb-4">
-                <div className="text-yellow-400 font-bold text-xs sm:text-sm md:text-base mb-2">
+                <div className="font-bold mb-2" style={{color: '#FFD700', fontSize: isMobile ? '10px' : isTablet ? '17px' : '20px'}}>
                   Các đơn vị đồng hành
                 </div>
                 <div className="flex justify-center items-center gap-2 sm:gap-3 md:gap-4 flex-wrap" style={{backgroundColor: 'white', padding: '8px', borderRadius: '8px'}}>
