@@ -94,7 +94,7 @@ export default function HaoQuangMatchIntro() {
     // Delay to ensure DOM is ready
     setTimeout(adjustTeamNameFontSize, 100);
   }, [matchData.team1, matchData.team2, isMobile, isTablet]);
-  const logoSize = isMobile ? 30 : isTablet ? 80 : 140;
+  const logoSize = isMobile ? 50 : isTablet ? 80 : 140;
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
