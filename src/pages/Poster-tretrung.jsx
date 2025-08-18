@@ -70,7 +70,7 @@ export default function TreTrungMatchIntro() {
 
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
-  const logoSize = isMobile ? 80 : isTablet ? 120 : 160; // Giảm size để fit layout
+  const logoSize = isMobile ? 40 : isTablet ? 100 : 160; // Gi���m size đáng kể cho mobile
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
@@ -134,90 +134,86 @@ export default function TreTrungMatchIntro() {
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col p-2 sm:p-4 md:p-6">
+        <div className="relative z-10 h-full flex flex-col pt-2 px-2 pb-0 sm:pt-4 sm:px-4 sm:pb-0 md:pt-6 md:px-6 md:pb-0">
 
 
-          {/* Top section với logos */}
-          <div className="flex justify-between items-start mb-2 sm:mb-3 md:mb-4 min-h-[10vh] sm:min-h-[12vh] md:min-h-[14vh]">
+          {/* Top section với logos - Mobile responsive */}
+          <div className={`flex justify-between items-start mb-2 sm:mb-3 md:mb-4 ${isMobile ? 'min-h-[6vh]' : 'min-h-[10vh] sm:min-h-[12vh] md:min-h-[14vh]'}`}>
 
-            {/* Top-left: Sponsors and Organizing */}
-            <div className="flex items-start gap-2 sm:gap-4 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '35%' }}>
-              {hasSponsors && (
-                <div className="flex-shrink-0">
-                  <div className="text-sm sm:text-lg md:text-xl font-bold text-white mb-1 drop-shadow-lg">
-                    Nhà tài trợ
+            {/* Top-left: Sponsors and Organizing - Show on mobile but smaller */}
+            <div className={`flex items-start flex-shrink-0 ${isMobile ? 'gap-1' : 'gap-2 sm:gap-4'}`} style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: isMobile ? '25%' : '35%' }}>
+                {hasSponsors && (
+                  <div className="flex-shrink-0">
+                    <div className={`font-bold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
+                      Nhà tài trợ
+                    </div>
+                    <div className="flex gap-0.5">
+                      {sponsorLogos.slice(0, isMobile ? 3 : 6).map((sponsor, index) => (
+                        <div key={`sponsor-${index}`} className="flex-shrink-0">
+                          <img
+                            src={sponsor.logo}
+                            alt={sponsor.name}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                          />
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-1">
-                    {Array.from({ length: Math.ceil(Math.min(sponsorLogos.length, 6) / 3) }, (_, rowIndex) => (
-                      <div key={`sponsor-row-${rowIndex}`} className="flex gap-1 flex-nowrap">
-                        {sponsorLogos.slice(rowIndex * 3, (rowIndex + 1) * 3).slice(0, 3).map((sponsor, index) => (
-                          <div key={`sponsor-${rowIndex}-${index}`} className="flex-shrink-0">
-                            <img
-                              src={sponsor.logo}
-                              alt={sponsor.name}
-                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 p-0.5 sm:p-1`}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                )}
 
-              {hasOrganizing && (
-                <div className="flex-shrink-0">
-                  <div className="text-sm sm:text-lg md:text-xl font-bold text-white mb-1 drop-shadow-lg">
-                    Đơn vị tổ chức
+                {hasOrganizing && (
+                  <div className="flex-shrink-0">
+                    <div className={`font-bold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
+                      Đơn vị tổ chức
+                    </div>
+                    <div className="flex gap-0.5">
+                      {organizingLogos.slice(0, isMobile ? 3 : 6).map((organizing, index) => (
+                        <div key={`organizing-${index}`} className="flex-shrink-0">
+                          <img
+                            src={organizing.logo}
+                            alt={organizing.name}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                          />
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-1">
-                    {Array.from({ length: Math.ceil(Math.min(organizingLogos.length, 6) / 3) }, (_, rowIndex) => (
-                      <div key={`organizing-row-${rowIndex}`} className="flex gap-1 flex-nowrap">
-                        {organizingLogos.slice(rowIndex * 3, (rowIndex + 1) * 3).slice(0, 3).map((organizing, index) => (
-                          <div key={`organizing-${rowIndex}-${index}`} className="flex-shrink-0">
-                            <img
-                              src={organizing.logo}
-                              alt={organizing.name}
-                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 p-0.5 sm:p-1`}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
 
             {/* Top-center: Tournament Logos */}
-            <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4 px-4`}>
+            <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4 ${isMobile ? 'px-2' : 'px-4'}`}>
               {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 &&
-                matchData.tournamentLogos.map((logo, index) => (
+                matchData.tournamentLogos.slice(0, isMobile ? 2 : matchData.tournamentLogos.length).map((logo, index) => (
                   <img
                     key={index}
                     src={logo}
                     alt={`Tournament Logo ${index + 1}`}
-                    className="object-contain h-6 sm:h-8 md:h-12 lg:h-16 max-w-16 sm:max-w-24 md:max-w-32 flex-shrink-0"
+                    className={`object-contain flex-shrink-0 ${
+                      isMobile
+                        ? 'h-4 max-w-12'
+                        : 'h-6 sm:h-8 md:h-12 lg:h-16 max-w-16 sm:max-w-24 md:max-w-32'
+                    }`}
                   />
                 ))
               }
             </div>
 
-            {/* Top-right: Media Partners and Live Unit */}
-            <div className="flex flex-col items-end gap-2 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '30%' }}>
+            {/* Top-right: Media Partners and Live Unit - Show on mobile but smaller */}
+            <div className="flex flex-col items-end gap-1 sm:gap-2 flex-shrink-0" style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: '30%' }}>
               {hasMediaPartners && (
                 <div className="flex-shrink-0 w-full">
-                  <div className="text-sm sm:text-lg md:text-xl font-bold text-white mb-1 drop-shadow-lg text-right">
+                  <div className={`font-bold text-white mb-0.5 drop-shadow-lg text-right ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
                     Đơn vị truyền thông
                   </div>
-                  <div className="flex gap-1 justify-end overflow-x-auto scrollbar-hide">
-                    <div className="flex gap-1 flex-nowrap">
-                      {mediaPartnerLogos.map((media, index) => (
+                  <div className="flex gap-0.5 justify-end overflow-x-auto scrollbar-hide">
+                    <div className="flex gap-0.5 flex-nowrap">
+                      {mediaPartnerLogos.slice(0, isMobile ? 2 : mediaPartnerLogos.length).map((media, index) => (
                         <div key={index} className="flex-shrink-0">
                           <img
                             src={media.logo}
                             alt={media.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-10 h-10 sm:w-13 sm:h-13 md:w-16 md:h-16 p-1`}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 p-1'}`}
                           />
                         </div>
                       ))}
@@ -228,12 +224,14 @@ export default function TreTrungMatchIntro() {
 
               {matchData.liveUnit && (
                 <div className="flex-shrink-0">
-                  <div className="bg-red-600 text-white px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2">
+                  <div className={`bg-red-600 text-white rounded-md sm:rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2 ${
+                    isMobile ? 'px-1 py-0.5' : 'px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5'
+                  }`}>
                     <div className="w-1 h-1 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
                     <img
                       src={matchData.liveUnit}
                       alt="Live Unit"
-                      className="h-3 sm:h-4 md:h-5 object-contain"
+                      className={`object-contain ${isMobile ? 'h-2.5' : 'h-3 sm:h-4 md:h-5'}`}
                     />
                   </div>
                 </div>
@@ -258,24 +256,30 @@ export default function TreTrungMatchIntro() {
                 </div>
               )}
 
-              {/* Round and Group display */}
-              <div className="flex items-center justify-center gap-2 sm:gap-3 mt-0.5 sm:mt-1">
-                {matchData.showRound && (
-                  <div className="bg-blue-600/80 px-2 py-1 rounded text-xs sm:text-sm font-bold text-white">
-                    VÒNG {matchData.round}
-                  </div>
-                )}
-                {matchData.showGroup && (
-                  <div className="bg-green-600/80 px-2 py-1 rounded text-xs sm:text-sm font-bold text-white">
-                    BẢNG {matchData.group}
-                  </div>
-                )}
-              </div>
+              {/* Round and Group display - Hidden on mobile to save space */}
+              {!isMobile && (
+                <div className="flex items-center justify-center gap-2 sm:gap-3 mt-0.5 sm:mt-1">
+                  {matchData.showRound && (
+                    <div className="bg-blue-600/80 px-2 py-1 rounded text-xs sm:text-sm font-bold text-white">
+                      VÒNG {matchData.round}
+                    </div>
+                  )}
+                  {matchData.showGroup && (
+                    <div className="bg-green-600/80 px-2 py-1 rounded text-xs sm:text-sm font-bold text-white">
+                      BẢNG {matchData.group}
+                    </div>
+                  )}
+                </div>
+              )}
 
             </div>
 
-            {/* Teams section - compact */}
-            <div className="flex items-center justify-center w-full px-4 sm:px-8 md:px-12 mb-1 sm:mb-2 md:mb-3 gap-2 sm:gap-4 md:gap-6">
+            {/* Teams section - compact and mobile responsive */}
+            <div className={`flex items-center justify-center w-full mb-1 sm:mb-2 md:mb-3 ${
+              isMobile
+                ? 'px-2 gap-1'
+                : 'px-4 sm:px-8 md:px-12 gap-2 sm:gap-4 md:gap-6'
+            }`}>
 
               {/* Team A */}
               <div className="flex flex-col items-center space-y-1 sm:space-y-2">
@@ -306,13 +310,14 @@ export default function TreTrungMatchIntro() {
                     width: 'auto',
                     minWidth: 'unset',
                     maxWidth: 'unset',
-                    fontSize: isMobile ? '20px' : isTablet ? '35px' : '60px',
-                    padding: '4px 20px',
+                    fontSize: isMobile ? '10px' : isTablet ? '28px' : '48px',
+                    padding: isMobile ? '2px 8px' : '4px 20px',
                     width: 'fit-content',
-                    minWidth: '35%',
+                    minWidth: isMobile ? 'unset' : '35%',
                     color: '#ffffff',
                     fontFamily: 'Baloo Bhai 2, sans-serif',
-                    fontWeight: '800'
+                    fontWeight: '800',
+                    textShadow: '4px 4px #727272'
                   }}
                 >
                   {matchData.team1}
@@ -327,8 +332,8 @@ export default function TreTrungMatchIntro() {
                     alt="VS"
                     className="object-contain animate-pulse"
                     style={{
-                      width: isMobile ? '80px' : isTablet ? '120px' : '160px',
-                      height: isMobile ? '80px' : isTablet ? '120px' : '160px'
+                      width: isMobile ? '40px' : isTablet ? '120px' : '160px',
+                      height: isMobile ? '40px' : isTablet ? '120px' : '160px'
                     }}
                   />
                 </div>
@@ -363,13 +368,14 @@ export default function TreTrungMatchIntro() {
                     width: 'auto',
                     minWidth: 'unset',
                     maxWidth: 'unset',
-                    fontSize: isMobile ? '20px' : isTablet ? '35px' : '60px',
-                    padding: '4px 20px',
+                    fontSize: isMobile ? '10px' : isTablet ? '28px' : '48px',
+                    padding: isMobile ? '2px 8px' : '4px 20px',
                     width: 'fit-content',
-                    minWidth: '35%',
+                    minWidth: isMobile ? 'unset' : '35%',
                     color: '#ffffff',
                     fontFamily: 'Baloo Bhai 2, sans-serif',
-                    fontWeight: '800'
+                    fontWeight: '800',
+                    textShadow: '4px 4px #727272'
                   }}
                 >
                   {matchData.team2}
@@ -378,7 +384,7 @@ export default function TreTrungMatchIntro() {
             </div>
 
             {/* Match time and date - Below team names */}
-            <div className="flex justify-center items-center mb-2 sm:mb-3 md:mb-4">
+            <div className={`flex justify-center items-center ${isMobile ? 'mb-1' : 'mb-2 sm:mb-3 md:mb-4'}`}>
               <div
                 className="time-date-container"
                 style={{
@@ -386,12 +392,12 @@ export default function TreTrungMatchIntro() {
                   justifyContent: 'center',
                   alignItems: 'center',
                   background: 'linear-gradient(to right, #ff3131, #ff914d)',
-                  border: '6px solid #fff',
-                  borderRadius: '45px',
+                  border: isMobile ? '1px solid #fff' : '6px solid #fff',
+                  borderRadius: isMobile ? '10px' : '45px',
                   color: '#fff',
-                  fontSize: isMobile ? '10px' : isTablet ? '17px' : '25px',
+                  fontSize: isMobile ? '6px' : isTablet ? '17px' : '25px',
                   fontFamily: 'Bebas Neue, UTM Bebas, sans-serif',
-                  padding: '0px',
+                  padding: isMobile ? '1px 3px' : '4px 12px',
                   boxShadow: '0 4px 20px rgba(24, 119, 242, 0.11)',
                   letterSpacing: '1px',
                   textShadow: '1px 2px 3px #0e306c22',
@@ -404,37 +410,40 @@ export default function TreTrungMatchIntro() {
               </div>
             </div>
 
-            {/* Stadium and Live sections - Same row */}
-            <div className="flex justify-center items-center gap-8 sm:gap-12 md:gap-16 px-4 sm:px-8 md:px-12 mb-1">
-              {/* Stadium */}
-              <div className="flex items-center space-x-2 sm:space-x-3 text-white font-bold" style={{
-                fontSize: isMobile ? '16px' : isTablet ? '24px' : '32px'
-              }}>
-                <img
-                  src="/images/basic/stadium.png"
-                  alt="Stadium"
-                  className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain"
-                />
-                <span>{matchData.stadium}</span>
-              </div>
-
-              {/* Live Text */}
-              <div className="flex items-center space-x-2 sm:space-x-3 text-white font-bold" style={{
-                fontSize: isMobile ? '16px' : isTablet ? '24px' : '32px'
-              }}>
-                <img
-                  src="/images/basic/live-logo1.gif"
-                  alt="Live"
-                  className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain"
-                />
-                <span>{matchData.liveText}</span>
-              </div>
-            </div>
-
           </div>
 
-          {/* Bottom spacer */}
-          <div className="h-1 sm:h-1 md:h-1 flex-shrink-0"></div>
+          {/* Stadium and Live sections - Bottom position and mobile responsive */}
+          <div className="mt-auto mb-0">
+            <div className="flex justify-center items-center gap-2 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8">
+              {/* Stadium */}
+              {matchData.showStadium && (
+                <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-white font-normal" style={{
+                  fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
+                }}>
+                  <img
+                    src="/images/basic/stadium.png"
+                    alt="Stadium"
+                    className={`object-contain ${isMobile ? 'w-2 h-2' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
+                  />
+                  <span>{matchData.stadium}</span>
+                </div>
+              )}
+
+              {/* Live Text */}
+              {matchData.showLiveIndicator && (
+                <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-white font-normal" style={{
+                  fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
+                }}>
+                  <img
+                    src="/images/basic/live-logo1.gif"
+                    alt="Live"
+                    className={`object-contain ${isMobile ? 'w-2 h-2' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
+                  />
+                  <span>{matchData.liveText}</span>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -451,6 +460,22 @@ export default function TreTrungMatchIntro() {
                 animation: `bouncingLeaves ${3 + Math.random() * 4}s ease-in-out infinite`
               }}
             />
+          ))}
+
+          {/* Falling stars effect */}
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={`star-${i}`}
+              className="absolute text-white opacity-80"
+              style={{
+                left: `${Math.random() * 100}%`,
+                fontSize: `${16 + Math.random() * 16}px`,
+                animation: `fallingStar ${8 + Math.random() * 8}s linear infinite`,
+                animationDelay: `${Math.random() * 5}s`
+              }}
+            >
+              ✦
+            </div>
           ))}
         </div>
 
@@ -470,7 +495,7 @@ export default function TreTrungMatchIntro() {
 
           @media (max-width: 768px) {
             .title {
-              font-size: 24px !important;
+              font-size: 14px !important;
             }
           }
 
@@ -496,6 +521,23 @@ export default function TreTrungMatchIntro() {
             75% {
               transform: translateY(-30px) rotate(20deg);
               opacity: 0.9;
+            }
+          }
+
+          @keyframes fallingStar {
+            0% {
+              transform: translateY(-100vh) rotate(0deg);
+              opacity: 0;
+            }
+            10% {
+              opacity: 1;
+            }
+            90% {
+              opacity: 1;
+            }
+            100% {
+              transform: translateY(100vh) rotate(360deg);
+              opacity: 0;
             }
           }
 
