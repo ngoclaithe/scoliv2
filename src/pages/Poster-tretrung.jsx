@@ -422,7 +422,7 @@ export default function TreTrungMatchIntro() {
 
           {/* Stadium and Live sections - Bottom position and mobile responsive */}
           <div className="mt-auto mb-0">
-            <div className={`flex justify-center items-center gap-4 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8 ${isMobile ? 'flex-col space-y-2' : 'flex-row'}`}>
+            <div className="flex justify-center items-center gap-2 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8">
               {/* Stadium */}
               {matchData.showStadium && (
                 <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-white font-bold" style={{
