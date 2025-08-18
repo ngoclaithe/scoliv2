@@ -5,7 +5,6 @@ import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
 export default function DodenMatchIntro() {
   const {
     matchData: contextMatchData,
-    marqueeData,
     sponsors,
     organizing,
     mediaPartners,
@@ -57,9 +56,6 @@ export default function DodenMatchIntro() {
     height: typeof window !== 'undefined' ? window.innerHeight : 800
   });
 
-  const [marqueeWidth, setMarqueeWidth] = useState(0);
-  const [containerWidth, setContainerWidth] = useState(0);
-  const [showMarquee, setShowMarquee] = useState(true);
 
   useEffect(() => {
     const handleResize = () => {
@@ -73,14 +69,6 @@ export default function DodenMatchIntro() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    if (marqueeRef.current && marqueeContainerRef.current) {
-      const textWidth = marqueeRef.current.scrollWidth;
-      const containerWidth = marqueeContainerRef.current.offsetWidth;
-      setMarqueeWidth(textWidth);
-      setContainerWidth(containerWidth);
-    }
-  }, [marqueeData?.text, windowSize.width]);
 
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
@@ -107,37 +95,8 @@ export default function DodenMatchIntro() {
     typeDisplay: matchData.mediaPartnersTypeDisplay[index] || 'square'
   })) : [];
 
-  const scrollData = {
-    text: marqueeData?.text || "TRỰC TIẾP BÓNG ĐÁ",
-    color: marqueeData?.color === 'white-black' ? '#FFFFFF' :
-        marqueeData?.color === 'black-white' ? '#000000' :
-            marqueeData?.color === 'white-blue' ? '#FFFFFF' :
-                marqueeData?.color === 'white-red' ? '#FFFFFF' :
-                    marqueeData?.color === 'white-green' ? '#FFFFFF' : "#FFFFFF",
-    bgColor: marqueeData?.color === 'white-black' ? '#000000' :
-        marqueeData?.color === 'black-white' ? '#FFFFFF' :
-            marqueeData?.color === 'white-blue' ? '#2563eb' :
-                marqueeData?.color === 'white-red' ? '#dc2626' :
-                    marqueeData?.color === 'white-green' ? '#16a34a' : "#FF0000",
-    repeat: 1,
-    mode: marqueeData?.mode || 'khong',
-    interval: marqueeData?.mode === 'moi-2' ? 120000 :
-        marqueeData?.mode === 'moi-5' ? 300000 :
-            marqueeData?.mode === 'lien-tuc' ? 30000 : 0
-  };
 
-  const marqueeRef = useRef(null);
-  const marqueeContainerRef = useRef(null);
 
-  // Calculate proper animation duration based on text length
-  const getAnimationDuration = () => {
-    if (marqueeWidth && containerWidth) {
-      const totalDistance = marqueeWidth + containerWidth;
-      const speed = 100; 
-      return Math.max(10, totalDistance / speed); // minimum 10s
-    }
-    return 30; 
-  };
 
   // Font size adjustment function
   const adjustFontSize = (element) => {
@@ -180,22 +139,6 @@ export default function DodenMatchIntro() {
     }
   };
 
-  // Check if marquee should be running
-  const isMarqueeRunning = scrollData.mode !== 'khong' && scrollData.mode !== 'none' && scrollData.text && showMarquee;
-
-  // Handle interval-based marquee display
-  useEffect(() => {
-    if (scrollData.interval > 0 && (scrollData.mode === 'moi-2' || scrollData.mode === 'moi-5')) {
-      setShowMarquee(true);
-      const intervalId = setInterval(() => {
-        setShowMarquee(prev => !prev);
-      }, scrollData.interval);
-
-      return () => clearInterval(intervalId);
-    } else {
-      setShowMarquee(true);
-    }
-  }, [scrollData.interval, scrollData.mode]);
 
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
@@ -464,33 +407,6 @@ export default function DodenMatchIntro() {
           <div className="h-3 sm:h-4 md:h-6 flex-shrink-0"></div>
         </div>
 
-        {/* Fixed Marquee Section */}
-        {isMarqueeRunning && scrollData.text && (
-          <div 
-            ref={marqueeContainerRef}
-            className="absolute bottom-0 left-0 w-full h-3 sm:h-4 md:h-6 border-t-2 overflow-hidden z-20"
-            style={{
-              backgroundColor: scrollData.bgColor,
-              borderTopColor: scrollData.color === '#FFFFFF' ? '#dc2626' : scrollData.bgColor
-            }}
-          >
-            <div className="absolute inset-0 bg-black/20"></div>
-            <div
-              ref={marqueeRef}
-              className="absolute top-1/2 whitespace-nowrap text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-bold drop-shadow-lg"
-              style={{
-                color: scrollData.color,
-                left: containerWidth ? `${containerWidth}px` : '100%',
-                transform: 'translateY(-50%)',
-                animation: containerWidth && marqueeWidth ? 
-                  `marquee-scroll-fixed ${getAnimationDuration()}s linear infinite` : 
-                  'none'
-              }}
-            >
-              {scrollData.text.repeat(scrollData.repeat)}
-            </div>
-          </div>
-        )}
 
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {[...Array(15)].map((_, i) => (
@@ -507,14 +423,6 @@ export default function DodenMatchIntro() {
         </div>
 
         <style>{`
-          @keyframes marquee-scroll-fixed {
-            0% { 
-              left: 100%;
-            }
-            100% { 
-              left: -100%;
-            }
-          }
           @keyframes sparkle {
             0%, 100% {
               transform: scale(0) rotate(0deg);
