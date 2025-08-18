@@ -163,7 +163,7 @@ export default function HaoQuangMatchIntro() {
 
 
   return (
-    <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
+    <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-1 sm:p-2 md:p-4">
       <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
 
         <div
@@ -174,7 +174,7 @@ export default function HaoQuangMatchIntro() {
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col p-1 sm:p-2">
+        <div className={`relative z-10 h-full flex flex-col ${isMobile ? 'p-0.5' : 'p-1 sm:p-2'}`}>
 
           {/* Top section với tournament logos only - chỉ hiển thị khi có logos */}
           {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 && (
