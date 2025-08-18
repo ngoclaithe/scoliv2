@@ -207,21 +207,21 @@ export default function TreTrungMatchIntro() {
               }
             </div>
 
-            {/* Top-right: Media Partners and Live Unit - Simplified on mobile */}
-            <div className={`flex flex-col items-end gap-1 sm:gap-2 flex-shrink-0 ${isMobile ? 'max-w-[30%]' : ''}`} style={{ minWidth: isMobile ? 'unset' : '25%', maxWidth: '30%' }}>
-              {!isMobile && hasMediaPartners && (
+            {/* Top-right: Media Partners and Live Unit - Show on mobile but smaller */}
+            <div className="flex flex-col items-end gap-1 sm:gap-2 flex-shrink-0" style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: '30%' }}>
+              {hasMediaPartners && (
                 <div className="flex-shrink-0 w-full">
-                  <div className="text-sm sm:text-lg md:text-xl font-bold text-white mb-1 drop-shadow-lg text-right">
-                    Đơn vị truyền thông
+                  <div className={`font-bold text-white mb-0.5 drop-shadow-lg text-right ${isMobile ? 'text-xs' : 'text-sm sm:text-lg md:text-xl'}`}>
+                    {isMobile ? 'ĐVTT' : 'Đơn vị truyền thông'}
                   </div>
-                  <div className="flex gap-1 justify-end overflow-x-auto scrollbar-hide">
-                    <div className="flex gap-1 flex-nowrap">
-                      {mediaPartnerLogos.map((media, index) => (
+                  <div className="flex gap-0.5 justify-end overflow-x-auto scrollbar-hide">
+                    <div className="flex gap-0.5 flex-nowrap">
+                      {mediaPartnerLogos.slice(0, isMobile ? 2 : mediaPartnerLogos.length).map((media, index) => (
                         <div key={index} className="flex-shrink-0">
                           <img
                             src={media.logo}
                             alt={media.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-10 h-10 sm:w-13 sm:h-13 md:w-16 md:h-16 p-1`}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-10 h-10 sm:w-13 sm:h-13 md:w-16 md:h-16 p-1'}`}
                           />
                         </div>
                       ))}
