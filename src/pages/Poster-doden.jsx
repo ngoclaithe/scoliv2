@@ -264,7 +264,7 @@ export default function DodenMatchIntro() {
                   color: '#ef4444',
                   WebkitTextStroke: '2px white',
                   textStroke: '2px white',
-                  fontFamily: "'Orbitron', 'Arial Black', sans-serif",
+                  fontFamily: "'UTM Colossalis', 'Arial Black', sans-serif",
                   fontSize: isMobile ? '20px' : isTablet ? '24px' : '48px'
                 }}
               >
@@ -323,7 +323,7 @@ export default function DodenMatchIntro() {
                     className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-center block truncate"
                     style={{
                       color: '#ffe006',
-                      fontFamily: "'Orbitron', 'Arial Black', sans-serif",
+                      fontFamily: "'UTM Colossalis', 'Arial Black', sans-serif",
                       textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                     }}
                     ref={(el) => el && adjustFontSize(el)}
@@ -383,7 +383,7 @@ export default function DodenMatchIntro() {
                     className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-center block truncate"
                     style={{
                       color: '#ffe006',
-                      fontFamily: "'Orbitron', 'Arial Black', sans-serif",
+                      fontFamily: "'UTM Colossalis', 'Arial Black', sans-serif",
                       textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                     }}
                     ref={(el) => el && adjustFontSize(el)}
