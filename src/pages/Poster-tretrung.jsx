@@ -163,7 +163,7 @@ export default function TreTrungMatchIntro() {
 
                 {hasOrganizing && (
                   <div className="flex-shrink-0">
-                    <div className={`font-bold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-sm sm:text-lg md:text-xl'}`}>
+                    <div className={`font-bold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
                       Đơn vị tổ chức
                     </div>
                     <div className="flex gap-0.5">
