@@ -256,7 +256,7 @@ export default function DodenMatchIntro() {
           {/* Main content section */}
           <div className="flex-1 flex flex-col justify-start pt-1 sm:pt-2 md:pt-3 min-h-0">
 
-            {/* Title section - T��ng font lên 2 lần và giảm padding top */}
+            {/* Title section - Tăng font lên 2 lần và giảm padding top */}
             <div className="text-center mb-0">
               <h1
                 className="font-black uppercase px-2 sm:px-4 md:px-6"
@@ -292,13 +292,6 @@ export default function DodenMatchIntro() {
                 )}
               </div>
 
-              <div className="flex items-center justify-center mt-1 sm:mt-2">
-                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-400 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-orange-500 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-black rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
-              </div>
             </div>
 
             {/* Teams section và Time/Date section ngang hàng */}
@@ -438,7 +431,7 @@ export default function DodenMatchIntro() {
           </div>
         </div>
 
-        {/* Hiệu ứng mưa sao b��ng từ tâm ra 8 hướng */}
+        {/* Hiệu ứng mưa sao băng từ tâm ra 8 hướng */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {[...Array(40)].map((_, i) => {
             const angle = (i % 8) * 45; // 8 hướng: 0, 45, 90, 135, 180, 225, 270, 315 độ
