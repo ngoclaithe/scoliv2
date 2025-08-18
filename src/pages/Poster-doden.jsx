@@ -435,15 +435,43 @@ export default function DodenMatchIntro() {
           </div>
         </div>
 
+        {/* Hiệu ứng mưa sao băng từ tâm ra 8 hướng */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(15)].map((_, i) => (
+          {[...Array(40)].map((_, i) => {
+            const angle = (i % 8) * 45; // 8 hướng: 0, 45, 90, 135, 180, 225, 270, 315 độ
+            const distance = 30 + (i % 5) * 15; // Khoảng cách khác nhau
+            const delay = (i % 8) * 0.2; // Độ trễ cho mỗi hướng
+
+            return (
+              <div
+                key={i}
+                className="absolute w-1 h-1 sm:w-2 sm:h-2 bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 rounded-full"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  animation: `shootingStar-${angle} ${3 + Math.random() * 2}s ease-out infinite`,
+                  animationDelay: `${delay}s`,
+                  opacity: 0.8
+                }}
+              />
+            );
+          })}
+        </div>
+
+        {/* Bụi sao nhỏ rơi rơi ngẫu nhiên */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {[...Array(20)].map((_, i) => (
             <div
-              key={i}
-              className="absolute w-2 h-2 bg-gradient-to-r from-red-400 to-orange-500 rounded-full opacity-80"
+              key={`dust-${i}`}
+              className="absolute bg-white rounded-full opacity-60"
               style={{
+                width: `${1 + Math.random() * 2}px`,
+                height: `${1 + Math.random() * 2}px`,
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                animation: `sparkle ${2 + Math.random() * 3}s ease-in-out infinite`
+                animation: `sparkle ${2 + Math.random() * 3}s ease-in-out infinite`,
+                animationDelay: `${Math.random() * 2}s`
               }}
             />
           ))}
