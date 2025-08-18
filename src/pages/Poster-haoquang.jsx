@@ -212,8 +212,8 @@ export default function HaoQuangMatchIntro() {
               </div>
             </div>
 
-            {/* Teams section - giống như Poster-tretrung.jsx */}
-            <div className={`flex items-center justify-center w-full mb-1 sm:mb-2 md:mb-3 ${
+            {/* Teams section với Match info ngang hàng */}
+            <div className={`flex items-center justify-between w-full mb-1 sm:mb-2 md:mb-3 ${
               isMobile
                 ? 'px-2 gap-1'
                 : 'px-4 sm:px-8 md:px-12 gap-2 sm:gap-4 md:gap-6'
@@ -262,7 +262,7 @@ export default function HaoQuangMatchIntro() {
                 </div>
               </div>
 
-              {/* VS Section */}
+              {/* VS Section with Match Info */}
               <div className="flex flex-col items-center space-y-1 sm:space-y-2">
                 <div className="relative flex flex-col items-center">
                   <img
@@ -274,6 +274,33 @@ export default function HaoQuangMatchIntro() {
                       height: isMobile ? '40px' : isTablet ? '120px' : '160px'
                     }}
                   />
+                </div>
+
+                {/* Match Info - Time, Date, Stadium */}
+                <div className="flex flex-col items-center space-y-1 text-white text-center">
+                  {(matchData.showTimer || matchData.showDate) && (
+                    <div
+                      className="font-bold"
+                      style={{
+                        fontSize: isMobile ? '8px' : isTablet ? '14px' : '18px'
+                      }}
+                    >
+                      {matchData.showTimer && matchData.roundedTime}
+                      {matchData.showTimer && matchData.showDate && ' - '}
+                      {matchData.showDate && matchData.currentDate}
+                    </div>
+                  )}
+
+                  {matchData.showStadium && matchData.stadium && (
+                    <div
+                      className="font-normal"
+                      style={{
+                        fontSize: isMobile ? '7px' : isTablet ? '12px' : '16px'
+                      }}
+                    >
+                      {matchData.stadium}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -318,33 +345,6 @@ export default function HaoQuangMatchIntro() {
                 >
                   {matchData.team2}
                 </div>
-              </div>
-            </div>
-
-            {/* Match time and date - Below team names */}
-            <div className={`flex justify-center items-center ${isMobile ? 'mb-1' : 'mb-2 sm:mb-3 md:mb-4'}`}>
-              <div
-                className="time-date-container"
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  background: 'linear-gradient(to right, #ff3131, #ff914d)',
-                  border: isMobile ? '1px solid #fff' : '6px solid #fff',
-                  borderRadius: isMobile ? '10px' : '45px',
-                  color: '#fff',
-                  fontSize: isMobile ? '6px' : isTablet ? '17px' : '25px',
-                  fontFamily: 'Bebas Neue, UTM Bebas, sans-serif',
-                  padding: isMobile ? '1px 3px' : '4px 12px',
-                  boxShadow: '0 4px 20px rgba(24, 119, 242, 0.11)',
-                  letterSpacing: '1px',
-                  textShadow: '1px 2px 3px #0e306c22',
-                  whiteSpace: 'nowrap'
-                }}
-              >
-                {matchData.showTimer && matchData.roundedTime}
-                {matchData.showTimer && matchData.showDate && ' - '}
-                {matchData.showDate && matchData.currentDate}
               </div>
             </div>
 
