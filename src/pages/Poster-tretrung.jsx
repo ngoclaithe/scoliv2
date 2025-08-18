@@ -70,7 +70,7 @@ export default function TreTrungMatchIntro() {
 
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
-  const logoSize = isMobile ? 120 : isTablet ? 168 : 216; // Tăng gấp 3 lần
+  const logoSize = isMobile ? 80 : isTablet ? 120 : 160; // Giảm size để fit layout
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
@@ -123,7 +123,7 @@ export default function TreTrungMatchIntro() {
   };
 
   return (
-    <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
+    <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4 overflow-hidden">
       <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
 
         <div
@@ -134,15 +134,16 @@ export default function TreTrungMatchIntro() {
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col p-3 sm:p-6">
+        <div className="relative z-10 h-full flex flex-col p-2 sm:p-4 md:p-6">
 
-          <div className="flex justify-between items-start mb-1 sm:mb-3 md:mb-5 min-h-[8vh] sm:min-h-[12vh] md:min-h-[14vh]">
+          {/* Top section với logos */}
+          <div className="flex justify-between items-start mb-2 sm:mb-3 md:mb-4 min-h-[10vh] sm:min-h-[12vh] md:min-h-[14vh]">
 
             {/* Top-left: Sponsors and Organizing */}
             <div className="flex items-start gap-2 sm:gap-4 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '35%' }}>
               {hasSponsors && (
                 <div className="flex-shrink-0">
-                  <div className="text-base sm:text-xl md:text-2xl font-bold text-white mb-1 drop-shadow-lg">
+                  <div className="text-sm sm:text-lg md:text-xl font-bold text-white mb-1 drop-shadow-lg">
                     Nhà tài trợ
                   </div>
                   <div className="flex flex-col gap-1">
@@ -165,7 +166,7 @@ export default function TreTrungMatchIntro() {
 
               {hasOrganizing && (
                 <div className="flex-shrink-0">
-                  <div className="text-base sm:text-xl md:text-2xl font-bold text-white mb-1 drop-shadow-lg">
+                  <div className="text-sm sm:text-lg md:text-xl font-bold text-white mb-1 drop-shadow-lg">
                     Đơn vị tổ chức
                   </div>
                   <div className="flex flex-col gap-1">
@@ -205,7 +206,7 @@ export default function TreTrungMatchIntro() {
             <div className="flex flex-col items-end gap-2 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '30%' }}>
               {hasMediaPartners && (
                 <div className="flex-shrink-0 w-full">
-                  <div className="text-base sm:text-xl md:text-2xl font-bold text-white mb-1 drop-shadow-lg text-right">
+                  <div className="text-sm sm:text-lg md:text-xl font-bold text-white mb-1 drop-shadow-lg text-right">
                     Đơn vị truyền thông
                   </div>
                   <div className="flex gap-1 justify-end overflow-x-auto scrollbar-hide">
@@ -240,54 +241,54 @@ export default function TreTrungMatchIntro() {
 
           </div>
 
-          {/* Main content section */}
-          <div className="flex-1 flex flex-col justify-start min-h-0 pt-2 sm:pt-4 md:pt-6">
+          {/* Main content section - compact layout */}
+          <div className="flex-1 flex flex-col justify-center min-h-0">
 
-            {/* Title section */}
-            <div className="text-center mb-4 sm:mb-6 md:mb-8">
-              <h1 className="title text-white mb-2 sm:mb-4 px-1 sm:px-2">
+            {/* Title section - compact */}
+            <div className="text-center mb-2 sm:mb-3 md:mb-4">
+              <h1 className="title text-white mb-1 sm:mb-2 px-1 sm:px-2">
                 {matchData.matchTitle}
               </h1>
 
               {/* Subtitle display */}
               {matchData.showSubtitle && matchData.subtitle && (
-                <div className="text-white/90 text-xs sm:text-base md:text-lg lg:text-xl font-medium mt-2 sm:mt-4 px-2">
+                <div className="text-white/90 text-xs sm:text-sm md:text-base lg:text-lg font-medium mt-1 sm:mt-2 px-2">
                   {matchData.subtitle}
                 </div>
               )}
 
               {/* Round and Group display */}
-              <div className="flex items-center justify-center gap-2 sm:gap-4 mt-2 sm:mt-4">
+              <div className="flex items-center justify-center gap-2 sm:gap-3 mt-1 sm:mt-2">
                 {matchData.showRound && (
-                  <div className="bg-blue-600/80 px-2 sm:px-3 py-1 sm:py-2 rounded text-xs sm:text-sm md:text-base font-bold text-white">
+                  <div className="bg-blue-600/80 px-2 py-1 rounded text-xs sm:text-sm font-bold text-white">
                     VÒNG {matchData.round}
                   </div>
                 )}
                 {matchData.showGroup && (
-                  <div className="bg-green-600/80 px-2 sm:px-3 py-1 sm:py-2 rounded text-xs sm:text-sm md:text-base font-bold text-white">
+                  <div className="bg-green-600/80 px-2 py-1 rounded text-xs sm:text-sm font-bold text-white">
                     BẢNG {matchData.group}
                   </div>
                 )}
               </div>
 
-              <div className="flex items-center justify-center mt-4 sm:mt-6">
-                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
-                <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full mx-2 sm:mx-3"></div>
-                <div className="w-2 h-2 sm:w-3 sm:h-3 bg-emerald-500 rounded-full mx-2 sm:mx-3"></div>
-                <div className="w-2 h-2 sm:w-3 sm:h-3 bg-lime-500 rounded-full mx-2 sm:mx-3"></div>
-                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
+              <div className="flex items-center justify-center mt-2 sm:mt-3">
+                <div className="w-8 sm:w-16 h-0.5 bg-white"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full mx-1 sm:mx-2"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-emerald-500 rounded-full mx-1 sm:mx-2"></div>
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-lime-500 rounded-full mx-1 sm:mx-2"></div>
+                <div className="w-8 sm:w-16 h-0.5 bg-white"></div>
               </div>
             </div>
 
-            {/* Teams section */}
-            <div className="flex items-center justify-center w-full px-8 sm:px-12 md:px-16 mb-4 sm:mb-6 md:mb-8 gap-4 sm:gap-8 md:gap-12">
+            {/* Teams section - compact */}
+            <div className="flex items-center justify-center w-full px-4 sm:px-8 md:px-12 mb-2 sm:mb-3 md:mb-4 gap-2 sm:gap-4 md:gap-6">
 
               {/* Team A */}
-              <div className="flex flex-col items-center space-y-2 sm:space-y-3 md:space-y-4">
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className="relative rounded-full bg-white p-2 sm:p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`
@@ -311,8 +312,8 @@ export default function TreTrungMatchIntro() {
                     width: 'auto',
                     minWidth: 'unset',
                     maxWidth: 'unset',
-                    fontSize: isMobile ? '24px' : isTablet ? '42px' : '60px',
-                    padding: '8px 30px',
+                    fontSize: isMobile ? '20px' : isTablet ? '35px' : '60px',
+                    padding: '4px 20px',
                     width: 'fit-content',
                     minWidth: '35%',
                     color: '#ffffff'
@@ -323,26 +324,26 @@ export default function TreTrungMatchIntro() {
               </div>
 
               {/* VS Section */}
-              <div className="flex flex-col items-center space-y-2 sm:space-y-3 md:space-y-4">
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2">
                 <div className="relative flex flex-col items-center">
                   <img
                     src="/images/background-poster/vs3.png"
                     alt="VS"
                     className="object-contain animate-pulse"
                     style={{
-                      width: isMobile ? '62.5px' : isTablet ? '87.5px' : '112.5px', // Tăng gấp 2.5 lần
-                      height: isMobile ? '62.5px' : isTablet ? '87.5px' : '112.5px'
+                      width: isMobile ? '40px' : isTablet ? '60px' : '80px',
+                      height: isMobile ? '40px' : isTablet ? '60px' : '80px'
                     }}
                   />
                 </div>
               </div>
 
               {/* Team B */}
-              <div className="flex flex-col items-center space-y-2 sm:space-y-3 md:space-y-4">
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className="relative rounded-full bg-white p-2 sm:p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`
@@ -366,8 +367,8 @@ export default function TreTrungMatchIntro() {
                     width: 'auto',
                     minWidth: 'unset',
                     maxWidth: 'unset',
-                    fontSize: isMobile ? '24px' : isTablet ? '42px' : '60px',
-                    padding: '8px 30px',
+                    fontSize: isMobile ? '20px' : isTablet ? '35px' : '60px',
+                    padding: '4px 20px',
                     width: 'fit-content',
                     minWidth: '35%',
                     color: '#ffffff'
@@ -378,46 +379,42 @@ export default function TreTrungMatchIntro() {
               </div>
             </div>
 
-            {/* Match time and date - Now below team names */}
-            <div className="flex justify-center items-center mb-6 sm:mb-8 md:mb-10">
-              {(matchData.showTimer || matchData.showDate) && (
-                <div className="text-sm sm:text-lg md:text-xl lg:text-2xl font-semibold bg-black/50 px-2 sm:px-3 md:px-4 py-1 sm:py-2 md:py-3 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
-                  {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
-                </div>
-              )}
+            {/* Match time and date - Below team names */}
+            <div className="flex justify-center items-center mb-2 sm:mb-3 md:mb-4">
+              <div className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold bg-black/50 px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
+                {matchData.showTimer && matchData.roundedTime}
+                {matchData.showTimer && matchData.showDate && ' - '}
+                {matchData.showDate && matchData.currentDate}
+              </div>
             </div>
 
-            {/* Stadium and Live sections at marquee position */}
-            <div className="flex flex-col items-center space-y-3 sm:space-y-4 md:space-y-6">
+            {/* Stadium and Live sections */}
+            <div className="flex flex-col items-center space-y-2 sm:space-y-3">
               {/* Stadium */}
-              {matchData.showStadium && matchData.stadium && (
-                <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold">
-                  <img
-                    src="/images/basic/stadium.png"
-                    alt="Stadium"
-                    className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain"
-                  />
-                  <span>{matchData.stadium}</span>
-                </div>
-              )}
+              <div className="flex items-center space-x-2 sm:space-x-3 text-white text-sm sm:text-base md:text-lg lg:text-xl font-bold">
+                <img
+                  src="/images/basic/stadium.png"
+                  alt="Stadium"
+                  className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 object-contain"
+                />
+                <span>{matchData.stadium}</span>
+              </div>
 
               {/* Live Text */}
-              {matchData.liveText && (
-                <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold">
-                  <img
-                    src="/images/basic/live-logo1.gif"
-                    alt="Live"
-                    className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain"
-                  />
-                  <span>{matchData.liveText}</span>
-                </div>
-              )}
+              <div className="flex items-center space-x-2 sm:space-x-3 text-white text-sm sm:text-base md:text-lg lg:text-xl font-bold">
+                <img
+                  src="/images/basic/live-logo1.gif"
+                  alt="Live"
+                  className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 object-contain"
+                />
+                <span>{matchData.liveText}</span>
+              </div>
             </div>
 
           </div>
 
           {/* Bottom spacer */}
-          <div className="h-3 sm:h-4 md:h-6 flex-shrink-0"></div>
+          <div className="h-2 sm:h-3 md:h-4 flex-shrink-0"></div>
         </div>
 
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -438,9 +435,12 @@ export default function TreTrungMatchIntro() {
         </div>
 
         <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@400;500;600;700;800&display=swap');
+          
           .title {
-            color: #ffffff;
-            font-family: 'BalooBhai2-Bold', sans-serif;
+            color: #ffffff !important;
+            font-family: 'Baloo Bhai 2', 'BalooBhai2-Bold', sans-serif !important;
+            font-weight: 800 !important;
             font-size: 80px;
             height: auto;
             text-shadow: 4px 4px #727272;
@@ -449,13 +449,13 @@ export default function TreTrungMatchIntro() {
 
           @media (max-width: 768px) {
             .title {
-              font-size: 32px;
+              font-size: 28px !important;
             }
           }
 
           @media (min-width: 769px) and (max-width: 1024px) {
             .title {
-              font-size: 56px;
+              font-size: 48px !important;
             }
           }
 
