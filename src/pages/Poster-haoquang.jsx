@@ -15,7 +15,7 @@ export default function HaoQuangMatchIntro() {
   } = usePublicMatch();
 
   const matchData = {
-    matchTitle: contextMatchData.matchTitle || 'TRỰC TIẾP TRẬN BÓNG ��Á',
+    matchTitle: contextMatchData.matchTitle || 'TRỰC TIẾP TRẬN BÓNG ĐÁ',
     team1: contextMatchData.teamA.name || 'TEAM ALPHA',
     team2: contextMatchData.teamB.name || 'TEAM BETA',
     logo1: getFullLogoUrl(contextMatchData.teamA.logo) || '/images/background-poster/default_logoA.png',
@@ -414,12 +414,13 @@ export default function HaoQuangMatchIntro() {
 
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@400;500;600;700;800&display=swap');
 
           .title {
             color: #ffffff !important;
-            font-family: 'UTM Colossalis', sans-serif !important;
+            font-family: 'Baloo Bhai 2', 'BalooBhai2-Bold', sans-serif !important;
             font-weight: 800 !important;
-            font-size: 65px;
+            font-size: 32px;
             height: auto;
             text-shadow: 4px 4px #727272;
             line-height: 1.2;
@@ -427,13 +428,13 @@ export default function HaoQuangMatchIntro() {
 
           @media (max-width: 768px) {
             .title {
-              font-size: 14px !important;
+              font-size: 7px !important;
             }
           }
 
           @media (min-width: 769px) and (max-width: 1024px) {
             .title {
-              font-size: 40px !important;
+              font-size: 20px !important;
             }
           }
 
