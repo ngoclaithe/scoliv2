@@ -385,9 +385,9 @@ export default function TreTrungMatchIntro() {
                   border: '6px solid #fff',
                   borderRadius: '45px',
                   color: '#fff',
-                  fontSize: isMobile ? '20px' : isTablet ? '35px' : '50px',
+                  fontSize: isMobile ? '10px' : isTablet ? '17px' : '25px',
                   fontFamily: 'Bebas Neue, UTM Bebas, sans-serif',
-                  padding: '8px 40px 12px 40px',
+                  padding: '0px',
                   boxShadow: '0 4px 20px rgba(24, 119, 242, 0.11)',
                   letterSpacing: '1px',
                   textShadow: '1px 2px 3px #0e306c22',
@@ -401,23 +401,27 @@ export default function TreTrungMatchIntro() {
             </div>
 
             {/* Stadium and Live sections - Same row */}
-            <div className="flex justify-center items-center gap-8 sm:gap-12 md:gap-16 px-4 sm:px-8 md:px-12 mb-4">
+            <div className="flex justify-center items-center gap-8 sm:gap-12 md:gap-16 px-4 sm:px-8 md:px-12 mb-1">
               {/* Stadium */}
-              <div className="flex items-center space-x-2 sm:space-x-3 text-white text-sm sm:text-base md:text-lg lg:text-xl font-bold">
+              <div className="flex items-center space-x-2 sm:space-x-3 text-white font-bold" style={{
+                fontSize: isMobile ? '16px' : isTablet ? '24px' : '32px'
+              }}>
                 <img
                   src="/images/basic/stadium.png"
                   alt="Stadium"
-                  className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 object-contain"
+                  className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain"
                 />
                 <span>{matchData.stadium}</span>
               </div>
 
               {/* Live Text */}
-              <div className="flex items-center space-x-2 sm:space-x-3 text-white text-sm sm:text-base md:text-lg lg:text-xl font-bold">
+              <div className="flex items-center space-x-2 sm:space-x-3 text-white font-bold" style={{
+                fontSize: isMobile ? '16px' : isTablet ? '24px' : '32px'
+              }}>
                 <img
                   src="/images/basic/live-logo1.gif"
                   alt="Live"
-                  className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 object-contain"
+                  className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain"
                 />
                 <span>{matchData.liveText}</span>
               </div>
@@ -426,7 +430,7 @@ export default function TreTrungMatchIntro() {
           </div>
 
           {/* Bottom spacer */}
-          <div className="h-2 sm:h-3 md:h-4 flex-shrink-0"></div>
+          <div className="h-1 sm:h-1 md:h-1 flex-shrink-0"></div>
         </div>
 
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -454,7 +458,7 @@ export default function TreTrungMatchIntro() {
             color: #ffffff !important;
             font-family: 'Baloo Bhai 2', 'BalooBhai2-Bold', sans-serif !important;
             font-weight: 800 !important;
-            font-size: 80px;
+            font-size: 65px;
             height: auto;
             text-shadow: 4px 4px #727272;
             line-height: 1.2;
@@ -462,13 +466,13 @@ export default function TreTrungMatchIntro() {
 
           @media (max-width: 768px) {
             .title {
-              font-size: 28px !important;
+              font-size: 24px !important;
             }
           }
 
           @media (min-width: 769px) and (max-width: 1024px) {
             .title {
-              font-size: 48px !important;
+              font-size: 40px !important;
             }
           }
 
