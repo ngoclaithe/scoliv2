@@ -117,25 +117,6 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
                     </div>
                 </div>
 
-                {/* Logo B - Positioned outside right */}
-                <div className="absolute right-0 top-1/2 transform -translate-y-1/2 z-30">
-                    <div
-                        className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
-                        style={{
-                            width: '56px',
-                            height: '56px'
-                        }}
-                    >
-                        <img
-                            src={currentData.teamBLogo}
-                            alt={currentData.teamBName}
-                            className="object-contain w-[100%] h-[100%]"
-                            onError={(e) => {
-                                e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBCPC90ZXh0Pgo8L3N2Zz4K';
-                            }}
-                        />
-                    </div>
-                </div>
             </div>
 
             {/* LIVE indicator */}
