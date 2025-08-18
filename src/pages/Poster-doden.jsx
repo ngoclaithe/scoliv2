@@ -295,7 +295,7 @@ export default function DodenMatchIntro() {
             </div>
 
             {/* Teams section và Time/Date section ngang hàng */}
-            <div className="flex items-center justify-center gap-4 sm:gap-8 md:gap-16 w-full px-1 sm:px-2 md:px-4 mb-1 sm:mb-2 md:mb-3">
+            <div className="flex items-center justify-center gap-4 sm:gap-8 md:gap-16 w-full px-1 sm:px-2 md:px-4">
 
               {/* Team A */}
               <div className="flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3">
