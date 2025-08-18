@@ -62,218 +62,250 @@ const HalftimeBreakPoster = () => {
     const showSCOLogo = !showNSBLogo && !showBDPXTLogo;
 
     return (
-        <div className="min-h-screen bg-white p-4 flex items-center justify-center">
-            <div className="w-full h-full bg-gradient-to-br from-blue-900 via-blue-800 to-green-700 rounded-3xl shadow-2xl flex items-center justify-center relative overflow-hidden">
-                <div className="absolute inset-0 opacity-20">
-                    <div className="football-pattern"></div>
-                </div>
-
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/20"></div>
-
-                {/* Top left logos */}
-                {showNSBLogo && (
-                    <div
-                        className="absolute top-8 left-8 z-50 bg-gradient-to-r from-red-600 to-red-500 rounded-xl flex items-center justify-center text-white font-bold px-4 shadow-lg"
-                        style={{
-                            height: isMobile ? '6vw' : '4vw',
-                            minHeight: '32px',
-                            fontSize: isMobile ? '3vw' : '2vw',
-                            minFontSize: '14px'
-                        }}
-                    >
-                        NSB
-                    </div>
-                )}
-
-                {showBDPXTLogo && (
-                    <div
-                        className="absolute top-8 left-8 z-50 bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl flex items-center justify-center text-white font-bold px-4 shadow-lg"
-                        style={{
-                            height: isMobile ? '6vw' : '4vw',
-                            minHeight: '32px',
-                            fontSize: isMobile ? '3vw' : '2vw',
-                            minFontSize: '14px'
-                        }}
-                    >
-                        BDPXT
-                    </div>
-                )}
-
-                {/* Main poster container */}
-                <div className="w-full max-w-6xl mx-auto px-8 py-8 relative z-10">
-                    <div className="text-white text-center">
-                        {/* Title with custom style */}
-                        <h1 
-                            className="font-bold"
-                            style={{
-                                fontSize: isMobile ? '32px' : '52px',
-                                color: 'yellow',
-                                marginTop: '30px',
-                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.4)'
-                            }}
-                        >
-                            {matchData.matchTitle}
-                        </h1>
-
-                        {/* Subtitle without wrapper border */}
-                        <div 
-                            className="font-semibold text-white"
-                            style={{
-                                fontSize: isMobile ? '24px' : '40px',
-                                marginTop: '5px',
-                                textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)'
-                            }}
-                        >
-                            <div>{matchData.time} - {matchData.date}</div>
-                            {matchData.stadium && matchData.stadium !== 'san' && (
-                                <div className={`text-gray-200 ${isMobile ? 'text-base mt-2' : 'mt-1'}`}>
-                                    {matchData.stadium}
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Match section */}
-                        <div className="flex items-center justify-center space-x-4 sm:space-x-6 md:space-x-12 mb-8 mt-8">
-                            {/* Team 1 */}
-                            <div className="flex-1 flex flex-col items-center max-w-xs">
-                                <div className="relative mb-4">
-                                    <div
-                                        className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
-                                        style={{
-                                            width: `${logoSize}px`,
-                                            height: `${logoSize}px`
-                                        }}
-                                    >
-                                        <img
-                                            src={matchData.logo1}
-                                            alt={matchData.team1}
-                                            className="object-contain w-[85%] h-[85%]"
-                                            onError={(e) => {
-                                                e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                                <div className={`bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-sm px-4 py-2 rounded-xl font-bold text-center w-full shadow-lg border border-white/10 ${isMobile ? 'text-sm' : isTablet ? 'text-lg' : 'text-3xl'
-                                    }`}>
-                                    <div className="truncate">{matchData.team1}</div>
-                                </div>
-                            </div>
-
-                            {/* VS */}
-                            <div className="flex-shrink-0">
-                                <div className={`font-bold text-yellow-400 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-full shadow-2xl border-4 border-yellow-300 ${isMobile ? 'text-2xl' : isTablet ? 'text-4xl' : 'text-6xl'
-                                    }`} style={{
-                                        textShadow: '0 0 15px rgba(255, 235, 59, 0.8)'
-                                    }}>
-                                    VS
-                                </div>
-                            </div>
-
-                            {/* Team 2 */}
-                            <div className="flex-1 flex flex-col items-center max-w-xs">
-                                <div className="relative mb-4">
-                                    <div
-                                        className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
-                                        style={{
-                                            width: `${logoSize}px`,
-                                            height: `${logoSize}px`
-                                        }}
-                                    >
-                                        <img
-                                            src={matchData.logo2}
-                                            alt={matchData.team2}
-                                            className="object-contain w-[85%] h-[85%]"
-                                            onError={(e) => {
-                                                e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                                <div className={`bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-sm px-4 py-2 rounded-xl font-bold text-center w-full shadow-lg border border-white/10 ${isMobile ? 'text-sm' : isTablet ? 'text-lg' : 'text-3xl'
-                                    }`}>
-                                    <div className="truncate">{matchData.team2}</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Halftime break message with custom style, no icon */}
-                        <div 
-                            className="font-bold inline-block"
-                            style={{
-                                fontSize: isMobile ? '28px' : '46px',
-                                background: '#FF6900',
-                                color: 'white',
-                                padding: isMobile ? '5px 30px' : '5px 60px',
-                                display: 'inline-block',
-                                marginTop: '26px'
-                            }}
-                        >
-                            NGHỈ GIỮA 2 HIỆP
-                        </div>
-                    </div>
-                </div>
-
-                {/* Bottom left SCO logo */}
-                {showSCOLogo && (
-                    <div
-                        id="sco"
-                        style={{
-                            position: 'fixed',
-                            bottom: '3vw',
-                            left: '3vw',
-                            zIndex: 100,
-                            transformOrigin: 'bottom left',
-                            width: isMobile ? '60px' : '96px',
-                            height: isMobile ? '60px' : '96px'
-                        }}
-                    >
-                        <img
-                            src="/images/basic/ScoLivLogo.png"
-                            alt="SCO Live"
-                            className="w-full h-full object-contain rounded-full shadow-xl bg-white/10 backdrop-blur-sm p-2"
-                            style={{
-                                overflowClipMargin: 'content-box',
-                                overflow: 'clip'
-                            }}
-                            onError={(e) => {
-                                // Fallback to text version if image fails to load
-                                e.target.style.display = 'none';
-                                e.target.nextSibling.style.display = 'flex';
-                            }}
-                        />
-                        <div
-                            className="w-full h-full bg-gradient-to-r from-gray-700 to-gray-600 rounded-full items-center justify-center text-white font-bold text-lg hidden shadow-xl"
-                            style={{ display: 'none' }}
-                        >
-                            SCO
-                        </div>
-                    </div>
-                )}
-
-                {/* Marquee (if enabled) */}
-                {matchData.showMarquee && matchData.marqueeText && (
-                    <div
-                        className="absolute bottom-0 left-0 w-full bg-gradient-to-r from-black/50 via-black/40 to-black/50 backdrop-blur-sm text-white flex items-center overflow-hidden z-50 border-t border-white/20"
-                        style={{
-                            height: isMobile ? '6vw' : '3vw',
-                            minHeight: '32px'
-                        }}
-                    >
-                        <div
-                            className="animate-marquee whitespace-nowrap font-bold"
-                            style={{
-                                fontSize: isMobile ? '4vw' : '2.4vw',
-                                minFontSize: '16px',
-                                paddingBottom: '0.2vw',
-                                textShadow: '0 0 5px rgba(0, 0, 0, 0.8)'
-                            }}
-                        >
-                            {matchData.marqueeText}
-                        </div>
-                    </div>
-                )}
+        <div 
+            className="min-h-screen p-4 flex items-center justify-center relative overflow-hidden"
+            style={{
+                background: 'linear-gradient(to bottom right, rgba(1, 58, 179, 0.7), rgba(1, 122, 44, 0.7))'
+            }}
+        >
+            <div className="absolute inset-0 opacity-20">
+                <div className="football-pattern"></div>
             </div>
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/20"></div>
+
+            {/* Top left logos */}
+            {showNSBLogo && (
+                <div
+                    className="absolute top-8 left-8 z-50 bg-gradient-to-r from-red-600 to-red-500 rounded-xl flex items-center justify-center text-white font-bold px-4 shadow-lg"
+                    style={{
+                        height: isMobile ? '6vw' : '4vw',
+                        minHeight: '32px',
+                        fontSize: isMobile ? '3vw' : '2vw',
+                        minFontSize: '14px'
+                    }}
+                >
+                    NSB
+                </div>
+            )}
+
+            {showBDPXTLogo && (
+                <div
+                    className="absolute top-8 left-8 z-50 bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl flex items-center justify-center text-white font-bold px-4 shadow-lg"
+                    style={{
+                        height: isMobile ? '6vw' : '4vw',
+                        minHeight: '32px',
+                        fontSize: isMobile ? '3vw' : '2vw',
+                        minFontSize: '14px'
+                    }}
+                >
+                    BDPXT
+                </div>
+            )}
+
+            {/* Main poster container */}
+            <div className="w-full max-w-6xl mx-auto px-8 py-8 relative z-10">
+                <div className="text-white text-center">
+                    {/* Title with custom style */}
+                    <h1 
+                        className="font-bold"
+                        style={{
+                            fontSize: isMobile ? '32px' : '52px',
+                            color: 'yellow',
+                            marginTop: '30px',
+                            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.4)'
+                        }}
+                    >
+                        {matchData.matchTitle}
+                    </h1>
+
+                    {/* Subtitle without wrapper border */}
+                    <div 
+                        className="font-semibold text-white"
+                        style={{
+                            fontSize: isMobile ? '24px' : '40px',
+                            marginTop: '5px',
+                            textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)',
+                            whiteSpace: 'nowrap'
+                        }}
+                    >
+                        {matchData.time} - {matchData.date}
+                        {matchData.stadium && matchData.stadium !== 'san' && (
+                            <span className="text-gray-200 ml-4">
+                                {matchData.stadium}
+                            </span>
+                        )}
+                    </div>
+
+                    {/* Match section */}
+                    <div className="flex items-center justify-center space-x-4 sm:space-x-6 md:space-x-12 mb-8 mt-8">
+                        {/* Team 1 */}
+                        <div className="flex-1 flex flex-col items-center max-w-xs">
+                            <div className="relative mb-4">
+                                <div
+                                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                                    style={{
+                                        width: `${logoSize}px`,
+                                        height: `${logoSize}px`
+                                    }}
+                                >
+                                    <img
+                                        src={matchData.logo1}
+                                        alt={matchData.team1}
+                                        className="object-contain w-[85%] h-[85%]"
+                                        onError={(e) => {
+                                            e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                            <div 
+                                className="font-bold text-white"
+                                style={{
+                                    background: 'rgba(0, 0, 0, 0.5)',
+                                    padding: '5px',
+                                    borderRadius: '7px',
+                                    display: 'inline-block',
+                                    marginTop: '30px',
+                                    width: '240px',
+                                    textAlign: 'center',
+                                    fontSize: isMobile ? '18px' : isTablet ? '24px' : '32px',
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden'
+                                }}
+                            >
+                                {matchData.team1}
+                            </div>
+                        </div>
+
+                        {/* VS */}
+                        <div className="flex-shrink-0">
+                            <img
+                                src="/images/basic/vs_nghigiuahiep.png"
+                                alt="VS"
+                                style={{
+                                    height: '261px',
+                                    overflowClipMargin: 'content-box',
+                                    overflow: 'clip'
+                                }}
+                                onError={(e) => {
+                                    // Fallback to text if image fails
+                                    e.target.style.display = 'none';
+                                    e.target.nextSibling.style.display = 'flex';
+                                }}
+                            />
+                            <div className={`font-bold text-yellow-400 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-full shadow-2xl border-4 border-yellow-300 ${isMobile ? 'text-2xl' : isTablet ? 'text-4xl' : 'text-6xl'
+                                }`} style={{
+                                    textShadow: '0 0 15px rgba(255, 235, 59, 0.8)',
+                                    display: 'none'
+                                }}>
+                                VS
+                            </div>
+                        </div>
+
+                        {/* Team 2 */}
+                        <div className="flex-1 flex flex-col items-center max-w-xs">
+                            <div className="relative mb-4">
+                                <div
+                                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                                    style={{
+                                        width: `${logoSize}px`,
+                                        height: `${logoSize}px`
+                                    }}
+                                >
+                                    <img
+                                        src={matchData.logo2}
+                                        alt={matchData.team2}
+                                        className="object-contain w-[85%] h-[85%]"
+                                        onError={(e) => {
+                                            e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNDMzOGNhIi8+Cjx0ZXh0IHg9IjUwIiB5PSI1NSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGVhbSBBPC90ZXh0Pgo8L3N2Zz4K';
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                            <div className={`bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-sm px-4 py-2 rounded-xl font-bold text-center w-full shadow-lg border border-white/10 ${isMobile ? 'text-sm' : isTablet ? 'text-lg' : 'text-3xl'
+                                }`}>
+                                <div className="truncate">{matchData.team2}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Halftime break message with custom style, no icon */}
+                    <div 
+                        className="font-bold inline-block"
+                        style={{
+                            fontSize: isMobile ? '28px' : '46px',
+                            background: '#FF6900',
+                            color: 'white',
+                            padding: isMobile ? '5px 30px' : '5px 60px',
+                            display: 'inline-block',
+                            marginTop: '26px'
+                        }}
+                    >
+                        NGHỈ GIỮA 2 HIỆP
+                    </div>
+                </div>
+            </div>
+
+            {/* Bottom left SCO logo */}
+            {showSCOLogo && (
+                <div
+                    id="sco"
+                    style={{
+                        position: 'absolute',
+                        bottom: '3vw',
+                        left: '3vw',
+                        zIndex: 10,
+                        transformOrigin: 'bottom left',
+                        width: isMobile ? '60px' : '96px',
+                        height: isMobile ? '60px' : '96px'
+                    }}
+                >
+                    <img
+                        src="/images/basic/ScoLivLogo.png"
+                        alt="SCO Live"
+                        className="w-full h-full object-contain rounded-full shadow-xl bg-white/10 backdrop-blur-sm p-2"
+                        style={{
+                            overflowClipMargin: 'content-box',
+                            overflow: 'clip'
+                        }}
+                        onError={(e) => {
+                            // Fallback to text version if image fails to load
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                        }}
+                    />
+                    <div
+                        className="w-full h-full bg-gradient-to-r from-gray-700 to-gray-600 rounded-full items-center justify-center text-white font-bold text-lg hidden shadow-xl"
+                        style={{ display: 'none' }}
+                    >
+                        SCO
+                    </div>
+                </div>
+            )}
+
+            {/* Marquee (if enabled) */}
+            {matchData.showMarquee && matchData.marqueeText && (
+                <div
+                    className="absolute bottom-0 left-0 w-full bg-gradient-to-r from-black/50 via-black/40 to-black/50 backdrop-blur-sm text-white flex items-center overflow-hidden z-50 border-t border-white/20"
+                    style={{
+                        height: isMobile ? '6vw' : '3vw',
+                        minHeight: '32px'
+                    }}
+                >
+                    <div
+                        className="animate-marquee whitespace-nowrap font-bold"
+                        style={{
+                            fontSize: isMobile ? '4vw' : '2.4vw',
+                            minFontSize: '16px',
+                            paddingBottom: '0.2vw',
+                            textShadow: '0 0 5px rgba(0, 0, 0, 0.8)'
+                        }}
+                    >
+                        {matchData.marqueeText}
+                    </div>
+                </div>
+            )}
 
             {/* Minimal styles - only marquee animation kept */}
             <style>{`
