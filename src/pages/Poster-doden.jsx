@@ -433,10 +433,10 @@ export default function DodenMatchIntro() {
 
         {/* Hiệu ứng mưa sao băng từ tâm ra 8 hướng */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(40)].map((_, i) => {
-            const angle = (i % 8) * 45; // 8 hướng: 0, 45, 90, 135, 180, 225, 270, 315 độ
-            const distance = 30 + (i % 5) * 15; // Khoảng cách khác nhau
-            const delay = (i % 8) * 0.2; // Độ trễ cho mỗi hướng
+          {[...Array(80)].map((_, i) => {
+            const angle = (i % 16) * 22.5; // 16 hướng: 0, 22.5, 45, 67.5, 90, 112.5, 135, 157.5, 180, 202.5, 225, 247.5, 270, 292.5, 315, 337.5 độ
+            const distance = 60 + (i % 10) * 30; // Tăng gấp đôi khoảng cách
+            const delay = (i % 16) * 0.1; // Độ trễ cho mỗi hướng (16 hướng)
 
             return (
               <div
