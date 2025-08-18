@@ -237,7 +237,7 @@ export default function HaoQuangMatchIntro() {
             {/* Teams section với Match info ngang hàng */}
             <div className={`flex items-center justify-center w-full mb-1 sm:mb-2 md:mb-3 ${
               isMobile
-                ? 'px-8 gap-3'
+                ? 'px-2 gap-1'
                 : 'px-16 sm:px-20 md:px-24 gap-4 sm:gap-6 md:gap-8'
             }`}>
 
