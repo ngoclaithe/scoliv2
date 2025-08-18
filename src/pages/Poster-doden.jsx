@@ -383,8 +383,8 @@ export default function DodenMatchIntro() {
         </div>
 
         {/* Bottom section - Stadium và Live Text - Đưa ra ngoài để width bằng poster */}
-        <div className="absolute bottom-0 left-0 right-0 z-10">
-          <div className="flex justify-center items-center gap-2 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8 py-2 bg-white/90 rounded-t-lg mx-4 sm:mx-8">
+        <div className="absolute bottom-[20%] left-0 right-0 z-10 bg-white">
+          <div className="flex justify-center items-center gap-2 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8 py-2 rounded-t-lg mx-4 sm:mx-8">
             {/* Stadium */}
             {matchData.showStadium && (
               <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-gray-800 font-normal" style={{
