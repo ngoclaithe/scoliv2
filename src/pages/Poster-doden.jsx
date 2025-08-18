@@ -70,7 +70,7 @@ export default function DodenMatchIntro() {
 
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
-  const logoSize = isMobile ? 80 : isTablet ? 112 : 144; // Tăng gấp đôi từ 40/56/72
+  const logoSize = isMobile ? 70 : isTablet ? 96 : 128; // Giảm nhỏ hơn cho mobile
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
