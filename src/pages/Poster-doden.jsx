@@ -304,8 +304,8 @@ export default function DodenMatchIntro() {
                   <div
                     className="relative rounded-full bg-white p-1 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
-                      width: `${isMobile ? logoSize * 0.9 : logoSize}px`, // Giảm 10% cho mobile
-                      height: `${isMobile ? logoSize * 0.9 : logoSize}px`
+                      width: `${isMobile ? logoSize * 0.25 : logoSize}px`, // Giảm xuống 1/4 cho mobile
+                      height: `${isMobile ? logoSize * 0.25 : logoSize}px`
                     }}
                   >
                     <img
