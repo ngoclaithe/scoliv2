@@ -469,7 +469,7 @@ export default function TreTrungMatchIntro() {
               className="absolute text-white opacity-80"
               style={{
                 left: `${Math.random() * 100}%`,
-                fontSize: `${8 + Math.random() * 8}px`,
+                fontSize: `${16 + Math.random() * 16}px`,
                 animation: `fallingStar ${8 + Math.random() * 8}s linear infinite`,
                 animationDelay: `${Math.random() * 5}s`
               }}
