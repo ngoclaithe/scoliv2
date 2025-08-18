@@ -15,13 +15,13 @@ export default function XanhDuongMatchIntro() {
   } = usePublicMatch();
 
   const matchData = {
-    matchTitle: contextMatchData.matchTitle || 'GIẢI BÓNG ĐÁ THIẾU NIÊN',
-    team1: contextMatchData.teamA.name || 'TEAM BLUE',
-    team2: contextMatchData.teamB.name || 'TEAM RED',
+    matchTitle: contextMatchData.matchTitle || 'GIẢI VÔ ĐỊCH QUỐC GIA',
+    team1: contextMatchData.teamA.name || 'FIRE TIGERS',
+    team2: contextMatchData.teamB.name || 'BLACK EAGLES',
     logo1: getFullLogoUrl(contextMatchData.teamA.logo) || '/images/background-poster/default_logoA.png',
     logo2: getFullLogoUrl(contextMatchData.teamB.logo) || '/images/background-poster/default_logoB.png',
-    stadium: contextMatchData.stadium || 'SVĐ QUẬN 1',
-    roundedTime: contextMatchData.startTime || contextMatchData.time || '16:00',
+    stadium: contextMatchData.stadium || 'SVĐ MỸ ĐÌNH',
+    roundedTime: contextMatchData.startTime || contextMatchData.time || '20:00',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
     sponsors: getFullLogoUrls(sponsors?.sponsors?.url_logo || []),
     sponsorsTypeDisplay: sponsors?.sponsors?.type_display || [],
@@ -41,7 +41,7 @@ export default function XanhDuongMatchIntro() {
     showDate: posterSettings?.showDate !== false,
     showStadium: posterSettings?.showStadium !== false,
     showLiveIndicator: posterSettings?.showLiveIndicator !== false,
-    accentColor: posterSettings?.accentColor || '#3b82f6',
+    accentColor: posterSettings?.accentColor || '#ef4444',
     liveText: contextMatchData.liveText || 'FACEBOOK LIVE',
     round: contextMatchData.round || 1,
     group: contextMatchData.group || 'A',
@@ -56,7 +56,6 @@ export default function XanhDuongMatchIntro() {
     height: typeof window !== 'undefined' ? window.innerHeight : 800
   });
 
-
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -69,10 +68,9 @@ export default function XanhDuongMatchIntro() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
-  const logoSize = isMobile ? 40 : isTablet ? 56 : 72;
+  const logoSize = isMobile ? 70 : isTablet ? 96 : 128; // Giảm nhỏ hơn cho mobile
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
@@ -94,9 +92,6 @@ export default function XanhDuongMatchIntro() {
     type: 'media',
     typeDisplay: matchData.mediaPartnersTypeDisplay[index] || 'square'
   })) : [];
-
-
-
 
   // Font size adjustment function
   const adjustFontSize = (element) => {
@@ -139,9 +134,8 @@ export default function XanhDuongMatchIntro() {
     }
   };
 
-
   return (
-    <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
+    <div className="w-full h-screen flex items-center justify-center p-2 sm:p-4 overflow-hidden" style={{background: 'transparent'}}>
       <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
 
         <div
@@ -152,15 +146,16 @@ export default function XanhDuongMatchIntro() {
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col p-3 sm:p-6">
+        <div className="relative z-10 h-full flex flex-col p-1 sm:p-3">
 
-          <div className="flex justify-between items-start mb-1 sm:mb-3 md:mb-5 min-h-[8vh] sm:min-h-[12vh] md:min-h-[14vh]">
+          {/* Header section với khoảng cách nhỏ hơn */}
+          <div className={`flex justify-between items-start ${isMobile ? 'mb-1' : 'mb-1 sm:mb-2 md:mb-2'}`}>
 
             {/* Top-left: Sponsors and Organizing */}
             <div className="flex items-start gap-2 sm:gap-4 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '35%' }}>
               {hasSponsors && (
                 <div className="flex-shrink-0">
-                  <div className="text-[8px] sm:text-xs font-bold text-green-400 mb-1 drop-shadow-lg">
+                  <div className="text-[8px] sm:text-xs font-bold text-white mb-1 drop-shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Nhà tài trợ
                   </div>
                   <div className="flex flex-col gap-1">
@@ -171,7 +166,7 @@ export default function XanhDuongMatchIntro() {
                             <img
                               src={sponsor.logo}
                               alt={sponsor.name}
-                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 p-0.5 sm:p-1`}
+                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 p-1`}
                             />
                           </div>
                         ))}
@@ -183,8 +178,8 @@ export default function XanhDuongMatchIntro() {
 
               {hasOrganizing && (
                 <div className="flex-shrink-0">
-                  <div className="text-[8px] sm:text-xs font-bold text-blue-400 mb-1 drop-shadow-lg">
-                    Đơn vị tổ chức
+                  <div className="text-[8px] sm:text-xs font-bold text-white mb-1 drop-shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                    Đơn vị đồng hành
                   </div>
                   <div className="flex flex-col gap-1">
                     {Array.from({ length: Math.ceil(Math.min(organizingLogos.length, 6) / 3) }, (_, rowIndex) => (
@@ -194,7 +189,7 @@ export default function XanhDuongMatchIntro() {
                             <img
                               src={organizing.logo}
                               alt={organizing.name}
-                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 p-0.5 sm:p-1`}
+                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 p-1`}
                             />
                           </div>
                         ))}
@@ -223,7 +218,7 @@ export default function XanhDuongMatchIntro() {
             <div className="flex flex-col items-end gap-2 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '30%' }}>
               {hasMediaPartners && (
                 <div className="flex-shrink-0 w-full">
-                  <div className="text-[8px] sm:text-xs font-bold text-purple-400 mb-1 drop-shadow-lg text-right">
+                  <div className="text-[8px] sm:text-xs font-bold text-white mb-1 drop-shadow-lg text-right" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Đơn vị truyền thông
                   </div>
                   <div className="flex gap-1 justify-end overflow-x-auto scrollbar-hide">
@@ -233,7 +228,7 @@ export default function XanhDuongMatchIntro() {
                           <img
                             src={media.logo}
                             alt={media.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-1`}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 p-1`}
                           />
                         </div>
                       ))}
@@ -259,40 +254,58 @@ export default function XanhDuongMatchIntro() {
           </div>
 
           {/* Main content section */}
-          <div className="flex-1 flex flex-col justify-center min-h-0">
+          <div className="flex-1 flex flex-col justify-start min-h-0">
 
-            {/* Title section */}
-            <div className="text-center mb-1 sm:mb-2 md:mb-3">
+            {/* Title section - Tăng font lên 2 lần và giảm padding top */}
+            <div className="text-center">
               <h1
-                className="font-black uppercase text-white text-xs sm:text-sm md:text-lg lg:text-2xl xl:text-3xl px-1 sm:px-2"
+                className="font-black uppercase px-2 sm:px-4 md:px-6"
                 style={{
-                  textShadow: '#1e40af 2px 2px 4px',
+                  color: '#ef4444',
+                  WebkitTextStroke: '2px white',
+                  textStroke: '2px white',
+                  fontFamily: "'UTM Colossalis', 'Arial Black', sans-serif",
+                  fontSize: isMobile ? '20px' : isTablet ? '24px' : '48px'
                 }}
               >
                 {matchData.matchTitle}
               </h1>
 
-              <div className="flex items-center justify-center mt-2 sm:mt-4">
-                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-400 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-cyan-500 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-indigo-500 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
+              {/* Subtitle display */}
+              {matchData.showSubtitle && matchData.subtitle && (
+                <div className="text-white/90 text-[8px] sm:text-xs md:text-sm lg:text-base font-medium mt-1 sm:mt-2 px-2">
+                  {matchData.subtitle}
+                </div>
+              )}
+
+              {/* Round and Group display - Moved below title */}
+              <div className="flex items-center justify-center gap-2 sm:gap-4 mt-1 sm:mt-2">
+                {matchData.showRound && (
+                  <div className="bg-blue-600/80 px-1 sm:px-2 py-0.5 sm:py-1 rounded text-[6px] sm:text-[8px] md:text-[10px] font-bold text-white">
+                    VÒNG {matchData.round}
+                  </div>
+                )}
+                {matchData.showGroup && (
+                  <div className="bg-red-600/80 px-1 sm:px-2 py-0.5 sm:py-1 rounded text-[6px] sm:text-[8px] md:text-[10px] font-bold text-white">
+                    BẢNG {matchData.group}
+                  </div>
+                )}
               </div>
+
             </div>
 
-            {/* Teams section */}
-            <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-1 sm:mb-2 md:mb-4">
+            {/* Teams section và Time/Date section ngang hàng */}
+            <div className="flex items-center justify-center gap-4 sm:gap-8 md:gap-16 w-full px-1 sm:px-2 md:px-4">
 
               {/* Team A */}
-              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
+              <div className="flex flex-col items-center">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className="relative rounded-full bg-white p-1 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
-                      width: `${logoSize}px`,
-                      height: `${logoSize}px`
+                      width: `${isMobile ? logoSize * 0.5 : logoSize}px`, // Tăng gấp đôi từ 0.25 lên 0.5 cho mobile
+                      height: `${isMobile ? logoSize * 0.5 : logoSize}px`
                     }}
                   >
                     <img
@@ -305,9 +318,14 @@ export default function XanhDuongMatchIntro() {
                     />
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-blue-500 to-blue-700 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
+                <div className="px-1 sm:px-2 md:px-3">
                   <span
-                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-white text-center block truncate"
+                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-center block truncate"
+                    style={{
+                      color: '#ffe006',
+                      fontFamily: "'UTM Colossalis', 'Arial Black', sans-serif",
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                    }}
                     ref={(el) => el && adjustFontSize(el)}
                   >
                     {matchData.team1}
@@ -315,48 +333,39 @@ export default function XanhDuongMatchIntro() {
                 </div>
               </div>
 
-              {/* VS Section */}
-              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
-                <div className="relative flex flex-col items-center">
-                  <img
-                    src="/images/background-poster/vs2.png"
-                    alt="VS"
-                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-18 lg:h-18 object-contain animate-pulse"
-                  />
-                </div>
-
-                <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
-                    {(matchData.showTimer || matchData.showDate) && (
-                      <span>
-                        {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
-                      </span>
-                    )}
-                    {(matchData.showTimer || matchData.showDate) && matchData.showStadium && matchData.stadium && (
-                      <span> | </span>
-                    )}
-                    {matchData.showStadium && matchData.stadium && (
-                      <span>📍 {matchData.stadium}</span>
-                    )}
+              {/* Time and Date section - Ngang hàng với teams */}
+              <div className="flex flex-col items-center px-2 sm:px-4">
+                {matchData.showTimer && (
+                  <div
+                    className="text-white font-bold"
+                    style={{
+                      fontSize: isMobile ? '20px' : isTablet ? '32px' : '60px'
+                    }}
+                  >
+                    {matchData.roundedTime}
                   </div>
-                  {matchData.liveText && (
-                    <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-semibold bg-red-600/80 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap flex items-center space-x-1">
-                      <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full animate-pulse"></div>
-                      <span>Đơn vị Live: {matchData.liveText}</span>
-                    </div>
-                  )}
-                </div>
+                )}
+                {matchData.showDate && (
+                  <div
+                    className="text-white/90 font-bold mt-1"
+                    style={{
+                      fontSize: isMobile ? '12px' : isTablet ? '18px' : '24px'
+                    }}
+                  >
+                    {matchData.currentDate}
+                  </div>
+                )}
               </div>
 
               {/* Team B */}
-              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
+              <div className="flex flex-col items-center">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-red-400 to-red-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-gray-700 to-black rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className="relative rounded-full bg-white p-1 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
-                      width: `${logoSize}px`,
-                      height: `${logoSize}px`
+                      width: `${isMobile ? logoSize * 0.5 : logoSize}px`, // Tăng gấp đôi từ 0.25 lên 0.5 cho mobile
+                      height: `${isMobile ? logoSize * 0.5 : logoSize}px`
                     }}
                   >
                     <img
@@ -369,9 +378,14 @@ export default function XanhDuongMatchIntro() {
                     />
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-red-500 to-red-700 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
+                <div className="px-1 sm:px-2 md:px-3">
                   <span
-                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-white text-center block truncate"
+                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-center block truncate"
+                    style={{
+                      color: '#ffe006',
+                      fontFamily: "'UTM Colossalis', 'Arial Black', sans-serif",
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                    }}
                     ref={(el) => el && adjustFontSize(el)}
                   >
                     {matchData.team2}
@@ -382,39 +396,192 @@ export default function XanhDuongMatchIntro() {
 
           </div>
 
-          {/* Bottom spacer */}
-          <div className="h-3 sm:h-4 md:h-6 flex-shrink-0"></div>
         </div>
 
+        {/* Bottom section - Stadium và Live Text - Đưa ra ngoài để width bằng poster */}
+        <div className="absolute bottom-[20%] left-0 right-0 z-10 bg-white">
+          <div className="flex justify-center items-center gap-2 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8 py-2 rounded-t-lg mx-4 sm:mx-8">
+            {/* Stadium */}
+            {matchData.showStadium && (
+              <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-gray-800 font-normal" style={{
+                fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
+              }}>
+                <img
+                  src="/images/basic/stadium.png"
+                  alt="Stadium"
+                  className={`object-contain ${isMobile ? 'w-2 h-2' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
+                />
+                <span>{matchData.stadium}</span>
+              </div>
+            )}
 
+            {/* Live Text */}
+            {matchData.showLiveIndicator && (
+              <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-red-600 font-bold" style={{
+                fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
+              }}>
+                <img
+                  src="/images/basic/live-logo1.gif"
+                  alt="Live"
+                  className={`object-contain ${isMobile ? 'w-2 h-2' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
+                />
+                <span>{matchData.liveText}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Hiệu ứng mưa sao băng từ tâm ra 16 hướng */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(14)].map((_, i) => (
+          {[...Array(80)].map((_, i) => {
+            const angle = (i % 16) * 22.5; // 16 hướng: 0, 22.5, 45, 67.5, 90, 112.5, 135, 157.5, 180, 202.5, 225, 247.5, 270, 292.5, 315, 337.5 độ
+            const distance = 60 + (i % 10) * 30; // Tăng gấp đôi khoảng cách
+            const delay = (i % 16) * 0.1; // Độ trễ cho mỗi hướng (16 hướng)
+
+            return (
+              <div
+                key={i}
+                className="absolute w-1 h-1 sm:w-2 sm:h-2 bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 rounded-full"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  animation: `shootingStar-${angle} ${3 + Math.random() * 2}s ease-out infinite`,
+                  animationDelay: `${delay}s`,
+                  opacity: 0.8
+                }}
+              />
+            );
+          })}
+        </div>
+
+        {/* Bụi sao nhỏ rơi rơi ngẫu nhiên */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {[...Array(20)].map((_, i) => (
             <div
-              key={i}
-              className="absolute bg-blue-300 opacity-80"
+              key={`dust-${i}`}
+              className="absolute bg-white rounded-full opacity-60"
               style={{
-                width: `${3 + Math.random() * 4}px`,
-                height: `${3 + Math.random() * 4}px`,
+                width: `${1 + Math.random() * 2}px`,
+                height: `${1 + Math.random() * 2}px`,
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                borderRadius: Math.random() > 0.5 ? '50%' : '0%',
-                animation: `twinkle ${1 + Math.random() * 3}s ease-in-out infinite`
+                animation: `sparkle ${2 + Math.random() * 3}s ease-in-out infinite`,
+                animationDelay: `${Math.random() * 2}s`
               }}
             />
           ))}
         </div>
 
         <style>{`
-          @keyframes twinkle {
+          @keyframes sparkle {
             0%, 100% {
-              opacity: 0.2;
-              transform: scale(1);
+              transform: scale(0) rotate(0deg);
+              opacity: 0;
             }
             50% {
+              transform: scale(1.5) rotate(180deg);
               opacity: 1;
-              transform: scale(1.3);
             }
           }
+
+          /* Shooting star animations for 16 directions */
+          @keyframes shootingStar-0 {
+            0% { transform: translate(-50%, -50%) translateX(0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translateX(0) scale(1); }
+            100% { transform: translate(-50%, -50%) translateX(1200px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-22.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(1131px, -465px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-45 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(900px, -900px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-67.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(465px, -1131px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-90 {
+            0% { transform: translate(-50%, -50%) translateY(0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translateY(0) scale(1); }
+            100% { transform: translate(-50%, -50%) translateY(-1200px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-112.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-465px, -1131px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-135 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-900px, -900px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-157.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-1131px, -465px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-180 {
+            0% { transform: translate(-50%, -50%) translateX(0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translateX(0) scale(1); }
+            100% { transform: translate(-50%, -50%) translateX(-1200px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-202.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-1131px, 465px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-225 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-900px, 900px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-247.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-465px, 1131px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-270 {
+            0% { transform: translate(-50%, -50%) translateY(0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translateY(0) scale(1); }
+            100% { transform: translate(-50%, -50%) translateY(1200px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-292.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(465px, 1131px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-315 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(900px, 900px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-337.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(1131px, 465px) scale(0); opacity: 0; }
+          }
+
           .scrollbar-hide {
             -ms-overflow-style: none;
             scrollbar-width: none;
