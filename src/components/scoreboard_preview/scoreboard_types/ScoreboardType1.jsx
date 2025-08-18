@@ -28,14 +28,14 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                                     {currentData.teamAName}
                                 </div>
 
-                                <div className="flex w-full h-2">
+                                <div className="flex w-full" style={{ height: '56px' }}>
                                     <div
-                                        className="flex-1 h-full"
-                                        style={{ backgroundColor: currentData.teamAKitColor }}
+                                        className="flex-1"
+                                        style={{ backgroundColor: currentData.teamAKitColor, height: '56px' }}
                                     />
                                     <div
-                                        className="flex-1 h-full"
-                                        style={{ backgroundColor: currentData.teamA2KitColor }}
+                                        className="flex-1"
+                                        style={{ backgroundColor: currentData.teamA2KitColor, height: '56px' }}
                                     />
                                 </div>
                             </div>
@@ -65,14 +65,14 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                                     {currentData.teamBName}
                                 </div>
 
-                                <div className="flex w-full h-2">
+                                <div className="flex w-full" style={{ height: '56px' }}>
                                     <div
-                                        className="flex-1 h-full"
-                                        style={{ backgroundColor: currentData.teamB2KitColor }}
+                                        className="flex-1"
+                                        style={{ backgroundColor: currentData.teamB2KitColor, height: '56px' }}
                                     />
                                     <div
-                                        className="flex-1 h-full"
-                                        style={{ backgroundColor: currentData.teamBKitColor }}
+                                        className="flex-1"
+                                        style={{ backgroundColor: currentData.teamBKitColor, height: '56px' }}
                                     />
                                 </div>
                             </div>
