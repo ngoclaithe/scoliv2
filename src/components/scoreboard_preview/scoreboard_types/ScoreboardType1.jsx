@@ -45,12 +45,10 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                 {showMatchTime && (
                     <div className="bg-black text-white px-2 py-1 text-sm font-bold whitespace-nowrap">
                         {currentData.matchTime}
+                        <div className="h-1 bg-black"></div>
+                        <div className="h-1 bg-black"></div>
                     </div>
                 )}
-
-                {/* Thẻ thêm có h bằng team kit */}
-                <div className="h-1 bg-transparent"></div>
-                <div className="h-1 bg-transparent"></div>
 
                 <div className="flex">
                     <div className="flex flex-col items-center">
@@ -100,7 +98,7 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                 <img
                     src="/images/basic/ScoLivLogo.png"
                     alt="ScoLiv Logo"
-                    className="w-[250px] h-auto"
+                    className="w-[46%] h-auto"
                 />
             </div>
         </div>
