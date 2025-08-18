@@ -405,7 +405,7 @@ export default function TreTrungMatchIntro() {
                   border: isMobile ? '3px solid #fff' : '6px solid #fff',
                   borderRadius: isMobile ? '25px' : '45px',
                   color: '#fff',
-                  fontSize: isMobile ? '8px' : isTablet ? '17px' : '25px',
+                  fontSize: isMobile ? '6px' : isTablet ? '17px' : '25px',
                   fontFamily: 'Bebas Neue, UTM Bebas, sans-serif',
                   padding: isMobile ? '2px 8px' : '4px 12px',
                   boxShadow: '0 4px 20px rgba(24, 119, 242, 0.11)',
