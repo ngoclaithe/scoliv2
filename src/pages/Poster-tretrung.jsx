@@ -188,7 +188,6 @@ export default function TreTrungMatchIntro() {
                   </div>
                 )}
               </div>
-            )}
 
             {/* Top-center: Tournament Logos */}
             <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4 ${isMobile ? 'px-2' : 'px-4'}`}>
