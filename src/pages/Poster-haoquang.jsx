@@ -176,22 +176,22 @@ export default function HaoQuangMatchIntro() {
 
         <div className="relative z-10 h-full flex flex-col p-1 sm:p-2">
 
-          {/* Top section với tournament logos only */}
-          <div className="flex justify-center items-start mb-0 sm:mb-1 md:mb-2 min-h-[6vh] sm:min-h-[8vh] md:min-h-[10vh]">
-            {/* Tournament Logos */}
-            <div className={`flex ${getTournamentPositionClass()} items-center gap-1 sm:gap-2 md:gap-4 px-4`}>
-              {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 &&
-                matchData.tournamentLogos.map((logo, index) => (
+          {/* Top section với tournament logos only - chỉ hiển thị khi có logos */}
+          {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 && (
+            <div className="flex justify-center items-start mb-0 sm:mb-1 md:mb-2 min-h-[6vh] sm:min-h-[8vh] md:min-h-[10vh]">
+              {/* Tournament Logos */}
+              <div className={`flex ${getTournamentPositionClass()} items-center gap-1 sm:gap-2 md:gap-4 px-4`}>
+                {matchData.tournamentLogos.map((logo, index) => (
                   <img
                     key={index}
                     src={logo}
                     alt={`Tournament Logo ${index + 1}`}
                     className="object-contain h-6 sm:h-8 md:h-12 lg:h-16 max-w-16 sm:max-w-24 md:max-w-32 flex-shrink-0"
                   />
-                ))
-              }
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Main content section */}
           <div className="flex-1 flex flex-col justify-center min-h-0">
