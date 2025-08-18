@@ -226,8 +226,8 @@ export default function HaoQuangMatchIntro() {
                   <div
                     className="relative rounded-full bg-white p-2 sm:p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
-                      width: `${logoSize}px`,
-                      height: `${logoSize}px`
+                      width: `${logoSize / 2}px`,
+                      height: `${logoSize / 2}px`
                     }}
                   >
                     <img
@@ -354,10 +354,10 @@ export default function HaoQuangMatchIntro() {
                 <div className="text-yellow-400 font-bold text-xs sm:text-sm md:text-base mb-2">
                   Các đơn vị đồng hành
                 </div>
-                <div className="flex justify-center items-center gap-2 sm:gap-3 md:gap-4 flex-wrap">
+                <div className="flex justify-center items-center gap-2 sm:gap-3 md:gap-4 flex-wrap" style={{backgroundColor: 'white', padding: '8px', borderRadius: '8px'}}>
                   {/* Sponsors */}
                   {sponsorLogos.map((sponsor, index) => (
-                    <div key={`all-sponsor-${index}`} className="flex-shrink-0">
+                    <div key={`all-sponsor-${index}`} className="flex-shrink-0" style={{backgroundColor: 'white', padding: '2px', borderRadius: '4px'}}>
                       <img
                         src={sponsor.logo}
                         alt={sponsor.name}
@@ -368,7 +368,7 @@ export default function HaoQuangMatchIntro() {
 
                   {/* Organizing */}
                   {organizingLogos.map((organizing, index) => (
-                    <div key={`all-organizing-${index}`} className="flex-shrink-0">
+                    <div key={`all-organizing-${index}`} className="flex-shrink-0" style={{backgroundColor: 'white', padding: '2px', borderRadius: '4px'}}>
                       <img
                         src={organizing.logo}
                         alt={organizing.name}
@@ -379,7 +379,7 @@ export default function HaoQuangMatchIntro() {
 
                   {/* Media Partners */}
                   {mediaPartnerLogos.map((media, index) => (
-                    <div key={`all-media-${index}`} className="flex-shrink-0">
+                    <div key={`all-media-${index}`} className="flex-shrink-0" style={{backgroundColor: 'white', padding: '2px', borderRadius: '4px'}}>
                       <img
                         src={media.logo}
                         alt={media.name}
