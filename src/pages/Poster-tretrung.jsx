@@ -266,19 +266,21 @@ export default function TreTrungMatchIntro() {
                 </div>
               )}
 
-              {/* Round and Group display */}
-              <div className="flex items-center justify-center gap-2 sm:gap-3 mt-0.5 sm:mt-1">
-                {matchData.showRound && (
-                  <div className="bg-blue-600/80 px-2 py-1 rounded text-xs sm:text-sm font-bold text-white">
-                    VÒNG {matchData.round}
-                  </div>
-                )}
-                {matchData.showGroup && (
-                  <div className="bg-green-600/80 px-2 py-1 rounded text-xs sm:text-sm font-bold text-white">
-                    BẢNG {matchData.group}
-                  </div>
-                )}
-              </div>
+              {/* Round and Group display - Hidden on mobile to save space */}
+              {!isMobile && (
+                <div className="flex items-center justify-center gap-2 sm:gap-3 mt-0.5 sm:mt-1">
+                  {matchData.showRound && (
+                    <div className="bg-blue-600/80 px-2 py-1 rounded text-xs sm:text-sm font-bold text-white">
+                      VÒNG {matchData.round}
+                    </div>
+                  )}
+                  {matchData.showGroup && (
+                    <div className="bg-green-600/80 px-2 py-1 rounded text-xs sm:text-sm font-bold text-white">
+                      BẢNG {matchData.group}
+                    </div>
+                  )}
+                </div>
+              )}
 
             </div>
 
