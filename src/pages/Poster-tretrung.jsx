@@ -145,7 +145,7 @@ export default function TreTrungMatchIntro() {
                 {hasSponsors && (
                   <div className="flex-shrink-0">
                     <div className={`font-bold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-sm sm:text-lg md:text-xl'}`}>
-                      {isMobile ? 'NTT' : 'Nhà tài trợ'}
+                      Nhà tài trợ
                     </div>
                     <div className="flex flex-col gap-0.5">
                       {Array.from({ length: Math.ceil(Math.min(sponsorLogos.length, isMobile ? 2 : 6) / (isMobile ? 1 : 3)) }, (_, rowIndex) => (
