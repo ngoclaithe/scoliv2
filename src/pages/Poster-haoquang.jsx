@@ -154,59 +154,10 @@ export default function HaoQuangMatchIntro() {
 
         <div className="relative z-10 h-full flex flex-col p-3 sm:p-6">
 
-          <div className="flex justify-between items-start mb-1 sm:mb-3 md:mb-5 min-h-[8vh] sm:min-h-[12vh] md:min-h-[14vh]">
-
-            {/* Top-left: Sponsors and Organizing */}
-            <div className="flex items-start gap-2 sm:gap-4 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '35%' }}>
-              {hasSponsors && (
-                <div className="flex-shrink-0">
-                  <div className="text-[8px] sm:text-xs font-bold text-green-400 mb-1 drop-shadow-lg">
-                    Nhà tài trợ
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    {Array.from({ length: Math.ceil(Math.min(sponsorLogos.length, 6) / 3) }, (_, rowIndex) => (
-                      <div key={`sponsor-row-${rowIndex}`} className="flex gap-1 flex-nowrap">
-                        {sponsorLogos.slice(rowIndex * 3, (rowIndex + 1) * 3).slice(0, 3).map((sponsor, index) => (
-                          <div key={`sponsor-${rowIndex}-${index}`} className="flex-shrink-0">
-                            <img
-                              src={sponsor.logo}
-                              alt={sponsor.name}
-                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 p-0.5 sm:p-1`}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {hasOrganizing && (
-                <div className="flex-shrink-0">
-                  <div className="text-[8px] sm:text-xs font-bold text-blue-400 mb-1 drop-shadow-lg">
-                    Đơn vị tổ chức
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    {Array.from({ length: Math.ceil(Math.min(organizingLogos.length, 6) / 3) }, (_, rowIndex) => (
-                      <div key={`organizing-row-${rowIndex}`} className="flex gap-1 flex-nowrap">
-                        {organizingLogos.slice(rowIndex * 3, (rowIndex + 1) * 3).slice(0, 3).map((organizing, index) => (
-                          <div key={`organizing-${rowIndex}-${index}`} className="flex-shrink-0">
-                            <img
-                              src={organizing.logo}
-                              alt={organizing.name}
-                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 p-0.5 sm:p-1`}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Top-center: Tournament Logos */}
-            <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4 px-4`}>
+          {/* Top section với tournament logos only */}
+          <div className="flex justify-center items-start mb-1 sm:mb-3 md:mb-5 min-h-[8vh] sm:min-h-[12vh] md:min-h-[14vh]">
+            {/* Tournament Logos */}
+            <div className={`flex ${getTournamentPositionClass()} items-center gap-1 sm:gap-2 md:gap-4 px-4`}>
               {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 &&
                 matchData.tournamentLogos.map((logo, index) => (
                   <img
@@ -218,44 +169,6 @@ export default function HaoQuangMatchIntro() {
                 ))
               }
             </div>
-
-            {/* Top-right: Media Partners and Live Unit */}
-            <div className="flex flex-col items-end gap-2 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '30%' }}>
-              {hasMediaPartners && (
-                <div className="flex-shrink-0 w-full">
-                  <div className="text-[8px] sm:text-xs font-bold text-purple-400 mb-1 drop-shadow-lg text-right">
-                    Đơn vị truyền thông
-                  </div>
-                  <div className="flex gap-1 justify-end overflow-x-auto scrollbar-hide">
-                    <div className="flex gap-1 flex-nowrap">
-                      {mediaPartnerLogos.map((media, index) => (
-                        <div key={index} className="flex-shrink-0">
-                          <img
-                            src={media.logo}
-                            alt={media.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-1`}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {matchData.liveUnit && (
-                <div className="flex-shrink-0">
-                  <div className="bg-red-600 text-white px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2">
-                    <div className="w-1 h-1 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
-                    <img
-                      src={matchData.liveUnit}
-                      alt="Live Unit"
-                      className="h-3 sm:h-4 md:h-5 object-contain"
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-
           </div>
 
           {/* Main content section */}
