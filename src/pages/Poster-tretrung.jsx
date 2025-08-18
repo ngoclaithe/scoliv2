@@ -203,7 +203,7 @@ export default function TreTrungMatchIntro() {
             <div className="flex flex-col items-end gap-1 sm:gap-2 flex-shrink-0" style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: '30%' }}>
               {hasMediaPartners && (
                 <div className="flex-shrink-0 w-full">
-                  <div className={`font-bold text-white mb-0.5 drop-shadow-lg text-right ${isMobile ? 'text-xs' : 'text-sm sm:text-lg md:text-xl'}`}>
+                  <div className={`font-bold text-white mb-0.5 drop-shadow-lg text-right ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
                     Đơn vị truyền thông
                   </div>
                   <div className="flex gap-0.5 justify-end overflow-x-auto scrollbar-hide">
