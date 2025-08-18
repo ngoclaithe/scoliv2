@@ -178,7 +178,7 @@ export default function DodenMatchIntro() {
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col p-3 sm:p-6">
+        <div className="relative z-10 h-full flex flex-col p-1 sm:p-3">
 
           <div className="flex justify-between items-start mb-1 sm:mb-3 md:mb-5 min-h-[8vh] sm:min-h-[12vh] md:min-h-[14vh]">
 
@@ -186,7 +186,7 @@ export default function DodenMatchIntro() {
             <div className="flex items-start gap-2 sm:gap-4 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '35%' }}>
               {hasSponsors && (
                 <div className="flex-shrink-0">
-                  <div className="text-[8px] sm:text-xs font-bold text-green-400 mb-1 drop-shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <div className="text-[8px] sm:text-xs font-bold text-white mb-1 drop-shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Nhà tài trợ
                   </div>
                   <div className="flex flex-col gap-1">
@@ -209,7 +209,7 @@ export default function DodenMatchIntro() {
 
               {hasOrganizing && (
                 <div className="flex-shrink-0">
-                  <div className="text-[8px] sm:text-xs font-bold text-blue-400 mb-1 drop-shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <div className="text-[8px] sm:text-xs font-bold text-white mb-1 drop-shadow-lg" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Đơn vị đồng hành
                   </div>
                   <div className="flex flex-col gap-1">
@@ -249,7 +249,7 @@ export default function DodenMatchIntro() {
             <div className="flex flex-col items-end gap-2 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '30%' }}>
               {hasMediaPartners && (
                 <div className="flex-shrink-0 w-full">
-                  <div className="text-[8px] sm:text-xs font-bold text-purple-400 mb-1 drop-shadow-lg text-right" style={{ fontFamily: 'Inter, sans-serif' }}>
+                  <div className="text-[8px] sm:text-xs font-bold text-white mb-1 drop-shadow-lg text-right" style={{ fontFamily: 'Inter, sans-serif' }}>
                     Đơn vị truyền thông
                   </div>
                   <div className="flex gap-1 justify-end overflow-x-auto scrollbar-hide">
@@ -287,12 +287,13 @@ export default function DodenMatchIntro() {
           {/* Main content section */}
           <div className="flex-1 flex flex-col justify-center min-h-0">
 
-            {/* Title section */}
-            <div className="text-center mb-1 sm:mb-2 md:mb-3">
+            {/* Title section - Tăng font lên 2 lần và giảm padding top */}
+            <div className="text-center mb-0 sm:mb-1 md:mb-2">
               <h1
-                className="font-black uppercase text-white text-xs sm:text-sm md:text-lg lg:text-2xl xl:text-3xl px-1 sm:px-2"
+                className="font-black uppercase text-white px-1 sm:px-2"
                 style={{
                   textShadow: '#dc2626 2px 2px 4px',
+                  fontSize: isMobile ? '24px' : isTablet ? '28px' : '48px' // Tăng gấp đôi từ 12px/14px/24px
                 }}
               >
                 {matchData.matchTitle}
@@ -328,7 +329,7 @@ export default function DodenMatchIntro() {
               </div>
             </div>
 
-            {/* Teams section - Removed VS section */}
+            {/* Teams section và Time/Date section ngang hàng */}
             <div className="flex items-center justify-center gap-4 sm:gap-8 md:gap-16 w-full px-1 sm:px-2 md:px-4 mb-2 sm:mb-4 md:mb-6">
 
               {/* Team A */}
@@ -360,6 +361,20 @@ export default function DodenMatchIntro() {
                     {matchData.team1}
                   </span>
                 </div>
+              </div>
+
+              {/* Time and Date section - Ngang hàng với teams */}
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3">
+                {matchData.showTimer && (
+                  <div className="text-white font-bold text-sm sm:text-lg md:text-xl lg:text-2xl">
+                    {matchData.roundedTime}
+                  </div>
+                )}
+                {matchData.showDate && (
+                  <div className="text-white/90 font-medium text-xs sm:text-sm md:text-base">
+                    {matchData.currentDate}
+                  </div>
+                )}
               </div>
 
               {/* Team B */}
@@ -394,53 +409,40 @@ export default function DodenMatchIntro() {
               </div>
             </div>
 
-            {/* Time and Date section - Time above Date */}
-            <div className="flex flex-col items-center mb-1 sm:mb-2">
-              {matchData.showTimer && (
-                <div className="text-white font-bold text-sm sm:text-lg md:text-xl lg:text-2xl mb-1">
-                  {matchData.roundedTime}
-                </div>
-              )}
-              {matchData.showDate && (
-                <div className="text-white/90 font-medium text-xs sm:text-sm md:text-base">
-                  {matchData.currentDate}
-                </div>
-              )}
-            </div>
-
           </div>
 
-          {/* Bottom section - Stadium and Live Text */}
-          <div className="mt-auto mb-0">
-            <div className="flex justify-center items-center gap-2 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8 py-2 bg-white/90 rounded-lg mx-4 sm:mx-8">
-              {/* Stadium */}
-              {matchData.showStadium && (
-                <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-gray-800 font-normal" style={{
-                  fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
-                }}>
-                  <img
-                    src="/images/basic/stadium.png"
-                    alt="Stadium"
-                    className={`object-contain ${isMobile ? 'w-2 h-2' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
-                  />
-                  <span>{matchData.stadium}</span>
-                </div>
-              )}
+        </div>
 
-              {/* Live Text */}
-              {matchData.showLiveIndicator && (
-                <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-red-600 font-bold" style={{
-                  fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
-                }}>
-                  <img
-                    src="/images/basic/live-logo1.gif"
-                    alt="Live"
-                    className={`object-contain ${isMobile ? 'w-2 h-2' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
-                  />
-                  <span>{matchData.liveText}</span>
-                </div>
-              )}
-            </div>
+        {/* Bottom section - Stadium và Live Text - Đưa ra ngoài để width bằng poster */}
+        <div className="absolute bottom-0 left-0 right-0 z-10">
+          <div className="flex justify-center items-center gap-2 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8 py-2 bg-white/90 rounded-t-lg mx-4 sm:mx-8">
+            {/* Stadium */}
+            {matchData.showStadium && (
+              <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-gray-800 font-normal" style={{
+                fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
+              }}>
+                <img
+                  src="/images/basic/stadium.png"
+                  alt="Stadium"
+                  className={`object-contain ${isMobile ? 'w-2 h-2' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
+                />
+                <span>{matchData.stadium}</span>
+              </div>
+            )}
+
+            {/* Live Text */}
+            {matchData.showLiveIndicator && (
+              <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-red-600 font-bold" style={{
+                fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
+              }}>
+                <img
+                  src="/images/basic/live-logo1.gif"
+                  alt="Live"
+                  className={`object-contain ${isMobile ? 'w-2 h-2' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
+                />
+                <span>{matchData.liveText}</span>
+              </div>
+            )}
           </div>
         </div>
 
