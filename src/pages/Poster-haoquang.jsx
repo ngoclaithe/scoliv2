@@ -78,9 +78,9 @@ export default function HaoQuangMatchIntro() {
       const teamNameElements = document.querySelectorAll('.team-name-text');
       teamNameElements.forEach((element) => {
         const container = element.parentElement;
-        const containerWidth = container.offsetWidth - 30; // subtract padding
-        let fontSize = isMobile ? 7 : isTablet ? 20 : 34;
-        const minFontSize = isMobile ? 4 : isTablet ? 8 : 14;
+        const containerWidth = container.offsetWidth - (isMobile ? 16 : 30); // subtract padding
+        let fontSize = isMobile ? 6 : isTablet ? 16 : 28;
+        const minFontSize = isMobile ? 3 : isTablet ? 6 : 12;
 
         element.style.fontSize = fontSize + 'px';
 
@@ -94,7 +94,7 @@ export default function HaoQuangMatchIntro() {
     // Delay to ensure DOM is ready
     setTimeout(adjustTeamNameFontSize, 100);
   }, [matchData.team1, matchData.team2, isMobile, isTablet]);
-  const logoSize = isMobile ? 40 : isTablet ? 100 : 160;
+  const logoSize = isMobile ? 50 : isTablet ? 80 : 140;
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
@@ -163,7 +163,7 @@ export default function HaoQuangMatchIntro() {
 
 
   return (
-    <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
+    <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-1 sm:p-2 md:p-4">
       <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
 
         <div
@@ -174,7 +174,7 @@ export default function HaoQuangMatchIntro() {
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col p-1 sm:p-2">
+        <div className={`relative z-10 h-full flex flex-col ${isMobile ? 'p-0.5' : 'p-1 sm:p-2'}`}>
 
           {/* Top section với tournament logos only - chỉ hiển thị khi có logos */}
           {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 && (
@@ -237,7 +237,7 @@ export default function HaoQuangMatchIntro() {
             {/* Teams section với Match info ngang hàng */}
             <div className={`flex items-center justify-center w-full mb-1 sm:mb-2 md:mb-3 ${
               isMobile
-                ? 'px-8 gap-3'
+                ? 'px-1 gap-0.5'
                 : 'px-16 sm:px-20 md:px-24 gap-4 sm:gap-6 md:gap-8'
             }`}>
 
@@ -246,7 +246,9 @@ export default function HaoQuangMatchIntro() {
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-2 sm:p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className={`relative rounded-full bg-white shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden ${
+                      isMobile ? 'p-1' : 'p-2 sm:p-3'
+                    }`}
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`
@@ -266,19 +268,19 @@ export default function HaoQuangMatchIntro() {
                   className="text-white font-bold uppercase tracking-wide text-center team-name-container"
                   style={{
                     background: 'linear-gradient(135deg, #1eae99, #008582)',
-                    borderRadius: '17px',
-                    marginTop: '45px',
+                    borderRadius: isMobile ? '8px' : '17px',
+                    marginTop: isMobile ? '20px' : '45px',
                     textAlign: 'center',
-                    fontSize: isMobile ? '7px' : isTablet ? '20px' : '34px',
-                    padding: '4px 15px',
-                    width: isMobile ? '80px' : isTablet ? '150px' : '200px',
-                    height: isMobile ? '25px' : isTablet ? '45px' : '60px',
+                    fontSize: isMobile ? '6px' : isTablet ? '16px' : '28px',
+                    padding: isMobile ? '2px 8px' : '4px 15px',
+                    width: isMobile ? '104px' : isTablet ? '195px' : '260px',
+                    height: isMobile ? '20px' : isTablet ? '36px' : '48px',
                     minWidth: 'unset',
-                    border: 'solid 5px #ffffff',
+                    border: isMobile ? 'solid 2px #ffffff' : 'solid 5px #ffffff',
                     color: '#ffffff',
                     fontFamily: 'Baloo Bhai 2, sans-serif',
                     fontWeight: '800',
-                    textShadow: '4px 4px #727272',
+                    textShadow: isMobile ? '2px 2px #727272' : '4px 4px #727272',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -299,8 +301,8 @@ export default function HaoQuangMatchIntro() {
                     alt="VS"
                     className="object-contain animate-pulse"
                     style={{
-                      width: isMobile ? '40px' : isTablet ? '120px' : '160px',
-                      height: isMobile ? '40px' : isTablet ? '120px' : '160px'
+                      width: isMobile ? '25px' : isTablet ? '80px' : '120px',
+                      height: isMobile ? '25px' : isTablet ? '80px' : '120px'
                     }}
                   />
                 </div>
@@ -311,7 +313,7 @@ export default function HaoQuangMatchIntro() {
                     <div
                       className="font-bold"
                       style={{
-                        fontSize: isMobile ? '8px' : isTablet ? '14px' : '18px'
+                        fontSize: isMobile ? '6px' : isTablet ? '12px' : '16px'
                       }}
                     >
                       {matchData.showTimer && matchData.roundedTime}
@@ -324,7 +326,7 @@ export default function HaoQuangMatchIntro() {
                     <div
                       className="font-normal"
                       style={{
-                        fontSize: isMobile ? '7px' : isTablet ? '12px' : '16px'
+                        fontSize: isMobile ? '5px' : isTablet ? '10px' : '14px'
                       }}
                     >
                       Địa điểm: {matchData.stadium}
@@ -338,7 +340,9 @@ export default function HaoQuangMatchIntro() {
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-2 sm:p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className={`relative rounded-full bg-white shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden ${
+                      isMobile ? 'p-1' : 'p-2 sm:p-3'
+                    }`}
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`
@@ -358,19 +362,19 @@ export default function HaoQuangMatchIntro() {
                   className="text-white font-bold uppercase tracking-wide text-center team-name-container"
                   style={{
                     background: 'linear-gradient(135deg, #1eae99, #008582)',
-                    borderRadius: '17px',
-                    marginTop: '45px',
+                    borderRadius: isMobile ? '8px' : '17px',
+                    marginTop: isMobile ? '20px' : '45px',
                     textAlign: 'center',
-                    fontSize: isMobile ? '7px' : isTablet ? '20px' : '34px',
-                    padding: '4px 15px',
-                    width: isMobile ? '80px' : isTablet ? '150px' : '200px',
-                    height: isMobile ? '25px' : isTablet ? '45px' : '60px',
+                    fontSize: isMobile ? '6px' : isTablet ? '16px' : '28px',
+                    padding: isMobile ? '2px 8px' : '4px 15px',
+                    width: isMobile ? '104px' : isTablet ? '195px' : '260px',
+                    height: isMobile ? '20px' : isTablet ? '36px' : '48px',
                     minWidth: 'unset',
-                    border: 'solid 5px #ffffff',
+                    border: isMobile ? 'solid 2px #ffffff' : 'solid 5px #ffffff',
                     color: '#ffffff',
                     fontFamily: 'Baloo Bhai 2, sans-serif',
                     fontWeight: '800',
-                    textShadow: '4px 4px #727272',
+                    textShadow: isMobile ? '2px 2px #727272' : '4px 4px #727272',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -386,18 +390,18 @@ export default function HaoQuangMatchIntro() {
 
             {/* Các đơn vị đồng hành */}
             {(hasSponsors || hasOrganizing || hasMediaPartners) && (
-              <div className="flex flex-col items-center mt-2 sm:mt-4 mb-2 sm:mb-4">
-                <div className="font-bold mb-2" style={{color: '#FFD700', fontSize: isMobile ? '10px' : isTablet ? '17px' : '20px'}}>
+              <div className={`flex flex-col items-center ${isMobile ? 'mt-1 mb-1' : 'mt-2 sm:mt-4 mb-2 sm:mb-4'}`}>
+                <div className="font-bold mb-1 sm:mb-2" style={{color: '#FFD700', fontSize: isMobile ? '8px' : isTablet ? '14px' : '18px'}}>
                   Các đơn vị đồng hành
                 </div>
-                <div className="flex justify-center items-center gap-2 sm:gap-3 md:gap-4 flex-wrap" style={{backgroundColor: 'white', padding: '8px', borderRadius: '8px'}}>
+                <div className={`flex justify-center items-center ${isMobile ? 'gap-1' : 'gap-2 sm:gap-3 md:gap-4'} flex-wrap`} style={{backgroundColor: 'white', padding: isMobile ? '4px' : '8px', borderRadius: isMobile ? '4px' : '8px'}}>
                   {/* Sponsors */}
                   {sponsorLogos.map((sponsor, index) => (
                     <div key={`all-sponsor-${index}`} className="flex-shrink-0" style={{backgroundColor: 'white', padding: '2px', borderRadius: '4px'}}>
                       <img
                         src={sponsor.logo}
                         alt={sponsor.name}
-                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-5 h-5 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
                       />
                     </div>
                   ))}
@@ -408,7 +412,7 @@ export default function HaoQuangMatchIntro() {
                       <img
                         src={organizing.logo}
                         alt={organizing.name}
-                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-5 h-5 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
                       />
                     </div>
                   ))}
@@ -419,7 +423,7 @@ export default function HaoQuangMatchIntro() {
                       <img
                         src={media.logo}
                         alt={media.name}
-                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-5 h-5 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
                       />
                     </div>
                   ))}
