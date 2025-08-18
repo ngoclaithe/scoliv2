@@ -102,14 +102,6 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                 </div>
             )}
 
-            {/* Logo ScoLiv */}
-            <div className="flex justify-center mt-2">
-                <img
-                    src="/images/basic/ScoLivLogo.png"
-                    alt="ScoLiv Logo"
-                    className="w-[46%] h-auto"
-                />
-            </div>
         </div>
     );
 };
