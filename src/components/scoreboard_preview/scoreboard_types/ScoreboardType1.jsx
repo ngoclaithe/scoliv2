@@ -3,7 +3,7 @@ import { FoulsDisplay } from '../../../utils/futsalUtils';
 
 const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
     return (
-        <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
+        <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5] sm:h-10">
             <div className="flex items-end justify-center w-full px-2 gap-0">
 
                 <div className="flex">
@@ -17,7 +17,7 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                         
                         <div className="flex items-start">
                             <div
-                                className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 min-w-[2.2rem] text-center"
+                                className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 text-center sm:w-8"
                             >
                                 {currentData.teamAScore}
                             </div>
@@ -48,6 +48,10 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                     </div>
                 )}
 
+                {/* Thẻ thêm có h bằng team kit */}
+                <div className="h-1 bg-transparent"></div>
+                <div className="h-1 bg-transparent"></div>
+
                 <div className="flex">
                     <div className="flex flex-col items-center">
                         {/* Fouls for Team B */}
@@ -74,7 +78,7 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                                     />
                                 </div>
                             </div>
-                            <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 min-w-[2.2rem] text-center">
+                            <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 text-center sm:w-8">
                                 {currentData.teamBScore}
                             </div>
                         </div>
@@ -90,6 +94,15 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                     </span>
                 </div>
             )}
+
+            {/* Logo ScoLiv */}
+            <div className="flex justify-center mt-2">
+                <img
+                    src="/images/basic/ScoLivLogo.png"
+                    alt="ScoLiv Logo"
+                    className="w-[250px] h-auto"
+                />
+            </div>
         </div>
     );
 };
