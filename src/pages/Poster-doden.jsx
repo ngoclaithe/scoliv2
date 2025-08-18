@@ -148,8 +148,8 @@ export default function DodenMatchIntro() {
 
         <div className="relative z-10 h-full flex flex-col p-1 sm:p-3">
 
-          {/* Sửa khoảng cách giống poster-tretrung */}
-          <div className={`flex justify-between items-start ${isMobile ? 'mb-2' : 'mb-2 sm:mb-3 md:mb-4'} ${isMobile ? 'min-h-[6vh]' : 'min-h-[10vh] sm:min-h-[12vh] md:min-h-[14vh]'}`}>
+          {/* Header section với khoảng cách nhỏ hơn */}
+          <div className={`flex justify-between items-start ${isMobile ? 'mb-1' : 'mb-1 sm:mb-2 md:mb-2'}`}>
 
             {/* Top-left: Sponsors and Organizing */}
             <div className="flex items-start gap-2 sm:gap-4 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '35%' }}>
@@ -166,7 +166,7 @@ export default function DodenMatchIntro() {
                             <img
                               src={sponsor.logo}
                               alt={sponsor.name}
-                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 p-0.5 sm:p-1`}
+                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 p-1 sm:p-2`}
                             />
                           </div>
                         ))}
@@ -189,7 +189,7 @@ export default function DodenMatchIntro() {
                             <img
                               src={organizing.logo}
                               alt={organizing.name}
-                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 p-0.5 sm:p-1`}
+                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 p-1 sm:p-2`}
                             />
                           </div>
                         ))}
@@ -228,7 +228,7 @@ export default function DodenMatchIntro() {
                           <img
                             src={media.logo}
                             alt={media.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-1`}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 p-2`}
                           />
                         </div>
                       ))}
@@ -254,10 +254,10 @@ export default function DodenMatchIntro() {
           </div>
 
           {/* Main content section */}
-          <div className="flex-1 flex flex-col justify-center min-h-0">
+          <div className="flex-1 flex flex-col justify-start pt-1 sm:pt-2 md:pt-3 min-h-0">
 
             {/* Title section - Tăng font lên 2 lần và giảm padding top */}
-            <div className="text-center mb-0 sm:mb-1 md:mb-2">
+            <div className="text-center mb-0">
               <h1
                 className="font-black uppercase text-white px-1 sm:px-2"
                 style={{
@@ -289,7 +289,7 @@ export default function DodenMatchIntro() {
                 )}
               </div>
 
-              <div className="flex items-center justify-center mt-2 sm:mt-4">
+              <div className="flex items-center justify-center mt-1 sm:mt-2">
                 <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
                 <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-400 rounded-full mx-1 sm:mx-2"></div>
                 <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-orange-500 rounded-full mx-1 sm:mx-2"></div>
@@ -299,7 +299,7 @@ export default function DodenMatchIntro() {
             </div>
 
             {/* Teams section và Time/Date section ngang hàng */}
-            <div className="flex items-center justify-center gap-4 sm:gap-8 md:gap-16 w-full px-1 sm:px-2 md:px-4 mb-2 sm:mb-4 md:mb-6">
+            <div className="flex items-center justify-center gap-4 sm:gap-8 md:gap-16 w-full px-1 sm:px-2 md:px-4 mb-1 sm:mb-2 md:mb-3">
 
               {/* Team A */}
               <div className="flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3">
@@ -322,9 +322,14 @@ export default function DodenMatchIntro() {
                     />
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-cyan-500 to-blue-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
+                <div className="px-1 sm:px-2 md:px-3">
                   <span
-                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-white text-center block truncate"
+                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-center block truncate"
+                    style={{
+                      color: '#ffe006',
+                      fontFamily: "'UTM Colossalis', sans-serif",
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                    }}
                     ref={(el) => el && adjustFontSize(el)}
                   >
                     {matchData.team1}
@@ -367,9 +372,14 @@ export default function DodenMatchIntro() {
                     />
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-cyan-500 to-blue-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
+                <div className="px-1 sm:px-2 md:px-3">
                   <span
-                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-white text-center block truncate"
+                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-center block truncate"
+                    style={{
+                      color: '#ffe006',
+                      fontFamily: "'UTM Colossalis', sans-serif",
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                    }}
                     ref={(el) => el && adjustFontSize(el)}
                   >
                     {matchData.team2}
@@ -383,8 +393,8 @@ export default function DodenMatchIntro() {
         </div>
 
         {/* Bottom section - Stadium và Live Text - Đưa ra ngoài để width bằng poster */}
-        <div className="absolute bottom-0 left-0 right-0 z-10">
-          <div className="flex justify-center items-center gap-2 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8 py-2 bg-white/90 rounded-t-lg mx-4 sm:mx-8">
+        <div className="absolute bottom-[20%] left-0 right-0 z-10 bg-white">
+          <div className="flex justify-center items-center gap-2 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8 py-2 rounded-t-lg mx-4 sm:mx-8">
             {/* Stadium */}
             {matchData.showStadium && (
               <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-gray-800 font-normal" style={{
