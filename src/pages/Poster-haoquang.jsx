@@ -72,7 +72,7 @@ export default function HaoQuangMatchIntro() {
 
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
-  const logoSize = isMobile ? 40 : isTablet ? 56 : 72;
+  const logoSize = isMobile ? 40 : isTablet ? 100 : 160;
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
