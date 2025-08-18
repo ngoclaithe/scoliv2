@@ -144,18 +144,18 @@ export default function TreTrungMatchIntro() {
             <div className={`flex items-start flex-shrink-0 ${isMobile ? 'gap-1' : 'gap-2 sm:gap-4'}`} style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: isMobile ? '25%' : '35%' }}>
                 {hasSponsors && (
                   <div className="flex-shrink-0">
-                    <div className="text-sm sm:text-lg md:text-xl font-bold text-white mb-1 drop-shadow-lg">
-                      Nhà tài trợ
+                    <div className={`font-bold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-sm sm:text-lg md:text-xl'}`}>
+                      {isMobile ? 'NTT' : 'Nhà tài trợ'}
                     </div>
-                    <div className="flex flex-col gap-1">
-                      {Array.from({ length: Math.ceil(Math.min(sponsorLogos.length, 6) / 3) }, (_, rowIndex) => (
-                        <div key={`sponsor-row-${rowIndex}`} className="flex gap-1 flex-nowrap">
-                          {sponsorLogos.slice(rowIndex * 3, (rowIndex + 1) * 3).slice(0, 3).map((sponsor, index) => (
+                    <div className="flex flex-col gap-0.5">
+                      {Array.from({ length: Math.ceil(Math.min(sponsorLogos.length, isMobile ? 2 : 6) / (isMobile ? 1 : 3)) }, (_, rowIndex) => (
+                        <div key={`sponsor-row-${rowIndex}`} className="flex gap-0.5 flex-nowrap">
+                          {sponsorLogos.slice(rowIndex * (isMobile ? 1 : 3), (rowIndex + 1) * (isMobile ? 1 : 3)).slice(0, isMobile ? 1 : 3).map((sponsor, index) => (
                             <div key={`sponsor-${rowIndex}-${index}`} className="flex-shrink-0">
                               <img
                                 src={sponsor.logo}
                                 alt={sponsor.name}
-                                className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 p-0.5 sm:p-1`}
+                                className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 p-0.5 sm:p-1'}`}
                               />
                             </div>
                           ))}
