@@ -144,7 +144,7 @@ export default function TreTrungMatchIntro() {
             <div className={`flex items-start flex-shrink-0 ${isMobile ? 'gap-1' : 'gap-2 sm:gap-4'}`} style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: isMobile ? '25%' : '35%' }}>
                 {hasSponsors && (
                   <div className="flex-shrink-0">
-                    <div className={`font-bold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-sm sm:text-lg md:text-xl'}`}>
+                    <div className={`font-bold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
                       Nhà tài trợ
                     </div>
                     <div className="flex gap-0.5">
