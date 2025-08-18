@@ -338,14 +338,24 @@ export default function DodenMatchIntro() {
               </div>
 
               {/* Time and Date section - Ngang hàng với teams */}
-              <div className="flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3">
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 px-2 sm:px-4">
                 {matchData.showTimer && (
-                  <div className="text-white font-bold text-sm sm:text-lg md:text-xl lg:text-2xl">
+                  <div
+                    className="text-white font-bold"
+                    style={{
+                      fontSize: isMobile ? '20px' : isTablet ? '32px' : '60px' // Tăng 2.5 lần: mobile 8px->20px, tablet 13px->32px, desktop 24px->60px
+                    }}
+                  >
                     {matchData.roundedTime}
                   </div>
                 )}
                 {matchData.showDate && (
-                  <div className="text-white/90 font-medium text-xs sm:text-sm md:text-base">
+                  <div
+                    className="text-white/90 font-bold"
+                    style={{
+                      fontSize: isMobile ? '12px' : isTablet ? '18px' : '24px' // Tăng 1.5 lần: mobile 8px->12px, tablet 12px->18px, desktop 16px->24px
+                    }}
+                  >
                     {matchData.currentDate}
                   </div>
                 )}
