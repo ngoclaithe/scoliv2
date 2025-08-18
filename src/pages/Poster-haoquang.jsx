@@ -69,6 +69,9 @@ export default function HaoQuangMatchIntro() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const isMobile = windowSize.width < 768;
+  const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
+
   // Auto-resize font for team names
   useEffect(() => {
     const adjustTeamNameFontSize = () => {
@@ -91,10 +94,6 @@ export default function HaoQuangMatchIntro() {
     // Delay to ensure DOM is ready
     setTimeout(adjustTeamNameFontSize, 100);
   }, [matchData.team1, matchData.team2, isMobile, isTablet]);
-
-
-  const isMobile = windowSize.width < 768;
-  const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
   const logoSize = isMobile ? 40 : isTablet ? 100 : 160;
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
