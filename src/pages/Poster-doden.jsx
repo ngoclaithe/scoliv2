@@ -322,9 +322,14 @@ export default function DodenMatchIntro() {
                     />
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-cyan-500 to-blue-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm">
+                <div className="px-1 sm:px-2 md:px-3">
                   <span
-                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-white text-center block truncate"
+                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-center block truncate"
+                    style={{
+                      color: '#ffe006',
+                      fontFamily: "'UTM Colossalis', sans-serif",
+                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                    }}
                     ref={(el) => el && adjustFontSize(el)}
                   >
                     {matchData.team1}
