@@ -289,7 +289,7 @@ export default function DodenMatchIntro() {
                 )}
               </div>
 
-              <div className="flex items-center justify-center mt-2 sm:mt-4">
+              <div className="flex items-center justify-center mt-1 sm:mt-2">
                 <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
                 <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-400 rounded-full mx-1 sm:mx-2"></div>
                 <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-orange-500 rounded-full mx-1 sm:mx-2"></div>
