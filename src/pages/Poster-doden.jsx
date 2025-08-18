@@ -259,10 +259,10 @@ export default function DodenMatchIntro() {
             {/* Title section - Tăng font lên 2 lần và giảm padding top */}
             <div className="text-center mb-0">
               <h1
-                className="font-black uppercase text-white px-1 sm:px-2"
+                className="font-black uppercase text-white px-2 sm:px-4 md:px-6"
                 style={{
                   textShadow: '#dc2626 2px 2px 4px',
-                  fontSize: isMobile ? '24px' : isTablet ? '28px' : '48px' // Tăng gấp đôi từ 12px/14px/24px
+                  fontSize: isMobile ? '20px' : isTablet ? '24px' : '48px' // Giảm font title cho mobile
                 }}
               >
                 {matchData.matchTitle}
