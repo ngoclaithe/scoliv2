@@ -18,7 +18,7 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                         <div className="flex items-start">
                             <div
                                 className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 text-center sm:w-8 font-"
-                                style={{ fontFamily: 'UTM Bebas, sans-serif' }}
+                                style={{ fontFamily: 'UTM Bebas, sans-serif', height: '56px' }}
                             >
                                 {currentData.teamAScore}
                             </div>
@@ -76,7 +76,7 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                                     />
                                 </div>
                             </div>
-                            <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 text-center sm:w-8" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
+                            <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 text-center sm:w-8" style={{ fontFamily: 'UTM Bebas, sans-serif', height: '56px' }}>
                                 {currentData.teamBScore}
                             </div>
                         </div>
