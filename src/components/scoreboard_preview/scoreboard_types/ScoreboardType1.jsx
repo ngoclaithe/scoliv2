@@ -24,7 +24,7 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                             </div>
 
                             <div className="w-[220px]">
-                                <div className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center" style={{ backgroundColor: '#004d73', fontFamily: 'UTM Bebas, sans-serif', height: '48px', fontSize: `${Math.max(40, Math.min(22, 220 / Math.max(1, currentData.teamAName.length) * 1.5))}px` }}>
+                                <div className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center" style={{ backgroundColor: '#004d73', fontFamily: 'UTM Bebas, sans-serif', height: '48px', fontSize: `${Math.min(40, Math.max(22, 220 / Math.max(1, currentData.teamAName.length) * 1.5))}px` }}>
                                     {currentData.teamAName}
                                 </div>
 
@@ -60,7 +60,7 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                         
                         <div className="flex items-start">
                             <div className="w-[220px]">
-                                <div className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center" style={{ backgroundColor: '#004d73', fontFamily: 'UTM Bebas, sans-serif', height: '48px', fontSize: `${Math.max(40, Math.min(22, 220 / Math.max(1, currentData.teamBName.length) * 1.5))}px` }}>
+                                <div className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center" style={{ backgroundColor: '#004d73', fontFamily: 'UTM Bebas, sans-serif', height: '48px',fontSize: `${Math.min(40, Math.max(22, 220 / Math.max(1, currentData.teamAName.length) * 1.5))}px` }}>
                                     {currentData.teamBName}
                                 </div>
 
