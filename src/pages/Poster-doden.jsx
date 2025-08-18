@@ -298,7 +298,7 @@ export default function DodenMatchIntro() {
             <div className="flex items-center justify-center gap-4 sm:gap-8 md:gap-16 w-full px-1 sm:px-2 md:px-4">
 
               {/* Team A */}
-              <div className="flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3">
+              <div className="flex flex-col items-center">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
