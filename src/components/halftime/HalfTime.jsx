@@ -102,18 +102,29 @@ const HalftimeBreakPoster = () => {
                 {/* Main poster container */}
                 <div className="w-full max-w-6xl mx-auto px-8 py-8 relative z-10">
                     <div className="text-white text-center">
-                        {/* Title */}
-                        <h1 className={`font-bold text-yellow-400 mb-6 ${isMobile ? 'text-2xl' : isTablet ? 'text-3xl' : 'text-5xl'
-                            }`} style={{
-                                textShadow: '0 0 20px rgba(255, 235, 59, 0.8), 0 0 40px rgba(255, 235, 59, 0.6), 0 0 60px rgba(255, 235, 59, 0.4)'
-                            }}>
+                        {/* Title with custom style */}
+                        <h1 
+                            className="font-bold"
+                            style={{
+                                fontSize: isMobile ? '32px' : '52px',
+                                color: 'yellow',
+                                marginTop: '30px',
+                                textShadow: '2px 2px 4px rgba(0, 0, 0, 0.4)'
+                            }}
+                        >
                             {matchData.matchTitle}
                         </h1>
 
-                        {/* Subtitle */}
-                        <div className={`backdrop-blur-sm bg-white/10 rounded-2xl px-6 py-4 mb-8 border border-white/20 shadow-xl ${isMobile ? 'text-lg' : isTablet ? 'text-2xl' : 'text-4xl'
-                            }`}>
-                            <div className="font-semibold">{matchData.time} - {matchData.date}</div>
+                        {/* Subtitle without wrapper border */}
+                        <div 
+                            className="font-semibold text-white"
+                            style={{
+                                fontSize: isMobile ? '24px' : '40px',
+                                marginTop: '5px',
+                                textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)'
+                            }}
+                        >
+                            <div>{matchData.time} - {matchData.date}</div>
                             {matchData.stadium && matchData.stadium !== 'san' && (
                                 <div className={`text-gray-200 ${isMobile ? 'text-base mt-2' : 'mt-1'}`}>
                                     {matchData.stadium}
@@ -122,7 +133,7 @@ const HalftimeBreakPoster = () => {
                         </div>
 
                         {/* Match section */}
-                        <div className="flex items-center justify-center space-x-4 sm:space-x-6 md:space-x-12 mb-8">
+                        <div className="flex items-center justify-center space-x-4 sm:space-x-6 md:space-x-12 mb-8 mt-8">
                             {/* Team 1 */}
                             <div className="flex-1 flex flex-col items-center max-w-xs">
                                 <div className="relative mb-4">
@@ -186,13 +197,19 @@ const HalftimeBreakPoster = () => {
                             </div>
                         </div>
 
-                        {/* Halftime break message - reduced size and width */}
-                        <div className={`bg-gradient-to-r from-orange-500 via-red-500 to-orange-500 text-white px-4 py-2 inline-block rounded-2xl font-bold shadow-2xl border-4 border-yellow-300 ${isMobile ? 'text-lg' : isTablet ? 'text-2xl' : 'text-3xl'
-                            }`} style={{
-                                textShadow: '0 0 10px rgba(0, 0, 0, 0.5)',
-                                boxShadow: '0 0 30px rgba(255, 165, 0, 0.6)'
-                            }}>
-                            ⏱️ NGHỈ GIỮA 2 HIỆP ⏱️
+                        {/* Halftime break message with custom style, no icon */}
+                        <div 
+                            className="font-bold inline-block"
+                            style={{
+                                fontSize: isMobile ? '28px' : '46px',
+                                background: '#FF6900',
+                                color: 'white',
+                                padding: isMobile ? '5px 30px' : '5px 60px',
+                                display: 'inline-block',
+                                marginTop: '26px'
+                            }}
+                        >
+                            NGHỈ GIỮA 2 HIỆP
                         </div>
                     </div>
                 </div>
@@ -200,8 +217,13 @@ const HalftimeBreakPoster = () => {
                 {/* Bottom left SCO logo */}
                 {showSCOLogo && (
                     <div
-                        className="absolute bottom-8 left-8 z-50"
+                        id="sco"
                         style={{
+                            position: 'fixed',
+                            bottom: '3vw',
+                            left: '3vw',
+                            zIndex: 100,
+                            transformOrigin: 'bottom left',
                             width: isMobile ? '60px' : '96px',
                             height: isMobile ? '60px' : '96px'
                         }}
@@ -210,6 +232,10 @@ const HalftimeBreakPoster = () => {
                             src="/images/basic/ScoLivLogo.png"
                             alt="SCO Live"
                             className="w-full h-full object-contain rounded-full shadow-xl bg-white/10 backdrop-blur-sm p-2"
+                            style={{
+                                overflowClipMargin: 'content-box',
+                                overflow: 'clip'
+                            }}
                             onError={(e) => {
                                 // Fallback to text version if image fails to load
                                 e.target.style.display = 'none';
