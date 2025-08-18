@@ -4,7 +4,7 @@ import { FoulsDisplay } from '../../../utils/futsalUtils';
 
 const ScoreboardType4 = ({ currentData, logoShape, showMatchTime, tournamentLogo }) => {
     return (
-        <div className="flex flex-col items-center w-full scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
+        <div className="flex flex-col items-center w-full scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5] max-w-[600px]">
             {/* Main scoreboard row với logo teamB cùng hàng */}
             <div className="w-full flex justify-center px-[4px] sm:px-[8px]">
                 <div className="flex flex-row items-end min-h-[64px] sm:min-h-[72px] relative bg-transparent">
