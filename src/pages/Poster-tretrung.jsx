@@ -137,75 +137,81 @@ export default function TreTrungMatchIntro() {
         <div className="relative z-10 h-full flex flex-col p-2 sm:p-4 md:p-6">
 
 
-          {/* Top section với logos */}
-          <div className="flex justify-between items-start mb-2 sm:mb-3 md:mb-4 min-h-[10vh] sm:min-h-[12vh] md:min-h-[14vh]">
+          {/* Top section với logos - Mobile responsive */}
+          <div className={`flex justify-between items-start mb-2 sm:mb-3 md:mb-4 ${isMobile ? 'min-h-[6vh]' : 'min-h-[10vh] sm:min-h-[12vh] md:min-h-[14vh]'}`}>
 
-            {/* Top-left: Sponsors and Organizing */}
-            <div className="flex items-start gap-2 sm:gap-4 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '35%' }}>
-              {hasSponsors && (
-                <div className="flex-shrink-0">
-                  <div className="text-sm sm:text-lg md:text-xl font-bold text-white mb-1 drop-shadow-lg">
-                    Nhà tài trợ
+            {/* Top-left: Sponsors and Organizing - Hidden on mobile */}
+            {!isMobile && (
+              <div className="flex items-start gap-2 sm:gap-4 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '35%' }}>
+                {hasSponsors && (
+                  <div className="flex-shrink-0">
+                    <div className="text-sm sm:text-lg md:text-xl font-bold text-white mb-1 drop-shadow-lg">
+                      Nhà tài trợ
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      {Array.from({ length: Math.ceil(Math.min(sponsorLogos.length, 6) / 3) }, (_, rowIndex) => (
+                        <div key={`sponsor-row-${rowIndex}`} className="flex gap-1 flex-nowrap">
+                          {sponsorLogos.slice(rowIndex * 3, (rowIndex + 1) * 3).slice(0, 3).map((sponsor, index) => (
+                            <div key={`sponsor-${rowIndex}-${index}`} className="flex-shrink-0">
+                              <img
+                                src={sponsor.logo}
+                                alt={sponsor.name}
+                                className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 p-0.5 sm:p-1`}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-1">
-                    {Array.from({ length: Math.ceil(Math.min(sponsorLogos.length, 6) / 3) }, (_, rowIndex) => (
-                      <div key={`sponsor-row-${rowIndex}`} className="flex gap-1 flex-nowrap">
-                        {sponsorLogos.slice(rowIndex * 3, (rowIndex + 1) * 3).slice(0, 3).map((sponsor, index) => (
-                          <div key={`sponsor-${rowIndex}-${index}`} className="flex-shrink-0">
-                            <img
-                              src={sponsor.logo}
-                              alt={sponsor.name}
-                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 p-0.5 sm:p-1`}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                )}
 
-              {hasOrganizing && (
-                <div className="flex-shrink-0">
-                  <div className="text-sm sm:text-lg md:text-xl font-bold text-white mb-1 drop-shadow-lg">
-                    Đơn vị tổ chức
+                {hasOrganizing && (
+                  <div className="flex-shrink-0">
+                    <div className="text-sm sm:text-lg md:text-xl font-bold text-white mb-1 drop-shadow-lg">
+                      Đơn vị tổ chức
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      {Array.from({ length: Math.ceil(Math.min(organizingLogos.length, 6) / 3) }, (_, rowIndex) => (
+                        <div key={`organizing-row-${rowIndex}`} className="flex gap-1 flex-nowrap">
+                          {organizingLogos.slice(rowIndex * 3, (rowIndex + 1) * 3).slice(0, 3).map((organizing, index) => (
+                            <div key={`organizing-${rowIndex}-${index}`} className="flex-shrink-0">
+                              <img
+                                src={organizing.logo}
+                                alt={organizing.name}
+                                className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 p-0.5 sm:p-1`}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-1">
-                    {Array.from({ length: Math.ceil(Math.min(organizingLogos.length, 6) / 3) }, (_, rowIndex) => (
-                      <div key={`organizing-row-${rowIndex}`} className="flex gap-1 flex-nowrap">
-                        {organizingLogos.slice(rowIndex * 3, (rowIndex + 1) * 3).slice(0, 3).map((organizing, index) => (
-                          <div key={`organizing-${rowIndex}-${index}`} className="flex-shrink-0">
-                            <img
-                              src={organizing.logo}
-                              alt={organizing.name}
-                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-8 h-8 sm:w-11 sm:h-11 md:w-14 md:h-14 p-0.5 sm:p-1`}
-                            />
-                          </div>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
 
             {/* Top-center: Tournament Logos */}
-            <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4 px-4`}>
+            <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4 ${isMobile ? 'px-2' : 'px-4'}`}>
               {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 &&
-                matchData.tournamentLogos.map((logo, index) => (
+                matchData.tournamentLogos.slice(0, isMobile ? 2 : matchData.tournamentLogos.length).map((logo, index) => (
                   <img
                     key={index}
                     src={logo}
                     alt={`Tournament Logo ${index + 1}`}
-                    className="object-contain h-6 sm:h-8 md:h-12 lg:h-16 max-w-16 sm:max-w-24 md:max-w-32 flex-shrink-0"
+                    className={`object-contain flex-shrink-0 ${
+                      isMobile
+                        ? 'h-4 max-w-12'
+                        : 'h-6 sm:h-8 md:h-12 lg:h-16 max-w-16 sm:max-w-24 md:max-w-32'
+                    }`}
                   />
                 ))
               }
             </div>
 
-            {/* Top-right: Media Partners and Live Unit */}
-            <div className="flex flex-col items-end gap-2 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '30%' }}>
-              {hasMediaPartners && (
+            {/* Top-right: Media Partners and Live Unit - Simplified on mobile */}
+            <div className={`flex flex-col items-end gap-1 sm:gap-2 flex-shrink-0 ${isMobile ? 'max-w-[30%]' : ''}`} style={{ minWidth: isMobile ? 'unset' : '25%', maxWidth: '30%' }}>
+              {!isMobile && hasMediaPartners && (
                 <div className="flex-shrink-0 w-full">
                   <div className="text-sm sm:text-lg md:text-xl font-bold text-white mb-1 drop-shadow-lg text-right">
                     Đơn vị truyền thông
@@ -228,12 +234,14 @@ export default function TreTrungMatchIntro() {
 
               {matchData.liveUnit && (
                 <div className="flex-shrink-0">
-                  <div className="bg-red-600 text-white px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2">
+                  <div className={`bg-red-600 text-white rounded-md sm:rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2 ${
+                    isMobile ? 'px-1 py-0.5' : 'px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5'
+                  }`}>
                     <div className="w-1 h-1 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
                     <img
                       src={matchData.liveUnit}
                       alt="Live Unit"
-                      className="h-3 sm:h-4 md:h-5 object-contain"
+                      className={`object-contain ${isMobile ? 'h-2.5' : 'h-3 sm:h-4 md:h-5'}`}
                     />
                   </div>
                 </div>
