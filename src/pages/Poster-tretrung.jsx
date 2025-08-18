@@ -136,34 +136,6 @@ export default function TreTrungMatchIntro() {
 
         <div className="relative z-10 h-full flex flex-col p-2 sm:p-4 md:p-6">
 
-          {/* Match time and date - Absolute positioned */}
-          <div
-            className="time-date-container"
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              position: 'absolute',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              bottom: '120px',
-              background: 'linear-gradient(to right, #ff3131, #ff914d)',
-              border: '6px solid #fff',
-              borderRadius: '45px',
-              color: '#fff',
-              fontSize: isMobile ? '20px' : isTablet ? '35px' : '50px',
-              fontFamily: 'Bebas Neue, UTM Bebas, sans-serif',
-              padding: '8px 40px 12px 40px',
-              boxShadow: '0 4px 20px rgba(24, 119, 242, 0.11)',
-              letterSpacing: '1px',
-              textShadow: '1px 2px 3px #0e306c22',
-              whiteSpace: 'nowrap'
-            }}
-          >
-            {matchData.showTimer && matchData.roundedTime}
-            {matchData.showTimer && matchData.showDate && ' - '}
-            {matchData.showDate && matchData.currentDate}
-          </div>
 
           {/* Top section với logos */}
           <div className="flex justify-between items-start mb-2 sm:mb-3 md:mb-4 min-h-[10vh] sm:min-h-[12vh] md:min-h-[14vh]">
@@ -274,7 +246,7 @@ export default function TreTrungMatchIntro() {
           <div className="flex-1 flex flex-col justify-center min-h-0">
 
             {/* Title section - compact */}
-            <div className="text-center mb-2 sm:mb-3 md:mb-4">
+            <div className="text-center mb-1 sm:mb-2 md:mb-3">
               <h1 className="title text-white mb-1 sm:mb-2 px-1 sm:px-2">
                 {matchData.matchTitle}
               </h1>
@@ -287,7 +259,7 @@ export default function TreTrungMatchIntro() {
               )}
 
               {/* Round and Group display */}
-              <div className="flex items-center justify-center gap-2 sm:gap-3 mt-1 sm:mt-2">
+              <div className="flex items-center justify-center gap-2 sm:gap-3 mt-0.5 sm:mt-1">
                 {matchData.showRound && (
                   <div className="bg-blue-600/80 px-2 py-1 rounded text-xs sm:text-sm font-bold text-white">
                     VÒNG {matchData.round}
@@ -300,17 +272,10 @@ export default function TreTrungMatchIntro() {
                 )}
               </div>
 
-              <div className="flex items-center justify-center mt-2 sm:mt-3">
-                <div className="w-8 sm:w-16 h-0.5 bg-white"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-emerald-500 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-lime-500 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-8 sm:w-16 h-0.5 bg-white"></div>
-              </div>
             </div>
 
             {/* Teams section - compact */}
-            <div className="flex items-center justify-center w-full px-4 sm:px-8 md:px-12 mb-2 sm:mb-3 md:mb-4 gap-2 sm:gap-4 md:gap-6">
+            <div className="flex items-center justify-center w-full px-4 sm:px-8 md:px-12 mb-1 sm:mb-2 md:mb-3 gap-2 sm:gap-4 md:gap-6">
 
               {/* Team A */}
               <div className="flex flex-col items-center space-y-1 sm:space-y-2">
@@ -360,8 +325,8 @@ export default function TreTrungMatchIntro() {
                     alt="VS"
                     className="object-contain animate-pulse"
                     style={{
-                      width: isMobile ? '40px' : isTablet ? '60px' : '80px',
-                      height: isMobile ? '40px' : isTablet ? '60px' : '80px'
+                      width: isMobile ? '80px' : isTablet ? '120px' : '160px',
+                      height: isMobile ? '80px' : isTablet ? '120px' : '160px'
                     }}
                   />
                 </div>
@@ -408,8 +373,35 @@ export default function TreTrungMatchIntro() {
               </div>
             </div>
 
+            {/* Match time and date - Below team names */}
+            <div className="flex justify-center items-center mb-2 sm:mb-3 md:mb-4">
+              <div
+                className="time-date-container"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  background: 'linear-gradient(to right, #ff3131, #ff914d)',
+                  border: '6px solid #fff',
+                  borderRadius: '45px',
+                  color: '#fff',
+                  fontSize: isMobile ? '20px' : isTablet ? '35px' : '50px',
+                  fontFamily: 'Bebas Neue, UTM Bebas, sans-serif',
+                  padding: '8px 40px 12px 40px',
+                  boxShadow: '0 4px 20px rgba(24, 119, 242, 0.11)',
+                  letterSpacing: '1px',
+                  textShadow: '1px 2px 3px #0e306c22',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                {matchData.showTimer && matchData.roundedTime}
+                {matchData.showTimer && matchData.showDate && ' - '}
+                {matchData.showDate && matchData.currentDate}
+              </div>
+            </div>
+
             {/* Stadium and Live sections - Same row */}
-            <div className="flex justify-between items-center px-4 sm:px-8 md:px-12 mb-4">
+            <div className="flex justify-center items-center gap-8 sm:gap-12 md:gap-16 px-4 sm:px-8 md:px-12 mb-4">
               {/* Stadium */}
               <div className="flex items-center space-x-2 sm:space-x-3 text-white text-sm sm:text-base md:text-lg lg:text-xl font-bold">
                 <img
