@@ -401,7 +401,7 @@ export default function HaoQuangMatchIntro() {
                       <img
                         src={sponsor.logo}
                         alt={sponsor.name}
-                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-5 h-5 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
                       />
                     </div>
                   ))}
@@ -412,7 +412,7 @@ export default function HaoQuangMatchIntro() {
                       <img
                         src={organizing.logo}
                         alt={organizing.name}
-                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-5 h-5 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
                       />
                     </div>
                   ))}
@@ -423,7 +423,7 @@ export default function HaoQuangMatchIntro() {
                       <img
                         src={media.logo}
                         alt={media.name}
-                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-5 h-5 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
                       />
                     </div>
                   ))}
