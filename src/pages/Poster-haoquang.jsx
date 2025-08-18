@@ -212,15 +212,19 @@ export default function HaoQuangMatchIntro() {
               </div>
             </div>
 
-            {/* Teams section */}
-            <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-1 sm:mb-2 md:mb-4">
+            {/* Teams section - giống như Poster-tretrung.jsx */}
+            <div className={`flex items-center justify-center w-full mb-1 sm:mb-2 md:mb-3 ${
+              isMobile
+                ? 'px-2 gap-1'
+                : 'px-4 sm:px-8 md:px-12 gap-2 sm:gap-4 md:gap-6'
+            }`}>
 
               {/* Team A */}
-              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className="relative rounded-full bg-white p-2 sm:p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`
@@ -236,55 +240,49 @@ export default function HaoQuangMatchIntro() {
                     />
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-cyan-500 to-blue-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
-                  <span
-                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-white text-center block truncate"
-                    ref={(el) => el && adjustFontSize(el)}
-                  >
-                    {matchData.team1}
-                  </span>
+                <div
+                  className="text-white font-bold uppercase tracking-wide text-center"
+                  style={{
+                    whiteSpace: 'nowrap',
+                    overflowX: 'visible',
+                    width: 'auto',
+                    minWidth: 'unset',
+                    maxWidth: 'unset',
+                    fontSize: isMobile ? '10px' : isTablet ? '28px' : '48px',
+                    padding: isMobile ? '2px 8px' : '4px 20px',
+                    width: 'fit-content',
+                    minWidth: isMobile ? 'unset' : '35%',
+                    color: '#ffffff',
+                    fontFamily: 'UTM Colossalis, sans-serif',
+                    fontWeight: '800',
+                    textShadow: '4px 4px #727272'
+                  }}
+                >
+                  {matchData.team1}
                 </div>
               </div>
 
               {/* VS Section */}
-              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2">
                 <div className="relative flex flex-col items-center">
                   <img
-                    src="/images/background-poster/vs2.png"
+                    src="/images/background-poster/vs3.png"
                     alt="VS"
-                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-18 lg:h-18 object-contain animate-pulse"
+                    className="object-contain animate-pulse"
+                    style={{
+                      width: isMobile ? '40px' : isTablet ? '120px' : '160px',
+                      height: isMobile ? '40px' : isTablet ? '120px' : '160px'
+                    }}
                   />
-                </div>
-
-                <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
-                    {(matchData.showTimer || matchData.showDate) && (
-                      <span>
-                        {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
-                      </span>
-                    )}
-                    {(matchData.showTimer || matchData.showDate) && matchData.showStadium && matchData.stadium && (
-                      <span> | </span>
-                    )}
-                    {matchData.showStadium && matchData.stadium && (
-                      <span>📍 {matchData.stadium}</span>
-                    )}
-                  </div>
-                  {matchData.liveText && (
-                    <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-semibold bg-red-600/80 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap flex items-center space-x-1">
-                      <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full animate-pulse"></div>
-                      <span>Đơn vị Live: {matchData.liveText}</span>
-                    </div>
-                  )}
                 </div>
               </div>
 
               {/* Team B */}
-              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2">
                 <div className="relative group">
-                  <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className="relative rounded-full bg-white p-2 sm:p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`
@@ -300,14 +298,53 @@ export default function HaoQuangMatchIntro() {
                     />
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
-                  <span
-                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-white text-center block truncate"
-                    ref={(el) => el && adjustFontSize(el)}
-                  >
-                    {matchData.team2}
-                  </span>
+                <div
+                  className="text-white font-bold uppercase tracking-wide text-center"
+                  style={{
+                    whiteSpace: 'nowrap',
+                    overflowX: 'visible',
+                    width: 'auto',
+                    minWidth: 'unset',
+                    maxWidth: 'unset',
+                    fontSize: isMobile ? '10px' : isTablet ? '28px' : '48px',
+                    padding: isMobile ? '2px 8px' : '4px 20px',
+                    width: 'fit-content',
+                    minWidth: isMobile ? 'unset' : '35%',
+                    color: '#ffffff',
+                    fontFamily: 'UTM Colossalis, sans-serif',
+                    fontWeight: '800',
+                    textShadow: '4px 4px #727272'
+                  }}
+                >
+                  {matchData.team2}
                 </div>
+              </div>
+            </div>
+
+            {/* Match time and date - Below team names */}
+            <div className={`flex justify-center items-center ${isMobile ? 'mb-1' : 'mb-2 sm:mb-3 md:mb-4'}`}>
+              <div
+                className="time-date-container"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  background: 'linear-gradient(to right, #ff3131, #ff914d)',
+                  border: isMobile ? '1px solid #fff' : '6px solid #fff',
+                  borderRadius: isMobile ? '10px' : '45px',
+                  color: '#fff',
+                  fontSize: isMobile ? '6px' : isTablet ? '17px' : '25px',
+                  fontFamily: 'Bebas Neue, UTM Bebas, sans-serif',
+                  padding: isMobile ? '1px 3px' : '4px 12px',
+                  boxShadow: '0 4px 20px rgba(24, 119, 242, 0.11)',
+                  letterSpacing: '1px',
+                  textShadow: '1px 2px 3px #0e306c22',
+                  whiteSpace: 'nowrap'
+                }}
+              >
+                {matchData.showTimer && matchData.roundedTime}
+                {matchData.showTimer && matchData.showDate && ' - '}
+                {matchData.showDate && matchData.currentDate}
               </div>
             </div>
 
