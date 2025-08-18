@@ -461,6 +461,22 @@ export default function TreTrungMatchIntro() {
               }}
             />
           ))}
+
+          {/* Falling stars effect */}
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={`star-${i}`}
+              className="absolute text-white opacity-80"
+              style={{
+                left: `${Math.random() * 100}%`,
+                fontSize: `${8 + Math.random() * 8}px`,
+                animation: `fallingStar ${4 + Math.random() * 6}s linear infinite`,
+                animationDelay: `${Math.random() * 5}s`
+              }}
+            >
+              ✦
+            </div>
+          ))}
         </div>
 
         <style>{`
