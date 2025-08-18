@@ -257,7 +257,7 @@ export default function DodenMatchIntro() {
           <div className="flex-1 flex flex-col justify-start min-h-0">
 
             {/* Title section - Tăng font lên 2 lần và giảm padding top */}
-            <div className="text-center mb-0">
+            <div className="text-center">
               <h1
                 className="font-black uppercase px-2 sm:px-4 md:px-6"
                 style={{
