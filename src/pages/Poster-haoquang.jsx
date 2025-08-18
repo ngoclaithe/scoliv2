@@ -69,6 +69,29 @@ export default function HaoQuangMatchIntro() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Auto-resize font for team names
+  useEffect(() => {
+    const adjustTeamNameFontSize = () => {
+      const teamNameElements = document.querySelectorAll('.team-name-text');
+      teamNameElements.forEach((element) => {
+        const container = element.parentElement;
+        const containerWidth = container.offsetWidth - 30; // subtract padding
+        let fontSize = isMobile ? 10 : isTablet ? 28 : 48;
+        const minFontSize = isMobile ? 6 : isTablet ? 12 : 20;
+
+        element.style.fontSize = fontSize + 'px';
+
+        while (element.scrollWidth > containerWidth && fontSize > minFontSize) {
+          fontSize -= 1;
+          element.style.fontSize = fontSize + 'px';
+        }
+      });
+    };
+
+    // Delay to ensure DOM is ready
+    setTimeout(adjustTeamNameFontSize, 100);
+  }, [matchData.team1, matchData.team2, isMobile, isTablet]);
+
 
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
