@@ -70,7 +70,7 @@ export default function DodenMatchIntro() {
 
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
-  const logoSize = isMobile ? 80 : isTablet ? 112 : 144; // Tăng gấp đôi từ 40/56/72
+  const logoSize = isMobile ? 70 : isTablet ? 96 : 128; // Giảm nhỏ hơn cho mobile
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
@@ -166,7 +166,7 @@ export default function DodenMatchIntro() {
                             <img
                               src={sponsor.logo}
                               alt={sponsor.name}
-                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 p-1 sm:p-2`}
+                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 p-1`}
                             />
                           </div>
                         ))}
@@ -189,7 +189,7 @@ export default function DodenMatchIntro() {
                             <img
                               src={organizing.logo}
                               alt={organizing.name}
-                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 p-1 sm:p-2`}
+                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 p-1`}
                             />
                           </div>
                         ))}
@@ -228,7 +228,7 @@ export default function DodenMatchIntro() {
                           <img
                             src={media.logo}
                             alt={media.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 p-2`}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 p-1`}
                           />
                         </div>
                       ))}
@@ -254,15 +254,18 @@ export default function DodenMatchIntro() {
           </div>
 
           {/* Main content section */}
-          <div className="flex-1 flex flex-col justify-start pt-1 sm:pt-2 md:pt-3 min-h-0">
+          <div className="flex-1 flex flex-col justify-start min-h-0">
 
             {/* Title section - Tăng font lên 2 lần và giảm padding top */}
-            <div className="text-center mb-0">
+            <div className="text-center">
               <h1
-                className="font-black uppercase text-white px-1 sm:px-2"
+                className="font-black uppercase px-2 sm:px-4 md:px-6"
                 style={{
-                  textShadow: '#dc2626 2px 2px 4px',
-                  fontSize: isMobile ? '24px' : isTablet ? '28px' : '48px' // Tăng gấp đôi từ 12px/14px/24px
+                  color: '#ef4444',
+                  WebkitTextStroke: '2px white',
+                  textStroke: '2px white',
+                  fontFamily: "'UTM Colossalis', 'Arial Black', sans-serif",
+                  fontSize: isMobile ? '20px' : isTablet ? '24px' : '48px'
                 }}
               >
                 {matchData.matchTitle}
@@ -289,27 +292,20 @@ export default function DodenMatchIntro() {
                 )}
               </div>
 
-              <div className="flex items-center justify-center mt-1 sm:mt-2">
-                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-400 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-orange-500 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-black rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
-              </div>
             </div>
 
             {/* Teams section và Time/Date section ngang hàng */}
-            <div className="flex items-center justify-center gap-4 sm:gap-8 md:gap-16 w-full px-1 sm:px-2 md:px-4 mb-1 sm:mb-2 md:mb-3">
+            <div className="flex items-center justify-center gap-4 sm:gap-8 md:gap-16 w-full px-1 sm:px-2 md:px-4">
 
               {/* Team A */}
-              <div className="flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3">
+              <div className="flex flex-col items-center">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
                     className="relative rounded-full bg-white p-1 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
-                      width: `${logoSize}px`,
-                      height: `${logoSize}px`
+                      width: `${isMobile ? logoSize * 0.5 : logoSize}px`, // Tăng gấp đôi từ 0.25 lên 0.5 cho mobile
+                      height: `${isMobile ? logoSize * 0.5 : logoSize}px`
                     }}
                   >
                     <img
@@ -327,7 +323,7 @@ export default function DodenMatchIntro() {
                     className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-center block truncate"
                     style={{
                       color: '#ffe006',
-                      fontFamily: "'UTM Colossalis', sans-serif",
+                      fontFamily: "'UTM Colossalis', 'Arial Black', sans-serif",
                       textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                     }}
                     ref={(el) => el && adjustFontSize(el)}
@@ -338,28 +334,38 @@ export default function DodenMatchIntro() {
               </div>
 
               {/* Time and Date section - Ngang hàng với teams */}
-              <div className="flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3">
+              <div className="flex flex-col items-center px-2 sm:px-4">
                 {matchData.showTimer && (
-                  <div className="text-white font-bold text-sm sm:text-lg md:text-xl lg:text-2xl">
+                  <div
+                    className="text-white font-bold"
+                    style={{
+                      fontSize: isMobile ? '20px' : isTablet ? '32px' : '60px'
+                    }}
+                  >
                     {matchData.roundedTime}
                   </div>
                 )}
                 {matchData.showDate && (
-                  <div className="text-white/90 font-medium text-xs sm:text-sm md:text-base">
+                  <div
+                    className="text-white/90 font-bold mt-1"
+                    style={{
+                      fontSize: isMobile ? '12px' : isTablet ? '18px' : '24px'
+                    }}
+                  >
                     {matchData.currentDate}
                   </div>
                 )}
               </div>
 
               {/* Team B */}
-              <div className="flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3">
+              <div className="flex flex-col items-center">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-gray-700 to-black rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
                     className="relative rounded-full bg-white p-1 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
-                      width: `${logoSize}px`,
-                      height: `${logoSize}px`
+                      width: `${isMobile ? logoSize * 0.5 : logoSize}px`, // Tăng gấp đôi từ 0.25 lên 0.5 cho mobile
+                      height: `${isMobile ? logoSize * 0.5 : logoSize}px`
                     }}
                   >
                     <img
@@ -377,7 +383,7 @@ export default function DodenMatchIntro() {
                     className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-center block truncate"
                     style={{
                       color: '#ffe006',
-                      fontFamily: "'UTM Colossalis', sans-serif",
+                      fontFamily: "'UTM Colossalis', 'Arial Black', sans-serif",
                       textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
                     }}
                     ref={(el) => el && adjustFontSize(el)}
@@ -425,15 +431,43 @@ export default function DodenMatchIntro() {
           </div>
         </div>
 
+        {/* Hiệu ứng mưa sao băng từ tâm ra 8 hướng */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(15)].map((_, i) => (
+          {[...Array(80)].map((_, i) => {
+            const angle = (i % 16) * 22.5; // 16 hướng: 0, 22.5, 45, 67.5, 90, 112.5, 135, 157.5, 180, 202.5, 225, 247.5, 270, 292.5, 315, 337.5 độ
+            const distance = 60 + (i % 10) * 30; // Tăng gấp đôi khoảng cách
+            const delay = (i % 16) * 0.1; // Độ trễ cho mỗi hướng (16 hướng)
+
+            return (
+              <div
+                key={i}
+                className="absolute w-1 h-1 sm:w-2 sm:h-2 bg-gradient-to-r from-yellow-300 via-orange-400 to-red-500 rounded-full"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  animation: `shootingStar-${angle} ${3 + Math.random() * 2}s ease-out infinite`,
+                  animationDelay: `${delay}s`,
+                  opacity: 0.8
+                }}
+              />
+            );
+          })}
+        </div>
+
+        {/* Bụi sao nhỏ rơi rơi ngẫu nhiên */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          {[...Array(20)].map((_, i) => (
             <div
-              key={i}
-              className="absolute w-2 h-2 bg-gradient-to-r from-red-400 to-orange-500 rounded-full opacity-80"
+              key={`dust-${i}`}
+              className="absolute bg-white rounded-full opacity-60"
               style={{
+                width: `${1 + Math.random() * 2}px`,
+                height: `${1 + Math.random() * 2}px`,
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
-                animation: `sparkle ${2 + Math.random() * 3}s ease-in-out infinite`
+                animation: `sparkle ${2 + Math.random() * 3}s ease-in-out infinite`,
+                animationDelay: `${Math.random() * 2}s`
               }}
             />
           ))}
@@ -449,6 +483,103 @@ export default function DodenMatchIntro() {
               transform: scale(1.5) rotate(180deg);
               opacity: 1;
             }
+          }
+
+          /* Shooting star animations for 16 directions */
+          @keyframes shootingStar-0 {
+            0% { transform: translate(-50%, -50%) translateX(0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translateX(0) scale(1); }
+            100% { transform: translate(-50%, -50%) translateX(1200px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-22.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(1131px, -465px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-45 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(900px, -900px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-67.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(465px, -1131px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-90 {
+            0% { transform: translate(-50%, -50%) translateY(0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translateY(0) scale(1); }
+            100% { transform: translate(-50%, -50%) translateY(-1200px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-112.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-465px, -1131px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-135 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-900px, -900px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-157.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-1131px, -465px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-180 {
+            0% { transform: translate(-50%, -50%) translateX(0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translateX(0) scale(1); }
+            100% { transform: translate(-50%, -50%) translateX(-1200px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-202.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-1131px, 465px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-225 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-900px, 900px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-247.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(-465px, 1131px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-270 {
+            0% { transform: translate(-50%, -50%) translateY(0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translateY(0) scale(1); }
+            100% { transform: translate(-50%, -50%) translateY(1200px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-292.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(465px, 1131px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-315 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(900px, 900px) scale(0); opacity: 0; }
+          }
+
+          @keyframes shootingStar-337.5 {
+            0% { transform: translate(-50%, -50%) translate(0, 0) scale(0); opacity: 0; }
+            10% { opacity: 1; transform: translate(-50%, -50%) translate(0, 0) scale(1); }
+            100% { transform: translate(-50%, -50%) translate(1131px, 465px) scale(0); opacity: 0; }
           }
 
           .scrollbar-hide {
