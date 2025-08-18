@@ -15,7 +15,7 @@ export default function HaoQuangMatchIntro() {
   } = usePublicMatch();
 
   const matchData = {
-    matchTitle: contextMatchData.matchTitle || 'TRỰC TIẾP TRẬN BÓNG ĐÁ',
+    matchTitle: contextMatchData.matchTitle || 'TRỰC TIẾP TRẬN BÓNG ��Á',
     team1: contextMatchData.teamA.name || 'TEAM ALPHA',
     team2: contextMatchData.teamB.name || 'TEAM BETA',
     logo1: getFullLogoUrl(contextMatchData.teamA.logo) || '/images/background-poster/default_logoA.png',
@@ -413,6 +413,30 @@ export default function HaoQuangMatchIntro() {
         </div>
 
         <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+          .title {
+            color: #ffffff !important;
+            font-family: 'UTM Colossalis', sans-serif !important;
+            font-weight: 800 !important;
+            font-size: 65px;
+            height: auto;
+            text-shadow: 4px 4px #727272;
+            line-height: 1.2;
+          }
+
+          @media (max-width: 768px) {
+            .title {
+              font-size: 14px !important;
+            }
+          }
+
+          @media (min-width: 769px) and (max-width: 1024px) {
+            .title {
+              font-size: 40px !important;
+            }
+          }
+
           @keyframes sparkle {
             0%, 100% {
               transform: scale(0) rotate(0deg);
