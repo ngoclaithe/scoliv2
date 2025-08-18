@@ -264,7 +264,7 @@ export default function DodenMatchIntro() {
                   color: '#ef4444',
                   WebkitTextStroke: '2px white',
                   textStroke: '2px white',
-                  fontFamily: "'UTM Colossalis', 'Arial Black', sans-serif",
+                  fontFamily: "'Orbitron', 'Arial Black', sans-serif",
                   fontSize: isMobile ? '20px' : isTablet ? '24px' : '48px'
                 }}
               >
