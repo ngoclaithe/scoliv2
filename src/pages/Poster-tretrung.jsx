@@ -5,7 +5,6 @@ import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
 export default function TreTrungMatchIntro() {
   const {
     matchData: contextMatchData,
-    marqueeData,
     sponsors,
     organizing,
     mediaPartners,
@@ -57,10 +56,6 @@ export default function TreTrungMatchIntro() {
     height: typeof window !== 'undefined' ? window.innerHeight : 800
   });
 
-  const [marqueeWidth, setMarqueeWidth] = useState(0);
-  const [containerWidth, setContainerWidth] = useState(0);
-  const [showMarquee, setShowMarquee] = useState(true);
-
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -73,18 +68,9 @@ export default function TreTrungMatchIntro() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => {
-    if (marqueeRef.current && marqueeContainerRef.current) {
-      const textWidth = marqueeRef.current.scrollWidth;
-      const containerWidth = marqueeContainerRef.current.offsetWidth;
-      setMarqueeWidth(textWidth);
-      setContainerWidth(containerWidth);
-    }
-  }, [marqueeData?.text, windowSize.width]);
-
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
-  const logoSize = isMobile ? 40 : isTablet ? 56 : 72;
+  const logoSize = isMobile ? 120 : isTablet ? 168 : 216; // Tăng gấp 3 lần
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
@@ -106,50 +92,6 @@ export default function TreTrungMatchIntro() {
     type: 'media',
     typeDisplay: matchData.mediaPartnersTypeDisplay[index] || 'square'
   })) : [];
-
-  const scrollData = {
-    text: marqueeData?.text || "TRỰC TIẾP BÓNG ĐÁ",
-    color: marqueeData?.color === 'white-black' ? '#FFFFFF' :
-        marqueeData?.color === 'black-white' ? '#000000' :
-            marqueeData?.color === 'white-blue' ? '#FFFFFF' :
-                marqueeData?.color === 'white-red' ? '#FFFFFF' :
-                    marqueeData?.color === 'white-green' ? '#FFFFFF' : "#FFFFFF",
-    bgColor: marqueeData?.color === 'white-black' ? '#000000' :
-        marqueeData?.color === 'black-white' ? '#FFFFFF' :
-            marqueeData?.color === 'white-blue' ? '#2563eb' :
-                marqueeData?.color === 'white-red' ? '#dc2626' :
-                    marqueeData?.color === 'white-green' ? '#16a34a' : "#10b981",
-    repeat: 1,
-    mode: marqueeData?.mode || 'khong',
-    interval: marqueeData?.mode === 'moi-2' ? 120000 :
-        marqueeData?.mode === 'moi-5' ? 300000 :
-            marqueeData?.mode === 'lien-tuc' ? 30000 : 0
-  };
-
-  const marqueeRef = useRef(null);
-  const marqueeContainerRef = useRef(null);
-
-  // Calculate proper animation duration based on text length
-  const getAnimationDuration = () => {
-    if (marqueeWidth && containerWidth) {
-      const totalDistance = marqueeWidth + containerWidth;
-      const speed = 100; 
-      return Math.max(10, totalDistance / speed);
-    }
-    return 30; 
-  };
-
-  // Font size adjustment function
-  const adjustFontSize = (element) => {
-    if (!element) return;
-    let fontSize = parseInt(window.getComputedStyle(element).fontSize);
-    const minFontSize = 14;
-
-    while (element.scrollWidth > element.offsetWidth && fontSize > minFontSize) {
-      fontSize -= 1;
-      element.style.fontSize = fontSize + "px";
-    }
-  };
 
   const hasSponsors = sponsorLogos.length > 0;
   const hasOrganizing = organizingLogos.length > 0;
@@ -180,23 +122,6 @@ export default function TreTrungMatchIntro() {
     }
   };
 
-  // Check if marquee should be running
-  const isMarqueeRunning = scrollData.mode !== 'khong' && scrollData.mode !== 'none' && scrollData.text && showMarquee;
-
-  // Handle interval-based marquee display
-  useEffect(() => {
-    if (scrollData.interval > 0 && (scrollData.mode === 'moi-2' || scrollData.mode === 'moi-5')) {
-      setShowMarquee(true);
-      const intervalId = setInterval(() => {
-        setShowMarquee(prev => !prev);
-      }, scrollData.interval);
-
-      return () => clearInterval(intervalId);
-    } else {
-      setShowMarquee(true);
-    }
-  }, [scrollData.interval, scrollData.mode]);
-
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
       <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
@@ -217,7 +142,7 @@ export default function TreTrungMatchIntro() {
             <div className="flex items-start gap-2 sm:gap-4 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '35%' }}>
               {hasSponsors && (
                 <div className="flex-shrink-0">
-                  <div className="text-[8px] sm:text-xs font-bold text-green-400 mb-1 drop-shadow-lg">
+                  <div className="text-base sm:text-xl md:text-2xl font-bold text-white mb-1 drop-shadow-lg">
                     Nhà tài trợ
                   </div>
                   <div className="flex flex-col gap-1">
@@ -228,7 +153,7 @@ export default function TreTrungMatchIntro() {
                             <img
                               src={sponsor.logo}
                               alt={sponsor.name}
-                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 p-0.5 sm:p-1`}
+                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 p-0.5 sm:p-1`}
                             />
                           </div>
                         ))}
@@ -240,7 +165,7 @@ export default function TreTrungMatchIntro() {
 
               {hasOrganizing && (
                 <div className="flex-shrink-0">
-                  <div className="text-[8px] sm:text-xs font-bold text-blue-400 mb-1 drop-shadow-lg">
+                  <div className="text-base sm:text-xl md:text-2xl font-bold text-white mb-1 drop-shadow-lg">
                     Đơn vị tổ chức
                   </div>
                   <div className="flex flex-col gap-1">
@@ -251,7 +176,7 @@ export default function TreTrungMatchIntro() {
                             <img
                               src={organizing.logo}
                               alt={organizing.name}
-                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-5 h-5 sm:w-7 sm:h-7 md:w-9 md:h-9 p-0.5 sm:p-1`}
+                              className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-10 h-10 sm:w-14 sm:h-14 md:w-18 md:h-18 p-0.5 sm:p-1`}
                             />
                           </div>
                         ))}
@@ -280,7 +205,7 @@ export default function TreTrungMatchIntro() {
             <div className="flex flex-col items-end gap-2 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '30%' }}>
               {hasMediaPartners && (
                 <div className="flex-shrink-0 w-full">
-                  <div className="text-[8px] sm:text-xs font-bold text-purple-400 mb-1 drop-shadow-lg text-right">
+                  <div className="text-base sm:text-xl md:text-2xl font-bold text-white mb-1 drop-shadow-lg text-right">
                     Đơn vị truyền thông
                   </div>
                   <div className="flex gap-1 justify-end overflow-x-auto scrollbar-hide">
@@ -290,7 +215,7 @@ export default function TreTrungMatchIntro() {
                           <img
                             src={media.logo}
                             alt={media.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-1`}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 p-1`}
                           />
                         </div>
                       ))}
@@ -316,58 +241,53 @@ export default function TreTrungMatchIntro() {
           </div>
 
           {/* Main content section */}
-          <div className="flex-1 flex flex-col justify-center min-h-0">
+          <div className="flex-1 flex flex-col justify-center min-h-0 pt-8 sm:pt-12 md:pt-16 lg:pt-20">
 
             {/* Title section */}
-            <div className="text-center mb-1 sm:mb-2 md:mb-3">
-              <h1
-                className="font-black uppercase text-white text-xs sm:text-sm md:text-lg lg:text-2xl xl:text-3xl px-1 sm:px-2"
-                style={{
-                  textShadow: '#166534 2px 2px 4px',
-                }}
-              >
+            <div className="text-center mb-6 sm:mb-8 md:mb-10">
+              <h1 className="title text-white mb-2 sm:mb-4 px-1 sm:px-2">
                 {matchData.matchTitle}
               </h1>
 
               {/* Subtitle display */}
               {matchData.showSubtitle && matchData.subtitle && (
-                <div className="text-white/90 text-[8px] sm:text-xs md:text-sm lg:text-base font-medium mt-1 sm:mt-2 px-2">
+                <div className="text-white/90 text-xs sm:text-base md:text-lg lg:text-xl font-medium mt-2 sm:mt-4 px-2">
                   {matchData.subtitle}
                 </div>
               )}
 
-              {/* Round and Group display - Moved below title */}
-              <div className="flex items-center justify-center gap-2 sm:gap-4 mt-1 sm:mt-2">
+              {/* Round and Group display */}
+              <div className="flex items-center justify-center gap-2 sm:gap-4 mt-2 sm:mt-4">
                 {matchData.showRound && (
-                  <div className="bg-blue-600/80 px-1 sm:px-2 py-0.5 sm:py-1 rounded text-[6px] sm:text-[8px] md:text-[10px] font-bold text-white">
+                  <div className="bg-blue-600/80 px-2 sm:px-3 py-1 sm:py-2 rounded text-xs sm:text-sm md:text-base font-bold text-white">
                     VÒNG {matchData.round}
                   </div>
                 )}
                 {matchData.showGroup && (
-                  <div className="bg-green-600/80 px-1 sm:px-2 py-0.5 sm:py-1 rounded text-[6px] sm:text-[8px] md:text-[10px] font-bold text-white">
+                  <div className="bg-green-600/80 px-2 sm:px-3 py-1 sm:py-2 rounded text-xs sm:text-sm md:text-base font-bold text-white">
                     BẢNG {matchData.group}
                   </div>
                 )}
               </div>
 
-              <div className="flex items-center justify-center mt-2 sm:mt-4">
+              <div className="flex items-center justify-center mt-4 sm:mt-6">
                 <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-green-400 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-emerald-500 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-lime-500 rounded-full mx-1 sm:mx-2"></div>
+                <div className="w-2 h-2 sm:w-3 sm:h-3 bg-green-400 rounded-full mx-2 sm:mx-3"></div>
+                <div className="w-2 h-2 sm:w-3 sm:h-3 bg-emerald-500 rounded-full mx-2 sm:mx-3"></div>
+                <div className="w-2 h-2 sm:w-3 sm:h-3 bg-lime-500 rounded-full mx-2 sm:mx-3"></div>
                 <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
               </div>
             </div>
 
             {/* Teams section */}
-            <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-1 sm:mb-2 md:mb-4">
+            <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-4 sm:mb-6 md:mb-8">
 
               {/* Team A */}
-              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
+              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3 md:space-y-4 max-w-[30%]">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className="relative rounded-full bg-white p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`
@@ -383,55 +303,57 @@ export default function TreTrungMatchIntro() {
                     />
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-green-500 to-emerald-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
-                  <span
-                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-white text-center block truncate"
-                    ref={(el) => el && adjustFontSize(el)}
-                  >
-                    {matchData.team1}
-                  </span>
+                <div
+                  className="text-white font-bold uppercase tracking-wide text-center overflow-x-visible"
+                  style={{
+                    whiteSpace: 'nowrap',
+                    overflowX: 'visible',
+                    width: 'auto',
+                    minWidth: 'unset',
+                    maxWidth: 'unset',
+                    fontSize: '60px',
+                    padding: '8px 30px',
+                    width: 'fit-content',
+                    minWidth: '35%',
+                    color: '#ffffff'
+                  }}
+                >
+                  {matchData.team1}
                 </div>
               </div>
 
               {/* VS Section */}
-              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
+              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3 md:space-y-4 max-w-[30%]">
                 <div className="relative flex flex-col items-center">
                   <img
                     src="/images/background-poster/vs3.png"
                     alt="VS"
-                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-18 lg:h-18 object-contain animate-pulse"
+                    className="object-contain animate-pulse"
+                    style={{
+                      width: isMobile ? '62.5px' : isTablet ? '87.5px' : '112.5px', // Tăng gấp 2.5 lần
+                      height: isMobile ? '62.5px' : isTablet ? '87.5px' : '112.5px'
+                    }}
                   />
                 </div>
 
-                <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
+                {/* Match time and date */}
+                <div className="flex flex-col items-center space-y-2 sm:space-y-3 mt-24 sm:mt-32 md:mt-40 lg:mt-48">
+                  <div className="text-sm sm:text-lg md:text-xl lg:text-2xl font-semibold bg-black/50 px-2 sm:px-3 md:px-4 py-1 sm:py-2 md:py-3 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
                     {(matchData.showTimer || matchData.showDate) && (
                       <span>
                         {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
                       </span>
                     )}
-                    {(matchData.showTimer || matchData.showDate) && matchData.showStadium && matchData.stadium && (
-                      <span> | </span>
-                    )}
-                    {matchData.showStadium && matchData.stadium && (
-                      <span>📍 {matchData.stadium}</span>
-                    )}
                   </div>
-                  {matchData.liveText && (
-                    <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-semibold bg-red-600/80 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap flex items-center space-x-1">
-                      <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full animate-pulse"></div>
-                      <span>Đơn vị Live: {matchData.liveText}</span>
-                    </div>
-                  )}
                 </div>
               </div>
 
               {/* Team B */}
-              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
+              <div className="flex-1 flex flex-col items-center space-y-2 sm:space-y-3 md:space-y-4 max-w-[30%]">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className="relative rounded-full bg-white p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`
@@ -447,15 +369,51 @@ export default function TreTrungMatchIntro() {
                     />
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-yellow-500 to-orange-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
-                  <span
-                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-white text-center block truncate"
-                    ref={(el) => el && adjustFontSize(el)}
-                  >
-                    {matchData.team2}
-                  </span>
+                <div
+                  className="text-white font-bold uppercase tracking-wide text-center overflow-x-visible"
+                  style={{
+                    whiteSpace: 'nowrap',
+                    overflowX: 'visible',
+                    width: 'auto',
+                    minWidth: 'unset',
+                    maxWidth: 'unset',
+                    fontSize: '60px',
+                    padding: '8px 30px',
+                    width: 'fit-content',
+                    minWidth: '35%',
+                    color: '#ffffff'
+                  }}
+                >
+                  {matchData.team2}
                 </div>
               </div>
+            </div>
+
+            {/* Stadium and Live sections at marquee position */}
+            <div className="flex flex-col items-center space-y-3 sm:space-y-4 md:space-y-6 mt-20 sm:mt-28 md:mt-36 lg:mt-44">
+              {/* Stadium */}
+              {matchData.showStadium && matchData.stadium && (
+                <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold">
+                  <img
+                    src="/images/basic/stadium.png"
+                    alt="Stadium"
+                    className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain"
+                  />
+                  <span>{matchData.stadium}</span>
+                </div>
+              )}
+
+              {/* Live Text */}
+              {matchData.liveText && (
+                <div className="flex items-center space-x-2 sm:space-x-3 md:space-x-4 text-white text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold">
+                  <img
+                    src="/images/basic/live-logo1.gif"
+                    alt="Live"
+                    className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain"
+                  />
+                  <span>{matchData.liveText}</span>
+                </div>
+              )}
             </div>
 
           </div>
@@ -463,34 +421,6 @@ export default function TreTrungMatchIntro() {
           {/* Bottom spacer */}
           <div className="h-3 sm:h-4 md:h-6 flex-shrink-0"></div>
         </div>
-
-        {/* Fixed Marquee Section */}
-        {isMarqueeRunning && scrollData.text && (
-          <div 
-            ref={marqueeContainerRef}
-            className="absolute bottom-0 left-0 w-full h-3 sm:h-4 md:h-6 border-t-2 overflow-hidden z-20"
-            style={{
-              backgroundColor: scrollData.bgColor,
-              borderTopColor: scrollData.color === '#FFFFFF' ? '#16a34a' : scrollData.bgColor
-            }}
-          >
-            <div className="absolute inset-0 bg-black/20"></div>
-            <div
-              ref={marqueeRef}
-              className="absolute top-1/2 whitespace-nowrap text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-bold drop-shadow-lg"
-              style={{
-                color: scrollData.color,
-                left: containerWidth ? `${containerWidth}px` : '100%',
-                transform: 'translateY(-50%)',
-                animation: containerWidth && marqueeWidth ? 
-                  `marquee-scroll-fixed ${getAnimationDuration()}s linear infinite` : 
-                  'none'
-              }}
-            >
-              {scrollData.text.repeat(scrollData.repeat)}
-            </div>
-          </div>
-        )}
 
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {[...Array(12)].map((_, i) => (
@@ -510,14 +440,27 @@ export default function TreTrungMatchIntro() {
         </div>
 
         <style>{`
-          @keyframes marquee-scroll-fixed {
-            0% { 
-              left: 100%;
-            }
-            100% { 
-              left: -100%;
+          .title {
+            color: #ffffff;
+            font-family: 'BalooBhai2-Bold', sans-serif;
+            font-size: 80px;
+            height: auto;
+            text-shadow: 4px 4px #727272;
+            line-height: 1.2;
+          }
+
+          @media (max-width: 768px) {
+            .title {
+              font-size: 32px;
             }
           }
+
+          @media (min-width: 769px) and (max-width: 1024px) {
+            .title {
+              font-size: 56px;
+            }
+          }
+
           @keyframes bouncingLeaves {
             0%, 100% {
               transform: translateY(0px) rotate(0deg);
@@ -536,6 +479,7 @@ export default function TreTrungMatchIntro() {
               opacity: 0.9;
             }
           }
+
           .scrollbar-hide {
             -ms-overflow-style: none;
             scrollbar-width: none;
