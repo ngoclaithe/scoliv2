@@ -394,7 +394,7 @@ export default function TreTrungMatchIntro() {
             </div>
 
             {/* Match time and date - Below team names */}
-            <div className="flex justify-center items-center mb-2 sm:mb-3 md:mb-4">
+            <div className={`flex justify-center items-center ${isMobile ? 'mb-1' : 'mb-2 sm:mb-3 md:mb-4'}`}>
               <div
                 className="time-date-container"
                 style={{
@@ -402,12 +402,12 @@ export default function TreTrungMatchIntro() {
                   justifyContent: 'center',
                   alignItems: 'center',
                   background: 'linear-gradient(to right, #ff3131, #ff914d)',
-                  border: '6px solid #fff',
-                  borderRadius: '45px',
+                  border: isMobile ? '3px solid #fff' : '6px solid #fff',
+                  borderRadius: isMobile ? '25px' : '45px',
                   color: '#fff',
-                  fontSize: isMobile ? '10px' : isTablet ? '17px' : '25px',
+                  fontSize: isMobile ? '8px' : isTablet ? '17px' : '25px',
                   fontFamily: 'Bebas Neue, UTM Bebas, sans-serif',
-                  padding: '0px',
+                  padding: isMobile ? '2px 8px' : '4px 12px',
                   boxShadow: '0 4px 20px rgba(24, 119, 242, 0.11)',
                   letterSpacing: '1px',
                   textShadow: '1px 2px 3px #0e306c22',
