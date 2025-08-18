@@ -406,37 +406,40 @@ export default function TreTrungMatchIntro() {
               </div>
             </div>
 
-            {/* Stadium and Live sections - Same row */}
-            <div className="flex justify-center items-center gap-8 sm:gap-12 md:gap-16 px-4 sm:px-8 md:px-12 mb-1">
-              {/* Stadium */}
-              <div className="flex items-center space-x-2 sm:space-x-3 text-white font-bold" style={{
-                fontSize: isMobile ? '16px' : isTablet ? '24px' : '32px'
-              }}>
-                <img
-                  src="/images/basic/stadium.png"
-                  alt="Stadium"
-                  className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain"
-                />
-                <span>{matchData.stadium}</span>
-              </div>
-
-              {/* Live Text */}
-              <div className="flex items-center space-x-2 sm:space-x-3 text-white font-bold" style={{
-                fontSize: isMobile ? '16px' : isTablet ? '24px' : '32px'
-              }}>
-                <img
-                  src="/images/basic/live-logo1.gif"
-                  alt="Live"
-                  className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 object-contain"
-                />
-                <span>{matchData.liveText}</span>
-              </div>
-            </div>
-
           </div>
 
-          {/* Bottom spacer */}
-          <div className="h-1 sm:h-1 md:h-1 flex-shrink-0"></div>
+          {/* Stadium and Live sections - Bottom position and mobile responsive */}
+          <div className="mt-auto mb-2 sm:mb-3">
+            <div className={`flex justify-center items-center gap-4 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8 ${isMobile ? 'flex-col space-y-2' : 'flex-row'}`}>
+              {/* Stadium */}
+              {matchData.showStadium && (
+                <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-white font-bold" style={{
+                  fontSize: isMobile ? '12px' : isTablet ? '20px' : '28px'
+                }}>
+                  <img
+                    src="/images/basic/stadium.png"
+                    alt="Stadium"
+                    className={`object-contain ${isMobile ? 'w-4 h-4' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
+                  />
+                  <span>{matchData.stadium}</span>
+                </div>
+              )}
+
+              {/* Live Text */}
+              {matchData.showLiveIndicator && (
+                <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-white font-bold" style={{
+                  fontSize: isMobile ? '12px' : isTablet ? '20px' : '28px'
+                }}>
+                  <img
+                    src="/images/basic/live-logo1.gif"
+                    alt="Live"
+                    className={`object-contain ${isMobile ? 'w-4 h-4' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
+                  />
+                  <span>{matchData.liveText}</span>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
