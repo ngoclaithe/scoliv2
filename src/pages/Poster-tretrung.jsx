@@ -136,6 +136,36 @@ export default function TreTrungMatchIntro() {
 
         <div className="relative z-10 h-full flex flex-col p-2 sm:p-4 md:p-6">
 
+          {/* Match time and date - Absolute positioned */}
+          <div
+            className="time-date-container"
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              position: 'absolute',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              bottom: '120px',
+              background: 'linear-gradient(to right, #ff3131, #ff914d)',
+              border: '6px solid #fff',
+              borderRadius: '45px',
+              color: '#fff',
+              fontSize: isMobile ? '20px' : isTablet ? '35px' : '50px',
+              fontFamily: 'Bebas Neue, UTM Bebas, sans-serif',
+              padding: '8px 40px 12px 40px',
+              boxShadow: '0 4px 20px rgba(24, 119, 242, 0.11)',
+              letterSpacing: '1px',
+              textShadow: '1px 2px 3px #0e306c22',
+              zIndex: 50,
+              whiteSpace: 'nowrap'
+            }}
+          >
+            {matchData.showTimer && matchData.roundedTime}
+            {matchData.showTimer && matchData.showDate && ' - '}
+            {matchData.showDate && matchData.currentDate}
+          </div>
+
           {/* Top section với logos */}
           <div className="flex justify-between items-start mb-2 sm:mb-3 md:mb-4 min-h-[10vh] sm:min-h-[12vh] md:min-h-[14vh]">
 
@@ -379,17 +409,8 @@ export default function TreTrungMatchIntro() {
               </div>
             </div>
 
-            {/* Match time and date - Below team names */}
-            <div className="flex justify-center items-center mb-2 sm:mb-3 md:mb-4">
-              <div className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold bg-black/50 px-2 sm:px-3 md:px-4 py-1 sm:py-1.5 md:py-2 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
-                {matchData.showTimer && matchData.roundedTime}
-                {matchData.showTimer && matchData.showDate && ' - '}
-                {matchData.showDate && matchData.currentDate}
-              </div>
-            </div>
-
-            {/* Stadium and Live sections */}
-            <div className="flex flex-col items-center space-y-2 sm:space-y-3">
+            {/* Stadium and Live sections - Same row */}
+            <div className="flex justify-between items-center px-4 sm:px-8 md:px-12 mb-4">
               {/* Stadium */}
               <div className="flex items-center space-x-2 sm:space-x-3 text-white text-sm sm:text-base md:text-lg lg:text-xl font-bold">
                 <img
@@ -436,6 +457,7 @@ export default function TreTrungMatchIntro() {
 
         <style>{`
           @import url('https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@400;500;600;700;800&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
           
           .title {
             color: #ffffff !important;
