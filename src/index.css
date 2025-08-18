@@ -5,7 +5,17 @@
 @font-face {
   font-family: 'UTM Colossalis';
   src: url('../public/fonts/UTMColossalis.woff2') format('woff2'),
-       url('../public/fonts/UTMColossalis.woff') format('woff'),;
+       url('../public/fonts/UTMColossalis.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* UTM Bebas Font */
+@font-face {
+  font-family: 'UTM Bebas';
+  src: url('../public/fonts/UTMBebas.woff2') format('woff2'),
+       url('../public/fonts/UTMBebas.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
