@@ -16,10 +16,12 @@ const HalftimeBreakPoster = () => {
         logo2: getFullLogoUrl(contextMatchData?.teamB?.logo) || "/api/placeholder/90/90",
         liveText: contextMatchData.liveText || "FACEBOOK LIVE"
     };
+
     const [windowSize, setWindowSize] = useState({
         width: typeof window !== 'undefined' ? window.innerWidth : 1200,
         height: typeof window !== 'undefined' ? window.innerHeight : 800
     });
+
     useEffect(() => {
         const handleResize = () => {
             setWindowSize({
@@ -31,30 +33,11 @@ const HalftimeBreakPoster = () => {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
-    const [screenSize, setScreenSize] = useState({ width: 0, height: 0 });
+
     const isMobile = windowSize.width < 768;
     const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
 
-    const posterWidth = isMobile ? windowSize.width - 32 : isTablet ? 700 : 900;
-    const posterHeight = isMobile ? windowSize.height * 0.85 : isTablet ? 500 : 580;
-    const logoSize = isMobile ? 120 : isTablet ? 140 : 160;
-    const titleSize = isMobile ? 'text-2xl' : isTablet ? 'text-3xl' : 'text-4xl';
-    const subtitleSize = isMobile ? 'text-lg' : isTablet ? 'text-xl' : 'text-2xl';
-    const vsSize = isMobile ? 'text-4xl' : isTablet ? 'text-5xl' : 'text-6xl';
-    const teamNameSize = isMobile ? 'text-lg' : isTablet ? 'text-xl' : 'text-2xl';
-    const liveSize = isMobile ? 'text-lg' : isTablet ? 'text-xl' : 'text-2xl';
-    useEffect(() => {
-        const updateScreenSize = () => {
-            setScreenSize({
-                width: window.innerWidth,
-                height: window.innerHeight
-            });
-        };
-
-        updateScreenSize();
-        window.addEventListener('resize', updateScreenSize);
-        return () => window.removeEventListener('resize', updateScreenSize);
-    }, []);
+    const logoSize = isMobile ? 120 : isTablet ? 160 : 200;
 
     const liveTextLower = matchData.liveText.toLowerCase();
     const showNSBLogo = liveTextLower.includes('nsb') || liveTextLower.includes('nga son biz');
@@ -62,10 +45,11 @@ const HalftimeBreakPoster = () => {
     const showSCOLogo = !showNSBLogo && !showBDPXTLogo;
 
     return (
-        <div 
-            className="min-h-screen p-4 flex items-center justify-center relative overflow-hidden"
+        <div
+            className="min-h-screen p-2 sm:p-4 flex items-center justify-center relative overflow-hidden"
             style={{
-                background: 'linear-gradient(to bottom right, rgba(1, 58, 179, 0.7), rgba(1, 122, 44, 0.7))'
+                background: 'linear-gradient(to bottom right, rgba(1, 58, 179, 0.7), rgba(1, 122, 44, 0.7))',
+                fontFamily: 'UTM Bebas, Arial, sans-serif'
             }}
         >
             <div className="absolute inset-0 opacity-20">
@@ -77,12 +61,11 @@ const HalftimeBreakPoster = () => {
             {/* Top left logos */}
             {showNSBLogo && (
                 <div
-                    className="absolute top-8 left-8 z-50 bg-gradient-to-r from-red-600 to-red-500 rounded-xl flex items-center justify-center text-white font-bold px-4 shadow-lg"
+                    className="absolute top-4 left-4 sm:top-8 sm:left-8 z-50 bg-gradient-to-r from-red-600 to-red-500 rounded-xl flex items-center justify-center text-white font-bold px-2 sm:px-4 shadow-lg"
                     style={{
-                        height: isMobile ? '6vw' : '4vw',
-                        minHeight: '32px',
-                        fontSize: isMobile ? '3vw' : '2vw',
-                        minFontSize: '14px'
+                        height: isMobile ? '40px' : '60px',
+                        fontSize: isMobile ? '14px' : '20px',
+                        fontFamily: 'UTM Bebas, Arial, sans-serif'
                     }}
                 >
                     NSB
@@ -91,12 +74,11 @@ const HalftimeBreakPoster = () => {
 
             {showBDPXTLogo && (
                 <div
-                    className="absolute top-8 left-8 z-50 bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl flex items-center justify-center text-white font-bold px-4 shadow-lg"
+                    className="absolute top-4 left-4 sm:top-8 sm:left-8 z-50 bg-gradient-to-r from-blue-600 to-blue-500 rounded-xl flex items-center justify-center text-white font-bold px-2 sm:px-4 shadow-lg"
                     style={{
-                        height: isMobile ? '6vw' : '4vw',
-                        minHeight: '32px',
-                        fontSize: isMobile ? '3vw' : '2vw',
-                        minFontSize: '14px'
+                        height: isMobile ? '40px' : '60px',
+                        fontSize: isMobile ? '14px' : '20px',
+                        fontFamily: 'UTM Bebas, Arial, sans-serif'
                     }}
                 >
                     BDPXT
@@ -104,43 +86,46 @@ const HalftimeBreakPoster = () => {
             )}
 
             {/* Main poster container */}
-            <div className="w-full max-w-6xl mx-auto px-8 py-8 relative z-10">
+            <div className="w-full max-w-6xl mx-auto px-4 sm:px-8 pb-4 sm:pb-8 relative z-10">
                 <div className="text-white text-center">
-                    {/* Title with custom style */}
-                    <h1 
+                    {/* Title */}
+                    <h1
                         className="font-bold"
                         style={{
-                            fontSize: isMobile ? '32px' : '52px',
+                            fontSize: isMobile ? '24px' : isTablet ? '36px' : '52px',
                             color: 'yellow',
-                            marginTop: '30px',
-                            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.4)'
+                            // Giảm một nửa so với trước (trước là 5px/10px, giờ còn 2.5px/5px)
+                            marginTop: isMobile ? '2.5px' : '5px',
+                            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.4)',
+                            fontFamily: 'UTM Bebas, Arial, sans-serif'
                         }}
                     >
                         {matchData.matchTitle}
                     </h1>
 
-                    {/* Subtitle without wrapper border */}
-                    <div 
+                    {/* Time and Date with Stadium */}
+                    <div
                         className="font-semibold text-white"
                         style={{
-                            fontSize: isMobile ? '24px' : '40px',
+                            fontSize: isMobile ? '16px' : isTablet ? '24px' : '40px',
                             marginTop: '5px',
                             textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)',
-                            whiteSpace: 'nowrap'
+                            fontFamily: 'UTM Bebas, Arial, sans-serif',
+                            whiteSpace: isMobile ? 'normal' : 'nowrap'
                         }}
                     >
                         {matchData.time} - {matchData.date}
                         {matchData.stadium && matchData.stadium !== 'san' && (
-                            <span className="text-gray-200 ml-4">
+                            <span className="text-white ml-2 sm:ml-4 block sm:inline">
                                 {matchData.stadium}
                             </span>
                         )}
                     </div>
 
                     {/* Match section */}
-                    <div className="flex items-center justify-center space-x-4 sm:space-x-6 md:space-x-12 mb-8 mt-8">
+                    <div className="flex items-center justify-center gap-4 sm:gap-8 md:gap-12 mb-4 sm:mb-8 mt-6 sm:mt-8">
                         {/* Team 1 */}
-                        <div className="flex-1 flex flex-col items-center max-w-xs">
+                        <div className="flex-1 flex flex-col items-center max-w-[120px] sm:max-w-xs">
                             <div className="relative mb-4">
                                 <div
                                     className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
@@ -159,19 +144,21 @@ const HalftimeBreakPoster = () => {
                                     />
                                 </div>
                             </div>
-                            <div 
+                            <div
                                 className="font-bold text-white"
                                 style={{
                                     background: 'rgba(0, 0, 0, 0.5)',
-                                    padding: '5px',
+                                    padding: '5px 10px',
                                     borderRadius: '7px',
                                     display: 'inline-block',
-                                    marginTop: '30px',
-                                    width: '240px',
+                                    marginTop: isMobile ? '15px' : '30px',
+                                    width: isMobile ? '100px' : isTablet ? '180px' : '240px',
                                     textAlign: 'center',
-                                    fontSize: isMobile ? '18px' : isTablet ? '24px' : '32px',
+                                    fontSize: isMobile ? '14px' : isTablet ? '18px' : '24px',
                                     whiteSpace: 'nowrap',
-                                    overflow: 'hidden'
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    fontFamily: 'UTM Bebas, Arial, sans-serif'
                                 }}
                             >
                                 {matchData.team1}
@@ -184,7 +171,8 @@ const HalftimeBreakPoster = () => {
                                 src="/images/basic/vs_nghigiuahiep.png"
                                 alt="VS"
                                 style={{
-                                    height: '261px',
+                                    height: isMobile ? '120px' : isTablet ? '180px' : '261px',
+                                    width: 'auto',
                                     overflowClipMargin: 'content-box',
                                     overflow: 'clip'
                                 }}
@@ -194,17 +182,21 @@ const HalftimeBreakPoster = () => {
                                     e.target.nextSibling.style.display = 'flex';
                                 }}
                             />
-                            <div className={`font-bold text-yellow-400 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-full shadow-2xl border-4 border-yellow-300 ${isMobile ? 'text-2xl' : isTablet ? 'text-4xl' : 'text-6xl'
-                                }`} style={{
+                            <div
+                                className="font-bold text-yellow-400 px-4 py-2 bg-gradient-to-r from-orange-500 to-red-500 rounded-full shadow-2xl border-4 border-yellow-300"
+                                style={{
                                     textShadow: '0 0 15px rgba(255, 235, 59, 0.8)',
-                                    display: 'none'
-                                }}>
+                                    display: 'none',
+                                    fontSize: isMobile ? '24px' : isTablet ? '36px' : '48px',
+                                    fontFamily: 'UTM Bebas, Arial, sans-serif'
+                                }}
+                            >
                                 VS
                             </div>
                         </div>
 
                         {/* Team 2 */}
-                        <div className="flex-1 flex flex-col items-center max-w-xs">
+                        <div className="flex-1 flex flex-col items-center max-w-[120px] sm:max-w-xs">
                             <div className="relative mb-4">
                                 <div
                                     className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
@@ -223,23 +215,39 @@ const HalftimeBreakPoster = () => {
                                     />
                                 </div>
                             </div>
-                            <div className={`bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-sm px-4 py-2 rounded-xl font-bold text-center w-full shadow-lg border border-white/10 ${isMobile ? 'text-sm' : isTablet ? 'text-lg' : 'text-3xl'
-                                }`}>
-                                <div className="truncate">{matchData.team2}</div>
+                            <div
+                                className="font-bold text-white"
+                                style={{
+                                    background: 'rgba(0, 0, 0, 0.5)',
+                                    padding: '5px 10px',
+                                    borderRadius: '7px',
+                                    display: 'inline-block',
+                                    marginTop: isMobile ? '15px' : '30px',
+                                    width: isMobile ? '100px' : isTablet ? '180px' : '240px',
+                                    textAlign: 'center',
+                                    fontSize: isMobile ? '14px' : isTablet ? '18px' : '24px',
+                                    whiteSpace: 'nowrap',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    fontFamily: 'UTM Bebas, Arial, sans-serif'
+                                }}
+                            >
+                                {matchData.team2}
                             </div>
                         </div>
                     </div>
 
-                    {/* Halftime break message with custom style, no icon */}
-                    <div 
+                    {/* Halftime break message */}
+                    <div
                         className="font-bold inline-block"
                         style={{
-                            fontSize: isMobile ? '28px' : '46px',
+                            fontSize: isMobile ? '20px' : isTablet ? '32px' : '46px',
                             background: '#FF6900',
                             color: 'white',
-                            padding: isMobile ? '5px 30px' : '5px 60px',
+                            padding: isMobile ? '8px 20px' : isTablet ? '8px 40px' : '10px 60px',
                             display: 'inline-block',
-                            marginTop: '26px'
+                            marginTop: isMobile ? '15px' : '26px',
+                            fontFamily: 'UTM Bebas, Arial, sans-serif'
                         }}
                     >
                         NGHỈ GIỮA 2 HIỆP
@@ -247,41 +255,39 @@ const HalftimeBreakPoster = () => {
                 </div>
             </div>
 
-            {/* Bottom left SCO logo */}
+            {/* Bottom left SCO logo - NO rounded background */}
             {showSCOLogo && (
-                <div
-                    id="sco"
-                    style={{
-                        position: 'absolute',
-                        bottom: '3vw',
-                        left: '3vw',
-                        zIndex: 10,
-                        transformOrigin: 'bottom left',
-                        width: isMobile ? '60px' : '96px',
-                        height: isMobile ? '60px' : '96px'
-                    }}
-                >
+                <>
                     <img
                         src="/images/basic/ScoLivLogo.png"
                         alt="SCO Live"
-                        className="w-full h-full object-contain rounded-full shadow-xl bg-white/10 backdrop-blur-sm p-2"
                         style={{
-                            overflowClipMargin: 'content-box',
-                            overflow: 'clip'
-                        }}
-                        onError={(e) => {
-                            // Fallback to text version if image fails to load
-                            e.target.style.display = 'none';
-                            e.target.nextSibling.style.display = 'flex';
+                            position: 'absolute',
+                            bottom: '40px',
+                            left: isMobile ? '20px' : '25px',
+                            zIndex: 10,
+                            width: isMobile ? '80px' : isTablet ? '120px' : '150px',
+                            height: 'auto', 
+                            objectFit: 'cover'
                         }}
                     />
+
                     <div
-                        className="w-full h-full bg-gradient-to-r from-gray-700 to-gray-600 rounded-full items-center justify-center text-white font-bold text-lg hidden shadow-xl"
-                        style={{ display: 'none' }}
+                        className="bg-gradient-to-r from-gray-700 to-gray-600 rounded-full items-center justify-center text-white font-bold text-lg hidden shadow-xl"
+                        style={{
+                            display: 'none',
+                            position: 'absolute',
+                            bottom: '0px',
+                            left: isMobile ? '5px' : '10px',
+                            zIndex: 10,
+                            width: isMobile ? '100px' : isTablet ? '140px' : '192px',
+                            height: isMobile ? '100px' : isTablet ? '140px' : '192px',
+                            fontFamily: 'UTM Bebas, Arial, sans-serif'
+                        }}
                     >
                         SCO
                     </div>
-                </div>
+                </>
             )}
 
             {/* Marquee (if enabled) */}
@@ -289,17 +295,16 @@ const HalftimeBreakPoster = () => {
                 <div
                     className="absolute bottom-0 left-0 w-full bg-gradient-to-r from-black/50 via-black/40 to-black/50 backdrop-blur-sm text-white flex items-center overflow-hidden z-50 border-t border-white/20"
                     style={{
-                        height: isMobile ? '6vw' : '3vw',
-                        minHeight: '32px'
+                        height: isMobile ? '40px' : '60px'
                     }}
                 >
                     <div
                         className="animate-marquee whitespace-nowrap font-bold"
                         style={{
-                            fontSize: isMobile ? '4vw' : '2.4vw',
-                            minFontSize: '16px',
+                            fontSize: isMobile ? '16px' : isTablet ? '20px' : '24px',
                             paddingBottom: '0.2vw',
-                            textShadow: '0 0 5px rgba(0, 0, 0, 0.8)'
+                            textShadow: '0 0 5px rgba(0, 0, 0, 0.8)',
+                            fontFamily: 'UTM Bebas, Arial, sans-serif'
                         }}
                     >
                         {matchData.marqueeText}
@@ -307,8 +312,10 @@ const HalftimeBreakPoster = () => {
                 </div>
             )}
 
-            {/* Minimal styles - only marquee animation kept */}
+            {/* Styles */}
             <style>{`
+                @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@400&display=swap');
+                
                 @keyframes marquee {
                     0% { transform: translateX(100%); }
                     100% { transform: translateX(-100%); }
@@ -328,11 +335,23 @@ const HalftimeBreakPoster = () => {
                     height: 100%;
                 }
 
-                /* Ensure text stays readable on very small screens */
+                /* Mobile responsive adjustments */
                 @media (max-width: 480px) {
                     .truncate {
                         font-size: 12px !important;
                         line-height: 1.2;
+                    }
+                }
+
+                @media (max-width: 640px) {
+                    /* Ensure proper spacing on very small screens */
+                    .gap-4 {
+                        gap: 1rem !important;
+                    }
+                    
+                    /* Stack time/date/stadium vertically on small screens */
+                    .flex-col {
+                        align-items: center !important;
                     }
                 }
             `}</style>
