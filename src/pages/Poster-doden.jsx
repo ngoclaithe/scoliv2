@@ -135,8 +135,8 @@ export default function DodenMatchIntro() {
   };
 
   return (
-    <div className="w-full h-screen flex items-center justify-center p-2 sm:p-4" style={{background: 'transparent'}}>
-      <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl mx-auto">
+    <div className="w-full h-screen flex items-center justify-center p-2 sm:p-4 overflow-hidden" style={{background: 'transparent'}}>
+      <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
 
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
