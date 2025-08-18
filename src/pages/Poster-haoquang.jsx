@@ -246,7 +246,9 @@ export default function HaoQuangMatchIntro() {
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-2 sm:p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className={`relative rounded-full bg-white shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden ${
+                      isMobile ? 'p-1' : 'p-2 sm:p-3'
+                    }`}
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`
@@ -338,7 +340,9 @@ export default function HaoQuangMatchIntro() {
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-2 sm:p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className={`relative rounded-full bg-white shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden ${
+                      isMobile ? 'p-1' : 'p-2 sm:p-3'
+                    }`}
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`
