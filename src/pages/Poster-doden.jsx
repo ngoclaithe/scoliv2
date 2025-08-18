@@ -489,6 +489,127 @@ export default function DodenMatchIntro() {
             }
           }
 
+          /* Shooting star animations for 8 directions */
+          @keyframes shootingStar-0 {
+            0% {
+              transform: translate(-50%, -50%) translateX(0) scale(0);
+              opacity: 0;
+            }
+            10% {
+              opacity: 1;
+              transform: translate(-50%, -50%) translateX(0) scale(1);
+            }
+            100% {
+              transform: translate(-50%, -50%) translateX(200px) scale(0);
+              opacity: 0;
+            }
+          }
+
+          @keyframes shootingStar-45 {
+            0% {
+              transform: translate(-50%, -50%) translate(0, 0) scale(0);
+              opacity: 0;
+            }
+            10% {
+              opacity: 1;
+              transform: translate(-50%, -50%) translate(0, 0) scale(1);
+            }
+            100% {
+              transform: translate(-50%, -50%) translate(150px, -150px) scale(0);
+              opacity: 0;
+            }
+          }
+
+          @keyframes shootingStar-90 {
+            0% {
+              transform: translate(-50%, -50%) translateY(0) scale(0);
+              opacity: 0;
+            }
+            10% {
+              opacity: 1;
+              transform: translate(-50%, -50%) translateY(0) scale(1);
+            }
+            100% {
+              transform: translate(-50%, -50%) translateY(-200px) scale(0);
+              opacity: 0;
+            }
+          }
+
+          @keyframes shootingStar-135 {
+            0% {
+              transform: translate(-50%, -50%) translate(0, 0) scale(0);
+              opacity: 0;
+            }
+            10% {
+              opacity: 1;
+              transform: translate(-50%, -50%) translate(0, 0) scale(1);
+            }
+            100% {
+              transform: translate(-50%, -50%) translate(-150px, -150px) scale(0);
+              opacity: 0;
+            }
+          }
+
+          @keyframes shootingStar-180 {
+            0% {
+              transform: translate(-50%, -50%) translateX(0) scale(0);
+              opacity: 0;
+            }
+            10% {
+              opacity: 1;
+              transform: translate(-50%, -50%) translateX(0) scale(1);
+            }
+            100% {
+              transform: translate(-50%, -50%) translateX(-200px) scale(0);
+              opacity: 0;
+            }
+          }
+
+          @keyframes shootingStar-225 {
+            0% {
+              transform: translate(-50%, -50%) translate(0, 0) scale(0);
+              opacity: 0;
+            }
+            10% {
+              opacity: 1;
+              transform: translate(-50%, -50%) translate(0, 0) scale(1);
+            }
+            100% {
+              transform: translate(-50%, -50%) translate(-150px, 150px) scale(0);
+              opacity: 0;
+            }
+          }
+
+          @keyframes shootingStar-270 {
+            0% {
+              transform: translate(-50%, -50%) translateY(0) scale(0);
+              opacity: 0;
+            }
+            10% {
+              opacity: 1;
+              transform: translate(-50%, -50%) translateY(0) scale(1);
+            }
+            100% {
+              transform: translate(-50%, -50%) translateY(200px) scale(0);
+              opacity: 0;
+            }
+          }
+
+          @keyframes shootingStar-315 {
+            0% {
+              transform: translate(-50%, -50%) translate(0, 0) scale(0);
+              opacity: 0;
+            }
+            10% {
+              opacity: 1;
+              transform: translate(-50%, -50%) translate(0, 0) scale(1);
+            }
+            100% {
+              transform: translate(-50%, -50%) translate(150px, 150px) scale(0);
+              opacity: 0;
+            }
+          }
+
           .scrollbar-hide {
             -ms-overflow-style: none;
             scrollbar-width: none;
