@@ -442,7 +442,7 @@ export default function TreTrungMatchIntro() {
               {/* Live Text */}
               {matchData.showLiveIndicator && (
                 <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-white font-bold" style={{
-                  fontSize: isMobile ? '12px' : isTablet ? '20px' : '28px'
+                  fontSize: isMobile ? '8px' : isTablet ? '20px' : '28px'
                 }}>
                   <img
                     src="/images/basic/live-logo1.gif"
