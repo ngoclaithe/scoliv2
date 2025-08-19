@@ -384,6 +384,31 @@ export default function VangKimMatchIntro() {
                 </div>
               </div>
 
+              {/* Time and Date Section - Thay thế VS Section */}
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2">
+                <div
+                  className="time-date-container"
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    background: 'linear-gradient(to right, #3b82f6, #1d4ed8)',
+                    border: isMobile ? '1px solid #fff' : '6px solid #fff',
+                    borderRadius: isMobile ? '8px' : '16px',
+                    color: '#fff',
+                    fontSize: isMobile ? '12px' : isTablet ? '34px' : '74px',
+                    fontFamily: 'UTM Colossalis',
+                    padding: isMobile ? '3px 6px' : '8px 16px',
+                    boxShadow: '0 2px 10px rgba(24, 119, 242, 0.11)',
+                    letterSpacing: '1px',
+                    textShadow: '1px 2px 3px #0e306c22',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  {(matchData.showTimer || matchData.showDate) && matchData.formattedDateTime}
+                </div>
+              </div>
+
               {/* Team B */}
               <div className="flex flex-col items-center space-y-1 sm:space-y-2">
                 <div className="relative group">
@@ -421,31 +446,6 @@ export default function VangKimMatchIntro() {
                     {matchData.team2}
                   </div>
                 </div>
-              </div>
-            </div>
-
-            {/* Match time and date - Below team names */}
-            <div className={`flex justify-center items-center ${isMobile ? 'mb-1 mt-2' : 'mb-2 sm:mb-2 md:mb-3 mt-4 sm:mt-6 md:mt-8'}`}>
-              <div
-                className="time-date-container"
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  background: 'linear-gradient(to right, #3b82f6, #1d4ed8)',
-                  border: isMobile ? '1px solid #fff' : '6px solid #fff',
-                  borderRadius: isMobile ? '8px' : '16px',
-                  color: '#fff',
-                  fontSize: isMobile ? '12px' : isTablet ? '34px' : '74px',
-                  fontFamily: 'UTM Colossalis',
-                  padding: isMobile ? '3px 6px' : '8px 16px',
-                  boxShadow: '0 2px 10px rgba(24, 119, 242, 0.11)',
-                  letterSpacing: '1px',
-                  textShadow: '1px 2px 3px #0e306c22',
-                  whiteSpace: 'nowrap'
-                }}
-              >
-                {(matchData.showTimer || matchData.showDate) && matchData.formattedDateTime}
               </div>
             </div>
 
