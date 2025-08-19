@@ -170,7 +170,11 @@ export default function VangXanhMatchIntro() {
 
   return (
     <div className="w-full h-screen bg-transparent flex items-start justify-center overflow-hidden">
-      <div className="relative w-full max-w-7xl h-full bg-white overflow-hidden">
+      <div className={`relative bg-white overflow-hidden ${
+        isMobile
+          ? 'w-full h-full max-h-[60vh] aspect-video'
+          : 'w-full max-w-7xl h-full'
+      }`}>
 
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
