@@ -246,32 +246,15 @@ export default function DodenMatchIntro() {
               </div>
 
               <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
-                <div className="relative flex flex-col items-center">
-                  <img
-                    src="/images/background-poster/vs5.png"
-                    alt="VS"
-                    className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-18 lg:h-18 object-contain animate-pulse"
-                  />
-                </div>
-
-                <div className="flex flex-col items-center space-y-1 sm:space-y-2">
-                  <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-semibold bg-black/50 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap">
-                    {(matchData.showTimer || matchData.showDate) && (
-                      <span>
-                        {matchData.showTimer && matchData.roundedTime}{matchData.showTimer && matchData.showDate && ' - '}{matchData.showDate && matchData.currentDate}
-                      </span>
-                    )}
-                    {(matchData.showTimer || matchData.showDate) && matchData.showStadium && matchData.stadium && (
-                      <span> | </span>
-                    )}
-                    {matchData.showStadium && matchData.stadium && (
-                      <span>📍 {matchData.stadium}</span>
-                    )}
-                  </div>
-                  {matchData.liveText && (
-                    <div className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-semibold bg-red-600/80 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg backdrop-blur-sm text-white text-center whitespace-nowrap flex items-center space-x-1">
-                      <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full animate-pulse"></div>
-                      <span>Đơn vị live: {matchData.liveText}</span>
+                <div className="text-white font-bold text-center">
+                  {matchData.showTimer && (
+                    <div className="text-xs sm:text-sm md:text-lg lg:text-xl mb-1">
+                      {matchData.roundedTime}
+                    </div>
+                  )}
+                  {matchData.showDate && (
+                    <div className="text-xs sm:text-sm md:text-base lg:text-lg">
+                      {matchData.currentDate}
                     </div>
                   )}
                 </div>
