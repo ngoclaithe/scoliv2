@@ -23,6 +23,12 @@ export default function VangXanhMatchIntro() {
     stadium: contextMatchData.stadium || 'SVĐ THỐNG NHẤT',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '15:30',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
+    // Format time in Vietnamese style
+    formattedDateTime: (() => {
+      const time = contextMatchData.startTime || contextMatchData.time || '15:30';
+      const date = contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN');
+      return `${time} ngày ${date}`;
+    })(),
     sponsors: getFullLogoUrls(sponsors?.sponsors?.url_logo || []),
     sponsorsTypeDisplay: sponsors?.sponsors?.type_display || [],
     organizing: getFullLogoUrls(organizing?.organizing?.url_logo || []),
