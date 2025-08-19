@@ -26,54 +26,51 @@ const ScoreboardBelowType1 = ({ currentData, logoShape, showMatchTime }) => {
             </div>
             
             {/* Main scoreboard */}
-            <div className="flex items-end justify-center w-full px-2 gap-0 relative">
+            <div className="flex items-center justify-center w-full gap-0 relative bg-white/95 backdrop-blur-sm rounded-lg shadow-lg overflow-hidden">
                 {/* Logo team A */}
-                <div className="relative z-10">
+                <div className="absolute left-2 top-1/2 transform -translate-y-1/2 z-20">
                     <DisplayLogo
                         logos={[currentData.teamALogo]}
                         alt={currentData.teamAName}
-                        className="w-14 h-14"
+                        className="w-12 h-12 sm:w-14 sm:h-14"
                         type_play={logoShape}
-                        logoSize="w-14 h-14"
+                        logoSize="w-12 h-12 sm:w-14 sm:h-14"
                     />
                 </div>
 
                 {/* Team A info */}
-                <div className="flex">
-                    <div className="flex flex-col items-center">
-                        <div className="flex items-start">
-                            <div className="w-[220px]">
-                                <div
-                                    className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center"
-                                    style={{
-                                        backgroundColor: '#004d73',
-                                        fontFamily: 'UTM Bebas, sans-serif',
-                                        height: '48px',
-                                        fontSize: `${getClampedFontSize(currentData.teamAName)}px`
-                                    }}
-                                >
-                                    {currentData.teamAName}
-                                </div>
-
-                                <div className="flex w-full" style={{ height: '8px' }}>
-                                    <div
-                                        className="flex-1"
-                                        style={{ backgroundColor: currentData.teamAKitColor, height: '8px' }}
-                                    />
-                                    <div
-                                        className="flex-1"
-                                        style={{ backgroundColor: currentData.teamA2KitColor, height: '8px' }}
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                <div className="flex-1 flex flex-col pl-16 pr-2">
+                    <div
+                        className="text-white font-bold text-center truncate flex items-center justify-center"
+                        style={{
+                            backgroundColor: '#004d73',
+                            fontFamily: 'UTM Bebas, sans-serif',
+                            height: '48px',
+                            fontSize: `clamp(16px, ${getClampedFontSize(currentData.teamAName)}px, 32px)`
+                        }}
+                    >
+                        {currentData.teamAName}
+                    </div>
+                    <div className="flex w-full h-2">
+                        <div
+                            className="flex-1"
+                            style={{ backgroundColor: currentData.teamAKitColor }}
+                        />
+                        <div
+                            className="flex-1"
+                            style={{ backgroundColor: currentData.teamA2KitColor }}
+                        />
                     </div>
                 </div>
 
                 {/* Center scores display */}
                 <div
-                    className="bg-black text-white px-4 py-1 text-xl font-bold whitespace-nowrap flex items-center justify-center gap-2"
-                    style={{ height: '56px', fontFamily: 'UTM Bebas, sans-serif' }}
+                    className="bg-black text-white px-3 sm:px-4 py-1 font-bold whitespace-nowrap flex items-center justify-center gap-2 min-w-[80px]"
+                    style={{
+                        height: '50px',
+                        fontFamily: 'UTM Bebas, sans-serif',
+                        fontSize: 'clamp(18px, 3vw, 24px)'
+                    }}
                 >
                     <span>{currentData.teamAScore}</span>
                     <span>-</span>
@@ -81,61 +78,54 @@ const ScoreboardBelowType1 = ({ currentData, logoShape, showMatchTime }) => {
                 </div>
 
                 {/* Team B info */}
-                <div className="flex">
-                    <div className="flex flex-col items-center">
-                        <div className="flex items-start">
-                            <div className="w-[220px]">
-                                <div
-                                    className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center"
-                                    style={{
-                                        backgroundColor: '#004d73',
-                                        fontFamily: 'UTM Bebas, sans-serif',
-                                        height: '48px',
-                                        fontSize: `${getClampedFontSize(currentData.teamBName)}px`
-                                    }}
-                                >
-                                    {currentData.teamBName}
-                                </div>
-
-                                <div className="flex w-full" style={{ height: '8px' }}>
-                                    <div
-                                        className="flex-1"
-                                        style={{ backgroundColor: currentData.teamB2KitColor, height: '8px' }}
-                                    />
-                                    <div
-                                        className="flex-1"
-                                        style={{ backgroundColor: currentData.teamBKitColor, height: '8px' }}
-                                    />
-                                </div>
-                            </div>
-                        </div>
+                <div className="flex-1 flex flex-col pr-16 pl-2">
+                    <div
+                        className="text-white font-bold text-center truncate flex items-center justify-center"
+                        style={{
+                            backgroundColor: '#004d73',
+                            fontFamily: 'UTM Bebas, sans-serif',
+                            height: '48px',
+                            fontSize: `clamp(16px, ${getClampedFontSize(currentData.teamBName)}px, 32px)`
+                        }}
+                    >
+                        {currentData.teamBName}
+                    </div>
+                    <div className="flex w-full h-2">
+                        <div
+                            className="flex-1"
+                            style={{ backgroundColor: currentData.teamB2KitColor }}
+                        />
+                        <div
+                            className="flex-1"
+                            style={{ backgroundColor: currentData.teamBKitColor }}
+                        />
                     </div>
                 </div>
 
                 {/* Logo team B */}
-                <div className="relative z-10">
+                <div className="absolute right-2 top-1/2 transform -translate-y-1/2 z-20">
                     <DisplayLogo
                         logos={[currentData.teamBLogo]}
                         alt={currentData.teamBName}
-                        className="w-14 h-14"
+                        className="w-12 h-12 sm:w-14 sm:h-14"
                         type_play={logoShape}
-                        logoSize="w-14 h-14"
+                        logoSize="w-12 h-12 sm:w-14 sm:h-14"
                     />
                 </div>
             </div>
 
             {/* Bottom section with match time and period info */}
-            <div className="flex justify-center w-full mt-2">
-                <div 
-                    className="bg-red-600 text-white text-center font-bold rounded-b-lg px-4 py-2"
+            <div className="flex justify-center w-full mt-1">
+                <div
+                    className="bg-red-600 text-white text-center font-bold rounded-b-lg px-4 py-2 shadow-lg"
                     style={{
                         fontFamily: 'UTM Bebas, sans-serif',
-                        fontSize: '24px',
+                        fontSize: 'clamp(18px, 3vw, 24px)',
                         minWidth: '200px'
                     }}
                 >
-                    {currentData.status === 'live' || currentData.status === 'pause' 
-                        ? `${currentData.matchTime} - ${currentData.period}` 
+                    {showMatchTime
+                        ? `${currentData.matchTime} - ${currentData.period}`
                         : currentData.period
                     }
                 </div>
