@@ -186,8 +186,10 @@ const ScoreboardBelowNew = ({
                             />
                         </div>
                     </div>
-                    <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 min-w-[2.2rem] text-center"
-                        style={{ clipPath: 'polygon(0% 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 0% 100%)' }}>
+                    <div
+                        className="bg-yellow-400 text-black font-bold text-4xl px-2 py-0.5 text-center sm:w-8 flex items-center justify-center"
+                        style={{ fontFamily: 'UTM Bebas, sans-serif', height: '56px' }}
+                    >
                         {currentData.teamBScore}
                     </div>
                 </div>
