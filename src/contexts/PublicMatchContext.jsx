@@ -376,7 +376,7 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('goal_scorers_updated', (data) => {
       const { team, scorer } = data;
 
-      // Xác định ��úng teamKey dựa trên cấu trúc state
+      // Xác định đúng teamKey dựa trên cấu trúc state
       const teamKey = team === 'teamA' ? 'teamA' : 'teamB';
       const scorersKey = team === 'teamA' ? 'teamAScorers' : 'teamBScorers';
 
@@ -830,10 +830,12 @@ export const PublicMatchProvider = ({ children }) => {
           const state = data.currentState;
 
           if (state.matchData) {
-            // console.log('🔄 [PublicMatchContext] Updating matchData from join_roomed:', state.matchData);
+            console.log('🔄 [PublicMatchContext] Updating matchData from join_roomed:', state.matchData);
+            console.log('🏆 [PublicMatchContext] Tournament value from server:', state.matchData.tournament);
 
             const mappedMatchData = {
               ...state.matchData,
+              tournament: state.matchData.tournament || "",
               round: state.matchData.round || 1,
               group: state.matchData.group || "A",
               subtitle: state.matchData.subtitle || "",
@@ -902,7 +904,7 @@ export const PublicMatchProvider = ({ children }) => {
               const mediaPartnerLogos = state.displaySettings.logos.filter(logo => logo.type === 'media_partners');
               const tournamentLogos = state.displaySettings.logos.filter(logo => logo.type === 'tournament_logo');
 
-              // Kiểm tra nếu có logo banner (code bắt đầu b���ng B) thì logoShape = square
+              // Kiểm tra nếu có logo banner (code bắt đầu bằng B) thì logoShape = square
               const allLogos = [...sponsorLogos, ...organizingLogos, ...mediaPartnerLogos];
               const hasBannerLogo = allLogos.some(logo => logo.codelogo && logo.codelogo.startsWith('B'));
 
