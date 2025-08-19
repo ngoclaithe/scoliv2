@@ -370,7 +370,7 @@ export default function VangXanhMatchIntro() {
               <div className="flex flex-col items-center space-y-1 sm:space-y-2">
                 <div className="relative flex flex-col items-center">
                   <img
-                    src="/images/background-poster/vs3.png"
+                    src="/images/background-poster/vs5.png"
                     alt="VS"
                     className="object-contain animate-pulse"
                     style={{
