@@ -115,16 +115,14 @@ const ScoreboardBelowNew = ({ type = 1 }) => {
         <div className="w-full h-screen relative overflow-hidden">
             {/* Container for all elements */}
             <div className="w-full h-full relative bg-transparent">
-                {/* ScoLiv Logo - Tăng gấp đôi kích thước và đưa sát bottom hơn */}
-                <div className="absolute bottom-0 left-4 sm:left-16 z-40">
+                {/* ScoLiv Logo*/}
+                <div className="absolute bottom-10 left-1 sm:left-2 z-40">
                     <img
                         src="/images/basic/ScoLivLogo.png"
                         alt="ScoLiv"
-                        className="w-48 h-48 sm:w-72 sm:h-72 object-contain"
-                        onError={(e) => {
-                            e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><rect width="128" height="128" rx="16" fill="%23007acc"/><text x="64" y="76" text-anchor="middle" font-size="24" fill="white" font-weight="bold">ScoLiv</text></svg>`;
-                        }}
+                        className="w-24 h-24 sm:w-72 sm:h-72 object-contain object-bottom"
                     />
+
                 </div>
 
                 {/* Main Scoreboard */}
