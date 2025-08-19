@@ -375,7 +375,8 @@ export default function VangKimMatchIntro() {
                       color: '#3265a8',
                       fontFamily: 'UTM Colossalis',
                       fontWeight: '800',
-                      textShadow: '2px 2px #ffffff',
+                      WebkitTextStroke: '2px white',
+                      textStroke: '2px white',
                       whiteSpace: 'nowrap'
                     }}
                   >
@@ -439,7 +440,8 @@ export default function VangKimMatchIntro() {
                       color: '#3265a8',
                       fontFamily: 'UTM Colossalis',
                       fontWeight: '800',
-                      textShadow: '2px 2px #ffffff',
+                      WebkitTextStroke: '2px white',
+                      textStroke: '2px white',
                       whiteSpace: 'nowrap'
                     }}
                   >
@@ -534,7 +536,8 @@ export default function VangKimMatchIntro() {
             font-weight: 800 !important;
             font-size: 65px;
             height: auto;
-            text-shadow: 4px 4px #ffffff;
+            WebkitTextStroke: 2px white;
+            textStroke: 2px white;
             line-height: 1.2;
           }
 
