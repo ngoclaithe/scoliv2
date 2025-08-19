@@ -20,8 +20,8 @@ const ScoreboardBelowNew = ({ type = 1 }) => {
     const currentData = {
         teamAName: matchData?.teamA?.name || "ĐỘI A",
         teamBName: matchData?.teamB?.name || "ĐỘI B",
-        teamALogo: matchData?.teamA?.logo || "https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/1200px-FC_Barcelona_logo.svg.png",
-        teamBLogo: matchData?.teamB?.logo || "https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/1200px-FC_Barcelona_logo.svg.png",
+        teamALogo: matchData?.teamA?.logo || "/images/basic/logo-skin4.png",
+        teamBLogo: matchData?.teamB?.logo || "/images/basic/logo-skin4.png",
         teamAScore: matchData?.teamA?.score || 0,
         teamBScore: matchData?.teamB?.score || 0,
         teamAScorers: matchData?.teamA?.teamAScorers || [],
@@ -35,7 +35,7 @@ const ScoreboardBelowNew = ({ type = 1 }) => {
         teamBKitColor: matchData?.teamB?.teamBKitColor || "#0000FF",
         teamA2KitColor: matchData?.teamA?.teamA2KitColor || "#FF0000",
         teamB2KitColor: matchData?.teamB?.teamB2KitColor || "#0000FF",
-        leagueLogo: "https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/1200px-FC_Barcelona_logo.svg.png",
+        leagueLogo: "/images/basic/logo-skin4.png",
         typeMatch: matchData?.typeMatch || "soccer"
     };
 
