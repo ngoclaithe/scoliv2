@@ -19,7 +19,7 @@ const ScoreboardType3 = ({ currentData, logoShape, showMatchTime }) => {
                             </div>
                             
                             <div className="flex flex-col items-center">
-                                <div className="text-white px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs font-medium bg-gray-800/80 rounded-md w-[60px] sm:w-[80px] truncate text-center">
+                                <div className="text-white px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs font-medium bg-gray-800/80 rounded-md w-[60px] sm:w-[80px] truncate text-center" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
                                     {currentData.teamAName}
                                 </div>
                                 <div className="flex w-full h-0.5 mt-0.5 rounded-full overflow-hidden">
@@ -62,7 +62,7 @@ const ScoreboardType3 = ({ currentData, logoShape, showMatchTime }) => {
                             </div>
                             
                             <div className="flex flex-col items-center">
-                                <div className="text-white px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs font-medium bg-gray-800/80 rounded-md w-[60px] sm:w-[80px] truncate text-center">
+                                <div className="text-white px-1.5 sm:px-2 py-0.5 sm:py-1 text-xs font-medium bg-gray-800/80 rounded-md w-[60px] sm:w-[80px] truncate text-center" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
                                     {currentData.teamBName}
                                 </div>
                                 <div className="flex w-full h-0.5 mt-0.5 rounded-full overflow-hidden">

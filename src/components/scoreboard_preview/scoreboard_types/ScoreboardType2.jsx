@@ -42,7 +42,7 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
                             </div>
                         </div>
 
-                        <span className="w-full text-xs sm:text-sm font-semibold text-center leading-[1.2] px-1 sm:px-2">
+                        <span className="w-full text-xs sm:text-sm font-semibold text-center leading-[1.2] px-1 sm:px-2" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
                             {currentData.teamAName}
                         </span>
                         <div className="flex w-full h-[3px] sm:h-[4px] px-1 sm:px-2">
@@ -108,7 +108,7 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
                             </div>
                         </div>
 
-                        <span className="w-full text-xs sm:text-sm font-semibold text-center leading-[1.2] px-1 sm:px-2">
+                        <span className="w-full text-xs sm:text-sm font-semibold text-center leading-[1.2] px-1 sm:px-2" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
                             {currentData.teamBName}
                         </span>
                         <div className="flex w-full h-[3px] sm:h-[4px] px-1 sm:px-2">
