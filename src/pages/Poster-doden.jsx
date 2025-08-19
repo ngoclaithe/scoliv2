@@ -436,9 +436,9 @@ export default function DodenMatchIntro() {
         </div>
 
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(216)].map((_, i) => {
-            const angle = (i * 360) / 216;
-            const distance = 60 + (i % 10) * 30;
+          {[...Array(432)].map((_, i) => {
+            const angle = (i * 360) / 432;
+            const distance = 120 + (i % 10) * 60;
 
             return (
               <div
