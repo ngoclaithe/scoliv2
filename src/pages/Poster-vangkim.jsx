@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
+import { formatVietnameseDate } from '../utils/helpers';
 
 export default function VangKimMatchIntro() {
   const {
@@ -22,11 +23,11 @@ export default function VangKimMatchIntro() {
     logo2: getFullLogoUrl(contextMatchData.teamB.logo) || '/images/background-poster/default_logoB.png',
     stadium: contextMatchData.stadium || 'SVĐ THỐNG NHẤT',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '15:30',
-    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
+    currentDate: formatVietnameseDate(contextMatchData.matchDate) || formatVietnameseDate(new Date()),
     // Format time in Vietnamese style
     formattedDateTime: (() => {
       const time = contextMatchData.startTime || contextMatchData.time || '15:30';
-      const date = contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN');
+      const date = formatVietnameseDate(contextMatchData.matchDate) || formatVietnameseDate(new Date());
       return `${time} ngày ${date}`;
     })(),
     sponsors: getFullLogoUrls(sponsors?.sponsors?.url_logo || []),
@@ -391,7 +392,10 @@ export default function VangKimMatchIntro() {
                 <div
                   className="text-white font-bold font-utm-colossalis leading-none"
                   style={{
-                    fontSize: isMobile ? '20px' : isTablet ? '32px' : '88px'
+                    fontSize: isMobile ? '20px' : isTablet ? '32px' : '88px',
+                    border: '1px solid #f87171',
+                    borderRadius: isMobile ? '4px' : '8px',
+                    padding: isMobile ? '2px 6px' : '4px 12px'
                   }}
                 >
                   {matchData.roundedTime}
@@ -402,7 +406,10 @@ export default function VangKimMatchIntro() {
                   className="text-white/90 font-bold font-utm-colossalis leading-none"
                   style={{
                     fontSize: isMobile ? '12px' : isTablet ? '18px' : '44px',
-                    marginTop: isMobile ? '-2px' : isTablet ? '-4px' : '-8px'
+                    marginTop: isMobile ? '2px' : isTablet ? '4px' : '8px',
+                    border: '1px solid #f87171',
+                    borderRadius: isMobile ? '4px' : '8px',
+                    padding: isMobile ? '2px 6px' : '4px 12px'
                   }}
                 >
                   {matchData.currentDate}
