@@ -940,7 +940,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   }, [historyMatches]);
 
   const handleItemRemove = useCallback(async (itemId) => {
-    console.log('��️ [PosterLogoManager] Removing item:', itemId);
+    console.log(' [PosterLogoManager] Removing item:', itemId);
 
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);
     const item = logoItems.find(logo => logo.id === itemId);
@@ -1233,7 +1233,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           </label>
         </div>
 
-        {/* Tiêu đề ph�� */}
+        {/* Tiêu đề phụ */}
         <div className="flex items-center gap-2">
           <label className="flex items-center gap-1">
             <span className="text-xs text-gray-700">Tiêu đề phụ:</span>
@@ -1398,7 +1398,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
                   <span className="text-xs">{shape.icon}</span>
                   <span className="text-xs">{shape.label}</span>
-                  {isDisabled && <span className="text-xs text-red-500">(Bị khóa)</span>}
+                  {/* {isDisabled && <span className="text-xs text-red-500">(Bị khóa)</span>} */}
                 </label>
               );
             })}
@@ -1426,7 +1426,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               }}
               className="w-2 h-2"
             />
-            <span className="text-xs">🔄 Hi���n thị luân phiên</span>
+            <span className="text-xs">🔄 Hiển thị luân phiên</span>
           </label>
         </div>
       </div>
