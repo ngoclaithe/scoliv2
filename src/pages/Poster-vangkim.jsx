@@ -539,10 +539,10 @@ export default function VangKimMatchIntro() {
             color: #ff3e37 !important;
             font-family: 'UTM Colossalis' !important;
             font-weight: 800 !important;
-            font-size: 65px;
+            font-size: 65px !important;
             height: auto;
-            WebkitTextStroke: 2px white !important;
-            textStroke: 2px white !important;
+            -webkit-text-stroke: 2px white !important;
+            text-stroke: 2px white !important;
             line-height: 1.2;
           }
 
