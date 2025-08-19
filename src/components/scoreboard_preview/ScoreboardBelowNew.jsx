@@ -333,7 +333,7 @@ const ScoreboardBelowNew = ({
 
                     {/* Score */}
                     <div className="mx-4 flex flex-col items-center">
-                        <div className="flex items-center bg-white/95 px-4 py-1 rounded-md shadow-sm">
+                        <div className="flex items-center bg-white/95 px-4 py-1 rounded-md shadow-sm" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
                             <span className="font-bold text-xl text-gray-900">{currentData.teamAScore}</span>
                             <span className="mx-2 text-gray-400 font-light">:</span>
                             <span className="font-bold text-xl text-gray-900">{currentData.teamBScore}</span>
