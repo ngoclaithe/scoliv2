@@ -230,15 +230,6 @@ const ScoreboardBelowNew = ({
                     logoSize="w-14 h-14"
                 />
             </div>
-
-            {/* Logo ScoLiv */}
-            <div className="flex justify-center w-full">
-                <img
-                    src="/images/basic/ScoLivLogo.png"
-                    alt="ScoLiv Logo"
-                    className="w-[46%] h-auto"
-                />
-            </div>
         </div>
     );
 
@@ -377,15 +368,6 @@ const ScoreboardBelowNew = ({
                         />
                     </div>
                 </div>
-            </div>
-
-            {/* Logo ScoLiv */}
-            <div className="flex justify-center w-full">
-                <img
-                    src="/images/basic/ScoLivLogo.png"
-                    alt="ScoLiv Logo"
-                    className="w-[46%] h-auto"
-                />
             </div>
         </div>
     );
