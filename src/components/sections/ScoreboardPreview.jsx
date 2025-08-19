@@ -274,7 +274,8 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
   );
 
   const renderScoreboardType4 = () => (
-    <div className="flex items-center justify-center gap-0">
+    <div className="flex items-center justify-center gap-0 scale-50 origin-center">
+      {/* Team A Logo */}
       <div className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden">
         <img
           src={currentData.teamALogo}
@@ -292,7 +293,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
 
       <div className="flex items-center gap-0 -space-x-2">
         <div
-          className="text-white text-xs font-semibold flex items-center justify-center w-16 h-5"
+          className="text-white text-xs font-semibold flex items-center justify-center w-24 h-6"
           style={{
             background: 'linear-gradient(90deg, rgb(222, 57, 51), rgb(238, 134, 58))',
             clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)'
@@ -301,7 +302,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
           <span className="truncate text-center">{currentData.teamAName}</span>
         </div>
         <div
-          className="w-6 h-5 z-10"
+          className="w-8 h-6 z-10"
           style={{
             backgroundColor: currentData.teamAKitColor,
             clipPath: 'polygon(0% 0%, 55% 0%, 100% 100%, 45% 100%)'
@@ -316,15 +317,15 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
             backgroundColor: '#213f80',
             clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)',
             minHeight: '32px',
-            width: '120px'
+            width: '80px'
           }}
         >
           <div className="text-white font-bold text-sm min-w-[1rem] text-center">
             {currentData.teamAScore}
           </div>
-          <div className="mx-1 w-5 h-5 rounded-full flex items-center justify-center text-xs overflow-hidden">
+          <div className="mx-1 w-4 h-4 rounded-full flex items-center justify-center text-xs overflow-hidden">
             <img
-              src="/api/placeholder/20/20"
+              src="https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/1200px-FC_Barcelona_logo.svg.png"
               alt="League Logo"
               className="w-full h-full object-cover"
               onError={(e) => {
@@ -347,14 +348,14 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
 
       <div className="flex items-center gap-0 -space-x-2">
         <div
-          className="w-6 h-5 z-10"
+          className="w-8 h-6 z-10"
           style={{
             backgroundColor: currentData.teamBKitColor,
             clipPath: 'polygon(45% 0%, 100% 0%, 55% 100%, 0% 100%)'
           }}
         />
         <div
-          className="text-white text-xs font-semibold flex items-center justify-center w-16 h-5"
+          className="text-white text-xs font-semibold flex items-center justify-center w-24 h-6"
           style={{
             background: 'linear-gradient(90deg, rgb(222, 57, 51), rgb(238, 134, 58))',
             clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)'
@@ -364,6 +365,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
         </div>
       </div>
 
+      {/* Team B Logo */}
       <div className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden">
         <img
           src={currentData.teamBLogo}
