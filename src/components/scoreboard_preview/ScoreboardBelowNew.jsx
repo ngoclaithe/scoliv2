@@ -247,6 +247,7 @@ const ScoreboardBelowNew = ({
                             fontSize: 'clamp(10px, 4vw, 16px)',
                             color: getTextColor(currentData.teamBKitColor),
                             textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+                            fontFamily: 'UTM Bebas, sans-serif'
                         }}
                     >
                         {currentData.teamBName}
