@@ -122,7 +122,6 @@ const ScoreboardBelowNew = ({ type = 1 }) => {
                         alt="ScoLiv"
                         className="w-24 h-24 sm:w-72 sm:h-72 object-contain object-bottom"
                     />
-
                 </div>
 
                 {/* Main Scoreboard */}

@@ -6,7 +6,7 @@ const getClampedFontSize = (name) => {
     return Math.max(22, Math.min(40, dynamicSize));
 };
 
-const ScoreboardBelowType1 = ({ currentData, logoShape, showMatchTime }) => {
+const ScoreboardBelowType1 = ({ currentData, logoShape }) => {
     return (
         <div className="flex flex-col items-center w-full sm:w-[800px] mx-auto px-2 sm:px-0">
             {/* Header - Trực tiếp trận đấu */}
@@ -18,7 +18,7 @@ const ScoreboardBelowType1 = ({ currentData, logoShape, showMatchTime }) => {
                         fontFamily: 'UTM Bebas, sans-serif',
                         fontSize: 'clamp(16px, 4vw, 30px)',
                         width: 'auto',
-                        maxWidth: '90%'
+                        maxWidth: '50%'
                     }}
                 >
                     TRỰC TIẾP TRẬN BÓNG ĐÁ
