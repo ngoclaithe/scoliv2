@@ -605,6 +605,20 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     const handleSearch = async () => {
       if (localCode.trim().length >= 3) {
+        // Check for duplicate codes within the same category
+        const allCurrentItems = [...apiLogos, ...logoItems];
+        const duplicateInCategory = allCurrentItems.find(logoItem =>
+          logoItem.id !== item.id &&
+          logoItem.category === item.category &&
+          logoItem.code &&
+          logoItem.code.trim().toUpperCase() === localCode.trim().toUpperCase()
+        );
+
+        if (duplicateInCategory) {
+          alert(`Mã logo "${localCode.trim()}" đã tồn tại trong danh mục ${item.category}. Vui lòng chọn mã khác.`);
+          return;
+        }
+
         try {
           setIsSearching(true);
           const response = await LogoAPI.searchLogosByCode(localCode.trim(), true);
