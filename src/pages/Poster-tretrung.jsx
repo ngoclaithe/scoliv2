@@ -189,7 +189,7 @@ export default function TreTrungMatchIntro() {
             <div className={`flex items-start flex-shrink-0 ${isMobile ? 'gap-1' : 'gap-2 sm:gap-4'}`} style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: isMobile ? '25%' : '35%' }}>
                 {hasSponsors && (
                   <div className="flex-shrink-0">
-                    <div className={`font-bold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
+                    <div className={`font-bold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-sm' : 'text-sm sm:text-lg md:text-xl'}`}>
                       Nhà tài trợ
                     </div>
                     <div className="flex gap-0.5">
@@ -198,7 +198,7 @@ export default function TreTrungMatchIntro() {
                           <img
                             src={sponsor.logo}
                             alt={sponsor.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-8 h-8 sm:w-10 sm:h-10 md:w-13 md:h-13 p-0.5 sm:p-1'}`}
                           />
                         </div>
                       ))}
