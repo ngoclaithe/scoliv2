@@ -387,27 +387,27 @@ export default function VangKimMatchIntro() {
 
               {/* Time and Date Section - Thay thế VS Section */}
               <div className="flex flex-col items-center space-y-1 sm:space-y-2">
+                {matchData.showTimer && (
                 <div
-                  className="time-date-container"
+                  className="text-white font-bold font-utm-colossalis leading-none"
                   style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    background: 'linear-gradient(to right, #3b82f6, #1d4ed8)',
-                    border: isMobile ? '1px solid #fff' : '6px solid #fff',
-                    borderRadius: isMobile ? '8px' : '16px',
-                    color: '#fff',
-                    fontSize: isMobile ? '12px' : isTablet ? '34px' : '74px',
-                    fontFamily: 'UTM Colossalis',
-                    padding: isMobile ? '3px 6px' : '8px 16px',
-                    boxShadow: '0 2px 10px rgba(24, 119, 242, 0.11)',
-                    letterSpacing: '1px',
-                    textShadow: '1px 2px 3px #0e306c22',
-                    whiteSpace: 'nowrap'
+                    fontSize: isMobile ? '20px' : isTablet ? '32px' : '88px'
                   }}
                 >
-                  {(matchData.showTimer || matchData.showDate) && matchData.formattedDateTime}
+                  {matchData.roundedTime}
                 </div>
+              )}
+              {matchData.showDate && (
+                <div
+                  className="text-white/90 font-bold font-utm-colossalis leading-none"
+                  style={{
+                    fontSize: isMobile ? '12px' : isTablet ? '18px' : '44px',
+                    marginTop: isMobile ? '-2px' : isTablet ? '-4px' : '-8px'
+                  }}
+                >
+                  {matchData.currentDate}
+                </div>
+              )}
               </div>
 
               {/* Team B */}
@@ -458,7 +458,7 @@ export default function VangKimMatchIntro() {
             <div
               className="flex items-center justify-center gap-4 sm:gap-8 md:gap-16 px-3 py-2 w-full"
               style={{
-                backgroundColor: '#FF6011',
+                backgroundColor: 'transparent',
                 fontFamily: 'UTM Colossalis'
               }}
             >
