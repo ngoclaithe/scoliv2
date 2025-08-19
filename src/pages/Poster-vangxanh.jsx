@@ -431,20 +431,18 @@ export default function VangXanhMatchIntro() {
                   alignItems: 'center',
                   background: 'linear-gradient(to right, #3b82f6, #1d4ed8)',
                   border: isMobile ? '1px solid #fff' : '6px solid #fff',
-                  borderRadius: isMobile ? '10px' : '45px',
+                  borderRadius: isMobile ? '8px' : '16px',
                   color: '#fff',
                   fontSize: isMobile ? '6px' : isTablet ? '17px' : '25px',
-                  fontFamily: 'Bebas Neue, UTM Bebas, sans-serif',
-                  padding: isMobile ? '1px 3px' : '4px 12px',
+                  fontFamily: 'iCielBCCubano, Bebas Neue, UTM Bebas, sans-serif',
+                  padding: isMobile ? '3px 6px' : '8px 16px',
                   boxShadow: '0 4px 20px rgba(24, 119, 242, 0.11)',
                   letterSpacing: '1px',
                   textShadow: '1px 2px 3px #0e306c22',
                   whiteSpace: 'nowrap'
                 }}
               >
-                {matchData.showTimer && matchData.roundedTime}
-                {matchData.showTimer && matchData.showDate && ' - '}
-                {matchData.showDate && matchData.currentDate}
+                {(matchData.showTimer || matchData.showDate) && matchData.formattedDateTime}
               </div>
             </div>
 
