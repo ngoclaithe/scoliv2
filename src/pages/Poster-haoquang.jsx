@@ -454,11 +454,10 @@ export default function HaoQuangMatchIntro() {
 
           .title {
             color: #ffffff !important;
-            font-family: 'Baloo Bhai 2', 'BalooBhai2-Bold', sans-serif !important;
+            font-family: 'UTM Colossalis', sans-serif !important;
             font-weight: 800 !important;
             font-size: 64px;
             height: auto;
-            text-shadow: 4px 4px #727272;
             line-height: 1.2;
           }
 
