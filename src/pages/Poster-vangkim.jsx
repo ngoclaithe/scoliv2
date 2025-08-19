@@ -305,7 +305,7 @@ export default function VangKimMatchIntro() {
           </div>
 
           {/* Main content section - compact layout */}
-          <div className="flex-1 flex flex-col justify-start min-h-0 px-2 sm:px-4 md:px-6">
+          <div className="flex-1 flex flex-col justify-center min-h-0 px-2 sm:px-4 md:px-6">
 
             {/* Title section - compact */}
             <div className="text-center mb-1 sm:mb-1 md:mb-1">
@@ -373,7 +373,7 @@ export default function VangKimMatchIntro() {
                     className="text-white font-normal uppercase tracking-wide text-center"
                     style={{
                       color: '#3265a8',
-                      fontFamily: 'UTM Colossalis, sans-serif',
+                      fontFamily: 'UTM Colossalis',
                       fontWeight: '800',
                       textShadow: '2px 2px #ffffff',
                       whiteSpace: 'nowrap'
@@ -412,7 +412,7 @@ export default function VangKimMatchIntro() {
                     className="text-white font-normal uppercase tracking-wide text-center"
                     style={{
                       color: '#3265a8',
-                      fontFamily: 'UTM Colossalis, sans-serif',
+                      fontFamily: 'UTM Colossalis',
                       fontWeight: '800',
                       textShadow: '2px 2px #ffffff',
                       whiteSpace: 'nowrap'
@@ -437,7 +437,7 @@ export default function VangKimMatchIntro() {
                   borderRadius: isMobile ? '8px' : '16px',
                   color: '#fff',
                   fontSize: isMobile ? '12px' : isTablet ? '34px' : '74px',
-                  fontFamily: 'UTM Colossalis, Bebas Neue, UTM Bebas, sans-serif',
+                  fontFamily: 'UTM Colossalis',
                   padding: isMobile ? '3px 6px' : '8px 16px',
                   boxShadow: '0 2px 10px rgba(24, 119, 242, 0.11)',
                   letterSpacing: '1px',
@@ -457,7 +457,7 @@ export default function VangKimMatchIntro() {
               className="flex items-center justify-center gap-4 sm:gap-8 md:gap-16 px-3 py-2 w-full"
               style={{
                 backgroundColor: '#FF6011',
-                fontFamily: 'UTM Colossalis, sans-serif'
+                fontFamily: 'UTM Colossalis'
               }}
             >
                 {/* Stadium */}
@@ -530,7 +530,7 @@ export default function VangKimMatchIntro() {
           
           .title {
             color: #ff3e37 !important;
-            font-family: 'UTM Colossalis', 'Baloo Bhai 2', 'BalooBhai2-Bold', sans-serif !important;
+            font-family: 'UTM Colossalis' !important;
             font-weight: 800 !important;
             font-size: 65px;
             height: auto;
