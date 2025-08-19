@@ -65,16 +65,15 @@ const ScoreboardBelowType1 = ({ currentData, logoShape, showMatchTime }) => {
 
                 {/* Center scores display */}
                 <div
-                    className="bg-black text-white px-3 sm:px-4 py-1 font-bold whitespace-nowrap flex items-center justify-center gap-2 min-w-[80px]"
+                    className="bg-black text-white px-3 sm:px-4 py-1 font-bold whitespace-nowrap flex items-center justify-center min-w-[80px]"
                     style={{
                         height: '50px',
                         fontFamily: 'UTM Bebas, sans-serif',
-                        fontSize: 'clamp(18px, 3vw, 24px)'
+                        fontSize: 'clamp(36px, 6vw, 48px)',
+                        gap: '0'
                     }}
                 >
-                    <span>{currentData.teamAScore}</span>
-                    <span>-</span>
-                    <span>{currentData.teamBScore}</span>
+                    <span>{currentData.teamAScore}</span><span>-</span><span>{currentData.teamBScore}</span>
                 </div>
 
                 {/* Team B info */}
