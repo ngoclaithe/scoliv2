@@ -451,33 +451,41 @@ export default function VangXanhMatchIntro() {
           {/* Stadium and Live sections - Bottom position and mobile responsive */}
           <div className="mt-auto mb-0">
             <div className="flex justify-center items-center gap-2 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8">
-              {/* Stadium */}
-              {matchData.showStadium && (
-                <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-white font-normal" style={{
-                  fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
-                }}>
-                  <img
-                    src="/images/basic/stadium.png"
-                    alt="Stadium"
-                    className={`object-contain ${isMobile ? 'w-2 h-2' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
-                  />
-                  <span>{matchData.stadium}</span>
-                </div>
-              )}
+              <div
+                className="flex items-center justify-center gap-4 sm:gap-8 md:gap-16 px-3 py-2 rounded-lg"
+                style={{
+                  backgroundColor: '#FF6011',
+                  fontFamily: 'iCielBCCubano, sans-serif'
+                }}
+              >
+                {/* Stadium */}
+                {matchData.showStadium && (
+                  <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-white font-normal" style={{
+                    fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
+                  }}>
+                    <img
+                      src="/images/basic/stadium.png"
+                      alt="Stadium"
+                      className={`object-contain ${isMobile ? 'w-2 h-2' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
+                    />
+                    <span>{matchData.stadium}</span>
+                  </div>
+                )}
 
-              {/* Live Text */}
-              {matchData.showLiveIndicator && (
-                <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-white font-normal" style={{
-                  fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
-                }}>
-                  <img
-                    src="/images/basic/live-logo1.gif"
-                    alt="Live"
-                    className={`object-contain ${isMobile ? 'w-2 h-2' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
-                  />
-                  <span>{matchData.liveText}</span>
-                </div>
-              )}
+                {/* Live Text */}
+                {matchData.showLiveIndicator && (
+                  <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-white font-normal" style={{
+                    fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
+                  }}>
+                    <img
+                      src="/images/basic/live-logo1.gif"
+                      alt="Live"
+                      className={`object-contain ${isMobile ? 'w-2 h-2' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
+                    />
+                    <span>{matchData.liveText}</span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
