@@ -373,7 +373,7 @@ export default function VangXanhMatchIntro() {
                     className="text-white font-normal uppercase tracking-wide text-center"
                     style={{
                       color: '#3e90ff',
-                      fontFamily: 'iCielBCCubano, sans-serif',
+                      fontFamily: 'UTM Colossalis',
                       fontWeight: '800',
                       textShadow: '2px 2px #ffffff',
                       whiteSpace: 'nowrap'
@@ -427,7 +427,7 @@ export default function VangXanhMatchIntro() {
                     className="text-white font-normal uppercase tracking-wide text-center"
                     style={{
                       color: '#3e90ff',
-                      fontFamily: 'iCielBCCubano, sans-serif',
+                      fontFamily: 'UTM Colossalis',
                       fontWeight: '800',
                       textShadow: '2px 2px #ffffff',
                       whiteSpace: 'nowrap'
