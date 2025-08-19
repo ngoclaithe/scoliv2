@@ -78,7 +78,7 @@ export default function HaoQuangMatchIntro() {
       const teamNameElements = document.querySelectorAll('.team-name-text');
       teamNameElements.forEach((element) => {
         const container = element.parentElement;
-        const containerWidth = container.offsetWidth - (isMobile ? 16 : 30); 
+        const containerWidth = container.offsetWidth - (isMobile ? 16 : 30);
         let fontSize = isMobile ? 6 : isTablet ? 16 : 28;
         const minFontSize = isMobile ? 3 : isTablet ? 6 : 12;
 
@@ -146,8 +146,12 @@ export default function HaoQuangMatchIntro() {
   };
 
   return (
-    <div className="w-full h-screen bg-transparent flex items-center justify-center p-1 sm:p-2 md:p-4">
-      <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
+    <div className={`w-full h-screen bg-transparent flex justify-center overflow-hidden ${isMobile ? 'items-center' : 'items-start'
+      }`}>
+      <div className={`relative bg-white overflow-hidden ${isMobile
+          ? 'w-full h-[1/2] max-h-[60vh] aspect-video'
+          : 'w-full max-w-7xl h-full'
+        }`}>
 
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -217,20 +221,18 @@ export default function HaoQuangMatchIntro() {
             </div>
 
             {/* Teams section với Match info ngang hàng */}
-            <div className={`flex items-center justify-center w-full mb-1 sm:mb-2 md:mb-3 ${
-              isMobile
+            <div className={`flex items-center justify-center w-full mb-1 sm:mb-2 md:mb-3 ${isMobile
                 ? 'px-1 gap-0.5'
                 : 'px-16 sm:px-20 md:px-24 gap-4 sm:gap-6 md:gap-8'
-            }`}>
+              }`}>
 
               {/* Team A */}
-              <div className="flex flex-col items-center space-y-1 sm:space-y-2" style={{transform: 'translateX(-10%)'}}>
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2" style={{ transform: 'translateX(-10%)' }}>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className={`relative rounded-full bg-white shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden ${
-                      isMobile ? 'p-1' : 'p-2 sm:p-3'
-                    }`}
+                    className={`relative rounded-full bg-white shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden ${isMobile ? 'p-1' : 'p-2 sm:p-3'
+                      }`}
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`
@@ -247,7 +249,7 @@ export default function HaoQuangMatchIntro() {
                   </div>
                 </div>
                 <div
-                  className="text-white font-bold uppercase tracking-wide text-center team-name-container w-[120%]"
+                  className="text-white font-bold uppercase tracking-wide text-center team-name-container"
                   style={{
                     background: 'linear-gradient(135deg, #1eae99, #008582)',
                     borderRadius: isMobile ? '8px' : '17px',
@@ -260,22 +262,20 @@ export default function HaoQuangMatchIntro() {
                         (isMobile ? 104 : isTablet ? 195 : 260) / Math.max(matchData.team1?.length || 1, 1) * 2
                       )
                     ) + 'px',
-                    padding: isMobile ? '2px 8px' : '4px 15px',
-                    minWidth: isMobile ? '80px' : isTablet ? '120px' : '180px',
-                    maxWidth: isMobile ? '120px' : isTablet ? '220px' : '300px',
+                    padding: isMobile ? '4px 12px' : '8px 20px',
+                    width: isMobile ? '120px' : isTablet ? '220px' : '300px',
                     height: isMobile ? '20px' : isTablet ? '36px' : '48px',
-                    border: isMobile ? 'solid 2px #ffffff' : 'solid 5px #ffffff',
+                    border: isMobile ? 'solid 1px #ffffff' : 'solid 2px #ffffff',
                     color: '#ffffff',
-                    fontFamily: 'Baloo Bhai 2, sans-serif',
+                    fontFamily: 'UTM Colossalis, sans-serif',
                     fontWeight: '800',
-                    textShadow: isMobile ? '2px 2px #727272' : '4px 4px #727272',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     overflow: 'hidden'
                   }}
                 >
-                  <span className="team-name-text" style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                  <span className="team-name-text" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {matchData.team1}
                   </span>
                 </div>
@@ -289,8 +289,8 @@ export default function HaoQuangMatchIntro() {
                     alt="VS"
                     className="object-contain animate-pulse"
                     style={{
-                      width: isMobile ? '25px' : isTablet ? '80px' : '120px',
-                      height: isMobile ? '25px' : isTablet ? '80px' : '120px'
+                      width: isMobile ? '25px' : isTablet ? '80px' : '156px',
+                      height: isMobile ? '25px' : isTablet ? '80px' : '156px'
                     }}
                   />
                 </div>
@@ -301,7 +301,7 @@ export default function HaoQuangMatchIntro() {
                     <div
                       className="font-bold"
                       style={{
-                        fontSize: isMobile ? '5px' : isTablet ? '12px' : '20px'
+                        fontSize: isMobile ? '5px' : isTablet ? '12px' : '30px'
                       }}
                     >
                       {matchData.showTimer && matchData.roundedTime}
@@ -314,7 +314,7 @@ export default function HaoQuangMatchIntro() {
                     <div
                       className="font-normal"
                       style={{
-                        fontSize: isMobile ? '5px' : isTablet ? '12px' : '20px'
+                        fontSize: isMobile ? '5px' : isTablet ? '12px' : '30px'
                       }}
                     >
                       Địa điểm: {matchData.stadium}
@@ -324,13 +324,12 @@ export default function HaoQuangMatchIntro() {
               </div>
 
               {/* Team B */}
-              <div className="flex flex-col items-center space-y-1 sm:space-y-2" style={{transform: 'translateX(10%)'}}>
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2" style={{ transform: 'translateX(10%)' }}>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className={`relative rounded-full bg-white shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden ${
-                      isMobile ? 'p-1' : 'p-2 sm:p-3'
-                    }`}
+                    className={`relative rounded-full bg-white shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden ${isMobile ? 'p-1' : 'p-2 sm:p-3'
+                      }`}
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`
@@ -347,7 +346,7 @@ export default function HaoQuangMatchIntro() {
                   </div>
                 </div>
                 <div
-                  className="text-white font-bold uppercase tracking-wide text-center team-name-container w-[120%]"
+                  className="text-white font-bold uppercase tracking-wide text-center team-name-container"
                   style={{
                     background: 'linear-gradient(135deg, #1eae99, #008582)',
                     borderRadius: isMobile ? '8px' : '17px',
@@ -360,22 +359,20 @@ export default function HaoQuangMatchIntro() {
                         (isMobile ? 104 : isTablet ? 195 : 260) / Math.max(matchData.team2?.length || 1, 1) * 2
                       )
                     ) + 'px',
-                    padding: isMobile ? '2px 8px' : '4px 15px',
-                    minWidth: isMobile ? '80px' : isTablet ? '120px' : '180px',
-                    maxWidth: isMobile ? '120px' : isTablet ? '220px' : '300px',
+                    padding: isMobile ? '4px 12px' : '8px 20px',
+                    width: isMobile ? '120px' : isTablet ? '220px' : '300px',
                     height: isMobile ? '20px' : isTablet ? '36px' : '48px',
-                    border: isMobile ? 'solid 2px #ffffff' : 'solid 5px #ffffff',
+                    border: isMobile ? 'solid 1px #ffffff' : 'solid 2px #ffffff',
                     color: '#ffffff',
-                    fontFamily: 'Baloo Bhai 2, sans-serif',
+                    fontFamily: 'UTM Colossalis, sans-serif',
                     fontWeight: '800',
-                    textShadow: isMobile ? '2px 2px #727272' : '4px 4px #727272',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     overflow: 'hidden'
                   }}
                 >
-                  <span className="team-name-text" style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                  <span className="team-name-text" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {matchData.team2}
                   </span>
                 </div>
@@ -385,39 +382,39 @@ export default function HaoQuangMatchIntro() {
             {/* Các đơn vị đồng hành */}
             {(hasSponsors || hasOrganizing || hasMediaPartners) && (
               <div className={`flex flex-col items-center ${isMobile ? 'mt-1 mb-1' : 'mt-2 sm:mt-4 mb-2 sm:mb-4'}`}>
-                <div className="font-bold mb-1 sm:mb-2" style={{color: '#FFD700', fontSize: isMobile ? '8px' : isTablet ? '14px' : '18px'}}>
+                <div className="font-bold mb-1 sm:mb-2" style={{ color: '#FFD700', fontSize: isMobile ? '8px' : isTablet ? '14px' : '27px' }}>
                   Các đơn vị đồng hành
                 </div>
-                <div className={`flex justify-center items-center ${isMobile ? 'gap-1' : 'gap-2 sm:gap-3 md:gap-4'} flex-wrap`} style={{backgroundColor: 'white', padding: isMobile ? '4px' : '8px', borderRadius: isMobile ? '4px' : '8px'}}>
+                <div className={`flex justify-center items-center ${isMobile ? 'gap-1' : 'gap-2 sm:gap-3 md:gap-4'} flex-wrap`} style={{ backgroundColor: 'white', padding: isMobile ? '4px' : '8px', borderRadius: isMobile ? '4px' : '8px' }}>
                   {/* Sponsors */}
                   {sponsorLogos.map((sponsor, index) => (
-                    <div key={`all-sponsor-${index}`} className="flex-shrink-0" style={{backgroundColor: 'white', padding: '2px', borderRadius: '4px'}}>
+                    <div key={`all-sponsor-${index}`} className="flex-shrink-0" style={{ backgroundColor: 'white', padding: '2px', borderRadius: '4px' }}>
                       <img
                         src={sponsor.logo}
                         alt={sponsor.name}
-                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-5 h-5 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-5 h-5 p-0.5' : 'w-9 h-9 sm:w-12 sm:h-12 md:w-15 md:h-15 p-0.5 sm:p-1'}`}
                       />
                     </div>
                   ))}
 
                   {/* Organizing */}
                   {organizingLogos.map((organizing, index) => (
-                    <div key={`all-organizing-${index}`} className="flex-shrink-0" style={{backgroundColor: 'white', padding: '2px', borderRadius: '4px'}}>
+                    <div key={`all-organizing-${index}`} className="flex-shrink-0" style={{ backgroundColor: 'white', padding: '2px', borderRadius: '4px' }}>
                       <img
                         src={organizing.logo}
                         alt={organizing.name}
-                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-5 h-5 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-5 h-5 p-0.5' : 'w-9 h-9 sm:w-12 sm:h-12 md:w-15 md:h-15 p-0.5 sm:p-1'}`}
                       />
                     </div>
                   ))}
 
                   {/* Media Partners */}
                   {mediaPartnerLogos.map((media, index) => (
-                    <div key={`all-media-${index}`} className="flex-shrink-0" style={{backgroundColor: 'white', padding: '2px', borderRadius: '4px'}}>
+                    <div key={`all-media-${index}`} className="flex-shrink-0" style={{ backgroundColor: 'white', padding: '2px', borderRadius: '4px' }}>
                       <img
                         src={media.logo}
                         alt={media.name}
-                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-5 h-5 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                        className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-5 h-5 p-0.5' : 'w-9 h-9 sm:w-12 sm:h-12 md:w-15 md:h-15 p-0.5 sm:p-1'}`}
                       />
                     </div>
                   ))}
@@ -447,17 +444,15 @@ export default function HaoQuangMatchIntro() {
         </div>
 
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-          @import url('https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@400;500;600;700;800&display=swap');
 
           .title {
             color: #ffffff !important;
-            font-family: 'Baloo Bhai 2', 'BalooBhai2-Bold', sans-serif !important;
+            font-family: 'UTM Colossalis', sans-serif !important;
             font-weight: 800 !important;
             font-size: 64px;
             height: auto;
-            text-shadow: 4px 4px #727272;
-            line-height: 1.2;
+            line-height: 1.0;
+            letter-spacing: 3px; 
           }
 
           @media (max-width: 768px) {
