@@ -173,10 +173,16 @@ const ScoreboardBelowNew = ({
                         >
                             {currentData.teamBName}
                         </div>
-                        <div
-                            className="w-full h-3"
-                            style={{ backgroundColor: currentData.teamBKitColor }}
-                        />
+                        <div className="flex w-full" style={{ height: '8px' }}>
+                            <div
+                                className="flex-1"
+                                style={{ backgroundColor: currentData.teamB2KitColor, height: '8px' }}
+                            />
+                            <div
+                                className="flex-1"
+                                style={{ backgroundColor: currentData.teamBKitColor, height: '8px' }}
+                            />
+                        </div>
                     </div>
                     <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 min-w-[2.2rem] text-center"
                         style={{ clipPath: 'polygon(0% 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 0% 100%)' }}>
