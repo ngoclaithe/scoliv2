@@ -27,7 +27,7 @@ export const URL_TO_INTERNAL_VIEW = {
   'event': 'event'
 };
 
-// Mapping ngược t�� internal view names sang URL view names (tiếng Việt)
+// Mapping ngược từ internal view names sang URL view names (tiếng Việt)
 export const INTERNAL_TO_URL_VIEW = {
   'scoreboard': 'tisotren',
   'scoreboard_below': 'tisoduoi',

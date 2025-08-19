@@ -161,7 +161,7 @@ export const createSafeMatchTitle = (matchTitle) => {
   
   let safe = matchTitle
     .replace(/[/\\?#&=+%]/g, '-') // Thay thế ký tự đặc biệt bằng dấu gạch ngang
-    .replace(/\s+/g, '-') // Thay th�� space bằng dấu gạch ngang
+    .replace(/\s+/g, '-') // Thay thế space bằng dấu gạch ngang
     .replace(/-+/g, '-') // Gộp nhiều dấu gạch ngang thành một
     .replace(/^-|-$/g, '') // Xóa dấu gạch ngang ở đầu và cuối
     .toLowerCase();
