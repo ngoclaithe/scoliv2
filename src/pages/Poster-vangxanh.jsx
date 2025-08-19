@@ -190,7 +190,7 @@ export default function VangXanhMatchIntro() {
             <div className={`flex items-start flex-shrink-0 ${isMobile ? 'gap-1' : 'gap-2 sm:gap-4'}`} style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: isMobile ? '25%' : '35%' }}>
                 {hasSponsors && (
                   <div className="flex-shrink-0">
-                    <div className={`font-normal text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
+                    <div className={`font-normal text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-2xl'}`}>
                       Nhà tài trợ
                     </div>
                     <div className="flex gap-0.5">
@@ -209,7 +209,7 @@ export default function VangXanhMatchIntro() {
 
                 {hasOrganizing && (
                   <div className="flex-shrink-0">
-                    <div className={`font-normal text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
+                    <div className={`font-normal text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-2xl'}`}>
                       Đơn vị tổ chức
                     </div>
                     <div className="flex gap-0.5">
@@ -249,7 +249,7 @@ export default function VangXanhMatchIntro() {
             <div className="flex flex-col items-end gap-1 sm:gap-2 flex-shrink-0" style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: '30%' }}>
               {hasMediaPartners && (
                 <div className="flex-shrink-0 w-full">
-                  <div className={`font-normal text-white mb-0.5 drop-shadow-lg text-right ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
+                  <div className={`font-normal text-white mb-0.5 drop-shadow-lg text-right ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-2xl'}`}>
                     Đơn vị truyền thông
                   </div>
                   <div className="flex gap-0.5 justify-end overflow-x-auto scrollbar-hide">
@@ -422,7 +422,7 @@ export default function VangXanhMatchIntro() {
             </div>
 
             {/* Match time and date - Below team names */}
-            <div className={`flex justify-center items-center ${isMobile ? 'mb-1' : 'mb-2 sm:mb-2 md:mb-3'}`}>
+            <div className={`flex justify-center items-center ${isMobile ? 'mb-1 mt-2' : 'mb-2 sm:mb-2 md:mb-3 mt-4 sm:mt-6 md:mt-8'}`}>
               <div
                 className="time-date-container"
                 style={{
@@ -433,7 +433,7 @@ export default function VangXanhMatchIntro() {
                   border: isMobile ? '1px solid #fff' : '6px solid #fff',
                   borderRadius: isMobile ? '8px' : '16px',
                   color: '#fff',
-                  fontSize: isMobile ? '6px' : isTablet ? '17px' : '25px',
+                  fontSize: isMobile ? '6px' : isTablet ? '17px' : '37px',
                   fontFamily: 'iCielBCCubano, Bebas Neue, UTM Bebas, sans-serif',
                   padding: isMobile ? '3px 6px' : '8px 16px',
                   boxShadow: '0 2px 10px rgba(24, 119, 242, 0.11)',
