@@ -605,19 +605,21 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     const handleSearch = async () => {
       if (localCode.trim().length >= 3) {
-        // Check for duplicate codes across ALL categories (sponsors, mediapartners, organizing)
+        // Check duplicate CHỈ trong cùng category (sponsor không trùng với sponsor khác)
         const allCurrentItems = [...apiLogos, ...logoItems];
         const duplicateCode = allCurrentItems.find(logoItem =>
           logoItem.id !== item.id &&
-          (logoItem.category === 'sponsor' || logoItem.category === 'media' || logoItem.category === 'organizing') &&
+          logoItem.category === item.category &&
           logoItem.code &&
           logoItem.code.trim().toUpperCase() === localCode.trim().toUpperCase()
         );
 
         if (duplicateCode) {
-          alert(`Mã logo "${localCode.trim()}" đã tồn tại trong hệ thống. Vui lòng chọn mã khác.`);
+          alert(`Mã logo "${localCode.trim()}" đã tồn tại trong ${item.category}. Vui lòng chọn mã khác.`);
           return;
         }
+
+        console.log(`🔍 [PosterLogoManager] Searching for code: ${localCode.trim()}, category: ${item.category}`);
 
         try {
           setIsSearching(true);
@@ -625,6 +627,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
           if (response?.data?.length > 0) {
             const foundLogo = response.data[0];
+            console.log(`✅ [PosterLogoManager] Found logo for code ${localCode.trim()}:`, foundLogo);
             if (foundLogo.url_logo ) {
               onUpdate(item.id, {
                 ...item,
@@ -637,6 +640,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               onUpdate(item.id, { ...item, code: localCode.trim() });
             }
           } else {
+            console.log(`⚠️ [PosterLogoManager] No logo found for code ${localCode.trim()}`);
             onUpdate(item.id, { ...item, code: localCode.trim() });
           }
         } catch (error) {
@@ -756,6 +760,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               onClick={handleSearch}
               disabled={isSearching || localCode.trim().length < 3}
               className="absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-500 disabled:text-gray-300"
+              title="Tìm kiếm logo theo mã"
             >
               🔍
             </button>
@@ -935,7 +940,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   }, [historyMatches]);
 
   const handleItemRemove = useCallback(async (itemId) => {
-    console.log('🗑️ [PosterLogoManager] Removing item:', itemId);
+    console.log(' [PosterLogoManager] Removing item:', itemId);
 
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);
     const item = logoItems.find(logo => logo.id === itemId);
@@ -1079,31 +1084,25 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     });
   }, [allLogoItems, activeLogoCategory, logoItems]);
 
-  // Kiểm tra xem có banner nào được chọn không (theo code bắt đầu bằng B hoặc type banner)
+  // Kiểm tra xem có banner nào được chọn không (tất cả categories)
   const hasBannerSelected = useMemo(() => {
-    const bannerSelected = currentItems.some(item => {
+    // Kiểm tra tất cả logos từ tất cả categories, không chỉ currentItems
+    const allActiveItems = [...apiLogos, ...logoItems].filter(item =>
+      item.displayPositions && item.displayPositions.length > 0
+    );
+
+    const bannerSelected = allActiveItems.some(item => {
       const isBannerByCode = item.code && item.code.toUpperCase().startsWith('B');
       const isBannerByType = item.type === 'banner';
       const isActive = item.displayPositions && item.displayPositions.length > 0;
+      console.log(`🔍 [PosterLogoManager] Checking item: ${item.code}, category: ${item.category}, isBannerByCode: ${isBannerByCode}, isBannerByType: ${isBannerByType}, isActive: ${isActive}`);
       return (isBannerByCode || isBannerByType) && isActive;
     });
 
-    // Nếu có banner được chọn với mã B, tự động đặt shape là square và gửi qua socket
-    if (bannerSelected) {
-      const bannerWithCodeB = currentItems.find(item => {
-        const isBannerByCode = item.code && item.code.toUpperCase().startsWith('B');
-        const isActive = item.displayPositions && item.displayPositions.length > 0;
-        return isBannerByCode && isActive;
-      });
-
-      if (bannerWithCodeB && logoDisplayOptions.shape !== 'square') {
-        setLogoDisplayOptions(prev => ({ ...prev, shape: 'square' }));
-        socketService.emit('logoShape_update', { logoShape: 'square' });
-      }
-    }
+    console.log(`🎯 [PosterLogoManager] Banner selected across ALL categories: ${bannerSelected}`);
 
     return bannerSelected;
-  }, [currentItems, logoDisplayOptions.shape]);
+  }, [apiLogos, logoItems]);
 
   // Kiểm tra xem có logo nào được chọn không
   const hasLogoSelected = useMemo(() => {
@@ -1116,12 +1115,19 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   }, [currentItems, activeLogoCategory]);
 
   const shouldDisableShapeOption = (shapeValue) => {
-    if (hasBannerSelected && shapeValue !== 'square') {
-      return true;
-    }
-
-    return false;
+    const disabled = hasBannerSelected && shapeValue !== 'square';
+    console.log(`🔒 [PosterLogoManager] shouldDisableShapeOption(${shapeValue}): hasBannerSelected=${hasBannerSelected}, disabled=${disabled}`);
+    return disabled;
   };
+
+  // Effect to auto-update shape when banner is selected
+  useEffect(() => {
+    if (hasBannerSelected && logoDisplayOptions.shape !== 'square') {
+      console.log('🎨 [PosterLogoManager] Auto-setting shape to square due to banner selection');
+      setLogoDisplayOptions(prev => ({ ...prev, shape: 'square' }));
+      socketService.emit('logoShape_update', { logoShape: 'square' });
+    }
+  }, [hasBannerSelected, logoDisplayOptions.shape]);
 
   const handleRoundGroupUpdate = useCallback((type, value, show) => {
     console.log(`🔄 [PosterLogoManager] handleRoundGroupUpdate - type: ${type}, value: ${value}, show: ${show}`);
@@ -1370,8 +1376,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                     disabled={isDisabled}
                     onChange={(e) => {
                       const newShape = e.target.value;
+                      console.log(`🎨 [PosterLogoManager] Attempting to change shape to: ${newShape}, current hasBannerSelected: ${hasBannerSelected}`);
                       setLogoDisplayOptions(prev => ({ ...prev, shape: newShape }));
-                      console.log('🎨 [PosterLogoManager] Logo shape changed to:', newShape);
 
                       // Emit shape change to socket for real-time updates
                       socketService.emit('logoShape_update', { logoShape: newShape });
@@ -1392,7 +1398,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
                   <span className="text-xs">{shape.icon}</span>
                   <span className="text-xs">{shape.label}</span>
-                  {isDisabled && <span className="text-xs text-red-500">(Bị khóa)</span>}
+                  {/* {isDisabled && <span className="text-xs text-red-500">(Bị khóa)</span>} */}
                 </label>
               );
             })}
