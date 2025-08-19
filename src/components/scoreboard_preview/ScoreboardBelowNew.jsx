@@ -351,7 +351,7 @@ const ScoreboardBelowNew = ({
                             className="w-1 h-6 mr-1 rounded-full"
                             style={{ backgroundColor: currentData.teamBKitColor }}
                         />
-                        <div className="text-white px-3 py-2 text-sm font-medium bg-gray-800/80 rounded-md w-[120px] truncate text-right">
+                        <div className="text-white px-3 py-2 text-sm font-medium bg-gray-800/80 rounded-md w-[120px] truncate text-right" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
                             {currentData.teamBName}
                         </div>
                     </div>
