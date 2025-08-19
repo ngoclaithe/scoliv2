@@ -55,7 +55,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
     const showMatchTime = currentData.status === 'live' || currentData.status === 'pause';
 
     const scrollData = {
-        text: marqueeData?.text || "TRỰC TIẾP BÓNG ĐÁ",
+        text: marqueeData?.text || "TRỰC TIẾP BÓNG ��Á",
         color: marqueeData?.color === 'white-black' ? '#FFFFFF' :
             marqueeData?.color === 'black-white' ? '#000000' :
                 marqueeData?.color === 'white-blue' ? '#FFFFFF' :
@@ -172,14 +172,14 @@ const ScoreboardAbove = ({ type = 1 }) => {
                 </div>
 
                 {/* Tournament Logo - Top Left (if no sponsors) */}
-                {collectLogosForPosition('top-left').length === 0 && tournamentLogo?.url_logo && tournamentLogo.url_logo.length > 0 && (
+                {collectLogosForPosition('top-left').length === 0 && (
                     <div className="absolute top-2 left-2 z-40
                         md:top-4 md:left-4
                         sm:top-2 sm:left-2
                         max-[480px]:top-1 max-[480px]:left-1
                         max-[360px]:top-0.5 max-[360px]:left-0.5">
                         <DisplayLogo
-                            logos={getFullLogoUrls(tournamentLogo.url_logo)}
+                            logos={tournamentLogo?.url_logo && tournamentLogo.url_logo.length > 0 ? getFullLogoUrls(tournamentLogo.url_logo) : ['/images/basic/logo-skin4.png']}
                             alt="Tournament"
                             className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16"
                             type_play={logoShape}
