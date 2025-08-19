@@ -375,8 +375,8 @@ export default function VangKimMatchIntro() {
                       color: '#3265a8',
                       fontFamily: 'UTM Colossalis',
                       fontWeight: '800',
-                      WebkitTextStroke: '2px white',
-                      textStroke: '2px white',
+                      WebkitTextStroke: '1px white',
+                      textStroke: '1px white',
                       whiteSpace: 'nowrap'
                     }}
                   >
@@ -440,8 +440,8 @@ export default function VangKimMatchIntro() {
                       color: '#3265a8',
                       fontFamily: 'UTM Colossalis',
                       fontWeight: '800',
-                      WebkitTextStroke: '2px white',
-                      textStroke: '2px white',
+                      WebkitTextStroke: '1px white',
+                      textStroke: '1px white',
                       whiteSpace: 'nowrap'
                     }}
                   >
