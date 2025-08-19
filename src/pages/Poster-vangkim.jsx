@@ -305,7 +305,7 @@ export default function VangKimMatchIntro() {
           </div>
 
           {/* Main content section - compact layout */}
-          <div className="flex-1 flex flex-col justify-center min-h-0 px-2 sm:px-4 md:px-6">
+          <div className="flex-1 flex flex-col justify-start min-h-0 px-2 sm:px-4 md:px-6">
 
             {/* Title section - compact */}
             <div className="text-center mb-1 sm:mb-1 md:mb-1">
