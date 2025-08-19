@@ -1,12 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FoulsDisplay } from '../../../utils/futsalUtils';
 
 const ScoreboardType3 = ({ currentData, logoShape, showMatchTime }) => {
+    const [fontSize, setFontSize] = useState('text-xs');
+
+    const calculateFontSize = (teamAName, teamBName) => {
+        const maxLength = Math.max(teamAName?.length || 0, teamBName?.length || 0);
+        
+        if (maxLength <= 8) return 'text-6xl';       
+        if (maxLength <= 12) return 'text-4xl';      
+        if (maxLength <= 16) return 'text-[22px]';  
+        if (maxLength <= 20) return 'text-[20px]';  
+        if (maxLength <= 24) return 'text-[18px]';   
+        return 'text-[18px]';                        
+    };
+
+    useEffect(() => {
+        const newFontSize = calculateFontSize(currentData.teamAName, currentData.teamBName);
+        setFontSize(newFontSize);
+    }, [currentData.teamAName, currentData.teamBName]);
+
     return (
         <div className="flex flex-col items-center w-[520px] scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
             
-            <div className="flex items-center justify-start w-full">
-                <div className="flex flex-col bg-black/20 backdrop-blur-sm shadow-xl flex-1">
+            <div className="flex items-center justify-between w-full bg-white">
+                <div className="flex flex-col flex-1">
                     
                     {/* Fouls */}
                     <div className="flex items-center justify-between w-full">
@@ -24,7 +42,7 @@ const ScoreboardType3 = ({ currentData, logoShape, showMatchTime }) => {
                         {/* Team A */}
                         <div className="flex flex-col items-center">
                             <div
-                                className="text-white text-xs font-medium w-full truncate text-center min-h-[34px] flex items-center justify-center"
+                                className={`text-white ${fontSize} font-medium w-full truncate text-center min-h-[34px] flex items-center justify-center`}
                                 style={{ backgroundColor: '#0d94a4' }}
                             >
                                 {currentData.teamAName}
@@ -52,8 +70,8 @@ const ScoreboardType3 = ({ currentData, logoShape, showMatchTime }) => {
                         {/* Team B */}
                         <div className="flex flex-col items-center">
                             <div
-                                className="text-white text-xs font-medium w-full truncate text-center min-h-[34px] flex items-center justify-center"
-                                style={{ backgroundColor: '#444' }}
+                                className={`text-white ${fontSize} font-medium w-full truncate text-center min-h-[34px] flex items-center justify-center`}
+                                style={{ backgroundColor: '#0d94a4' }}
                             >
                                 {currentData.teamBName}
                             </div>
