@@ -169,8 +169,8 @@ export default function VangXanhMatchIntro() {
   });
 
   return (
-    <div className="w-full h-screen bg-transparent flex items-center justify-center overflow-hidden">
-      <div className="relative w-full max-w-7xl aspect-video bg-white overflow-hidden">
+    <div className="w-full h-screen bg-transparent flex items-start justify-center overflow-hidden">
+      <div className="relative w-full max-w-7xl h-full bg-white overflow-hidden">
 
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -184,7 +184,7 @@ export default function VangXanhMatchIntro() {
 
 
           {/* Top section với logos - Mobile responsive */}
-          <div className={`flex justify-between items-start mb-1 sm:mb-2 md:mb-2 pt-1 px-2 sm:pt-2 sm:px-4 md:pt-3 md:px-6 ${isMobile ? 'min-h-[5vh]' : 'min-h-[8vh] sm:min-h-[10vh] md:min-h-[12vh]'}`}>
+          <div className={`flex justify-between items-start mb-1 sm:mb-2 md:mb-2 pt-1 px-2 sm:pt-2 sm:px-4 md:pt-1 md:px-6 ${isMobile ? 'min-h-[5vh]' : 'min-h-[8vh] sm:min-h-[10vh] md:min-h-[10vh]'}`}>
 
             {/* Top-left: Sponsors and Organizing - Show on mobile but smaller */}
             <div className={`flex items-start flex-shrink-0 ${isMobile ? 'gap-1' : 'gap-2 sm:gap-4'}`} style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: isMobile ? '25%' : '35%' }}>
