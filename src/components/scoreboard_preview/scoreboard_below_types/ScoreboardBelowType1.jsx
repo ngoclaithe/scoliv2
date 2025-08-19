@@ -6,19 +6,19 @@ const getClampedFontSize = (name) => {
     return Math.max(22, Math.min(40, dynamicSize));
 };
 
-const ScoreboardBelowType1 = ({ currentData, logoShape }) => {
+const ScoreboardBelowType1 = ({ currentData, logoShape, showMatchTime }) => {
     return (
-        <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5] w-[600px]">
+        <div className="flex flex-col items-center w-full max-w-[600px] mx-auto">
             {/* Header - Trực tiếp trận đấu */}
-            <div className="flex justify-center w-full">
-                <div 
-                    className="bg-yellow-400 text-center font-normal rounded-t-lg"
+            <div className="flex justify-center w-full mb-1">
+                <div
+                    className="bg-yellow-400 text-center font-bold rounded-t-lg px-4 py-2"
                     style={{
                         color: '#004d73',
                         fontFamily: 'UTM Bebas, sans-serif',
-                        width: '46%',
-                        fontSize: '40px',
-                        padding: '8px 0'
+                        fontSize: 'clamp(24px, 4vw, 40px)',
+                        width: 'auto',
+                        minWidth: '280px'
                     }}
                 >
                     TRỰC TIẾP TRẬN BÓNG ĐÁ
