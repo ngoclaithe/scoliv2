@@ -605,7 +605,20 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     const handleSearch = async () => {
       if (localCode.trim().length >= 3) {
-        // Bỏ hết logic check duplicate - cho phép sponsor và mediapartner cùng mã
+        // Check duplicate CHỈ trong cùng category (sponsor không trùng với sponsor khác)
+        const allCurrentItems = [...apiLogos, ...logoItems];
+        const duplicateCode = allCurrentItems.find(logoItem =>
+          logoItem.id !== item.id &&
+          logoItem.category === item.category &&
+          logoItem.code &&
+          logoItem.code.trim().toUpperCase() === localCode.trim().toUpperCase()
+        );
+
+        if (duplicateCode) {
+          alert(`Mã logo "${localCode.trim()}" đã tồn tại trong ${item.category}. Vui lòng chọn mã khác.`);
+          return;
+        }
+
         console.log(`🔍 [PosterLogoManager] Searching for code: ${localCode.trim()}, category: ${item.category}`);
 
         try {
@@ -1413,7 +1426,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               }}
               className="w-2 h-2"
             />
-            <span className="text-xs">🔄 Hiển thị luân phiên</span>
+            <span className="text-xs">🔄 Hi���n thị luân phiên</span>
           </label>
         </div>
       </div>
