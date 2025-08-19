@@ -605,17 +605,17 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     const handleSearch = async () => {
       if (localCode.trim().length >= 3) {
-        // Check for duplicate codes across ALL categories (sponsors, mediapartners, organizing)
+        // Check for duplicate codes ONLY within the same category
         const allCurrentItems = [...apiLogos, ...logoItems];
         const duplicateCode = allCurrentItems.find(logoItem =>
           logoItem.id !== item.id &&
-          (logoItem.category === 'sponsor' || logoItem.category === 'media' || logoItem.category === 'organizing') &&
+          logoItem.category === item.category &&
           logoItem.code &&
           logoItem.code.trim().toUpperCase() === localCode.trim().toUpperCase()
         );
 
         if (duplicateCode) {
-          alert(`Mã logo "${localCode.trim()}" đã tồn tại trong hệ thống. Vui lòng chọn mã khác.`);
+          alert(`Mã logo "${localCode.trim()}" đã tồn tại trong ${item.category}. Vui lòng chọn mã khác.`);
           return;
         }
 
@@ -1079,31 +1079,28 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     });
   }, [allLogoItems, activeLogoCategory, logoItems]);
 
-  // Kiểm tra xem có banner nào được chọn không (theo code bắt đầu bằng B hoặc type banner)
+  // Kiểm tra xem có banner nào được chọn không (tất cả categories)
   const hasBannerSelected = useMemo(() => {
-    const bannerSelected = currentItems.some(item => {
+    // Kiểm tra tất cả logos từ tất cả categories, không chỉ currentItems
+    const allActiveItems = [...apiLogos, ...logoItems].filter(item =>
+      item.displayPositions && item.displayPositions.length > 0
+    );
+
+    const bannerSelected = allActiveItems.some(item => {
       const isBannerByCode = item.code && item.code.toUpperCase().startsWith('B');
       const isBannerByType = item.type === 'banner';
-      const isActive = item.displayPositions && item.displayPositions.length > 0;
-      return (isBannerByCode || isBannerByType) && isActive;
+      return isBannerByCode || isBannerByType;
     });
 
-    // Nếu có banner được chọn với mã B, tự động đặt shape là square và gửi qua socket
-    if (bannerSelected) {
-      const bannerWithCodeB = currentItems.find(item => {
-        const isBannerByCode = item.code && item.code.toUpperCase().startsWith('B');
-        const isActive = item.displayPositions && item.displayPositions.length > 0;
-        return isBannerByCode && isActive;
-      });
-
-      if (bannerWithCodeB && logoDisplayOptions.shape !== 'square') {
-        setLogoDisplayOptions(prev => ({ ...prev, shape: 'square' }));
-        socketService.emit('logoShape_update', { logoShape: 'square' });
-      }
+    // Nếu có banner được chọn, tự động đặt shape là square và gửi qua socket
+    if (bannerSelected && logoDisplayOptions.shape !== 'square') {
+      setLogoDisplayOptions(prev => ({ ...prev, shape: 'square' }));
+      socketService.emit('logoShape_update', { logoShape: 'square' });
+      console.log('🎨 [PosterLogoManager] Auto-set shape to square due to banner selection');
     }
 
     return bannerSelected;
-  }, [currentItems, logoDisplayOptions.shape]);
+  }, [apiLogos, logoItems, logoDisplayOptions.shape]);
 
   // Kiểm tra xem có logo nào được chọn không
   const hasLogoSelected = useMemo(() => {
