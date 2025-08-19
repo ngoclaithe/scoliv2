@@ -184,7 +184,7 @@ export default function VangXanhMatchIntro() {
 
 
           {/* Top section với logos - Mobile responsive */}
-          <div className={`flex justify-between items-start mb-2 sm:mb-3 md:mb-4 ${isMobile ? 'min-h-[6vh]' : 'min-h-[10vh] sm:min-h-[12vh] md:min-h-[14vh]'}`}>
+          <div className={`flex justify-between items-start mb-2 sm:mb-3 md:mb-4 pt-2 px-2 sm:pt-4 sm:px-4 md:pt-6 md:px-6 ${isMobile ? 'min-h-[6vh]' : 'min-h-[10vh] sm:min-h-[12vh] md:min-h-[14vh]'}`}>
 
             {/* Top-left: Sponsors and Organizing - Show on mobile but smaller */}
             <div className={`flex items-start flex-shrink-0 ${isMobile ? 'gap-1' : 'gap-2 sm:gap-4'}`} style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: isMobile ? '25%' : '35%' }}>
@@ -312,7 +312,7 @@ export default function VangXanhMatchIntro() {
                   )}
                   {matchData.showGroup && (
                     <div className="bg-green-600/80 px-2 py-1 rounded text-xs sm:text-sm font-normal text-white">
-                      B���NG {matchData.group}
+                      BẢNG {matchData.group}
                     </div>
                   )}
                 </div>
