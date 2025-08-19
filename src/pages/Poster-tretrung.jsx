@@ -236,8 +236,8 @@ export default function TreTrungMatchIntro() {
                     alt={`Tournament Logo ${index + 1}`}
                     className={`object-contain flex-shrink-0 ${
                       isMobile
-                        ? 'h-4 max-w-12'
-                        : 'h-6 sm:h-8 md:h-12 lg:h-16 max-w-16 sm:max-w-24 md:max-w-32'
+                        ? 'h-5 max-w-16'
+                        : 'h-8 sm:h-10 md:h-16 lg:h-21 max-w-20 sm:max-w-31 md:max-w-42'
                     }`}
                   />
                 ))
