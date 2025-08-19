@@ -169,8 +169,8 @@ export default function VangXanhMatchIntro() {
   });
 
   return (
-    <div className="w-full h-full bg-transparent flex items-center justify-center overflow-hidden">
-      <div className="relative w-full h-full max-w-7xl aspect-video bg-transparent overflow-hidden">
+    <div className="w-full h-screen bg-transparent flex items-center justify-center overflow-hidden">
+      <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
 
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
