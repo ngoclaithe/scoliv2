@@ -8,17 +8,17 @@ const getClampedFontSize = (name) => {
 
 const ScoreboardBelowType1 = ({ currentData, logoShape, showMatchTime }) => {
     return (
-        <div className="flex flex-col items-center w-full max-w-[600px] mx-auto">
+        <div className="flex flex-col items-center w-full w-[600px] mx-auto">
             {/* Header - Trực tiếp trận đấu */}
             <div className="flex justify-center w-full mb-1">
                 <div
-                    className="bg-yellow-400 text-center font-bold rounded-t-lg px-4 py-2"
+                    className="bg-yellow-400 text-center font-normal rounded-t-lg"
                     style={{
                         color: '#004d73',
                         fontFamily: 'UTM Bebas, sans-serif',
-                        fontSize: 'clamp(24px, 4vw, 40px)',
+                        fontSize: '32px',
                         width: 'auto',
-                        minWidth: '280px'
+                        maxWidth: '280px'
                     }}
                 >
                     TRỰC TIẾP TRẬN BÓNG ĐÁ
@@ -111,23 +111,6 @@ const ScoreboardBelowType1 = ({ currentData, logoShape, showMatchTime }) => {
                         type_play={logoShape}
                         logoSize="w-12 h-12 sm:w-14 sm:h-14"
                     />
-                </div>
-            </div>
-
-            {/* Bottom section with match time and period info */}
-            <div className="flex justify-center w-full mt-1">
-                <div
-                    className="bg-red-600 text-white text-center font-bold rounded-b-lg px-4 py-2 shadow-lg"
-                    style={{
-                        fontFamily: 'UTM Bebas, sans-serif',
-                        fontSize: 'clamp(18px, 3vw, 24px)',
-                        minWidth: '200px'
-                    }}
-                >
-                    {showMatchTime
-                        ? `${currentData.matchTime} - ${currentData.period}`
-                        : currentData.period
-                    }
                 </div>
             </div>
         </div>

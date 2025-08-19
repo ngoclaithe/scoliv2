@@ -116,7 +116,7 @@ const ScoreboardBelowNew = ({ type = 1 }) => {
             {/* Container for all elements */}
             <div className="w-full h-full relative bg-transparent">
                 {/* ScoLiv Logo - Tăng gấp đôi kích thước và đưa sát bottom hơn */}
-                <div className="absolute bottom-1 left-4 sm:left-16 z-40">
+                <div className="absolute bottom-0 left-4 sm:left-16 z-40">
                     <img
                         src="/images/basic/ScoLivLogo.png"
                         alt="ScoLiv"
@@ -129,7 +129,7 @@ const ScoreboardBelowNew = ({ type = 1 }) => {
 
                 {/* Main Scoreboard */}
                 <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30">
-                    <div className="scoreboard-main bg-transparent rounded-lg shadow-2xl">
+                    <div className="scoreboard-main bg-transparent">
                         {renderScoreboard()}
                     </div>
                 </div>
