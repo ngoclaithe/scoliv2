@@ -605,19 +605,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     const handleSearch = async () => {
       if (localCode.trim().length >= 3) {
-        // Check for duplicate codes ONLY within the same category
-        const allCurrentItems = [...apiLogos, ...logoItems];
-        const duplicateCode = allCurrentItems.find(logoItem =>
-          logoItem.id !== item.id &&
-          logoItem.category === item.category &&
-          logoItem.code &&
-          logoItem.code.trim().toUpperCase() === localCode.trim().toUpperCase()
-        );
-
-        if (duplicateCode) {
-          alert(`Mã logo "${localCode.trim()}" đã tồn tại trong cùng loại ${item.category}. Vui lòng chọn mã khác.`);
-          return;
-        }
+        // Bỏ hết logic check duplicate - cho phép sponsor và mediapartner cùng mã
+        console.log(`🔍 [PosterLogoManager] Searching for code: ${localCode.trim()}, category: ${item.category}`);
 
         try {
           setIsSearching(true);
@@ -625,6 +614,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
           if (response?.data?.length > 0) {
             const foundLogo = response.data[0];
+            console.log(`✅ [PosterLogoManager] Found logo for code ${localCode.trim()}:`, foundLogo);
             if (foundLogo.url_logo ) {
               onUpdate(item.id, {
                 ...item,
@@ -637,6 +627,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               onUpdate(item.id, { ...item, code: localCode.trim() });
             }
           } else {
+            console.log(`⚠️ [PosterLogoManager] No logo found for code ${localCode.trim()}`);
             onUpdate(item.id, { ...item, code: localCode.trim() });
           }
         } catch (error) {
@@ -756,6 +747,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               onClick={handleSearch}
               disabled={isSearching || localCode.trim().length < 3}
               className="absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-blue-500 disabled:text-gray-300"
+              title="Tìm kiếm logo theo mã"
             >
               🔍
             </button>
