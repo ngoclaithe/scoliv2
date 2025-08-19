@@ -48,7 +48,7 @@ const ScoreboardType4 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                                 </div>
                                 {/* Team A name */}
                                 <div
-                                    className="text-white font-semibold flex items-center justify-center z-10"
+                                    className="text-white font-normal flex items-center justify-center z-10"
                                     style={{
                                         width: '240px', 
                                         height: '47px', 
@@ -140,7 +140,7 @@ const ScoreboardType4 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                                 </div>
                                 {/* Team B name */}
                                 <div
-                                    className="text-white font-semibold flex items-center justify-center"
+                                    className="text-white font-normal flex items-center justify-center"
                                     style={{
                                         width: '240px', 
                                         height: '47px', 
