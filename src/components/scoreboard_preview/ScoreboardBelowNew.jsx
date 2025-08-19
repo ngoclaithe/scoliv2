@@ -110,36 +110,36 @@ const ScoreboardBelowNew = ({
 
     const logoShape = displaySettings?.logoShape || "square";
 
-    // renderScoreboardType1 - Copy từ ScoreboardType1.jsx + thêm team logos
     const renderScoreboardType1 = () => (
         <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5] sm:h-10 w-[600px]">
-            <div className="flex items-end justify-center w-full px-2 gap-0">
+            <div className="flex justify-center w-full">
+                <div 
+                    className="bg-yellow-400 text-center font-normal rounded-t-lg"
+                    style={{
+                        color: '#004d73',
+                        fontFamily: 'UTM Bebas, sans-serif',
+                        width: '46%',
+                        fontSize: '40px'
+                    }}
+                >
+                    TRỰC TIẾP TRẬN BÓNG ĐÁ
+                </div>
+            </div>
+            <div className="flex items-end justify-center w-full px-2 gap-0 relative">
                 {/* Logo team A */}
-                <DisplayLogo
-                    logos={[currentData.teamALogo]}
-                    alt={currentData.teamAName}
-                    className="w-14 h-14"
-                    type_play={logoShape}
-                    logoSize="w-14 h-14"
-                />
-
+                <div className="relative z-10">
+                    <DisplayLogo
+                        logos={[currentData.teamALogo]}
+                        alt={currentData.teamAName}
+                        className="w-14 h-14"
+                        type_play={logoShape}
+                        logoSize="w-14 h-14"
+                    />
+                </div>
+    
                 <div className="flex">
                     <div className="flex flex-col items-center">
-                        {/* Fouls for Team A */}
-                        <div className="flex justify-center mb-0.5">
-                            <div className="[&>*]:!w-3 [&>*]:!h-[6px]">
-                                <FoulsDisplay foulsCount={currentData.teamAFouls} />
-                            </div>
-                        </div>
-
                         <div className="flex items-start">
-                            <div
-                                className="bg-yellow-400 text-black font-bold text-4xl px-2 py-0.5 text-center sm:w-8 font- flex items-center justify-center"
-                                style={{ fontFamily: 'UTM Bebas, sans-serif', height: '56px' }}
-                            >
-                                {currentData.teamAScore}
-                            </div>
-
                             <div className="w-[220px]">
                                 <div
                                     className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center"
@@ -152,7 +152,7 @@ const ScoreboardBelowNew = ({
                                 >
                                     {currentData.teamAName}
                                 </div>
-
+    
                                 <div className="flex w-full" style={{ height: '8px' }}>
                                     <div
                                         className="flex-1"
@@ -167,25 +167,19 @@ const ScoreboardBelowNew = ({
                         </div>
                     </div>
                 </div>
-
-                {showMatchTime && (
-                    <div
-                        className="bg-black text-white px-2 py-1 text-sm font-bold whitespace-nowrap flex items-center justify-center"
-                        style={{ height: '56px' }}
-                    >
-                        {currentData.matchTime}
-                    </div>
-                )}
-
+    
+                {/* Center scores display */}
+                <div
+                    className="bg-black text-white px-4 py-1 text-xl font-bold whitespace-nowrap flex items-center justify-center gap-2"
+                    style={{ height: '56px', fontFamily: 'UTM Bebas, sans-serif' }}
+                >
+                    <span>{currentData.teamAScore}</span>
+                    <span>-</span>
+                    <span>{currentData.teamBScore}</span>
+                </div>
+    
                 <div className="flex">
                     <div className="flex flex-col items-center">
-                        {/* Fouls for Team B */}
-                        <div className="flex justify-center mb-0.5">
-                            <div className="[&>*]:!w-3 [&>*]:!h-[6px]">
-                                <FoulsDisplay foulsCount={currentData.teamBFouls} />
-                            </div>
-                        </div>
-
                         <div className="flex items-start">
                             <div className="w-[220px]">
                                 <div
@@ -199,7 +193,7 @@ const ScoreboardBelowNew = ({
                                 >
                                     {currentData.teamBName}
                                 </div>
-
+    
                                 <div className="flex w-full" style={{ height: '8px' }}>
                                     <div
                                         className="flex-1"
@@ -211,28 +205,23 @@ const ScoreboardBelowNew = ({
                                     />
                                 </div>
                             </div>
-                            <div
-                                className="bg-yellow-400 text-black font-bold text-4xl px-2 py-0.5 text-center sm:w-8 flex items-center justify-center"
-                                style={{ fontFamily: 'UTM Bebas, sans-serif', height: '56px' }}
-                            >
-                                {currentData.teamBScore}
-                            </div>
                         </div>
                     </div>
                 </div>
-
+    
                 {/* Logo team B */}
-                <DisplayLogo
-                    logos={[currentData.teamBLogo]}
-                    alt={currentData.teamBName}
-                    className="w-14 h-14"
-                    type_play={logoShape}
-                    logoSize="w-14 h-14"
-                />
+                <div className="relative z-10">
+                    <DisplayLogo
+                        logos={[currentData.teamBLogo]}
+                        alt={currentData.teamBName}
+                        className="w-14 h-14"
+                        type_play={logoShape}
+                        logoSize="w-14 h-14"
+                    />
+                </div>
             </div>
         </div>
     );
-
     // renderScoreboardType2 - Copy từ ScoreboardType2.jsx + thêm team logos
     const renderScoreboardType2 = () => (
         <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5] w-[600px]">

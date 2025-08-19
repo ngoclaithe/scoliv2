@@ -56,6 +56,10 @@ export default function TreTrungMatchIntro() {
     height: typeof window !== 'undefined' ? window.innerHeight : 800
   });
 
+  // Refs for team name containers
+  const teamANameRef = useRef(null);
+  const teamBNameRef = useRef(null);
+
   useEffect(() => {
     const handleResize = () => {
       setWindowSize({
@@ -68,9 +72,35 @@ export default function TreTrungMatchIntro() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Function to adjust font size to fit container
+  const adjustFontSize = (element, text, containerWidth, containerHeight) => {
+    if (!element) return;
+    
+    let fontSize = isMobile ? 16 : isTablet ? 48 : 64; // Starting font size
+    element.style.fontSize = fontSize + 'px';
+    
+    while ((element.scrollWidth > containerWidth || element.scrollHeight > containerHeight) && fontSize > 8) {
+      fontSize -= 1;
+      element.style.fontSize = fontSize + 'px';
+    }
+  };
+
+  useEffect(() => {
+    const teamAContainer = teamANameRef.current;
+    const teamBContainer = teamBNameRef.current;
+    
+    if (teamAContainer && teamBContainer) {
+      const containerWidth = isMobile ? 80 : isTablet ? 200 : 280;
+      const containerHeight = isMobile ? 20 : isTablet ? 60 : 80;
+      
+      adjustFontSize(teamAContainer, matchData.team1, containerWidth, containerHeight);
+      adjustFontSize(teamBContainer, matchData.team2, containerWidth, containerHeight);
+    }
+  }, [matchData.team1, matchData.team2, windowSize]);
+
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
-  const logoSize = isMobile ? 40 : isTablet ? 100 : 160; // Gi���m size đáng kể cho mobile
+  const logoSize = isMobile ? 40 : isTablet ? 100 : 160; // Giảm size đáng kể cho mobile
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
@@ -121,6 +151,16 @@ export default function TreTrungMatchIntro() {
         return 'justify-center';
     }
   };
+
+  // Team name container dimensions
+  const getTeamNameContainerStyle = () => ({
+    width: isMobile ? '80px' : isTablet ? '200px' : '280px',
+    height: isMobile ? '20px' : isTablet ? '60px' : '80px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden'
+  });
 
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4 overflow-hidden">
@@ -302,25 +342,21 @@ export default function TreTrungMatchIntro() {
                     />
                   </div>
                 </div>
-                <div
-                  className="text-white font-bold uppercase tracking-wide text-center"
-                  style={{
-                    whiteSpace: 'nowrap',
-                    overflowX: 'visible',
-                    width: 'auto',
-                    minWidth: 'unset',
-                    maxWidth: 'unset',
-                    fontSize: isMobile ? '10px' : isTablet ? '28px' : '48px',
-                    padding: isMobile ? '2px 8px' : '4px 20px',
-                    width: 'fit-content',
-                    minWidth: isMobile ? 'unset' : '35%',
-                    color: '#ffffff',
-                    fontFamily: 'Baloo Bhai 2, sans-serif',
-                    fontWeight: '800',
-                    textShadow: '4px 4px #727272'
-                  }}
-                >
-                  {matchData.team1}
+                {/* Team A Name Container */}
+                <div style={getTeamNameContainerStyle()}>
+                  <div
+                    ref={teamANameRef}
+                    className="text-white font-bold uppercase tracking-wide text-center"
+                    style={{
+                      color: '#ffffff',
+                      fontFamily: 'Baloo Bhai 2, sans-serif',
+                      fontWeight: '800',
+                      textShadow: '4px 4px #727272',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {matchData.team1}
+                  </div>
                 </div>
               </div>
 
@@ -360,25 +396,21 @@ export default function TreTrungMatchIntro() {
                     />
                   </div>
                 </div>
-                <div
-                  className="text-white font-bold uppercase tracking-wide text-center"
-                  style={{
-                    whiteSpace: 'nowrap',
-                    overflowX: 'visible',
-                    width: 'auto',
-                    minWidth: 'unset',
-                    maxWidth: 'unset',
-                    fontSize: isMobile ? '10px' : isTablet ? '28px' : '48px',
-                    padding: isMobile ? '2px 8px' : '4px 20px',
-                    width: 'fit-content',
-                    minWidth: isMobile ? 'unset' : '35%',
-                    color: '#ffffff',
-                    fontFamily: 'Baloo Bhai 2, sans-serif',
-                    fontWeight: '800',
-                    textShadow: '4px 4px #727272'
-                  }}
-                >
-                  {matchData.team2}
+                {/* Team B Name Container */}
+                <div style={getTeamNameContainerStyle()}>
+                  <div
+                    ref={teamBNameRef}
+                    className="text-white font-bold uppercase tracking-wide text-center"
+                    style={{
+                      color: '#ffffff',
+                      fontFamily: 'Baloo Bhai 2, sans-serif',
+                      fontWeight: '800',
+                      textShadow: '4px 4px #727272',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {matchData.team2}
+                  </div>
                 </div>
               </div>
             </div>
