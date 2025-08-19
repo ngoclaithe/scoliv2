@@ -3,6 +3,12 @@ import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { getFullLogoUrl } from '../../utils/logoUtils';
 import DisplayLogo from '../common/DisplayLogo';
 
+// Hàm clamp font size theo độ dài tên giống ScoreboardType1
+const getClampedFontSize = (name) => {
+    const dynamicSize = (220 / Math.max(1, name.length)) * 1.5;
+    return Math.max(22, Math.min(40, dynamicSize)); // clamp trong khoảng 22–40px
+};
+
 const ScoreboardBelowNew = ({
     type = 1
 }) => {
