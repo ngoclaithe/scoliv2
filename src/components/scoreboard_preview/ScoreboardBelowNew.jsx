@@ -142,7 +142,7 @@ const ScoreboardBelowNew = ({
                 {/* Team B section */}
                 <div className="flex items-center gap-0">
                     <div className="flex flex-col items-center w-[110px]">
-                        <div className="w-full bg-blue-600 text-white px-2 py-0.5 text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]">
+                        <div className="w-full bg-blue-600 text-white px-2 py-0.5 text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
                             {currentData.teamBName}
                         </div>
                         <div
