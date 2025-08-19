@@ -268,7 +268,7 @@ export default function HaoQuangMatchIntro() {
                     border: isMobile ? 'solid 1px #ffffff' : 'solid 2px #ffffff',
                     color: '#ffffff',
                     fontFamily: 'UTM Colossalis, sans-serif',
-                    fontWeight: '800',
+                    fontWeight: '400',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -301,7 +301,7 @@ export default function HaoQuangMatchIntro() {
                     <div
                       className="font-bold"
                       style={{
-                        fontSize: isMobile ? '5px' : isTablet ? '12px' : '30px'
+                        fontSize: isMobile ? '5px' : isTablet ? '16px' : '36px'
                       }}
                     >
                       {matchData.showTimer && matchData.roundedTime}
@@ -312,12 +312,12 @@ export default function HaoQuangMatchIntro() {
 
                   {matchData.showStadium && matchData.stadium && (
                     <div
-                      className="font-normal"
+                      className="font-bold"
                       style={{
-                        fontSize: isMobile ? '5px' : isTablet ? '12px' : '30px'
+                        fontSize: isMobile ? '5px' : isTablet ? '12px' : '24px'
                       }}
                     >
-                      Địa điểm: {matchData.stadium}
+                      ĐỊA ĐIỂM: {matchData.stadium}
                     </div>
                   )}
                 </div>
@@ -365,7 +365,7 @@ export default function HaoQuangMatchIntro() {
                     border: isMobile ? 'solid 1px #ffffff' : 'solid 2px #ffffff',
                     color: '#ffffff',
                     fontFamily: 'UTM Colossalis, sans-serif',
-                    fontWeight: '800',
+                    fontWeight: '400',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
