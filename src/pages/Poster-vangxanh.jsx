@@ -196,7 +196,7 @@ export default function VangXanhMatchIntro() {
             <div className={`flex items-start flex-shrink-0 ${isMobile ? 'gap-1' : 'gap-2 sm:gap-4'}`} style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: isMobile ? '25%' : '35%' }}>
                 {hasSponsors && (
                   <div className="flex-shrink-0">
-                    <div className={`font-normal text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-2xl'}`}>
+                    <div className={`font-semibold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-2xl'}`}>
                       Nhà tài trợ
                     </div>
                     <div className="flex gap-0.5">
@@ -205,7 +205,11 @@ export default function VangXanhMatchIntro() {
                           <img
                             src={sponsor.logo}
                             alt={sponsor.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} 
+                            ${isMobile 
+                              ? 'w-3 h-3 p-0.5' 
+                              : 'w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 p-0.5 sm:p-1'
+                            }`}
                           />
                         </div>
                       ))}
@@ -215,7 +219,7 @@ export default function VangXanhMatchIntro() {
 
                 {hasOrganizing && (
                   <div className="flex-shrink-0">
-                    <div className={`font-normal text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-2xl'}`}>
+                    <div className={`font-semibold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-2xl'}`}>
                       Đơn vị tổ chức
                     </div>
                     <div className="flex gap-0.5">
@@ -224,7 +228,11 @@ export default function VangXanhMatchIntro() {
                           <img
                             src={organizing.logo}
                             alt={organizing.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} 
+                            ${isMobile 
+                              ? 'w-3 h-3 p-0.5' 
+                              : 'w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 p-0.5 sm:p-1'
+                            }`}
                           />
                         </div>
                       ))}
@@ -255,7 +263,7 @@ export default function VangXanhMatchIntro() {
             <div className="flex flex-col items-end gap-1 sm:gap-2 flex-shrink-0" style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: '30%' }}>
               {hasMediaPartners && (
                 <div className="flex-shrink-0 w-full">
-                  <div className={`font-normal text-white mb-0.5 drop-shadow-lg text-right ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-2xl'}`}>
+                  <div className={`font-semibold text-white mb-0.5 drop-shadow-lg text-right ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-2xl'}`}>
                     Đơn vị truyền thông
                   </div>
                   <div className="flex gap-0.5 justify-end overflow-x-auto scrollbar-hide">
@@ -265,8 +273,12 @@ export default function VangXanhMatchIntro() {
                           <img
                             src={media.logo}
                             alt={media.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 p-1'}`}
-                          />
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} 
+                            ${isMobile 
+                              ? 'w-3 h-3 p-0.5' 
+                              : 'w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 p-0.5 sm:p-1'
+                            }`}
+                            />
                         </div>
                       ))}
                     </div>
