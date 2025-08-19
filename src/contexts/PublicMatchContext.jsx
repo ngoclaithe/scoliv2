@@ -228,6 +228,9 @@ export const PublicMatchProvider = ({ children }) => {
 
   const setupSocketListeners = useCallback(() => {
     socketService.on('match_info_updated', (data) => {
+      console.log('🔄 [PublicMatchContext] match_info_updated received:', data);
+      console.log('🏆 [PublicMatchContext] Tournament in match_info_updated:', data.matchInfo?.tournament);
+
       setMatchData(prev => ({
         ...prev,
         ...data.matchInfo,
