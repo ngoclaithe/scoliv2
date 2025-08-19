@@ -40,8 +40,35 @@ function toDateInputFormat(dateStr) {
   return date.toISOString().split('T')[0];
 }
 
+/**
+ * Formats date to Vietnamese format (dd.mm.yyyy)
+ * @param {string|Date} dateInput - Date to format
+ * @returns {string} - Formatted date string
+ */
+function formatVietnameseDate(dateInput) {
+  let date;
+  if (typeof dateInput === 'string') {
+    date = new Date(dateInput);
+  } else if (dateInput instanceof Date) {
+    date = dateInput;
+  } else {
+    date = new Date();
+  }
+
+  if (isNaN(date.getTime())) {
+    date = new Date();
+  }
+
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+
+  return `${day}.${month}.${year}`;
+}
+
 module.exports = {
   generateRandomCode,
   formatCurrencyVND,
-  toDateInputFormat
+  toDateInputFormat,
+  formatVietnameseDate
 };
