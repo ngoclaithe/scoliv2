@@ -1032,11 +1032,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     return (
       <div className="space-y-1">
-        <div className="flex items-center gap-1">
-          <span className="text-xs">🖼️</span>
-          <h3 className="text-xs font-semibold text-gray-900">Poster Template</h3>
-        </div>
-
         <div className="flex gap-1 overflow-x-auto pb-1 scrollbar-hide">
           {allPosters.map((poster, index) => (
             <div key={`${poster.id}-${index}`} className="flex-none w-24">
@@ -1047,7 +1042,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               />
             </div>
           ))}
-          {/* Nút thêm poster - chỉ hiện khi chưa đủ 1 poster */}
           {canUploadMore && (
             <div className="flex-none w-24">
               <div className="relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-200 cursor-pointer group border-2 border-dashed border-gray-300 hover:border-blue-400">
@@ -1462,17 +1456,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       <div className={`bg-white border border-gray-200 rounded-lg p-2 ${isCustomPosterSelected ? 'opacity-50 pointer-events-none' : ''}`}>
         {renderLogoSection()}
       </div>
-
-      {/* Display options section - disabled khi chọn custom poster */}
-      <div className={`bg-white border border-gray-200 rounded-lg p-2 ${isCustomPosterSelected ? 'opacity-50 pointer-events-none' : ''}`}>
-        <div className="text-xs font-medium text-gray-700 mb-2">Tùy chọn hiển thị</div>
-        {isCustomPosterSelected && (
-          <div className="text-xs text-red-600 bg-red-50 p-1 rounded border mb-2">
-            ⚠️ Đã chọn poster tùy chỉnh - tùy chọn hiển thị bị khóa
-          </div>
-        )}
-      </div>
-
       {/* Round & Group section - disabled khi chọn custom poster */}
       <div className={`bg-white border border-gray-200 rounded-lg p-2 ${isCustomPosterSelected ? 'opacity-50 pointer-events-none' : ''}`}>
         {renderRoundGroupSection()}
