@@ -393,9 +393,8 @@ export default function VangKimMatchIntro() {
                   className="text-white font-bold font-utm-colossalis leading-none"
                   style={{
                     fontSize: isMobile ? '20px' : isTablet ? '32px' : '88px',
-                    border: '1px solid #f87171',
-                    borderRadius: isMobile ? '4px' : '8px',
-                    padding: isMobile ? '2px 6px' : '4px 12px'
+                    WebkitTextStroke: '1px #f87171',
+                    textStroke: '1px #f87171'
                   }}
                 >
                   {matchData.roundedTime}
@@ -406,10 +405,9 @@ export default function VangKimMatchIntro() {
                   className="text-white/90 font-bold font-utm-colossalis leading-none"
                   style={{
                     fontSize: isMobile ? '12px' : isTablet ? '18px' : '44px',
-                    marginTop: isMobile ? '2px' : isTablet ? '4px' : '8px',
-                    border: '1px solid #f87171',
-                    borderRadius: isMobile ? '4px' : '8px',
-                    padding: isMobile ? '2px 6px' : '4px 12px'
+                    marginTop: isMobile ? '-2px' : isTablet ? '-4px' : '-8px',
+                    WebkitTextStroke: '1px #f87171',
+                    textStroke: '1px #f87171'
                   }}
                 >
                   {matchData.currentDate}
@@ -543,8 +541,8 @@ export default function VangKimMatchIntro() {
             font-weight: 800 !important;
             font-size: 65px;
             height: auto;
-            WebkitTextStroke: 2px white;
-            textStroke: 2px white;
+            WebkitTextStroke: 2px white !important;
+            textStroke: 2px white !important;
             line-height: 1.2;
           }
 
