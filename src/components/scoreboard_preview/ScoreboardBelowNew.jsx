@@ -128,7 +128,15 @@ const ScoreboardBelowNew = ({
                         {currentData.teamAScore}
                     </div>
                     <div className="flex flex-col items-center w-[110px]">
-                        <div className="w-full bg-blue-600 text-white px-2 py-0.5 text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
+                        <div
+                            className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center"
+                            style={{
+                                backgroundColor: '#004d73',
+                                fontFamily: 'UTM Bebas, sans-serif',
+                                height: '48px',
+                                fontSize: `${getClampedFontSize(currentData.teamAName)}px`
+                            }}
+                        >
                             {currentData.teamAName}
                         </div>
                         <div
