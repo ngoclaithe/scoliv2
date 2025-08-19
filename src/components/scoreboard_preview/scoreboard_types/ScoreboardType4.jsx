@@ -27,7 +27,7 @@ const ScoreboardType4 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                 <div className="flex flex-row items-end min-h-[64px] sm:min-h-[72px] relative bg-transparent">
 
                     {/* Tournament/League Logo - Đặt riêng phía trên */}
-                    <div className="absolute left-1/2 top-[8px] sm:top-[18px] -translate-x-1/2 w-[16px] h-[16px] sm:w-[52px] sm:h-[52px] z-50">
+                    <div className="absolute left-1/2 top-[-8px] sm:top-[-16px] -translate-x-1/2 w-[16px] h-[16px] sm:w-[52px] sm:h-[52px] z-50">
                         <DisplayLogo
                             logos={[tournamentLogo || '/images/basic/logo-skin4.png']}
                             alt="Tournament"
