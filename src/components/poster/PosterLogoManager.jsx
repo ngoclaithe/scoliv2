@@ -605,17 +605,17 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     const handleSearch = async () => {
       if (localCode.trim().length >= 3) {
-        // Check for duplicate codes within the same category
+        // Check for duplicate codes across ALL categories (sponsors, mediapartners, organizing)
         const allCurrentItems = [...apiLogos, ...logoItems];
-        const duplicateInCategory = allCurrentItems.find(logoItem =>
+        const duplicateCode = allCurrentItems.find(logoItem =>
           logoItem.id !== item.id &&
-          logoItem.category === item.category &&
+          (logoItem.category === 'sponsor' || logoItem.category === 'media' || logoItem.category === 'organizing') &&
           logoItem.code &&
           logoItem.code.trim().toUpperCase() === localCode.trim().toUpperCase()
         );
 
-        if (duplicateInCategory) {
-          alert(`Mã logo "${localCode.trim()}" đã tồn tại trong danh mục ${item.category}. Vui lòng chọn mã khác.`);
+        if (duplicateCode) {
+          alert(`Mã logo "${localCode.trim()}" đã tồn tại trong hệ thống. Vui lòng chọn mã khác.`);
           return;
         }
 
@@ -1087,13 +1087,29 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
   // Kiểm tra xem có banner nào được chọn không (theo code bắt đầu bằng B hoặc type banner)
   const hasBannerSelected = useMemo(() => {
-    return currentItems.some(item => {
+    const bannerSelected = currentItems.some(item => {
       const isBannerByCode = item.code && item.code.toUpperCase().startsWith('B');
       const isBannerByType = item.type === 'banner';
       const isActive = item.displayPositions && item.displayPositions.length > 0;
       return (isBannerByCode || isBannerByType) && isActive;
     });
-  }, [currentItems]);
+
+    // Nếu có banner được chọn với mã B, tự động đặt shape là square và gửi qua socket
+    if (bannerSelected) {
+      const bannerWithCodeB = currentItems.find(item => {
+        const isBannerByCode = item.code && item.code.toUpperCase().startsWith('B');
+        const isActive = item.displayPositions && item.displayPositions.length > 0;
+        return isBannerByCode && isActive;
+      });
+
+      if (bannerWithCodeB && logoDisplayOptions.shape !== 'square') {
+        setLogoDisplayOptions(prev => ({ ...prev, shape: 'square' }));
+        socketService.emit('logoShape_update', { logoShape: 'square' });
+      }
+    }
+
+    return bannerSelected;
+  }, [currentItems, logoDisplayOptions.shape]);
 
   // Kiểm tra xem có logo nào được chọn không
   const hasLogoSelected = useMemo(() => {
@@ -1362,6 +1378,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                       const newShape = e.target.value;
                       setLogoDisplayOptions(prev => ({ ...prev, shape: newShape }));
                       console.log('🎨 [PosterLogoManager] Logo shape changed to:', newShape);
+
+                      // Emit shape change to socket for real-time updates
+                      socketService.emit('logoShape_update', { logoShape: newShape });
 
                       if (onLogoUpdate) {
                         const activeItems = allLogoItems.filter(item =>

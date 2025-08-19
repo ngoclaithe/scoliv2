@@ -264,7 +264,7 @@ export default function XanhDuongMatchIntro() {
                     <img
                       src={matchData.liveUnit}
                       alt="Live Unit"
-                      className="h-3 sm:h-4 md:h-5 object-contain"
+                      className="h-6 sm:h-8 md:h-10 object-contain"
                     />
                   </div>
                 </div>
@@ -458,7 +458,7 @@ export default function XanhDuongMatchIntro() {
                 <img
                   src="/images/basic/live-logo1.gif"
                   alt="Live"
-                  className={`object-contain ${isMobile ? 'w-2 h-2' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
+                  className={`object-contain ${isMobile ? 'w-2 h-4' : 'w-6 h-12 sm:w-8 sm:h-16 md:w-10 md:h-20'}`}
                 />
                 <span>{matchData.liveText}</span>
               </div>
