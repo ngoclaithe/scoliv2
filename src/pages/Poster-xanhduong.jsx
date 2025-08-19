@@ -327,16 +327,29 @@ export default function XanhDuongMatchIntro() {
                   </div>
                 </div>
                 <div className={`px-1 sm:px-2 md:px-3 ${getTeamNameMargin()}`}>
-                  <span
-                    className={`${getTeamNameFontSize()} font-bold uppercase tracking-wide text-center block truncate font-utm-colossalis`}
+                  <div
                     style={{
-                      color: '#ffe006',
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                      width: isMobile ? '80px' : isTablet ? '200px' : '280px',
+                      height: isMobile ? '20px' : isTablet ? '60px' : '80px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      overflow: 'hidden',
+                      backgroundColor: 'transparent'
                     }}
-                    ref={(el) => el && adjustFontSize(el)}
                   >
-                    {matchData.team1}
-                  </span>
+                    <span
+                      className={`${getTeamNameFontSize()} font-bold uppercase tracking-wide text-center block truncate font-utm-colossalis`}
+                      style={{
+                        color: '#ffe006',
+                        textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                        whiteSpace: 'nowrap'
+                      }}
+                      ref={(el) => el && adjustFontSize(el)}
+                    >
+                      {matchData.team1}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -387,16 +400,29 @@ export default function XanhDuongMatchIntro() {
                   </div>
                 </div>
                 <div className={`px-1 sm:px-2 md:px-3 ${getTeamNameMargin()}`}>
-                  <span
-                    className={`${getTeamNameFontSize()} font-bold uppercase tracking-wide text-center block truncate font-utm-colossalis`}
+                  <div
                     style={{
-                      color: '#ffe006',
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                      width: isMobile ? '80px' : isTablet ? '200px' : '280px',
+                      height: isMobile ? '20px' : isTablet ? '60px' : '80px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      overflow: 'hidden',
+                      backgroundColor: 'transparent'
                     }}
-                    ref={(el) => el && adjustFontSize(el)}
                   >
-                    {matchData.team2}
-                  </span>
+                    <span
+                      className={`${getTeamNameFontSize()} font-bold uppercase tracking-wide text-center block truncate font-utm-colossalis`}
+                      style={{
+                        color: '#ffe006',
+                        textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                        whiteSpace: 'nowrap'
+                      }}
+                      ref={(el) => el && adjustFontSize(el)}
+                    >
+                      {matchData.team2}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
