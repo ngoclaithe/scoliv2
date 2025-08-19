@@ -56,6 +56,9 @@ export default function DodenMatchIntro() {
     height: typeof window !== 'undefined' ? window.innerHeight : 800
   });
 
+  // Refs for team name containers
+  const teamANameRef = useRef(null);
+  const teamBNameRef = useRef(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -69,10 +72,35 @@ export default function DodenMatchIntro() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Function to adjust font size to fit container
+  const adjustFontSize = (element, text, containerWidth, containerHeight) => {
+    if (!element) return;
+    
+    let fontSize = isMobile ? 16 : isTablet ? 48 : 64; // Starting font size
+    element.style.fontSize = fontSize + 'px';
+    
+    while ((element.scrollWidth > containerWidth || element.scrollHeight > containerHeight) && fontSize > 8) {
+      fontSize -= 1;
+      element.style.fontSize = fontSize + 'px';
+    }
+  };
+
+  useEffect(() => {
+    const teamAContainer = teamANameRef.current;
+    const teamBContainer = teamBNameRef.current;
+    
+    if (teamAContainer && teamBContainer) {
+      const containerWidth = isMobile ? 80 : isTablet ? 200 : 280;
+      const containerHeight = isMobile ? 20 : isTablet ? 60 : 80;
+      
+      adjustFontSize(teamAContainer, matchData.team1, containerWidth, containerHeight);
+      adjustFontSize(teamBContainer, matchData.team2, containerWidth, containerHeight);
+    }
+  }, [matchData.team1, matchData.team2, windowSize]);
 
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
-  const logoSize = isMobile ? 40 : isTablet ? 56 : 72;
+  const logoSize = isMobile ? 40 : isTablet ? 100 : 160; // Giảm size đáng kể cho mobile
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
@@ -95,23 +123,9 @@ export default function DodenMatchIntro() {
     typeDisplay: matchData.mediaPartnersTypeDisplay[index] || 'square'
   })) : [];
 
-  const partnerLogos = [...sponsorLogos, ...organizingLogos];
-  const hasPartners = partnerLogos.length > 0;
-
-
-
-
-  // Font size adjustment function
-  const adjustFontSize = (element) => {
-    if (!element) return;
-    let fontSize = parseInt(window.getComputedStyle(element).fontSize);
-    const minFontSize = 14;
-
-    while (element.scrollWidth > element.offsetWidth && fontSize > minFontSize) {
-      fontSize -= 1;
-      element.style.fontSize = fontSize + "px";
-    }
-  };
+  const hasSponsors = sponsorLogos.length > 0;
+  const hasOrganizing = organizingLogos.length > 0;
+  const hasMediaPartners = mediaPartnerLogos.length > 0;
 
   const getDisplayEachLogo = (baseClass) => {
     switch (matchData.logoShape) {
@@ -138,10 +152,19 @@ export default function DodenMatchIntro() {
     }
   };
 
+  // Team name container dimensions
+  const getTeamNameContainerStyle = () => ({
+    width: isMobile ? '80px' : isTablet ? '200px' : '280px',
+    height: isMobile ? '20px' : isTablet ? '60px' : '80px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden'
+  });
 
   return (
-    <div className="w-full h-screen bg-transparent flex items-center justify-center p-1 sm:p-2 md:p-4">
-      <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden shadow-2xl">
+    <div className="w-full h-screen bg-transparent flex items-center justify-center p-2 sm:p-4 overflow-hidden">
+      <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
 
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -151,38 +174,86 @@ export default function DodenMatchIntro() {
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col p-1 sm:p-3 md:p-6">
+        <div className="relative z-10 h-full flex flex-col pt-2 px-2 pb-0 sm:pt-4 sm:px-4 sm:pb-0 md:pt-6 md:px-6 md:pb-0">
 
-          <div className="flex justify-between items-start mb-1 sm:mb-3 md:mb-5 min-h-[6vh] sm:min-h-[8vh] md:min-h-[10vh]">
 
-            <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4`}>
+          {/* Top section với logos - Mobile responsive */}
+          <div className={`flex justify-between items-start mb-2 sm:mb-3 md:mb-4 ${isMobile ? 'min-h-[6vh]' : 'min-h-[10vh] sm:min-h-[12vh] md:min-h-[14vh]'}`}>
+
+            {/* Top-left: Sponsors and Organizing - Show on mobile but smaller */}
+            <div className={`flex items-start flex-shrink-0 ${isMobile ? 'gap-1' : 'gap-2 sm:gap-4'}`} style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: isMobile ? '25%' : '35%' }}>
+                {hasSponsors && (
+                  <div className="flex-shrink-0">
+                    <div className={`font-bold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
+                      Nhà tài trợ
+                    </div>
+                    <div className="flex gap-0.5">
+                      {sponsorLogos.slice(0, isMobile ? 3 : 6).map((sponsor, index) => (
+                        <div key={`sponsor-${index}`} className="flex-shrink-0">
+                          <img
+                            src={sponsor.logo}
+                            alt={sponsor.name}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {hasOrganizing && (
+                  <div className="flex-shrink-0">
+                    <div className={`font-bold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
+                      Đơn vị tổ chức
+                    </div>
+                    <div className="flex gap-0.5">
+                      {organizingLogos.slice(0, isMobile ? 3 : 6).map((organizing, index) => (
+                        <div key={`organizing-${index}`} className="flex-shrink-0">
+                          <img
+                            src={organizing.logo}
+                            alt={organizing.name}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+            {/* Top-center: Tournament Logos */}
+            <div className={`flex ${getTournamentPositionClass()} items-center flex-1 gap-1 sm:gap-2 md:gap-4 ${isMobile ? 'px-2' : 'px-4'}`}>
               {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 &&
-                matchData.tournamentLogos.map((logo, index) => (
+                matchData.tournamentLogos.slice(0, isMobile ? 2 : matchData.tournamentLogos.length).map((logo, index) => (
                   <img
                     key={index}
                     src={logo}
                     alt={`Tournament Logo ${index + 1}`}
-                    className="object-contain h-6 sm:h-8 md:h-12 lg:h-16 max-w-16 sm:max-w-24 md:max-w-32"
+                    className={`object-contain flex-shrink-0 ${
+                      isMobile
+                        ? 'h-4 max-w-12'
+                        : 'h-6 sm:h-8 md:h-12 lg:h-16 max-w-16 sm:max-w-24 md:max-w-32'
+                    }`}
                   />
                 ))
               }
             </div>
 
-            {/* Top-right: Media Partners */}
-            <div className="flex flex-col items-end gap-2 flex-shrink-0" style={{ minWidth: '25%', maxWidth: '30%' }}>
-              {mediaPartnerLogos.length > 0 && (
+            {/* Top-right: Media Partners and Live Unit - Show on mobile but smaller */}
+            <div className="flex flex-col items-end gap-1 sm:gap-2 flex-shrink-0" style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: '30%' }}>
+              {hasMediaPartners && (
                 <div className="flex-shrink-0 w-full">
-                  <div className="text-[8px] sm:text-xs font-bold text-purple-400 mb-1 drop-shadow-lg text-right">
+                  <div className={`font-bold text-white mb-0.5 drop-shadow-lg text-right ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
                     Đơn vị truyền thông
                   </div>
-                  <div className="flex gap-1 justify-end overflow-x-auto scrollbar-hide">
-                    <div className="flex gap-1 flex-nowrap">
-                      {mediaPartnerLogos.slice(0, 6).map((media, index) => (
+                  <div className="flex gap-0.5 justify-end overflow-x-auto scrollbar-hide">
+                    <div className="flex gap-0.5 flex-nowrap">
+                      {mediaPartnerLogos.slice(0, isMobile ? 2 : mediaPartnerLogos.length).map((media, index) => (
                         <div key={index} className="flex-shrink-0">
                           <img
                             src={media.logo}
                             alt={media.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50', media.typeDisplay)} w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-1`}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 p-1'}`}
                           />
                         </div>
                       ))}
@@ -190,37 +261,72 @@ export default function DodenMatchIntro() {
                   </div>
                 </div>
               )}
+
+              {matchData.liveUnit && (
+                <div className="flex-shrink-0">
+                  <div className={`bg-red-600 text-white rounded-md sm:rounded-lg shadow-lg flex items-center space-x-1 sm:space-x-2 ${
+                    isMobile ? 'px-1 py-0.5' : 'px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5'
+                  }`}>
+                    <div className="w-1 h-1 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse"></div>
+                    <img
+                      src={matchData.liveUnit}
+                      alt="Live Unit"
+                      className={`object-contain ${isMobile ? 'h-2.5' : 'h-3 sm:h-4 md:h-5'}`}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
+
           </div>
 
+          {/* Main content section - compact layout */}
           <div className="flex-1 flex flex-col justify-center min-h-0">
 
+            {/* Title section - compact */}
             <div className="text-center mb-1 sm:mb-2 md:mb-3">
-              <h1
-                className="font-black uppercase text-white text-xs sm:text-sm md:text-lg lg:text-2xl xl:text-3xl px-1 sm:px-2 mb-1 sm:mb-2"
-                style={{
-                  textShadow: '#d97706 2px 2px 4px'
-                }}
-              >
+              <h1 className="title text-white mb-1 sm:mb-2 px-1 sm:px-2">
                 {matchData.matchTitle}
               </h1>
 
-              <div className="flex items-center justify-center mt-2 sm:mt-4">
-                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-yellow-400 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-amber-500 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-orange-500 rounded-full mx-1 sm:mx-2"></div>
-                <div className="w-12 sm:w-24 h-0.5 bg-white"></div>
-              </div>
+              {/* Subtitle display */}
+              {matchData.showSubtitle && matchData.subtitle && (
+                <div className="text-white/90 text-xs sm:text-sm md:text-base lg:text-lg font-medium mt-1 sm:mt-2 px-2">
+                  {matchData.subtitle}
+                </div>
+              )}
+
+              {/* Round and Group display - Hidden on mobile to save space */}
+              {!isMobile && (
+                <div className="flex items-center justify-center gap-2 sm:gap-3 mt-0.5 sm:mt-1">
+                  {matchData.showRound && (
+                    <div className="bg-blue-600/80 px-2 py-1 rounded text-xs sm:text-sm font-bold text-white">
+                      VÒNG {matchData.round}
+                    </div>
+                  )}
+                  {matchData.showGroup && (
+                    <div className="bg-green-600/80 px-2 py-1 rounded text-xs sm:text-sm font-bold text-white">
+                      BẢNG {matchData.group}
+                    </div>
+                  )}
+                </div>
+              )}
+
             </div>
 
-            <div className="flex items-center justify-between w-full px-2 sm:px-4 md:px-8 mb-1 sm:mb-2 md:mb-4">
+            {/* Teams section - compact and mobile responsive */}
+            <div className={`flex items-center justify-center w-full mb-1 sm:mb-2 md:mb-3 ${
+              isMobile
+                ? 'px-2 gap-1'
+                : 'px-4 sm:px-8 md:px-12 gap-2 sm:gap-4 md:gap-6'
+            }`}>
 
-              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
+              {/* Team A */}
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-amber-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className="relative rounded-full bg-white p-2 sm:p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`
@@ -236,16 +342,26 @@ export default function DodenMatchIntro() {
                     />
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-yellow-500 to-amber-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
-                  <span
-                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-white text-center block truncate"
+                {/* Team A Name Container */}
+                <div style={getTeamNameContainerStyle()}>
+                  <div
+                    ref={teamANameRef}
+                    className="text-white font-bold uppercase tracking-wide text-center"
+                    style={{
+                      color: '#ffffff',
+                      fontFamily: 'Baloo Bhai 2, sans-serif',
+                      fontWeight: '800',
+                      textShadow: '4px 4px #727272',
+                      whiteSpace: 'nowrap'
+                    }}
                   >
                     {matchData.team1}
-                  </span>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
+              {/* Time and Date Section */}
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2">
                 <div className="text-white font-bold text-center">
                   {matchData.showTimer && (
                     <div className="text-xs sm:text-sm md:text-lg lg:text-xl mb-1">
@@ -260,11 +376,12 @@ export default function DodenMatchIntro() {
                 </div>
               </div>
 
-              <div className="flex-1 flex flex-col items-center space-y-1 sm:space-y-2 md:space-y-3 max-w-[30%]">
+              {/* Team B */}
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2">
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-gray-500 to-slate-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-2 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className="relative rounded-full bg-white p-2 sm:p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`
@@ -280,51 +397,61 @@ export default function DodenMatchIntro() {
                     />
                   </div>
                 </div>
-                <div className="bg-gradient-to-r from-gray-500 to-slate-600 px-1 sm:px-2 md:px-3 py-0.5 sm:py-1 md:py-1.5 rounded-md sm:rounded-lg md:rounded-xl shadow-lg border border-white/30 backdrop-blur-sm w-1/2">
-                  <span
-                    className="text-[8px] sm:text-xs md:text-sm lg:text-base font-bold uppercase tracking-wide text-white text-center block truncate"
+                {/* Team B Name Container */}
+                <div style={getTeamNameContainerStyle()}>
+                  <div
+                    ref={teamBNameRef}
+                    className="text-white font-bold uppercase tracking-wide text-center"
+                    style={{
+                      color: '#ffffff',
+                      fontFamily: 'Baloo Bhai 2, sans-serif',
+                      fontWeight: '800',
+                      textShadow: '4px 4px #727272',
+                      whiteSpace: 'nowrap'
+                    }}
                   >
                     {matchData.team2}
-                  </span>
+                  </div>
                 </div>
               </div>
             </div>
 
           </div>
 
-          {/* Partners Section */}
-          {hasPartners && (
-            <div className="mb-4 sm:mb-6 md:mb-8 relative z-10 mt-2 sm:mt-4">
-              <div className="text-center">
-                <div className="mb-1 sm:mb-2">
-                  <span
-                    className="text-[6px] sm:text-[8px] md:text-[10px] lg:text-xs font-bold text-white bg-black/50 backdrop-blur-sm rounded-lg border border-white/30 px-1 sm:px-2 py-0.5 sm:py-1"
-                  >
-                    Các đơn vị
-                  </span>
+          {/* Stadium and Live sections - Bottom position and mobile responsive */}
+          <div className="mt-auto mb-0">
+            <div className="flex justify-center items-center gap-2 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8">
+              {/* Stadium */}
+              {matchData.showStadium && (
+                <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-white font-normal" style={{
+                  fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
+                }}>
+                  <img
+                    src="/images/basic/stadium.png"
+                    alt="Stadium"
+                    className={`object-contain ${isMobile ? 'w-2 h-2' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
+                  />
+                  <span>{matchData.stadium}</span>
                 </div>
-                <div className="flex justify-center items-center flex-wrap gap-1 sm:gap-2 md:gap-4 overflow-x-auto scrollbar-hide">
-                  <div className="flex gap-1 sm:gap-2 flex-nowrap">
-                    {partnerLogos.slice(0, 12).map((partner, index) => (
-                      <div key={index} className="flex-shrink-0">
-                        <img
-                          src={partner.logo}
-                          alt={partner.name}
-                          className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50', partner.typeDisplay)} w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-1`}
-                        />
-                      </div>
-                    ))}
-                  </div>
+              )}
+
+              {/* Live Text */}
+              {matchData.showLiveIndicator && (
+                <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-white font-normal" style={{
+                  fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
+                }}>
+                  <img
+                    src="/images/basic/live-logo1.gif"
+                    alt="Live"
+                    className={`object-contain ${isMobile ? 'w-2 h-2' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
+                  />
+                  <span>{matchData.liveText}</span>
                 </div>
-              </div>
+              )}
             </div>
-          )}
-
-          <div className="h-6 sm:h-8 md:h-10 flex-shrink-0"></div>
-
+          </div>
         </div>
 
-        
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {[...Array(20)].map((_, i) => (
             <div
@@ -343,6 +470,31 @@ export default function DodenMatchIntro() {
         </div>
 
         <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@400;500;600;700;800&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+          
+          .title {
+            color: #ffffff !important;
+            font-family: 'Baloo Bhai 2', 'BalooBhai2-Bold', sans-serif !important;
+            font-weight: 800 !important;
+            font-size: 65px;
+            height: auto;
+            text-shadow: 4px 4px #727272;
+            line-height: 1.2;
+          }
+
+          @media (max-width: 768px) {
+            .title {
+              font-size: 14px !important;
+            }
+          }
+
+          @media (min-width: 769px) and (max-width: 1024px) {
+            .title {
+              font-size: 40px !important;
+            }
+          }
+
           @keyframes sparkle {
             0%, 100% {
               transform: scale(0) rotate(0deg);
