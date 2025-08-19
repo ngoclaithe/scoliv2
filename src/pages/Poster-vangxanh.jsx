@@ -169,8 +169,14 @@ export default function VangXanhMatchIntro() {
   });
 
   return (
-    <div className="w-full h-screen bg-transparent flex items-center justify-center overflow-hidden">
-      <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
+    <div className={`w-full h-screen bg-transparent flex justify-center overflow-hidden ${
+      isMobile ? 'items-center' : 'items-start'
+    }`}>
+      <div className={`relative bg-white overflow-hidden ${
+        isMobile
+          ? 'w-full h-[1/2] max-h-[60vh] aspect-video'
+          : 'w-full max-w-7xl h-full'
+      }`}>
 
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -180,17 +186,17 @@ export default function VangXanhMatchIntro() {
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col pt-2 px-2 pb-0 sm:pt-4 sm:px-4 sm:pb-0 md:pt-6 md:px-6 md:pb-0">
+        <div className="relative z-10 h-full flex flex-col p-0">
 
 
           {/* Top section với logos - Mobile responsive */}
-          <div className={`flex justify-between items-start mb-2 sm:mb-3 md:mb-4 ${isMobile ? 'min-h-[6vh]' : 'min-h-[10vh] sm:min-h-[12vh] md:min-h-[14vh]'}`}>
+          <div className={`flex justify-between items-start mb-1 sm:mb-2 md:mb-2 pt-1 px-2 sm:pt-2 sm:px-4 md:pt-1 md:px-6 ${isMobile ? 'min-h-[5vh]' : 'min-h-[8vh] sm:min-h-[10vh] md:min-h-[10vh]'}`}>
 
             {/* Top-left: Sponsors and Organizing - Show on mobile but smaller */}
             <div className={`flex items-start flex-shrink-0 ${isMobile ? 'gap-1' : 'gap-2 sm:gap-4'}`} style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: isMobile ? '25%' : '35%' }}>
                 {hasSponsors && (
                   <div className="flex-shrink-0">
-                    <div className={`font-normal text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
+                    <div className={`font-semibold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-2xl'}`}>
                       Nhà tài trợ
                     </div>
                     <div className="flex gap-0.5">
@@ -199,7 +205,11 @@ export default function VangXanhMatchIntro() {
                           <img
                             src={sponsor.logo}
                             alt={sponsor.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} 
+                            ${isMobile 
+                              ? 'w-3 h-3 p-0.5' 
+                              : 'w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 p-0.5 sm:p-1'
+                            }`}
                           />
                         </div>
                       ))}
@@ -209,7 +219,7 @@ export default function VangXanhMatchIntro() {
 
                 {hasOrganizing && (
                   <div className="flex-shrink-0">
-                    <div className={`font-normal text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
+                    <div className={`font-semibold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-2xl'}`}>
                       Đơn vị tổ chức
                     </div>
                     <div className="flex gap-0.5">
@@ -218,7 +228,11 @@ export default function VangXanhMatchIntro() {
                           <img
                             src={organizing.logo}
                             alt={organizing.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 p-0.5 sm:p-1'}`}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} 
+                            ${isMobile 
+                              ? 'w-3 h-3 p-0.5' 
+                              : 'w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 p-0.5 sm:p-1'
+                            }`}
                           />
                         </div>
                       ))}
@@ -249,7 +263,7 @@ export default function VangXanhMatchIntro() {
             <div className="flex flex-col items-end gap-1 sm:gap-2 flex-shrink-0" style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: '30%' }}>
               {hasMediaPartners && (
                 <div className="flex-shrink-0 w-full">
-                  <div className={`font-normal text-white mb-0.5 drop-shadow-lg text-right ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
+                  <div className={`font-semibold text-white mb-0.5 drop-shadow-lg text-right ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-2xl'}`}>
                     Đơn vị truyền thông
                   </div>
                   <div className="flex gap-0.5 justify-end overflow-x-auto scrollbar-hide">
@@ -259,8 +273,12 @@ export default function VangXanhMatchIntro() {
                           <img
                             src={media.logo}
                             alt={media.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 p-1'}`}
-                          />
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} 
+                            ${isMobile 
+                              ? 'w-3 h-3 p-0.5' 
+                              : 'w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 p-0.5 sm:p-1'
+                            }`}
+                            />
                         </div>
                       ))}
                     </div>
@@ -287,24 +305,24 @@ export default function VangXanhMatchIntro() {
           </div>
 
           {/* Main content section - compact layout */}
-          <div className="flex-1 flex flex-col justify-center min-h-0">
+          <div className="flex-1 flex flex-col justify-center min-h-0 px-2 sm:px-4 md:px-6">
 
             {/* Title section - compact */}
-            <div className="text-center mb-1 sm:mb-2 md:mb-3">
-              <h1 className="title text-white mb-1 sm:mb-2 px-1 sm:px-2">
+            <div className="text-center mb-1 sm:mb-1 md:mb-1">
+              <h1 className="title text-white mb-1 sm:mb-1 px-1 sm:px-2">
                 {matchData.matchTitle}
               </h1>
 
               {/* Subtitle display */}
               {matchData.showSubtitle && matchData.subtitle && (
-                <div className="text-white/90 text-xs sm:text-sm md:text-base lg:text-lg font-medium mt-1 sm:mt-2 px-2">
+                <div className="text-white/90 text-xs sm:text-sm md:text-base lg:text-lg font-medium mt-1 sm:mt-1 px-2">
                   {matchData.subtitle}
                 </div>
               )}
 
               {/* Round and Group display - Hidden on mobile to save space */}
               {!isMobile && (
-                <div className="flex items-center justify-center gap-2 sm:gap-3 mt-0.5 sm:mt-1">
+                <div className="flex items-center justify-center gap-2 sm:gap-3 mt-0.5 sm:mt-0.5">
                   {matchData.showRound && (
                     <div className="bg-blue-600/80 px-2 py-1 rounded text-xs sm:text-sm font-normal text-white">
                       VÒNG {matchData.round}
@@ -321,7 +339,7 @@ export default function VangXanhMatchIntro() {
             </div>
 
             {/* Teams section - compact and mobile responsive */}
-            <div className={`flex items-center justify-center w-full mb-1 sm:mb-2 md:mb-3 ${
+            <div className={`flex items-center justify-center w-full mb-1 sm:mb-1 md:mb-1 ${
               isMobile
                 ? 'px-2 gap-1'
                 : 'px-4 sm:px-8 md:px-12 gap-2 sm:gap-4 md:gap-6'
@@ -422,7 +440,7 @@ export default function VangXanhMatchIntro() {
             </div>
 
             {/* Match time and date - Below team names */}
-            <div className={`flex justify-center items-center ${isMobile ? 'mb-1' : 'mb-2 sm:mb-3 md:mb-4'}`}>
+            <div className={`flex justify-center items-center ${isMobile ? 'mb-1 mt-2' : 'mb-2 sm:mb-2 md:mb-3 mt-4 sm:mt-6 md:mt-8'}`}>
               <div
                 className="time-date-container"
                 style={{
@@ -433,7 +451,7 @@ export default function VangXanhMatchIntro() {
                   border: isMobile ? '1px solid #fff' : '6px solid #fff',
                   borderRadius: isMobile ? '8px' : '16px',
                   color: '#fff',
-                  fontSize: isMobile ? '6px' : isTablet ? '17px' : '25px',
+                  fontSize: isMobile ? '6px' : isTablet ? '17px' : '37px',
                   fontFamily: 'iCielBCCubano, Bebas Neue, UTM Bebas, sans-serif',
                   padding: isMobile ? '3px 6px' : '8px 16px',
                   boxShadow: '0 2px 10px rgba(24, 119, 242, 0.11)',
@@ -450,14 +468,13 @@ export default function VangXanhMatchIntro() {
 
           {/* Stadium and Live sections - Bottom position and mobile responsive */}
           <div className="mt-auto mb-0">
-            <div className="flex justify-center items-center gap-2 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8">
-              <div
-                className="flex items-center justify-center gap-4 sm:gap-8 md:gap-16 px-3 py-2 rounded-lg"
-                style={{
-                  backgroundColor: '#FF6011',
-                  fontFamily: 'iCielBCCubano, sans-serif'
-                }}
-              >
+            <div
+              className="flex items-center justify-center gap-4 sm:gap-8 md:gap-16 px-3 py-2 w-full"
+              style={{
+                backgroundColor: '#FF6011',
+                fontFamily: 'iCielBCCubano, sans-serif'
+              }}
+            >
                 {/* Stadium */}
                 {matchData.showStadium && (
                   <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-white font-normal" style={{
@@ -485,7 +502,6 @@ export default function VangXanhMatchIntro() {
                     <span>{matchData.liveText}</span>
                   </div>
                 )}
-              </div>
             </div>
           </div>
         </div>
