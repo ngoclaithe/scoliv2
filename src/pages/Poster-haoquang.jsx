@@ -449,8 +449,6 @@ export default function HaoQuangMatchIntro() {
         </div>
 
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-          @import url('https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@400;500;600;700;800&display=swap');
 
           .title {
             color: #ffffff !important;
