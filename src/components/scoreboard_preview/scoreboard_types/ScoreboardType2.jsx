@@ -12,15 +12,15 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
     };
 
     return (
-        <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5] max-w-[600px]">
-            <div className="relative w-full flex justify-center items-center max-w-sm">
+        <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5] w-[600px]">
+            <div className="relative w-full flex justify-start items-center">
                 {/* Main scoreboard container */}
                 <div
-                    className="flex items-center justify-center relative z-10 h-8 sm:h-9 rounded-md"
+                    className="flex items-center justify-center relative z-10"
                     style={{
                         background: `linear-gradient(to right, ${currentData.teamAKitColor}, ${currentData.teamBKitColor})`,
-                        width: showMatchTime ? '250px' : '230px',
-                        maxWidth: showMatchTime ? '250px' : '230px',
+                        width: '600px',
+                        height: '48px',
                         overflow: 'hidden',
                     }}
                 >
@@ -28,9 +28,9 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
                     <div
                         className="flex flex-col items-start justify-center truncate relative"
                         style={{
-                            width: '90px',
+                            width: '240px',
                             height: '100%',
-                            fontSize: 'clamp(10px, 3.5vw, 14px)',
+                            fontSize: `${Math.min(40, Math.max(22, 240 / Math.max(1, currentData.teamAName.length) * 1.5))}px`,
                             color: getTextColor(currentData.teamAKitColor),
                             textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
                         }}
@@ -42,21 +42,21 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
                             </div>
                         </div>
 
-                        <span className="w-full text-xs sm:text-sm font-semibold text-center leading-[1.2] px-1 sm:px-2">
+                        <span className="w-full text-sm sm:text-base font-semibold text-center leading-[1.2] px-2">
                             {currentData.teamAName}
                         </span>
-                        <div className="flex w-full h-[3px] sm:h-[4px] px-1 sm:px-2">
+                        <div className="flex w-full h-[6px] px-2">
                             <div className="flex-1" style={{ backgroundColor: currentData.teamA2KitColor }} />
                         </div>
                     </div>
 
                     {/* Tỉ số A */}
                     <div
-                        className="text-white font-extrabold text-xl sm:text-2xl text-center flex items-center justify-center"
+                        className="text-white font-extrabold text-5xl text-center flex items-center justify-center"
                         style={{
                             WebkitTextStroke: '1px black',
-                            width: '2.2rem',
-                            height: '100%',
+                            width: '80px',
+                            height: '48px',
                             textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
                         }}
                     >
@@ -66,24 +66,27 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
                     {/* Thời gian */}
                     {showMatchTime && (
                         <div
-                            className="bg-yellow-400 text-black text-xs font-bold flex items-center justify-center rounded mx-1 sm:mx-2"
+                            className="bg-red-600 text-white text-3xl font-bold flex items-center justify-center mx-2 leading-none"
                             style={{
-                                padding: '0 6px',
-                                height: '70%',
-                                minWidth: '40px',
+                                padding: '0 0px',
+                                height: 'auto',
+                                minHeight: '48px', 
+                                whiteSpace: 'nowrap',
                             }}
                         >
                             {currentData.matchTime}
                         </div>
+
                     )}
+
 
                     {/* Tỉ số B */}
                     <div
-                        className="text-white font-extrabold text-xl sm:text-2xl text-center flex items-center justify-center"
+                        className="text-white font-extrabold text-5xl text-center flex items-center justify-center"
                         style={{
                             WebkitTextStroke: '1px black',
-                            width: '2.2rem',
-                            height: '100%',
+                            width: '80px',
+                            height: '48px',
                             textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
                         }}
                     >
@@ -94,9 +97,9 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
                     <div
                         className="flex flex-col items-end justify-center truncate relative"
                         style={{
-                            width: '90px',
+                            width: '240px',
                             height: '100%',
-                            fontSize: 'clamp(10px, 3.5vw, 14px)',
+                            fontSize: `${Math.min(40, Math.max(22, 240 / Math.max(1, currentData.teamBName.length) * 1.5))}px`,
                             color: getTextColor(currentData.teamBKitColor),
                             textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
                         }}
@@ -108,10 +111,10 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
                             </div>
                         </div>
 
-                        <span className="w-full text-xs sm:text-sm font-semibold text-center leading-[1.2] px-1 sm:px-2">
+                        <span className="w-full text-sm sm:text-base font-semibold text-center leading-[1.2] px-2">
                             {currentData.teamBName}
                         </span>
-                        <div className="flex w-full h-[3px] sm:h-[4px] px-1 sm:px-2">
+                        <div className="flex w-full h-[6px] px-2">
                             <div className="flex-1" style={{ backgroundColor: currentData.teamB2KitColor }} />
                         </div>
                     </div>
@@ -119,14 +122,14 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
 
             </div>
 
-            {/* LIVE indicator */}
-            {!showMatchTime && (
-                <div className="text-center mt-2">
-                    <span className="bg-green-600 text-white px-4 py-1 text-sm font-bold rounded animate-pulse">
-                        ● TRỰC TIẾP
-                    </span>
-                </div>
-            )}
+            {/* Logo ScoLiv */}
+            <div className="flex justify-center w-full">
+                <img
+                    src="/images/basic/ScoLivLogo.png"
+                    alt="ScoLiv Logo"
+                    className="w-[46%] h-auto"
+                />
+            </div>
         </div>
     );
 };
