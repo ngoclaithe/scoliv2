@@ -43,7 +43,7 @@ const ScoreboardType3 = ({ currentData, logoShape, showMatchTime }) => {
                         <div className="flex flex-col items-center">
                             <div
                                 className={`text-white ${fontSize} font-medium w-full truncate text-center min-h-[34px] flex items-center justify-center`}
-                                style={{ backgroundColor: '#0d94a4' }}
+                                style={{ backgroundColor: '#0d94a4', fontFamily: 'UTM Bebas, sans-serif' }}
                             >
                                 {currentData.teamAName}
                             </div>
@@ -55,10 +55,10 @@ const ScoreboardType3 = ({ currentData, logoShape, showMatchTime }) => {
 
                         {/* Score + time */}
                         <div className="flex flex-col items-center">
-                            <div className="flex items-center bg-white h-full px-2 py-[2px]">
-                                <span className="font-bold text-lg sm:text-xl text-gray-900">{currentData.teamAScore}</span>
+                            <div className="flex items-center bg-white h-full px-2 py-[2px]" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
+                                <span className="font-bold text-lg sm:text-xl text-gray-900" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>{currentData.teamAScore}</span>
                                 <span className="text-gray-400 font-light text-sm sm:text-base mx-1">:</span>
-                                <span className="font-bold text-lg sm:text-xl text-gray-900">{currentData.teamBScore}</span>
+                                <span className="font-bold text-lg sm:text-xl text-gray-900" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>{currentData.teamBScore}</span>
                             </div>
                             {showMatchTime && (
                                 <div className="bg-red-600 text-white text-xs sm:text-sm font-semibold whitespace-nowrap w-full text-center py-[1px]">
@@ -71,7 +71,7 @@ const ScoreboardType3 = ({ currentData, logoShape, showMatchTime }) => {
                         <div className="flex flex-col items-center">
                             <div
                                 className={`text-white ${fontSize} font-medium w-full truncate text-center min-h-[34px] flex items-center justify-center`}
-                                style={{ backgroundColor: '#0d94a4' }}
+                                style={{ backgroundColor: '#0d94a4', fontFamily: 'UTM Bebas, sans-serif' }}
                             >
                                 {currentData.teamBName}
                             </div>

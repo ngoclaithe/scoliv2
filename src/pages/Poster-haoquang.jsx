@@ -161,6 +161,27 @@ export default function HaoQuangMatchIntro() {
     }
   };
 
+  // Helper function to get sponsor label font size
+  const getSponsorLabelFontSize = () => {
+    if (isMobile) return 'text-[8px]';
+    if (isTablet) return 'text-xs';
+    return 'text-lg';
+  };
+
+  // Helper function to get team name font size
+  const getTeamNameFontSize = () => {
+    if (isMobile) return 'text-[8px]';
+    if (isTablet) return 'text-xs';
+    return 'text-3xl';
+  };
+
+  // Helper function to get team name top margin
+  const getTeamNameMargin = () => {
+    if (isMobile) return 'mt-4';
+    if (isTablet) return 'mt-6';
+    return 'mt-8';
+  };
+
 
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-1 sm:p-2 md:p-4">
@@ -271,11 +292,17 @@ export default function HaoQuangMatchIntro() {
                     borderRadius: isMobile ? '8px' : '17px',
                     marginTop: isMobile ? '20px' : '45px',
                     textAlign: 'center',
-                    fontSize: isMobile ? '6px' : isTablet ? '16px' : '28px',
+                    fontSize: Math.min(
+                      isMobile ? 6 : isTablet ? 16 : 28,
+                      Math.max(
+                        isMobile ? 4 : 10,
+                        (isMobile ? 104 : isTablet ? 195 : 260) / Math.max(matchData.team1?.length || 1, 1) * 2
+                      )
+                    ) + 'px',
                     padding: isMobile ? '2px 8px' : '4px 15px',
-                    width: isMobile ? '104px' : isTablet ? '195px' : '260px',
+                    minWidth: isMobile ? '80px' : isTablet ? '120px' : '180px',
+                    maxWidth: isMobile ? '120px' : isTablet ? '220px' : '300px',
                     height: isMobile ? '20px' : isTablet ? '36px' : '48px',
-                    minWidth: 'unset',
                     border: isMobile ? 'solid 2px #ffffff' : 'solid 5px #ffffff',
                     color: '#ffffff',
                     fontFamily: 'Baloo Bhai 2, sans-serif',
@@ -365,11 +392,17 @@ export default function HaoQuangMatchIntro() {
                     borderRadius: isMobile ? '8px' : '17px',
                     marginTop: isMobile ? '20px' : '45px',
                     textAlign: 'center',
-                    fontSize: isMobile ? '6px' : isTablet ? '16px' : '28px',
+                    fontSize: Math.min(
+                      isMobile ? 6 : isTablet ? 16 : 28,
+                      Math.max(
+                        isMobile ? 4 : 10,
+                        (isMobile ? 104 : isTablet ? 195 : 260) / Math.max(matchData.team2?.length || 1, 1) * 2
+                      )
+                    ) + 'px',
                     padding: isMobile ? '2px 8px' : '4px 15px',
-                    width: isMobile ? '104px' : isTablet ? '195px' : '260px',
+                    minWidth: isMobile ? '80px' : isTablet ? '120px' : '180px',
+                    maxWidth: isMobile ? '120px' : isTablet ? '220px' : '300px',
                     height: isMobile ? '20px' : isTablet ? '36px' : '48px',
-                    minWidth: 'unset',
                     border: isMobile ? 'solid 2px #ffffff' : 'solid 5px #ffffff',
                     color: '#ffffff',
                     fontFamily: 'Baloo Bhai 2, sans-serif',

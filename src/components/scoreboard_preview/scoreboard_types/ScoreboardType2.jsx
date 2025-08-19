@@ -42,7 +42,7 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
                             </div>
                         </div>
 
-                        <span className="w-full text-sm sm:text-base font-semibold text-center leading-[1.2] px-2">
+                        <span className="w-full text-sm sm:text-base font-semibold text-center leading-[1.2] px-2" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
                             {currentData.teamAName}
                         </span>
                         <div className="flex w-full h-[6px] px-2">
@@ -58,6 +58,7 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
                             width: '80px',
                             height: '48px',
                             textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                            fontFamily: 'UTM Bebas, sans-serif'
                         }}
                     >
                         {currentData.teamAScore}
@@ -88,6 +89,7 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
                             width: '80px',
                             height: '48px',
                             textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                            fontFamily: 'UTM Bebas, sans-serif'
                         }}
                     >
                         {currentData.teamBScore}
@@ -111,7 +113,7 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
                             </div>
                         </div>
 
-                        <span className="w-full text-sm sm:text-base font-semibold text-center leading-[1.2] px-2">
+                        <span className="w-full text-sm sm:text-base font-semibold text-center leading-[1.2] px-2" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
                             {currentData.teamBName}
                         </span>
                         <div className="flex w-full h-[6px] px-2">
