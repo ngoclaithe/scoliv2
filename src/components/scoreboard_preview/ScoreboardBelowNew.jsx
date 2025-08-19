@@ -134,7 +134,7 @@ const ScoreboardBelowNew = ({
 
                 {/* Match time - centered */}
                 {showMatchTime && (
-                    <div className="bg-black text-white px-2 py-1 text-sm font-bold whitespace-nowrap">
+                    <div className="bg-black text-white px-2 py-1 text-sm font-bold whitespace-nowrap" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
                         {currentData.matchTime}
                     </div>
                 )}
