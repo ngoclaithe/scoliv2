@@ -1,45 +1,32 @@
 export const renderFutsalFouls = (foulsCount) => {
-  const redFouls = Math.floor(foulsCount / 7); 
-  const yellowFouls = foulsCount % 7; 
-  
-  let result = '';
-  
-  for (let i = 0; i < redFouls; i++) {
-    result += '|';
-  }
-  
-  for (let i = 0; i < yellowFouls; i++) {
-    result += '|';
-  }
-  
-  return {
-    redFouls,
-    yellowFouls,
-    display: result,
-    redDisplay: '|'.repeat(redFouls),
-    yellowDisplay: '|'.repeat(yellowFouls)
-  };
+  const redFouls = Math.floor(foulsCount / 7);
+  const yellowFouls = foulsCount % 7;
+  return { redFouls, yellowFouls };
 };
 
 export const FoulsDisplay = ({ foulsCount, className = "" }) => {
   const { redFouls, yellowFouls } = renderFutsalFouls(foulsCount);
 
   if (foulsCount === 0) {
-    return <div className={`flex items-center ${className}`}></div>;
+    return <div className={`flex ${className}`} />;
   }
 
   return (
-    <div className={`flex items-center ${className}`}>
-      {yellowFouls > 0 && (
-        <span className="text-red-500 font-bold text-sm tracking-wider">
-          {'|'.repeat(yellowFouls)}
-        </span>
-      )}
-      {redFouls > 0 && (
-        <span className="text-yellow-500 font-bold text-sm tracking-wider">
-          {'|'.repeat(redFouls)}
-        </span>
-      )}
+    <div className={`flex gap-[2px] ${className}`}>
+      {/* Yellow fouls */}
+      {Array.from({ length: yellowFouls }).map((_, i) => (
+        <span
+          key={`y-${i}`}
+          className="bg-yellow-500 w-[9px] h-4 flex-shrink-0 inline-block border border-white rounded-sm"
+        />
+      ))}
+      {/* Red fouls */}
+      {Array.from({ length: redFouls }).map((_, i) => (
+        <span
+          key={`r-${i}`}
+          className="bg-red-500 w-[27px] h-4 flex-shrink-0 inline-block border border-white rounded-sm"
+        />
+      ))}
     </div>
   );
 };

@@ -1,6 +1,12 @@
 import React from 'react';
 import { FoulsDisplay } from '../../../utils/futsalUtils';
 
+// Hàm clamp font size theo độ dài tên
+const getClampedFontSize = (name) => {
+    const dynamicSize = (220 / Math.max(1, name.length)) * 1.5;
+    return Math.max(22, Math.min(40, dynamicSize)); // clamp trong khoảng 22–40px
+};
+
 const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
     return (
         <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5] sm:h-10 w-[600px]">
@@ -9,12 +15,14 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                 <div className="flex">
                     <div className="flex flex-col items-center">
                         {/* Fouls for Team A */}
-                        <div className="flex justify-center">
-                            <div className="[&>*]:!w-3 [&>*]:!h-1">
-                                <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[10px]" />
+                        <div className="flex justify-center mb-0.5">
+                            <div className="[&>*]:!w-3 [&>*]:!h-[6px]">
+                                <FoulsDisplay foulsCount={currentData.teamAFouls} />
                             </div>
                         </div>
-                        
+
+
+
                         <div className="flex items-start">
                             <div
                                 className="bg-yellow-400 text-black font-bold text-4xl px-2 py-0.5 text-center sm:w-8 font- flex items-center justify-center"
@@ -24,7 +32,15 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                             </div>
 
                             <div className="w-[220px]">
-                                <div className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center" style={{ backgroundColor: '#004d73', fontFamily: 'UTM Bebas, sans-serif', height: '48px', fontSize: `${Math.min(40, Math.max(22, 220 / Math.max(1, currentData.teamAName.length) * 1.5))}px` }}>
+                                <div
+                                    className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center"
+                                    style={{
+                                        backgroundColor: '#004d73',
+                                        fontFamily: 'UTM Bebas, sans-serif',
+                                        height: '48px',
+                                        fontSize: `${getClampedFontSize(currentData.teamAName)}px`
+                                    }}
+                                >
                                     {currentData.teamAName}
                                 </div>
 
@@ -44,23 +60,36 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                 </div>
 
                 {showMatchTime && (
-                    <div className="bg-black text-white px-2 py-1 text-sm font-bold whitespace-nowrap flex items-center justify-center" style={{ height: '56px' }}>
+                    <div
+                        className="bg-black text-white px-2 py-1 text-sm font-bold whitespace-nowrap flex items-center justify-center"
+                        style={{ height: '56px' }}
+                    >
                         {currentData.matchTime}
                     </div>
                 )}
-    
+
                 <div className="flex">
                     <div className="flex flex-col items-center">
                         {/* Fouls for Team B */}
-                        <div className="flex justify-center">
-                            <div className="[&>*]:!w-3 [&>*]:!h-1">
-                                <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[10px]" />
+                        {/* Fouls for Team A */}
+                        <div className="flex justify-center mb-0.5">
+                            <div className="[&>*]:!w-3 [&>*]:!h-[6px]">
+                                <FoulsDisplay foulsCount={currentData.teamBFouls} />
                             </div>
                         </div>
-                        
+
+
                         <div className="flex items-start">
                             <div className="w-[220px]">
-                                <div className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center" style={{ backgroundColor: '#004d73', fontFamily: 'UTM Bebas, sans-serif', height: '48px',fontSize: `${Math.min(40, Math.max(22, 220 / Math.max(1, currentData.teamAName.length) * 1.5))}px` }}>
+                                <div
+                                    className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center"
+                                    style={{
+                                        backgroundColor: '#004d73',
+                                        fontFamily: 'UTM Bebas, sans-serif',
+                                        height: '48px',
+                                        fontSize: `${getClampedFontSize(currentData.teamBName)}px`
+                                    }}
+                                >
                                     {currentData.teamBName}
                                 </div>
 
@@ -75,7 +104,10 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                                     />
                                 </div>
                             </div>
-                            <div className="bg-yellow-400 text-black font-bold text-4xl px-2 py-0.5 text-center sm:w-8 flex items-center justify-center" style={{ fontFamily: 'UTM Bebas, sans-serif', height: '56px' }}>
+                            <div
+                                className="bg-yellow-400 text-black font-bold text-4xl px-2 py-0.5 text-center sm:w-8 flex items-center justify-center"
+                                style={{ fontFamily: 'UTM Bebas, sans-serif', height: '56px' }}
+                            >
                                 {currentData.teamBScore}
                             </div>
                         </div>
@@ -83,7 +115,8 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                 </div>
 
             </div>
-                        {/* Logo ScoLiv */}
+
+            {/* Logo ScoLiv */}
             <div className="flex justify-center w-full">
                 <img
                     src="/images/basic/ScoLivLogo.png"
@@ -91,7 +124,6 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                     className="w-[46%] h-auto"
                 />
             </div>
-
         </div>
     );
 };
