@@ -824,10 +824,11 @@ export const PublicMatchProvider = ({ children }) => {
       // console.log(`🏠 [PublicMatchContext] Room event: ${eventType}`, data);
 
       if (eventType === 'room_joined' || eventType === 'join_roomed') {
-        // console.log('✅ [PublicMatchContext] Successfully joined room, processing current state from join_roomed...');
+        console.log('✅ [PublicMatchContext] Successfully joined room, processing current state from join_roomed...');
 
         if (data && data.currentState) {
           const state = data.currentState;
+          console.log('📦 [PublicMatchContext] Full currentState from server:', state);
 
           if (state.matchData) {
             console.log('🔄 [PublicMatchContext] Updating matchData from join_roomed:', state.matchData);
