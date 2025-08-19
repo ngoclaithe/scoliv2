@@ -181,12 +181,12 @@ export default function VangKimMatchIntro() {
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('/images/background-poster/bg5.jpg')"
+            backgroundImage: "url('/images/background-poster/bg4.jpg')"
           }}
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col p-0">
+        <div className="relative z-10 h-full flex flex-col p-0 md:py-4">
 
 
           {/* Top section với logos - Mobile responsive */}
