@@ -45,7 +45,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
         teamA2KitColor: matchData?.teamA?.teamA2KitColor || "#FF0000",
         teamBKitColor: matchData?.teamB?.teamBKitColor || "#0000FF",
         teamB2KitColor: matchData?.teamB?.teamB2KitColor || "#FF0000",
-        leagueLogo: "/api/placeholder/40/40",
+        leagueLogo: "/images/basic/logo-skin4.png",
         typeMatch: matchData?.typeMatch || "soccer"
     };
 
@@ -127,7 +127,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
                     : 'square';
 
                 if (position === targetPosition && (!behavior || behavior === 'add')) {
-                    console.log('🔍 MediaPartners typeDisplay for position', targetPosition, ':', typeDisplay);
+                    // console.log('🔍 MediaPartners typeDisplay for position', targetPosition, ':', typeDisplay);
                     allLogos.push({ url: getFullLogoUrl(logo), alt: 'Media Partner', type: 'media', typeDisplay });
                 }
             });
