@@ -3,6 +3,7 @@ import DisplayLogo from '../../common/DisplayLogo';
 import { FoulsDisplay } from '../../../utils/futsalUtils';
 
 const ScoreboardType4 = ({ currentData, logoShape, showMatchTime, tournamentLogo }) => {
+    const defaultTournamentLogo = 'https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/1200px-FC_Barcelona_logo.svg.png';
     const getTeamNameFontSize = (teamName, isMobile = false) => {
         const length = teamName ? teamName.length : 0;
         
@@ -29,7 +30,7 @@ const ScoreboardType4 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                     {/* Tournament/League Logo - Đặt riêng phía trên */}
                     <div className="absolute left-1/2 top-[-8px] sm:top-[-16px] -translate-x-1/2 w-[16px] h-[16px] sm:w-[52px] sm:h-[52px] z-50">
                         <DisplayLogo
-                            logos={[tournamentLogo || '/images/basic/logo-skin4.png']}
+                            logos={[tournamentLogo || defaultTournamentLogo]}
                             alt="Tournament"
                             type_play={logoShape}
                             className="w-full h-full"
