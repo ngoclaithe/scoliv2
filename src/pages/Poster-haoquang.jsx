@@ -183,7 +183,7 @@ export default function HaoQuangMatchIntro() {
           <div className="flex-1 flex flex-col justify-center min-h-0">
 
             {/* Title section */}
-            <div className="text-center mb-0 sm:mb-1 md:mb-2">
+            <div className="text-center mb-0 sm:mb-0 md:mb-1">
               <h1
                 className="title text-white px-1 sm:px-2"
               >
