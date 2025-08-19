@@ -174,7 +174,7 @@ export default function VangXanhMatchIntro() {
     }`}>
       <div className={`relative bg-white overflow-hidden ${
         isMobile
-          ? 'w-full h-full max-h-[60vh] aspect-video'
+          ? 'w-full h-[1/2] max-h-[60vh] aspect-video'
           : 'w-full max-w-7xl h-full'
       }`}>
 
