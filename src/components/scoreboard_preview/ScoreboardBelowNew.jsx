@@ -139,10 +139,16 @@ const ScoreboardBelowNew = ({
                         >
                             {currentData.teamAName}
                         </div>
-                        <div
-                            className="w-full h-3"
-                            style={{ backgroundColor: currentData.teamAKitColor }}
-                        />
+                        <div className="flex w-full" style={{ height: '8px' }}>
+                            <div
+                                className="flex-1"
+                                style={{ backgroundColor: currentData.teamAKitColor, height: '8px' }}
+                            />
+                            <div
+                                className="flex-1"
+                                style={{ backgroundColor: currentData.teamA2KitColor, height: '8px' }}
+                            />
+                        </div>
                     </div>
                 </div>
 
