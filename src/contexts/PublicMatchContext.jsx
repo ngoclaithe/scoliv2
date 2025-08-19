@@ -376,7 +376,7 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('goal_scorers_updated', (data) => {
       const { team, scorer } = data;
 
-      // Xác định đúng teamKey dựa trên cấu trúc state
+      // Xác định ��úng teamKey dựa trên cấu trúc state
       const teamKey = team === 'teamA' ? 'teamA' : 'teamB';
       const scorersKey = team === 'teamA' ? 'teamAScorers' : 'teamBScorers';
 
@@ -894,12 +894,22 @@ export const PublicMatchProvider = ({ children }) => {
 
             // Process logos from displaySettings.logos if they exist
             if (state.displaySettings.logos && Array.isArray(state.displaySettings.logos)) {
-              // console.log('🔄 [PublicMatchContext] Processing logos from displaySettings:', state.displaySettings.logos);
+              console.log('🔄 [PublicMatchContext] Processing logos from displaySettings:', state.displaySettings.logos);
 
               // Separate logos by type
               const sponsorLogos = state.displaySettings.logos.filter(logo => logo.type === 'sponsors');
               const organizingLogos = state.displaySettings.logos.filter(logo => logo.type === 'organizing');
               const mediaPartnerLogos = state.displaySettings.logos.filter(logo => logo.type === 'media_partners');
+              const tournamentLogos = state.displaySettings.logos.filter(logo => logo.type === 'tournament_logo');
+
+              // Kiểm tra nếu có logo banner (code bắt đầu b���ng B) thì logoShape = square
+              const allLogos = [...sponsorLogos, ...organizingLogos, ...mediaPartnerLogos];
+              const hasBannerLogo = allLogos.some(logo => logo.codelogo && logo.codelogo.startsWith('B'));
+
+              if (hasBannerLogo) {
+                console.log('🔲 [PublicMatchContext] Found banner logo, setting logoShape to square');
+                setDisplaySettings(prev => ({ ...prev, logoShape: 'square' }));
+              }
 
               // Update sponsors if found
               if (sponsorLogos.length > 0) {
@@ -939,6 +949,19 @@ export const PublicMatchProvider = ({ children }) => {
                 };
                 console.log('📺 [PublicMatchContext] Setting mediaPartners from logos:', mediaPartnerData);
                 setMediaPartners({ mediaPartners: mediaPartnerData });
+              }
+
+              // Update tournament logo if found
+              if (tournamentLogos.length > 0) {
+                const tournamentData = {
+                  url_logo: tournamentLogos.map(logo => logo.urlLogo),
+                  code_logo: tournamentLogos.map(logo => logo.codelogo),
+                  position: tournamentLogos.map(logo => logo.position),
+                  type_display: tournamentLogos.map(logo => logo.typeDisplay || 'square'),
+                  behavior: 'add'
+                };
+                console.log('🏆 [PublicMatchContext] Setting tournamentLogo from logos:', tournamentData);
+                setTournamentLogo(tournamentData);
               }
             }
           }
