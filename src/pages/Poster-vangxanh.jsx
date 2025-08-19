@@ -190,7 +190,7 @@ export default function VangXanhMatchIntro() {
             <div className={`flex items-start flex-shrink-0 ${isMobile ? 'gap-1' : 'gap-2 sm:gap-4'}`} style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: isMobile ? '25%' : '35%' }}>
                 {hasSponsors && (
                   <div className="flex-shrink-0">
-                    <div className={`font-bold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
+                    <div className={`font-normal text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
                       Nhà tài trợ
                     </div>
                     <div className="flex gap-0.5">
@@ -209,7 +209,7 @@ export default function VangXanhMatchIntro() {
 
                 {hasOrganizing && (
                   <div className="flex-shrink-0">
-                    <div className={`font-bold text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
+                    <div className={`font-normal text-white mb-0.5 drop-shadow-lg ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
                       Đơn vị tổ chức
                     </div>
                     <div className="flex gap-0.5">
@@ -249,7 +249,7 @@ export default function VangXanhMatchIntro() {
             <div className="flex flex-col items-end gap-1 sm:gap-2 flex-shrink-0" style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: '30%' }}>
               {hasMediaPartners && (
                 <div className="flex-shrink-0 w-full">
-                  <div className={`font-bold text-white mb-0.5 drop-shadow-lg text-right ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
+                  <div className={`font-normal text-white mb-0.5 drop-shadow-lg text-right ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
                     Đơn vị truyền thông
                   </div>
                   <div className="flex gap-0.5 justify-end overflow-x-auto scrollbar-hide">
@@ -306,12 +306,12 @@ export default function VangXanhMatchIntro() {
               {!isMobile && (
                 <div className="flex items-center justify-center gap-2 sm:gap-3 mt-0.5 sm:mt-1">
                   {matchData.showRound && (
-                    <div className="bg-blue-600/80 px-2 py-1 rounded text-xs sm:text-sm font-bold text-white">
+                    <div className="bg-blue-600/80 px-2 py-1 rounded text-xs sm:text-sm font-normal text-white">
                       VÒNG {matchData.round}
                     </div>
                   )}
                   {matchData.showGroup && (
-                    <div className="bg-green-600/80 px-2 py-1 rounded text-xs sm:text-sm font-bold text-white">
+                    <div className="bg-green-600/80 px-2 py-1 rounded text-xs sm:text-sm font-normal text-white">
                       BẢNG {matchData.group}
                     </div>
                   )}
@@ -352,9 +352,9 @@ export default function VangXanhMatchIntro() {
                 <div style={getTeamNameContainerStyle()}>
                   <div
                     ref={teamANameRef}
-                    className="text-white font-bold uppercase tracking-wide text-center"
+                    className="text-white font-normal uppercase tracking-wide text-center"
                     style={{
-                      color: '#00ff00',
+                      color: '#3e90ff',
                       fontFamily: 'iCielBCCubano, sans-serif',
                       fontWeight: '800',
                       textShadow: '4px 4px #ffffff',
@@ -406,9 +406,9 @@ export default function VangXanhMatchIntro() {
                 <div style={getTeamNameContainerStyle()}>
                   <div
                     ref={teamBNameRef}
-                    className="text-white font-bold uppercase tracking-wide text-center"
+                    className="text-white font-normal uppercase tracking-wide text-center"
                     style={{
-                      color: '#00ff00',
+                      color: '#3e90ff',
                       fontFamily: 'iCielBCCubano, sans-serif',
                       fontWeight: '800',
                       textShadow: '4px 4px #ffffff',
@@ -528,7 +528,7 @@ export default function VangXanhMatchIntro() {
           @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
           
           .title {
-            color: #00ff00 !important;
+            color: #3e90ff !important;
             font-family: 'iCielBCCubano', 'Baloo Bhai 2', 'BalooBhai2-Bold', sans-serif !important;
             font-weight: 800 !important;
             font-size: 65px;
