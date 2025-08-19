@@ -228,6 +228,9 @@ export const PublicMatchProvider = ({ children }) => {
 
   const setupSocketListeners = useCallback(() => {
     socketService.on('match_info_updated', (data) => {
+      console.log('🔄 [PublicMatchContext] match_info_updated received:', data);
+      console.log('🏆 [PublicMatchContext] Tournament in match_info_updated:', data.matchInfo?.tournament);
+
       setMatchData(prev => ({
         ...prev,
         ...data.matchInfo,
@@ -824,16 +827,19 @@ export const PublicMatchProvider = ({ children }) => {
       // console.log(`🏠 [PublicMatchContext] Room event: ${eventType}`, data);
 
       if (eventType === 'room_joined' || eventType === 'join_roomed') {
-        // console.log('✅ [PublicMatchContext] Successfully joined room, processing current state from join_roomed...');
+        console.log('✅ [PublicMatchContext] Successfully joined room, processing current state from join_roomed...');
 
         if (data && data.currentState) {
           const state = data.currentState;
+          console.log('📦 [PublicMatchContext] Full currentState from server:', state);
 
           if (state.matchData) {
-            // console.log('🔄 [PublicMatchContext] Updating matchData from join_roomed:', state.matchData);
+            console.log('🔄 [PublicMatchContext] Updating matchData from join_roomed:', state.matchData);
+            console.log('🏆 [PublicMatchContext] Tournament value from server:', state.matchData.tournament);
 
             const mappedMatchData = {
               ...state.matchData,
+              tournament: state.matchData.tournament || "",
               round: state.matchData.round || 1,
               group: state.matchData.group || "A",
               subtitle: state.matchData.subtitle || "",
@@ -894,12 +900,22 @@ export const PublicMatchProvider = ({ children }) => {
 
             // Process logos from displaySettings.logos if they exist
             if (state.displaySettings.logos && Array.isArray(state.displaySettings.logos)) {
-              // console.log('🔄 [PublicMatchContext] Processing logos from displaySettings:', state.displaySettings.logos);
+              console.log('🔄 [PublicMatchContext] Processing logos from displaySettings:', state.displaySettings.logos);
 
               // Separate logos by type
               const sponsorLogos = state.displaySettings.logos.filter(logo => logo.type === 'sponsors');
               const organizingLogos = state.displaySettings.logos.filter(logo => logo.type === 'organizing');
               const mediaPartnerLogos = state.displaySettings.logos.filter(logo => logo.type === 'media_partners');
+              const tournamentLogos = state.displaySettings.logos.filter(logo => logo.type === 'tournament_logo');
+
+              // Kiểm tra nếu có logo banner (code bắt đầu bằng B) thì logoShape = square
+              const allLogos = [...sponsorLogos, ...organizingLogos, ...mediaPartnerLogos];
+              const hasBannerLogo = allLogos.some(logo => logo.codelogo && logo.codelogo.startsWith('B'));
+
+              if (hasBannerLogo) {
+                console.log('🔲 [PublicMatchContext] Found banner logo, setting logoShape to square');
+                setDisplaySettings(prev => ({ ...prev, logoShape: 'square' }));
+              }
 
               // Update sponsors if found
               if (sponsorLogos.length > 0) {
@@ -939,6 +955,19 @@ export const PublicMatchProvider = ({ children }) => {
                 };
                 console.log('📺 [PublicMatchContext] Setting mediaPartners from logos:', mediaPartnerData);
                 setMediaPartners({ mediaPartners: mediaPartnerData });
+              }
+
+              // Update tournament logo if found
+              if (tournamentLogos.length > 0) {
+                const tournamentData = {
+                  url_logo: tournamentLogos.map(logo => logo.urlLogo),
+                  code_logo: tournamentLogos.map(logo => logo.codelogo),
+                  position: tournamentLogos.map(logo => logo.position),
+                  type_display: tournamentLogos.map(logo => logo.typeDisplay || 'square'),
+                  behavior: 'add'
+                };
+                console.log('🏆 [PublicMatchContext] Setting tournamentLogo from logos:', tournamentData);
+                setTournamentLogo(tournamentData);
               }
             }
           }
