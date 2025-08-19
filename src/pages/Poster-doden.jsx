@@ -135,25 +135,22 @@ export default function DodenMatchIntro() {
     }
   };
 
-  // Helper function to get sponsor label font size
   const getSponsorLabelFontSize = () => {
     if (isMobile) return 'text-[8px]';
     if (isTablet) return 'text-xs';
-    return 'text-lg'; // 1.5x larger than original text-xs for desktop
+    return 'text-lg'; 
   };
 
-  // Helper function to get team name font size
   const getTeamNameFontSize = () => {
     if (isMobile) return 'text-[8px]';
     if (isTablet) return 'text-xs';
-    return 'text-3xl'; // 1.4x larger than original text-xl for desktop (approximately)
+    return 'text-3xl'; 
   };
 
-  // Helper function to get team name top margin (doubled spacing)
   const getTeamNameMargin = () => {
-    if (isMobile) return 'mt-4'; // doubled from mt-2 equivalent
-    if (isTablet) return 'mt-6'; // doubled from mt-3 equivalent  
-    return 'mt-8'; // doubled from mt-4 equivalent
+    if (isMobile) return 'mt-4'; 
+    if (isTablet) return 'mt-6';  
+    return 'mt-8'; 
   };
 
   return (

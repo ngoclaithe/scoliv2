@@ -72,13 +72,12 @@ export default function HaoQuangMatchIntro() {
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
 
-  // Auto-resize font for team names
   useEffect(() => {
     const adjustTeamNameFontSize = () => {
       const teamNameElements = document.querySelectorAll('.team-name-text');
       teamNameElements.forEach((element) => {
         const container = element.parentElement;
-        const containerWidth = container.offsetWidth - (isMobile ? 16 : 30); // subtract padding
+        const containerWidth = container.offsetWidth - (isMobile ? 16 : 30); 
         let fontSize = isMobile ? 6 : isTablet ? 16 : 28;
         const minFontSize = isMobile ? 3 : isTablet ? 6 : 12;
 
@@ -91,7 +90,6 @@ export default function HaoQuangMatchIntro() {
       });
     };
 
-    // Delay to ensure DOM is ready
     setTimeout(adjustTeamNameFontSize, 100);
   }, [matchData.team1, matchData.team2, isMobile, isTablet]);
   const logoSize = isMobile ? 50 : isTablet ? 80 : 140;
@@ -116,21 +114,6 @@ export default function HaoQuangMatchIntro() {
     type: 'media',
     typeDisplay: matchData.mediaPartnersTypeDisplay[index] || 'square'
   })) : [];
-
-
-
-
-  // Font size adjustment function
-  const adjustFontSize = (element) => {
-    if (!element) return;
-    let fontSize = parseInt(window.getComputedStyle(element).fontSize);
-    const minFontSize = 14;
-
-    while (element.scrollWidth > element.offsetWidth && fontSize > minFontSize) {
-      fontSize -= 1;
-      element.style.fontSize = fontSize + "px";
-    }
-  };
 
   const hasSponsors = sponsorLogos.length > 0;
   const hasOrganizing = organizingLogos.length > 0;
@@ -161,30 +144,8 @@ export default function HaoQuangMatchIntro() {
     }
   };
 
-  // Helper function to get sponsor label font size
-  const getSponsorLabelFontSize = () => {
-    if (isMobile) return 'text-[8px]';
-    if (isTablet) return 'text-xs';
-    return 'text-lg';
-  };
-
-  // Helper function to get team name font size
-  const getTeamNameFontSize = () => {
-    if (isMobile) return 'text-[8px]';
-    if (isTablet) return 'text-xs';
-    return 'text-3xl';
-  };
-
-  // Helper function to get team name top margin
-  const getTeamNameMargin = () => {
-    if (isMobile) return 'mt-4';
-    if (isTablet) return 'mt-6';
-    return 'mt-8';
-  };
-
-
   return (
-    <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-1 sm:p-2 md:p-4">
+    <div className="w-full h-screen bg-transparent flex items-center justify-center p-1 sm:p-2 md:p-4">
       <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
 
         <div
@@ -197,7 +158,6 @@ export default function HaoQuangMatchIntro() {
 
         <div className={`relative z-10 h-full flex flex-col ${isMobile ? 'p-0.5' : 'p-1 sm:p-2'}`}>
 
-          {/* Top section với tournament logos only - chỉ hiển thị khi có logos */}
           {matchData.showTournamentLogo && matchData.tournamentLogos && matchData.tournamentLogos.length > 0 && (
             <div className="flex justify-center items-start mb-0 sm:mb-1 md:mb-2 min-h-[6vh] sm:min-h-[8vh] md:min-h-[10vh]">
               {/* Tournament Logos */}
@@ -263,7 +223,7 @@ export default function HaoQuangMatchIntro() {
             }`}>
 
               {/* Team A */}
-              <div className="flex flex-col items-center space-y-1 sm:space-y-2">
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2" style={{transform: 'translateX(-10%)'}}>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
@@ -286,7 +246,7 @@ export default function HaoQuangMatchIntro() {
                   </div>
                 </div>
                 <div
-                  className="text-white font-bold uppercase tracking-wide text-center team-name-container"
+                  className="text-white font-bold uppercase tracking-wide text-center team-name-container w-[120%]"
                   style={{
                     background: 'linear-gradient(135deg, #1eae99, #008582)',
                     borderRadius: isMobile ? '8px' : '17px',
@@ -340,7 +300,7 @@ export default function HaoQuangMatchIntro() {
                     <div
                       className="font-bold"
                       style={{
-                        fontSize: isMobile ? '6px' : isTablet ? '12px' : '16px'
+                        fontSize: isMobile ? '5px' : isTablet ? '12px' : '20px'
                       }}
                     >
                       {matchData.showTimer && matchData.roundedTime}
@@ -353,7 +313,7 @@ export default function HaoQuangMatchIntro() {
                     <div
                       className="font-normal"
                       style={{
-                        fontSize: isMobile ? '5px' : isTablet ? '10px' : '14px'
+                        fontSize: isMobile ? '5px' : isTablet ? '12px' : '20px'
                       }}
                     >
                       Địa điểm: {matchData.stadium}
@@ -363,7 +323,7 @@ export default function HaoQuangMatchIntro() {
               </div>
 
               {/* Team B */}
-              <div className="flex flex-col items-center space-y-1 sm:space-y-2">
+              <div className="flex flex-col items-center space-y-1 sm:space-y-2" style={{transform: 'translateX(10%)'}}>
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
@@ -386,7 +346,7 @@ export default function HaoQuangMatchIntro() {
                   </div>
                 </div>
                 <div
-                  className="text-white font-bold uppercase tracking-wide text-center team-name-container"
+                  className="text-white font-bold uppercase tracking-wide text-center team-name-container w-[120%]"
                   style={{
                     background: 'linear-gradient(135deg, #1eae99, #008582)',
                     borderRadius: isMobile ? '8px' : '17px',

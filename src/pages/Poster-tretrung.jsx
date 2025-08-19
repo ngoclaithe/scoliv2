@@ -163,7 +163,7 @@ export default function TreTrungMatchIntro() {
   });
 
   return (
-    <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4 overflow-hidden">
+    <div className="w-full h-screen bg-transparent flex items-center justify-center p-2 sm:p-4 overflow-hidden">
       <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
 
         <div

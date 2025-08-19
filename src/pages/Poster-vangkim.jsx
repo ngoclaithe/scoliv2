@@ -140,7 +140,7 @@ export default function DodenMatchIntro() {
 
 
   return (
-    <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-1 sm:p-2 md:p-4">
+    <div className="w-full h-screen bg-transparent flex items-center justify-center p-1 sm:p-2 md:p-4">
       <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden shadow-2xl">
 
         <div
