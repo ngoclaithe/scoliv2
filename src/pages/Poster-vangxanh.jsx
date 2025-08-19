@@ -290,21 +290,21 @@ export default function VangXanhMatchIntro() {
           <div className="flex-1 flex flex-col justify-center min-h-0 px-2 sm:px-4 md:px-6">
 
             {/* Title section - compact */}
-            <div className="text-center mb-1 sm:mb-2 md:mb-2">
-              <h1 className="title text-white mb-1 sm:mb-2 px-1 sm:px-2">
+            <div className="text-center mb-1 sm:mb-1 md:mb-1">
+              <h1 className="title text-white mb-1 sm:mb-1 px-1 sm:px-2">
                 {matchData.matchTitle}
               </h1>
 
               {/* Subtitle display */}
               {matchData.showSubtitle && matchData.subtitle && (
-                <div className="text-white/90 text-xs sm:text-sm md:text-base lg:text-lg font-medium mt-1 sm:mt-2 px-2">
+                <div className="text-white/90 text-xs sm:text-sm md:text-base lg:text-lg font-medium mt-1 sm:mt-1 px-2">
                   {matchData.subtitle}
                 </div>
               )}
 
               {/* Round and Group display - Hidden on mobile to save space */}
               {!isMobile && (
-                <div className="flex items-center justify-center gap-2 sm:gap-3 mt-0.5 sm:mt-1">
+                <div className="flex items-center justify-center gap-2 sm:gap-3 mt-0.5 sm:mt-0.5">
                   {matchData.showRound && (
                     <div className="bg-blue-600/80 px-2 py-1 rounded text-xs sm:text-sm font-normal text-white">
                       VÒNG {matchData.round}
@@ -321,7 +321,7 @@ export default function VangXanhMatchIntro() {
             </div>
 
             {/* Teams section - compact and mobile responsive */}
-            <div className={`flex items-center justify-center w-full mb-1 sm:mb-2 md:mb-2 ${
+            <div className={`flex items-center justify-center w-full mb-1 sm:mb-1 md:mb-1 ${
               isMobile
                 ? 'px-2 gap-1'
                 : 'px-4 sm:px-8 md:px-12 gap-2 sm:gap-4 md:gap-6'
