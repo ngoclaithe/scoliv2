@@ -385,7 +385,8 @@ const ScoreboardBelowNew = ({
                         className="text-white text-sm font-semibold relative flex items-center justify-center w-24 h-8 sm:w-32 md:w-40 z-10 -mr-6"
                         style={{
                             background: 'linear-gradient(90deg, rgb(222, 57, 51), rgb(238, 134, 58))',
-                            clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)'
+                            clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)',
+                            fontFamily: 'UTM Bebas, sans-serif'
                         }}
                     >
                         <span className="truncate text-center">{currentData.teamAName}</span>
@@ -408,7 +409,7 @@ const ScoreboardBelowNew = ({
                             minHeight: '48px'
                         }}
                     >
-                        <div className="text-white font-bold text-lg sm:text-xl min-w-[1.5rem] sm:min-w-[2rem] text-center">
+                        <div className="text-white font-bold text-lg sm:text-xl min-w-[1.5rem] sm:min-w-[2rem] text-center" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
                             {currentData.teamAScore}
                         </div>
 
@@ -422,7 +423,7 @@ const ScoreboardBelowNew = ({
                             />
                         </div>
 
-                        <div className="text-white font-bold text-lg sm:text-xl min-w-[1.5rem] sm:min-w-[2rem] text-center">
+                        <div className="text-white font-bold text-lg sm:text-xl min-w-[1.5rem] sm:min-w-[2rem] text-center" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
                             {currentData.teamBScore}
                         </div>
                     </div>
@@ -443,7 +444,8 @@ const ScoreboardBelowNew = ({
                         className="text-white text-sm font-semibold relative flex items-center justify-center w-24 h-8 sm:w-32 md:w-40 z-10 -ml-6"
                         style={{
                             background: 'linear-gradient(90deg, rgb(222, 57, 51), rgb(238, 134, 58))',
-                            clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)'
+                            clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)',
+                            fontFamily: 'UTM Bebas, sans-serif'
                         }}
                     >
                         <span className="truncate text-center">{currentData.teamBName}</span>
