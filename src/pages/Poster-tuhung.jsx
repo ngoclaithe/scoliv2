@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
+import { formatVietnameseDate } from '../utils/helpers';
 
 export default function TuHungMatchIntro() {
   const {
@@ -22,7 +23,7 @@ export default function TuHungMatchIntro() {
     logo2: getFullLogoUrl(contextMatchData.teamB.logo) || '/images/background-poster/default_logoB.png',
     stadium: contextMatchData.stadium || 'SVĐ TỨ HÙNG',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '19:30',
-    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
+    currentDate: formatVietnameseDate(contextMatchData.matchDate) || formatVietnameseDate(new Date()),
     tournamentLogos: getFullLogoUrls(tournamentLogo?.url_logo || []),
     liveUnit: getFullLogoUrl(liveUnit?.url_logo?.[0]) || null,
     liveText: contextMatchData.liveText || 'YOUTUBE LIVE',

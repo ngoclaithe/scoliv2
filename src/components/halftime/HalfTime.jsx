@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../../utils/logoUtils';
+import { formatVietnameseDate } from '../../utils/helpers';
 
 const HalftimeBreakPoster = () => {
     const { matchData: contextMatchData } = usePublicMatch();
@@ -9,7 +10,7 @@ const HalftimeBreakPoster = () => {
         matchTitle: contextMatchData.matchTitle || "GIẢI BÓNG ĐÁ PHONG TRÀO",
         stadium: contextMatchData.stadium || "Sân vận động Thiên Trường",
         time: contextMatchData.startTime || contextMatchData.time || "19:30",
-        date: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
+        date: formatVietnameseDate(contextMatchData.matchDate) || formatVietnameseDate(new Date()),
         team1: contextMatchData.teamA.name || "ĐỘI A",
         team2: contextMatchData.teamB.name || "ĐỘI B",
         logo1: getFullLogoUrl(contextMatchData?.teamA?.logo) || "/api/placeholder/90/90",

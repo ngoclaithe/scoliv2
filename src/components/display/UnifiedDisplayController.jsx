@@ -167,12 +167,10 @@ const UnifiedDisplayController = () => {
         }
       }
 
-      // Auto start timer nếu có matchTime và view không ph��i poster/intro/halftime
       const viewsWithoutTimer = ['poster', 'intro', 'halftime'];
       if (params.matchTime && params.matchTime !== '00:00' && !viewsWithoutTimer.includes(params.view)) {
-        console.log('⏰ [UnifiedDisplayController] Auto starting timer with time:', params.matchTime, 'for view:', params.view);
+        // console.log('⏰ [UnifiedDisplayController] Auto starting timer with time:', params.matchTime, 'for view:', params.view);
 
-        // Delay để đảm bảo socket đã sẵn sàng
         setTimeout(() => {
           try {
             console.log('🎯 [UnifiedDisplayController] Starting timer - calling startServerTimer:', {
@@ -213,7 +211,7 @@ const UnifiedDisplayController = () => {
             verifyResult.message.includes('expired') ||
             verifyResult.message.includes('không hợp lệ')
           )) {
-            setError(`❌ Mã truy cập đã hết hạn hoặc không hợp lệ: ${accessCode}\n\n⏰ Vui lòng liên h��� admin để cấp mã mới.`);
+            setError(`❌ Mã truy cập đã hết hạn hoặc không hợp lệ: ${accessCode}\n\n⏰ Vui lòng liên hệ admin để cấp mã mới.`);
           } else {
             setError(`❌ Mã truy cập không hợp lệ: ${accessCode}\n\n${verifyResult.message || 'Vui lòng kiểm tra lại mã truy cập.'}`);
           }

@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
+import { formatVietnameseDate } from '../utils/helpers';
 
 export default function DodenMatchIntro() {
   const {
@@ -22,7 +23,7 @@ export default function DodenMatchIntro() {
     logo2: getFullLogoUrl(contextMatchData.teamB.logo) || '/images/background-poster/default_logoB.png',
     stadium: contextMatchData.stadium || 'SVĐ MỸ ĐÌNH',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '20:00',
-    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
+    currentDate: formatVietnameseDate(contextMatchData.matchDate) || formatVietnameseDate(new Date()),
     sponsors: getFullLogoUrls(sponsors?.sponsors?.url_logo || []),
     sponsorsTypeDisplay: sponsors?.sponsors?.type_display || [],
     organizing: getFullLogoUrls(organizing?.organizing?.url_logo || []),
@@ -327,16 +328,29 @@ export default function DodenMatchIntro() {
                   </div>
                 </div>
                 <div className={`px-1 sm:px-2 md:px-3 ${getTeamNameMargin()}`}>
-                  <span
-                    className={`${getTeamNameFontSize()} font-bold uppercase tracking-wide text-center block truncate font-utm-colossalis`}
+                  <div
                     style={{
-                      color: '#ffe006',
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                      width: isMobile ? '80px' : isTablet ? '200px' : '280px',
+                      height: isMobile ? '20px' : isTablet ? '60px' : '80px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      overflow: 'hidden',
+                      backgroundColor: 'transparent'
                     }}
-                    ref={(el) => el && adjustFontSize(el)}
                   >
-                    {matchData.team1}
-                  </span>
+                    <span
+                      className={`${getTeamNameFontSize()} font-bold uppercase tracking-wide text-center block truncate font-utm-colossalis`}
+                      style={{
+                        color: '#ffe006',
+                        textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                        whiteSpace: 'nowrap'
+                      }}
+                      ref={(el) => el && adjustFontSize(el)}
+                    >
+                      {matchData.team1}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -387,16 +401,29 @@ export default function DodenMatchIntro() {
                   </div>
                 </div>
                 <div className={`px-1 sm:px-2 md:px-3 ${getTeamNameMargin()}`}>
-                  <span
-                    className={`${getTeamNameFontSize()} font-bold uppercase tracking-wide text-center block truncate font-utm-colossalis`}
+                  <div
                     style={{
-                      color: '#ffe006',
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                      width: isMobile ? '80px' : isTablet ? '200px' : '280px',
+                      height: isMobile ? '20px' : isTablet ? '60px' : '80px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      overflow: 'hidden',
+                      backgroundColor: 'transparent'
                     }}
-                    ref={(el) => el && adjustFontSize(el)}
                   >
-                    {matchData.team2}
-                  </span>
+                    <span
+                      className={`${getTeamNameFontSize()} font-bold uppercase tracking-wide text-center block truncate font-utm-colossalis`}
+                      style={{
+                        color: '#ffe006',
+                        textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                        whiteSpace: 'nowrap'
+                      }}
+                      ref={(el) => el && adjustFontSize(el)}
+                    >
+                      {matchData.team2}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -436,9 +463,9 @@ export default function DodenMatchIntro() {
         </div>
 
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          {[...Array(216)].map((_, i) => {
-            const angle = (i * 360) / 216;
-            const distance = 60 + (i % 10) * 30;
+          {[...Array(432)].map((_, i) => {
+            const angle = (i * 360) / 432;
+            const distance = 120 + (i % 10) * 60;
 
             return (
               <div
@@ -486,26 +513,26 @@ export default function DodenMatchIntro() {
             }
           }
 
-          ${[...Array(216)].map((_, i) => {
-          const angle = (i * 360) / 216;
+          ${[...Array(432)].map((_, i) => {
+          const angle = (i * 360) / 432;
           const radian = (angle * Math.PI) / 180;
-          const distance = 1200;
+          const distance = 2400;
           const x = Math.cos(radian) * distance;
           const y = Math.sin(radian) * distance;
 
           return `
               @keyframes shootingStar-${angle} {
-                0% { 
-                  transform: translate(-50%, -50%) translate(0, 0) scale(0); 
-                  opacity: 0; 
+                0% {
+                  transform: translate(-50%, -50%) translate(0, 0) scale(0);
+                  opacity: 0;
                 }
-                10% { 
-                  opacity: 1; 
-                  transform: translate(-50%, -50%) translate(0, 0) scale(1); 
+                10% {
+                  opacity: 1;
+                  transform: translate(-50%, -50%) translate(0, 0) scale(1);
                 }
-                100% { 
-                  transform: translate(-50%, -50%) translate(${x}px, ${y}px) scale(0); 
-                  opacity: 0; 
+                100% {
+                  transform: translate(-50%, -50%) translate(${x}px, ${y}px) scale(0);
+                  opacity: 0;
                 }
               }
             `;

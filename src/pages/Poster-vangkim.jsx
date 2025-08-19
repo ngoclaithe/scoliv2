@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
+import { formatVietnameseDate } from '../utils/helpers';
 
 export default function VangKimMatchIntro() {
   const {
@@ -22,11 +23,11 @@ export default function VangKimMatchIntro() {
     logo2: getFullLogoUrl(contextMatchData.teamB.logo) || '/images/background-poster/default_logoB.png',
     stadium: contextMatchData.stadium || 'SVĐ THỐNG NHẤT',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '15:30',
-    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
+    currentDate: formatVietnameseDate(contextMatchData.matchDate) || formatVietnameseDate(new Date()),
     // Format time in Vietnamese style
     formattedDateTime: (() => {
       const time = contextMatchData.startTime || contextMatchData.time || '15:30';
-      const date = contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN');
+      const date = formatVietnameseDate(contextMatchData.matchDate) || formatVietnameseDate(new Date());
       return `${time} ngày ${date}`;
     })(),
     sponsors: getFullLogoUrls(sponsors?.sponsors?.url_logo || []),
@@ -181,12 +182,12 @@ export default function VangKimMatchIntro() {
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('/images/background-poster/bg5.jpg')"
+            backgroundImage: "url('/images/background-poster/bg4.jpg')"
           }}
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col p-0">
+        <div className="relative z-10 h-full flex flex-col p-0 md:py-4">
 
 
           {/* Top section với logos - Mobile responsive */}
@@ -375,7 +376,8 @@ export default function VangKimMatchIntro() {
                       color: '#3265a8',
                       fontFamily: 'UTM Colossalis',
                       fontWeight: '800',
-                      textShadow: '2px 2px #ffffff',
+                      WebkitTextStroke: '0.5px white',
+                      textStroke: '1px white',
                       whiteSpace: 'nowrap'
                     }}
                   >
@@ -386,27 +388,31 @@ export default function VangKimMatchIntro() {
 
               {/* Time and Date Section - Thay thế VS Section */}
               <div className="flex flex-col items-center space-y-1 sm:space-y-2">
+                {matchData.showTimer && (
                 <div
-                  className="time-date-container"
+                  className="text-white font-bold font-utm-colossalis leading-none"
                   style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    background: 'linear-gradient(to right, #3b82f6, #1d4ed8)',
-                    border: isMobile ? '1px solid #fff' : '6px solid #fff',
-                    borderRadius: isMobile ? '8px' : '16px',
-                    color: '#fff',
-                    fontSize: isMobile ? '12px' : isTablet ? '34px' : '74px',
-                    fontFamily: 'UTM Colossalis',
-                    padding: isMobile ? '3px 6px' : '8px 16px',
-                    boxShadow: '0 2px 10px rgba(24, 119, 242, 0.11)',
-                    letterSpacing: '1px',
-                    textShadow: '1px 2px 3px #0e306c22',
-                    whiteSpace: 'nowrap'
+                    fontSize: isMobile ? '20px' : isTablet ? '32px' : '88px',
+                    WebkitTextStroke: '1px #f87171',
+                    textStroke: '1px #f87171'
                   }}
                 >
-                  {(matchData.showTimer || matchData.showDate) && matchData.formattedDateTime}
+                  {matchData.roundedTime}
                 </div>
+              )}
+              {matchData.showDate && (
+                <div
+                  className="text-white/90 font-bold font-utm-colossalis leading-none"
+                  style={{
+                    fontSize: isMobile ? '12px' : isTablet ? '18px' : '44px',
+                    marginTop: isMobile ? '-2px' : isTablet ? '-4px' : '-8px',
+                    WebkitTextStroke: '1px #f87171',
+                    textStroke: '1px #f87171'
+                  }}
+                >
+                  {matchData.currentDate}
+                </div>
+              )}
               </div>
 
               {/* Team B */}
@@ -439,7 +445,8 @@ export default function VangKimMatchIntro() {
                       color: '#3265a8',
                       fontFamily: 'UTM Colossalis',
                       fontWeight: '800',
-                      textShadow: '2px 2px #ffffff',
+                      WebkitTextStroke: '0.5px white',
+                      textStroke: '1px white',
                       whiteSpace: 'nowrap'
                     }}
                   >
@@ -456,7 +463,7 @@ export default function VangKimMatchIntro() {
             <div
               className="flex items-center justify-center gap-4 sm:gap-8 md:gap-16 px-3 py-2 w-full"
               style={{
-                backgroundColor: '#FF6011',
+                backgroundColor: 'transparent',
                 fontFamily: 'UTM Colossalis'
               }}
             >
@@ -525,16 +532,15 @@ export default function VangKimMatchIntro() {
         </div>
 
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@400;500;600;700;800&display=swap');
-          @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-          
+
           .title {
             color: #ff3e37 !important;
             font-family: 'UTM Colossalis' !important;
             font-weight: 800 !important;
-            font-size: 65px;
+            font-size: 65px !important;
             height: auto;
-            text-shadow: 4px 4px #ffffff;
+            -webkit-text-stroke: 1px white !important;
+            text-stroke: 1px white !important;
             line-height: 1.2;
           }
 

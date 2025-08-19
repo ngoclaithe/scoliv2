@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
+import { formatVietnameseDate } from '../utils/helpers';
 
 export default function TreTrungMatchIntro() {
   const {
@@ -22,7 +23,7 @@ export default function TreTrungMatchIntro() {
     logo2: getFullLogoUrl(contextMatchData.teamB.logo) || '/images/background-poster/default_logoB.png',
     stadium: contextMatchData.stadium || 'SVĐ THỐNG NHẤT',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '15:30',
-    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
+    currentDate: formatVietnameseDate(contextMatchData.matchDate) || formatVietnameseDate(new Date()),
     sponsors: getFullLogoUrls(sponsors?.sponsors?.url_logo || []),
     sponsorsTypeDisplay: sponsors?.sponsors?.type_display || [],
     organizing: getFullLogoUrls(organizing?.organizing?.url_logo || []),

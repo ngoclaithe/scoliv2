@@ -323,7 +323,7 @@ const MatchStatsEdit = ({
     let currentTotalA = totalPossessionA;
     let currentTotalB = totalPossessionB;
 
-    // Thêm thời gian hiện tại nếu c�� đội đang kiểm soát và không bị pause
+    // Thêm thời gian hiện tại nếu có đội đang kiểm soát và không bị pause
     if (matchStarted && !matchPaused && currentController && possessionStartTime) {
       const currentDuration = now - possessionStartTime;
       if (currentController === 'teamA') {
@@ -896,7 +896,7 @@ const MatchStatsEdit = ({
           </div>
         </div>
 
-        {/* Cầu thủ ghi bàn - gi��� nguyên logic */}
+        {/* Cầu thủ ghi bàn - giữ nguyên logic */}
         <div className="py-0.5 border-t border-gray-200 pt-1">
           <div className="text-center mb-1.5">
             <span className="font-medium text-gray-700 text-sm">Sự kiện</span>

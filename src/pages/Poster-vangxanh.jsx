@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
+import { formatVietnameseDate } from '../utils/helpers';
 
 export default function VangXanhMatchIntro() {
   const {
@@ -22,11 +23,11 @@ export default function VangXanhMatchIntro() {
     logo2: getFullLogoUrl(contextMatchData.teamB.logo) || '/images/background-poster/default_logoB.png',
     stadium: contextMatchData.stadium || 'SVĐ THỐNG NHẤT',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '15:30',
-    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
+    currentDate: formatVietnameseDate(contextMatchData.matchDate) || formatVietnameseDate(new Date()),
     // Format time in Vietnamese style
     formattedDateTime: (() => {
       const time = contextMatchData.startTime || contextMatchData.time || '15:30';
-      const date = contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN');
+      const date = formatVietnameseDate(contextMatchData.matchDate) || formatVietnameseDate(new Date());
       return `${time} ngày ${date}`;
     })(),
     sponsors: getFullLogoUrls(sponsors?.sponsors?.url_logo || []),

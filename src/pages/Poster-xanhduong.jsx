@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
+import { formatVietnameseDate } from '../utils/helpers';
 
 export default function XanhDuongMatchIntro() {
   const {
@@ -22,7 +23,7 @@ export default function XanhDuongMatchIntro() {
     logo2: getFullLogoUrl(contextMatchData.teamB.logo) || '/images/background-poster/default_logoB.png',
     stadium: contextMatchData.stadium || 'SVĐ MỸ ĐÌNH',
     roundedTime: contextMatchData.startTime || contextMatchData.time || '20:00',
-    currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
+    currentDate: formatVietnameseDate(contextMatchData.matchDate) || formatVietnameseDate(new Date()),
     sponsors: getFullLogoUrls(sponsors?.sponsors?.url_logo || []),
     sponsorsTypeDisplay: sponsors?.sponsors?.type_display || [],
     organizing: getFullLogoUrls(organizing?.organizing?.url_logo || []),
@@ -327,16 +328,29 @@ export default function XanhDuongMatchIntro() {
                   </div>
                 </div>
                 <div className={`px-1 sm:px-2 md:px-3 ${getTeamNameMargin()}`}>
-                  <span
-                    className={`${getTeamNameFontSize()} font-bold uppercase tracking-wide text-center block truncate font-utm-colossalis`}
+                  <div
                     style={{
-                      color: '#ffe006',
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                      width: isMobile ? '80px' : isTablet ? '200px' : '280px',
+                      height: isMobile ? '20px' : isTablet ? '60px' : '80px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      overflow: 'hidden',
+                      backgroundColor: 'transparent'
                     }}
-                    ref={(el) => el && adjustFontSize(el)}
                   >
-                    {matchData.team1}
-                  </span>
+                    <span
+                      className={`${getTeamNameFontSize()} font-bold uppercase tracking-wide text-center block truncate font-utm-colossalis`}
+                      style={{
+                        color: '#ffe006',
+                        textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                        whiteSpace: 'nowrap'
+                      }}
+                      ref={(el) => el && adjustFontSize(el)}
+                    >
+                      {matchData.team1}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -387,16 +401,29 @@ export default function XanhDuongMatchIntro() {
                   </div>
                 </div>
                 <div className={`px-1 sm:px-2 md:px-3 ${getTeamNameMargin()}`}>
-                  <span
-                    className={`${getTeamNameFontSize()} font-bold uppercase tracking-wide text-center block truncate font-utm-colossalis`}
+                  <div
                     style={{
-                      color: '#ffe006',
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)'
+                      width: isMobile ? '80px' : isTablet ? '200px' : '280px',
+                      height: isMobile ? '20px' : isTablet ? '60px' : '80px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      overflow: 'hidden',
+                      backgroundColor: 'transparent'
                     }}
-                    ref={(el) => el && adjustFontSize(el)}
                   >
-                    {matchData.team2}
-                  </span>
+                    <span
+                      className={`${getTeamNameFontSize()} font-bold uppercase tracking-wide text-center block truncate font-utm-colossalis`}
+                      style={{
+                        color: '#ffe006',
+                        textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                        whiteSpace: 'nowrap'
+                      }}
+                      ref={(el) => el && adjustFontSize(el)}
+                    >
+                      {matchData.team2}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

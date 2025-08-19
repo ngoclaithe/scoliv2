@@ -755,7 +755,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
           {/* Position toggles */}
           <div className="mt-2">
-            <div className="text-xs text-gray-600 mb-1">Vị trí hi���n thị:</div>
+            <div className="text-xs text-gray-600 mb-1">Vị trí hiển thị:</div>
             <div className="grid grid-cols-3 gap-1">
               {[
                 { key: 'top-left', icon: '↖️', title: 'Trên trái' },
@@ -1178,7 +1178,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           </label>
         </div>
 
-        {/* Bảng đ��u */}
+        {/* Bảng đấu */}
         <div className="flex items-center gap-2">
           <label className="flex items-center gap-1">
             <span className="text-xs text-gray-700">Bảng:</span>
