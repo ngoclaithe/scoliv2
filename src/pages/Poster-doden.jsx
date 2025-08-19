@@ -196,7 +196,7 @@ export default function DodenMatchIntro() {
               {hasOrganizing && (
                 <div className="flex-shrink-0">
                   <div className={`${getSponsorLabelFontSize()} font-bold text-white mb-1 drop-shadow-lg`} style={{ fontFamily: 'Inter, sans-serif' }}>
-                    Đơn vị đồng hành
+                    ��ơn vị đồng hành
                   </div>
                   <div className="flex flex-col gap-1">
                     {Array.from({ length: Math.ceil(Math.min(organizingLogos.length, 6) / 3) }, (_, rowIndex) => (
@@ -486,26 +486,26 @@ export default function DodenMatchIntro() {
             }
           }
 
-          ${[...Array(216)].map((_, i) => {
-          const angle = (i * 360) / 216;
+          ${[...Array(432)].map((_, i) => {
+          const angle = (i * 360) / 432;
           const radian = (angle * Math.PI) / 180;
-          const distance = 1200;
+          const distance = 2400;
           const x = Math.cos(radian) * distance;
           const y = Math.sin(radian) * distance;
 
           return `
               @keyframes shootingStar-${angle} {
-                0% { 
-                  transform: translate(-50%, -50%) translate(0, 0) scale(0); 
-                  opacity: 0; 
+                0% {
+                  transform: translate(-50%, -50%) translate(0, 0) scale(0);
+                  opacity: 0;
                 }
-                10% { 
-                  opacity: 1; 
-                  transform: translate(-50%, -50%) translate(0, 0) scale(1); 
+                10% {
+                  opacity: 1;
+                  transform: translate(-50%, -50%) translate(0, 0) scale(1);
                 }
-                100% { 
-                  transform: translate(-50%, -50%) translate(${x}px, ${y}px) scale(0); 
-                  opacity: 0; 
+                100% {
+                  transform: translate(-50%, -50%) translate(${x}px, ${y}px) scale(0);
+                  opacity: 0;
                 }
               }
             `;
