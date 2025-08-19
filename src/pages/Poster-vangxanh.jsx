@@ -170,7 +170,7 @@ export default function VangXanhMatchIntro() {
 
   return (
     <div className="w-full h-screen bg-transparent flex items-center justify-center overflow-hidden">
-      <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
+      <div className="relative w-full h-full bg-white overflow-hidden">
 
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -184,7 +184,7 @@ export default function VangXanhMatchIntro() {
 
 
           {/* Top section với logos - Mobile responsive */}
-          <div className={`flex justify-between items-start mb-2 sm:mb-3 md:mb-4 pt-2 px-2 sm:pt-4 sm:px-4 md:pt-6 md:px-6 ${isMobile ? 'min-h-[6vh]' : 'min-h-[10vh] sm:min-h-[12vh] md:min-h-[14vh]'}`}>
+          <div className={`flex justify-between items-start mb-1 sm:mb-2 pt-1 px-2 sm:pt-2 sm:px-4 md:pt-3 md:px-6 ${isMobile ? 'min-h-[4vh]' : 'min-h-[6vh] sm:min-h-[8vh] md:min-h-[10vh]'}`}>
 
             {/* Top-left: Sponsors and Organizing - Show on mobile but smaller */}
             <div className={`flex items-start flex-shrink-0 ${isMobile ? 'gap-1' : 'gap-2 sm:gap-4'}`} style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: isMobile ? '25%' : '35%' }}>
@@ -290,7 +290,7 @@ export default function VangXanhMatchIntro() {
           <div className="flex-1 flex flex-col justify-center min-h-0 px-2 sm:px-4 md:px-6">
 
             {/* Title section - compact */}
-            <div className="text-center mb-1 sm:mb-2 md:mb-3">
+            <div className="text-center mb-1 sm:mb-1 md:mb-2">
               <h1 className="title text-white mb-1 sm:mb-2 px-1 sm:px-2">
                 {matchData.matchTitle}
               </h1>
@@ -321,7 +321,7 @@ export default function VangXanhMatchIntro() {
             </div>
 
             {/* Teams section - compact and mobile responsive */}
-            <div className={`flex items-center justify-center w-full mb-1 sm:mb-2 md:mb-3 ${
+            <div className={`flex items-center justify-center w-full mb-1 sm:mb-1 md:mb-2 ${
               isMobile
                 ? 'px-2 gap-1'
                 : 'px-4 sm:px-8 md:px-12 gap-2 sm:gap-4 md:gap-6'
@@ -422,7 +422,7 @@ export default function VangXanhMatchIntro() {
             </div>
 
             {/* Match time and date - Below team names */}
-            <div className={`flex justify-center items-center ${isMobile ? 'mb-1' : 'mb-2 sm:mb-3 md:mb-4'}`}>
+            <div className={`flex justify-center items-center ${isMobile ? 'mb-1' : 'mb-1 sm:mb-2 md:mb-2'}`}>
               <div
                 className="time-date-container"
                 style={{
