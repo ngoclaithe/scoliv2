@@ -376,7 +376,7 @@ export default function VangKimMatchIntro() {
                       color: '#3265a8',
                       fontFamily: 'UTM Colossalis',
                       fontWeight: '800',
-                      WebkitTextStroke: '1px white',
+                      WebkitTextStroke: '0.5px white',
                       textStroke: '1px white',
                       whiteSpace: 'nowrap'
                     }}
@@ -445,7 +445,7 @@ export default function VangKimMatchIntro() {
                       color: '#3265a8',
                       fontFamily: 'UTM Colossalis',
                       fontWeight: '800',
-                      WebkitTextStroke: '1px white',
+                      WebkitTextStroke: '0.5px white',
                       textStroke: '1px white',
                       whiteSpace: 'nowrap'
                     }}
@@ -532,17 +532,15 @@ export default function VangKimMatchIntro() {
         </div>
 
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Baloo+Bhai+2:wght@400;500;600;700;800&display=swap');
-          @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
-          
+
           .title {
             color: #ff3e37 !important;
             font-family: 'UTM Colossalis' !important;
             font-weight: 800 !important;
             font-size: 65px !important;
             height: auto;
-            -webkit-text-stroke: 2px white !important;
-            text-stroke: 2px white !important;
+            -webkit-text-stroke: 1px white !important;
+            text-stroke: 1px white !important;
             line-height: 1.2;
           }
 
