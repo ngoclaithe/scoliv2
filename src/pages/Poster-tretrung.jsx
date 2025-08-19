@@ -248,7 +248,7 @@ export default function TreTrungMatchIntro() {
             <div className="flex flex-col items-end gap-1 sm:gap-2 flex-shrink-0" style={{ minWidth: isMobile ? '20%' : '25%', maxWidth: '30%' }}>
               {hasMediaPartners && (
                 <div className="flex-shrink-0 w-full">
-                  <div className={`font-bold text-white mb-0.5 drop-shadow-lg text-right ${isMobile ? 'text-xs' : 'text-xs sm:text-sm md:text-base'}`}>
+                  <div className={`font-bold text-white mb-0.5 drop-shadow-lg text-right ${isMobile ? 'text-sm' : 'text-sm sm:text-lg md:text-xl'}`}>
                     Đơn vị truyền thông
                   </div>
                   <div className="flex gap-0.5 justify-end overflow-x-auto scrollbar-hide">
@@ -258,7 +258,7 @@ export default function TreTrungMatchIntro() {
                           <img
                             src={media.logo}
                             alt={media.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-3 h-3 p-0.5' : 'w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 p-1'}`}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-10 h-10 sm:w-13 sm:h-13 md:w-16 md:h-16 p-1'}`}
                           />
                         </div>
                       ))}
