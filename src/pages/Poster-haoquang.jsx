@@ -294,8 +294,8 @@ export default function HaoQuangMatchIntro() {
                     alt="VS"
                     className="object-contain animate-pulse"
                     style={{
-                      width: isMobile ? '25px' : isTablet ? '80px' : '120px',
-                      height: isMobile ? '25px' : isTablet ? '80px' : '120px'
+                      width: isMobile ? '25px' : isTablet ? '80px' : '156px',
+                      height: isMobile ? '25px' : isTablet ? '80px' : '156px'
                     }}
                   />
                 </div>
