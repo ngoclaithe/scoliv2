@@ -39,7 +39,7 @@ const DisplayLogo = ({
                 };
             case "hexagon":
                 return {
-                    containerClass: "", // Không dùng overflow-hidden để không cắt hexagon
+                    containerClass: "",
                     imageClass: baseClasses,
                     clipPath: "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)"
                 };
@@ -53,7 +53,6 @@ const DisplayLogo = ({
 
     const shapeStyles = getShapeStyles(type_play);
 
-    // Tạo fallback SVG
     const createFallbackSVG = (altText) => {
         return `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="%23ddd" stroke="%23999" stroke-width="2"/><text x="20" y="25" text-anchor="middle" font-size="12" fill="%23666">${altText.charAt(0)}</text></svg>`;
     };
