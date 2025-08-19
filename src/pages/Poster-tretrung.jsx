@@ -164,8 +164,12 @@ export default function TreTrungMatchIntro() {
   });
 
   return (
-    <div className="w-full h-screen bg-transparent flex items-center justify-center p-2 sm:p-4 overflow-hidden">
-      <div className="relative w-full max-w-7xl aspect-video bg-white rounded-lg sm:rounded-2xl overflow-hidden shadow-2xl">
+    <div className={`w-full h-screen bg-transparent flex justify-center overflow-hidden ${isMobile ? 'items-center' : 'items-start'
+      }`}>
+      <div className={`relative bg-white overflow-hidden ${isMobile
+          ? 'w-full h-[1/2] max-h-[60vh] aspect-video'
+          : 'w-full max-w-7xl h-full'
+        }`}>
 
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
