@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { getFullLogoUrl, getFullLogoUrls } from '../utils/logoUtils';
 
-export default function DodenMatchIntro() {
+export default function VangKimMatchIntro() {
   const {
     matchData: contextMatchData,
     sponsors,
@@ -15,14 +15,20 @@ export default function DodenMatchIntro() {
   } = usePublicMatch();
 
   const matchData = {
-    matchTitle: contextMatchData.matchTitle || 'GIẢI VÔ ĐỊCH QUỐC GIA',
-    team1: contextMatchData.teamA.name || 'FIRE TIGERS',
-    team2: contextMatchData.teamB.name || 'BLACK EAGLES',
+    matchTitle: contextMatchData.matchTitle || 'GIẢI BÓNG ĐÁ VÀNG KIM',
+    team1: contextMatchData.teamA.name || 'TEAM ALPHA',
+    team2: contextMatchData.teamB.name || 'TEAM BETA',
     logo1: getFullLogoUrl(contextMatchData.teamA.logo) || '/images/background-poster/default_logoA.png',
     logo2: getFullLogoUrl(contextMatchData.teamB.logo) || '/images/background-poster/default_logoB.png',
-    stadium: contextMatchData.stadium || 'SVĐ MỸ ĐÌNH',
-    roundedTime: contextMatchData.startTime || contextMatchData.time || '20:00',
+    stadium: contextMatchData.stadium || 'SVĐ THỐNG NHẤT',
+    roundedTime: contextMatchData.startTime || contextMatchData.time || '15:30',
     currentDate: contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN'),
+    // Format time in Vietnamese style
+    formattedDateTime: (() => {
+      const time = contextMatchData.startTime || contextMatchData.time || '15:30';
+      const date = contextMatchData.matchDate || new Date().toLocaleDateString('vi-VN');
+      return `${time} ngày ${date}`;
+    })(),
     sponsors: getFullLogoUrls(sponsors?.sponsors?.url_logo || []),
     sponsorsTypeDisplay: sponsors?.sponsors?.type_display || [],
     organizing: getFullLogoUrls(organizing?.organizing?.url_logo || []),
