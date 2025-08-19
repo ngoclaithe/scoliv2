@@ -172,7 +172,7 @@ const ScoreboardType4 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                 <img
                     src="/images/basic/ScoLivLogo.png"
                     alt="ScoLiv Logo"
-                    className="w-[44%] h-auto"
+                    className="w-[30%] h-auto"
                 />
             </div>
         </div>
