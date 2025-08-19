@@ -274,7 +274,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
   );
 
   const renderScoreboardType4 = () => (
-    <div className="flex items-center justify-center gap-0 scale-50 origin-center">
+    <div className="flex items-center justify-center gap-0 scale-75 origin-center">
       {/* Team A Logo */}
       <div className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden">
         <img
@@ -325,7 +325,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
           </div>
           <div className="mx-1 w-4 h-4 rounded-full flex items-center justify-center text-xs overflow-hidden">
             <img
-              src="https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/1200px-FC_Barcelona_logo.svg.png"
+              src="/images/basic/logo-skin4.png"
               alt="League Logo"
               className="w-full h-full object-cover"
               onError={(e) => {
