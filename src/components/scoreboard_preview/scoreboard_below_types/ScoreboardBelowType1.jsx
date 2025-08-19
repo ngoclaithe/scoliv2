@@ -41,7 +41,7 @@ const ScoreboardBelowType1 = ({ currentData, logoShape, showMatchTime }) => {
                 {/* Team A info */}
                 <div className="flex-1 flex flex-col pl-16 pr-2">
                     <div
-                        className="text-white font-bold text-center truncate flex items-center justify-center"
+                        className="text-white font-normal text-center truncate flex items-center justify-center"
                         style={{
                             backgroundColor: '#004d73',
                             fontFamily: 'UTM Bebas, sans-serif',
@@ -80,7 +80,7 @@ const ScoreboardBelowType1 = ({ currentData, logoShape, showMatchTime }) => {
                 {/* Team B info */}
                 <div className="flex-1 flex flex-col pr-16 pl-2">
                     <div
-                        className="text-white font-bold text-center truncate flex items-center justify-center"
+                        className="text-white font-normal text-center truncate flex items-center justify-center"
                         style={{
                             backgroundColor: '#004d73',
                             fontFamily: 'UTM Bebas, sans-serif',
