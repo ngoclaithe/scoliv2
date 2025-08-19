@@ -1220,7 +1220,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           </label>
         </div>
 
-        {/* Tiêu đề phụ */}
+        {/* Tiêu đề ph�� */}
         <div className="flex items-center gap-2">
           <label className="flex items-center gap-1">
             <span className="text-xs text-gray-700">Tiêu đề phụ:</span>
@@ -1363,8 +1363,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                     disabled={isDisabled}
                     onChange={(e) => {
                       const newShape = e.target.value;
+                      console.log(`🎨 [PosterLogoManager] Attempting to change shape to: ${newShape}, current hasBannerSelected: ${hasBannerSelected}`);
                       setLogoDisplayOptions(prev => ({ ...prev, shape: newShape }));
-                      console.log('🎨 [PosterLogoManager] Logo shape changed to:', newShape);
 
                       // Emit shape change to socket for real-time updates
                       socketService.emit('logoShape_update', { logoShape: newShape });
