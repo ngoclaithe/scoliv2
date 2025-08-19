@@ -408,10 +408,10 @@ export default function VangXanhMatchIntro() {
                     ref={teamBNameRef}
                     className="text-white font-bold uppercase tracking-wide text-center"
                     style={{
-                      color: '#ffffff',
-                      fontFamily: 'Baloo Bhai 2, sans-serif',
+                      color: '#00ff00',
+                      fontFamily: 'iCielBCCubano, sans-serif',
                       fontWeight: '800',
-                      textShadow: '4px 4px #727272',
+                      textShadow: '4px 4px #ffffff',
                       whiteSpace: 'nowrap'
                     }}
                   >
