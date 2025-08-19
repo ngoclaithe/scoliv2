@@ -161,6 +161,27 @@ export default function HaoQuangMatchIntro() {
     }
   };
 
+  // Helper function to get sponsor label font size
+  const getSponsorLabelFontSize = () => {
+    if (isMobile) return 'text-[8px]';
+    if (isTablet) return 'text-xs';
+    return 'text-lg';
+  };
+
+  // Helper function to get team name font size
+  const getTeamNameFontSize = () => {
+    if (isMobile) return 'text-[8px]';
+    if (isTablet) return 'text-xs';
+    return 'text-3xl';
+  };
+
+  // Helper function to get team name top margin
+  const getTeamNameMargin = () => {
+    if (isMobile) return 'mt-4';
+    if (isTablet) return 'mt-6';
+    return 'mt-8';
+  };
+
 
   return (
     <div className="w-full h-screen bg-gray-900 flex items-center justify-center p-1 sm:p-2 md:p-4">
