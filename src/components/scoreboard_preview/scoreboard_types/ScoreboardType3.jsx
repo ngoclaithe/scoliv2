@@ -3,7 +3,7 @@ import { FoulsDisplay } from '../../../utils/futsalUtils';
 
 const ScoreboardType3 = ({ currentData, logoShape, showMatchTime }) => {
     return (
-        <div className="flex flex-col items-center w-full scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
+        <div className="flex flex-col items-center w-full scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5] max-w-[600px]">
             {/* Main scoreboard row */}
             <div className="flex items-center justify-center w-full px-2 max-w-sm mx-auto">
 

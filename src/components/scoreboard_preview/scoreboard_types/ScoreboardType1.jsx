@@ -3,7 +3,7 @@ import { FoulsDisplay } from '../../../utils/futsalUtils';
 
 const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
     return (
-        <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5] sm:h-10">
+        <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5] sm:h-10 max-w-[600px]">
             <div className="flex items-end justify-center w-full px-2 gap-0">
 
                 <div className="flex">
@@ -18,24 +18,24 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                         <div className="flex items-start">
                             <div
                                 className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 text-center sm:w-8 font-"
-                                style={{ fontFamily: 'UTM Bebas, sans-serif' }}
+                                style={{ fontFamily: 'UTM Bebas, sans-serif', height: '56px' }}
                             >
                                 {currentData.teamAScore}
                             </div>
 
                             <div className="w-[180px]">
-                                <div className="w-full text-white text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)] h-6" style={{ backgroundColor: '#004d73', fontFamily: 'UTM Bebas, sans-serif' }}>
+                                <div className="w-full text-white text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]" style={{ backgroundColor: '#004d73', fontFamily: 'UTM Bebas, sans-serif', height: '56px' }}>
                                     {currentData.teamAName}
                                 </div>
 
-                                <div className="flex w-full h-2">
+                                <div className="flex w-full" style={{ height: '56px' }}>
                                     <div
-                                        className="flex-1 h-full"
-                                        style={{ backgroundColor: currentData.teamAKitColor }}
+                                        className="flex-1"
+                                        style={{ backgroundColor: currentData.teamAKitColor, height: '56px' }}
                                     />
                                     <div
-                                        className="flex-1 h-full"
-                                        style={{ backgroundColor: currentData.teamA2KitColor }}
+                                        className="flex-1"
+                                        style={{ backgroundColor: currentData.teamA2KitColor, height: '56px' }}
                                     />
                                 </div>
                             </div>
@@ -61,22 +61,22 @@ const ScoreboardType1 = ({ currentData, logoShape, showMatchTime }) => {
                         
                         <div className="flex items-start">
                             <div className="w-[180px]">
-                                <div className="w-full text-white text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)] h-6" style={{ backgroundColor: '#004d73', fontFamily: 'UTM Bebas, sans-serif' }}>
+                                <div className="w-full text-white text-sm font-semibold whitespace-nowrap text-center truncate text-[clamp(10px,4vw,14px)]" style={{ backgroundColor: '#004d73', fontFamily: 'UTM Bebas, sans-serif', height: '56px' }}>
                                     {currentData.teamBName}
                                 </div>
 
-                                <div className="flex w-full h-2">
+                                <div className="flex w-full" style={{ height: '56px' }}>
                                     <div
-                                        className="flex-1 h-full"
-                                        style={{ backgroundColor: currentData.teamB2KitColor }}
+                                        className="flex-1"
+                                        style={{ backgroundColor: currentData.teamB2KitColor, height: '56px' }}
                                     />
                                     <div
-                                        className="flex-1 h-full"
-                                        style={{ backgroundColor: currentData.teamBKitColor }}
+                                        className="flex-1"
+                                        style={{ backgroundColor: currentData.teamBKitColor, height: '56px' }}
                                     />
                                 </div>
                             </div>
-                            <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 text-center sm:w-8" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
+                            <div className="bg-yellow-400 text-black font-bold text-xl px-2 py-0.5 text-center sm:w-8" style={{ fontFamily: 'UTM Bebas, sans-serif', height: '56px' }}>
                                 {currentData.teamBScore}
                             </div>
                         </div>

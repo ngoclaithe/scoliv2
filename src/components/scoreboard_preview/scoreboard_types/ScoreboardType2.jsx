@@ -12,7 +12,7 @@ const ScoreboardType2 = ({ currentData, logoShape, showMatchTime }) => {
     };
 
     return (
-        <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
+        <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5] max-w-[600px]">
             <div className="relative w-full flex justify-center items-center max-w-sm">
                 {/* Main scoreboard container */}
                 <div
