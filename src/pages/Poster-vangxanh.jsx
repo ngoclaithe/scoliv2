@@ -528,12 +528,12 @@ export default function VangXanhMatchIntro() {
           @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
           
           .title {
-            color: #ffffff !important;
-            font-family: 'Baloo Bhai 2', 'BalooBhai2-Bold', sans-serif !important;
+            color: #00ff00 !important;
+            font-family: 'iCielBCCubano', 'Baloo Bhai 2', 'BalooBhai2-Bold', sans-serif !important;
             font-weight: 800 !important;
             font-size: 65px;
             height: auto;
-            text-shadow: 4px 4px #727272;
+            text-shadow: 4px 4px #ffffff;
             line-height: 1.2;
           }
 
