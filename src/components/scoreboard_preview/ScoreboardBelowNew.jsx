@@ -1,24 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
-import { getFullLogoUrl } from '../../utils/logoUtils';
-import DisplayLogo from '../common/DisplayLogo';
-import { FoulsDisplay } from '../../utils/futsalUtils';
+import ScoreboardBelowType1 from './scoreboard_below_types/ScoreboardBelowType1';
+import ScoreboardBelowType2 from './scoreboard_below_types/ScoreboardBelowType2';
+import ScoreboardBelowType3 from './scoreboard_below_types/ScoreboardBelowType3';
+import ScoreboardBelowType4 from './scoreboard_below_types/ScoreboardBelowType4';
 
-// Hàm clamp font size theo độ dài tên giống ScoreboardType1
-const getClampedFontSize = (name) => {
-    const dynamicSize = (220 / Math.max(1, name.length)) * 1.5;
-    return Math.max(22, Math.min(40, dynamicSize)); // clamp trong khoảng 22–40px
-};
-
-const ScoreboardBelowNew = ({
-    type = 1
-}) => {
+const ScoreboardBelowNew = ({ type = 1 }) => {
     const {
         matchData,
         futsalErrors,
         displaySettings,
         marqueeData,
-        penaltyData,
         socketConnected,
         tournamentLogo
     } = usePublicMatch();
@@ -46,6 +38,7 @@ const ScoreboardBelowNew = ({
         leagueLogo: "https://upload.wikimedia.org/wikipedia/vi/thumb/9/91/FC_Barcelona_logo.svg/1200px-FC_Barcelona_logo.svg.png",
         typeMatch: matchData?.typeMatch || "soccer"
     };
+
     const [showScrollingText, setShowScrollingText] = useState(false);
 
     const scrollData = {
@@ -68,6 +61,8 @@ const ScoreboardBelowNew = ({
     };
 
     const showMatchTime = currentData.status === 'live' || currentData.status === 'pause';
+    const logoShape = displaySettings?.logoShape || "square";
+
     useEffect(() => {
         if (displaySettings?.selectedSkin) {
             setCurrentType(displaySettings.selectedSkin);
@@ -98,432 +93,21 @@ const ScoreboardBelowNew = ({
             }
         };
     }, [scrollData.mode, scrollData.interval]);
-    
-    const getTextColor = (backgroundColor) => {
-        const hex = backgroundColor.replace('#', '');
-        const r = parseInt(hex.substr(0, 2), 16);
-        const g = parseInt(hex.substr(2, 2), 16);
-        const b = parseInt(hex.substr(4, 2), 16);
-        const brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-        return brightness > 128 ? '#000000' : '#FFFFFF';
-    };
-
-    const logoShape = displaySettings?.logoShape || "square";
-
-    const renderScoreboardType1 = () => (
-        <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5] sm:h-10 w-[600px]">
-            <div className="flex justify-center w-full">
-                <div 
-                    className="bg-yellow-400 text-center font-normal rounded-t-lg"
-                    style={{
-                        color: '#004d73',
-                        fontFamily: 'UTM Bebas, sans-serif',
-                        width: '46%',
-                        fontSize: '40px'
-                    }}
-                >
-                    TRỰC TIẾP TRẬN BÓNG ĐÁ
-                </div>
-            </div>
-            <div className="flex items-end justify-center w-full px-2 gap-0 relative">
-                {/* Logo team A */}
-                <div className="relative z-10">
-                    <DisplayLogo
-                        logos={[currentData.teamALogo]}
-                        alt={currentData.teamAName}
-                        className="w-14 h-14"
-                        type_play={logoShape}
-                        logoSize="w-14 h-14"
-                    />
-                </div>
-    
-                <div className="flex">
-                    <div className="flex flex-col items-center">
-                        <div className="flex items-start">
-                            <div className="w-[220px]">
-                                <div
-                                    className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center"
-                                    style={{
-                                        backgroundColor: '#004d73',
-                                        fontFamily: 'UTM Bebas, sans-serif',
-                                        height: '48px',
-                                        fontSize: `${getClampedFontSize(currentData.teamAName)}px`
-                                    }}
-                                >
-                                    {currentData.teamAName}
-                                </div>
-    
-                                <div className="flex w-full" style={{ height: '8px' }}>
-                                    <div
-                                        className="flex-1"
-                                        style={{ backgroundColor: currentData.teamAKitColor, height: '8px' }}
-                                    />
-                                    <div
-                                        className="flex-1"
-                                        style={{ backgroundColor: currentData.teamA2KitColor, height: '8px' }}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-    
-                {/* Center scores display */}
-                <div
-                    className="bg-black text-white px-4 py-1 text-xl font-bold whitespace-nowrap flex items-center justify-center gap-2"
-                    style={{ height: '56px', fontFamily: 'UTM Bebas, sans-serif' }}
-                >
-                    <span>{currentData.teamAScore}</span>
-                    <span>-</span>
-                    <span>{currentData.teamBScore}</span>
-                </div>
-    
-                <div className="flex">
-                    <div className="flex flex-col items-center">
-                        <div className="flex items-start">
-                            <div className="w-[220px]">
-                                <div
-                                    className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center"
-                                    style={{
-                                        backgroundColor: '#004d73',
-                                        fontFamily: 'UTM Bebas, sans-serif',
-                                        height: '48px',
-                                        fontSize: `${getClampedFontSize(currentData.teamBName)}px`
-                                    }}
-                                >
-                                    {currentData.teamBName}
-                                </div>
-    
-                                <div className="flex w-full" style={{ height: '8px' }}>
-                                    <div
-                                        className="flex-1"
-                                        style={{ backgroundColor: currentData.teamB2KitColor, height: '8px' }}
-                                    />
-                                    <div
-                                        className="flex-1"
-                                        style={{ backgroundColor: currentData.teamBKitColor, height: '8px' }}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-    
-                {/* Logo team B */}
-                <div className="relative z-10">
-                    <DisplayLogo
-                        logos={[currentData.teamBLogo]}
-                        alt={currentData.teamBName}
-                        className="w-14 h-14"
-                        type_play={logoShape}
-                        logoSize="w-14 h-14"
-                    />
-                </div>
-            </div>
-        </div>
-    );
-    // renderScoreboardType2 - Copy từ ScoreboardType2.jsx + thêm team logos
-    const renderScoreboardType2 = () => (
-        <div className="flex flex-col items-center scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5] w-[600px]">
-            <div className="relative w-full flex justify-start items-center">
-                {/* Logo team A */}
-                <div className="absolute z-20" style={{ left: 'calc(50% - 168px)', top: '50%', transform: 'translateY(-50%)' }}>
-                    <div className="w-12 h-12 border-2" style={{ borderColor: currentData.teamAKitColor, borderRadius: logoShape === 'circle' ? '50%' : logoShape === 'hexagon' ? '0' : '8px' }}>
-                        <DisplayLogo
-                            logos={[currentData.teamALogo]}
-                            alt={currentData.teamAName}
-                            className="w-full h-full"
-                            type_play={logoShape}
-                            logoSize="w-12 h-12"
-                        />
-                    </div>
-                </div>
-
-                {/* Main scoreboard container */}
-                <div
-                    className="flex items-center justify-center relative z-10"
-                    style={{
-                        background: `linear-gradient(to right, ${currentData.teamAKitColor}, ${currentData.teamBKitColor})`,
-                        width: '600px',
-                        height: '48px',
-                        overflow: 'hidden',
-                    }}
-                >
-                    {/* Tên đội A với fouls */}
-                    <div
-                        className="flex flex-col items-start justify-center truncate relative"
-                        style={{
-                            width: '240px',
-                            height: '100%',
-                            fontSize: `${Math.min(40, Math.max(22, 240 / Math.max(1, currentData.teamAName.length) * 1.5))}px`,
-                            color: getTextColor(currentData.teamAKitColor),
-                            textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
-                        }}
-                    >
-                        {/* Fouls for Team A - positioned above */}
-                        <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 z-10">
-                            <div className="[&>*]:!w-3 [&>*]:!h-2">
-                                <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-[10px]" />
-                            </div>
-                        </div>
-
-                        <span className="w-full text-sm sm:text-base font-semibold text-center leading-[1.2] px-2" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
-                            {currentData.teamAName}
-                        </span>
-                        <div className="flex w-full h-[6px] px-2">
-                            <div className="flex-1" style={{ backgroundColor: currentData.teamA2KitColor }} />
-                        </div>
-                    </div>
-
-                    {/* Tỉ số A */}
-                    <div
-                        className="text-white font-extrabold text-5xl text-center flex items-center justify-center"
-                        style={{
-                            WebkitTextStroke: '1px black',
-                            width: '80px',
-                            height: '48px',
-                            textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                            fontFamily: 'UTM Bebas, sans-serif'
-                        }}
-                    >
-                        {currentData.teamAScore}
-                    </div>
-
-                    {/* Thời gian */}
-                    {showMatchTime && (
-                        <div
-                            className="bg-red-600 text-white text-3xl font-bold flex items-center justify-center mx-2 leading-none"
-                            style={{
-                                padding: '0 0px',
-                                height: 'auto',
-                                minHeight: '48px', 
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            {currentData.matchTime}
-                        </div>
-                    )}
-
-                    {/* Tỉ số B */}
-                    <div
-                        className="text-white font-extrabold text-5xl text-center flex items-center justify-center"
-                        style={{
-                            WebkitTextStroke: '1px black',
-                            width: '80px',
-                            height: '48px',
-                            textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                            fontFamily: 'UTM Bebas, sans-serif'
-                        }}
-                    >
-                        {currentData.teamBScore}
-                    </div>
-
-                    {/* Tên đội B với fouls */}
-                    <div
-                        className="flex flex-col items-end justify-center truncate relative"
-                        style={{
-                            width: '240px',
-                            height: '100%',
-                            fontSize: `${Math.min(40, Math.max(22, 240 / Math.max(1, currentData.teamBName.length) * 1.5))}px`,
-                            color: getTextColor(currentData.teamBKitColor),
-                            textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
-                        }}
-                    >
-                        {/* Fouls for Team B - positioned above */}
-                        <div className="absolute -top-1 left-1/2 transform -translate-x-1/2 z-10">
-                            <div className="[&>*]:!w-3 [&>*]:!h-2">
-                                <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-[10px]" />
-                            </div>
-                        </div>
-
-                        <span className="w-full text-sm sm:text-base font-semibold text-center leading-[1.2] px-2" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
-                            {currentData.teamBName}
-                        </span>
-                        <div className="flex w-full h-[6px] px-2">
-                            <div className="flex-1" style={{ backgroundColor: currentData.teamB2KitColor }} />
-                        </div>
-                    </div>
-                </div>
-
-                {/* Logo team B */}
-                <div className="absolute z-20" style={{ right: 'calc(50% - 168px)', top: '50%', transform: 'translateY(-50%)' }}>
-                    <div className="w-12 h-12 border-2" style={{ borderColor: currentData.teamBKitColor, borderRadius: logoShape === 'circle' ? '50%' : logoShape === 'hexagon' ? '0' : '8px' }}>
-                        <DisplayLogo
-                            logos={[currentData.teamBLogo]}
-                            alt={currentData.teamBName}
-                            className="w-full h-full"
-                            type_play={logoShape}
-                            logoSize="w-12 h-12"
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-
-    const renderScoreboardType3 = () => (
-        <div className="flex flex-col items-center w-full">
-            <div className="flex items-center justify-between w-full px-2">
-                <DisplayLogo
-                    logos={[currentData.teamALogo]}
-                    alt={currentData.teamAName}
-                    className="w-12 h-12"
-                    type_play={logoShape}
-                    logoSize="w-12 h-12"
-                />
-
-                <div className="flex items-center bg-black/20 backdrop-blur-sm rounded-lg p-1 shadow-xl">
-                    {/* Team A */}
-                    <div className="flex items-center">
-                        <div className="text-white px-3 py-2 text-sm font-medium bg-gray-800/80 rounded-md w-[120px] truncate" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
-                            {currentData.teamAName}
-                        </div>
-                        <div
-                            className="w-1 h-6 ml-1 rounded-full"
-                            style={{ backgroundColor: currentData.teamAKitColor }}
-                        />
-                    </div>
-
-                    {/* Score */}
-                    <div className="mx-4 flex flex-col items-center">
-                        <div className="flex items-center bg-white/95 px-4 py-1 rounded-md shadow-sm" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
-                            <span className="font-bold text-xl text-gray-900">{currentData.teamAScore}</span>
-                            <span className="mx-2 text-gray-400 font-light">:</span>
-                            <span className="font-bold text-xl text-gray-900">{currentData.teamBScore}</span>
-                        </div>
-                        {showMatchTime && (
-                            <div className="bg-red-600 text-white px-2 py-0.5 text-xs font-medium rounded-sm mt-1">
-                                {currentData.matchTime}
-                            </div>
-                        )}
-                        </div>
-
-                    {/* Team B */}
-                    <div className="flex items-center">
-                        <div
-                            className="w-1 h-6 mr-1 rounded-full"
-                            style={{ backgroundColor: currentData.teamBKitColor }}
-                        />
-                        <div className="text-white px-3 py-2 text-sm font-medium bg-gray-800/80 rounded-md w-[120px] truncate text-right" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
-                            {currentData.teamBName}
-                        </div>
-                    </div>
-                </div>
-
-                <DisplayLogo
-                    logos={[currentData.teamBLogo]}
-                    alt={currentData.teamBName}
-                    className="w-12 h-12"
-                    type_play={logoShape}
-                    logoSize="w-12 h-12"
-                />
-            </div>
-
-        </div>
-    );
-
-    const renderScoreboardType4 = () => (
-        <div className="flex flex-col items-center">
-            <div className="flex items-center justify-between w-full">
-                <DisplayLogo
-                    logos={[currentData.teamALogo]}
-                    alt={currentData.teamAName}
-                    className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0"
-                    type_play={logoShape}
-                    logoSize="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
-                />
-
-                <div className="flex items-center z-20">
-                    <div
-                        className="text-white text-sm font-semibold relative flex items-center justify-center w-24 h-8 sm:w-32 md:w-40 z-10 -mr-6"
-                        style={{
-                            background: 'linear-gradient(90deg, rgb(222, 57, 51), rgb(238, 134, 58))',
-                            clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)',
-                            fontFamily: 'UTM Bebas, sans-serif'
-                        }}
-                    >
-                        <span className="truncate text-center">{currentData.teamAName}</span>
-                    </div>
-                    <div
-                        className="w-12 h-8 -ml-3 z-0 mr-2.5"
-                        style={{
-                            backgroundColor: currentData.teamAKitColor,
-                            clipPath: 'polygon(0% 0%, 55% 0%, 100% 100%, 45% 100%)'
-                        }}
-                    />
-                </div>
-
-                <div className="flex flex-col items-center -mr-12 -ml-12">
-                    <div
-                        className="hex-logo flex items-center justify-center sm:px-3 md:px-4 relative py-1"
-                        style={{
-                            backgroundColor: '#213f80',
-                            clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)',
-                            minHeight: '48px'
-                        }}
-                    >
-                        <div className="text-white font-bold text-lg sm:text-xl min-w-[1.5rem] sm:min-w-[2rem] text-center" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
-                            {currentData.teamAScore}
-                        </div>
-
-                        <div className="mx-2 sm:mx-3 relative" style={{ top: '-6px' }}>
-                            <DisplayLogo
-                                logos={[getFullLogoUrl(tournamentLogo?.url_logo?.[0]) || currentData.leagueLogo]}
-                                alt="Tournament"
-                                className="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10 flex-shrink-0"
-                                type_play={logoShape}
-                                logoSize="w-8 h-8 sm:w-9 sm:h-9 md:w-10 md:h-10"
-                            />
-                        </div>
-
-                        <div className="text-white font-bold text-lg sm:text-xl min-w-[1.5rem] sm:min-w-[2rem] text-center" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
-                            {currentData.teamBScore}
-                        </div>
-                    </div>
-                    <div className={`text-white text-xs font-bold px-2 py-0.5 ${showMatchTime ? 'bg-red-600' : 'bg-green-600'}`}>
-                        {showMatchTime ? currentData.matchTime : '● TRỰC TIẾP'}
-                    </div>
-                </div>
-
-                <div className="flex items-center z-20">
-                    <div
-                        className="w-12 h-8 -mr-3 z-0 ml-2.5"
-                        style={{
-                            backgroundColor: currentData.teamBKitColor,
-                            clipPath: 'polygon(45% 0%, 100% 0%, 55% 100%, 0% 100%)'
-                        }}
-                    />
-                    <div
-                        className="text-white text-sm font-semibold relative flex items-center justify-center w-24 h-8 sm:w-32 md:w-40 z-10 -ml-6"
-                        style={{
-                            background: 'linear-gradient(90deg, rgb(222, 57, 51), rgb(238, 134, 58))',
-                            clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)',
-                            fontFamily: 'UTM Bebas, sans-serif'
-                        }}
-                    >
-                        <span className="truncate text-center">{currentData.teamBName}</span>
-                    </div>
-                </div>
-
-                <DisplayLogo
-                    logos={[currentData.teamBLogo]}
-                    alt={currentData.teamBName}
-                    className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0"
-                    type_play={logoShape}
-                    logoSize="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12"
-                />
-            </div>
-
-        </div>
-    );
 
     const renderScoreboard = () => {
+        const props = {
+            currentData,
+            logoShape,
+            showMatchTime,
+            tournamentLogo
+        };
+
         switch (currentType) {
-            case 1: return renderScoreboardType1();
-            case 2: return renderScoreboardType2();
-            case 3: return renderScoreboardType3();
-            case 4: return renderScoreboardType4();
-            default: return renderScoreboardType1();
+            case 1: return <ScoreboardBelowType1 {...props} />;
+            case 2: return <ScoreboardBelowType2 {...props} />;
+            case 3: return <ScoreboardBelowType3 {...props} />;
+            case 4: return <ScoreboardBelowType4 {...props} />;
+            default: return <ScoreboardBelowType1 {...props} />;
         }
     };
 
@@ -531,13 +115,14 @@ const ScoreboardBelowNew = ({
         <div className="w-full h-screen relative overflow-hidden">
             {/* Container for all elements */}
             <div className="w-full h-full relative bg-transparent">
-                <div className="absolute bottom-4 left-4 sm:left-16 z-40">
+                {/* ScoLiv Logo - Tăng gấp đôi kích thước và đưa sát bottom hơn */}
+                <div className="absolute bottom-1 left-4 sm:left-16 z-40">
                     <img
                         src="/images/basic/ScoLivLogo.png"
                         alt="ScoLiv"
-                        className="w-24 h-24 sm:w-36 sm:h-36 object-contain"
+                        className="w-48 h-48 sm:w-72 sm:h-72 object-contain"
                         onError={(e) => {
-                            e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" rx="8" fill="%23007acc"/><text x="32" y="38" text-anchor="middle" font-size="12" fill="white" font-weight="bold">ScoLiv</text></svg>`;
+                            e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128"><rect width="128" height="128" rx="16" fill="%23007acc"/><text x="64" y="76" text-anchor="middle" font-size="24" fill="white" font-weight="bold">ScoLiv</text></svg>`;
                         }}
                     />
                 </div>
@@ -549,6 +134,7 @@ const ScoreboardBelowNew = ({
                     </div>
                 </div>
 
+                {/* Scrolling text */}
                 {scrollData.mode !== 'khong' && showScrollingText && (
                     <div className="absolute bottom-0 left-0 w-full z-20 overflow-hidden" style={{ backgroundColor: scrollData.bgColor }}>
                         <div
