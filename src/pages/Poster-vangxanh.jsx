@@ -106,7 +106,7 @@ export default function VangXanhMatchIntro() {
 
   const isMobile = windowSize.width < 768;
   const isTablet = windowSize.width >= 768 && windowSize.width < 1024;
-  const logoSize = isMobile ? 40 : isTablet ? 100 : 160; // Giảm size đáng kể cho mobile
+  const logoSize = isMobile ? 40 : isTablet ? 100 : 215; 
 
   const sponsorLogos = matchData.showSponsors ? matchData.sponsors.map((url, index) => ({
     logo: url,
@@ -357,7 +357,7 @@ export default function VangXanhMatchIntro() {
                       color: '#3e90ff',
                       fontFamily: 'iCielBCCubano, sans-serif',
                       fontWeight: '800',
-                      textShadow: '4px 4px #ffffff',
+                      textShadow: '2px 2px #ffffff',
                       whiteSpace: 'nowrap'
                     }}
                   >
@@ -375,7 +375,7 @@ export default function VangXanhMatchIntro() {
                     className="object-contain animate-pulse"
                     style={{
                       width: isMobile ? '40px' : isTablet ? '120px' : '160px',
-                      height: isMobile ? '40px' : isTablet ? '120px' : '160px'
+                      height: isMobile ? '40px' : isTablet ? '120px' : '240px'
                     }}
                   />
                 </div>
@@ -411,7 +411,7 @@ export default function VangXanhMatchIntro() {
                       color: '#3e90ff',
                       fontFamily: 'iCielBCCubano, sans-serif',
                       fontWeight: '800',
-                      textShadow: '4px 4px #ffffff',
+                      textShadow: '2px 2px #ffffff',
                       whiteSpace: 'nowrap'
                     }}
                   >
@@ -436,7 +436,7 @@ export default function VangXanhMatchIntro() {
                   fontSize: isMobile ? '6px' : isTablet ? '17px' : '25px',
                   fontFamily: 'iCielBCCubano, Bebas Neue, UTM Bebas, sans-serif',
                   padding: isMobile ? '3px 6px' : '8px 16px',
-                  boxShadow: '0 4px 20px rgba(24, 119, 242, 0.11)',
+                  boxShadow: '0 2px 10px rgba(24, 119, 242, 0.11)',
                   letterSpacing: '1px',
                   textShadow: '1px 2px 3px #0e306c22',
                   whiteSpace: 'nowrap'
