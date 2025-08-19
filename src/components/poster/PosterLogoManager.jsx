@@ -615,7 +615,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
         );
 
         if (duplicateCode) {
-          alert(`Mã logo "${localCode.trim()}" đã tồn tại trong ${item.category}. Vui lòng chọn mã khác.`);
+          alert(`Mã logo "${localCode.trim()}" đã tồn tại trong cùng loại ${item.category}. Vui lòng chọn mã khác.`);
           return;
         }
 
@@ -935,7 +935,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   }, [historyMatches]);
 
   const handleItemRemove = useCallback(async (itemId) => {
-    console.log('🗑️ [PosterLogoManager] Removing item:', itemId);
+    console.log('��️ [PosterLogoManager] Removing item:', itemId);
 
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);
     const item = logoItems.find(logo => logo.id === itemId);
@@ -1089,18 +1089,15 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     const bannerSelected = allActiveItems.some(item => {
       const isBannerByCode = item.code && item.code.toUpperCase().startsWith('B');
       const isBannerByType = item.type === 'banner';
-      return isBannerByCode || isBannerByType;
+      const isActive = item.displayPositions && item.displayPositions.length > 0;
+      console.log(`🔍 [PosterLogoManager] Checking item: ${item.code}, category: ${item.category}, isBannerByCode: ${isBannerByCode}, isBannerByType: ${isBannerByType}, isActive: ${isActive}`);
+      return (isBannerByCode || isBannerByType) && isActive;
     });
 
-    // Nếu có banner được chọn, tự động đặt shape là square và gửi qua socket
-    if (bannerSelected && logoDisplayOptions.shape !== 'square') {
-      setLogoDisplayOptions(prev => ({ ...prev, shape: 'square' }));
-      socketService.emit('logoShape_update', { logoShape: 'square' });
-      console.log('🎨 [PosterLogoManager] Auto-set shape to square due to banner selection');
-    }
+    console.log(`🎯 [PosterLogoManager] Banner selected across ALL categories: ${bannerSelected}`);
 
     return bannerSelected;
-  }, [apiLogos, logoItems, logoDisplayOptions.shape]);
+  }, [apiLogos, logoItems]);
 
   // Kiểm tra xem có logo nào được chọn không
   const hasLogoSelected = useMemo(() => {
@@ -1113,12 +1110,19 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   }, [currentItems, activeLogoCategory]);
 
   const shouldDisableShapeOption = (shapeValue) => {
-    if (hasBannerSelected && shapeValue !== 'square') {
-      return true;
-    }
-
-    return false;
+    const disabled = hasBannerSelected && shapeValue !== 'square';
+    console.log(`🔒 [PosterLogoManager] shouldDisableShapeOption(${shapeValue}): hasBannerSelected=${hasBannerSelected}, disabled=${disabled}`);
+    return disabled;
   };
+
+  // Effect to auto-update shape when banner is selected
+  useEffect(() => {
+    if (hasBannerSelected && logoDisplayOptions.shape !== 'square') {
+      console.log('🎨 [PosterLogoManager] Auto-setting shape to square due to banner selection');
+      setLogoDisplayOptions(prev => ({ ...prev, shape: 'square' }));
+      socketService.emit('logoShape_update', { logoShape: 'square' });
+    }
+  }, [hasBannerSelected, logoDisplayOptions.shape]);
 
   const handleRoundGroupUpdate = useCallback((type, value, show) => {
     console.log(`🔄 [PosterLogoManager] handleRoundGroupUpdate - type: ${type}, value: ${value}, show: ${show}`);
