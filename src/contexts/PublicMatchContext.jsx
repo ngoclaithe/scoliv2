@@ -79,6 +79,7 @@ export const PublicMatchProvider = ({ children }) => {
     matchDate: "",
     liveText: "",
     matchTitle: "",
+    commentator: "",
     typeMatch: "soccer",
     round: 1,
     group: "A",
@@ -234,6 +235,7 @@ export const PublicMatchProvider = ({ children }) => {
       setMatchData(prev => ({
         ...prev,
         ...data.matchInfo,
+        commentator: data.matchInfo.commentator || prev.commentator,
         teamA: {
           ...prev.teamA,
           teamAKitColor: data.matchInfo.teamAkitcolor || prev.teamA.teamAKitColor,
@@ -840,6 +842,7 @@ export const PublicMatchProvider = ({ children }) => {
             const mappedMatchData = {
               ...state.matchData,
               tournament: state.matchData.tournament || "",
+              commentator: state.matchData.commentator || "",
               round: state.matchData.round || 1,
               group: state.matchData.group || "A",
               subtitle: state.matchData.subtitle || "",
