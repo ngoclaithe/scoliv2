@@ -268,7 +268,7 @@ const UnifiedDisplayController = () => {
           if (handleExpiredAccess && handleExpiredAccess(err)) {
             return;
           }
-          setError('Không thể kết nối đến hệ thống');
+          setError('Không thể kết nối đến hệ th���ng');
         }
       }
     };
@@ -285,7 +285,24 @@ const UnifiedDisplayController = () => {
   const renderPoster = (posterType) => {
 
     const selectedPosterType = displaySettings.selectedPoster;
+    const customPosterUrl = displaySettings.url_custom_poster;
     // console.log("Giá trị selectedPosterType",selectedPosterType);
+    // console.log("Giá trị customPosterUrl",customPosterUrl);
+
+    // Ưu tiên kiểm tra custom poster URL từ displaySettings
+    if (customPosterUrl) {
+      console.log("✅ [UnifiedDisplayController] Using custom poster URL:", customPosterUrl);
+      return (
+        <div className="fixed inset-0 bg-black flex items-center justify-center">
+          <img
+            src={customPosterUrl}
+            alt="Custom Poster"
+            className="max-w-full max-h-full object-contain"
+            style={{ width: '100vw', height: '100vh', objectFit: 'cover' }}
+          />
+        </div>
+      );
+    }
 
     if (typeof selectedPosterType === 'string' && selectedPosterType.includes('api-poster')) {
       const foundPoster = savedPosters.find(poster => poster.id === selectedPosterType);
