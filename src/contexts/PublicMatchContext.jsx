@@ -904,7 +904,11 @@ export const PublicMatchProvider = ({ children }) => {
 
           if (state.displaySettings) {
             console.log('🎨 [PublicMatchContext] Updating displaySettings from join_roomed:', state.displaySettings);
-            setDisplaySettings(prev => ({ ...prev, ...state.displaySettings }));
+            setDisplaySettings(prev => ({
+              ...prev,
+              ...state.displaySettings,
+              url_custom_poster: state.displaySettings.url_custom_poster || null
+            }));
 
             // Process logos from displaySettings.logos if they exist
             if (state.displaySettings.logos && Array.isArray(state.displaySettings.logos)) {
