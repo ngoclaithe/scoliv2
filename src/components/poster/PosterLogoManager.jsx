@@ -777,10 +777,21 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     setSelectedPoster(poster);
     // Save to backend
     if (accessCode) {
-      socketService.emit('poster_update', {
-        posterType: poster.id,
-        posterData: poster
-      });
+      if (poster.isCustom) {
+        // Gửi custom poster với URL
+        socketService.emit('poster_update', {
+          posterType: poster.id,
+          posterData: poster,
+          isCustom: true,
+          customPosterUrl: poster.thumbnail || getFullPosterUrl(poster.serverData?.url_poster)
+        });
+      } else {
+        // Gửi poster template thông thường
+        socketService.emit('poster_update', {
+          posterType: poster.id,
+          posterData: poster
+        });
+      }
     }
     if (onPosterUpdate) {
       onPosterUpdate(poster);
