@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useCallback, useEffect } fr
 import { useParams, useLocation } from 'react-router-dom';
 import socketService from '../services/socketService';
 import audioUtils from '../utils/audioUtils';
-import { logRouteInfo, logSocketOperation } from '../utils/contextDebug';
+// import { logRouteInfo, logSocketOperation } from '../utils/contextDebug';
 import { mapUrlViewToInternal } from '../utils/viewMappingUtils';
 
 const PublicMatchContext = createContext();
@@ -19,7 +19,7 @@ export const PublicMatchProvider = ({ children }) => {
   const params = useParams();
   const location = useLocation();
 
-  logRouteInfo(params, location);
+  // logRouteInfo(params, location);
 
   const hasUrlParams = useCallback(() => {
     const {
@@ -1099,7 +1099,7 @@ export const PublicMatchProvider = ({ children }) => {
   // ===== SENDING FUNCTIONS (CHỈ KHI CÓ URL PARAMS) =====
 
   const updateMatchInfo = useCallback((newMatchInfo) => {
-    logSocketOperation('updateMatchInfo', newMatchInfo, canSendToSocket, socketConnected);
+    // logSocketOperation('updateMatchInfo', newMatchInfo, canSendToSocket, socketConnected);
     if (canSendToSocket && socketConnected) {
       socketService.updateMatchInfo(newMatchInfo);
     }
