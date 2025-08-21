@@ -258,7 +258,7 @@ export default function TreTrungMatchIntro() {
                           <img
                             src={media.logo}
                             alt={media.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-10 h-10 sm:w-13 sm:h-13 md:w-16 md:h-16 p-1'}`}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0' : 'w-10 h-10 sm:w-13 sm:h-13 md:w-16 md:h-16 p-1'}`}
                           />
                         </div>
                       ))}
