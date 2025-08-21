@@ -151,7 +151,7 @@ export const MatchProvider = ({ children }) => {
         // console.log('🔄 [MatchContext] Requested current state from server');
       }, 1000); 
 
-      console.log(`Socket initialized for access code: ${accessCode}`);
+      // console.log(`Socket initialized for access code: ${accessCode}`);
     } catch (error) {
       console.error('Failed to initialize socket:', error);
 
@@ -241,7 +241,7 @@ export const MatchProvider = ({ children }) => {
 
   const setupSocketListeners = useCallback(() => {
     socketService.on('match_info_updated', (data) => {
-      console.log('📝 [MatchContext] match_info_updated received:', data);
+      // console.log('📝 [MatchContext] match_info_updated received:', data);
       setMatchData(prev => ({
         ...prev,
         ...data.matchInfo,
@@ -329,7 +329,7 @@ export const MatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật logo đội
     socketService.on('team_logos_updated', (data) => {
-      console.log('🏆 [MatchContext] Received team_logos_updated:', data);
+      // console.log('🏆 [MatchContext] Received team_logos_updated:', data);
       setMatchData(prev => ({
         ...prev,
         teamA: { ...prev.teamA, logo: data.logos.teamA },
@@ -340,7 +340,7 @@ export const MatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật tên đội
     socketService.on('team_names_updated', (data) => {
-      console.log('📛 [MatchContext] Received team_names_updated:', data);
+      // console.log('📛 [MatchContext] Received team_names_updated:', data);
       setMatchData(prev => ({
         ...prev,
         teamA: { ...prev.teamA, name: data.names.teamA },
@@ -363,7 +363,7 @@ export const MatchProvider = ({ children }) => {
 
     // Lắng nghe cập nhật đơn vị live
     socketService.on('live_unit_updated', (data) => {
-      console.log('📝 [MatchContext] live_unit_updated received:', data);
+      // console.log('📝 [MatchContext] live_unit_updated received:', data);
       if (data.liveUnit && (data.liveUnit.text)) {
         setMatchData(prev => ({
           ...prev,

@@ -23,7 +23,6 @@ api.interceptors.request.use(
 );
 
 const PosterAPI = {
-  // Upload poster mới
   uploadPoster: async (file, accessCode, name = '', description = '') => {
     try {
       const formData = new FormData();
@@ -43,7 +42,6 @@ const PosterAPI = {
     }
   },
 
-  // Lấy danh sách poster
   getPosters: async (filters = {}) => {
     try {
       const params = new URLSearchParams();
@@ -71,7 +69,6 @@ const PosterAPI = {
     }
   },
 
-  // Lấy thông tin chi tiết poster
   getPosterByAccesscode: async (accessCode) => {
     try {
       const response = await api.get(`/posters/access-code/${accessCode}`);
@@ -81,7 +78,6 @@ const PosterAPI = {
     }
   },
 
-  // Cập nhật poster
   updatePoster: async (id, updateData) => {
     try {
       const formData = new FormData();
@@ -107,7 +103,6 @@ const PosterAPI = {
     }
   },
 
-  // Xóa poster
   deletePoster: async (id) => {
     try {
       const response = await api.delete(`/posters/${id}`);
@@ -117,7 +112,6 @@ const PosterAPI = {
     }
   },
 
-  // Tìm kiếm poster theo tên
   searchPosters: async (searchTerm) => {
     try {
       const response = await api.get(`/posters?name=${encodeURIComponent(searchTerm)}`);
@@ -127,7 +121,6 @@ const PosterAPI = {
     }
   },
 
-  // Xử lý lỗi
   handleError: (error) => {
     if (error.response) {
       const { status, data } = error.response;

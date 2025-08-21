@@ -112,18 +112,18 @@ const UnifiedDisplayController = () => {
       }
     };
 
-    // console.log('🌐 [UnifiedDisplayController] Parsed URL params:', params);
+    // console.log('[UnifiedDisplayController] Parsed URL params:', params);
     return params;
   }, [isDynamicRoute, location, matchTitle, liveText, teamALogoCode, teamBLogoCode, teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore, view, matchTime]);
 
   const updateSocketWithParams = useCallback(async (params) => {
     if (!params || !canSendToSocket) {
-      // console.log('⚠️ [UnifiedDisplayController] Cannot send params - canSend:', canSendToSocket);
+      // console.log('[UnifiedDisplayController] Cannot send params - canSend:', canSendToSocket);
       return;
     }
 
-    // console.log('🔄 [UnifiedDisplayController] updateSocketWithParams called with:', params);
-    // console.log('✅ [UnifiedDisplayController] Using PublicMatchContext sending functions...');
+    // console.log('[UnifiedDisplayController] updateSocketWithParams called with:', params);
+    // console.log('[UnifiedDisplayController] Using PublicMatchContext sending functions...');
 
     try {
       if (params.matchTitle || params.location || params.matchTime || params.liveText) {
@@ -135,17 +135,17 @@ const UnifiedDisplayController = () => {
           teamAKitColor: params.teamA.kitColor,
           teamBKitColor: params.teamB.kitColor
         };
-        // console.log('📝 [UnifiedDisplayController] Updating match info via context:', matchInfo);
+        // console.log('[UnifiedDisplayController] Updating match info via context:', matchInfo);
         updateMatchInfo(matchInfo);
       }
 
       if (params.view) {
-        console.log('👁️ [UnifiedDisplayController] Updating view via context:', params.view);
+        console.log('[UnifiedDisplayController] Updating view via context:', params.view);
         updateView(params.view);
       }
 
       if (params.teamA.name || params.teamB.name) {
-        // console.log('📛 [UnifiedDisplayController] Updating team names via context:', params.teamA.name, params.teamB.name);
+        // console.log('[UnifiedDisplayController] Updating team names via context:', params.teamA.name, params.teamB.name);
         updateTeamNames(params.teamA.name, params.teamB.name);
       }
 
