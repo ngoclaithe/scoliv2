@@ -151,7 +151,7 @@ const MatchInfo = ({
             />
           </div>
 
-          {/* Hàng 4: Thời gian (phút+giờ), Ngày, Địa điểm */}
+          {/* Hàng 4: Thời gian (phút+giờ), Ngày */}
           <div className="flex gap-1">
             <input
               type="time"
@@ -165,6 +165,10 @@ const MatchInfo = ({
               onChange={(e) => setMatchInfo(prev => ({ ...prev, matchDate: e.target.value }))}
               className="flex-1 px-1 py-0.5 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center bg-white"
             />
+          </div>
+
+          {/* Hàng 5: Địa điểm, Bình luận viên */}
+          <div className="flex gap-1">
             <input
               type="text"
               placeholder="Địa điểm"
@@ -173,16 +177,12 @@ const MatchInfo = ({
               className="flex-1 px-1 py-0.5 text-xs border border-gray-300 rounded focus:border-blue-500 focus:outline-none text-center bg-white"
               maxLength={20}
             />
-          </div>
-
-          {/* Hàng 5: Bình luận viên */}
-          <div className="flex gap-1">
             <input
               type="text"
               placeholder="Bình luận viên"
               value={commentator || ''}
               onChange={(e) => setCommentator(e.target.value)}
-              className="w-full px-1 py-0.5 text-xs text-center text-purple-700 bg-white border border-purple-300 rounded focus:outline-none focus:ring-1 focus:ring-purple-300"
+              className="flex-1 px-1 py-0.5 text-xs text-center text-purple-700 bg-white border border-purple-300 rounded focus:outline-none focus:ring-1 focus:ring-purple-300"
               maxLength={50}
             />
           </div>
