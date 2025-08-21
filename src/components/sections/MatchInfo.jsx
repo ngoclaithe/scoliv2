@@ -71,6 +71,7 @@ const MatchInfo = ({
               className="w-4 h-4 border border-gray-300 rounded cursor-pointer"
               title="Áo A"
             />
+            <span className="text-xs text-gray-500">Áo</span>
             <input
               type="color"
               value={teamAInfo.teamA2Kitcolor || '#0000ff'}
@@ -78,6 +79,7 @@ const MatchInfo = ({
               className="w-4 h-4 border border-gray-300 rounded cursor-pointer"
               title="Quần A"
             />
+            <span className="text-xs text-gray-500">Quần</span>
           </div>
 
           {/* Hàng 2: Team B - Tên, Logo, Màu áo, Màu quần */}
@@ -139,7 +141,7 @@ const MatchInfo = ({
             />
             <input
               type="text"
-              placeholder="Đơn v�� live"
+              placeholder="Đơn vị live"
               value={liveText}
               onChange={(e) => setLiveText(e.target.value)}
               className="flex-1 px-1 py-0.5 text-xs text-center text-blue-700 bg-white border border-blue-300 rounded focus:outline-none focus:ring-1 focus:ring-blue-300"
