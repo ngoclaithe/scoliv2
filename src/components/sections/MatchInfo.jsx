@@ -120,6 +120,7 @@ const MatchInfo = ({
               className="w-4 h-4 border border-gray-300 rounded cursor-pointer"
               title="Áo B"
             />
+            <span className="text-xs text-gray-500">Áo</span>
             <input
               type="color"
               value={teamBInfo.teamB2Kitcolor || '#00ff00'}
@@ -127,6 +128,7 @@ const MatchInfo = ({
               className="w-4 h-4 border border-gray-300 rounded cursor-pointer"
               title="Quần B"
             />
+            <span className="text-xs text-gray-500">Quần</span>
           </div>
 
           {/* Hàng 3: Tên trận đấu, Đơn vị live */}
