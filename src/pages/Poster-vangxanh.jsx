@@ -206,9 +206,9 @@ export default function VangXanhMatchIntro() {
                           <img
                             src={sponsor.logo}
                             alt={sponsor.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} 
-                            ${isMobile 
-                              ? 'w-3 h-3 p-0.5' 
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')}
+                            ${isMobile
+                              ? 'w-3 h-3 p-0'
                               : 'w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 p-0.5 sm:p-1'
                             }`}
                           />
