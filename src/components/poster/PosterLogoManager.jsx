@@ -360,13 +360,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               serverData: response.data
             };
 
-            // Thay thế poster đang upload bằng poster đã upload thành công
-            setCustomPosters(prev => prev.map(poster =>
-              poster.id === previewPoster.id ? uploadedPoster : poster
-            ));
-
-            setSavedPosters(prev => [...prev, uploadedPoster]);
+            // Remove preview poster and add to savedPosters only
             setCustomPosters(prev => prev.filter(poster => poster.id !== previewPoster.id));
+            setSavedPosters(prev => [...prev, uploadedPoster]);
             handlePosterSelect(uploadedPoster);
 
             // console.log('✅ [PosterLogoManager] Poster uploaded successfully:', response.data);
