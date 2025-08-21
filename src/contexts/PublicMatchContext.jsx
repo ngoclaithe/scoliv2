@@ -282,7 +282,11 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('poster_updated', (data) => {
       console.log('📝 [PublicMatchContext] poster_updated received:', data);
       setDisplaySettings(prev => {
-        const newSettings = { ...prev, selectedPoster: data.posterData || data.posterType };
+        const newSettings = {
+          ...prev,
+          selectedPoster: data.posterData || data.posterType,
+          url_custom_poster: data.customPosterUrl || data.isCustom ? data.customPosterUrl : null
+        };
         return newSettings;
       });
       setLastUpdateTime(Date.now());
