@@ -124,6 +124,7 @@ export const PublicMatchProvider = ({ children }) => {
   const [displaySettings, setDisplaySettings] = useState({
     selectedSkin: 1,
     selectedPoster: 'tretrung',
+    url_custom_poster: null,
     showStats: false,
     showPenalty: false,
     showLineup: false,
