@@ -215,9 +215,9 @@ export default function TreTrungMatchIntro() {
                       {organizingLogos.slice(0, isMobile ? 3 : 6).map((organizing, index) => (
                         <div key={`organizing-${index}`} className="flex-shrink-0">
                           <img
-                            src={organizing.logo}
-                            alt={organizing.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-8 h-8 sm:w-10 sm:h-10 md:w-13 md:h-13 p-0.5 sm:p-1'}`}
+                          src={organizing.logo}
+                          alt={organizing.name}
+                          className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0' : 'w-8 h-8 sm:w-10 sm:h-10 md:w-13 md:h-13 p-0.5 sm:p-1'}`}
                           />
                         </div>
                       ))}
