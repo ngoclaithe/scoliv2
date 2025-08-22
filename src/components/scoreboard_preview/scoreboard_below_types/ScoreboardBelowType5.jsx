@@ -8,309 +8,242 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
 
         if (isMobile) {
             // Mobile font sizes
-            if (length <= 8) return '19px';
-            if (length <= 12) return '18px';
-            if (length <= 16) return '17px';
-            return '16px';
+            if (length <= 8) return '10px';
+            if (length <= 12) return '9px';
+            if (length <= 16) return '8px';
+            return '7px';
         } else {
             // Desktop font sizes
-            if (length <= 8) return '32px';
-            if (length <= 12) return '28px';
-            if (length <= 16) return '24px';
-            return '24px';
+            if (length <= 8) return '18px';
+            if (length <= 12) return '16px';
+            if (length <= 16) return '14px';
+            return '12px';
         }
     };
 
     return (
-        <div className="flex flex-col items-center w-[800px] scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
-            {/* Main scoreboard row */}
-            <div className="w-full flex justify-center px-[4px] sm:px-[8px] relative">
-                {/* Background decorative layer */}
-                <div className="absolute inset-0 z-0">
-                    {/* Left wing decoration */}
+        <div className="flex flex-col items-center w-[900px] scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
+            {/* Main container */}
+            <div className="w-full relative">
+                {/* Tournament logo - Much bigger */}
+                <div className="absolute left-1/2 top-[-30px] sm:top-[-35px] -translate-x-1/2 w-[60px] h-[60px] sm:w-[70px] sm:h-[70px] z-50">
                     <div
-                        className="absolute left-0 top-0"
+                        className="w-full h-full flex items-center justify-center overflow-hidden"
                         style={{
-                            width: '200px',
-                            height: '50px',
-                            background: 'linear-gradient(45deg, rgba(59, 130, 246, 0.3), rgba(147, 51, 234, 0.3))',
-                            clipPath: 'polygon(0% 0%, 85% 0%, 70% 100%, 0% 100%)',
-                            transform: 'skew(-15deg)',
+                            background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+                            clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)',
+                            border: '4px solid #60a5fa',
+                            boxShadow: '0 0 25px rgba(59, 130, 246, 0.7), inset 0 3px 6px rgba(255,255,255,0.4)',
                         }}
-                    />
-                    {/* Right wing decoration */}
-                    <div
-                        className="absolute right-0 top-0"
-                        style={{
-                            width: '200px',
-                            height: '50px',
-                            background: 'linear-gradient(45deg, rgba(147, 51, 234, 0.3), rgba(59, 130, 246, 0.3))',
-                            clipPath: 'polygon(15% 0%, 100% 0%, 100% 100%, 30% 100%)',
-                            transform: 'skew(15deg)',
-                        }}
-                    />
+                    >
+                        <img
+                            src={getFullLogoUrl(tournamentLogo?.url_logo?.[0]) || currentData.leagueLogo}
+                            alt="Tournament"
+                            className="w-[70%] h-[70%] object-contain"
+                        />
+                    </div>
                 </div>
 
-                <div className="flex flex-row items-center min-h-[64px] sm:min-h-[72px] relative bg-transparent z-10">
-                    {/* Tournament/League Logo - Floating above */}
-                    <div className="absolute left-1/2 top-[-12px] sm:top-[-20px] -translate-x-1/2 w-[20px] h-[20px] sm:w-[56px] sm:h-[56px] z-50">
-                        <div className="w-full h-full rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 border-3 border-white shadow-xl flex items-center justify-center overflow-hidden">
-                            <img
-                                src={getFullLogoUrl(tournamentLogo?.url_logo?.[0]) || currentData.leagueLogo}
-                                alt="Tournament"
-                                className="w-[75%] h-[75%] object-contain"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Main content container with hexagonal frame */}
-                    <div className="flex flex-col items-center z-20 relative">
-                        <div className="flex flex-row items-center space-x-[-28px] sm:space-x-[-32px]">
-                            {/* Team A section with multilayer design */}
-                            <div className="flex flex-col items-center relative">
-                                {/* Team A name with layered background */}
-                                <div className="relative">
-                                    {/* Background layer 1 - shadow */}
+                {/* Main scoreboard panel - Better background */}
+                <div
+                    className="relative"
+                    style={{
+                        background: 'linear-gradient(135deg, #1e40af, #312e81, #1e293b)',
+                        clipPath: 'polygon(3% 0%, 97% 0%, 100% 20%, 100% 80%, 97% 100%, 3% 100%, 0% 80%, 0% 20%)',
+                        border: '3px solid #60a5fa',
+                        boxShadow: '0 12px 30px rgba(59, 130, 246, 0.5), inset 0 2px 4px rgba(255,255,255,0.2)',
+                    }}
+                >
+                    {/* Main content layout */}
+                    <div className="grid grid-cols-7 gap-4 items-center px-6 py-4">
+                        {/* Team A section */}
+                        <div className="col-span-3">
+                            <div
+                                className="relative"
+                                style={{
+                                    background: 'linear-gradient(135deg, #2563eb, #1e40af)',
+                                    clipPath: 'polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%, 10% 50%)',
+                                    border: '2px solid #3b82f6',
+                                    boxShadow: '0 0 15px rgba(37, 99, 235, 0.4), inset 0 2px 4px rgba(255,255,255,0.2)',
+                                }}
+                            >
+                                <div className="px-4 py-3">
+                                    {/* Team A name */}
                                     <div
-                                        className="absolute top-1 left-1"
+                                        className="text-white font-bold text-center mb-2"
                                         style={{
-                                            width: '320px',
-                                            height: '50px',
-                                            background: 'rgba(0, 0, 0, 0.3)',
-                                            clipPath: 'polygon(8% 0%, 92% 0%, 100% 80%, 15% 100%, 0% 20%)',
-                                            transform: 'rotate(-1deg)',
-                                        }}
-                                    />
-                                    {/* Background layer 2 - gradient */}
-                                    <div
-                                        className="absolute top-0 left-0"
-                                        style={{
-                                            width: '320px',
-                                            height: '50px',
-                                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                            clipPath: 'polygon(8% 0%, 92% 0%, 100% 80%, 15% 100%, 0% 20%)',
-                                        }}
-                                    />
-                                    {/* Main text layer */}
-                                    <div
-                                        className="relative text-white font-bold flex items-center justify-center z-10"
-                                        style={{
-                                            width: '320px',
-                                            height: '50px',
-                                            background: 'linear-gradient(45deg, #FF6B6B, #FF8E53)',
-                                            clipPath: 'polygon(8% 0%, 92% 0%, 100% 80%, 15% 100%, 0% 20%)',
                                             fontFamily: 'UTM Bebas, sans-serif',
                                             fontSize: getTeamNameFontSize(currentData.teamAName, window.innerWidth <= 640),
-                                            textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+                                            textShadow: '0 0 12px rgba(255,255,255,0.6), 2px 2px 4px rgba(0,0,0,0.8)',
+                                            letterSpacing: '1px',
                                         }}
                                     >
-                                        <span className="truncate text-center">{currentData.teamAName}</span>
+                                        {currentData.teamAName}
                                     </div>
-                                </div>
-                            </div>
-
-                            {/* Team A kit color with diamond design */}
-                            <div className="relative z-30">
-                                {/* Diamond outer layer */}
-                                <div
-                                    className="absolute -top-1 -left-1"
-                                    style={{
-                                        width: '40px',
-                                        height: '52px',
-                                        background: 'linear-gradient(45deg, #FFD700, #FFA500)',
-                                        clipPath: 'polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%)',
-                                    }}
-                                />
-                                {/* Diamond main layer */}
-                                <div
-                                    className="relative flex flex-col items-center"
-                                    style={{
-                                        width: '36px',
-                                        height: '50px',
-                                        clipPath: 'polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%)',
-                                    }}
-                                >
-                                    <div
-                                        className="w-full h-1/2"
-                                        style={{ backgroundColor: currentData.teamAKitColor }}
-                                    />
-                                    <div
-                                        className="w-full h-1/2"
-                                        style={{ backgroundColor: currentData.teamA2KitColor }}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Central score box with 3D effect */}
-                            <div className="relative z-40">
-                                {/* 3D shadow layers */}
-                                <div
-                                    className="absolute top-2 left-2"
-                                    style={{
-                                        width: '200px',
-                                        height: '60px',
-                                        background: 'rgba(0, 0, 0, 0.4)',
-                                        clipPath: 'polygon(20% 0%, 80% 0%, 95% 100%, 5% 100%)',
-                                    }}
-                                />
-                                <div
-                                    className="absolute top-1 left-1"
-                                    style={{
-                                        width: '200px',
-                                        height: '60px',
-                                        background: 'rgba(0, 0, 0, 0.2)',
-                                        clipPath: 'polygon(20% 0%, 80% 0%, 95% 100%, 5% 100%)',
-                                    }}
-                                />
-                                {/* Main score container */}
-                                <div
-                                    className="relative flex items-center justify-between px-4"
-                                    style={{
-                                        width: '200px',
-                                        height: '60px',
-                                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                        clipPath: 'polygon(20% 0%, 80% 0%, 95% 100%, 5% 100%)',
-                                        boxShadow: 'inset 0 2px 4px rgba(255,255,255,0.3)',
-                                    }}
-                                >
-                                    {/* Team A Score */}
-                                    <div
-                                        className="text-white font-bold text-xl sm:text-5xl text-center"
-                                        style={{
-                                            fontFamily: 'UTM Bebas, sans-serif',
-                                            textShadow: '2px 2px 4px rgba(0,0,0,0.7)',
-                                            filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.3))'
-                                        }}
-                                    >
-                                        {currentData.teamAScore}
-                                    </div>
-
-                                    {/* VS separator */}
-                                    <div
-                                        className="text-yellow-300 font-bold text-sm"
-                                        style={{
-                                            fontFamily: 'UTM Bebas, sans-serif',
-                                            textShadow: '1px 1px 2px rgba(0,0,0,0.8)'
-                                        }}
-                                    >
-                                        VS
-                                    </div>
-
-                                    {/* Team B Score */}
-                                    <div
-                                        className="text-white font-bold text-xl sm:text-5xl text-center"
-                                        style={{
-                                            fontFamily: 'UTM Bebas, sans-serif',
-                                            textShadow: '2px 2px 4px rgba(0,0,0,0.7)',
-                                            filter: 'drop-shadow(0 0 8px rgba(255,255,255,0.3))'
-                                        }}
-                                    >
-                                        {currentData.teamBScore}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Team B kit color with diamond design */}
-                            <div className="relative z-30">
-                                {/* Diamond outer layer */}
-                                <div
-                                    className="absolute -top-1 -left-1"
-                                    style={{
-                                        width: '40px',
-                                        height: '52px',
-                                        background: 'linear-gradient(45deg, #FFD700, #FFA500)',
-                                        clipPath: 'polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%)',
-                                    }}
-                                />
-                                {/* Diamond main layer */}
-                                <div
-                                    className="relative flex flex-col items-center"
-                                    style={{
-                                        width: '36px',
-                                        height: '50px',
-                                        clipPath: 'polygon(20% 0%, 80% 0%, 100% 50%, 80% 100%, 20% 100%, 0% 50%)',
-                                    }}
-                                >
-                                    <div
-                                        className="w-full h-1/2"
-                                        style={{ backgroundColor: currentData.teamBKitColor }}
-                                    />
-                                    <div
-                                        className="w-full h-1/2"
-                                        style={{ backgroundColor: currentData.teamB2KitColor }}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Team B section with multilayer design */}
-                            <div className="flex flex-col items-center relative">
-                                {/* Team B name with layered background */}
-                                <div className="relative">
-                                    {/* Background layer 1 - shadow */}
-                                    <div
-                                        className="absolute top-1 left-1"
-                                        style={{
-                                            width: '320px',
-                                            height: '50px',
-                                            background: 'rgba(0, 0, 0, 0.3)',
-                                            clipPath: 'polygon(8% 0%, 92% 0%, 100% 80%, 85% 100%, 0% 20%)',
-                                            transform: 'rotate(1deg)',
-                                        }}
-                                    />
-                                    {/* Background layer 2 - gradient */}
-                                    <div
-                                        className="absolute top-0 left-0"
-                                        style={{
-                                            width: '320px',
-                                            height: '50px',
-                                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                            clipPath: 'polygon(8% 0%, 92% 0%, 100% 80%, 85% 100%, 0% 20%)',
-                                        }}
-                                    />
-                                    {/* Main text layer */}
-                                    <div
-                                        className="relative text-white font-bold flex items-center justify-center"
-                                        style={{
-                                            width: '320px',
-                                            height: '50px',
-                                            background: 'linear-gradient(45deg, #FF8E53, #FF6B6B)',
-                                            clipPath: 'polygon(8% 0%, 92% 0%, 100% 80%, 85% 100%, 0% 20%)',
-                                            fontFamily: 'UTM Bebas, sans-serif',
-                                            fontSize: getTeamNameFontSize(currentData.teamBName, window.innerWidth <= 640),
-                                            textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
-                                        }}
-                                    >
-                                        <span className="truncate text-center">{currentData.teamBName}</span>
+                                    
+                                    {/* Team A kit colors - Diamond */}
+                                    <div className="flex justify-center">
+                                        <div
+                                            className="w-10 h-10 flex flex-col overflow-hidden relative"
+                                            style={{
+                                                transform: 'rotate(45deg)',
+                                                border: '3px solid #1e40af',
+                                                boxShadow: '0 0 12px rgba(37, 99, 235, 0.5)',
+                                                borderRadius: '2px',
+                                            }}
+                                        >
+                                            <div 
+                                                className="h-1/2 relative" 
+                                                style={{ 
+                                                    backgroundColor: currentData.teamAKitColor,
+                                                }}
+                                            >
+                                                <div 
+                                                    className="absolute inset-0 opacity-30"
+                                                    style={{
+                                                        background: 'linear-gradient(45deg, rgba(255,255,255,0.4) 0%, transparent 50%)',
+                                                    }}
+                                                />
+                                            </div>
+                                            <div 
+                                                className="h-1/2 relative" 
+                                                style={{ 
+                                                    backgroundColor: currentData.teamA2KitColor,
+                                                }}
+                                            >
+                                                <div 
+                                                    className="absolute inset-0 opacity-30"
+                                                    style={{
+                                                        background: 'linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.4) 100%)',
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/* Bottom status bar with animated gradient */}
-                        <div
-                            className="text-white text-2xl font-bold px-4 py-1 mt-2 relative overflow-hidden"
-                            style={{
-                                background: 'linear-gradient(90deg, #FF6B6B, #4ECDC4, #45B7D1, #96CEB4, #FFEAA7, #DDA0DD)',
-                                backgroundSize: '300% 100%',
-                                animation: 'gradientShift 3s ease infinite',
-                                clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)',
-                                fontFamily: 'UTM Bebas, sans-serif',
-                                textShadow: '2px 2px 4px rgba(0,0,0,0.7)'
-                            }}
-                        >
-                            TRỰC TIẾP THỂ THAO
+                        {/* Central score display - Better background, much larger fonts */}
+                        <div className="col-span-1">
+                            <div
+                                className="relative text-center"
+                                style={{
+                                    background: 'linear-gradient(135deg, #0c4a6e, #164e63, #1e293b)',
+                                    clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
+                                    border: '3px solid #0ea5e9',
+                                    boxShadow: '0 0 25px rgba(14, 165, 233, 0.5), inset 0 3px 6px rgba(255,255,255,0.2)',
+                                }}
+                            >
+                                <div className="px-4 py-3">
+                                    {/* Scores display - Much larger */}
+                                    <div className="space-y-1">
+                                        <div
+                                            className="text-white font-bold text-4xl sm:text-5xl"
+                                            style={{
+                                                fontFamily: 'UTM Bebas, sans-serif',
+                                                textShadow: '0 0 20px rgba(59, 130, 246, 0.9), 0 0 8px rgba(255,255,255,0.6)',
+                                                filter: 'drop-shadow(0 3px 6px rgba(0,0,0,0.8))',
+                                            }}
+                                        >
+                                            {currentData.teamAScore}
+                                        </div>
+                                        
+                                        <div 
+                                            className="text-slate-200 text-lg font-bold"
+                                            style={{ 
+                                                textShadow: '0 0 12px rgba(255,255,255,0.8)',
+                                                fontFamily: 'UTM Bebas, sans-serif',
+                                            }}
+                                        >
+                                            VS
+                                        </div>
+                                        
+                                        <div
+                                            className="text-white font-bold text-4xl sm:text-5xl"
+                                            style={{
+                                                fontFamily: 'UTM Bebas, sans-serif',
+                                                textShadow: '0 0 20px rgba(239, 68, 68, 0.9), 0 0 8px rgba(255,255,255,0.6)',
+                                                filter: 'drop-shadow(0 3px 6px rgba(0,0,0,0.8))',
+                                            }}
+                                        >
+                                            {currentData.teamBScore}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Team B section */}
+                        <div className="col-span-3">
+                            <div
+                                className="relative"
+                                style={{
+                                    background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+                                    clipPath: 'polygon(10% 0%, 100% 0%, 90% 50%, 100% 100%, 10% 100%, 0% 50%)',
+                                    border: '2px solid #ef4444',
+                                    boxShadow: '0 0 15px rgba(220, 38, 38, 0.4), inset 0 2px 4px rgba(255,255,255,0.2)',
+                                }}
+                            >
+                                <div className="px-4 py-3">
+                                    {/* Team B name */}
+                                    <div
+                                        className="text-white font-bold text-center mb-2"
+                                        style={{
+                                            fontFamily: 'UTM Bebas, sans-serif',
+                                            fontSize: getTeamNameFontSize(currentData.teamBName, window.innerWidth <= 640),
+                                            textShadow: '0 0 12px rgba(255,255,255,0.6), 2px 2px 4px rgba(0,0,0,0.8)',
+                                            letterSpacing: '1px',
+                                        }}
+                                    >
+                                        {currentData.teamBName}
+                                    </div>
+                                    
+                                    {/* Team B kit colors - Diamond */}
+                                    <div className="flex justify-center">
+                                        <div
+                                            className="w-10 h-10 flex flex-col overflow-hidden relative"
+                                            style={{
+                                                transform: 'rotate(45deg)',
+                                                border: '3px solid #b91c1c',
+                                                boxShadow: '0 0 12px rgba(220, 38, 38, 0.5)',
+                                                borderRadius: '2px',
+                                            }}
+                                        >
+                                            <div 
+                                                className="h-1/2 relative" 
+                                                style={{ 
+                                                    backgroundColor: currentData.teamBKitColor,
+                                                }}
+                                            >
+                                                <div 
+                                                    className="absolute inset-0 opacity-30"
+                                                    style={{
+                                                        background: 'linear-gradient(45deg, rgba(255,255,255,0.4) 0%, transparent 50%)',
+                                                    }}
+                                                />
+                                            </div>
+                                            <div 
+                                                className="h-1/2 relative" 
+                                                style={{ 
+                                                    backgroundColor: currentData.teamB2KitColor,
+                                                }}
+                                            >
+                                                <div 
+                                                    className="absolute inset-0 opacity-30"
+                                                    style={{
+                                                        background: 'linear-gradient(45deg, transparent 50%, rgba(255,255,255,0.4) 100%)',
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <style jsx>{`
-                @keyframes gradientShift {
-                    0% { background-position: 0% 50%; }
-                    50% { background-position: 100% 50%; }
-                    100% { background-position: 0% 50%; }
-                }
-            `}</style>
         </div>
     );
 };

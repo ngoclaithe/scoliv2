@@ -231,16 +231,20 @@ const ScoreboardAbove = ({ type = 1 }) => {
 
                 {/* Commentator Display - Center */}
                 {currentData.commentator && (
-                    <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 z-30
-                        md:bottom-20
-                        sm:bottom-16
-                        max-[480px]:bottom-12
-                        max-[360px]:bottom-10">
-                        <div className="bg-black bg-opacity-75 text-white px-3 py-1 rounded-lg
+                    <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30
+                        md:bottom-10
+                        sm:bottom-8
+                        max-[480px]:bottom-6
+                        max-[360px]:bottom-4">
+                        <div className="text-white px-3 py-1
                             md:px-4 md:py-2
                             sm:px-3 sm:py-1
-                            max-[480px]:px-2 max-[480px]:py-1">
-                            <span className="text-sm font-medium
+                            max-[480px]:px-2 max-[480px]:py-1"
+                            style={{
+                                WebkitTextStroke: '1px black',
+                                textShadow: '1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000'
+                            }}>
+                            <span className="text-sm font-bold
                                 md:text-lg
                                 sm:text-base
                                 max-[480px]:text-xs
