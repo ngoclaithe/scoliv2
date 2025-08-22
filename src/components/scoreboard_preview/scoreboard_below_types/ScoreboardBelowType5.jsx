@@ -231,7 +231,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                     {/* Team B kit colors - Diamond */}
                                     <div className="flex justify-center">
                                         <div
-                                            className="w-8 h-8 flex flex-col overflow-hidden relative"
+                                            className="w-8 h-4 flex flex-col overflow-hidden relative"
                                             style={{
                                                 transform: 'rotate(45deg)',
                                                 border: '2px solid #b91c1c',
