@@ -383,7 +383,7 @@ const UnifiedDisplayController = () => {
   return (
     <div className="relative min-h-screen bg-white">
       <div className="w-full h-full">
-        {renderCurrentView()}
+        {renderCurrentView}
       </div>
     </div>
   );
