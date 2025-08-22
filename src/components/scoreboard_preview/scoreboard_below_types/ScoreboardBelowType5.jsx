@@ -25,8 +25,8 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
         <div className="flex flex-col items-center w-[600px] scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
             {/* Main container */}
             <div className="w-full relative">
-                {/* Tournament logo - Much bigger */}
-                <div className="absolute left-1/2 top-[-6px] sm:top-[-8px] -translate-x-1/2 w-[45px] h-[22px] sm:w-[50px] sm:h-[25px] z-10">
+                {/* Tournament logo - Square and positioned much higher */}
+                <div className="absolute left-1/2 top-[-25px] sm:top-[-30px] -translate-x-1/2 w-[50px] h-[50px] sm:w-[55px] sm:h-[55px] z-10">
                     <div
                         className="w-full h-full flex items-center justify-center overflow-hidden"
                         style={{
@@ -44,7 +44,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                     </div>
                 </div>
 
-                {/* Main scoreboard panel - Better background */}
+                {/* Main scoreboard panel - Reduced height */}
                 <div
                     className="relative"
                     style={{
@@ -54,12 +54,12 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                         boxShadow: '0 12px 30px rgba(59, 130, 246, 0.5), inset 0 2px 4px rgba(255,255,255,0.2)',
                     }}
                 >
-                    {/* Main content layout */}
-                    <div className="grid grid-cols-7 gap-4 items-center px-6 py-2">
+                    {/* Main content layout - Reduced padding */}
+                    <div className="grid grid-cols-7 gap-2 items-center px-4 py-1">
                         {/* Team A section */}
-                        <div className="col-span-3 flex items-center gap-3">
-                            {/* Team A Logo */}
-                            <div className="w-12 h-6 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                        <div className="col-span-3 flex items-center gap-2">
+                            {/* Team A Logo - Square and bigger than tournament logo */}
+                            <div className="w-[60px] h-[60px] rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
                                 <img
                                     src={getFullLogoUrl(currentData.teamALogo) || "/api/placeholder/48/48"}
                                     alt="Team A Logo"
@@ -82,10 +82,10 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                     boxShadow: '0 0 15px rgba(37, 99, 235, 0.4), inset 0 2px 4px rgba(255,255,255,0.2)',
                                 }}
                             >
-                                <div className="px-4 py-1">
+                                <div className="px-3 py-0.5">
                                     {/* Team A name */}
                                     <div
-                                        className="text-white font-bold text-center mb-1"
+                                        className="text-white font-bold text-center mb-0.5"
                                         style={{
                                             fontFamily: 'UTM Bebas, sans-serif',
                                             fontSize: getTeamNameFontSize(currentData.teamAName, window.innerWidth <= 640),
@@ -138,7 +138,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                             </div>
                         </div>
 
-                        {/* Central score display - Better background, much larger fonts */}
+                        {/* Central score display - Horizontal scores, no VS */}
                         <div className="col-span-1">
                             <div
                                 className="relative text-center"
@@ -149,9 +149,9 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                     boxShadow: '0 0 25px rgba(14, 165, 233, 0.5), inset 0 3px 6px rgba(255,255,255,0.2)',
                                 }}
                             >
-                                <div className="px-4 py-1">
-                                    {/* Scores display - Much larger */}
-                                    <div className="space-y-1">
+                                <div className="px-2 py-0.5">
+                                    {/* Scores display - Horizontal layout */}
+                                    <div className="flex items-center justify-center gap-2">
                                         <div
                                             className="text-white font-bold text-2xl sm:text-3xl"
                                             style={{
@@ -170,7 +170,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                                 fontFamily: 'UTM Bebas, sans-serif',
                                             }}
                                         >
-                                            VS
+                                            -
                                         </div>
                                         
                                         <div
@@ -189,9 +189,9 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                         </div>
 
                         {/* Team B section */}
-                        <div className="col-span-3 flex items-center gap-3 flex-row-reverse">
-                            {/* Team B Logo */}
-                            <div className="w-12 h-6 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                        <div className="col-span-3 flex items-center gap-2 flex-row-reverse">
+                            {/* Team B Logo - Square and bigger than tournament logo */}
+                            <div className="w-[60px] h-[60px] rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
                                 <img
                                     src={getFullLogoUrl(currentData.teamBLogo) || "/api/placeholder/48/48"}
                                     alt="Team B Logo"
@@ -214,10 +214,10 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                     boxShadow: '0 0 15px rgba(220, 38, 38, 0.4), inset 0 2px 4px rgba(255,255,255,0.2)',
                                 }}
                             >
-                                <div className="px-4 py-1">
+                                <div className="px-3 py-0.5">
                                     {/* Team B name */}
                                     <div
-                                        className="text-white font-bold text-center mb-1"
+                                        className="text-white font-bold text-center mb-0.5"
                                         style={{
                                             fontFamily: 'UTM Bebas, sans-serif',
                                             fontSize: getTeamNameFontSize(currentData.teamBName, window.innerWidth <= 640),
