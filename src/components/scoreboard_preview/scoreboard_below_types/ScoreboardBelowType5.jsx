@@ -82,10 +82,10 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                     boxShadow: '0 0 15px rgba(37, 99, 235, 0.4), inset 0 2px 4px rgba(255,255,255,0.2)',
                                 }}
                             >
-                                <div className="px-4 py-3">
+                                <div className="px-4 py-1">
                                     {/* Team A name */}
                                     <div
-                                        className="text-white font-bold text-center mb-2"
+                                        className="text-white font-bold text-center mb-1"
                                         style={{
                                             fontFamily: 'UTM Bebas, sans-serif',
                                             fontSize: getTeamNameFontSize(currentData.teamAName, window.innerWidth <= 640),
