@@ -143,7 +143,11 @@ const ScoreboardBelowNew = ({ type = 1 }) => {
                         <div className="text-white px-3 py-1
                             md:px-4 md:py-2
                             sm:px-3 sm:py-1
-                            max-[480px]:px-2 max-[480px]:py-1">
+                            max-[480px]:px-2 max-[480px]:py-1"
+                            style={{
+                                WebkitTextStroke: '1px black',
+                                textShadow: '1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000'
+                            }}>
                             <span className="text-sm font-bold
                                 md:text-lg
                                 sm:text-base
