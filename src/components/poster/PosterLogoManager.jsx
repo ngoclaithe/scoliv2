@@ -104,7 +104,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             console.log("Giá trị posterResponse ", posterResponse);
             if (posterResponse?.success && posterResponse?.data) {
               const savedPosterList = posterResponse.data.map(poster => ({
-                id: `custom-poster-${poster.id}`,
+                id: `custom-${poster.id}`,
                 name: poster.name || 'Poster tùy chỉnh',
                 thumbnail: getFullPosterUrl(poster.url_poster),
                 isCustom: true
@@ -351,7 +351,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           if (response.success && response.data) {
             // Tạo poster từ response của server
             const uploadedPoster = {
-              id: `custom-poster-${response.data.id}`,
+              id: `custom-${response.data.id}`,
               name: response.data.name,
               thumbnail: getFullPosterUrl(response.data.url_poster),
               isCustom: true,
