@@ -27,35 +27,20 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       if (AuthAPI.isAuthenticated()) {
-        const token = AuthAPI.getToken();
-        if (token && (token.includes('user-token') || token.includes('admin-token'))) {
-          const userData = {
-            id: 'user-demo',
-            email: 'demo@user.com',
-            name: 'User Demo',
-            role: 'user',
-            avatar: null
-          };
-          setUser(userData);
+        try {
+          const userData = await AuthAPI.getMe();
+          setUser({
+            id: userData.id,
+            email: userData.email,
+            name: userData.name,
+            role: userData.role,
+            avatar: userData.avatar
+          });
           setIsAuthenticated(true);
           setAuthType('account');
           setCodeOnly(false);
-        } else {
-          try {
-            const userData = await AuthAPI.getMe();
-            setUser({
-              id: userData.id,
-              email: userData.email,
-              name: userData.name,
-              role: userData.role,
-              avatar: userData.avatar
-            });
-            setIsAuthenticated(true);
-            setAuthType('account');
-            setCodeOnly(false);
-          } catch (apiError) {
-            AuthAPI.logout();
-          }
+        } catch (apiError) {
+          AuthAPI.logout();
         }
       }
     } catch (error) {
@@ -73,26 +58,6 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       setLoading(true);
-
-      if (credentials.email === 'demo@user.com' && credentials.password === 'demo123') {
-        const userData = {
-          id: 'user-demo',
-          email: 'demo@user.com',
-          name: 'User Demo',
-          role: 'user',
-          avatar: null
-        };
-
-        setUser(userData);
-        setCodeOnly(false);
-        setAuthType('account'); 
-        setIsAuthenticated(true);
-
-        localStorage.setItem('token', 'fake-user-token');
-
-        toast.success('Đăng nhập thành công!');
-        return { success: true, user: userData };
-      }
 
       const { user: userData } = await AuthAPI.login(credentials);
 
@@ -195,16 +160,12 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
 
-      console.log('Đăng ký với dữ liệu:', userData);
-
       const response = await AuthAPI.register({
         name: userData.name,
         email: userData.email,
         password: userData.password,
         role: 'user' 
       });
-
-      console.log('Phản hồi đăng ký thành công:', response);
 
       setUser({
         id: response.user.id,
@@ -222,12 +183,6 @@ export const AuthProvider = ({ children }) => {
       return { success: true, user: userData };
     } catch (error) {
       console.error('Lỗi đăng ký:', error);
-      console.error('Chi tiết lỗi:', {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status,
-        statusText: error.response?.statusText
-      });
       
       let errorMessage = 'Đăng ký thất bại. Vui lòng thử lại.';
       let errorDetails = [];
@@ -243,21 +198,12 @@ export const AuthProvider = ({ children }) => {
         errorMessage = error.message;
       }
 
-      console.log('Thông báo lỗi sẽ hiển thị:', errorMessage);
-      console.log('Chi tiết lỗi:', errorDetails);
-
       if (errorDetails.length > 0) {
         errorDetails.forEach(detail => {
-          toast.error(detail, {
-            position: "top-right",
-            autoClose: 5000,
-          });
+          toast.error(detail);
         });
       } else {
-        toast.error(errorMessage, {
-          position: "top-right",
-          autoClose: 5000,
-        });
+        toast.error(errorMessage);
       }
 
       return {
@@ -289,11 +235,8 @@ export const AuthProvider = ({ children }) => {
   const updateProfile = async (userData) => {
     try {
       setLoading(true);
-      console.log('Cập nhật profile với dữ liệu:', userData);
       
       const updatedUser = await AuthAPI.updateDetails(userData);
-      
-      console.log('Cập nhật profile thành công:', updatedUser);
       
       setUser(prev => ({
         ...prev,
@@ -323,11 +266,9 @@ export const AuthProvider = ({ children }) => {
   const changePassword = async (currentPassword, newPassword) => {
     try {
       setLoading(true);
-      console.log('Đổi mật khẩu...');
       
       await AuthAPI.updatePassword({ currentPassword, newPassword });
       
-      console.log('Đổi mật khẩu thành công');
       toast.success('Đổi mật khẩu thành công!');
       return { success: true };
     } catch (error) {
@@ -349,11 +290,9 @@ export const AuthProvider = ({ children }) => {
   const requestPasswordReset = async (email) => {
     try {
       setLoading(true);
-      console.log('Gửi yêu cầu reset mật khẩu cho email:', email);
       
       await AuthAPI.forgotPassword(email);
       
-      console.log('Gửi email reset mật khẩu thành công');
       toast.success('Email đặt lại mật khẩu đã được gửi!');
       return { success: true };
     } catch (error) {
@@ -375,11 +314,9 @@ export const AuthProvider = ({ children }) => {
   const resetPassword = async (token, newPassword) => {
     try {
       setLoading(true);
-      console.log('Đặt lại mật khẩu với token:', token);
       
       await AuthAPI.resetPassword(token, newPassword);
       
-      console.log('Đặt lại mật khẩu thành công');
       toast.success('Đặt lại mật khẩu thành công!');
       return { success: true };
     } catch (error) {
@@ -401,7 +338,6 @@ export const AuthProvider = ({ children }) => {
   const enterMatchCode = async (code) => {
     try {
       setLoading(true);
-      console.log('Nhập mã trận đấu:', code);
 
       const response = await AccessCodeAPI.verifyCodeForLogin(code);
       if (response.success && response.isValid) {
@@ -410,7 +346,6 @@ export const AuthProvider = ({ children }) => {
         setAuthType('full');
         setTypeMatch(typeMatch);
         
-        console.log('Nhập mã trận đấu thành công:', response.data);
         toast.success('Nhập mã trận đấu thành công!');
         
         return {
@@ -421,7 +356,6 @@ export const AuthProvider = ({ children }) => {
         };
       } else {
         const errorMessage = response.message || 'Mã trận đấu không hợp lệ.';
-        console.log('Mã trận đấu không hợp lệ:', errorMessage);
         toast.error(errorMessage);
         
         return {
@@ -455,17 +389,11 @@ export const AuthProvider = ({ children }) => {
     if (authType === 'full') {
       setAuthType('account');
     }
-    console.log('Đã xóa mã trận đấu');
   };
 
   const handleExpiredAccess = useCallback((error) => {
     if (error?.message && error.message.includes('Mã truy cập đã bị hết hạn')) {
-      console.log('Mã truy cập đã hết hạn, đang đăng xuất...');
-      
-      toast.error('Mã truy cập đã hết hạn. Đang đăng xuất...', {
-        position: "top-center",
-        autoClose: 3000,
-      });
+      toast.error('Mã truy cập đã hết hạn. Đang đăng xuất...');
 
       setTimeout(() => {
         logout();
