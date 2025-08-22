@@ -73,7 +73,6 @@ export const AuthProvider = ({ children }) => {
       setAuthType('account'); 
       setIsAuthenticated(true);
       
-      toast.success('Đăng nhập thành công!');
       return { success: true, user: userData };
     } catch (error) {
       console.error('Lỗi đăng nhập:', error);
@@ -284,7 +283,6 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Lỗi đặt lại mật khẩu:', error);
       
-      // Chỉ hiển thị message lỗi từ server
       const errorMessage = error.response?.data?.message || 'Đặt lại mật khẩu thất bại.';
       
       toast.error(errorMessage);
