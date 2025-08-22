@@ -137,7 +137,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   const [commentator, setCommentator] = useState(matchData.commentator || "");
 
   useEffect(() => {
-    // console.log("Giá trị đồng bộ từ backend socket là", matchData);
+    // console.log("Giá trị đồng bộ t�� backend socket là", matchData);
     setTeamAInfo(prev => {
       const newTeamAInfo = {
         name: matchData.teamA.name || prev.name,
@@ -559,6 +559,8 @@ const MatchManagementSection = ({ isActive = true }) => {
           setSubtitle={setSubtitle}
           showSubtitle={showSubtitle}
           setShowSubtitle={setShowSubtitle}
+          commentator={commentator}
+          setCommentator={setCommentator}
         />
       </div>
 
