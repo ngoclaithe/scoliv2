@@ -78,7 +78,7 @@ const UnifiedDisplayController = () => {
     );
   }, [location, matchTitle, liveText, teamALogoCode, teamBLogoCode, teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore, view, matchTime]);
 
-  const parseUrlParams = useCallback(() => {
+  const parseUrlParams = useMemo(() => {
     if (!isDynamicRoute) return null;
 
     console.log('🔍 [UnifiedDisplayController] Raw URL params:', {
