@@ -27,35 +27,35 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
         <div className="flex flex-col items-center w-[500px] scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
             {/* Main container */}
             <div className="w-full relative">
-                {/* Tournament logo - Hexagonal */}
-                <div className="absolute left-1/2 top-[-15px] sm:top-[-20px] -translate-x-1/2 w-[30px] h-[30px] sm:w-[40px] sm:h-[40px] z-50">
+                {/* Tournament logo - Much bigger */}
+                <div className="absolute left-1/2 top-[-25px] sm:top-[-30px] -translate-x-1/2 w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] z-50">
                     <div
                         className="w-full h-full flex items-center justify-center overflow-hidden"
                         style={{
                             background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
                             clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)',
-                            border: '2px solid #60a5fa',
-                            boxShadow: '0 0 15px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255,255,255,0.3)',
+                            border: '3px solid #60a5fa',
+                            boxShadow: '0 0 20px rgba(59, 130, 246, 0.6), inset 0 2px 4px rgba(255,255,255,0.4)',
                         }}
                     >
                         <DisplayLogo
                             logos={[tournamentLogo || defaultTournamentLogo]}
                             alt="Tournament"
                             type_play="round"
-                            className="w-[60%] h-[60%]"
-                            logoSize="w-[18px] h-[18px] sm:w-[24px] sm:h-[24px]"
+                            className="w-[70%] h-[70%]"
+                            logoSize="w-[35px] h-[35px] sm:w-[42px] sm:h-[42px]"
                         />
                     </div>
                 </div>
 
-                {/* Main scoreboard container - Angular design */}
+                {/* Main scoreboard container - Better background */}
                 <div
                     className="relative"
                     style={{
-                        background: 'linear-gradient(135deg, #0f172a, #1e293b)',
+                        background: 'linear-gradient(135deg, #1e40af, #312e81, #1e293b)',
                         clipPath: 'polygon(5% 0%, 95% 0%, 100% 25%, 100% 75%, 95% 100%, 5% 100%, 0% 75%, 0% 25%)',
-                        border: '1px solid #334155',
-                        boxShadow: '0 8px 25px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)',
+                        border: '2px solid #60a5fa',
+                        boxShadow: '0 8px 25px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
                     }}
                 >
                     {/* Main content grid */}
@@ -101,41 +101,41 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                             </div>
                         </div>
 
-                        {/* Central score display - Angular hexagon */}
+                        {/* Central score display - Better background, larger fonts */}
                         <div className="col-span-1">
                             <div
                                 className="relative text-center"
                                 style={{
-                                    background: 'linear-gradient(135deg, #000000, #374151)',
+                                    background: 'linear-gradient(135deg, #0c4a6e, #164e63, #1e293b)',
                                     clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
-                                    border: '2px solid #4b5563',
-                                    boxShadow: '0 0 20px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.1)',
+                                    border: '2px solid #0ea5e9',
+                                    boxShadow: '0 0 20px rgba(14, 165, 233, 0.4), inset 0 2px 4px rgba(255,255,255,0.2)',
                                 }}
                             >
                                 <div className="px-3 py-2">
-                                    {/* Scores */}
+                                    {/* Scores - Much larger */}
                                     <div className="flex items-center justify-center space-x-1">
                                         <div
-                                            className="text-white font-bold text-lg sm:text-xl"
+                                            className="text-white font-bold text-2xl sm:text-3xl"
                                             style={{
                                                 fontFamily: 'UTM Bebas, sans-serif',
-                                                textShadow: '0 0 12px rgba(59, 130, 246, 0.8), 0 0 4px rgba(255,255,255,0.4)',
+                                                textShadow: '0 0 15px rgba(59, 130, 246, 0.9), 0 0 6px rgba(255,255,255,0.6)',
                                                 filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))',
                                             }}
                                         >
                                             {currentData.teamAScore}
                                         </div>
                                         <div 
-                                            className="text-slate-300 text-sm font-bold"
+                                            className="text-slate-200 text-lg font-bold"
                                             style={{ textShadow: '0 0 8px rgba(255,255,255,0.6)' }}
                                         >
                                             -
                                         </div>
                                         <div
-                                            className="text-white font-bold text-lg sm:text-xl"
+                                            className="text-white font-bold text-2xl sm:text-3xl"
                                             style={{
                                                 fontFamily: 'UTM Bebas, sans-serif',
-                                                textShadow: '0 0 12px rgba(239, 68, 68, 0.8), 0 0 4px rgba(255,255,255,0.4)',
+                                                textShadow: '0 0 15px rgba(239, 68, 68, 0.9), 0 0 6px rgba(255,255,255,0.6)',
                                                 filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))',
                                             }}
                                         >
@@ -143,14 +143,14 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                                         </div>
                                     </div>
                                     
-                                    {/* Time display */}
+                                    {/* Time display - Larger font */}
                                     {showMatchTime && (
-                                        <div>
+                                        <div className="mt-1">
                                             <div
-                                                className="text-green-400 text-xs font-bold"
+                                                className="text-green-400 text-sm sm:text-base font-bold"
                                                 style={{
                                                     fontFamily: 'UTM Bebas, sans-serif',
-                                                    textShadow: '0 0 8px rgba(34, 197, 94, 0.8)',
+                                                    textShadow: '0 0 12px rgba(34, 197, 94, 0.9), 0 0 4px rgba(255,255,255,0.5)',
                                                 }}
                                             >
                                                 {currentData.matchTime}
