@@ -179,7 +179,7 @@ export default function TreTrungMatchIntro() {
         >
         </div>
 
-        <div className="relative z-10 h-full flex flex-col pt-2 px-2 pb-1 sm:pt-4 sm:px-4 sm:pb-2 md:pt-6 md:px-6 md:pb-2">
+        <div className="relative z-10 h-full flex flex-col pt-2 px-2 pb-0 sm:pt-4 sm:px-4 sm:pb-0 md:pt-6 md:px-6 md:pb-0">
 
 
           {/* Top section với logos - Mobile responsive */}
@@ -450,7 +450,7 @@ export default function TreTrungMatchIntro() {
           </div>
 
           {/* Stadium and Live sections - Move closer to bottom */}
-          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full">
+          <div className="absolute inset-x-0 bottom-0 pb-1">
             <div className="flex justify-center items-center gap-2 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8">
               {/* Stadium */}
               {matchData.showStadium && (
