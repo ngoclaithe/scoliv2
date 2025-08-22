@@ -67,17 +67,15 @@ const UnifiedDisplayController = () => {
   const [error, setError] = useState(null);
   const [isDynamicRoute, setIsDynamicRoute] = useState(false);
 
-  const checkIfDynamicRoute = useCallback(() => {
-    const hasDynamicParams = Boolean(
-      location || matchTitle || liveText || 
-      teamALogoCode || teamBLogoCode || 
-      teamAName || teamBName || 
-      teamAKitColor || teamBKitColor || 
+  const checkIfDynamicRoute = useMemo(() => {
+    return Boolean(
+      location || matchTitle || liveText ||
+      teamALogoCode || teamBLogoCode ||
+      teamAName || teamBName ||
+      teamAKitColor || teamBKitColor ||
       teamAScore || teamBScore ||
       view || matchTime
     );
-    
-    return hasDynamicParams;
   }, [location, matchTitle, liveText, teamALogoCode, teamBLogoCode, teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore, view, matchTime]);
 
   const parseUrlParams = useCallback(() => {
