@@ -454,7 +454,7 @@ export default function TreTrungMatchIntro() {
             <div className="flex justify-center items-end gap-2 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8">
               {/* Stadium */}
               {matchData.showStadium && (
-                <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 text-white font-normal" style={{
+                <div className="flex items-end space-x-1 sm:space-x-2 md:space-x-3 text-white font-normal" style={{
                   fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
                 }}>
                   <img
@@ -462,13 +462,13 @@ export default function TreTrungMatchIntro() {
                     alt="Stadium"
                     className={`object-contain ${isMobile ? 'w-2 h-2' : 'w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10'}`}
                   />
-                  <span>{matchData.stadium}</span>
+                  <span className="leading-none">{matchData.stadium}</span>
                 </div>
               )}
 
               {/* Live Text */}
               {matchData.showLiveIndicator && (
-                <div className="flex items-center items-end space-x-1 sm:space-x-2 md:space-x-3 text-white font-normal" style={{
+                <div className="flex items-end space-x-1 sm:space-x-2 md:space-x-3 text-white font-normal" style={{
                   fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
                 }}>
                   <img
@@ -476,7 +476,7 @@ export default function TreTrungMatchIntro() {
                     alt="Live"
                     className={`object-contain ${isMobile ? 'w-2 h-4' : 'w-6 h-12 sm:w-8 sm:h-16 md:w-10 md:h-20'}`}
                   />
-                  <span>{matchData.liveText}</span>
+                  <span className="leading-none">{matchData.liveText}</span>
                 </div>
               )}
             </div>
