@@ -439,7 +439,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
                 background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                 clipPath: 'polygon(12% 0%, 88% 0%, 100% 100%, 0% 100%)',
                 fontFamily: 'UTM Bebas, sans-serif',
-                fontSize: '10px',
+                fontSize: '12px',
                 textShadow: '0 0 5px rgba(0,255,255,0.8)',
                 border: '1px solid rgba(0,255,255,0.5)',
               }}
@@ -592,7 +592,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
                 background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
                 clipPath: 'polygon(12% 0%, 88% 0%, 100% 100%, 0% 100%)',
                 fontFamily: 'UTM Bebas, sans-serif',
-                fontSize: '10px',
+                fontSize: '12px',
                 textShadow: '0 0 5px rgba(255,0,255,0.8)',
                 border: '1px solid rgba(255,0,255,0.5)',
               }}

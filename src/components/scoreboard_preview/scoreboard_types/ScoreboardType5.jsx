@@ -10,16 +10,16 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
         
         if (isMobile) {
             // Mobile font sizes
-            if (length <= 8) return '8px';
-            if (length <= 12) return '7px';
-            if (length <= 16) return '6px';
-            return '5px';
+            if (length <= 8) return '10px';
+            if (length <= 12) return '9px';
+            if (length <= 16) return '8px';
+            return '7px';
         } else {
             // Desktop font sizes
-            if (length <= 8) return '16px';
-            if (length <= 12) return '14px';
-            if (length <= 16) return '12px';
-            return '10px';
+            if (length <= 8) return '20px';
+            if (length <= 12) return '18px';
+            if (length <= 16) return '16px';
+            return '14px';
         }
     };
 
@@ -28,7 +28,7 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
             {/* Main container */}
             <div className="w-full relative">
                 {/* Tournament logo - Much bigger */}
-                <div className="absolute left-1/2 top-[-25px] sm:top-[-30px] -translate-x-1/2 w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] z-50">
+                <div className="absolute left-1/2 top-[-16px] sm:top-[-19px] -translate-x-1/2 w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] z-50">
                     <div
                         className="w-full h-full flex items-center justify-center overflow-hidden"
                         style={{
