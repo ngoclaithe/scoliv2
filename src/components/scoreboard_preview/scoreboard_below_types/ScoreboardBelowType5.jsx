@@ -55,7 +55,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                     }}
                 >
                     {/* Main content layout */}
-                    <div className="grid grid-cols-7 gap-4 items-center px-6 py-4">
+                    <div className="grid grid-cols-7 gap-4 items-center px-6 py-2">
                         {/* Team A section */}
                         <div className="col-span-3 flex items-center gap-3">
                             {/* Team A Logo */}
