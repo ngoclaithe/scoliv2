@@ -789,6 +789,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           posterData: poster
         });
       }
+
+      // Chuyển sang view poster
+      socketService.emit('view_update', { viewType: 'poster' });
     }
     // Loại bỏ onPosterUpdate để tránh double emit
     // if (onPosterUpdate) {
