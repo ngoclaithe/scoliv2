@@ -1187,12 +1187,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           </div>
         </div>
 
-        {isCustomPosterSelected && (
-          <div className="text-xs text-red-600 bg-red-50 p-1 rounded border">
-            ⚠️ Đã chọn poster tùy chỉnh - logo & banner bị khóa
-          </div>
-        )}
-
         <div className="flex flex-wrap gap-0.5">
           {logoTypes.map((type) => (
             <button
@@ -1378,11 +1372,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       {/* Round & Group section - disabled khi chọn custom poster */}
       <div className={`bg-white border border-gray-200 rounded-lg p-2 ${isCustomPosterSelected ? 'opacity-50 pointer-events-none' : ''}`}>
         {renderRoundGroupSection()}
-        {isCustomPosterSelected && (
-          <div className="text-xs text-red-600 bg-red-50 p-1 rounded border mt-2">
-            ⚠️ Đã chọn poster tùy chỉnh - vòng đấu & bảng đấu bị khóa
-          </div>
-        )}
       </div>
 
       <div className="bg-white border border-gray-200 rounded-lg p-2">
