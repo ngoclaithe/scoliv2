@@ -190,7 +190,10 @@ const MatchManagementSection = ({ isActive = true }) => {
     if (matchData.liveText !== undefined) {
       setLiveText(matchData.liveText);
     }
-  }, [matchData.matchTitle, matchData.liveText]);
+    if (matchData.commentator !== undefined) {
+      setCommentator(matchData.commentator);
+    }
+  }, [matchData.matchTitle, matchData.liveText, matchData.commentator]);
 
   const playAudioForAction = (audioType) => {
     if (!isActive || !audioEnabled) {
