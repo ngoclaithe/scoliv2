@@ -28,7 +28,7 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
             {/* Main container */}
             <div className="w-full relative">
                 {/* Tournament logo - Much bigger */}
-                <div className="absolute left-1/2 top-[-16px] sm:top-[-19px] -translate-x-1/2 w-[50px] h-[50px] sm:w-[60px] sm:h-[60px] z-50">
+                <div className="absolute left-1/2 top-[-8px] sm:top-[-10px] -translate-x-1/2 w-[40px] h-[40px] sm:w-[45px] sm:h-[45px] z-10">
                     <div
                         className="w-full h-full flex items-center justify-center overflow-hidden"
                         style={{
@@ -43,7 +43,7 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                             alt="Tournament"
                             type_play="round"
                             className="w-[70%] h-[70%]"
-                            logoSize="w-[35px] h-[35px] sm:w-[42px] sm:h-[42px]"
+                            logoSize="w-[28px] h-[28px] sm:w-[32px] sm:h-[32px]"
                         />
                     </div>
                 </div>
