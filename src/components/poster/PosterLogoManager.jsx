@@ -780,7 +780,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
         socketService.emit('poster_update', {
           posterType: 'custom',
           posterData: poster,
-          customPosterUrl: poster.thumbnail || getFullPosterUrl(poster.serverData?.url_poster)
+          customPosterUrl: poster.thumbnail
         });
       } else {
         // Gửi poster template thông thường
