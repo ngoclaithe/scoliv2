@@ -442,7 +442,8 @@ const MatchManagementSection = ({ isActive = true }) => {
       logoTeamA: teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
       logoTeamB: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || "",
       subtitle: subtitle,
-      showSubtitle: showSubtitle
+      showSubtitle: showSubtitle,
+      commentator: commentator
     };
 
     // console.log("🎨 [DEBUG] Gửi updateMatchInfo với:", matchInfoData);
