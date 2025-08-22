@@ -25,33 +25,33 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
         <div className="flex flex-col items-center w-[900px] scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
             {/* Main container */}
             <div className="w-full relative">
-                {/* Tournament logo - Large Hexagonal */}
-                <div className="absolute left-1/2 top-[-20px] sm:top-[-25px] -translate-x-1/2 w-[40px] h-[40px] sm:w-[50px] sm:h-[50px] z-50">
+                {/* Tournament logo - Much bigger */}
+                <div className="absolute left-1/2 top-[-30px] sm:top-[-35px] -translate-x-1/2 w-[60px] h-[60px] sm:w-[70px] sm:h-[70px] z-50">
                     <div
                         className="w-full h-full flex items-center justify-center overflow-hidden"
                         style={{
                             background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
                             clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)',
-                            border: '3px solid #60a5fa',
-                            boxShadow: '0 0 20px rgba(59, 130, 246, 0.5), inset 0 2px 4px rgba(255,255,255,0.3)',
+                            border: '4px solid #60a5fa',
+                            boxShadow: '0 0 25px rgba(59, 130, 246, 0.7), inset 0 3px 6px rgba(255,255,255,0.4)',
                         }}
                     >
                         <img
                             src={getFullLogoUrl(tournamentLogo?.url_logo?.[0]) || currentData.leagueLogo}
                             alt="Tournament"
-                            className="w-[60%] h-[60%] object-contain"
+                            className="w-[70%] h-[70%] object-contain"
                         />
                     </div>
                 </div>
 
-                {/* Main scoreboard panel - Angular wide design */}
+                {/* Main scoreboard panel - Better background */}
                 <div
                     className="relative"
                     style={{
-                        background: 'linear-gradient(135deg, #0f172a, #1e293b)',
+                        background: 'linear-gradient(135deg, #1e40af, #312e81, #1e293b)',
                         clipPath: 'polygon(3% 0%, 97% 0%, 100% 20%, 100% 80%, 97% 100%, 3% 100%, 0% 80%, 0% 20%)',
-                        border: '2px solid #334155',
-                        boxShadow: '0 12px 30px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.1)',
+                        border: '3px solid #60a5fa',
+                        boxShadow: '0 12px 30px rgba(59, 130, 246, 0.5), inset 0 2px 4px rgba(255,255,255,0.2)',
                     }}
                 >
                     {/* Main content layout */}
@@ -124,25 +124,25 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                             </div>
                         </div>
 
-                        {/* Central score display - Large hexagonal */}
+                        {/* Central score display - Better background, much larger fonts */}
                         <div className="col-span-1">
                             <div
                                 className="relative text-center"
                                 style={{
-                                    background: 'linear-gradient(135deg, #000000, #374151)',
+                                    background: 'linear-gradient(135deg, #0c4a6e, #164e63, #1e293b)',
                                     clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
-                                    border: '3px solid #4b5563',
-                                    boxShadow: '0 0 25px rgba(0,0,0,0.7), inset 0 3px 6px rgba(255,255,255,0.1)',
+                                    border: '3px solid #0ea5e9',
+                                    boxShadow: '0 0 25px rgba(14, 165, 233, 0.5), inset 0 3px 6px rgba(255,255,255,0.2)',
                                 }}
                             >
                                 <div className="px-4 py-3">
-                                    {/* Scores display */}
+                                    {/* Scores display - Much larger */}
                                     <div className="space-y-1">
                                         <div
-                                            className="text-white font-bold text-2xl sm:text-3xl"
+                                            className="text-white font-bold text-4xl sm:text-5xl"
                                             style={{
                                                 fontFamily: 'UTM Bebas, sans-serif',
-                                                textShadow: '0 0 15px rgba(59, 130, 246, 0.9), 0 0 6px rgba(255,255,255,0.5)',
+                                                textShadow: '0 0 20px rgba(59, 130, 246, 0.9), 0 0 8px rgba(255,255,255,0.6)',
                                                 filter: 'drop-shadow(0 3px 6px rgba(0,0,0,0.8))',
                                             }}
                                         >
@@ -150,9 +150,9 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                         </div>
                                         
                                         <div 
-                                            className="text-slate-300 text-sm font-bold"
+                                            className="text-slate-200 text-lg font-bold"
                                             style={{ 
-                                                textShadow: '0 0 10px rgba(255,255,255,0.7)',
+                                                textShadow: '0 0 12px rgba(255,255,255,0.8)',
                                                 fontFamily: 'UTM Bebas, sans-serif',
                                             }}
                                         >
@@ -160,10 +160,10 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                         </div>
                                         
                                         <div
-                                            className="text-white font-bold text-2xl sm:text-3xl"
+                                            className="text-white font-bold text-4xl sm:text-5xl"
                                             style={{
                                                 fontFamily: 'UTM Bebas, sans-serif',
-                                                textShadow: '0 0 15px rgba(239, 68, 68, 0.9), 0 0 6px rgba(255,255,255,0.5)',
+                                                textShadow: '0 0 20px rgba(239, 68, 68, 0.9), 0 0 8px rgba(255,255,255,0.6)',
                                                 filter: 'drop-shadow(0 3px 6px rgba(0,0,0,0.8))',
                                             }}
                                         >
