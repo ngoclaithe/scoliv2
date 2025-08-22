@@ -236,7 +236,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
                         sm:bottom-8
                         max-[480px]:bottom-6
                         max-[360px]:bottom-4">
-                        <div className="text-white px-3 py-1 rounded-lg border-2 border-black bg-transparent
+                        <div className="text-white px-3 py-1
                             md:px-4 md:py-2
                             sm:px-3 sm:py-1
                             max-[480px]:px-2 max-[480px]:py-1"
