@@ -284,8 +284,8 @@ export const PublicMatchProvider = ({ children }) => {
       setDisplaySettings(prev => {
         const newSettings = {
           ...prev,
-          selectedPoster: data.posterData || data.posterType,
-          url_custom_poster: data.customPosterUrl || data.isCustom ? data.customPosterUrl : null
+          selectedPoster: data.posterType,
+          url_custom_poster: data.posterType === 'custom' ? data.customPosterUrl : null
         };
         return newSettings;
       });
@@ -802,7 +802,7 @@ export const PublicMatchProvider = ({ children }) => {
             if (!audioData || (Array.isArray(audioData) && audioData.length === 0)) {
               return;
             }
-            console.log('🎵 [PublicMatchContext] Playing real-time referee voice');
+            console.log('��� [PublicMatchContext] Playing real-time referee voice');
             audioUtils.playRefereeVoiceRealtime(new Float32Array(audioData));
 
           } else if (data.command === 'PLAY_REFEREE_VOICE') {
@@ -1148,7 +1148,7 @@ export const PublicMatchProvider = ({ children }) => {
   const updateDisplaySettings = useCallback((newDisplaySettings) => {
     setDisplaySettings(prev => ({ ...prev, ...newDisplaySettings }));
     if (canSendToSocket && socketConnected) {
-      console.log('🎨 [PublicMatchContext] Sending display settings update:', newDisplaySettings);
+      console.log('���� [PublicMatchContext] Sending display settings update:', newDisplaySettings);
       socketService.updateDisplaySettings(newDisplaySettings);
     }
   }, [canSendToSocket, socketConnected]);
