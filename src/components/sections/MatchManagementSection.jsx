@@ -482,7 +482,7 @@ const MatchManagementSection = ({ isActive = true }) => {
         <div className="w-full h-12 sm:h-16 bg-gray-100 rounded-md overflow-hidden relative">
           {/* Hiển thị view hiện tại */}
           <div className="absolute top-1 left-1 bg-blue-500 text-white px-2 py-0.5 rounded text-xs font-bold z-10">
-            Màn hình: {viewMap[currentView || 'intro'] || 'Giới thiệu'}
+            💻: {viewMap[currentView || 'intro'] || 'Giới thiệu'}
           </div>
           <ScoreboardPreview
             matchData={{
