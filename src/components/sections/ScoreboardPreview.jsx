@@ -28,20 +28,21 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
     const brightness = ((r * 299) + (g * 587) + (b * 114)) / 1000;
     return brightness > 128 ? '#000000' : '#FFFFFF';
   };
+const renderScoreboardType1 = () => {
+  const getClampedFontSize = (name) => {
+    const dynamicSize = (120 / Math.max(1, name.length)) * 1.5;
+    return Math.max(12, Math.min(20, dynamicSize));
+  };
 
-  const renderScoreboardType1 = () => {
-    const getClampedFontSize = (name) => {
-      const dynamicSize = (120 / Math.max(1, name.length)) * 1.5;
-      return Math.max(12, Math.min(20, dynamicSize));
-    };
-
-    return (
-      <div className="flex items-end justify-center gap-0 scale-75">
-        <div className="flex">
-          <div className="flex flex-col items-center">
+  return (
+    <div className="flex items-end justify-center gap-0 scale-75">
+      <div className="flex">
+        <div className="flex flex-col items-center">
+          {/* Team A - Score bên trái name */}
+          <div className="flex items-center">
             <div
               className="bg-yellow-400 text-black font-bold text-lg px-2 py-0.5 text-center flex items-center justify-center"
-              style={{ fontFamily: 'UTM Bebas, sans-serif', height: '32px', minWidth: '32px' }}
+              style={{ fontFamily: 'UTM Bebas, sans-serif', height: '24px', minWidth: '32px' }}
             >
               {currentData.teamAScore}
             </div>
@@ -57,37 +58,34 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
               >
                 {currentData.teamAName}
               </div>
-              <div className="flex w-full" style={{ height: '4px' }}>
-                <div
-                  className="flex-1"
-                  style={{ backgroundColor: currentData.teamAKitColor }}
-                />
-                <div
-                  className="flex-1"
-                  style={{ backgroundColor: currentData.teamA2KitColor || currentData.teamAKitColor }}
-                />
-              </div>
             </div>
+          </div>
+          <div className="flex w-full" style={{ height: '4px', width: '153px' }}>
+            <div
+              className="flex-1"
+              style={{ backgroundColor: currentData.teamAKitColor }}
+            />
+            <div
+              className="flex-1"
+              style={{ backgroundColor: currentData.teamA2KitColor || currentData.teamAKitColor }}
+            />
           </div>
         </div>
+      </div>
 
-        {showMatchTime && (
-          <div
-            className="bg-black text-white px-2 py-1 text-xs font-bold whitespace-nowrap flex items-center justify-center"
-            style={{ height: '32px' }}
-          >
-            {currentData.matchTime}
-          </div>
-        )}
+      {showMatchTime && (
+        <div
+          className="bg-black text-white px-2 py-1 text-xs font-bold whitespace-nowrap flex items-center justify-center"
+          style={{ height: '24px' }}
+        >
+          {currentData.matchTime}
+        </div>
+      )}
 
-        <div className="flex">
-          <div className="flex flex-col items-center">
-            <div
-              className="bg-yellow-400 text-black font-bold text-lg px-2 py-0.5 text-center flex items-center justify-center"
-              style={{ fontFamily: 'UTM Bebas, sans-serif', height: '32px', minWidth: '32px' }}
-            >
-              {currentData.teamBScore}
-            </div>
+      <div className="flex">
+        <div className="flex flex-col items-center">
+          {/* Team B - Name bên trái score */}
+          <div className="flex items-center">
             <div className="w-[120px]">
               <div
                 className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center"
@@ -100,37 +98,43 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
               >
                 {currentData.teamBName}
               </div>
-              <div className="flex w-full" style={{ height: '4px' }}>
-                <div
-                  className="flex-1"
-                  style={{ backgroundColor: currentData.teamB2KitColor || currentData.teamBKitColor }}
-                />
-                <div
-                  className="flex-1"
-                  style={{ backgroundColor: currentData.teamBKitColor }}
-                />
-              </div>
             </div>
+            <div
+              className="bg-yellow-400 text-black font-bold text-lg px-2 py-0.5 text-center flex items-center justify-center"
+              style={{ fontFamily: 'UTM Bebas, sans-serif', height: '24px', minWidth: '32px' }}
+            >
+              {currentData.teamBScore}
+            </div>
+          </div>
+          <div className="flex w-full" style={{ height: '4px', width: '153px' }}>
+            <div
+              className="flex-1"
+              style={{ backgroundColor: currentData.teamB2KitColor || currentData.teamBKitColor }}
+            />
+            <div
+              className="flex-1"
+              style={{ backgroundColor: currentData.teamBKitColor }}
+            />
           </div>
         </div>
       </div>
-    );
-  };
-
+    </div>
+  );
+};
   const renderScoreboardType2 = () => (
     <div className="flex justify-center items-center">
       <div className="flex items-center mr-2">
         <div className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden">
-          <img 
-            src={currentData.teamALogo} 
-            alt="Team A Logo" 
+          <img
+            src={currentData.teamALogo}
+            alt="Team A Logo"
             className="w-full h-full object-cover"
             onError={(e) => {
               e.target.style.display = 'none';
               e.target.nextSibling.style.display = 'flex';
             }}
           />
-          <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
+          <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{ display: 'none' }}>
             A
           </div>
         </div>
@@ -203,16 +207,16 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
 
       <div className="flex items-center ml-2">
         <div className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden">
-          <img 
-            src={currentData.teamBLogo} 
-            alt="Team B Logo" 
+          <img
+            src={currentData.teamBLogo}
+            alt="Team B Logo"
             className="w-full h-full object-cover"
             onError={(e) => {
               e.target.style.display = 'none';
               e.target.nextSibling.style.display = 'flex';
             }}
           />
-          <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
+          <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{ display: 'none' }}>
             B
           </div>
         </div>
@@ -285,7 +289,6 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
       </div>
     );
   };
-
   const renderScoreboardType4 = () => (
     <div className="flex items-center justify-center gap-0 scale-75 origin-center">
       {/* Team A Logo */}
@@ -299,14 +302,14 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
             e.target.nextSibling.style.display = 'flex';
           }}
         />
-        <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
+        <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{ display: 'none' }}>
           A
         </div>
       </div>
 
-      <div className="flex items-center gap-0 -space-x-2">
+      <div className="flex items-center gap-0 relative">
         <div
-          className="text-white text-xs font-semibold flex items-center justify-center w-24 h-6"
+          className="text-white text-xs font-semibold flex items-center justify-center w-24 h-6 relative z-20"
           style={{
             background: 'linear-gradient(90deg, rgb(222, 57, 51), rgb(238, 134, 58))',
             clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)'
@@ -315,7 +318,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
           <span className="truncate text-center">{currentData.teamAName}</span>
         </div>
         <div
-          className="w-8 h-6 z-10"
+          className="w-8 h-6 z-10 -mr-4 absolute right-0"
           style={{
             backgroundColor: currentData.teamAKitColor,
             clipPath: 'polygon(0% 0%, 55% 0%, 100% 100%, 45% 100%)'
@@ -346,7 +349,10 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
                 e.target.nextSibling.style.display = 'flex';
               }}
             />
-            <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
+            <div
+              className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold"
+              style={{ display: 'none' }}
+            >
               L
             </div>
           </div>
@@ -354,21 +360,26 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
             {currentData.teamBScore}
           </div>
         </div>
-        <div className={`text-white text-xs font-bold px-1 py-0.5 rounded ${showMatchTime ? 'bg-red-600' : 'bg-green-600'}`}>
+
+        <div
+          className={`text-white text-xxs font-normal leading-none px-1 -mt-0.5 ${showMatchTime ? 'bg-red-600' : 'bg-green-600'
+            }`}
+        >
           {showMatchTime ? currentData.matchTime : '● LIVE'}
         </div>
       </div>
 
-      <div className="flex items-center gap-0 -space-x-2">
+
+      <div className="flex items-center gap-0 relative">
         <div
-          className="w-8 h-6 z-10"
+          className="w-8 h-6 z-10 -ml-4 absolute left-0"
           style={{
             backgroundColor: currentData.teamBKitColor,
             clipPath: 'polygon(45% 0%, 100% 0%, 55% 100%, 0% 100%)'
           }}
         />
         <div
-          className="text-white text-xs font-semibold flex items-center justify-center w-24 h-6"
+          className="text-white text-xs font-semibold flex items-center justify-center w-24 h-6 relative z-20"
           style={{
             background: 'linear-gradient(90deg, rgb(222, 57, 51), rgb(238, 134, 58))',
             clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)'
@@ -389,38 +400,37 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
             e.target.nextSibling.style.display = 'flex';
           }}
         />
-        <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
+        <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{ display: 'none' }}>
           B
         </div>
       </div>
     </div>
   );
-
   const renderScoreboardType5 = () => {
     const getTeamNameFontSize = (teamName, isMobile = false) => {
-        const length = teamName ? teamName.length : 0;
+      const length = teamName ? teamName.length : 0;
 
-        if (isMobile) {
-            // Mobile font sizes
-            if (length <= 8) return '8px';
-            if (length <= 12) return '7px';
-            if (length <= 16) return '6px';
-            return '5px';
-        } else {
-            // Desktop font sizes
-            if (length <= 8) return '14px';
-            if (length <= 12) return '12px';
-            if (length <= 16) return '10px';
-            return '8px';
-        }
+      if (isMobile) {
+        // Mobile font sizes
+        if (length <= 8) return '8px';
+        if (length <= 12) return '7px';
+        if (length <= 16) return '6px';
+        return '5px';
+      } else {
+        // Desktop font sizes
+        if (length <= 8) return '14px';
+        if (length <= 12) return '12px';
+        if (length <= 16) return '10px';
+        return '8px';
+      }
     };
 
     return (
       <div className="flex flex-col items-center w-[375px] scale-75">
         {/* Main container */}
         <div className="w-full relative">
-          {/* Tournament logo - Much bigger */}
-          <div className="absolute left-1/2 top-[-6px] sm:top-[-8px] -translate-x-1/2 w-[30px] h-[30px] sm:w-[34px] sm:h-[34px] z-10">
+          {/* Tournament logo - Square and positioned higher */}
+          <div className="absolute left-1/2 top-[-18px] sm:top-[-22px] -translate-x-1/2 w-[30px] h-[30px] sm:w-[34px] sm:h-[34px] z-10">
             <div
               className="w-full h-full flex items-center justify-center overflow-hidden"
               style={{
@@ -441,7 +451,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
             </div>
           </div>
 
-          {/* Main scoreboard container - Better background */}
+          {/* Main scoreboard container - Reduced height */}
           <div
             className="relative"
             style={{
@@ -451,13 +461,13 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
               boxShadow: '0 8px 25px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
             }}
           >
-            {/* Main content grid */}
-            <div className="grid grid-cols-5 gap-2 items-center px-3 py-2">
+            {/* Main content grid - Reduced padding */}
+            <div className="grid grid-cols-5 gap-2 items-center px-3 py-1">
               {/* Team A section */}
               <div className="col-span-2">
-                {/* Team A name - Angular cut */}
+                {/* Team A name - Angular cut, reduced margin */}
                 <div
-                  className="relative mb-2"
+                  className="relative mb-1"
                   style={{
                     background: 'linear-gradient(135deg, #2563eb, #1e40af)',
                     clipPath: 'polygon(0% 0%, 85% 0%, 100% 100%, 15% 100%)',
@@ -466,7 +476,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
                   }}
                 >
                   <div
-                    className="text-white font-bold text-center px-2 py-1"
+                    className="text-white font-bold text-center px-2 py-0.5"
                     style={{
                       fontFamily: 'UTM Bebas, sans-serif',
                       fontSize: getTeamNameFontSize(currentData.teamAName, window.innerWidth <= 640),
@@ -494,7 +504,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
                 </div>
               </div>
 
-              {/* Central score display - Better background, larger fonts */}
+              {/* Central score display - Reduced padding */}
               <div className="col-span-1">
                 <div
                   className="relative text-center"
@@ -505,8 +515,8 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
                     boxShadow: '0 0 20px rgba(14, 165, 233, 0.4), inset 0 2px 4px rgba(255,255,255,0.2)',
                   }}
                 >
-                  <div className="px-2 py-1">
-                    {/* Scores - Much larger */}
+                  <div className="px-2 py-0.5">
+                    {/* Scores - horizontal layout */}
                     <div className="flex items-center justify-center space-x-1">
                       <div
                         className="text-white font-bold text-lg sm:text-xl"
@@ -536,9 +546,9 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
                       </div>
                     </div>
 
-                    {/* Time display - Larger font */}
+                    {/* Time display - smaller margin */}
                     {showMatchTime && (
-                      <div className="mt-1">
+                      <div className="mt-0.5">
                         <div
                           className="text-green-400 text-xs sm:text-sm font-bold"
                           style={{
@@ -556,9 +566,9 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
 
               {/* Team B section */}
               <div className="col-span-2">
-                {/* Team B name - Angular cut (mirrored) */}
+                {/* Team B name - Angular cut (mirrored), reduced margin */}
                 <div
-                  className="relative mb-2"
+                  className="relative mb-1"
                   style={{
                     background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
                     clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
@@ -567,7 +577,7 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
                   }}
                 >
                   <div
-                    className="text-white font-bold text-center px-2 py-1"
+                    className="text-white font-bold text-center px-2 py-0.5"
                     style={{
                       fontFamily: 'UTM Bebas, sans-serif',
                       fontSize: getTeamNameFontSize(currentData.teamBName, window.innerWidth <= 640),

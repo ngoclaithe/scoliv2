@@ -41,6 +41,9 @@ module.exports = {
           "50%": { transform: "translateY(-5px)" },
         },
       },
+      fontSize: {
+        'xxs': '0.625rem', 
+      }
     },
   },
   plugins: [],
