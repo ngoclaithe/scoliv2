@@ -26,7 +26,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
             {/* Main container */}
             <div className="w-full relative">
                 {/* Tournament logo - Much bigger */}
-                <div className="absolute left-1/2 top-[-12px] sm:top-[-15px] -translate-x-1/2 w-[45px] h-[45px] sm:w-[50px] sm:h-[50px] z-10">
+                <div className="absolute left-1/2 top-[-6px] sm:top-[-8px] -translate-x-1/2 w-[45px] h-[22px] sm:w-[50px] sm:h-[25px] z-10">
                     <div
                         className="w-full h-full flex items-center justify-center overflow-hidden"
                         style={{
@@ -55,11 +55,11 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                     }}
                 >
                     {/* Main content layout */}
-                    <div className="grid grid-cols-7 gap-4 items-center px-6 py-4">
+                    <div className="grid grid-cols-7 gap-4 items-center px-6 py-2">
                         {/* Team A section */}
                         <div className="col-span-3 flex items-center gap-3">
                             {/* Team A Logo */}
-                            <div className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                            <div className="w-12 h-6 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
                                 <img
                                     src={getFullLogoUrl(currentData.teamALogo) || "/api/placeholder/48/48"}
                                     alt="Team A Logo"
@@ -82,10 +82,10 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                     boxShadow: '0 0 15px rgba(37, 99, 235, 0.4), inset 0 2px 4px rgba(255,255,255,0.2)',
                                 }}
                             >
-                                <div className="px-4 py-3">
+                                <div className="px-4 py-1">
                                     {/* Team A name */}
                                     <div
-                                        className="text-white font-bold text-center mb-2"
+                                        className="text-white font-bold text-center mb-1"
                                         style={{
                                             fontFamily: 'UTM Bebas, sans-serif',
                                             fontSize: getTeamNameFontSize(currentData.teamAName, window.innerWidth <= 640),
@@ -99,7 +99,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                     {/* Team A kit colors - Diamond */}
                                     <div className="flex justify-center">
                                         <div
-                                            className="w-8 h-8 flex flex-col overflow-hidden relative"
+                                            className="w-8 h-4 flex flex-col overflow-hidden relative"
                                             style={{
                                                 transform: 'rotate(45deg)',
                                                 border: '2px solid #1e40af',
@@ -149,11 +149,11 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                     boxShadow: '0 0 25px rgba(14, 165, 233, 0.5), inset 0 3px 6px rgba(255,255,255,0.2)',
                                 }}
                             >
-                                <div className="px-4 py-3">
+                                <div className="px-4 py-1">
                                     {/* Scores display - Much larger */}
                                     <div className="space-y-1">
                                         <div
-                                            className="text-white font-bold text-4xl sm:text-5xl"
+                                            className="text-white font-bold text-2xl sm:text-3xl"
                                             style={{
                                                 fontFamily: 'UTM Bebas, sans-serif',
                                                 textShadow: '0 0 20px rgba(59, 130, 246, 0.9), 0 0 8px rgba(255,255,255,0.6)',
@@ -174,7 +174,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                         </div>
                                         
                                         <div
-                                            className="text-white font-bold text-4xl sm:text-5xl"
+                                            className="text-white font-bold text-2xl sm:text-3xl"
                                             style={{
                                                 fontFamily: 'UTM Bebas, sans-serif',
                                                 textShadow: '0 0 20px rgba(239, 68, 68, 0.9), 0 0 8px rgba(255,255,255,0.6)',
@@ -191,7 +191,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                         {/* Team B section */}
                         <div className="col-span-3 flex items-center gap-3 flex-row-reverse">
                             {/* Team B Logo */}
-                            <div className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                            <div className="w-12 h-6 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
                                 <img
                                     src={getFullLogoUrl(currentData.teamBLogo) || "/api/placeholder/48/48"}
                                     alt="Team B Logo"
@@ -214,10 +214,10 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                     boxShadow: '0 0 15px rgba(220, 38, 38, 0.4), inset 0 2px 4px rgba(255,255,255,0.2)',
                                 }}
                             >
-                                <div className="px-4 py-3">
+                                <div className="px-4 py-1">
                                     {/* Team B name */}
                                     <div
-                                        className="text-white font-bold text-center mb-2"
+                                        className="text-white font-bold text-center mb-1"
                                         style={{
                                             fontFamily: 'UTM Bebas, sans-serif',
                                             fontSize: getTeamNameFontSize(currentData.teamBName, window.innerWidth <= 640),
@@ -231,7 +231,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                     {/* Team B kit colors - Diamond */}
                                     <div className="flex justify-center">
                                         <div
-                                            className="w-8 h-8 flex flex-col overflow-hidden relative"
+                                            className="w-8 h-4 flex flex-col overflow-hidden relative"
                                             style={{
                                                 transform: 'rotate(45deg)',
                                                 border: '2px solid #b91c1c',
