@@ -46,7 +46,8 @@ const ScoreboardAbove = ({ type = 1 }) => {
         teamBKitColor: matchData?.teamB?.teamBKitColor || "#0000FF",
         teamB2KitColor: matchData?.teamB?.teamB2KitColor || "#FF0000",
         leagueLogo: "/images/basic/logo-skin4.png",
-        typeMatch: matchData?.typeMatch || "soccer"
+        typeMatch: matchData?.typeMatch || "soccer",
+        commentator: matchData?.commentator || null
     };
 
     const rawLogoShape = displaySettings?.displaySettings?.logoShape || displaySettings?.logoShape || "round";
@@ -225,6 +226,28 @@ const ScoreboardAbove = ({ type = 1 }) => {
                         rotateDisplay={displaySettings?.displaySettings?.rotateDisplay || displaySettings?.rotateDisplay}
                     />
                 </div>
+
+                {/* Commentator Display - Center */}
+                {currentData.commentator && (
+                    <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 z-30
+                        md:bottom-20
+                        sm:bottom-16
+                        max-[480px]:bottom-12
+                        max-[360px]:bottom-10">
+                        <div className="bg-black bg-opacity-75 text-white px-3 py-1 rounded-lg
+                            md:px-4 md:py-2
+                            sm:px-3 sm:py-1
+                            max-[480px]:px-2 max-[480px]:py-1">
+                            <span className="text-sm font-medium
+                                md:text-lg
+                                sm:text-base
+                                max-[480px]:text-xs
+                                max-[360px]:text-[10px]">
+                                BLV: {currentData.commentator}
+                            </span>
+                        </div>
+                    </div>
+                )}
 
                 <ScoreboardMarquee scrollData={scrollData} />
             </div>

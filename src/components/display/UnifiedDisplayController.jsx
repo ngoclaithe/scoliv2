@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { useAuth } from '../../contexts/AuthContext';
@@ -67,20 +67,18 @@ const UnifiedDisplayController = () => {
   const [error, setError] = useState(null);
   const [isDynamicRoute, setIsDynamicRoute] = useState(false);
 
-  const checkIfDynamicRoute = useCallback(() => {
-    const hasDynamicParams = Boolean(
-      location || matchTitle || liveText || 
-      teamALogoCode || teamBLogoCode || 
-      teamAName || teamBName || 
-      teamAKitColor || teamBKitColor || 
+  const checkIfDynamicRoute = useMemo(() => {
+    return Boolean(
+      location || matchTitle || liveText ||
+      teamALogoCode || teamBLogoCode ||
+      teamAName || teamBName ||
+      teamAKitColor || teamBKitColor ||
       teamAScore || teamBScore ||
       view || matchTime
     );
-    
-    return hasDynamicParams;
   }, [location, matchTitle, liveText, teamALogoCode, teamBLogoCode, teamAName, teamBName, teamAKitColor, teamBKitColor, teamAScore, teamBScore, view, matchTime]);
 
-  const parseUrlParams = useCallback(() => {
+  const parseUrlParams = useMemo(() => {
     if (!isDynamicRoute) return null;
 
     console.log('🔍 [UnifiedDisplayController] Raw URL params:', {
@@ -195,10 +193,7 @@ const UnifiedDisplayController = () => {
 
     const initializeDisplay = async () => {
       try {
-        const isDynamic = checkIfDynamicRoute();
-        setIsDynamicRoute(isDynamic);
-        
-        // console.log(`🎯 [UnifiedDisplayController] Route type: ${isDynamic ? 'Dynamic' : 'Standard'}, hasUrlParams:`, hasUrlParams);
+        setIsDynamicRoute(isDynamicRoute);
 
         const verifyResult = await PublicAPI.verifyAccessCode(accessCode);
 
@@ -219,29 +214,18 @@ const UnifiedDisplayController = () => {
 
         if (!isCleanedUp) {
           setIsInitialized(true);
-          // console.log('[UnifiedDisplayController] Initialized successfully');
 
-          if (isDynamic && hasUrlParams) {
-            const params = parseUrlParams();
-            // console.log('📋 [UnifiedDisplayController] About to update socket with params:', params);
-            // console.log('🔧 [UnifiedDisplayController] canSendToSocket:', canSendToSocket);
-
-            if (params && Object.keys(params).length > 0) {
-              // Cập nhật view ngay lập tức nếu có trong URL
-              if (params.view) {
-                console.log('👁️ [UnifiedDisplayController] Setting view immediately from URL:', params.view);
-                updateView(params.view);
-              }
-
-              // console.log('⏰ [UnifiedDisplayController] Setting timeout to update socket params...');
-              setTimeout(() => {
-                updateSocketWithParams(params);
-              }, 1500);
-
-              setTimeout(() => {
-                updateSocketWithParams(params);
-              }, 3000);
+          if (isDynamicRoute && hasUrlParams && parseUrlParams) {
+            // Cập nhật view ngay lập tức nếu có trong URL
+            if (parseUrlParams.view) {
+              console.log('👁️ [UnifiedDisplayController] Setting view immediately from URL:', parseUrlParams.view);
+              updateView(parseUrlParams.view);
             }
+
+            // Chỉ dùng một setTimeout với delay ngắn hơn
+            setTimeout(() => {
+              updateSocketWithParams(parseUrlParams);
+            }, 1000);
           }
         }
       } catch (err) {
@@ -261,15 +245,14 @@ const UnifiedDisplayController = () => {
     return () => {
       isCleanedUp = true;
     };
-  }, [accessCode, initializeSocket, handleExpiredAccess, checkIfDynamicRoute, parseUrlParams, updateSocketWithParams, canSendToSocket, hasUrlParams]);
+  }, [accessCode, initializeSocket, handleExpiredAccess, isDynamicRoute, hasUrlParams, parseUrlParams, updateSocketWithParams, updateView]);
 
-  const renderPoster = (posterType) => {
-
-    const selectedPosterType = displaySettings.selectedPoster;
+  const renderPoster = useMemo(() => {
+    const posterType = displaySettings.selectedPoster;
     const customPosterUrl = displaySettings.url_custom_poster;
 
     // Kiểm tra nếu posterType là 'custom' và có URL
-    if (selectedPosterType === 'custom' && customPosterUrl) {
+    if (posterType === 'custom' && customPosterUrl) {
       console.log("✅ [UnifiedDisplayController] Using custom poster:", customPosterUrl);
       return (
         <div className="fixed inset-0 bg-black flex items-center justify-center">
@@ -302,9 +285,9 @@ const UnifiedDisplayController = () => {
       default:
         return <PosterHaoQuang accessCode={accessCode} />;
     }
-  };
+  }, [displaySettings.selectedPoster, displaySettings.url_custom_poster, accessCode]);
 
-  const renderCurrentView = () => {
+  const renderCurrentView = useMemo(() => {
     switch (currentView) {
       case 'intro':
         return <Intro accessCode={accessCode} />;
@@ -327,12 +310,12 @@ const UnifiedDisplayController = () => {
       case 'stat':
         return <Stat accessCode={accessCode} />;
       case 'event':
-        return <Event accessCode={accessCode} />;  
+        return <Event accessCode={accessCode} />;
       case 'poster':
       default:
-        return renderPoster(displaySettings.selectedPoster);
+        return renderPoster;
     }
-  };
+  }, [currentView, accessCode, displaySettings.selectedSkin, renderPoster]);
 
   if (!isInitialized) {
     return (
@@ -400,7 +383,7 @@ const UnifiedDisplayController = () => {
   return (
     <div className="relative min-h-screen bg-white">
       <div className="w-full h-full">
-        {renderCurrentView()}
+        {renderCurrentView}
       </div>
     </div>
   );

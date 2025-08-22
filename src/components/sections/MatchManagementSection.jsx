@@ -134,9 +134,10 @@ const MatchManagementSection = ({ isActive = true }) => {
   const [liveText, setLiveText] = useState(matchData.liveText || "");
   const [subtitle, setSubtitle] = useState(matchData.subtitle || "");
   const [showSubtitle, setShowSubtitle] = useState(matchData.showSubtitle !== false);
+  const [commentator, setCommentator] = useState(matchData.commentator || "");
 
   useEffect(() => {
-    // console.log("Giá trị đồng bộ từ backend socket là", matchData);
+    // console.log("Giá trị đồng bộ t�� backend socket là", matchData);
     setTeamAInfo(prev => {
       const newTeamAInfo = {
         name: matchData.teamA.name || prev.name,
@@ -189,7 +190,10 @@ const MatchManagementSection = ({ isActive = true }) => {
     if (matchData.liveText !== undefined) {
       setLiveText(matchData.liveText);
     }
-  }, [matchData.matchTitle, matchData.liveText]);
+    if (matchData.commentator !== undefined) {
+      setCommentator(matchData.commentator);
+    }
+  }, [matchData.matchTitle, matchData.liveText, matchData.commentator]);
 
   const playAudioForAction = (audioType) => {
     if (!isActive || !audioEnabled) {
@@ -438,7 +442,8 @@ const MatchManagementSection = ({ isActive = true }) => {
       logoTeamA: teamAInfo.logo || getFullLogoUrl(matchData.teamA.logo) || "",
       logoTeamB: teamBInfo.logo || getFullLogoUrl(matchData.teamB.logo) || "",
       subtitle: subtitle,
-      showSubtitle: showSubtitle
+      showSubtitle: showSubtitle,
+      commentator: commentator
     };
 
     // console.log("🎨 [DEBUG] Gửi updateMatchInfo với:", matchInfoData);
@@ -554,6 +559,8 @@ const MatchManagementSection = ({ isActive = true }) => {
           setSubtitle={setSubtitle}
           showSubtitle={showSubtitle}
           setShowSubtitle={setShowSubtitle}
+          commentator={commentator}
+          setCommentator={setCommentator}
         />
       </div>
 
