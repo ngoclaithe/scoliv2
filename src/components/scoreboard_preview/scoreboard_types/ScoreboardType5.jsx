@@ -25,16 +25,16 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
 
     return (
         <div className="flex flex-col items-center w-[500px] scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
-            {/* Main container - wider but shorter */}
+            {/* Main container */}
             <div className="w-full relative">
-                {/* Tournament logo - minimal */}
-                <div className="absolute left-1/2 top-[-8px] sm:top-[-10px] -translate-x-1/2 w-[16px] h-[16px] sm:w-[24px] sm:h-[24px] z-50">
+                {/* Tournament logo - bigger */}
+                <div className="absolute left-1/2 top-[-15px] sm:top-[-20px] -translate-x-1/2 w-[30px] h-[30px] sm:w-[40px] sm:h-[40px] z-50">
                     <div
                         className="w-full h-full rounded-full flex items-center justify-center overflow-hidden"
                         style={{
                             background: 'linear-gradient(145deg, #ffffff, #f0f0f0)',
-                            border: '1px solid #2563eb',
-                            boxShadow: '0 2px 6px rgba(37, 99, 235, 0.3)',
+                            border: '2px solid #2563eb',
+                            boxShadow: '0 4px 8px rgba(37, 99, 235, 0.3)',
                         }}
                     >
                         <DisplayLogo
@@ -42,27 +42,27 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                             alt="Tournament"
                             type_play="round"
                             className="w-[70%] h-[70%]"
-                            logoSize="w-[10px] h-[10px] sm:w-[16px] sm:h-[16px]"
+                            logoSize="w-[20px] h-[20px] sm:w-[28px] sm:h-[28px]"
                         />
                     </div>
                 </div>
 
-                {/* Main scoreboard container - minimal height */}
+                {/* Main scoreboard container - no padding */}
                 <div
-                    className="relative px-3 py-2 rounded-lg"
+                    className="relative rounded-lg"
                     style={{
                         background: 'linear-gradient(145deg, #1e293b, #0f172a)',
                         border: '1px solid #334155',
                         boxShadow: '0 4px 12px rgba(0,0,0,0.4)',
                     }}
                 >
-                    {/* Main content grid - no top bar */}
-                    <div className="grid grid-cols-5 gap-3 items-center">
+                    {/* Main content grid - no padding */}
+                    <div className="grid grid-cols-5 gap-2 items-center">
                         {/* Team A section */}
                         <div className="col-span-2">
                             {/* Team A name */}
                             <div
-                                className="relative p-2 rounded-md mb-1"
+                                className="relative rounded-md mb-1"
                                 style={{
                                     background: 'linear-gradient(145deg, #2563eb, #1d4ed8)',
                                     border: '1px solid #3b82f6',
@@ -97,7 +97,7 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                         {/* Central score display */}
                         <div className="col-span-1">
                             <div
-                                className="relative p-2 rounded-lg text-center"
+                                className="relative rounded-lg text-center"
                                 style={{
                                     background: 'linear-gradient(145deg, #0f172a, #1e293b)',
                                     border: '1px solid #334155',
@@ -128,7 +128,7 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                                 
                                 {/* Time display */}
                                 {showMatchTime && (
-                                    <div className="mt-1">
+                                    <div>
                                         <div
                                             className="text-green-400 text-xs font-bold"
                                             style={{
@@ -146,7 +146,7 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                         <div className="col-span-2">
                             {/* Team B name */}
                             <div
-                                className="relative p-2 rounded-md mb-1"
+                                className="relative rounded-md mb-1"
                                 style={{
                                     background: 'linear-gradient(145deg, #dc2626, #b91c1c)',
                                     border: '1px solid #ef4444',
@@ -179,15 +179,6 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                         </div>
                     </div>
                 </div>
-            </div>
-
-            {/* Logo ScoLiv - minimal */}
-            <div className="flex justify-center w-full mt-1">
-                <img
-                    src="/images/basic/ScoLivLogo.png"
-                    alt="ScoLiv Logo"
-                    className="w-8 h-auto opacity-90"
-                />
             </div>
         </div>
     );
