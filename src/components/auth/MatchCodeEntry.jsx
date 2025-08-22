@@ -88,10 +88,10 @@ const MatchCodeEntry = () => {
         {/* Footer */}
         <div className="text-center py-2 bg-gray-50 rounded-b-lg">
           <a
-            href="tel:0923415678"
+            href="tel:0966 335 502"
             className="text-xs text-gray-600 hover:text-blue-600"
           >
-            📞 Hotline: 0923415678
+            📞 Hotline: 0966 335 502
           </a>
         </div>
       </div>

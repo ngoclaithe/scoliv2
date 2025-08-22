@@ -99,9 +99,9 @@ const Home = () => {
               )}
 
               <a
-                href="tel:0923415678"
+                href="tel:0966 335 502"
                 className="flex items-center justify-center bg-white/10 rounded-full w-6 h-6 hover:bg-white/20"
-                title="Hotline: 0923415678"
+                title="Hotline: 0966 335 502"
               >
                 <span className="text-white text-xs">📞</span>
               </a>
