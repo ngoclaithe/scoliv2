@@ -4,6 +4,7 @@ import ScoreboardBelowType1 from './scoreboard_below_types/ScoreboardBelowType1'
 import ScoreboardBelowType2 from './scoreboard_below_types/ScoreboardBelowType2';
 import ScoreboardBelowType3 from './scoreboard_below_types/ScoreboardBelowType3';
 import ScoreboardBelowType4 from './scoreboard_below_types/ScoreboardBelowType4';
+import ScoreboardBelowType5 from './scoreboard_below_types/ScoreboardBelowType5';
 
 const ScoreboardBelowNew = ({ type = 1 }) => {
     const {
@@ -107,6 +108,7 @@ const ScoreboardBelowNew = ({ type = 1 }) => {
             case 2: return <ScoreboardBelowType2 {...props} />;
             case 3: return <ScoreboardBelowType3 {...props} />;
             case 4: return <ScoreboardBelowType4 {...props} />;
+            case 5: return <ScoreboardBelowType5 {...props} />;
             default: return <ScoreboardBelowType1 {...props} />;
         }
     };
