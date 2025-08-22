@@ -104,11 +104,10 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             console.log("Giá trị posterResponse ", posterResponse);
             if (posterResponse?.success && posterResponse?.data) {
               const savedPosterList = posterResponse.data.map(poster => ({
-                id: `api-poster-${poster.id}`,
+                id: `custom-poster-${poster.id}`,
                 name: poster.name || 'Poster tùy chỉnh',
                 thumbnail: getFullPosterUrl(poster.url_poster),
-                isCustom: true,
-                serverData: poster
+                isCustom: true
               }));
               setSavedPosters(savedPosterList);
             }
