@@ -773,7 +773,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
   const handlePosterSelect = useCallback((poster) => {
     setSelectedPoster(poster);
-    // Save to backend
+    // Save to backend - chỉ emit trực tiếp, không gọi onPosterUpdate để tránh double emit
     if (accessCode) {
       if (poster.isCustom) {
         // Gửi custom poster với posterType: 'custom'
@@ -790,10 +790,11 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
         });
       }
     }
-    if (onPosterUpdate) {
-      onPosterUpdate(poster);
-    }
-  }, [onPosterUpdate, accessCode]);
+    // Loại bỏ onPosterUpdate để tránh double emit
+    // if (onPosterUpdate) {
+    //   onPosterUpdate(poster);
+    // }
+  }, [accessCode]);
 
   const handleItemUpdate = useCallback(async (itemId, updatedItem) => {
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);
