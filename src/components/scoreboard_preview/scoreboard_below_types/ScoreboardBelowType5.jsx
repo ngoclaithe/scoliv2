@@ -174,7 +174,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                         </div>
                                         
                                         <div
-                                            className="text-white font-bold text-4xl sm:text-5xl"
+                                            className="text-white font-bold text-2xl sm:text-3xl"
                                             style={{
                                                 fontFamily: 'UTM Bebas, sans-serif',
                                                 textShadow: '0 0 20px rgba(239, 68, 68, 0.9), 0 0 8px rgba(255,255,255,0.6)',
