@@ -287,7 +287,7 @@ const UnifiedDisplayController = () => {
     }
   }, [displaySettings.selectedPoster, displaySettings.url_custom_poster, accessCode]);
 
-  const renderCurrentView = () => {
+  const renderCurrentView = useMemo(() => {
     switch (currentView) {
       case 'intro':
         return <Intro accessCode={accessCode} />;
@@ -310,12 +310,12 @@ const UnifiedDisplayController = () => {
       case 'stat':
         return <Stat accessCode={accessCode} />;
       case 'event':
-        return <Event accessCode={accessCode} />;  
+        return <Event accessCode={accessCode} />;
       case 'poster':
       default:
-        return renderPoster(displaySettings.selectedPoster);
+        return renderPoster;
     }
-  };
+  }, [currentView, accessCode, displaySettings.selectedSkin, renderPoster]);
 
   if (!isInitialized) {
     return (
