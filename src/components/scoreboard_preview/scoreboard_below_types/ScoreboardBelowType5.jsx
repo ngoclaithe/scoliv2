@@ -23,16 +23,16 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
 
     return (
         <div className="flex flex-col items-center w-[900px] scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
-            {/* Main container - wider but shorter */}
+            {/* Main container */}
             <div className="w-full relative">
-                {/* Tournament logo - minimal */}
-                <div className="absolute left-1/2 top-[-12px] sm:top-[-16px] -translate-x-1/2 w-[20px] h-[20px] sm:w-[32px] sm:h-[32px] z-50">
+                {/* Tournament logo - bigger */}
+                <div className="absolute left-1/2 top-[-20px] sm:top-[-25px] -translate-x-1/2 w-[40px] h-[40px] sm:w-[50px] sm:h-[50px] z-50">
                     <div
                         className="w-full h-full rounded-full flex items-center justify-center overflow-hidden"
                         style={{
                             background: 'linear-gradient(145deg, #ffffff, #f8fafc)',
-                            border: '2px solid #1e293b',
-                            boxShadow: '0 4px 12px rgba(30, 41, 59, 0.4)',
+                            border: '3px solid #1e293b',
+                            boxShadow: '0 6px 15px rgba(30, 41, 59, 0.4)',
                         }}
                     >
                         <img
@@ -43,21 +43,21 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                     </div>
                 </div>
 
-                {/* Main scoreboard panel - minimal height */}
+                {/* Main scoreboard panel - no padding */}
                 <div
-                    className="relative px-4 py-3 rounded-xl"
+                    className="relative rounded-xl"
                     style={{
                         background: 'linear-gradient(145deg, #0f172a, #1e293b)',
                         border: '1px solid #334155',
                         boxShadow: '0 8px 20px rgba(0,0,0,0.5)',
                     }}
                 >
-                    {/* Main content layout */}
-                    <div className="grid grid-cols-7 gap-4 items-center">
+                    {/* Main content layout - no padding */}
+                    <div className="grid grid-cols-7 gap-3 items-center">
                         {/* Team A section */}
                         <div className="col-span-3">
                             <div
-                                className="relative p-3 rounded-lg"
+                                className="relative rounded-lg"
                                 style={{
                                     background: 'linear-gradient(145deg, #2563eb, #1e40af)',
                                     border: '1px solid #3b82f6',
@@ -65,7 +65,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                             >
                                 {/* Team A name */}
                                 <div
-                                    className="text-white font-bold text-center mb-2"
+                                    className="text-white font-bold text-center mb-1"
                                     style={{
                                         fontFamily: 'UTM Bebas, sans-serif',
                                         fontSize: getTeamNameFontSize(currentData.teamAName, window.innerWidth <= 640),
@@ -93,7 +93,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                         {/* Central score display */}
                         <div className="col-span-1">
                             <div
-                                className="relative p-3 rounded-xl text-center"
+                                className="relative rounded-xl text-center"
                                 style={{
                                     background: 'linear-gradient(145deg, #000000, #1e293b)',
                                     border: '2px solid #475569',
@@ -129,7 +129,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                         {/* Team B section */}
                         <div className="col-span-3">
                             <div
-                                className="relative p-3 rounded-lg"
+                                className="relative rounded-lg"
                                 style={{
                                     background: 'linear-gradient(145deg, #dc2626, #b91c1c)',
                                     border: '1px solid #ef4444',
@@ -137,7 +137,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                             >
                                 {/* Team B name */}
                                 <div
-                                    className="text-white font-bold text-center mb-2"
+                                    className="text-white font-bold text-center mb-1"
                                     style={{
                                         fontFamily: 'UTM Bebas, sans-serif',
                                         fontSize: getTeamNameFontSize(currentData.teamBName, window.innerWidth <= 640),
@@ -161,17 +161,6 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                {/* Professional details strip - minimal */}
-                <div className="mt-2">
-                    <div className="flex justify-center">
-                        <img
-                            src="/images/basic/ScoLivLogo.png"
-                            alt="ScoLiv Logo"
-                            className="h-3 opacity-90"
-                        />
                     </div>
                 </div>
             </div>
