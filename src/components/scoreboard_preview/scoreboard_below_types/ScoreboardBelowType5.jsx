@@ -59,7 +59,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                         {/* Team A section */}
                         <div className="col-span-3 flex items-center gap-3">
                             {/* Team A Logo */}
-                            <div className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                            <div className="w-12 h-6 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
                                 <img
                                     src={getFullLogoUrl(currentData.teamALogo) || "/api/placeholder/48/48"}
                                     alt="Team A Logo"
