@@ -216,22 +216,6 @@ const UnifiedDisplayController = () => {
         }
 
         await initializeSocket(accessCode);
-        try {
-          const posterResponse = await PosterAPI.getPosterByAccesscode(accessCode);
-          if (posterResponse?.success && posterResponse?.data) {
-            const savedPosterList = posterResponse.data.map(poster => ({
-              id: `api-poster-${poster.id}`,
-              name: poster.name || 'Poster tùy chỉnh',
-              thumbnail: getFullPosterUrl(poster.url_poster),
-              isCustom: true,
-              serverData: poster
-            }));
-            setSavedPosters(savedPosterList);
-            // console.log('✅ [UnifiedDisplayController] Loaded saved posters:', savedPosterList.length);
-          }
-        } catch (error) {
-          console.error('❌ [UnifiedDisplayController] Failed to load saved posters:', error);
-        }
 
         if (!isCleanedUp) {
           setIsInitialized(true);
