@@ -778,11 +778,10 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     // Save to backend
     if (accessCode) {
       if (poster.isCustom) {
-        // Gửi custom poster với URL
+        // Gửi custom poster với posterType: 'custom'
         socketService.emit('poster_update', {
-          posterType: poster.id,
+          posterType: 'custom',
           posterData: poster,
-          isCustom: true,
           customPosterUrl: poster.thumbnail || getFullPosterUrl(poster.serverData?.url_poster)
         });
       } else {
