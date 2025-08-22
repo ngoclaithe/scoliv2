@@ -46,7 +46,8 @@ const ScoreboardAbove = ({ type = 1 }) => {
         teamBKitColor: matchData?.teamB?.teamBKitColor || "#0000FF",
         teamB2KitColor: matchData?.teamB?.teamB2KitColor || "#FF0000",
         leagueLogo: "/images/basic/logo-skin4.png",
-        typeMatch: matchData?.typeMatch || "soccer"
+        typeMatch: matchData?.typeMatch || "soccer",
+        commentator: matchData?.commentator || null
     };
 
     const rawLogoShape = displaySettings?.displaySettings?.logoShape || displaySettings?.logoShape || "round";
