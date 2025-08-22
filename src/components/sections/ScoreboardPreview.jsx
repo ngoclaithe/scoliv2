@@ -29,77 +29,93 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
     return brightness > 128 ? '#000000' : '#FFFFFF';
   };
 
-  const renderScoreboardType1 = () => (
-    <div className="flex items-center justify-center gap-0">
-      <div className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden">
-        <img 
-          src={currentData.teamALogo} 
-          alt="Team A Logo" 
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            e.target.nextSibling.style.display = 'flex';
-          }}
-        />
-        <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
-          A
-        </div>
-      </div>
+  const renderScoreboardType1 = () => {
+    const getClampedFontSize = (name) => {
+      const dynamicSize = (120 / Math.max(1, name.length)) * 1.5;
+      return Math.max(12, Math.min(20, dynamicSize));
+    };
 
-      <div className="flex items-center gap-0">
-        <div className="bg-yellow-400 text-black font-bold text-sm px-1 py-0.5 min-w-[1.5rem] text-center"
-          style={{ clipPath: 'polygon(12px 0%, 100% 0%, 100% 100%, 12px 100%, 0% 50%)' }}>
-          {currentData.teamAScore}
-        </div>
-        <div className="flex flex-col items-center w-[60px]">
-          <div className="w-full bg-blue-600 text-white px-1 py-0.5 text-xs font-semibold text-center truncate">
-            {currentData.teamAName}
+    return (
+      <div className="flex items-end justify-center gap-0 scale-75">
+        <div className="flex">
+          <div className="flex flex-col items-center">
+            <div
+              className="bg-yellow-400 text-black font-bold text-lg px-2 py-0.5 text-center flex items-center justify-center"
+              style={{ fontFamily: 'UTM Bebas, sans-serif', height: '32px', minWidth: '32px' }}
+            >
+              {currentData.teamAScore}
+            </div>
+            <div className="w-[120px]">
+              <div
+                className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center"
+                style={{
+                  backgroundColor: '#004d73',
+                  fontFamily: 'UTM Bebas, sans-serif',
+                  height: '24px',
+                  fontSize: `${getClampedFontSize(currentData.teamAName)}px`
+                }}
+              >
+                {currentData.teamAName}
+              </div>
+              <div className="flex w-full" style={{ height: '4px' }}>
+                <div
+                  className="flex-1"
+                  style={{ backgroundColor: currentData.teamAKitColor }}
+                />
+                <div
+                  className="flex-1"
+                  style={{ backgroundColor: currentData.teamA2KitColor || currentData.teamAKitColor }}
+                />
+              </div>
+            </div>
           </div>
+        </div>
+
+        {showMatchTime && (
           <div
-            className="w-full h-2"
-            style={{ backgroundColor: currentData.teamAKitColor }}
-          />
-        </div>
-      </div>
-
-      {showMatchTime && (
-        <div className="bg-black text-white px-1 py-0.5 text-xs font-bold">
-          {currentData.matchTime}
-        </div>
-      )}
-
-      <div className="flex items-center gap-0">
-        <div className="flex flex-col items-center w-[60px]">
-          <div className="w-full bg-blue-600 text-white px-1 py-0.5 text-xs font-semibold text-center truncate">
-            {currentData.teamBName}
+            className="bg-black text-white px-2 py-1 text-xs font-bold whitespace-nowrap flex items-center justify-center"
+            style={{ height: '32px' }}
+          >
+            {currentData.matchTime}
           </div>
-          <div
-            className="w-full h-2"
-            style={{ backgroundColor: currentData.teamBKitColor }}
-          />
-        </div>
-        <div className="bg-yellow-400 text-black font-bold text-sm px-1 py-0.5 min-w-[1.5rem] text-center"
-          style={{ clipPath: 'polygon(0% 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 0% 100%)' }}>
-          {currentData.teamBScore}
-        </div>
-      </div>
+        )}
 
-      <div className="w-8 h-8 rounded-full flex items-center justify-center overflow-hidden">
-        <img 
-          src={currentData.teamBLogo} 
-          alt="Team B Logo" 
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            e.target.nextSibling.style.display = 'flex';
-          }}
-        />
-        <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
-          B
+        <div className="flex">
+          <div className="flex flex-col items-center">
+            <div
+              className="bg-yellow-400 text-black font-bold text-lg px-2 py-0.5 text-center flex items-center justify-center"
+              style={{ fontFamily: 'UTM Bebas, sans-serif', height: '32px', minWidth: '32px' }}
+            >
+              {currentData.teamBScore}
+            </div>
+            <div className="w-[120px]">
+              <div
+                className="w-full text-white font-normal whitespace-nowrap text-center truncate flex items-center justify-center"
+                style={{
+                  backgroundColor: '#004d73',
+                  fontFamily: 'UTM Bebas, sans-serif',
+                  height: '24px',
+                  fontSize: `${getClampedFontSize(currentData.teamBName)}px`
+                }}
+              >
+                {currentData.teamBName}
+              </div>
+              <div className="flex w-full" style={{ height: '4px' }}>
+                <div
+                  className="flex-1"
+                  style={{ backgroundColor: currentData.teamB2KitColor || currentData.teamBKitColor }}
+                />
+                <div
+                  className="flex-1"
+                  style={{ backgroundColor: currentData.teamBKitColor }}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderScoreboardType2 = () => (
     <div className="flex justify-center items-center">
@@ -204,74 +220,71 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
     </div>
   );
 
-  const renderScoreboardType3 = () => (
-    <div className="flex items-center justify-between">
-      <div className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden">
-        <img 
-          src={currentData.teamALogo} 
-          alt="Team A Logo" 
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            e.target.nextSibling.style.display = 'flex';
-          }}
-        />
-        <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
-          A
-        </div>
-      </div>
+  const renderScoreboardType3 = () => {
+    const calculateFontSize = (teamAName, teamBName) => {
+      const maxLength = Math.max(teamAName?.length || 0, teamBName?.length || 0);
 
-      <div className="flex items-center bg-black/20 backdrop-blur-sm rounded-lg p-1">
-        <div className="flex items-center">
-          <div className="text-white px-2 py-1 text-xs font-medium bg-gray-800/80 rounded w-[80px] truncate">
-            {currentData.teamAName}
-          </div>
-          <div
-            className="w-1 h-4 ml-1 rounded-full"
-            style={{ backgroundColor: currentData.teamAKitColor }}
-          />
-        </div>
+      if (maxLength <= 8) return 'text-sm';
+      if (maxLength <= 12) return 'text-xs';
+      if (maxLength <= 16) return 'text-[10px]';
+      return 'text-[9px]';
+    };
 
-        <div className="mx-2 flex flex-col items-center">
-          <div className="flex items-center bg-white/95 px-2 py-0.5 rounded shadow-sm">
-            <span className="font-bold text-sm text-gray-900">{currentData.teamAScore}</span>
-            <span className="mx-1 text-gray-400 font-light">:</span>
-            <span className="font-bold text-sm text-gray-900">{currentData.teamBScore}</span>
-          </div>
-          {showMatchTime && (
-            <div className="bg-red-600 text-white px-1 py-0.5 text-xs font-medium rounded-sm mt-1">
-              {currentData.matchTime}
+    const fontSize = calculateFontSize(currentData.teamAName, currentData.teamBName);
+
+    return (
+      <div className="flex flex-col items-center w-[260px] scale-75">
+        <div className="flex items-center justify-between w-full bg-white">
+          <div className="flex flex-col flex-1">
+            {/* Main content row - grid 3 columns */}
+            <div className="grid grid-cols-[1fr_auto_1fr] w-full items-stretch">
+              {/* Team A */}
+              <div className="flex flex-col items-center">
+                <div
+                  className={`text-white ${fontSize} font-medium w-full truncate text-center min-h-[20px] flex items-center justify-center`}
+                  style={{ backgroundColor: '#0d94a4', fontFamily: 'UTM Bebas, sans-serif' }}
+                >
+                  {currentData.teamAName}
+                </div>
+                <div className="flex w-full h-[3px] overflow-hidden">
+                  <div className="flex-1" style={{ backgroundColor: currentData.teamAKitColor }} />
+                  <div className="flex-1" style={{ backgroundColor: currentData.teamA2KitColor || currentData.teamAKitColor }} />
+                </div>
+              </div>
+
+              {/* Score + time */}
+              <div className="flex flex-col items-center">
+                <div className="flex items-center bg-white h-full px-1 py-[1px]" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>
+                  <span className="font-bold text-sm text-gray-900" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>{currentData.teamAScore}</span>
+                  <span className="text-gray-400 font-light text-xs mx-1">:</span>
+                  <span className="font-bold text-sm text-gray-900" style={{ fontFamily: 'UTM Bebas, sans-serif' }}>{currentData.teamBScore}</span>
+                </div>
+                {showMatchTime && (
+                  <div className="bg-red-600 text-white text-[10px] font-semibold whitespace-nowrap w-full text-center py-[1px]">
+                    {currentData.matchTime}
+                  </div>
+                )}
+              </div>
+
+              {/* Team B */}
+              <div className="flex flex-col items-center">
+                <div
+                  className={`text-white ${fontSize} font-medium w-full truncate text-center min-h-[20px] flex items-center justify-center`}
+                  style={{ backgroundColor: '#0d94a4', fontFamily: 'UTM Bebas, sans-serif' }}
+                >
+                  {currentData.teamBName}
+                </div>
+                <div className="flex w-full h-[3px] overflow-hidden">
+                  <div className="flex-1" style={{ backgroundColor: currentData.teamBKitColor }} />
+                  <div className="flex-1" style={{ backgroundColor: currentData.teamB2KitColor || currentData.teamBKitColor }} />
+                </div>
+              </div>
             </div>
-          )}
-        </div>
-
-        <div className="flex items-center">
-          <div
-            className="w-1 h-4 mr-1 rounded-full"
-            style={{ backgroundColor: currentData.teamBKitColor }}
-          />
-          <div className="text-white px-2 py-1 text-xs font-medium bg-gray-800/80 rounded w-[80px] truncate text-right">
-            {currentData.teamBName}
           </div>
         </div>
       </div>
-
-      <div className="w-6 h-6 rounded-full flex items-center justify-center overflow-hidden">
-        <img 
-          src={currentData.teamBLogo} 
-          alt="Team B Logo" 
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            e.target.style.display = 'none';
-            e.target.nextSibling.style.display = 'flex';
-          }}
-        />
-        <div className="w-full h-full bg-gray-200 rounded-full flex items-center justify-center text-xs font-bold" style={{display: 'none'}}>
-          B
-        </div>
-      </div>
-    </div>
-  );
+    );
+  };
 
   const renderScoreboardType4 = () => (
     <div className="flex items-center justify-center gap-0 scale-75 origin-center">
