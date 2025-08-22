@@ -352,12 +352,11 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           if (response.success && response.data) {
             // Tạo poster từ response của server
             const uploadedPoster = {
-              id: `uploaded-poster-${response.data.id}`,
+              id: `custom-poster-${response.data.id}`,
               name: response.data.name,
               thumbnail: getFullPosterUrl(response.data.url_poster),
               isCustom: true,
-              uploading: false,
-              serverData: response.data
+              uploading: false
             };
 
             // Remove preview poster and add to savedPosters only
