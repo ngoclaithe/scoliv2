@@ -78,7 +78,6 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Lỗi đăng nhập:', error);
       
-      // Chỉ hiển thị message lỗi từ server
       const errorMessage = error.response?.data?.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
       
       toast.error(errorMessage);
@@ -115,8 +114,6 @@ export const AuthProvider = ({ children }) => {
         setAuthType('code');
         setIsAuthenticated(true);
         setTypeMatch(typeMatch);
-
-        toast.success('Đăng nhập bằng mã thành công!');
 
         return {
           success: true,
@@ -195,7 +192,6 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await AuthAPI.logout();
-      toast.success('Đăng xuất thành công!');
     } catch (error) {
       console.error('Lỗi khi đăng xuất:', error);
     } finally {
@@ -263,7 +259,6 @@ export const AuthProvider = ({ children }) => {
       
       await AuthAPI.forgotPassword(email);
       
-      toast.success('Email đặt lại mật khẩu đã được gửi!');
       return { success: true };
     } catch (error) {
       console.error('Lỗi gửi email reset mật khẩu:', error);
@@ -309,9 +304,7 @@ export const AuthProvider = ({ children }) => {
         setMatchCode(code);
         setAuthType('full');
         setTypeMatch(typeMatch);
-        
-        toast.success('Nhập mã trận đấu thành công!');
-        
+                
         return {
           success: true,
           matchData: response.data?.match,
