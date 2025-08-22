@@ -239,10 +239,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
                         <div className="text-white px-3 py-1
                             md:px-4 md:py-2
                             sm:px-3 sm:py-1
-                            max-[480px]:px-2 max-[480px]:py-1"
-                            style={{
-                                textShadow: '2px 2px 0px #000000, -2px -2px 0px #000000, 2px -2px 0px #000000, -2px 2px 0px #000000'
-                            }}>
+                            max-[480px]:px-2 max-[480px]:py-1">
                             <span className="text-sm font-bold
                                 md:text-lg
                                 sm:text-base
