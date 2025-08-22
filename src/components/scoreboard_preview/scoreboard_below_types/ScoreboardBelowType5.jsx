@@ -14,19 +14,19 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
             return '7px';
         } else {
             // Desktop font sizes
-            if (length <= 8) return '18px';
-            if (length <= 12) return '16px';
-            if (length <= 16) return '14px';
-            return '12px';
+            if (length <= 8) return '20px';
+            if (length <= 12) return '18px';
+            if (length <= 16) return '16px';
+            return '14px';
         }
     };
 
     return (
-        <div className="flex flex-col items-center w-[900px] scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
+        <div className="flex flex-col items-center w-[600px] scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
             {/* Main container */}
             <div className="w-full relative">
                 {/* Tournament logo - Much bigger */}
-                <div className="absolute left-1/2 top-[-30px] sm:top-[-35px] -translate-x-1/2 w-[60px] h-[60px] sm:w-[70px] sm:h-[70px] z-50">
+                <div className="absolute left-1/2 top-[-12px] sm:top-[-15px] -translate-x-1/2 w-[45px] h-[45px] sm:w-[50px] sm:h-[50px] z-10">
                     <div
                         className="w-full h-full flex items-center justify-center overflow-hidden"
                         style={{
@@ -57,9 +57,24 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                     {/* Main content layout */}
                     <div className="grid grid-cols-7 gap-4 items-center px-6 py-4">
                         {/* Team A section */}
-                        <div className="col-span-3">
+                        <div className="col-span-3 flex items-center gap-3">
+                            {/* Team A Logo */}
+                            <div className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                                <img
+                                    src={getFullLogoUrl(currentData.teamALogo) || "/api/placeholder/48/48"}
+                                    alt="Team A Logo"
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                        e.target.style.display = 'none';
+                                        e.target.nextSibling.style.display = 'flex';
+                                    }}
+                                />
+                                <div className="w-full h-full bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg" style={{display: 'none'}}>
+                                    A
+                                </div>
+                            </div>
                             <div
-                                className="relative"
+                                className="relative flex-1"
                                 style={{
                                     background: 'linear-gradient(135deg, #2563eb, #1e40af)',
                                     clipPath: 'polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%, 10% 50%)',
@@ -84,12 +99,11 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                     {/* Team A kit colors - Diamond */}
                                     <div className="flex justify-center">
                                         <div
-                                            className="w-10 h-10 flex flex-col overflow-hidden relative"
+                                            className="w-8 h-8 flex flex-col overflow-hidden relative"
                                             style={{
                                                 transform: 'rotate(45deg)',
-                                                border: '3px solid #1e40af',
-                                                boxShadow: '0 0 12px rgba(37, 99, 235, 0.5)',
-                                                borderRadius: '2px',
+                                                border: '2px solid #1e40af',
+                                                boxShadow: '0 0 8px rgba(37, 99, 235, 0.4)',
                                             }}
                                         >
                                             <div 
@@ -175,9 +189,24 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                         </div>
 
                         {/* Team B section */}
-                        <div className="col-span-3">
+                        <div className="col-span-3 flex items-center gap-3 flex-row-reverse">
+                            {/* Team B Logo */}
+                            <div className="w-12 h-12 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                                <img
+                                    src={getFullLogoUrl(currentData.teamBLogo) || "/api/placeholder/48/48"}
+                                    alt="Team B Logo"
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => {
+                                        e.target.style.display = 'none';
+                                        e.target.nextSibling.style.display = 'flex';
+                                    }}
+                                />
+                                <div className="w-full h-full bg-red-600 rounded-full flex items-center justify-center text-white font-bold text-lg" style={{display: 'none'}}>
+                                    B
+                                </div>
+                            </div>
                             <div
-                                className="relative"
+                                className="relative flex-1"
                                 style={{
                                     background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
                                     clipPath: 'polygon(10% 0%, 100% 0%, 90% 50%, 100% 100%, 10% 100%, 0% 50%)',
@@ -202,12 +231,11 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                     {/* Team B kit colors - Diamond */}
                                     <div className="flex justify-center">
                                         <div
-                                            className="w-10 h-10 flex flex-col overflow-hidden relative"
+                                            className="w-8 h-8 flex flex-col overflow-hidden relative"
                                             style={{
                                                 transform: 'rotate(45deg)',
-                                                border: '3px solid #b91c1c',
-                                                boxShadow: '0 0 12px rgba(220, 38, 38, 0.5)',
-                                                borderRadius: '2px',
+                                                border: '2px solid #b91c1c',
+                                                boxShadow: '0 0 8px rgba(220, 38, 38, 0.4)',
                                             }}
                                         >
                                             <div 

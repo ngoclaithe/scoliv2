@@ -397,238 +397,206 @@ const ScoreboardPreview = ({ matchData, displaySettings }) => {
   );
 
   const renderScoreboardType5 = () => {
+    const getTeamNameFontSize = (teamName, isMobile = false) => {
+        const length = teamName ? teamName.length : 0;
+
+        if (isMobile) {
+            // Mobile font sizes
+            if (length <= 8) return '8px';
+            if (length <= 12) return '7px';
+            if (length <= 16) return '6px';
+            return '5px';
+        } else {
+            // Desktop font sizes
+            if (length <= 8) return '14px';
+            if (length <= 12) return '12px';
+            if (length <= 16) return '10px';
+            return '8px';
+        }
+    };
+
     return (
-      <div className="flex flex-col items-center w-[300px] scale-75 relative">
-        {/* Decorative background */}
-        <div className="absolute inset-0 z-0 overflow-hidden">
+      <div className="flex flex-col items-center w-[375px] scale-75">
+        {/* Main container */}
+        <div className="w-full relative">
+          {/* Tournament logo - Much bigger */}
+          <div className="absolute left-1/2 top-[-6px] sm:top-[-8px] -translate-x-1/2 w-[30px] h-[30px] sm:w-[34px] sm:h-[34px] z-10">
+            <div
+              className="w-full h-full flex items-center justify-center overflow-hidden"
+              style={{
+                background: 'linear-gradient(135deg, #3b82f6, #1d4ed8)',
+                clipPath: 'polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%)',
+                border: '2px solid #60a5fa',
+                boxShadow: '0 0 15px rgba(59, 130, 246, 0.6), inset 0 2px 4px rgba(255,255,255,0.4)',
+              }}
+            >
+              <img
+                src="/images/basic/logo-skin4.png"
+                alt="Tournament"
+                className="w-[70%] h-[70%] object-contain"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Main scoreboard container - Better background */}
           <div
-            className="absolute -top-4 -left-4 w-12 h-12 rounded-full opacity-20"
+            className="relative"
             style={{
-              background: 'linear-gradient(45deg, #FF6B6B, #4ECDC4)',
-              animation: 'pulse 3s ease-in-out infinite',
-            }}
-          />
-          <div
-            className="absolute -top-4 -right-4 w-12 h-12 rounded-full opacity-20"
-            style={{
-              background: 'linear-gradient(45deg, #4ECDC4, #45B7D1)',
-              animation: 'pulse 3s ease-in-out infinite 1.5s',
-            }}
-          />
-        </div>
-
-        {/* Main content */}
-        <div className="relative z-10 flex flex-row items-center space-x-[-10px]">
-          {/* Team A section with neon effect */}
-          <div className="relative">
-            <div
-              className="absolute inset-0"
-              style={{
-                width: '110px',
-                height: '25px',
-                background: 'rgba(0, 255, 255, 0.3)',
-                clipPath: 'polygon(12% 0%, 88% 0%, 100% 100%, 0% 100%)',
-                filter: 'blur(2px)',
-              }}
-            />
-            <div
-              className="relative text-white font-bold flex items-center justify-center z-10"
-              style={{
-                width: '110px',
-                height: '25px',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                clipPath: 'polygon(12% 0%, 88% 0%, 100% 100%, 0% 100%)',
-                fontFamily: 'UTM Bebas, sans-serif',
-                fontSize: '12px',
-                textShadow: '0 0 5px rgba(0,255,255,0.8)',
-                border: '1px solid rgba(0,255,255,0.5)',
-              }}
-            >
-              <span className="truncate text-center">{currentData.teamAName}</span>
-            </div>
-          </div>
-
-          {/* Team A kit color */}
-          <div className="relative z-30">
-            <div
-              className="absolute inset-0"
-              style={{
-                width: '16px',
-                height: '25px',
-                background: 'linear-gradient(45deg, rgba(255,0,255,0.3), rgba(0,255,255,0.3))',
-                clipPath: 'polygon(0% 0%, 70% 0%, 100% 100%, 30% 100%)',
-                animation: 'pulse 2s ease-in-out infinite',
-              }}
-            />
-            <div
-              className="relative flex flex-col items-center"
-              style={{
-                width: '12px',
-                height: '25px',
-                clipPath: 'polygon(0% 0%, 70% 0%, 100% 100%, 30% 100%)',
-              }}
-            >
-              <div
-                className="w-full h-1/2"
-                style={{
-                  backgroundColor: currentData.teamAKitColor,
-                  boxShadow: `0 0 4px ${currentData.teamAKitColor}40`
-                }}
-              />
-              <div
-                className="w-full h-1/2"
-                style={{
-                  backgroundColor: currentData.teamA2KitColor || currentData.teamAKitColor,
-                  boxShadow: `0 0 4px ${currentData.teamA2KitColor || currentData.teamAKitColor}40`
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Central score box */}
-          <div className="relative z-40">
-            <div
-              className="absolute inset-0"
-              style={{
-                width: '70px',
-                height: '30px',
-                background: 'conic-gradient(from 0deg, #667eea, #764ba2, #667eea)',
-                clipPath: 'polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%)',
-                animation: 'rotate 6s linear infinite',
-              }}
-            />
-            <div
-              className="absolute top-0.5 left-0.5 right-0.5 bottom-0.5"
-              style={{
-                background: 'linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)',
-                clipPath: 'polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%)',
-              }}
-            />
-            <div
-              className="relative flex items-center justify-around px-1"
-              style={{
-                width: '70px',
-                height: '30px',
-                clipPath: 'polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%)',
-              }}
-            >
-              <div
-                className="text-white font-bold text-sm text-center"
-                style={{
-                  fontFamily: 'UTM Bebas, sans-serif',
-                  textShadow: '0 0 5px rgba(0,255,255,0.8)',
-                  filter: 'drop-shadow(0 0 4px rgba(255,255,255,0.3))'
-                }}
-              >
-                {currentData.teamAScore}
-              </div>
-              <div
-                className="text-white font-bold text-sm text-center"
-                style={{
-                  fontFamily: 'UTM Bebas, sans-serif',
-                  textShadow: '0 0 5px rgba(255,0,255,0.8)',
-                  filter: 'drop-shadow(0 0 4px rgba(255,255,255,0.3))'
-                }}
-              >
-                {currentData.teamBScore}
-              </div>
-            </div>
-          </div>
-
-          {/* Team B kit color */}
-          <div className="relative z-30">
-            <div
-              className="absolute inset-0"
-              style={{
-                width: '16px',
-                height: '25px',
-                background: 'linear-gradient(45deg, rgba(255,255,0,0.3), rgba(255,0,255,0.3))',
-                clipPath: 'polygon(30% 0%, 100% 0%, 70% 100%, 0% 100%)',
-                animation: 'pulse 2s ease-in-out infinite 1s',
-              }}
-            />
-            <div
-              className="relative flex flex-col items-center"
-              style={{
-                width: '12px',
-                height: '25px',
-                clipPath: 'polygon(30% 0%, 100% 0%, 70% 100%, 0% 100%)',
-              }}
-            >
-              <div
-                className="w-full h-1/2"
-                style={{
-                  backgroundColor: currentData.teamBKitColor,
-                  boxShadow: `0 0 4px ${currentData.teamBKitColor}40`
-                }}
-              />
-              <div
-                className="w-full h-1/2"
-                style={{
-                  backgroundColor: currentData.teamB2KitColor || currentData.teamBKitColor,
-                  boxShadow: `0 0 4px ${currentData.teamB2KitColor || currentData.teamBKitColor}40`
-                }}
-              />
-            </div>
-          </div>
-
-          {/* Team B section with neon effect */}
-          <div className="relative">
-            <div
-              className="absolute inset-0"
-              style={{
-                width: '110px',
-                height: '25px',
-                background: 'rgba(255, 0, 255, 0.3)',
-                clipPath: 'polygon(12% 0%, 88% 0%, 100% 100%, 0% 100%)',
-                filter: 'blur(2px)',
-              }}
-            />
-            <div
-              className="relative text-white font-bold flex items-center justify-center"
-              style={{
-                width: '110px',
-                height: '25px',
-                background: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
-                clipPath: 'polygon(12% 0%, 88% 0%, 100% 100%, 0% 100%)',
-                fontFamily: 'UTM Bebas, sans-serif',
-                fontSize: '12px',
-                textShadow: '0 0 5px rgba(255,0,255,0.8)',
-                border: '1px solid rgba(255,0,255,0.5)',
-              }}
-            >
-              <span className="truncate text-center">{currentData.teamBName}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Status display */}
-        {showMatchTime && (
-          <div
-            className="text-white text-xs font-bold px-2 py-0.5 mt-1 bg-red-600"
-            style={{
-              fontFamily: 'UTM Bebas, sans-serif',
-              clipPath: 'polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)',
-              textShadow: '0 0 4px rgba(255,255,255,0.6)',
-              animation: 'pulse 1.5s ease-in-out infinite',
-              boxShadow: '0 0 10px rgba(239,68,68,0.6)',
+              background: 'linear-gradient(135deg, #1e40af, #312e81, #1e293b)',
+              clipPath: 'polygon(5% 0%, 95% 0%, 100% 25%, 100% 75%, 95% 100%, 5% 100%, 0% 75%, 0% 25%)',
+              border: '2px solid #60a5fa',
+              boxShadow: '0 8px 25px rgba(59, 130, 246, 0.4), inset 0 1px 0 rgba(255,255,255,0.2)',
             }}
           >
-            {currentData.matchTime}
+            {/* Main content grid */}
+            <div className="grid grid-cols-5 gap-2 items-center px-3 py-2">
+              {/* Team A section */}
+              <div className="col-span-2">
+                {/* Team A name - Angular cut */}
+                <div
+                  className="relative mb-2"
+                  style={{
+                    background: 'linear-gradient(135deg, #2563eb, #1e40af)',
+                    clipPath: 'polygon(0% 0%, 85% 0%, 100% 100%, 15% 100%)',
+                    border: '1px solid #3b82f6',
+                    boxShadow: '0 0 12px rgba(37, 99, 235, 0.3)',
+                  }}
+                >
+                  <div
+                    className="text-white font-bold text-center px-2 py-1"
+                    style={{
+                      fontFamily: 'UTM Bebas, sans-serif',
+                      fontSize: getTeamNameFontSize(currentData.teamAName, window.innerWidth <= 640),
+                      textShadow: '0 0 8px rgba(255,255,255,0.5)',
+                      letterSpacing: '0.5px',
+                    }}
+                  >
+                    {currentData.teamAName}
+                  </div>
+                </div>
+
+                {/* Team A kit colors - Diamond */}
+                <div className="flex justify-center">
+                  <div
+                    className="w-5 h-5 flex flex-col overflow-hidden relative"
+                    style={{
+                      transform: 'rotate(45deg)',
+                      border: '2px solid #1e40af',
+                      boxShadow: '0 0 8px rgba(37, 99, 235, 0.4)',
+                    }}
+                  >
+                    <div className="h-1/2" style={{ backgroundColor: currentData.teamAKitColor }} />
+                    <div className="h-1/2" style={{ backgroundColor: currentData.teamA2KitColor || currentData.teamAKitColor }} />
+                  </div>
+                </div>
+              </div>
+
+              {/* Central score display - Better background, larger fonts */}
+              <div className="col-span-1">
+                <div
+                  className="relative text-center"
+                  style={{
+                    background: 'linear-gradient(135deg, #0c4a6e, #164e63, #1e293b)',
+                    clipPath: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)',
+                    border: '2px solid #0ea5e9',
+                    boxShadow: '0 0 20px rgba(14, 165, 233, 0.4), inset 0 2px 4px rgba(255,255,255,0.2)',
+                  }}
+                >
+                  <div className="px-2 py-1">
+                    {/* Scores - Much larger */}
+                    <div className="flex items-center justify-center space-x-1">
+                      <div
+                        className="text-white font-bold text-lg sm:text-xl"
+                        style={{
+                          fontFamily: 'UTM Bebas, sans-serif',
+                          textShadow: '0 0 15px rgba(59, 130, 246, 0.9), 0 0 6px rgba(255,255,255,0.6)',
+                          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))',
+                        }}
+                      >
+                        {currentData.teamAScore}
+                      </div>
+                      <div
+                        className="text-slate-200 text-sm font-bold"
+                        style={{ textShadow: '0 0 8px rgba(255,255,255,0.6)' }}
+                      >
+                        -
+                      </div>
+                      <div
+                        className="text-white font-bold text-lg sm:text-xl"
+                        style={{
+                          fontFamily: 'UTM Bebas, sans-serif',
+                          textShadow: '0 0 15px rgba(239, 68, 68, 0.9), 0 0 6px rgba(255,255,255,0.6)',
+                          filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.8))',
+                        }}
+                      >
+                        {currentData.teamBScore}
+                      </div>
+                    </div>
+
+                    {/* Time display - Larger font */}
+                    {showMatchTime && (
+                      <div className="mt-1">
+                        <div
+                          className="text-green-400 text-xs sm:text-sm font-bold"
+                          style={{
+                            fontFamily: 'UTM Bebas, sans-serif',
+                            textShadow: '0 0 12px rgba(34, 197, 94, 0.9), 0 0 4px rgba(255,255,255,0.5)',
+                          }}
+                        >
+                          {currentData.matchTime}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Team B section */}
+              <div className="col-span-2">
+                {/* Team B name - Angular cut (mirrored) */}
+                <div
+                  className="relative mb-2"
+                  style={{
+                    background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+                    clipPath: 'polygon(15% 0%, 100% 0%, 85% 100%, 0% 100%)',
+                    border: '1px solid #ef4444',
+                    boxShadow: '0 0 12px rgba(220, 38, 38, 0.3)',
+                  }}
+                >
+                  <div
+                    className="text-white font-bold text-center px-2 py-1"
+                    style={{
+                      fontFamily: 'UTM Bebas, sans-serif',
+                      fontSize: getTeamNameFontSize(currentData.teamBName, window.innerWidth <= 640),
+                      textShadow: '0 0 8px rgba(255,255,255,0.5)',
+                      letterSpacing: '0.5px',
+                    }}
+                  >
+                    {currentData.teamBName}
+                  </div>
+                </div>
+
+                {/* Team B kit colors - Diamond */}
+                <div className="flex justify-center">
+                  <div
+                    className="w-5 h-5 flex flex-col overflow-hidden relative"
+                    style={{
+                      transform: 'rotate(45deg)',
+                      border: '2px solid #b91c1c',
+                      boxShadow: '0 0 8px rgba(220, 38, 38, 0.4)',
+                    }}
+                  >
+                    <div className="h-1/2" style={{ backgroundColor: currentData.teamBKitColor }} />
+                    <div className="h-1/2" style={{ backgroundColor: currentData.teamB2KitColor || currentData.teamBKitColor }} />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        )}
-
-        <style jsx>{`
-          @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-
-          @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.05); }
-          }
-        `}</style>
+        </div>
       </div>
     );
   };
