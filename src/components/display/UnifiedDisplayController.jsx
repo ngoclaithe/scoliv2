@@ -193,10 +193,7 @@ const UnifiedDisplayController = () => {
 
     const initializeDisplay = async () => {
       try {
-        const isDynamic = checkIfDynamicRoute();
-        setIsDynamicRoute(isDynamic);
-        
-        // console.log(`🎯 [UnifiedDisplayController] Route type: ${isDynamic ? 'Dynamic' : 'Standard'}, hasUrlParams:`, hasUrlParams);
+        setIsDynamicRoute(isDynamicRoute);
 
         const verifyResult = await PublicAPI.verifyAccessCode(accessCode);
 
@@ -217,29 +214,18 @@ const UnifiedDisplayController = () => {
 
         if (!isCleanedUp) {
           setIsInitialized(true);
-          // console.log('[UnifiedDisplayController] Initialized successfully');
 
-          if (isDynamic && hasUrlParams) {
-            const params = parseUrlParams();
-            // console.log('📋 [UnifiedDisplayController] About to update socket with params:', params);
-            // console.log('🔧 [UnifiedDisplayController] canSendToSocket:', canSendToSocket);
-
-            if (params && Object.keys(params).length > 0) {
-              // Cập nhật view ngay lập tức nếu có trong URL
-              if (params.view) {
-                console.log('👁️ [UnifiedDisplayController] Setting view immediately from URL:', params.view);
-                updateView(params.view);
-              }
-
-              // console.log('⏰ [UnifiedDisplayController] Setting timeout to update socket params...');
-              setTimeout(() => {
-                updateSocketWithParams(params);
-              }, 1500);
-
-              setTimeout(() => {
-                updateSocketWithParams(params);
-              }, 3000);
+          if (isDynamicRoute && hasUrlParams && parseUrlParams) {
+            // Cập nhật view ngay lập tức nếu có trong URL
+            if (parseUrlParams.view) {
+              console.log('👁️ [UnifiedDisplayController] Setting view immediately from URL:', parseUrlParams.view);
+              updateView(parseUrlParams.view);
             }
+
+            // Chỉ dùng một setTimeout với delay ngắn hơn
+            setTimeout(() => {
+              updateSocketWithParams(parseUrlParams);
+            }, 1000);
           }
         }
       } catch (err) {
@@ -259,7 +245,7 @@ const UnifiedDisplayController = () => {
     return () => {
       isCleanedUp = true;
     };
-  }, [accessCode, initializeSocket, handleExpiredAccess, checkIfDynamicRoute, parseUrlParams, updateSocketWithParams, canSendToSocket, hasUrlParams]);
+  }, [accessCode, initializeSocket, handleExpiredAccess, isDynamicRoute, hasUrlParams, parseUrlParams, updateSocketWithParams, updateView]);
 
   const renderPoster = (posterType) => {
 
