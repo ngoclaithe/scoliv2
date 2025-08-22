@@ -247,13 +247,12 @@ const UnifiedDisplayController = () => {
     };
   }, [accessCode, initializeSocket, handleExpiredAccess, isDynamicRoute, hasUrlParams, parseUrlParams, updateSocketWithParams, updateView]);
 
-  const renderPoster = (posterType) => {
-
-    const selectedPosterType = displaySettings.selectedPoster;
+  const renderPoster = useMemo(() => {
+    const posterType = displaySettings.selectedPoster;
     const customPosterUrl = displaySettings.url_custom_poster;
 
     // Kiểm tra nếu posterType là 'custom' và có URL
-    if (selectedPosterType === 'custom' && customPosterUrl) {
+    if (posterType === 'custom' && customPosterUrl) {
       console.log("✅ [UnifiedDisplayController] Using custom poster:", customPosterUrl);
       return (
         <div className="fixed inset-0 bg-black flex items-center justify-center">
@@ -286,7 +285,7 @@ const UnifiedDisplayController = () => {
       default:
         return <PosterHaoQuang accessCode={accessCode} />;
     }
-  };
+  }, [displaySettings.selectedPoster, displaySettings.url_custom_poster, accessCode]);
 
   const renderCurrentView = () => {
     switch (currentView) {
