@@ -68,7 +68,6 @@ const UnifiedDisplayController = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
   const [isDynamicRoute, setIsDynamicRoute] = useState(false);
-  const [savedPosters, setSavedPosters] = useState([]);
 
   const checkIfDynamicRoute = useCallback(() => {
     const hasDynamicParams = Boolean(
