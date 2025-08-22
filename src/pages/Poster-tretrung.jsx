@@ -450,7 +450,7 @@ export default function TreTrungMatchIntro() {
           </div>
 
           {/* Stadium and Live sections - Move closer to bottom */}
-          <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-full">
+          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-full">
             <div className="flex justify-center items-center gap-2 sm:gap-8 md:gap-16 px-2 sm:px-4 md:px-8">
               {/* Stadium */}
               {matchData.showStadium && (
