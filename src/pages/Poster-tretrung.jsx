@@ -235,8 +235,8 @@ export default function TreTrungMatchIntro() {
                     src={logo}
                     alt={`Tournament Logo ${index + 1}`}
                     className={`object-contain flex-shrink-0 ${isMobile
-                        ? 'h-5 max-w-16'
-                        : 'h-8 sm:h-10 md:h-16 lg:h-21 max-w-20 sm:max-w-31 md:max-w-42'
+                      ? 'h-5 max-w-16'
+                      : 'h-8 sm:h-10 md:h-16 lg:h-21 max-w-20 sm:max-w-31 md:max-w-42'
                       }`}
                   />
                 ))
@@ -319,8 +319,8 @@ export default function TreTrungMatchIntro() {
 
             {/* Teams section - compact and mobile responsive */}
             <div className={`flex items-center justify-center w-full mb-1 sm:mb-2 md:mb-3 ${isMobile
-                ? 'px-2 gap-1'
-                : 'px-4 sm:px-8 md:px-12 gap-2 sm:gap-4 md:gap-6'
+              ? 'px-2 gap-1'
+              : 'px-4 sm:px-8 md:px-12 gap-2 sm:gap-4 md:gap-6'
               }`}>
 
               {/* Team A */}
@@ -471,8 +471,9 @@ export default function TreTrungMatchIntro() {
                   <img
                     src="/images/basic/live-logo1.gif"
                     alt="Live"
-                    className={`object-contain self-end ${isMobile ? 'w-2 h-4' : 'w-6 h-12 sm:w-8 sm:h-16 md:w-10 md:h-20'}`}
+                    className={`self-end object-contain ${isMobile ? 'h-4' : 'h-12 sm:h-16 md:h-20'}`}
                   />
+
                   <span className="leading-none">{matchData.liveText}</span>
                 </div>
               )}
