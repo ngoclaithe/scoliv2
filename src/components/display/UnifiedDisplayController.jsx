@@ -330,8 +330,7 @@ const UnifiedDisplayController = () => {
         return <Event accessCode={accessCode} />;  
       case 'poster':
       default:
-        const posterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;
-        return renderPoster(posterType);
+        return renderPoster(displaySettings.selectedPoster);
     }
   };
 
