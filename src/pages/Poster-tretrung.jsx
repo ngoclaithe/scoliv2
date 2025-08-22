@@ -465,15 +465,13 @@ export default function TreTrungMatchIntro() {
 
               {/* Live Text */}
               {matchData.showLiveIndicator && (
-                <div className="flex items-end space-x-1 sm:space-x-2 md:space-x-3 text-white font-normal" style={{
-                  fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px'
-                }}>
+                <div className="flex items-end gap-1 sm:gap-2 md:gap-3 text-white font-normal"
+                  style={{ fontSize: isMobile ? '6px' : isTablet ? '18px' : '24px' }}>
                   <img
                     src="/images/basic/live-logo1.gif"
                     alt="Live"
-                    className={`self-end object-contain ${isMobile ? 'h-4' : 'h-12 sm:h-16 md:h-20'}`}
+                    className={`${isMobile ? 'h-4' : 'h-12 sm:h-16 md:h-20'} object-contain`}
                   />
-
                   <span className="leading-none">{matchData.liveText}</span>
                 </div>
               )}
