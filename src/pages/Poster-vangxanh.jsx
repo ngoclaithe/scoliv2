@@ -206,9 +206,9 @@ export default function VangXanhMatchIntro() {
                           <img
                             src={sponsor.logo}
                             alt={sponsor.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} 
-                            ${isMobile 
-                              ? 'w-3 h-3 p-0.5' 
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')}
+                            ${isMobile
+                              ? 'w-3 h-3 p-0'
                               : 'w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 p-0.5 sm:p-1'
                             }`}
                           />
@@ -229,9 +229,9 @@ export default function VangXanhMatchIntro() {
                           <img
                             src={organizing.logo}
                             alt={organizing.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} 
-                            ${isMobile 
-                              ? 'w-3 h-3 p-0.5' 
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')}
+                            ${isMobile
+                              ? 'w-3 h-3 p-0'
                               : 'w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 p-0.5 sm:p-1'
                             }`}
                           />
@@ -274,9 +274,9 @@ export default function VangXanhMatchIntro() {
                           <img
                             src={media.logo}
                             alt={media.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} 
-                            ${isMobile 
-                              ? 'w-3 h-3 p-0.5' 
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')}
+                            ${isMobile
+                              ? 'w-3 h-3 p-0'
                               : 'w-9 h-9 sm:w-12 sm:h-12 md:w-16 md:h-16 p-0.5 sm:p-1'
                             }`}
                             />
@@ -351,7 +351,7 @@ export default function VangXanhMatchIntro() {
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-2 sm:p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className={`relative rounded-full bg-white shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden ${isMobile ? 'p-1' : 'p-2 sm:p-3'}`}
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`
@@ -405,7 +405,7 @@ export default function VangXanhMatchIntro() {
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-2 sm:p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className={`relative rounded-full bg-white shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden ${isMobile ? 'p-1' : 'p-2 sm:p-3'}`}
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`

@@ -406,7 +406,7 @@ const MatchManagementSection = ({ isActive = true }) => {
   onLogoUpdateRef.current = handleLogoUpdate;
   onPosterUpdateRef.current = useCallback((poster) => {
     if (poster) {
-      const posterType = poster.id || poster.name;
+      const posterType = poster.isCustom ? 'custom' : (poster.id || poster.name);
       updatePoster(posterType);
       updateView('poster');
     }

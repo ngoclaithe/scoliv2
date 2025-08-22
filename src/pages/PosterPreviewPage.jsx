@@ -118,14 +118,16 @@ const PosterPreviewPage = () => {
 
   const renderPosterComponent = () => {
     const selectedPoster = displaySettings?.selectedPoster;
-    const posterType = selectedPoster?.id || selectedPoster || 'tretrung';
+    const customPosterUrl = displaySettings?.url_custom_poster;
+    const posterType = selectedPoster || 'tretrung';
 
-    if (selectedPoster?.isCustom && selectedPoster?.thumbnail) {
+    // Kiểm tra nếu posterType là 'custom' và có URL
+    if (selectedPoster === 'custom' && customPosterUrl) {
       return (
         <div className="w-full h-full flex items-center justify-center bg-gray-100">
           <img
-            src={selectedPoster.thumbnail || getFullPosterUrl(selectedPoster.serverData?.url_poster)}
-            alt={selectedPoster.name || 'Custom Poster'}
+            src={customPosterUrl}
+            alt="Custom Poster"
             className="max-w-full max-h-full object-contain"
             style={{ maxHeight: '800px' }}
           />

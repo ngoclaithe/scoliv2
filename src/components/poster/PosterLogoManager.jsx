@@ -104,11 +104,10 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             console.log("Giá trị posterResponse ", posterResponse);
             if (posterResponse?.success && posterResponse?.data) {
               const savedPosterList = posterResponse.data.map(poster => ({
-                id: `api-poster-${poster.id}`,
+                id: `custom-${poster.id}`,
                 name: poster.name || 'Poster tùy chỉnh',
                 thumbnail: getFullPosterUrl(poster.url_poster),
-                isCustom: true,
-                serverData: poster
+                isCustom: true
               }));
               setSavedPosters(savedPosterList);
             }
@@ -352,21 +351,16 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           if (response.success && response.data) {
             // Tạo poster từ response của server
             const uploadedPoster = {
-              id: `uploaded-poster-${response.data.id}`,
+              id: `custom-${response.data.id}`,
               name: response.data.name,
               thumbnail: getFullPosterUrl(response.data.url_poster),
               isCustom: true,
-              uploading: false,
-              serverData: response.data
+              uploading: false
             };
 
-            // Thay thế poster đang upload bằng poster đã upload thành công
-            setCustomPosters(prev => prev.map(poster =>
-              poster.id === previewPoster.id ? uploadedPoster : poster
-            ));
-
-            setSavedPosters(prev => [...prev, uploadedPoster]);
+            // Remove preview poster and add to savedPosters only
             setCustomPosters(prev => prev.filter(poster => poster.id !== previewPoster.id));
+            setSavedPosters(prev => [...prev, uploadedPoster]);
             handlePosterSelect(uploadedPoster);
 
             // console.log('✅ [PosterLogoManager] Poster uploaded successfully:', response.data);
@@ -779,17 +773,31 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
   const handlePosterSelect = useCallback((poster) => {
     setSelectedPoster(poster);
-    // Save to backend
+    // Save to backend - chỉ emit trực tiếp, không gọi onPosterUpdate để tránh double emit
     if (accessCode) {
-      socketService.emit('poster_update', {
-        posterType: poster.id,
-        posterData: poster
-      });
+      if (poster.isCustom) {
+        // Gửi custom poster với posterType: 'custom'
+        socketService.emit('poster_update', {
+          posterType: 'custom',
+          posterData: poster,
+          customPosterUrl: poster.thumbnail
+        });
+      } else {
+        // Gửi poster template thông thường
+        socketService.emit('poster_update', {
+          posterType: poster.id,
+          posterData: poster
+        });
+      }
+
+      // Chuyển sang view poster
+      socketService.emit('view_update', { viewType: 'poster' });
     }
-    if (onPosterUpdate) {
-      onPosterUpdate(poster);
-    }
-  }, [onPosterUpdate, accessCode]);
+    // Loại bỏ onPosterUpdate để tránh double emit
+    // if (onPosterUpdate) {
+    //   onPosterUpdate(poster);
+    // }
+  }, [accessCode]);
 
   const handleItemUpdate = useCallback(async (itemId, updatedItem) => {
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);

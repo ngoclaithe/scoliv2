@@ -38,6 +38,7 @@ export const MatchProvider = ({ children }) => {
     matchDate: "",
     liveText: "",
     matchTitle: "",
+    commentator: "",
     typeMatch: "soccer",
     round: 1,
     group: "A",
@@ -176,7 +177,11 @@ export const MatchProvider = ({ children }) => {
           if (state.matchData) {
             // console.log('🔄 [MatchContext] Updating matchData from room_joined:', state.matchData);
             const { matchTime, period, status, ...otherMatchData } = state.matchData;
-            setMatchData(prev => ({ ...prev, ...otherMatchData }));
+            setMatchData(prev => ({
+              ...prev,
+              ...otherMatchData,
+              commentator: otherMatchData.commentator || prev.commentator
+            }));
 
             if (matchTime || period || status) {
               updateTimerData({ matchTime, period, status });
@@ -245,6 +250,7 @@ export const MatchProvider = ({ children }) => {
       setMatchData(prev => ({
         ...prev,
         ...data.matchInfo,
+        commentator: data.matchInfo.commentator || prev.commentator,
         teamA: {
           ...prev.teamA,
           teamAKitColor: data.matchInfo.teamAKitColor || prev.teamA.teamAKitColor,
@@ -528,7 +534,9 @@ export const MatchProvider = ({ children }) => {
     }));
   
     if (socketConnected) {
-      socketService.updateMatchInfo(newMatchInfo);
+      socketService.emit('match_info_update', {
+        matchInfo: newMatchInfo
+      });
     }
   }, [socketConnected]);
 

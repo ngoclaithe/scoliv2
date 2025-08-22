@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../../contexts/PublicMatchContext';
 import { useAuth } from '../../contexts/AuthContext';
 import PublicAPI from '../../API/apiPublic';
-import PosterAPI from '../../API/apiPoster';
 import socketService from '../../services/socketService';
 import {
   findTeamLogos,
@@ -15,7 +14,6 @@ import {
   parseNumberParam
 } from '../../utils/dynamicRouteUtils';
 import { mapUrlViewToInternal } from '../../utils/viewMappingUtils';
-import { getFullPosterUrl } from '../../utils/logoUtils';
 
 import PosterTreTrung from '../../pages/Poster-tretrung';
 import PosterHaoQuang from '../../pages/Poster-haoquang';
@@ -68,7 +66,6 @@ const UnifiedDisplayController = () => {
   const [isInitialized, setIsInitialized] = useState(false);
   const [error, setError] = useState(null);
   const [isDynamicRoute, setIsDynamicRoute] = useState(false);
-  const [savedPosters, setSavedPosters] = useState([]);
 
   const checkIfDynamicRoute = useCallback(() => {
     const hasDynamicParams = Boolean(
@@ -219,22 +216,6 @@ const UnifiedDisplayController = () => {
         }
 
         await initializeSocket(accessCode);
-        try {
-          const posterResponse = await PosterAPI.getPosterByAccesscode(accessCode);
-          if (posterResponse?.success && posterResponse?.data) {
-            const savedPosterList = posterResponse.data.map(poster => ({
-              id: `api-poster-${poster.id}`,
-              name: poster.name || 'Poster tùy chỉnh',
-              thumbnail: getFullPosterUrl(poster.url_poster),
-              isCustom: true,
-              serverData: poster
-            }));
-            setSavedPosters(savedPosterList);
-            // console.log('✅ [UnifiedDisplayController] Loaded saved posters:', savedPosterList.length);
-          }
-        } catch (error) {
-          console.error('❌ [UnifiedDisplayController] Failed to load saved posters:', error);
-        }
 
         if (!isCleanedUp) {
           setIsInitialized(true);
@@ -285,32 +266,16 @@ const UnifiedDisplayController = () => {
   const renderPoster = (posterType) => {
 
     const selectedPosterType = displaySettings.selectedPoster;
-    // console.log("Giá trị selectedPosterType",selectedPosterType);
+    const customPosterUrl = displaySettings.url_custom_poster;
 
-    if (typeof selectedPosterType === 'string' && selectedPosterType.includes('api-poster')) {
-      const foundPoster = savedPosters.find(poster => poster.id === selectedPosterType);
-      if (foundPoster && foundPoster.serverData?.url_poster) {
-        // console.log("✅ [UnifiedDisplayController] Found custom poster:", foundPoster);
-        return (
-          <div className="fixed inset-0 bg-black flex items-center justify-center">
-            <img
-              src={getFullPosterUrl(foundPoster.serverData.url_poster)}
-              alt={foundPoster.name || 'Custom Poster'}
-              className="max-w-full max-h-full object-contain"
-              style={{ width: '100vw', height: '100vh', objectFit: 'cover' }}
-            />
-          </div>
-        );
-      }
-    }
-
-    // Fallback: nếu selectedPoster là object (từ socket)
-    if (selectedPosterType && typeof selectedPosterType === 'object' && selectedPosterType.isCustom) {
+    // Kiểm tra nếu posterType là 'custom' và có URL
+    if (selectedPosterType === 'custom' && customPosterUrl) {
+      console.log("✅ [UnifiedDisplayController] Using custom poster:", customPosterUrl);
       return (
         <div className="fixed inset-0 bg-black flex items-center justify-center">
           <img
-            src={selectedPosterType.thumbnail || getFullPosterUrl(selectedPosterType.serverData?.url_poster)}
-            alt={selectedPosterType.name || 'Custom Poster'}
+            src={customPosterUrl}
+            alt="Custom Poster"
             className="max-w-full max-h-full object-contain"
             style={{ width: '100vw', height: '100vh', objectFit: 'cover' }}
           />
@@ -365,8 +330,7 @@ const UnifiedDisplayController = () => {
         return <Event accessCode={accessCode} />;  
       case 'poster':
       default:
-        const posterType = displaySettings.selectedPoster?.id || displaySettings.selectedPoster;
-        return renderPoster(posterType);
+        return renderPoster(displaySettings.selectedPoster);
     }
   };
 

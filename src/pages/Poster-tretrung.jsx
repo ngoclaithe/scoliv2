@@ -196,9 +196,9 @@ export default function TreTrungMatchIntro() {
                       {sponsorLogos.slice(0, isMobile ? 3 : 6).map((sponsor, index) => (
                         <div key={`sponsor-${index}`} className="flex-shrink-0">
                           <img
-                            src={sponsor.logo}
-                            alt={sponsor.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-8 h-8 sm:w-10 sm:h-10 md:w-13 md:h-13 p-0.5 sm:p-1'}`}
+                          src={sponsor.logo}
+                          alt={sponsor.name}
+                          className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0' : 'w-8 h-8 sm:w-10 sm:h-10 md:w-13 md:h-13 p-0.5 sm:p-1'}`}
                           />
                         </div>
                       ))}
@@ -215,9 +215,9 @@ export default function TreTrungMatchIntro() {
                       {organizingLogos.slice(0, isMobile ? 3 : 6).map((organizing, index) => (
                         <div key={`organizing-${index}`} className="flex-shrink-0">
                           <img
-                            src={organizing.logo}
-                            alt={organizing.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-8 h-8 sm:w-10 sm:h-10 md:w-13 md:h-13 p-0.5 sm:p-1'}`}
+                          src={organizing.logo}
+                          alt={organizing.name}
+                          className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0' : 'w-8 h-8 sm:w-10 sm:h-10 md:w-13 md:h-13 p-0.5 sm:p-1'}`}
                           />
                         </div>
                       ))}
@@ -258,7 +258,7 @@ export default function TreTrungMatchIntro() {
                           <img
                             src={media.logo}
                             alt={media.name}
-                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0.5' : 'w-10 h-10 sm:w-13 sm:h-13 md:w-16 md:h-16 p-1'}`}
+                            className={`${getDisplayEachLogo('object-contain bg-white/90 border border-white/50')} ${isMobile ? 'w-4 h-4 p-0' : 'w-10 h-10 sm:w-13 sm:h-13 md:w-16 md:h-16 p-1'}`}
                           />
                         </div>
                       ))}
@@ -331,7 +331,7 @@ export default function TreTrungMatchIntro() {
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-2 sm:p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className={`relative rounded-full bg-white shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden ${isMobile ? 'p-1' : 'p-2 sm:p-3'}`}
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`
@@ -385,7 +385,7 @@ export default function TreTrungMatchIntro() {
                 <div className="relative group">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
                   <div
-                    className="relative rounded-full bg-white p-2 sm:p-3 shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden"
+                    className={`relative rounded-full bg-white shadow-xl border-4 border-white/30 flex items-center justify-center overflow-hidden ${isMobile ? 'p-1' : 'p-2 sm:p-3'}`}
                     style={{
                       width: `${logoSize}px`,
                       height: `${logoSize}px`

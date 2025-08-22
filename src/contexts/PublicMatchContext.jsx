@@ -79,6 +79,7 @@ export const PublicMatchProvider = ({ children }) => {
     matchDate: "",
     liveText: "",
     matchTitle: "",
+    commentator: "",
     typeMatch: "soccer",
     round: 1,
     group: "A",
@@ -123,6 +124,7 @@ export const PublicMatchProvider = ({ children }) => {
   const [displaySettings, setDisplaySettings] = useState({
     selectedSkin: 1,
     selectedPoster: 'tretrung',
+    url_custom_poster: null,
     showStats: false,
     showPenalty: false,
     showLineup: false,
@@ -234,6 +236,7 @@ export const PublicMatchProvider = ({ children }) => {
       setMatchData(prev => ({
         ...prev,
         ...data.matchInfo,
+        commentator: data.matchInfo.commentator || prev.commentator,
         teamA: {
           ...prev.teamA,
           teamAKitColor: data.matchInfo.teamAkitcolor || prev.teamA.teamAKitColor,
@@ -279,7 +282,11 @@ export const PublicMatchProvider = ({ children }) => {
     socketService.on('poster_updated', (data) => {
       console.log('📝 [PublicMatchContext] poster_updated received:', data);
       setDisplaySettings(prev => {
-        const newSettings = { ...prev, selectedPoster: data.posterData || data.posterType };
+        const newSettings = {
+          ...prev,
+          selectedPoster: data.posterType,
+          url_custom_poster: data.posterType === 'custom' ? data.customPosterUrl : null
+        };
         return newSettings;
       });
       setLastUpdateTime(Date.now());
@@ -840,6 +847,7 @@ export const PublicMatchProvider = ({ children }) => {
             const mappedMatchData = {
               ...state.matchData,
               tournament: state.matchData.tournament || "",
+              commentator: state.matchData.commentator || "",
               round: state.matchData.round || 1,
               group: state.matchData.group || "A",
               subtitle: state.matchData.subtitle || "",
@@ -896,7 +904,11 @@ export const PublicMatchProvider = ({ children }) => {
 
           if (state.displaySettings) {
             console.log('🎨 [PublicMatchContext] Updating displaySettings from join_roomed:', state.displaySettings);
-            setDisplaySettings(prev => ({ ...prev, ...state.displaySettings }));
+            setDisplaySettings(prev => ({
+              ...prev,
+              ...state.displaySettings,
+              url_custom_poster: state.displaySettings.selectedPoster === 'custom' ? state.displaySettings.url_custom_poster : null
+            }));
 
             // Process logos from displaySettings.logos if they exist
             if (state.displaySettings.logos && Array.isArray(state.displaySettings.logos)) {
