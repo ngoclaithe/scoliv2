@@ -4,6 +4,7 @@ import ScoreboardBelowType1 from './scoreboard_below_types/ScoreboardBelowType1'
 import ScoreboardBelowType2 from './scoreboard_below_types/ScoreboardBelowType2';
 import ScoreboardBelowType3 from './scoreboard_below_types/ScoreboardBelowType3';
 import ScoreboardBelowType4 from './scoreboard_below_types/ScoreboardBelowType4';
+import ScoreboardBelowType5 from './scoreboard_below_types/ScoreboardBelowType5';
 
 const ScoreboardBelowNew = ({ type = 1 }) => {
     const {
@@ -107,6 +108,7 @@ const ScoreboardBelowNew = ({ type = 1 }) => {
             case 2: return <ScoreboardBelowType2 {...props} />;
             case 3: return <ScoreboardBelowType3 {...props} />;
             case 4: return <ScoreboardBelowType4 {...props} />;
+            case 5: return <ScoreboardBelowType5 {...props} />;
             default: return <ScoreboardBelowType1 {...props} />;
         }
     };
@@ -130,6 +132,31 @@ const ScoreboardBelowNew = ({ type = 1 }) => {
                         {renderScoreboard()}
                     </div>
                 </div>
+
+                {/* Commentator Display - Center - Positioned closer to marquee */}
+                {currentData.commentator && (
+                    <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-30
+                        md:bottom-8
+                        sm:bottom-6
+                        max-[480px]:bottom-4
+                        max-[360px]:bottom-3">
+                        <div className="text-white px-3 py-1 rounded-lg border-2 border-black bg-transparent
+                            md:px-4 md:py-2
+                            sm:px-3 sm:py-1
+                            max-[480px]:px-2 max-[480px]:py-1"
+                            style={{
+                                textShadow: '2px 2px 0px #000000, -2px -2px 0px #000000, 2px -2px 0px #000000, -2px 2px 0px #000000'
+                            }}>
+                            <span className="text-sm font-bold
+                                md:text-lg
+                                sm:text-base
+                                max-[480px]:text-xs
+                                max-[360px]:text-[10px]">
+                                BLV: {currentData.commentator}
+                            </span>
+                        </div>
+                    </div>
+                )}
 
                 {/* Scrolling text */}
                 {scrollData.mode !== 'khong' && showScrollingText && (

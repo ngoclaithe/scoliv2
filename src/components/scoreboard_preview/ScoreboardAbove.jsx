@@ -6,6 +6,7 @@ import ScoreboardType1 from './scoreboard_types/ScoreboardType1';
 import ScoreboardType2 from './scoreboard_types/ScoreboardType2';
 import ScoreboardType3 from './scoreboard_types/ScoreboardType3';
 import ScoreboardType4 from './scoreboard_types/ScoreboardType4';
+import ScoreboardType5 from './scoreboard_types/ScoreboardType5';
 import ScoreboardLogos from './ScoreboardLogos';
 import ScoreboardMarquee from './ScoreboardMarquee';
 import DisplayLogo from '../common/DisplayLogo';
@@ -151,6 +152,7 @@ const ScoreboardAbove = ({ type = 1 }) => {
             case 2: return <ScoreboardType2 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
             case 3: return <ScoreboardType3 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
             case 4: return <ScoreboardType4 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} tournamentLogo={tournamentLogoUrl} />;
+            case 5: return <ScoreboardType5 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} tournamentLogo={tournamentLogoUrl} />;
             default: return <ScoreboardType1 currentData={currentData} logoShape={logoShape} showMatchTime={showMatchTime} />;
         }
     };
