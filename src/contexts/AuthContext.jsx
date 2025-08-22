@@ -78,11 +78,8 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Lỗi đăng nhập:', error);
       
-      const errorMessage = error.response?.data?.errors 
-        ? error.response.data.errors.join(', ')
-        : error.response?.data?.message 
-        || error.message 
-        || 'Đăng nhập thất bại. Vui lòng thử lại.';
+      // Chỉ hiển thị message lỗi từ server
+      const errorMessage = error.response?.data?.message || 'Đăng nhập thất bại. Vui lòng thử lại.';
       
       toast.error(errorMessage);
       
@@ -139,11 +136,8 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Lỗi đăng nhập với code:', error);
       
-      const errorMessage = error.response?.data?.errors 
-        ? error.response.data.errors.join(', ')
-        : error.response?.data?.message 
-        || error.message 
-        || 'Mã không hợp lệ. Vui lòng thử lại.';
+      // Chỉ hiển thị message lỗi từ server
+      const errorMessage = error.response?.data?.message || 'Mã không hợp lệ. Vui lòng thử lại.';
       
       toast.error(errorMessage);
       
@@ -184,32 +178,14 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Lỗi đăng ký:', error);
       
-      let errorMessage = 'Đăng ký thất bại. Vui lòng thử lại.';
-      let errorDetails = [];
-
-      if (error.response?.data) {
-        if (error.response.data.errors && Array.isArray(error.response.data.errors)) {
-          errorDetails = error.response.data.errors;
-          errorMessage = error.response.data.message || 'Đăng ký thất bại';
-        } else if (error.response.data.message) {
-          errorMessage = error.response.data.message;
-        }
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-
-      if (errorDetails.length > 0) {
-        errorDetails.forEach(detail => {
-          toast.error(detail);
-        });
-      } else {
-        toast.error(errorMessage);
-      }
-
+      // Chỉ hiển thị message lỗi từ server, không hiển thị mã trạng thái
+      const errorMessage = error.response?.data?.message || 'Đăng ký thất bại. Vui lòng thử lại.';
+      
+      toast.error(errorMessage);
+      
       return {
         success: false,
-        error: errorMessage,
-        errors: errorDetails
+        error: errorMessage
       };
     } finally {
       setLoading(false);
@@ -250,11 +226,8 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Lỗi cập nhật profile:', error);
       
-      const errorMessage = error.response?.data?.errors 
-        ? error.response.data.errors.join(', ')
-        : error.response?.data?.message 
-        || error.message 
-        || 'Cập nhật thông tin thất bại.';
+      // Chỉ hiển thị message lỗi từ server
+      const errorMessage = error.response?.data?.message || 'Cập nhật thông tin thất bại.';
       
       toast.error(errorMessage);
       return { success: false, error: errorMessage };
@@ -274,11 +247,8 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Lỗi đổi mật khẩu:', error);
       
-      const errorMessage = error.response?.data?.errors 
-        ? error.response.data.errors.join(', ')
-        : error.response?.data?.message 
-        || error.message 
-        || 'Đổi mật khẩu thất bại.';
+      // Chỉ hiển thị message lỗi từ server
+      const errorMessage = error.response?.data?.message || 'Đổi mật khẩu thất bại.';
       
       toast.error(errorMessage);
       return { success: false, error: errorMessage };
@@ -298,11 +268,8 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Lỗi gửi email reset mật khẩu:', error);
       
-      const errorMessage = error.response?.data?.errors 
-        ? error.response.data.errors.join(', ')
-        : error.response?.data?.message 
-        || error.message 
-        || 'Gửi email thất bại.';
+      // Chỉ hiển thị message lỗi từ server
+      const errorMessage = error.response?.data?.message || 'Gửi email thất bại.';
       
       toast.error(errorMessage);
       return { success: false, error: errorMessage };
@@ -322,11 +289,8 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Lỗi đặt lại mật khẩu:', error);
       
-      const errorMessage = error.response?.data?.errors 
-        ? error.response.data.errors.join(', ')
-        : error.response?.data?.message 
-        || error.message 
-        || 'Đặt lại mật khẩu thất bại.';
+      // Chỉ hiển thị message lỗi từ server
+      const errorMessage = error.response?.data?.message || 'Đặt lại mật khẩu thất bại.';
       
       toast.error(errorMessage);
       return { success: false, error: errorMessage };
@@ -366,11 +330,8 @@ export const AuthProvider = ({ children }) => {
     } catch (error) {
       console.error('Lỗi xác thực mã trận đấu:', error);
       
-      const errorMessage = error.response?.data?.errors 
-        ? error.response.data.errors.join(', ')
-        : error.response?.data?.message 
-        || error.message 
-        || 'Mã trận đấu không hợp lệ.';
+      // Chỉ hiển thị message lỗi từ server
+      const errorMessage = error.response?.data?.message || 'Mã trận đấu không hợp lệ.';
       
       toast.error(errorMessage);
       
