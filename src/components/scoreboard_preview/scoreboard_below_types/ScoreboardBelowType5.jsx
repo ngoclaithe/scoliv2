@@ -149,7 +149,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
                                     boxShadow: '0 0 25px rgba(14, 165, 233, 0.5), inset 0 3px 6px rgba(255,255,255,0.2)',
                                 }}
                             >
-                                <div className="px-4 py-3">
+                                <div className="px-4 py-1">
                                     {/* Scores display - Much larger */}
                                     <div className="space-y-1">
                                         <div
