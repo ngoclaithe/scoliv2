@@ -10,31 +10,31 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
         
         if (isMobile) {
             // Mobile font sizes
-            if (length <= 8) return '12px';
-            if (length <= 12) return '11px';
-            if (length <= 16) return '10px';
-            return '9px';
+            if (length <= 8) return '9px';
+            if (length <= 12) return '8px';
+            if (length <= 16) return '7px';
+            return '6px';
         } else {
             // Desktop font sizes
-            if (length <= 8) return '28px';
-            if (length <= 12) return '26px';
-            if (length <= 16) return '24px';
-            return '22px';
+            if (length <= 8) return '18px';
+            if (length <= 12) return '16px';
+            if (length <= 16) return '14px';
+            return '12px';
         }
     };
 
     return (
-        <div className="flex flex-col items-center w-[650px] scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
+        <div className="flex flex-col items-center w-[380px] scale-100 sm:scale-100 max-[480px]:scale-[0.67] max-[360px]:scale-[0.5]">
             {/* Stadium-style main container */}
             <div className="w-full relative">
-                {/* Tournament logo - Professional floating badge */}
-                <div className="absolute left-1/2 top-[-25px] sm:top-[-35px] -translate-x-1/2 w-[35px] h-[35px] sm:w-[60px] sm:h-[60px] z-50">
+                {/* Tournament logo - Compact badge */}
+                <div className="absolute left-1/2 top-[-12px] sm:top-[-16px] -translate-x-1/2 w-[20px] h-[20px] sm:w-[32px] sm:h-[32px] z-50">
                     <div
                         className="w-full h-full rounded-full flex items-center justify-center overflow-hidden"
                         style={{
                             background: 'linear-gradient(145deg, #ffffff, #f0f0f0)',
-                            border: '3px solid #2563eb',
-                            boxShadow: '0 8px 25px rgba(37, 99, 235, 0.3), inset 0 2px 4px rgba(255,255,255,0.8)',
+                            border: '2px solid #2563eb',
+                            boxShadow: '0 4px 12px rgba(37, 99, 235, 0.3), inset 0 1px 2px rgba(255,255,255,0.8)',
                         }}
                     >
                         <DisplayLogo
@@ -42,64 +42,64 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                             alt="Tournament"
                             type_play="round"
                             className="w-[70%] h-[70%]"
-                            logoSize="w-[20px] h-[20px] sm:w-[40px] sm:h-[40px]"
+                            logoSize="w-[12px] h-[12px] sm:w-[20px] sm:h-[20px]"
                         />
                     </div>
                 </div>
 
-                {/* Main scoreboard container - Stadium panel style */}
+                {/* Main scoreboard container - Compact panel */}
                 <div
-                    className="relative px-8 py-6 rounded-lg"
+                    className="relative px-4 py-3 rounded-lg"
                     style={{
                         background: 'linear-gradient(145deg, #1e293b, #0f172a)',
-                        border: '2px solid #334155',
-                        boxShadow: '0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)',
+                        border: '1px solid #334155',
+                        boxShadow: '0 8px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)',
                     }}
                 >
-                    {/* Top info bar */}
-                    <div className="flex items-center justify-between mb-4">
+                    {/* Compact info bar */}
+                    <div className="flex items-center justify-between mb-2">
                         {/* Team A fouls */}
-                        <div className="flex items-center space-x-2">
-                            <span className="text-slate-400 text-xs font-medium">FOULS</span>
-                            <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-sm" style={{ fontFamily: 'UTM Bebas, sans-serif' }} />
+                        <div className="flex items-center space-x-1">
+                            <span className="text-slate-400 text-xs font-medium">F</span>
+                            <FoulsDisplay foulsCount={currentData.teamAFouls} className="text-xs" style={{ fontFamily: 'UTM Bebas, sans-serif' }} />
                         </div>
                         
                         {/* Status indicator */}
                         <div
-                            className={`px-4 py-1 rounded-full text-xs font-bold tracking-wider ${showMatchTime ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}
+                            className={`px-2 py-1 rounded-full text-xs font-bold ${showMatchTime ? 'bg-red-500 text-white' : 'bg-green-500 text-white'}`}
                             style={{
-                                boxShadow: showMatchTime ? '0 0 20px rgba(239,68,68,0.5)' : '0 0 20px rgba(34,197,94,0.5)',
+                                boxShadow: showMatchTime ? '0 0 10px rgba(239,68,68,0.5)' : '0 0 10px rgba(34,197,94,0.5)',
                             }}
                         >
                             {showMatchTime ? 'LIVE' : 'READY'}
                         </div>
 
                         {/* Team B fouls */}
-                        <div className="flex items-center space-x-2">
-                            <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-sm" style={{ fontFamily: 'UTM Bebas, sans-serif' }} />
-                            <span className="text-slate-400 text-xs font-medium">FOULS</span>
+                        <div className="flex items-center space-x-1">
+                            <FoulsDisplay foulsCount={currentData.teamBFouls} className="text-xs" style={{ fontFamily: 'UTM Bebas, sans-serif' }} />
+                            <span className="text-slate-400 text-xs font-medium">F</span>
                         </div>
                     </div>
 
                     {/* Main content grid */}
-                    <div className="grid grid-cols-5 gap-4 items-center">
+                    <div className="grid grid-cols-5 gap-2 items-center">
                         {/* Team A section */}
                         <div className="col-span-2">
                             {/* Team A name */}
                             <div
-                                className="relative p-4 rounded-lg mb-3"
+                                className="relative p-2 rounded-md mb-2"
                                 style={{
                                     background: 'linear-gradient(145deg, #2563eb, #1d4ed8)',
                                     border: '1px solid #3b82f6',
-                                    boxShadow: '0 8px 20px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
+                                    boxShadow: '0 4px 10px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
                                 }}
                             >
                                 <div
-                                    className="text-white font-bold text-center tracking-wide"
+                                    className="text-white font-bold text-center"
                                     style={{
                                         fontFamily: 'UTM Bebas, sans-serif',
                                         fontSize: getTeamNameFontSize(currentData.teamAName, window.innerWidth <= 640),
-                                        textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                                        textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
                                     }}
                                 >
                                     {currentData.teamAName}
@@ -109,10 +109,10 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                             {/* Team A kit colors */}
                             <div className="flex justify-center">
                                 <div
-                                    className="w-12 h-12 rounded-lg flex flex-col overflow-hidden"
+                                    className="w-6 h-6 rounded-md flex flex-col overflow-hidden"
                                     style={{
-                                        border: '2px solid #64748b',
-                                        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                                        border: '1px solid #64748b',
+                                        boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
                                     }}
                                 >
                                     <div className="h-1/2" style={{ backgroundColor: currentData.teamAKitColor }} />
@@ -124,30 +124,30 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                         {/* Central score display */}
                         <div className="col-span-1">
                             <div
-                                className="relative p-6 rounded-xl text-center"
+                                className="relative p-3 rounded-lg text-center"
                                 style={{
                                     background: 'linear-gradient(145deg, #0f172a, #1e293b)',
-                                    border: '3px solid #334155',
-                                    boxShadow: '0 15px 35px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.1)',
+                                    border: '2px solid #334155',
+                                    boxShadow: '0 6px 15px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.1)',
                                 }}
                             >
                                 {/* Scores */}
-                                <div className="flex items-center justify-center space-x-3">
+                                <div className="flex items-center justify-center space-x-1">
                                     <div
-                                        className="text-white font-bold text-4xl sm:text-6xl"
+                                        className="text-white font-bold text-lg sm:text-2xl"
                                         style={{
                                             fontFamily: 'UTM Bebas, sans-serif',
-                                            textShadow: '0 0 20px rgba(59, 130, 246, 0.8), 3px 3px 6px rgba(0,0,0,0.8)',
+                                            textShadow: '0 0 10px rgba(59, 130, 246, 0.8), 2px 2px 4px rgba(0,0,0,0.8)',
                                         }}
                                     >
                                         {currentData.teamAScore}
                                     </div>
-                                    <div className="text-slate-400 text-xl font-bold">-</div>
+                                    <div className="text-slate-400 text-sm font-bold">-</div>
                                     <div
-                                        className="text-white font-bold text-4xl sm:text-6xl"
+                                        className="text-white font-bold text-lg sm:text-2xl"
                                         style={{
                                             fontFamily: 'UTM Bebas, sans-serif',
-                                            textShadow: '0 0 20px rgba(239, 68, 68, 0.8), 3px 3px 6px rgba(0,0,0,0.8)',
+                                            textShadow: '0 0 10px rgba(239, 68, 68, 0.8), 2px 2px 4px rgba(0,0,0,0.8)',
                                         }}
                                     >
                                         {currentData.teamBScore}
@@ -156,12 +156,12 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                                 
                                 {/* Time display */}
                                 {showMatchTime && (
-                                    <div className="mt-3">
+                                    <div className="mt-1">
                                         <div
-                                            className="text-green-400 text-lg font-bold tracking-widest"
+                                            className="text-green-400 text-xs font-bold"
                                             style={{
                                                 fontFamily: 'UTM Bebas, sans-serif',
-                                                textShadow: '0 0 15px rgba(34, 197, 94, 0.8)',
+                                                textShadow: '0 0 8px rgba(34, 197, 94, 0.8)',
                                             }}
                                         >
                                             {currentData.matchTime}
@@ -175,19 +175,19 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                         <div className="col-span-2">
                             {/* Team B name */}
                             <div
-                                className="relative p-4 rounded-lg mb-3"
+                                className="relative p-2 rounded-md mb-2"
                                 style={{
                                     background: 'linear-gradient(145deg, #dc2626, #b91c1c)',
                                     border: '1px solid #ef4444',
-                                    boxShadow: '0 8px 20px rgba(220, 38, 38, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
+                                    boxShadow: '0 4px 10px rgba(220, 38, 38, 0.3), inset 0 1px 0 rgba(255,255,255,0.2)',
                                 }}
                             >
                                 <div
-                                    className="text-white font-bold text-center tracking-wide"
+                                    className="text-white font-bold text-center"
                                     style={{
                                         fontFamily: 'UTM Bebas, sans-serif',
                                         fontSize: getTeamNameFontSize(currentData.teamBName, window.innerWidth <= 640),
-                                        textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
+                                        textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
                                     }}
                                 >
                                     {currentData.teamBName}
@@ -197,10 +197,10 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                             {/* Team B kit colors */}
                             <div className="flex justify-center">
                                 <div
-                                    className="w-12 h-12 rounded-lg flex flex-col overflow-hidden"
+                                    className="w-6 h-6 rounded-md flex flex-col overflow-hidden"
                                     style={{
-                                        border: '2px solid #64748b',
-                                        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                                        border: '1px solid #64748b',
+                                        boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
                                     }}
                                 >
                                     <div className="h-1/2" style={{ backgroundColor: currentData.teamBKitColor }} />
@@ -211,38 +211,37 @@ const ScoreboardType5 = ({ currentData, logoShape, showMatchTime, tournamentLogo
                     </div>
 
                     {/* Bottom status bar */}
-                    <div className="mt-6 text-center">
+                    <div className="mt-2 text-center">
                         <div
-                            className="inline-block px-8 py-2 rounded-full text-white font-bold tracking-widest"
+                            className="inline-block px-3 py-1 rounded-full text-white font-bold text-xs"
                             style={{
                                 background: 'linear-gradient(90deg, #1e293b, #334155, #1e293b)',
                                 border: '1px solid #475569',
                                 fontFamily: 'UTM Bebas, sans-serif',
-                                fontSize: '18px',
-                                textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                                boxShadow: '0 4px 15px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)',
+                                textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+                                boxShadow: '0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)',
                             }}
                         >
-                            PROFESSIONAL SPORTS BROADCAST
+                            SPORTS BROADCAST
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Logo ScoLiv - Professional placement */}
-            <div className="flex justify-center w-full mt-6">
+            {/* Logo ScoLiv - Compact */}
+            <div className="flex justify-center w-full mt-2">
                 <div
-                    className="p-2 rounded-lg"
+                    className="p-1 rounded-md"
                     style={{
                         background: 'rgba(255,255,255,0.1)',
-                        backdropFilter: 'blur(10px)',
+                        backdropFilter: 'blur(5px)',
                         border: '1px solid rgba(255,255,255,0.2)',
                     }}
                 >
                     <img
                         src="/images/basic/ScoLivLogo.png"
                         alt="ScoLiv Logo"
-                        className="w-20 h-auto opacity-90"
+                        className="w-10 h-auto opacity-90"
                     />
                 </div>
             </div>
