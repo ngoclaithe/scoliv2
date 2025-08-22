@@ -26,7 +26,7 @@ const ScoreboardBelowType5 = ({ currentData, logoShape, tournamentLogo }) => {
             {/* Main container */}
             <div className="w-full relative">
                 {/* Tournament logo - Much bigger */}
-                <div className="absolute left-1/2 top-[-12px] sm:top-[-15px] -translate-x-1/2 w-[45px] h-[45px] sm:w-[50px] sm:h-[50px] z-10">
+                <div className="absolute left-1/2 top-[-6px] sm:top-[-8px] -translate-x-1/2 w-[45px] h-[22px] sm:w-[50px] sm:h-[25px] z-10">
                     <div
                         className="w-full h-full flex items-center justify-center overflow-hidden"
                         style={{
