@@ -131,6 +131,31 @@ const ScoreboardBelowNew = ({ type = 1 }) => {
                     </div>
                 </div>
 
+                {/* Commentator Display - Center - Positioned closer to marquee */}
+                {currentData.commentator && (
+                    <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-30
+                        md:bottom-8
+                        sm:bottom-6
+                        max-[480px]:bottom-4
+                        max-[360px]:bottom-3">
+                        <div className="text-white px-3 py-1 rounded-lg border-2 border-black bg-transparent
+                            md:px-4 md:py-2
+                            sm:px-3 sm:py-1
+                            max-[480px]:px-2 max-[480px]:py-1"
+                            style={{
+                                textShadow: '2px 2px 0px #000000, -2px -2px 0px #000000, 2px -2px 0px #000000, -2px 2px 0px #000000'
+                            }}>
+                            <span className="text-sm font-bold
+                                md:text-lg
+                                sm:text-base
+                                max-[480px]:text-xs
+                                max-[360px]:text-[10px]">
+                                BLV: {currentData.commentator}
+                            </span>
+                        </div>
+                    </div>
+                )}
+
                 {/* Scrolling text */}
                 {scrollData.mode !== 'khong' && showScrollingText && (
                     <div className="absolute bottom-0 left-0 w-full z-20 overflow-hidden" style={{ backgroundColor: scrollData.bgColor }}>
