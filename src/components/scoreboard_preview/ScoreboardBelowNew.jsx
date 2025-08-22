@@ -135,11 +135,11 @@ const ScoreboardBelowNew = ({ type = 1 }) => {
 
                 {/* Commentator Display - Center - Positioned closer to marquee */}
                 {currentData.commentator && (
-                    <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-30
-                        md:bottom-8
-                        sm:bottom-6
-                        max-[480px]:bottom-4
-                        max-[360px]:bottom-3">
+                    <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-30
+                        md:bottom-3
+                        sm:bottom-2
+                        max-[480px]:bottom-1
+                        max-[360px]:bottom-1">
                         <div className="text-white px-3 py-1 rounded-lg border-2 border-black bg-transparent
                             md:px-4 md:py-2
                             sm:px-3 sm:py-1
