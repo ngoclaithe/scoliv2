@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { useAuth } from '../contexts/AuthContext';
 import PublicAPI from '../API/apiPublic';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 import { getFullPosterUrl } from '../utils/logoUtils';
 
 // Import các poster templates
