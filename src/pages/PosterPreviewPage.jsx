@@ -91,29 +91,100 @@ const PosterPreviewPage = () => {
     if (!posterRef.current) return;
 
     setDownloading(true);
+    let clone;
     try {
-      // Đợi font và ảnh tải xong để tránh lệch chữ khi chụp
+      // 1) Ensure fonts used by poster are loaded. Collect font families from the poster.
       try {
         if (document.fonts && document.fonts.ready) {
           await document.fonts.ready;
         }
       } catch (_) {}
 
-      const images = Array.from(posterRef.current.querySelectorAll('img'));
-      await Promise.all(
-        images.map((img) => (img.decode ? img.decode().catch(() => {}) : Promise.resolve()))
-      );
+      const collectFontFamilies = () => {
+        const families = new Set();
+        const els = posterRef.current.querySelectorAll('*');
+        els.forEach((el) => {
+          try {
+            const ff = window.getComputedStyle(el).fontFamily;
+            if (ff) {
+              // take first family token
+              const primary = ff.split(',')[0].replace(/['"]/g, '').trim();
+              if (primary) families.add(primary);
+            }
+          } catch (_) {}
+        });
+        return Array.from(families);
+      };
 
-      // Đảm bảo layout đã ổn định trước khi chụp
+      const families = collectFontFamilies();
+      const fontLoadPromises = [];
+      families.forEach((fam) => {
+        // load a normal and bold variant to be safe
+        try {
+          fontLoadPromises.push(document.fonts.load(`16px "${fam}"`));
+          fontLoadPromises.push(document.fonts.load(`800 16px "${fam}"`));
+        } catch (_) {}
+      });
+      if (fontLoadPromises.length) await Promise.allSettled(fontLoadPromises);
+
+      // 2) Create a clone and inline computed styles so html2canvas gets exact values
+      const original = posterRef.current;
+      clone = original.cloneNode(true);
+      const rect = original.getBoundingClientRect();
+
+      // Prepare clone container offscreen
+      clone.style.width = `${Math.round(rect.width)}px`;
+      clone.style.height = `${Math.round(rect.height)}px`;
+      clone.style.boxSizing = 'border-box';
+      clone.style.position = 'absolute';
+      clone.style.left = '-99999px';
+      clone.style.top = '0px';
+      clone.style.margin = '0';
+      clone.style.transform = 'none';
+      clone.classList.add('capture-mode');
+
+      document.body.appendChild(clone);
+
+      // Inline computed styles for each element
+      const computedProps = [
+        'font-family', 'font-size', 'font-weight', 'line-height', 'letter-spacing', 'text-transform', 'white-space', 'word-spacing', 'word-break', 'font-style', 'color', 'text-shadow', 'box-sizing', 'padding', 'margin', 'display', 'width', 'height', 'max-width', 'max-height', 'min-width', 'min-height', 'transform'
+      ];
+
+      const allEls = clone.querySelectorAll('*');
+      allEls.forEach((el) => {
+        try {
+          const cs = window.getComputedStyle(original.querySelector(`[data-clone-marker]`) || el) || window.getComputedStyle(el);
+          // If mapping original->clone by index, fallback to el's computed style (ok for most)
+          const sourceEl = original.querySelectorAll('*')[Array.from(allEls).indexOf(el)] || el;
+          const sourceCs = window.getComputedStyle(sourceEl);
+
+          computedProps.forEach((prop) => {
+            const val = sourceCs.getPropertyValue(prop);
+            if (val) el.style.setProperty(prop, val);
+          });
+
+          // Ensure transforms removed
+          el.style.transform = 'none';
+        } catch (e) {
+          // ignore
+        }
+      });
+
+      // 3) Ensure images in clone are loaded/decoded
+      const imgs = Array.from(clone.querySelectorAll('img'));
+      await Promise.all(imgs.map((img) => (img.decode ? img.decode().catch(() => {}) : Promise.resolve())));
+
+      // Wait a couple of frames to stabilize
       await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
 
-      const canvas = await html2canvas(posterRef.current, {
+      // 4) Capture the clone with html2canvas
+      const canvas = await html2canvas(clone, {
         scale: Math.max(2, window.devicePixelRatio || 1),
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#ffffff',
-        width: posterRef.current.offsetWidth,
-        height: posterRef.current.offsetHeight,
+        width: Math.round(rect.width),
+        height: Math.round(rect.height),
         letterRendering: true,
         logging: false,
         removeContainer: true,
@@ -123,6 +194,7 @@ const PosterPreviewPage = () => {
         windowHeight: document.documentElement.clientHeight,
       });
 
+      // 5) Download
       const link = document.createElement('a');
       link.download = `poster_${matchData?.teamA?.name || 'TeamA'}_vs_${matchData?.teamB?.name || 'TeamB'}_${new Date().getTime()}.png`;
       link.href = canvas.toDataURL('image/png');
@@ -134,6 +206,9 @@ const PosterPreviewPage = () => {
       alert('Có lỗi xảy ra khi tải ảnh poster. Vui lòng thử lại!');
     } finally {
       setDownloading(false);
+      try {
+        if (clone && clone.parentNode) clone.parentNode.removeChild(clone);
+      } catch (_) {}
     }
   };
 
