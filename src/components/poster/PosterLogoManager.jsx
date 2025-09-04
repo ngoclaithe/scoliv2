@@ -428,9 +428,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           const apiLogo = {
             id: response.data.id,
             unitName: response.data.name || item.unitName,
-            code: item.code,
-            type: response.data.type || item.type,
-            url: getFullLogoUrl(response.data.url || response.data.url_logo),
+            code: response.data.code_logo || item.code,
+            type: response.data.type_logo || response.data.type || item.type,
+            url: getFullLogoUrl(response.data.url_logo || response.data.public_url || response.data.url),
             category: item.category,
             displayPositions: item.displayPositions,
             uploadStatus: 'completed',
@@ -441,7 +441,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           setLogoItems(prev => prev.filter(logo => logo.id !== item.id));
           setApiLogos(prev => [apiLogo, ...prev]);
 
-          alert(`Tải lên ${item.type} thành công!`);
+          alert(`Tải lên ${item.type} thành công! Mã: ${apiLogo.code}`);
         }
       } catch (error) {
         console.error("Lỗi khi tải lên:", error);
