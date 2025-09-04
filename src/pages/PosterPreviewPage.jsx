@@ -92,16 +92,37 @@ const PosterPreviewPage = () => {
 
     setDownloading(true);
     try {
+      // Đợi font và ảnh tải xong để tránh lệch chữ khi chụp
+      try {
+        if (document.fonts && document.fonts.ready) {
+          await document.fonts.ready;
+        }
+      } catch (_) {}
+
+      const images = Array.from(posterRef.current.querySelectorAll('img'));
+      await Promise.all(
+        images.map((img) => (img.decode ? img.decode().catch(() => {}) : Promise.resolve()))
+      );
+
+      // Đảm bảo layout đã ổn định trước khi chụp
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
       const canvas = await html2canvas(posterRef.current, {
-        scale: 2, // Độ phân giải cao hơn
+        scale: Math.max(2, window.devicePixelRatio || 1),
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#ffffff',
         width: posterRef.current.offsetWidth,
         height: posterRef.current.offsetHeight,
+        letterRendering: true,
+        logging: false,
+        removeContainer: true,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: document.documentElement.clientWidth,
+        windowHeight: document.documentElement.clientHeight,
       });
 
-      // Tạo link download
       const link = document.createElement('a');
       link.download = `poster_${matchData?.teamA?.name || 'TeamA'}_vs_${matchData?.teamB?.name || 'TeamB'}_${new Date().getTime()}.png`;
       link.href = canvas.toDataURL('image/png');
@@ -209,6 +230,12 @@ const PosterPreviewPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
+      <style>{`
+        .capture-mode *, .capture-mode *::before, .capture-mode *::after {
+          animation: none !important;
+          transition: none !important;
+        }
+      `}</style>
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 py-3">
@@ -254,7 +281,7 @@ const PosterPreviewPage = () => {
 
       {/* Poster Content */}
       <div className="max-w-10xl mx-auto p-4">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden" ref={posterRef}>
+        <div className={`bg-white rounded-lg shadow-lg overflow-hidden ${downloading ? 'capture-mode' : ''}`} ref={posterRef}>
           {renderPosterComponent()}
         </div>
       </div>
