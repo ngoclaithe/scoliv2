@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { useAuth } from '../contexts/AuthContext';
 import PublicAPI from '../API/apiPublic';
-import { toPng } from 'html-to-image';
+import domtoimage from 'dom-to-image';
 import { getFullPosterUrl } from '../utils/logoUtils';
 
 // Import các poster templates
@@ -86,153 +86,106 @@ const PosterPreviewPage = () => {
     };
   }, [accessCode, initializeSocket, handleExpiredAccess]);
 
-  // Hàm tải ảnh poster
+  // Hàm tải ảnh poster với dom-to-image
   const handleDownloadPoster = async () => {
     if (!posterRef.current) return;
 
     setDownloading(true);
-    let clone;
     try {
-      // 1) Ensure fonts used by poster are loaded. Collect font families from the poster.
-      try {
-        if (document.fonts && document.fonts.ready) {
-          await document.fonts.ready;
-        }
-      } catch (_) {}
+      // Đợi tất cả fonts được load
+      if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready;
+      }
 
-      const collectFontFamilies = () => {
-        const families = new Set();
-        const els = posterRef.current.querySelectorAll('*');
-        els.forEach((el) => {
-          try {
-            const ff = window.getComputedStyle(el).fontFamily;
-            if (ff) {
-              // take first family token
-              const primary = ff.split(',')[0].replace(/['"]/g, '').trim();
-              if (primary) families.add(primary);
-            }
-          } catch (_) {}
-        });
-        return Array.from(families);
+      // Đợi tất cả images được load
+      const images = posterRef.current.querySelectorAll('img');
+      await Promise.all(
+        Array.from(images).map(img => {
+          if (img.complete) return Promise.resolve();
+          return new Promise((resolve, reject) => {
+            img.onload = resolve;
+            img.onerror = resolve; // Không reject để tránh break toàn bộ process
+          });
+        })
+      );
+
+      // Thêm delay nhỏ để đảm bảo render hoàn tất
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      const scale = 2; // Tăng quality
+      const node = posterRef.current;
+      
+      // Lấy kích thước thực tế của element
+      const rect = node.getBoundingClientRect();
+      const width = rect.width;
+      const height = rect.height;
+
+      // Cấu hình cho dom-to-image
+      const config = {
+        quality: 1,
+        width: width * scale,
+        height: height * scale,
+        bgcolor: '#ffffff',
+        style: {
+          transform: `scale(${scale})`,
+          transformOrigin: 'top left',
+          width: width + 'px',
+          height: height + 'px'
+        },
+        filter: (node) => {
+          // Loại bỏ các element không cần thiết
+          if (node.tagName === 'SCRIPT') return false;
+          if (node.tagName === 'STYLE' && node.innerHTML.includes('capture-mode')) return false;
+          return true;
+        },
+        imagePlaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
+        cacheBust: true
       };
 
-      const families = collectFontFamilies();
-      const fontLoadPromises = [];
-      families.forEach((fam) => {
-        // load a normal and bold variant to be safe
-        try {
-          fontLoadPromises.push(document.fonts.load(`16px "${fam}"`));
-          fontLoadPromises.push(document.fonts.load(`800 16px "${fam}"`));
-        } catch (_) {}
-      });
-      if (fontLoadPromises.length) await Promise.allSettled(fontLoadPromises);
+      // Sử dụng toPng của dom-to-image
+      const dataUrl = await domtoimage.toPng(node, config);
 
-      // 2) Create a clone and inline computed styles so html2canvas gets exact values
-      const original = posterRef.current;
-      clone = original.cloneNode(true);
-      const rect = original.getBoundingClientRect();
-
-      // Prepare clone container offscreen
-      clone.style.width = `${Math.round(rect.width)}px`;
-      clone.style.height = `${Math.round(rect.height)}px`;
-      clone.style.boxSizing = 'border-box';
-      clone.style.position = 'absolute';
-      clone.style.left = '-99999px';
-      clone.style.top = '0px';
-      clone.style.margin = '0';
-      clone.style.transform = 'none';
-      clone.classList.add('capture-mode');
-
-      document.body.appendChild(clone);
-
-      // Inline computed styles for each element
-      const computedProps = [
-        'font-family', 'font-size', 'font-weight', 'line-height', 'letter-spacing', 'text-transform', 'white-space', 'word-spacing', 'word-break', 'font-style', 'color', 'text-shadow', 'box-sizing', 'padding', 'margin', 'display', 'width', 'height', 'max-width', 'max-height', 'min-width', 'min-height', 'transform'
-      ];
-
-      const allEls = clone.querySelectorAll('*');
-      allEls.forEach((el) => {
-        try {
-          const cs = window.getComputedStyle(original.querySelector(`[data-clone-marker]`) || el) || window.getComputedStyle(el);
-          // If mapping original->clone by index, fallback to el's computed style (ok for most)
-          const sourceEl = original.querySelectorAll('*')[Array.from(allEls).indexOf(el)] || el;
-          const sourceCs = window.getComputedStyle(sourceEl);
-
-          computedProps.forEach((prop) => {
-            const val = sourceCs.getPropertyValue(prop);
-            if (val) el.style.setProperty(prop, val);
-          });
-
-          // Ensure transforms removed
-          el.style.transform = 'none';
-        } catch (e) {
-          // ignore
-        }
-      });
-
-      // 3) Ensure images in clone are loaded/decoded and handle GIFs / CORS
-      const imgs = Array.from(clone.querySelectorAll('img'));
-      await Promise.all(imgs.map(async (img) => {
-        try {
-          // prefer anonymous crossOrigin to allow taint-free drawing
-          try { img.crossOrigin = 'anonymous'; } catch (_) {}
-
-          const src = (img.currentSrc || img.src || '').toString();
-          const isGif = src.toLowerCase().endsWith('.gif') || src.toLowerCase().includes('.gif');
-
-          if (isGif) {
-            // load original gif into temp image and draw first frame to canvas, then replace src with PNG dataURL
-            const temp = new Image();
-            try { temp.crossOrigin = 'anonymous'; } catch (_) {}
-            temp.src = src;
-            await (temp.decode ? temp.decode().catch(() => {}) : Promise.resolve());
-            const c = document.createElement('canvas');
-            c.width = temp.naturalWidth || img.width || img.clientWidth || Math.max(100, img.width || 100);
-            c.height = temp.naturalHeight || img.height || img.clientHeight || Math.max(100, img.height || 100);
-            const ctx = c.getContext('2d');
-            ctx.drawImage(temp, 0, 0, c.width, c.height);
-            try {
-              const dataUrl = c.toDataURL('image/png');
-              img.src = dataUrl;
-            } catch (e) {
-              // if toDataURL fails due to CORS, leave original src
-              console.warn('[poster] gif -> canvas conversion failed (CORS):', e);
-            }
-          } else {
-            if (img.decode) await img.decode().catch(() => {});
-          }
-        } catch (e) {
-          // ignore individual image errors
-        }
-      }));
-
-      // Wait a couple of frames to stabilize
-      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-
-      // 4) Capture the clone using html-to-image (toPng)
-      const dataUrl = await toPng(clone, {
-        cacheBust: true,
-        bgcolor: '#ffffff',
-        width: Math.round(rect.width),
-        height: Math.round(rect.height),
-        pixelRatio: Math.max(2, window.devicePixelRatio || 1)
-      });
-
-      // 5) Download
+      // Tạo và tải file
       const link = document.createElement('a');
       link.download = `poster_${matchData?.teamA?.name || 'TeamA'}_vs_${matchData?.teamB?.name || 'TeamB'}_${new Date().getTime()}.png`;
       link.href = dataUrl;
+      
+      // Thêm vào DOM, click, và remove
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+
+      console.log('✅ Poster đã được tải thành công!');
+      
     } catch (error) {
-      console.error('Lỗi khi tải ảnh poster:', error);
-      alert('Có lỗi xảy ra khi tải ảnh poster. Vui lòng thử lại!');
+      console.error('❌ Lỗi khi tải ảnh poster:', error);
+      
+      // Fallback: thử với config đơn giản hơn
+      try {
+        console.log('🔄 Thử lại với cấu hình đơn giản...');
+        const simpleConfig = {
+          quality: 0.95,
+          bgcolor: '#ffffff',
+          cacheBust: true
+        };
+        
+        const dataUrl = await domtoimage.toPng(posterRef.current, simpleConfig);
+        
+        const link = document.createElement('a');
+        link.download = `poster_${matchData?.teamA?.name || 'TeamA'}_vs_${matchData?.teamB?.name || 'TeamB'}_${new Date().getTime()}.png`;
+        link.href = dataUrl;
+        
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        console.log('✅ Poster đã được tải thành công (fallback)!');
+      } catch (fallbackError) {
+        console.error('❌ Fallback cũng thất bại:', fallbackError);
+        alert('Có lỗi xảy ra khi tải ảnh poster. Vui lòng thử lại sau!');
+      }
     } finally {
       setDownloading(false);
-      try {
-        if (clone && clone.parentNode) clone.parentNode.removeChild(clone);
-      } catch (_) {}
     }
   };
 
@@ -250,6 +203,7 @@ const PosterPreviewPage = () => {
             alt="Custom Poster"
             className="max-w-full max-h-full object-contain"
             style={{ maxHeight: '800px' }}
+            crossOrigin="anonymous"
           />
         </div>
       );
@@ -334,6 +288,13 @@ const PosterPreviewPage = () => {
           animation: none !important;
           transition: none !important;
         }
+        
+        /* Đảm bảo fonts được render đúng khi capture */
+        .poster-container * {
+          text-rendering: geometricPrecision;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+        }
       `}</style>
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
@@ -380,7 +341,10 @@ const PosterPreviewPage = () => {
 
       {/* Poster Content */}
       <div className="max-w-10xl mx-auto p-4">
-        <div className={`bg-white rounded-lg shadow-lg overflow-hidden ${downloading ? 'capture-mode' : ''}`} ref={posterRef}>
+        <div 
+          className={`poster-container bg-white rounded-lg shadow-lg overflow-hidden ${downloading ? 'capture-mode' : ''}`} 
+          ref={posterRef}
+        >
           {renderPosterComponent()}
         </div>
       </div>
