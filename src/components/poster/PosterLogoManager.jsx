@@ -345,7 +345,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             file,
             accessCode,
             `Poster tùy chỉnh ${customPosters.length + 1}`,
-            'Poster được tải lên bởi người dùng'
+            'Poster được tải lên bởi ng��ời dùng'
           );
 
           if (response.success && response.data) {
@@ -437,9 +437,25 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             uploadProgress: 100
           };
 
-          URL.revokeObjectURL(previewUrl);
-          setLogoItems(prev => prev.filter(logo => logo.id !== item.id));
-          setApiLogos(prev => [apiLogo, ...prev]);
+          // Update the existing custom item so the card remains visible and shows returned code/url
+          setLogoItems(prev => prev.map(logo =>
+            logo.id === item.id
+              ? {
+                ...logo,
+                apiId: apiLogo.id,
+                unitName: apiLogo.unitName,
+                code: apiLogo.code,
+                type: apiLogo.type,
+                url: apiLogo.url,
+                uploadStatus: 'completed',
+                uploadProgress: 100,
+                isCustom: false
+              }
+              : logo
+          ));
+
+          // Optionally add to apiLogos if you want the item to appear in the global API list
+          // setApiLogos(prev => [apiLogo, ...prev]);
 
           alert(`Tải lên ${item.type} thành công! Mã: ${apiLogo.code}`);
         }
