@@ -170,9 +170,41 @@ const PosterPreviewPage = () => {
         }
       });
 
-      // 3) Ensure images in clone are loaded/decoded
+      // 3) Ensure images in clone are loaded/decoded and handle GIFs / CORS
       const imgs = Array.from(clone.querySelectorAll('img'));
-      await Promise.all(imgs.map((img) => (img.decode ? img.decode().catch(() => {}) : Promise.resolve())));
+      await Promise.all(imgs.map(async (img) => {
+        try {
+          // prefer anonymous crossOrigin to allow taint-free drawing
+          try { img.crossOrigin = 'anonymous'; } catch (_) {}
+
+          const src = (img.currentSrc || img.src || '').toString();
+          const isGif = src.toLowerCase().endsWith('.gif') || src.toLowerCase().includes('.gif');
+
+          if (isGif) {
+            // load original gif into temp image and draw first frame to canvas, then replace src with PNG dataURL
+            const temp = new Image();
+            try { temp.crossOrigin = 'anonymous'; } catch (_) {}
+            temp.src = src;
+            await (temp.decode ? temp.decode().catch(() => {}) : Promise.resolve());
+            const c = document.createElement('canvas');
+            c.width = temp.naturalWidth || img.width || img.clientWidth || Math.max(100, img.width || 100);
+            c.height = temp.naturalHeight || img.height || img.clientHeight || Math.max(100, img.height || 100);
+            const ctx = c.getContext('2d');
+            ctx.drawImage(temp, 0, 0, c.width, c.height);
+            try {
+              const dataUrl = c.toDataURL('image/png');
+              img.src = dataUrl;
+            } catch (e) {
+              // if toDataURL fails due to CORS, leave original src
+              console.warn('[poster] gif -> canvas conversion failed (CORS):', e);
+            }
+          } else {
+            if (img.decode) await img.decode().catch(() => {});
+          }
+        } catch (e) {
+          // ignore individual image errors
+        }
+      }));
 
       // Wait a couple of frames to stabilize
       await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
@@ -195,7 +227,7 @@ const PosterPreviewPage = () => {
       document.body.removeChild(link);
     } catch (error) {
       console.error('Lỗi khi tải ảnh poster:', error);
-      alert('Có lỗi x��y ra khi tải ảnh poster. Vui lòng thử lại!');
+      alert('Có lỗi xảy ra khi tải ảnh poster. Vui lòng thử lại!');
     } finally {
       setDownloading(false);
       try {
