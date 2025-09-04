@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { usePublicMatch } from '../contexts/PublicMatchContext';
 import { useAuth } from '../contexts/AuthContext';
 import PublicAPI from '../API/apiPublic';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 import { getFullPosterUrl } from '../utils/logoUtils';
 
 // Import các poster templates
@@ -177,33 +177,25 @@ const PosterPreviewPage = () => {
       // Wait a couple of frames to stabilize
       await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
 
-      // 4) Capture the clone with html2canvas
-      const canvas = await html2canvas(clone, {
-        scale: Math.max(2, window.devicePixelRatio || 1),
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#ffffff',
+      // 4) Capture the clone using html-to-image (toPng)
+      const dataUrl = await toPng(clone, {
+        cacheBust: true,
+        bgcolor: '#ffffff',
         width: Math.round(rect.width),
         height: Math.round(rect.height),
-        letterRendering: true,
-        logging: false,
-        removeContainer: true,
-        scrollX: 0,
-        scrollY: 0,
-        windowWidth: document.documentElement.clientWidth,
-        windowHeight: document.documentElement.clientHeight,
+        pixelRatio: Math.max(2, window.devicePixelRatio || 1)
       });
 
       // 5) Download
       const link = document.createElement('a');
       link.download = `poster_${matchData?.teamA?.name || 'TeamA'}_vs_${matchData?.teamB?.name || 'TeamB'}_${new Date().getTime()}.png`;
-      link.href = canvas.toDataURL('image/png');
+      link.href = dataUrl;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     } catch (error) {
       console.error('Lỗi khi tải ảnh poster:', error);
-      alert('Có lỗi xảy ra khi tải ảnh poster. Vui lòng thử lại!');
+      alert('Có lỗi x��y ra khi tải ảnh poster. Vui lòng thử lại!');
     } finally {
       setDownloading(false);
       try {
