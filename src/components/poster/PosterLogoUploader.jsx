@@ -108,7 +108,6 @@ const PosterLogoUploader = ({
             resolve(responseData);
           } catch (e) {
             console.log('PosterLogoUploader - backend response (non-JSON):', xhr.responseText);
-            createPreviewAfterUpload(file);
             onSuccess?.({ data: xhr.responseText });
             resolve({ data: xhr.responseText });
           }
