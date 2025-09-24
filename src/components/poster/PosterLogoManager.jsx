@@ -723,24 +723,63 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
         {/* File upload cho custom logo */}
         {item.isCustom && (
           <div className="mt-2">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleFileUpload(e, item)}
-              className="hidden"
-              id={`file-${item.id}`}
+            <PosterLogoUploader
+              item={item}
+              onPreview={(previewUrl) => {
+                setLogoItems(prev => prev.map(logo =>
+                  logo.id === item.id
+                    ? { ...logo, url: previewUrl, file: logo.file || null, uploadStatus: 'uploading', uploadProgress: 0 }
+                    : logo
+                ));
+              }}
+              onProgress={({ percent, loaded, total }) => {
+                setLogoItems(prev => prev.map(logo =>
+                  logo.id === item.id
+                    ? { ...logo, uploadProgress: percent ?? logo.uploadProgress }
+                    : logo
+                ));
+              }}
+              onSuccess={(responseData) => {
+                const response = responseData?.data || responseData;
+                const apiLogo = {
+                  id: response.id,
+                  unitName: response.name || item.unitName,
+                  code: response.code_logo || item.code,
+                  type: response.type_logo || response.type || item.type,
+                  url: getFullLogoUrl(response.url_logo || response.public_url || response.url),
+                  category: item.category,
+                  displayPositions: item.displayPositions,
+                  uploadStatus: 'completed',
+                  uploadProgress: 100
+                };
+
+                setLogoItems(prev => prev.map(logo =>
+                  logo.id === item.id
+                    ? {
+                      ...logo,
+                      apiId: apiLogo.id,
+                      unitName: apiLogo.unitName,
+                      code: apiLogo.code,
+                      type: apiLogo.type,
+                      url: apiLogo.url,
+                      uploadStatus: 'completed',
+                      uploadProgress: 100,
+                      isCustom: false
+                    }
+                    : logo
+                ));
+
+                alert(`Tải lên ${item.type} thành công! Mã: ${apiLogo.code}`);
+              }}
+              onError={(error) => {
+                setLogoItems(prev => prev.map(logo =>
+                  logo.id === item.id
+                    ? { ...logo, uploadStatus: 'error' }
+                    : logo
+                ));
+                alert(`Lỗi khi tải lên: ${error?.message || 'Đã xảy ra lỗi'}`);
+              }}
             />
-            <label
-              htmlFor={`file-${item.id}`}
-              className={`block w-full text-xs text-center border rounded px-1 py-1 cursor-pointer transition-colors ${item.uploadStatus === 'preview' ? 'bg-yellow-50 border-yellow-300 text-yellow-700' :
-                item.uploadStatus === 'error' ? 'bg-red-50 border-red-300 text-red-700' :
-                  'bg-blue-50 border-blue-300 hover:bg-blue-100'
-                }`}
-            >
-              {item.uploadStatus === 'preview' ? '⏳ Đang tải...' :
-                item.uploadStatus === 'error' ? 'Thử lại' :
-                  '📁 Chọn file'}
-            </label>
           </div>
         )}
       </div>
@@ -1065,7 +1104,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       <div className="space-y-2">
         <div className="flex items-center gap-1">
           <span className="text-xs">🏆</span>
-          <h3 className="text-xs font-semibold text-gray-900">Vòng đấu & Bảng đấu & Tiêu đề phụ</h3>
+          <h3 className="text-xs font-semibold text-gray-900">Vòng đấu & Bảng đấu & Tiêu đ�� phụ</h3>
         </div>
 
         {/* Vòng đấu */}
@@ -1343,7 +1382,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             }}
             className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-sm rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
           >
-            <span>📥</span>
+            <span>����</span>
             <span>Preview</span>
           </button>
         </div>
