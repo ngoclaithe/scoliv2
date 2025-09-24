@@ -50,9 +50,6 @@ const PosterLogoUploader = ({
         }
       }
 
-      // *** QUAN TRỌNG: Tạo preview sau khi upload thành công, không phải trước ***
-      // Đây là điểm khác biệt chính so với VideoUpload
-
       // Upload trực tiếp như VideoUpload pattern
       await uploadFile(processedFile);
 
@@ -103,19 +100,16 @@ const PosterLogoUploader = ({
         if (xhr.status >= 200 && xhr.status < 300) {
           try {
             const responseData = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-            
-            // *** TẠO PREVIEW SAU KHI UPLOAD THÀNH CÔNG ***
-            createPreviewAfterUpload(file);
-            
+            console.log('PosterLogoUploader - backend response parsed:', responseData);
             onSuccess?.(responseData);
             resolve(responseData);
           } catch (e) {
-            // Non-JSON response
-            createPreviewAfterUpload(file);
+            console.log('PosterLogoUploader - backend response (non-JSON):', xhr.responseText);
             onSuccess?.({ data: xhr.responseText });
             resolve({ data: xhr.responseText });
           }
         } else {
+          console.error('PosterLogoUploader - upload failed status:', xhr.status, 'response:', xhr.responseText);
           const err = new Error(`Upload failed with status ${xhr.status}`);
           err.status = xhr.status;
           err.responseText = xhr.responseText;
@@ -135,22 +129,6 @@ const PosterLogoUploader = ({
       // Send request
       xhr.send(formData);
     });
-  };
-
-  // Helper function để tạo preview sau upload
-  const createPreviewAfterUpload = (file) => {
-    try {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        onPreview?.(ev.target.result);
-      };
-      reader.onerror = () => {
-        console.warn('Could not create preview after upload');
-      };
-      reader.readAsDataURL(file);
-    } catch (err) {
-      console.warn('Preview creation failed:', err);
-    }
   };
 
   const labelClass = `block w-full text-xs text-center border rounded px-1 py-1 cursor-pointer transition-colors ${
