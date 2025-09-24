@@ -649,10 +649,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                     }
                     : logo
                 ));
-
-                // Không emit lên backend ngay sau khi upload; chờ người dùng chọn vị trí hiển thị.
-                // Việc emit sẽ xảy ra khi người dùng toggle vị trí (handlePositionToggle).
-
                 alert(`Tải lên ${item.type} thành công! Mã: ${apiLogo.code}`);
               }}
               onError={(error) => {
@@ -1073,7 +1069,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           <div className="flex items-center gap-1">
             <span className="text-xs">🏷️</span>
             <h3 className="text-xs font-semibold text-gray-900">Logo & Banner</h3>
-            <span className="text-xs text-gray-500">({Object.values(selectedLogosCount).reduce((a, b) => a + b, 0)} đ�� chọn)</span>
+            <span className="text-xs text-gray-500">({Object.values(selectedLogosCount).reduce((a, b) => a + b, 0)} đã chọn)</span>
           </div>
         </div>
 
