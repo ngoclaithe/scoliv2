@@ -650,6 +650,18 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                     : logo
                 ));
 
+                const nextAll = [...apiLogos, ...logoItems].map(l => l.id === item.id ? apiLogo : l);
+                const activeItems = nextAll.filter(l => l.category === activeLogoCategory && l.displayPositions && l.displayPositions.length > 0);
+
+                if (onLogoUpdate) {
+                  onLogoUpdate({
+                    logoItems: activeItems,
+                    displayOptions: logoDisplayOptions,
+                    changedItem: apiLogo,
+                    behavior: 'add'
+                  });
+                }
+
                 alert(`Tải lên ${item.type} thành công! Mã: ${apiLogo.code}`);
               }}
               onError={(error) => {
