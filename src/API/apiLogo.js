@@ -29,21 +29,20 @@ const LogoAPI = {
    * @param {string} type - Type of logo ('banner', 'logo','other')
    * @returns {Promise<Object>} The uploaded logo data
    */
-  uploadLogo: async (file, type, name, onUploadProgress) => {
+  uploadLogo: async (file, type, name) => {
     const formData = new FormData();
     formData.append('file', file);
-    if (type) formData.append('type', type);
-    if (name) formData.append('name', name);
+    formData.append('type', type);
+    formData.append('name', name);
 
     try {
-      const config = {};
-      if (onUploadProgress) config.onUploadProgress = onUploadProgress;
-      // IMPORTANT: do NOT set Content-Type for FormData — let the browser set the boundary automatically
-      const response = await api.post('/logos', formData, config);
+      const response = await api.post('/logos', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return response.data;
     } catch (error) {
-      console.error('❌ [LogoAPI] uploadLogo error:', error);
-      if (error.request) console.error('❌ [LogoAPI] No response from server. request:', error.request);
       throw LogoAPI.handleError(error);
     }
   },
@@ -102,20 +101,19 @@ const LogoAPI = {
    * @param {string} [data.type] - New logo type (optional)
    * @returns {Promise<Object>} The updated logo data
    */
-  updateLogo: async (id, { file, type }, onUploadProgress) => {
+  updateLogo: async (id, { file, type }) => {
     const formData = new FormData();
     if (file) formData.append('file', file);
     if (type) formData.append('type', type);
 
     try {
-      const config = {};
-      if (onUploadProgress) config.onUploadProgress = onUploadProgress;
-      // Let browser set Content-Type for FormData
-      const response = await api.put(`/logos/${id}`, formData, config);
+      const response = await api.put(`/logos/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return response.data;
     } catch (error) {
-      console.error('❌ [LogoAPI] updateLogo error:', error);
-      if (error.request) console.error('❌ [LogoAPI] No response from server. request:', error.request);
       throw LogoAPI.handleError(error);
     }
   },
