@@ -29,22 +29,92 @@ const LogoAPI = {
    * @param {string} type - Type of logo ('banner', 'logo','other')
    * @returns {Promise<Object>} The uploaded logo data
    */
-  uploadLogo: async (file, type, name) => {
+  uploadLogo: async (file, type, name, onProgress) => {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('type', type);
-    formData.append('name', name);
+    if (type) formData.append('type', type);
+    if (name) formData.append('name', name);
 
+    // FE debug logs to help diagnose iOS-only failures
     try {
-      const response = await api.post('/logos', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      console.log('[LogoAPI] uploadLogo START', {
+        file: file && { name: file.name, size: file.size, type: file.type },
+        type,
+        name,
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
+        platform: typeof navigator !== 'undefined' ? navigator.platform : 'unknown'
       });
-      return response.data;
-    } catch (error) {
-      throw LogoAPI.handleError(error);
+    } catch (e) {
+      // ignore logging errors
     }
+
+    // Use XMLHttpRequest for uploads (better control of upload.onprogress and known fixes on iOS WebKit)
+    return new Promise((resolve, reject) => {
+      try {
+        const xhr = new XMLHttpRequest();
+        const url = `${API_BASE_URL.replace(/\/$/, '')}/logos`;
+        xhr.open('POST', url);
+        xhr.timeout = 60000; // 60s
+
+        // Set auth header if available
+        try {
+          const token = localStorage.getItem('token');
+          if (token) {
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+          }
+        } catch (e) { /* ignore */ }
+
+        xhr.upload.onprogress = (evt) => {
+          try {
+            if (evt.lengthComputable) {
+              const percent = Math.round((evt.loaded / evt.total) * 100);
+              console.log('[LogoAPI] xhr upload progress', { percent, loaded: evt.loaded, total: evt.total });
+              if (typeof onProgress === 'function') onProgress({ loaded: evt.loaded, total: evt.total, percent });
+            } else {
+              console.log('[LogoAPI] xhr upload progress unknown total', { loaded: evt.loaded });
+              if (typeof onProgress === 'function') onProgress({ loaded: evt.loaded, total: null, percent: null });
+            }
+          } catch (e) { }
+        };
+
+        xhr.onload = () => {
+          const status = xhr.status;
+          const responseText = xhr.responseText;
+          console.log('[LogoAPI] xhr onload', { status, responseText });
+          if (status >= 200 && status < 300) {
+            try {
+              const data = responseText ? JSON.parse(responseText) : null;
+              resolve(data);
+            } catch (e) {
+              // non-json response
+              resolve({ data: responseText });
+            }
+          } else {
+            const err = new Error(`Upload failed with status ${status}`);
+            err.status = status;
+            err.responseText = responseText;
+            console.error('[LogoAPI] xhr upload failed', { status, responseText });
+            reject(err);
+          }
+        };
+
+        xhr.onerror = () => {
+          console.error('[LogoAPI] xhr onerror', { readyState: xhr.readyState });
+          reject(new Error('Network error during logo upload'));
+        };
+
+        xhr.ontimeout = () => {
+          console.error('[LogoAPI] xhr ontimeout');
+          reject(new Error('Upload timed out'));
+        };
+
+        // Do NOT set Content-Type header here. Browser will set multipart/form-data with boundary.
+        xhr.send(formData);
+      } catch (error) {
+        console.error('[LogoAPI] uploadLogo XHR wrapper error', { message: error?.message });
+        reject(error);
+      }
+    });
   },
 
   /**
@@ -107,11 +177,7 @@ const LogoAPI = {
     if (type) formData.append('type', type);
 
     try {
-      const response = await api.put(`/logos/${id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await api.put(`/logos/${id}`, formData);
       return response.data;
     } catch (error) {
       throw LogoAPI.handleError(error);
