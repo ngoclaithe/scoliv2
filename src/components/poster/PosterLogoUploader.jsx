@@ -104,7 +104,6 @@ const PosterLogoUploader = ({
           try {
             const responseData = xhr.responseText ? JSON.parse(xhr.responseText) : null;
             console.log('PosterLogoUploader - backend response parsed:', responseData);
-            createPreviewAfterUpload(file);
             onSuccess?.(responseData);
             resolve(responseData);
           } catch (e) {
