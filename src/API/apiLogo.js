@@ -29,20 +29,57 @@ const LogoAPI = {
    * @param {string} type - Type of logo ('banner', 'logo','other')
    * @returns {Promise<Object>} The uploaded logo data
    */
-  uploadLogo: async (file, type, name) => {
+  uploadLogo: async (file, type, name, onProgress) => {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('type', type);
-    formData.append('name', name);
+    if (type) formData.append('type', type);
+    if (name) formData.append('name', name);
+
+    // FE debug logs to help diagnose iOS-only failures
+    try {
+      console.log('[LogoAPI] uploadLogo START', {
+        file: file && { name: file.name, size: file.size, type: file.type },
+        type,
+        name,
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'unknown',
+        platform: typeof navigator !== 'undefined' ? navigator.platform : 'unknown'
+      });
+    } catch (e) {
+      // ignore logging errors
+    }
 
     try {
-      const response = await api.post('/logos', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+      const config = {
+        // do NOT set Content-Type header manually so browser can add the boundary (fixes some Safari issues)
+        onUploadProgress: (progressEvent) => {
+          try {
+            const percent = progressEvent.total ? Math.round((progressEvent.loaded * 100) / progressEvent.total) : null;
+            console.log('[LogoAPI] upload progress', { percent, loaded: progressEvent.loaded, total: progressEvent.total });
+          } catch (e) { }
+          if (typeof onProgress === 'function') onProgress(progressEvent);
         },
-      });
+        timeout: 60000,
+      };
+
+      const response = await api.post('/logos', formData, config);
+
+      console.log('[LogoAPI] uploadLogo SUCCESS', { data: response?.data, status: response?.status });
       return response.data;
     } catch (error) {
+      // Detailed front-end logging for debugging iOS Safari where backend never receives request
+      try {
+        console.error('[LogoAPI] uploadLogo ERROR', {
+          message: error?.message,
+          isAxiosError: error?.isAxiosError || false,
+          code: error?.code || null,
+          response: error?.response ? { status: error.response.status, headers: error.response.headers, data: error.response.data } : null,
+          request: error?.request || null,
+          navigator: typeof navigator !== 'undefined' ? { userAgent: navigator.userAgent, platform: navigator.platform } : null
+        });
+      } catch (e) {
+        console.error('[LogoAPI] uploadLogo ERROR - failed to stringify error');
+      }
+
       throw LogoAPI.handleError(error);
     }
   },
