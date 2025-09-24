@@ -8,12 +8,7 @@ import socketService from "../../services/socketService";
 import {availablePosters, logoTypes} from '../../utils/poster';
 import { isHeicFile, convertHeicToJpegOrPng } from "../../utils/imageUtils";
 const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialData, accessCode }) => {
-  // console.log('��️ [PosterLogoManager] Component initialized with props:', {
-  //   onPosterUpdate: !!onPosterUpdate,
-  //   onLogoUpdate: !!onLogoUpdate,
-  //   initialData,
-  //   accessCode
-  // });
+
   const [selectedPoster, setSelectedPoster] = useState(null);
   const [logoItems, setLogoItems] = useState([]);
   const [apiLogos, setApiLogos] = useState([]);
@@ -54,16 +49,11 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
   const loadHistoryMatches = async () => {
     try {
-      // console.log('🔍 [PosterLogoManager] Loading history matches from API...');
       const response = await RoomSessionAPI.getHistoryMatches();
-      // console.log('📋 [PosterLogoManager] History matches response:', response);
-      // console.log('📋 [PosterLogoManager] History matches response structure:', JSON.stringify(response, null, 2));
 
       if (response?.success && response?.data && Array.isArray(response.data)) {
-        // console.log('📋 [PosterLogoManager] Processing', response.data.length, 'history matches');
         const transformedMatches = response.data.map(match => {
           const displaySettings = match.accessCodeInfo?.displaySettings || [];
-          // console.log('📋 [PosterLogoManager] Match:', match.accessCode, 'has', displaySettings.length, 'display settings');
           return {
             id: match.id,
             accessCode: match.accessCode,
@@ -73,7 +63,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           };
         });
         setHistoryMatches(transformedMatches);
-        // console.log(`✅ [PosterLogoManager] Loaded ${transformedMatches.length} history matches`);
       } else {
         console.warn('⚠️ [PosterLogoManager] Invalid history matches response format:', response);
         setHistoryMatches([]);
@@ -94,7 +83,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     const loadLogos = async () => {
       try {
-        // console.log('🗨️ [PosterLogoManager] useEffect loadLogos triggered with accessCode:', accessCode);
         setLoading(true);
 
         await loadHistoryMatches();
@@ -130,8 +118,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           try {
             console.log('🔍 [PosterLogoManager] Loading display settings from API for:', accessCode);
             const response = await DisplaySettingsAPI.getDisplaySettings(accessCode);
-            // console.log('[PosterLogoManager] Full API response:', response);
-            // console.log('📋 [PosterLogoManager] Response data structure:', JSON.stringify(response?.data, null, 2));
 
             if (response?.success && response?.data && isMounted) {
 
@@ -139,9 +125,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
               // Process sponsors
               if (response.data.sponsors && Array.isArray(response.data.sponsors)) {
-                // console.log('📋 [PosterLogoManager] Processing sponsors:', response.data.sponsors.length, 'items');
                 response.data.sponsors.forEach((item, index) => {
-                  // console.log(`📋 [PosterLogoManager] Sponsor ${index + 1}:`, item);
                   let positions = [];
                   if (item.position) {
                     try {
@@ -162,18 +146,14 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                     url: getFullLogoUrl(item.url_logo),
                     displayPositions: positions
                   };
-                  // console.log('📋 [PosterLogoManager] Created sponsor logo item:', logoItem);
                   loadedLogos.push(logoItem);
                 });
               } else {
                 console.log('📋 [PosterLogoManager] No sponsors found or sponsors is not an array');
               }
 
-              // Process organizing (nếu có trong response)
               if (response.data.organizing && Array.isArray(response.data.organizing)) {
-                // console.log('📋 [PosterLogoManager] Processing organizing:', response.data.organizing.length, 'items');
                 response.data.organizing.forEach((item, index) => {
-                  // console.log(`📋 [PosterLogoManager] Organizing ${index + 1}:`, item);
                   let positions = [];
                   if (item.position) {
                     try {
@@ -196,11 +176,8 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                   };
                   loadedLogos.push(logoItem);
                 });
-              } else {
-                // console.log('��� [PosterLogoManager] No organizing found or organizing is not an array');
-              }
+              } 
 
-              // Process media (nếu có trong response)
               if (response.data.media_partners && Array.isArray(response.data.media_partners)) {
                 response.data.media_partners.forEach((item) => {
                   let positions = [];
@@ -226,7 +203,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                 });
               }
 
-              // Process tournament (nếu có trong response)
               if (response.data.tournament_logo && Array.isArray(response.data.tournament_logo)) {
                 response.data.tournament_logo.forEach((item) => {
                   let positions = [];
@@ -253,9 +229,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               }
 
               if (isMounted) {
-              //   console.log(`✅ [PosterLogoManager] Final loaded logos array:`, loadedLogos);
-              //   console.log(`✅ [PosterLogoManager] Setting ${loadedLogos.length} display settings from API`);
-                setApiLogos(loadedLogos);
+               setApiLogos(loadedLogos);
               }
             }
           } catch (err) {
@@ -308,7 +282,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     let file = event.target.files[0];
     if (!file) return;
 
-    // Convert HEIC/HEIF from iPhone to JPEG before validations
     if (isHeicFile(file)) {
       try {
         file = await convertHeicToJpegOrPng(file, 'image/jpeg', 0.92);
@@ -318,7 +291,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       }
     }
 
-    // Kiểm tra giới hạn tối đa 1 poster
     const uploadedPostersCount = [...savedPosters, ...customPosters].length;
     if (uploadedPostersCount >= 1) {
       alert("Chỉ được phép upload tối đa 1 poster!");
@@ -337,7 +309,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     }
 
     try {
-      // Tạo preview trước khi upload
       const reader = new FileReader();
       reader.onload = async (e) => {
         const previewPoster = {
@@ -351,16 +322,14 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
         setCustomPosters(prev => [...prev, previewPoster]);
 
         try {
-          // Upload poster lên server
           const response = await PosterAPI.uploadPoster(
             file,
             accessCode,
             `Poster tùy chỉnh ${customPosters.length + 1}`,
-            'Poster được tải lên bởi ng��ời dùng'
+            'Poster được tải lên bởi người dùng'
           );
 
           if (response.success && response.data) {
-            // Tạo poster từ response của server
             const uploadedPoster = {
               id: `custom-${response.data.id}`,
               name: response.data.name,
@@ -369,16 +338,12 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               uploading: false
             };
 
-            // Remove preview poster and add to savedPosters only
             setCustomPosters(prev => prev.filter(poster => poster.id !== previewPoster.id));
             setSavedPosters(prev => [...prev, uploadedPoster]);
             handlePosterSelect(uploadedPoster);
 
-            // console.log('✅ [PosterLogoManager] Poster uploaded successfully:', response.data);
           }
         } catch (error) {
-          // console.error('❌ [PosterLogoManager] Failed to upload poster:', error);
-
           setCustomPosters(prev => prev.filter(poster => poster.id !== previewPoster.id));
 
           alert(`Lỗi khi tải lên poster: ${error.message || 'Đã xảy ra lỗi'}`);
@@ -386,7 +351,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       };
       reader.readAsDataURL(file);
     } catch (error) {
-      // console.error('❌ [PosterLogoManager] Error processing poster upload:', error);
       alert(`Lỗi khi xử lý file: ${error.message || 'Đã xảy ra lỗi'}`);
     }
   };
@@ -395,7 +359,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     let file = event.target.files[0];
     if (!file) return;
 
-    // Convert HEIC/HEIF from iPhone to JPEG before validations
     if (isHeicFile(file)) {
       try {
         file = await convertHeicToJpegOrPng(file, 'image/jpeg', 0.92);
@@ -458,7 +421,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             uploadProgress: 100
           };
 
-          // Update the existing custom item so the card remains visible and shows returned code/url
           setLogoItems(prev => prev.map(logo =>
             logo.id === item.id
               ? {
@@ -475,7 +437,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               : logo
           ));
 
-          // Optionally add to apiLogos if you want the item to appear in the global API list
           // setApiLogos(prev => [apiLogo, ...prev]);
 
           alert(`Tải lên ${item.type} thành công! Mã: ${apiLogo.code}`);
@@ -574,7 +535,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     const handleSearch = async () => {
       if (localCode.trim().length >= 3) {
-        // Check duplicate CHỈ trong cùng category (sponsor không trùng với sponsor khác)
         const allCurrentItems = [...apiLogos, ...logoItems];
         const duplicateCode = allCurrentItems.find(logoItem =>
           logoItem.id !== item.id &&
@@ -700,11 +660,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           </div>
 
           {/* Logo code display */}
-          {/* <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded p-1 mb-1">
-            <div className="text-xs text-green-700 bg-white rounded px-1 py-0.5 font-bold truncate">
-              {item.code}
-            </div>
-          </div> */}
         </div>
 
         <div className="mt-2">
@@ -804,36 +759,28 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       prevProps.onRemove !== nextProps.onRemove
     );
 
-    // Return true to prevent re-render, false to allow re-render
     return !itemChanged && !callbacksChanged;
   });
 
   const handlePosterSelect = useCallback((poster) => {
     setSelectedPoster(poster);
-    // Save to backend - chỉ emit trực tiếp, không gọi onPosterUpdate để tránh double emit
     if (accessCode) {
       if (poster.isCustom) {
-        // Gửi custom poster với posterType: 'custom'
         socketService.emit('poster_update', {
           posterType: 'custom',
           posterData: poster,
           customPosterUrl: poster.thumbnail
         });
       } else {
-        // Gửi poster template thông thường
         socketService.emit('poster_update', {
           posterType: poster.id,
           posterData: poster
         });
       }
 
-      // Chuyển sang view poster
       socketService.emit('view_update', { viewType: 'poster' });
     }
-    // Loại bỏ onPosterUpdate để tránh double emit
-    // if (onPosterUpdate) {
-    //   onPosterUpdate(poster);
-    // }
+
   }, [accessCode]);
 
   const handleItemUpdate = useCallback(async (itemId, updatedItem) => {
@@ -869,25 +816,18 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
         return;
       }
 
-      // console.log('📋 [PosterLogoManager] Selected match data:', selectedMatch);
-
-      // Clear current logos
       setApiLogos([]);
       setLogoItems([]);
 
-      // Load logos from selected match's display settings
       const loadedLogos = [];
 
       selectedMatch.displaySettings.forEach((setting) => {
-        let category = 'sponsor'; // default
-
-        // Determine category based on setting type
+        let category = 'sponsor'; 
         if (setting.type === 'sponsors') category = 'sponsor';
         else if (setting.type === 'organizing') category = 'organizing';
         else if (setting.type === 'media_partners') category = 'media';
         else if (setting.type === 'tournament_logo') category = 'tournament';
 
-        // Parse position
         let positions = [];
         if (setting.position) {
           try {
@@ -910,7 +850,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       });
 
       setApiLogos(loadedLogos);
-      // console.log(`✅ [PosterLogoManager] Loaded ${loadedLogos.length} logos from history match`);
 
     } catch (error) {
       console.error('❌ [PosterLogoManager] Error loading history match:', error);
@@ -922,18 +861,15 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     const isFromAPI = apiLogos.find(logo => logo.id === itemId);
     const item = logoItems.find(logo => logo.id === itemId);
 
-    // Clean up blob URLs
     if (item && item.url && item.url.startsWith('blob:')) {
       URL.revokeObjectURL(item.url);
     }
 
     if (isFromAPI) {
-      // Clear display positions for API logos (don't remove from list)
       setApiLogos(prev => prev.map(logo =>
         logo.id === itemId ? { ...logo, displayPositions: [] } : logo
       ));
     } else {
-      // Remove custom logos completely
       setLogoItems(prev => prev.filter(logo => logo.id !== itemId));
     }
 
@@ -946,7 +882,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       logoItem.displayPositions && logoItem.displayPositions.length > 0
     );
 
-    // Find the removed item to pass as changedItem
     const removedItem = (isFromAPI ? apiLogos : logoItems).find(logo => logo.id === itemId);
 
     if (onLogoUpdate && removedItem) {
@@ -960,7 +895,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   }, [apiLogos, logoItems, activeLogoCategory, logoDisplayOptions, onLogoUpdate]);
 
   const handleAddNewLogo = async () => {
-    // Kiểm tra giới hạn cho tournament
     if (activeLogoCategory === 'tournament' && tournamentItemsCount >= 1) {
       alert('Chỉ được phép có 1 logo hoặc banner duy nhất cho tournament!');
       return;
@@ -981,7 +915,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   };
 
   const handleAddNewBanner = async () => {
-    // Kiểm tra giới hạn cho tournament
     if (activeLogoCategory === 'tournament' && tournamentItemsCount >= 1) {
       alert('Chỉ được phép có 1 logo hoặc banner duy nhất cho tournament!');
       return;
@@ -1248,9 +1181,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
           ))}
         </div>
 
-        {/* Logo items và Add buttons cùng một hàng */}
         <div className="flex gap-2 overflow-x-auto pb-2">
-          {/* Hiển thị các logo items hiện có */}
           {currentItems.map((item) => (
             <LogoItem
               key={item.id}
@@ -1260,9 +1191,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             />
           ))}
 
-          {/* Add buttons container wrapper */}
           <div className="flex-shrink-0">
-            {/* Add buttons container */}
             <div className="flex flex-col gap-2">
               <div
                 onClick={handleAddNewLogo}
@@ -1324,7 +1253,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                       const newShape = e.target.value;
                       setLogoDisplayOptions(prev => ({ ...prev, shape: newShape }));
 
-                      // Emit shape change to socket for real-time updates
                       socketService.emit('logoShape_update', { logoShape: newShape });
 
                       if (onLogoUpdate) {
@@ -1343,7 +1271,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
                   <span className="text-xs">{shape.icon}</span>
                   <span className="text-xs">{shape.label}</span>
-                  {/* {isDisabled && <span className="text-xs text-red-500">(Bị khóa)</span>} */}
                 </label>
               );
             })}
@@ -1356,7 +1283,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               onChange={(e) => {
                 const isRotate = e.target.checked;
                 setLogoDisplayOptions(prev => ({ ...prev, rotateDisplay: isRotate }));
-                // Immediate update
                 if (onLogoUpdate) {
                   const activeItems = allLogoItems.filter(item =>
                     item.category === activeLogoCategory &&
@@ -1377,7 +1303,6 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
     );
   };
 
-  // Kiểm tra xem có chọn custom poster không (poster đã upload)
   const isCustomPosterSelected = selectedPoster && selectedPoster.isCustom;
 
   return (
@@ -1402,11 +1327,9 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
         {renderPosterSection()}
       </div>
 
-      {/* Logo & Banner section - disabled khi chọn custom poster */}
       <div className={`bg-white border border-gray-200 rounded-lg p-2 ${isCustomPosterSelected ? 'opacity-50 pointer-events-none' : ''}`}>
         {renderLogoSection()}
       </div>
-      {/* Round & Group section - disabled khi chọn custom poster */}
       <div className={`bg-white border border-gray-200 rounded-lg p-2 ${isCustomPosterSelected ? 'opacity-50 pointer-events-none' : ''}`}>
         {renderRoundGroupSection()}
       </div>
