@@ -48,40 +48,73 @@ const LogoAPI = {
       // ignore logging errors
     }
 
-    try {
-      const config = {
-        // do NOT set Content-Type header manually so browser can add the boundary (fixes some Safari issues)
-        onUploadProgress: (progressEvent) => {
-          try {
-            const percent = progressEvent.total ? Math.round((progressEvent.loaded * 100) / progressEvent.total) : null;
-            console.log('[LogoAPI] upload progress', { percent, loaded: progressEvent.loaded, total: progressEvent.total });
-          } catch (e) { }
-          if (typeof onProgress === 'function') onProgress(progressEvent);
-        },
-        timeout: 60000,
-      };
-
-      const response = await api.post('/logos', formData, config);
-
-      console.log('[LogoAPI] uploadLogo SUCCESS', { data: response?.data, status: response?.status });
-      return response.data;
-    } catch (error) {
-      // Detailed front-end logging for debugging iOS Safari where backend never receives request
+    // Use XMLHttpRequest for uploads (better control of upload.onprogress and known fixes on iOS WebKit)
+    return new Promise((resolve, reject) => {
       try {
-        console.error('[LogoAPI] uploadLogo ERROR', {
-          message: error?.message,
-          isAxiosError: error?.isAxiosError || false,
-          code: error?.code || null,
-          response: error?.response ? { status: error.response.status, headers: error.response.headers, data: error.response.data } : null,
-          request: error?.request || null,
-          navigator: typeof navigator !== 'undefined' ? { userAgent: navigator.userAgent, platform: navigator.platform } : null
-        });
-      } catch (e) {
-        console.error('[LogoAPI] uploadLogo ERROR - failed to stringify error');
-      }
+        const xhr = new XMLHttpRequest();
+        const url = `${API_BASE_URL.replace(/\/$/, '')}/logos`;
+        xhr.open('POST', url);
+        xhr.timeout = 60000; // 60s
 
-      throw LogoAPI.handleError(error);
-    }
+        // Set auth header if available
+        try {
+          const token = localStorage.getItem('token');
+          if (token) {
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+          }
+        } catch (e) { /* ignore */ }
+
+        xhr.upload.onprogress = (evt) => {
+          try {
+            if (evt.lengthComputable) {
+              const percent = Math.round((evt.loaded / evt.total) * 100);
+              console.log('[LogoAPI] xhr upload progress', { percent, loaded: evt.loaded, total: evt.total });
+              if (typeof onProgress === 'function') onProgress({ loaded: evt.loaded, total: evt.total, percent });
+            } else {
+              console.log('[LogoAPI] xhr upload progress unknown total', { loaded: evt.loaded });
+              if (typeof onProgress === 'function') onProgress({ loaded: evt.loaded, total: null, percent: null });
+            }
+          } catch (e) { }
+        };
+
+        xhr.onload = () => {
+          const status = xhr.status;
+          const responseText = xhr.responseText;
+          console.log('[LogoAPI] xhr onload', { status, responseText });
+          if (status >= 200 && status < 300) {
+            try {
+              const data = responseText ? JSON.parse(responseText) : null;
+              resolve(data);
+            } catch (e) {
+              // non-json response
+              resolve({ data: responseText });
+            }
+          } else {
+            const err = new Error(`Upload failed with status ${status}`);
+            err.status = status;
+            err.responseText = responseText;
+            console.error('[LogoAPI] xhr upload failed', { status, responseText });
+            reject(err);
+          }
+        };
+
+        xhr.onerror = () => {
+          console.error('[LogoAPI] xhr onerror', { readyState: xhr.readyState });
+          reject(new Error('Network error during logo upload'));
+        };
+
+        xhr.ontimeout = () => {
+          console.error('[LogoAPI] xhr ontimeout');
+          reject(new Error('Upload timed out'));
+        };
+
+        // Do NOT set Content-Type header here. Browser will set multipart/form-data with boundary.
+        xhr.send(formData);
+      } catch (error) {
+        console.error('[LogoAPI] uploadLogo XHR wrapper error', { message: error?.message });
+        reject(error);
+      }
+    });
   },
 
   /**
