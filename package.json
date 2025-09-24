@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.11.0",
     "dom-to-image": "^2.6.0",
+    "heic2any": "^0.0.4",
     "html-to-image": "^1.11.13",
     "html2canvas": "^1.4.1",
     "lucide-react": "^0.533.0",

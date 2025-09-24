@@ -6,8 +6,9 @@ import RoomSessionAPI from "../../API/apiRoomSession";
 import { getFullLogoUrl, getFullPosterUrl } from "../../utils/logoUtils";
 import socketService from "../../services/socketService";
 import {availablePosters, logoTypes} from '../../utils/poster';
+import { isHeicFile, convertHeicToJpegOrPng } from "../../utils/imageUtils";
 const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialData, accessCode }) => {
-  // console.log('🗨️ [PosterLogoManager] Component initialized with props:', {
+  // console.log('��️ [PosterLogoManager] Component initialized with props:', {
   //   onPosterUpdate: !!onPosterUpdate,
   //   onLogoUpdate: !!onLogoUpdate,
   //   initialData,
@@ -196,7 +197,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                   loadedLogos.push(logoItem);
                 });
               } else {
-                // console.log('📋 [PosterLogoManager] No organizing found or organizing is not an array');
+                // console.log('��� [PosterLogoManager] No organizing found or organizing is not an array');
               }
 
               // Process media (nếu có trong response)
@@ -304,8 +305,18 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   }, [updateSelectedLogosCount]);
 
   const handlePosterUpload = async (event) => {
-    const file = event.target.files[0];
+    let file = event.target.files[0];
     if (!file) return;
+
+    // Convert HEIC/HEIF from iPhone to JPEG before validations
+    if (isHeicFile(file)) {
+      try {
+        file = await convertHeicToJpegOrPng(file, 'image/jpeg', 0.92);
+      } catch (err) {
+        alert('Không thể chuyển HEIC sang JPEG/PNG. Vui lòng chọn ảnh JPEG/PNG.');
+        return;
+      }
+    }
 
     // Kiểm tra giới hạn tối đa 1 poster
     const uploadedPostersCount = [...savedPosters, ...customPosters].length;
@@ -381,8 +392,18 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
   };
 
   const handleFileUpload = async (event, item) => {
-    const file = event.target.files[0];
+    let file = event.target.files[0];
     if (!file) return;
+
+    // Convert HEIC/HEIF from iPhone to JPEG before validations
+    if (isHeicFile(file)) {
+      try {
+        file = await convertHeicToJpegOrPng(file, 'image/jpeg', 0.92);
+      } catch (err) {
+        alert('Không thể chuyển HEIC sang JPEG/PNG. Vui lòng chọn ảnh JPEG/PNG.');
+        return;
+      }
+    }
 
     if (file.size > 5 * 1024 * 1024) {
       alert("Kích thước file tối đa là 5MB");
@@ -762,7 +783,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                 }`}
             >
               {item.uploadStatus === 'preview' ? '⏳ Đang tải...' :
-                item.uploadStatus === 'error' ? '❌ Thử lại' :
+                item.uploadStatus === 'error' ? '��� Thử lại' :
                   '📁 Chọn file'}
             </label>
           </div>
