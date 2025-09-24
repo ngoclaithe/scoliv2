@@ -177,11 +177,7 @@ const LogoAPI = {
     if (type) formData.append('type', type);
 
     try {
-      const response = await api.put(`/logos/${id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await api.put(`/logos/${id}`, formData);
       return response.data;
     } catch (error) {
       throw LogoAPI.handleError(error);
