@@ -7,6 +7,7 @@ import { getFullLogoUrl, getFullPosterUrl } from "../../utils/logoUtils";
 import socketService from "../../services/socketService";
 import {availablePosters, logoTypes} from '../../utils/poster';
 import { isHeicFile, convertHeicToJpegOrPng } from "../../utils/imageUtils";
+import PosterLogoUploader from './PosterLogoUploader';
 const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialData, accessCode }) => {
 
   const [selectedPoster, setSelectedPoster] = useState(null);
@@ -293,7 +294,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
 
     const uploadedPostersCount = [...savedPosters, ...customPosters].length;
     if (uploadedPostersCount >= 1) {
-      alert("Chỉ được phép upload tối đa 1 poster!");
+      alert("Chỉ đư��c phép upload tối đa 1 poster!");
       return;
     }
 
@@ -1104,7 +1105,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
       <div className="space-y-2">
         <div className="flex items-center gap-1">
           <span className="text-xs">🏆</span>
-          <h3 className="text-xs font-semibold text-gray-900">Vòng đấu & Bảng đấu & Tiêu đ�� phụ</h3>
+          <h3 className="text-xs font-semibold text-gray-900">Vòng đấu & Bảng đấu & Tiêu đề phụ</h3>
         </div>
 
         {/* Vòng đấu */}
@@ -1382,7 +1383,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
             }}
             className="px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold text-sm rounded-lg shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center gap-2"
           >
-            <span>����</span>
+            <span>📥</span>
             <span>Preview</span>
           </button>
         </div>
