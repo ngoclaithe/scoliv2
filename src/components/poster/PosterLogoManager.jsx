@@ -621,6 +621,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
               }}
               onSuccess={(responseData) => {
                 const response = responseData?.data || responseData;
+                console.log('PosterLogoManager - backend response for logo upload:', responseData, response);
                 const apiLogo = {
                   id: response.id,
                   unitName: response.name || item.unitName,

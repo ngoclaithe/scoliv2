@@ -103,19 +103,18 @@ const PosterLogoUploader = ({
         if (xhr.status >= 200 && xhr.status < 300) {
           try {
             const responseData = xhr.responseText ? JSON.parse(xhr.responseText) : null;
-            
-            // *** TẠO PREVIEW SAU KHI UPLOAD THÀNH CÔNG ***
+            console.log('PosterLogoUploader - backend response parsed:', responseData);
             createPreviewAfterUpload(file);
-            
             onSuccess?.(responseData);
             resolve(responseData);
           } catch (e) {
-            // Non-JSON response
+            console.log('PosterLogoUploader - backend response (non-JSON):', xhr.responseText);
             createPreviewAfterUpload(file);
             onSuccess?.({ data: xhr.responseText });
             resolve({ data: xhr.responseText });
           }
         } else {
+          console.error('PosterLogoUploader - upload failed status:', xhr.status, 'response:', xhr.responseText);
           const err = new Error(`Upload failed with status ${xhr.status}`);
           err.status = xhr.status;
           err.responseText = xhr.responseText;
