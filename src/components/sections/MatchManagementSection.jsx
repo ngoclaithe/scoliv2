@@ -137,7 +137,6 @@ const MatchManagementSection = ({ isActive = true }) => {
   const [commentator, setCommentator] = useState(matchData.commentator || "");
 
   useEffect(() => {
-    // console.log("Giá trị đồng bộ t�� backend socket là", matchData);
     setTeamAInfo(prev => {
       const newTeamAInfo = {
         name: matchData.teamA.name || prev.name,

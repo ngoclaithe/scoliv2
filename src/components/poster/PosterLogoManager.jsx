@@ -738,7 +738,7 @@ const PosterLogoManager = React.memo(({ onPosterUpdate, onLogoUpdate, initialDat
                 }`}
             >
               {item.uploadStatus === 'preview' ? '⏳ Đang tải...' :
-                item.uploadStatus === 'error' ? '��� Thử lại' :
+                item.uploadStatus === 'error' ? 'Thử lại' :
                   '📁 Chọn file'}
             </label>
           </div>
